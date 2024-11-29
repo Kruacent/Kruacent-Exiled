@@ -14,12 +14,15 @@ namespace BlackoutKruacent
         public bool Debug { get; set; } = false;
 
         [Description("the minimum interval between 2 malfunctions")]
-        public static int MinInterval { get; set; } = 300;
+        public int MinInterval { get; set; } = 300;
         [Description("the maximum interval between 2 malfunctions")]
-        public static int MaxInterval { get; set; } = 600;
+        public int MaxInterval { get; set; } = 600;
         [Description("chance of having a Blackout at the start of the game")]
-        public static double InitialChanceBO { get; set; } = 0.5;
+        public double InitialChanceBO { get; set; } = 0.5;
         [Description("the duration of a malfunction")]
-        public static int DurationMalfunction { get; set; } = 30;
+        public int DurationMalfunction { get; set; } = 30;
+
+        public float[] ChancePreConta = { .2f, .3f, .3f, .15f, .05f };
+        public float[] ChancePostConta = { 0, .4f, .4f, .15f, .05f };
     }
 }
