@@ -1,5 +1,4 @@
-﻿
-namespace GEFExiled.Commands
+﻿namespace KruacentExiled.KruacentE.GlobalEventFramework.GEFE.Commands
 {
     using Exiled.API.Features;
     using Exiled.API.Features.Pickups;
@@ -12,7 +11,7 @@ namespace GEFExiled.Commands
     public class List : ICommand
     {
         public string Command { get; } = "list";
-        public string[] Aliases { get; } = new string[] { "l","ls" };
+        public string[] Aliases { get; } = new string[] { "l", "ls" };
         public string Description { get; } = "get the list of all Global Events";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
@@ -20,7 +19,7 @@ namespace GEFExiled.Commands
             string result = "List of all global event ([o] if it's active in the round ; [ ] otherwise) : ";
             foreach (IGlobalEvent ge in GlobalEvent.GlobalEvents.Values)
             {
-                
+
                 if (GlobalEvent.ActiveGlobalEvents.Contains(ge))
                 {
                     result += "[o]";
