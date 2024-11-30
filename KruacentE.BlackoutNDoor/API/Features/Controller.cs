@@ -10,13 +10,6 @@ namespace BlackoutKruacent.API.Features
 {
     internal class Controller
     {
-
-
-
-        
-        private static readonly float[] ChancePreConta = { .2f,.3f,.3f,.15f,.05f };
-        private static readonly float[] ChancePostConta = { 0, .4f, .4f, .15f, .05f };
-
         /// <summary>
         /// Select a random zone and close and lock all door of the zone
         /// </summary>
@@ -41,8 +34,8 @@ namespace BlackoutKruacent.API.Features
                     {
                         door.IsOpen = false;
                         door.ChangeLock(DoorLockType.Lockdown2176);
-                        Timing.CallDelayed(Config.DurationMalfunction / 2, () => door.IsOpen = true);
-                        Timing.CallDelayed(Config.DurationMalfunction, () => door.Unlock());
+                        Timing.CallDelayed(MainPlugin.Instance.Config.DurationMalfunction / 2, () => door.IsOpen = true);
+                        Timing.CallDelayed(MainPlugin.Instance.Config.DurationMalfunction, () => door.Unlock());
                         if (UnityEngine.Random.value < .5f)
                         {
                             door.IsOpen = false;
@@ -67,7 +60,7 @@ namespace BlackoutKruacent.API.Features
             Log.Debug($"BlackOut in {zone}");
             
 
-            Map.TurnOffAllLights(Config.DurationMalfunction, zone);
+            Map.TurnOffAllLights(MainPlugin.Instance.Config.DurationMalfunction, zone);
         }
 
 
@@ -79,7 +72,7 @@ namespace BlackoutKruacent.API.Features
                 {
                     case ZoneType.LightContainment:
                         Cassie.MessageTranslated("Warning Failure Of All Lights In Light Containment Zone in 5 seconds",
-                            "<color=#F00>Warning</color> Failure Of All Lights In <color=#1BBB9B>Light</color> Containment Zone in 5 seconds");
+                            "<color=#F00>Warning</color> Failure Of All Lights In <color=#1BBB9B>Light</color> Containment Zone in 5 seconds", false, false);
                         break;
                     case ZoneType.HeavyContainment:
                         Cassie.MessageTranslated("Warning Failure Of All Lights In Heavy Containment Zone in 5 seconds",
@@ -121,7 +114,7 @@ namespace BlackoutKruacent.API.Features
                         break;
                     case ZoneType.Unspecified:
                         Cassie.MessageTranslated("Door system malfunction in All of the facility in 5 seconds",
-                            "<color=#0a0a0a>Door system</color> malfunction in <color=#ff0000>All</color> of the facility in 5 seconds", false, false);
+                            "Door system malfunction in <color=#ff0000>All</color> of the facility in 5 seconds", false, false);
                         break;
                 }
             }
@@ -142,11 +135,11 @@ namespace BlackoutKruacent.API.Features
             }
             if (!Map.IsLczDecontaminated)
             {
-                z=  GetZoneType(GetProbabilityIndex(ChancePreConta, random));
+                z=  GetZoneType(GetProbabilityIndex(MainPlugin.Instance.Config.ChancePreConta, random));
             }
             else
             {
-                z= GetZoneType(GetProbabilityIndex(ChancePostConta, random));
+                z= GetZoneType(GetProbabilityIndex(MainPlugin.Instance.Config.ChancePostConta, random));
             }
             Log.Debug($"zone={z}");
             return z;

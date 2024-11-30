@@ -8,37 +8,34 @@ namespace BlackoutKruacent
 {
     public class MainPlugin : Plugin<Config>
     {
+        internal static MainPlugin Instance;
         private Controller _c;
         private ServerHandler _server;
 
         public override void OnEnabled()
         {
-            base.OnEnabled();
-            //_c = new Controller();
+            Instance = this;
+            _c = new Controller();
             this.RegisterEvent();
         }
         public override void OnDisabled()
         {
-            base.OnDisabled();
-            //_c = null;
+
+            Instance = null;
+            _c = null;
             this.UnregisterEvent();
         }
 
         private void RegisterEvent() 
         {
-            //_server = new ServerHandler(this.Config);
-            _server = new ServerHandler(this.Config);
+            _server = new ServerHandler(_c);
             Server.RoundStarted += _server.OnRoundStarted;
-            Server.WaitingForPlayers += _server.OnWaitingForPlayers;
-            Server.EndingRound += _server.OnEndingRound;
-            Server.RoundEnded += _server.OnRoundEnded;
+
         }
         private void UnregisterEvent() 
         {
             Server.RoundStarted -= _server.OnRoundStarted;
-            Server.WaitingForPlayers -= _server.OnWaitingForPlayers;
-            Server.EndingRound -= _server.OnEndingRound;
-            Server.RoundEnded -= _server.OnRoundEnded;
+
             _server = null;
         }
 

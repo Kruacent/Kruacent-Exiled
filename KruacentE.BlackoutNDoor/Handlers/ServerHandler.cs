@@ -9,43 +9,23 @@ namespace BlackoutKruacent.Handlers
 {
     internal class ServerHandler
     {
-        internal double ChanceBO { get; set; } = Config.InitialChanceBO;
-        private Config conf;
+        internal double ChanceBO { get; set; } = MainPlugin.Instance.Config.InitialChanceBO;
         private Controller controller;
-        internal ServerHandler(Config c,Controller con)
+        internal ServerHandler(Controller con)
         {
-            conf = c;
             controller = con;
         }
-        internal ServerHandler(Config c)
-        {
-            conf = c;
-        }
-        public void OnWaitingForPlayers()
-        {
-            Timing.KillCoroutines();
-        }
-
         public void OnRoundStarted()
         {
-            //Timing.RunCoroutine(Update());
-        }
-        public void OnRoundEnded(RoundEndedEventArgs ev)
-        {
-            Log.Debug("autre end round");
-            Timing.KillCoroutines();
-        }
-
-        public void OnEndingRound(EndingRoundEventArgs ev)
-        {
-            Log.Debug("end round");
-            Timing.KillCoroutines();
+            Timing.RunCoroutine(Update());
         }
 
         private IEnumerator<float> Update()
         {
             Log.Debug("startUpdate");
-            //yield return Timing.WaitForSeconds(UnityEngine.Random.Range(Config.MinInterval, Config.MaxInterval));
+            var wait = UnityEngine.Random.Range(MainPlugin.Instance.Config.MinInterval, MainPlugin.Instance.Config.MaxInterval);
+            Log.Debug($"waiting for {wait}");
+            yield return Timing.WaitForSeconds(wait);
             while (true)
             {
                 var a = UnityEngine.Random.value;
@@ -62,11 +42,16 @@ namespace BlackoutKruacent.Handlers
                     CoroutineHandle coroutine = Timing.RunCoroutine(controller.RandomDoorStuck());
                     yield return Timing.WaitUntilDone(coroutine);
                 }
-                
-                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(Config.MinInterval, Config.MaxInterval));
+                wait = UnityEngine.Random.Range(MainPlugin.Instance.Config.MinInterval, MainPlugin.Instance.Config.MaxInterval);
+                Log.Debug($"waiting : {wait}");
+                yield return Timing.WaitForSeconds(wait);
                 yield return Timing.WaitUntilFalse(() => Warhead.IsInProgress);
+
                 ChanceBO = -(1 / 60) * Round.ElapsedTime.TotalMinutes + 0.5;
+                Log.Debug($"new ChanceBO = {ChanceBO}");
             }
+            Log.Debug("end");
         }
+        
     }
 }
