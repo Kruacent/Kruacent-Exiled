@@ -15,7 +15,7 @@ public class Defibrilator : CustomItem
 {
     public override uint Id { get; set; } = 20;
     public override string Name { get; set; } = "DF-001";
-    public override string Description { get; set; } = "Voici un défibrillateur, utilisez-le sur une personne que vous voulez réanimer. Utilisable uniquement pendant les 10 premières secondes après la perte de conscience de la personne. Utilisez-le lorsque vous êtes dans la même pièce que la personne.";
+    public override string Description { get; set; } = "Le défibrilateur, il permet de réanimer une personne qui à une perte de conscience, on va réanimer la personne la plus proche du joueur qui l'utilise (le lieu de mort et non où se trouve le corps)";
     public override float Weight { get; set; } = 0.65f;
 
     private ConcurrentDictionary<Player, Vector3> positionMort = new ConcurrentDictionary<Player, Vector3>();
