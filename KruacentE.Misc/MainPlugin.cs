@@ -1,4 +1,6 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
+using System.Collections.Generic;
 using ServerHandle = Exiled.Events.Handlers.Server;
 
 namespace KE.Misc
@@ -40,7 +42,14 @@ namespace KE.Misc
             {
                 Server.FriendlyFire = false;
             }
-            Log.Debug($"Friendly Fire : {Exiled.API.Features.Server.FriendlyFire}");
+            Log.Debug($"Friendly Fire : {Server.FriendlyFire}");
+        }
+
+
+        internal IEnumerable<float> Nuke()
+        {
+            
+            yield return 0;
         }
         
 
