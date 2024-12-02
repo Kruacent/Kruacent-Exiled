@@ -13,6 +13,7 @@ namespace KE.Misc
         {
             MainPlugin.Instance.RandomFF();
             Timing.RunCoroutine(MainPlugin.Instance.NukeAnnouncement());
+            Timing.RunCoroutine(MainPlugin.Instance.PeanutLockdown());
         }
     }
 }
