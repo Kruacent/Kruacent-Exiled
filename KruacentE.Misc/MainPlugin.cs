@@ -67,6 +67,21 @@ namespace KE.Misc
             peanutDoor.Unlock();
         }
         
+        internal IEnumerator<float> AutoElevator()
+        {
+            while (!Round.IsEnded)
+            {
+                foreach (Lift l in Lift.List)
+                {
+                    yield return Timing.WaitForSeconds(UnityEngine.Random.Range(30,45));
+                    SendElevator(l);
+                }
+            }
+        }
 
+        private void SendElevator(Lift e)
+        {
+            e.TryStart(0, true);
+        }
     }
 }

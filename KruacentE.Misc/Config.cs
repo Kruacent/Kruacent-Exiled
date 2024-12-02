@@ -1,9 +1,5 @@
 ﻿using Exiled.API.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace KE.Misc
 {
@@ -11,7 +7,13 @@ namespace KE.Misc
     {
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = true;
-
+        [Description("Chance that the friendly fire is enabled at the start of the round (set 0 to disable)")]
         public int ChanceFF { get; set; } = 50;
+        [Description("Enable or disable the auto-nuke annoucement")]
+        public bool AutoNukeAnnoucement {  get; set; } = true;
+        [Description("Enable or disable the lockdown of SCP-173")]
+        public bool PeanutLockDown { get; set; } = true;
+        [Description("Enable or disable the auto elevator")]
+        public bool AutoElevator { get; set; } = true;
     }
 }
