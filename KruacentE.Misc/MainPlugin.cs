@@ -2,6 +2,7 @@
 using Exiled.API.Features;
 using System.Collections.Generic;
 using ServerHandle = Exiled.Events.Handlers.Server;
+using MEC;
 
 namespace KE.Misc
 {
@@ -46,10 +47,11 @@ namespace KE.Misc
         }
 
 
-        internal IEnumerable<float> Nuke()
+        internal IEnumerator<float> NukeAnnouncement()
         {
-            
-            yield return 0;
+            yield return Timing.WaitUntilTrue(() => 25 <= Round.ElapsedTime.TotalMinutes);
+            Cassie.MessageTranslated("Warning automatic warhead will detonate in 5 minutes", 
+                "Warning automatic warhead will detonate in <color=#FF0000>5</color> minutes");
         }
         
 
