@@ -26,7 +26,6 @@ namespace GEFExiled.GEFE.Examples.GE
         public override void SubscribeEvent()
         {
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
-            Exiled.Events.Handlers.Server.RespawnedTeam +=;
         }
 
         public override void UnsubscribeEvent()
