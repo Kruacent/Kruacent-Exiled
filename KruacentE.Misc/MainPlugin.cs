@@ -5,6 +5,8 @@ using ServerHandle = Exiled.Events.Handlers.Server;
 using MEC;
 using Exiled.API.Features.Doors;
 using System.Linq;
+using Exiled.API.Features.Doors;
+using Exiled.API.Interfaces;
 
 namespace KE.Misc
 {
@@ -32,7 +34,27 @@ namespace KE.Misc
             Instance = null;
         }
 
-
+        internal void ClassDDoorGoesBoom()
+        {
+            if (UnityEngine.Random.Range(0, 101) < Instance.Config.ChanceClassDDoorGoesBoom)
+            {
+                foreach (Door door in Door.List)
+                {
+                    if (door.Type == DoorType.PrisonDoor)
+                    {
+                        if (door is IDamageableDoor dBoyDoor && !dBoyDoor.IsDestroyed)
+                        {
+                            dBoyDoor.Break();
+                            Log.Debug("Les portes kaboom");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Log.Debug("Les portes ne kaboom pas");
+            }
+        }
 
 
         internal void RandomFF()
