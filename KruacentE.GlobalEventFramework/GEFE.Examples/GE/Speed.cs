@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using CustomPlayerEffects;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using GEFExiled.GEFE.API.Features;
 using System;
@@ -18,27 +19,19 @@ namespace GEFExiled.GEFE.Examples.GE
 
         public override IEnumerator<float> Start()
         {
-
+            Player.List.ToList().ForEach(p => p.EnableEffect<MovementBoost>(100));
             yield return 0;
         }
 
 
         public override void SubscribeEvent()
         {
-            Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
+            
         }
 
         public override void UnsubscribeEvent()
         {
-            Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
-        }
-
-        private void OnRoundStarted()
-        {
-            foreach(Player p in Player.List)
-            {
-                p.EnableEffect(EffectType.MovementBoost,100,99999999f);
-            }
+            
         }
 
     }

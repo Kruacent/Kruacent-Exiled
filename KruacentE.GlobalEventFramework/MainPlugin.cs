@@ -22,10 +22,11 @@ namespace GEFExiled
 		public override void OnEnabled()
 		{
 			_instance = this;
-			GlobalEvent.Register(new SystemMalfunction());
-			GlobalEvent.Register(new Shuffle());
-			
+			List<IGlobalEvent> globalEvents = new List<IGlobalEvent>(){ new SystemMalfunction(), new Speed(),new RandomSpawn() };
+			GlobalEvent.Register(globalEvents);
+
 			RegisterEvents();
+			
 			base.OnEnabled();
         }
 
@@ -78,21 +79,20 @@ namespace GEFExiled
 			return result;
 		}
 
-		public void ChooseGE()
+		public List<IGlobalEvent> ChooseGE()
 		{
-            Log.Debug("Choosine ge");
             List<IGlobalEvent> activeGE = ChooseRandomGE();
-            Log.Debug("et go les ga c la fin du randomge");
 
             foreach (IGlobalEvent ge in activeGE)
 			{
+				ge.SubscribeEvent();
 				Log.Debug($"GE : {ge.Name}");
 				var a = Timing.RunCoroutine(ge.Start());
                 Log.Debug("fin start corutn");
                 coroutineHandles.Add(a); //crash
 				Log.Debug("fin add corutn");
             }
-            Log.Debug("fin choosein ge");
+			return activeGE;
         }
 
 
@@ -108,7 +108,6 @@ namespace GEFExiled
 			
 			for (int i = 0; i < nbGE; i++)
 			{
-                Log.Debug("start foreach");
                 bool found = false;
 				foreach (IGlobalEvent ge in gelist)
 				{
@@ -116,20 +115,17 @@ namespace GEFExiled
 
 					if (randomWeight <= cumulativeWeight)
 					{
-                        Log.Debug("hon hon hon le add du if");
                         result.Add(ge);
 						break;
 					}
 				}
 				if (!found)
 				{
-                    Log.Debug("nsm on a pa trouvé");
                     result.Add(gelist.Last());
 					gelist.Remove(gelist.Last());
 				}
 
 			}
-            Log.Debug("fin :D");
             return result;
 		}
 

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Features;
-using GlobalEventFrameworkEXILED.API.Utils;
+using GEFExiled.API.Utils;
 using InventorySystem;
 using System.Linq;
 using Exiled.API.Features.Items;
@@ -22,7 +22,7 @@ namespace GEFExiled.GEFE.Examples.GE
         ///<inheritdoc/>
         public override string Description { get; set; } = "et ça fait roomba café dans le scp";
         ///<inheritdoc/>
-        public override double Weight { get; set; } = 1;
+        public override double Weight { get; set; } = 0;
         private Player[] players = Player.List.ToArray();
         private List<Item>[] inventories;
         ///<inheritdoc/>
