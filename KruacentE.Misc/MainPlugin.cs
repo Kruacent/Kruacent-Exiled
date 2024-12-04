@@ -5,7 +5,6 @@ using ServerHandle = Exiled.Events.Handlers.Server;
 using MEC;
 using Exiled.API.Features.Doors;
 using System.Linq;
-using Exiled.API.Features.Doors;
 using Exiled.API.Interfaces;
 
 namespace KE.Misc
