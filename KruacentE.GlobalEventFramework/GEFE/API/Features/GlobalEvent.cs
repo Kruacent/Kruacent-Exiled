@@ -49,7 +49,10 @@ namespace GEFExiled.GEFE.API.Features
             }
             GlobalEvents.Add(globalEvent.Id, globalEvent);
             Log.Info($"{globalEvent.Name} is registered");
-
+        }
+        public static void Register(List<IGlobalEvent> globalEvents)
+        {
+            globalEvents.ForEach(globalEvent => Register(globalEvent));
         }
 
         public virtual IEnumerator<float> Start()
