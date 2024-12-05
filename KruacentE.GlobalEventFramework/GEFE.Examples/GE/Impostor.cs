@@ -17,7 +17,7 @@ namespace GEFExiled.GEFE.Examples.GE
 
         public override IEnumerator<float> Start()
         {
-            while (true)
+            while (!Round.IsEnded)
             {
                 int randomNumber = UnityEngine.Random.Range(180, 300);
                 yield return Timing.WaitForSeconds(randomNumber);
@@ -48,19 +48,5 @@ namespace GEFExiled.GEFE.Examples.GE
             }
         }
 
-        public override void SubscribeEvent()
-        {
-            Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
-        }
-
-        public override void UnsubscribeEvent()
-        {
-            Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
-        }
-
-        private void OnRoundStarted()
-        {
-            Start();
-        }
     }
 }
