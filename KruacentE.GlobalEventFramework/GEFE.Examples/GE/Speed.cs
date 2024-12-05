@@ -3,6 +3,7 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using GEFExiled.GEFE.API.Features;
+using MEC;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,11 +20,11 @@ namespace GEFExiled.GEFE.Examples.GE
         public override string Description { get; set; } = "Gas! gas! gas!";
         public override double Weight { get; set; } = 1;
         [Description("the movement speed that will be added to the player")]
-        public int MovementBoost { get; set; } = 100;
+        public byte MovementBoost { get; set; } = 100;
 
         public override IEnumerator<float> Start()
         {
-            Player.List.ToList().ForEach(p => p.EnableEffect<MovementBoost>(MovementBoost, true));
+            Player.List.ToList().ForEach(p => p.EnableEffect<MovementBoost>(MovementBoost,999999999, true));
             yield return 0;
         }
         public override void SubscribeEvent()
@@ -40,7 +41,8 @@ namespace GEFExiled.GEFE.Examples.GE
 
         private void ReactivateEffectSpawn(ChangingRoleEventArgs ev)
         {
-            ev.Player.EnableEffect<MovementBoost>(MovementBoost,true);
+            Timing.CallDelayed(1f, () => ev.Player.EnableEffect<MovementBoost>(MovementBoost, 999999999, true));
+            
         }
     }
 }

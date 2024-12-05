@@ -20,7 +20,7 @@ namespace GEFExiled.GEFE.API.Features
         /// A list of Active GlobalEvents
         /// </summary>
         public static List<IGlobalEvent> ActiveGlobalEvents => ActiveGE.ToList();
-        internal static List<IGlobalEvent> ActiveGE { get; } = new List<IGlobalEvent>();
+        internal static List<IGlobalEvent> ActiveGE { get; set; } = new List<IGlobalEvent>();
         internal static Dictionary<int, IGlobalEvent> GlobalEvents { get; set; } = new Dictionary<int, IGlobalEvent>();
         /// <summary>
         /// A list of all registered GlobalEvents
@@ -63,11 +63,17 @@ namespace GEFExiled.GEFE.API.Features
 
         public virtual void SubscribeEvent()
         {
-            Log.Error($"{GetType().Name} SubscribeEvent is NOT overrided");
+            Log.Warn($"{GetType().Name} : SubscribeEvent is NOT overrided");
         }
         public virtual void UnsubscribeEvent()
         {
-            Log.Error($"{GetType().Name} UnsubscribeEvent is NOT overrided");
+            Log.Warn($"{GetType().Name} : UnsubscribeEvent is NOT overrided");
+        }
+
+        public void Clean()
+        {
+            GlobalEvents = new Dictionary<int, IGlobalEvent>();
+            ActiveGE = new List<IGlobalEvent>();
         }
     }
 }

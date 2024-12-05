@@ -1,6 +1,6 @@
 ﻿using Exiled.API.Features;
 using GEFExiled.GEFE.API.Features;
-using GlobalEventFrameworkEXILED.API.Utils;
+using GEFExiled.GEFE.API.Utils;
 using MEC;
 using System;
 using System.Collections.Generic;

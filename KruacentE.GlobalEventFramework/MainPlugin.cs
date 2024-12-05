@@ -58,10 +58,12 @@ namespace GEFExiled
 		{
 			foreach (Player player in Player.List)
 			{
-                Exiled.API.Features.Broadcast b = new Exiled.API.Features.Broadcast();
-				b.Content = ShowText();
-				b.Duration = 10;
-				player.Broadcast(b);
+                Exiled.API.Features.Broadcast b = new Exiled.API.Features.Broadcast
+                {
+                    Content = ShowText(),
+                    Duration = 10
+                };
+                player.Broadcast(b);
 			}
 		}
 
@@ -70,26 +72,36 @@ namespace GEFExiled
 			String result = "Global Events: ";
 			for (int i = 0; i < GlobalEvent.ActiveGE.Count(); i++)
 			{
-				result += GlobalEvent.ActiveGE[i].Description;
-				if (GlobalEvent.ActiveGE.Count() > 1)
+				if(UnityEngine.Random.value > 0.5f)
+				{
+                    result += GlobalEvent.ActiveGE[i].Description;
+				}
+				else
+				{
+					result += "[REDACTED]";
+				}
+				
+				if (GlobalEvent.ActiveGE.Count() > 1 && i < GlobalEvent.ActiveGE.Count()-1)
 				{
 					result += ",";
 				}
 			}
+
+
 			return result;
 		}
 
 		public List<IGlobalEvent> ChooseGE()
 		{
             List<IGlobalEvent> activeGE = ChooseRandomGE();
+			Log.Debug($"activeGE size : {activeGE.Count}");
+			Log.Info($"Global Event(s) : ");
 
-            foreach (IGlobalEvent ge in activeGE)
+			foreach (IGlobalEvent ge in activeGE)
 			{
-				Log.Debug($"GE : {ge.Name}");
+				Log.Info(ge.Name);
 				var a = Timing.RunCoroutine(ge.Start());
-                Log.Debug("fin start corutn");
-                coroutineHandles.Add(a); //crash
-				Log.Debug("fin add corutn");
+                coroutineHandles.Add(a); //crash when other from other assembly
             }
 			return activeGE;
         }
@@ -104,7 +116,13 @@ namespace GEFExiled
 			double randomWeight = UnityEngine.Random.value * totalWeight;
 			double cumulativeWeight = 0.0;
 
-			
+			result.Add(gelist[UnityEngine.Random.Range(0, gelist.Count)]);
+
+			GlobalEvent.ActiveGE = result.ToList();
+
+			return result;
+
+			// yes it's dead but they deserve it
 			for (int i = 0; i < nbGE; i++)
 			{
                 bool found = false;
