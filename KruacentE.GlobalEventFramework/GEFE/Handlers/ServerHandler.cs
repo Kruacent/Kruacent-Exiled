@@ -22,6 +22,7 @@ namespace GEFExiled.Handlers
 		{
 			Log.Debug("starting round");
             _activeGE = _plugin.ChooseGE();
+            _activeGE.ForEach(e => e.SubscribeEvent());
             Log.Debug("end starting round");
         }
 

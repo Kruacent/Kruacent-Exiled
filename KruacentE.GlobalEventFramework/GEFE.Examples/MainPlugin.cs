@@ -13,7 +13,7 @@ namespace GEFExiled.GEFE.Examples
 
 
             Timing.CallDelayed(10f, () => {
-                GlobalEvent.RegisterItems();
+                //GlobalEvent.Register();
             });
             base.OnEnabled();
         }

@@ -1,12 +1,14 @@
 ﻿using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.Events.EventArgs.Player;
 using GEFExiled.GEFE.API.Features;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Utils.NonAllocLINQ;
+using PlayerHandler = Exiled.Events.Handlers.Player;
 
 namespace GEFExiled.GEFE.Examples.GE
 {
@@ -16,23 +18,29 @@ namespace GEFExiled.GEFE.Examples.GE
         public override string Name { get; set; } = "Speed";
         public override string Description { get; set; } = "Gas! gas! gas!";
         public override double Weight { get; set; } = 1;
+        [Description("the movement speed that will be added to the player")]
+        public int MovementBoost { get; set; } = 100;
 
         public override IEnumerator<float> Start()
         {
-            Player.List.ToList().ForEach(p => p.EnableEffect<MovementBoost>(100));
+            Player.List.ToList().ForEach(p => p.EnableEffect<MovementBoost>(MovementBoost, true));
             yield return 0;
         }
-
-
         public override void SubscribeEvent()
         {
-            
+            PlayerHandler.ChangingRole += ReactivateEffectSpawn;
         }
 
         public override void UnsubscribeEvent()
         {
-            
+            PlayerHandler.ChangingRole -= ReactivateEffectSpawn;
+            Player.List.ToList().ForEach(p => p.DisableEffect<MovementBoost>());
         }
 
+
+        private void ReactivateEffectSpawn(ChangingRoleEventArgs ev)
+        {
+            ev.Player.EnableEffect<MovementBoost>(MovementBoost,true);
+        }
     }
 }

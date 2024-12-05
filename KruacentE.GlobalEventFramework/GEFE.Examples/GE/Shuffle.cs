@@ -1,15 +1,10 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Features;
-using GEFExiled.API.Utils;
-using InventorySystem;
-using System.Linq;
-using Exiled.API.Features.Items;
-using Exiled.API.Extensions;
-using Exiled.API.Enums;
-using InventorySystem.Items.Firearms.Attachments.Components;
-using Exiled.API.Structs;
 using MEC;
 using GEFExiled.GEFE.API.Features;
+using PlayerHandler = Exiled.Events.Handlers.Player;
+using Exiled.Events.EventArgs.Player;
+using UnityEngine;
 
 namespace GEFExiled.GEFE.Examples.GE
 {
@@ -23,58 +18,57 @@ namespace GEFExiled.GEFE.Examples.GE
         public override string Description { get; set; } = "et ça fait roomba café dans le scp";
         ///<inheritdoc/>
         public override double Weight { get; set; } = 0;
-        private Player[] players = Player.List.ToArray();
-        private List<Item>[] inventories;
+        private List<Player> players;
+        private List<Vector3> pos;
         ///<inheritdoc/>
         public override IEnumerator<float> Start()
         {
-            Coroutine.LaunchCoroutine(Update());
-            yield return 0;
-        }
-
-        public Shuffle()
-        {
-            inventories = new List<Item>[players.Length];
-            for (int i = 0; i < players.Length; i++)
-            {
-                inventories[i] = players[i].Items.ToList();
-            }
-        }
-        private IEnumerator<float> Update()
-        {
+            this.players.ShuffleList();
+            pos = new List<Vector3>();
             while (!Round.IsEnded)
             {
-                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(120, 240));
-
-
-            }
-        }
-        //sprainte 9 fèr lé non ki rest
-        private void Shuffling(int decale)
-        {
-            for (int i = 0; i < players.Length; i++)
-            {
-
-            }
-        }
-
-        private void ChangeInventory(int pid)
-        {
-            var fire = new Dictionary<Firearm, IEnumerable<AttachmentIdentifier>>();
-            players[pid].ClearItems();
-            foreach (Item item in inventories[pid])
-            {
-                //is a firearm
-                if (item is Firearm firearm)
+                yield return Timing.WaitForSeconds(Random.Range(120, 240));
+                for (int i = 0; i < this.players.Count; i++)
                 {
-                    fire.Add(firearm, firearm.AttachmentIdentifiers);
-                    players[pid].AddItem(fire);
+                    pos[i] = this.players[i].Position;
                 }
-                else
+                ShiftLeft(this.players);
+                for (int i = 0; i < this.players.Count; i++)
                 {
-                    players[pid].AddItem(item);
+                    this.players[i].Position = pos[i];
                 }
+                pos.Clear();
             }
         }
+
+        public override void SubscribeEvent()
+        {
+            PlayerHandler.Joined += OnJoined;
+        }
+
+        public override void UnsubscribeEvent()
+        {
+            PlayerHandler.Joined -= OnJoined;
+        }
+
+
+        private void OnJoined(JoinedEventArgs ev)
+        {
+            this.players.Add(ev.Player);
+        }
+
+        private void ShiftLeft<T>(List<T> lst)
+        {
+            for (int i = 1; i < lst.Count; i++)
+            {
+                lst[i - 1] = lst[i];
+            }
+
+            for (int i = lst.Count - 1; i < lst.Count; i++)
+            {
+                lst[i] = default;
+            }
+        }
+
     }
 }

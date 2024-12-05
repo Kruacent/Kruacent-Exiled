@@ -85,7 +85,6 @@ namespace GEFExiled
 
             foreach (IGlobalEvent ge in activeGE)
 			{
-				ge.SubscribeEvent();
 				Log.Debug($"GE : {ge.Name}");
 				var a = Timing.RunCoroutine(ge.Start());
                 Log.Debug("fin start corutn");
