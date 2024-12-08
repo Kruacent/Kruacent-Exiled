@@ -21,13 +21,21 @@ namespace BlackoutKruacent.API.Features
             yield return Timing.WaitUntilFalse(() => Cassie.IsSpeaking);
             CassieVoiceLine(zone, false);
             yield return Timing.WaitUntilFalse(() => Cassie.IsSpeaking);
-            yield return Timing.WaitForSeconds(5);
+            yield return Timing.WaitForSeconds(MainPlugin.Instance.Config.DurationMalfunction);
             // if the zone is light and there is only 30s left then skip
-            if (!(zone == ZoneType.LightContainment && Map.DecontaminationState == DecontaminationState.Countdown))
+            if (!(zone == ZoneType.LightContainment && Map.DecontaminationState == DecontaminationState.Countdown && Warhead.IsInProgress))
             {
+                
                 List<Door> doorList = Door.List
                     .Where(d => !new[] { DoorType.ElevatorGateA, DoorType.ElevatorGateB, DoorType.ElevatorLczA, DoorType.ElevatorLczB, DoorType.ElevatorNuke, DoorType.ElevatorScp049, DoorType.UnknownElevator }.Contains(d.Type))
                     .ToList();
+                var ge = Generator.List.Where(g => g.IsEngaged);
+                if(ge.ToList().Count != 3)
+                {
+                    doorList = Door.List
+                        .Where(d => !new[] { DoorType.Scp079First, DoorType.Scp079Second }.Contains(d.Type))
+                        .ToList();
+                }
                 foreach (Door door in doorList)
                 {
                     if (door.Zone == zone)
@@ -56,7 +64,7 @@ namespace BlackoutKruacent.API.Features
             yield return Timing.WaitUntilFalse(() => Cassie.IsSpeaking);
             CassieVoiceLine(zone, true);
             yield return Timing.WaitUntilFalse(() => Cassie.IsSpeaking);
-            yield return Timing.WaitForSeconds(5);
+            yield return Timing.WaitForSeconds(MainPlugin.Instance.Config.DurationMalfunction);
             Log.Debug($"BlackOut in {zone}");
             
 

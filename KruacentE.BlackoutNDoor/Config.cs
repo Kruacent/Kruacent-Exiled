@@ -21,8 +21,9 @@ namespace BlackoutKruacent
         public double InitialChanceBO { get; set; } = 0.5;
         [Description("the duration of a malfunction")]
         public int DurationMalfunction { get; set; } = 30;
-
+        [Description("chance before decontamination")]
         public float[] ChancePreConta = { .2f, .3f, .3f, .15f, .05f };
+        [Description("chance after decontamination")]
         public float[] ChancePostConta = { 0, .4f, .4f, .15f, .05f };
     }
 }

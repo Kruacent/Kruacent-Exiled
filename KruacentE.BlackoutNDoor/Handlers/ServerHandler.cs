@@ -19,9 +19,11 @@ namespace BlackoutKruacent.Handlers
         {
             Timing.RunCoroutine(Update());
         }
+        
 
         private IEnumerator<float> Update()
         {
+            yield return Timing.WaitUntilTrue(() => Round.InProgress);
             Log.Debug("startUpdate");
             var wait = UnityEngine.Random.Range(MainPlugin.Instance.Config.MinInterval, MainPlugin.Instance.Config.MaxInterval);
             Log.Debug($"waiting for {wait}");
