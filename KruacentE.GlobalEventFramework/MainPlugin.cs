@@ -8,6 +8,7 @@ using Player = Exiled.API.Features.Player;
 using GEFExiled.GEFE.API.Features;
 using GEFExiled.GEFE.API.Interfaces;
 using GEFExiled.GEFE.Examples.GE;
+using ServerHandler = Exiled.Events.Handlers.Server;
 namespace GEFExiled
 {
     internal class MainPlugin : Plugin<Config>
@@ -22,7 +23,7 @@ namespace GEFExiled
 		public override void OnEnabled()
 		{
 			_instance = this;
-			List<IGlobalEvent> globalEvents = new List<IGlobalEvent>(){ new SystemMalfunction(), new Speed(),new RandomSpawn() };
+			List<IGlobalEvent> globalEvents = new List<IGlobalEvent>(){ new Shuffle(),new Speed(),new SystemMalfunction(),new RandomSpawn(), new R() };
 			GlobalEvent.Register(globalEvents);
 
 			RegisterEvents();
@@ -42,37 +43,44 @@ namespace GEFExiled
 		{
 			_server = new Handlers.ServerHandler(this);
 
-			Exiled.Events.Handlers.Server.RoundStarted += _server.OnRoundStarted;
-			Exiled.Events.Handlers.Server.EndingRound += _server.OnEndingRound;
+            ServerHandler.RoundStarted += _server.OnRoundStarted;
+            ServerHandler.EndingRound += _server.OnEndingRound;
+			ServerHandler.RestartingRound += _server.OnRestartingRound;
+
 		}
 
 		private void UnregisterEvents()
 		{
-			Exiled.Events.Handlers.Server.RoundStarted -= _server.OnRoundStarted;
-			Exiled.Events.Handlers.Server.EndingRound -= _server.OnEndingRound;
+            ServerHandler.RoundStarted -= _server.OnRoundStarted;
+            ServerHandler.EndingRound -= _server.OnEndingRound;
+            ServerHandler.RestartingRound -= _server.OnRestartingRound;
 
-			_server = null;
+            _server = null;
 		}
 
 		public void Show()
 		{
-			foreach (Player player in Player.List)
+			var random = UnityEngine.Random.value;
+
+            foreach (Player player in Player.List)
 			{
                 Exiled.API.Features.Broadcast b = new Exiled.API.Features.Broadcast
                 {
-                    Content = ShowText(),
+                    Content = ShowText(random > .5f),
                     Duration = 10
                 };
                 player.Broadcast(b);
 			}
 		}
 
-		private String ShowText()
+		private String ShowText(bool redacted = false)
 		{
 			String result = "Global Events: ";
 			for (int i = 0; i < GlobalEvent.ActiveGE.Count(); i++)
 			{
-				if(UnityEngine.Random.value > 0.5f)
+				
+
+                if (redacted)
 				{
                     result += GlobalEvent.ActiveGE[i].Description;
 				}
@@ -101,7 +109,7 @@ namespace GEFExiled
 			{
 				Log.Info(ge.Name);
 				var a = Timing.RunCoroutine(ge.Start());
-                coroutineHandles.Add(a); //crash when other from other assembly
+                coroutineHandles.Add(a); //crash when using other ge from other assembly
             }
 			return activeGE;
         }
