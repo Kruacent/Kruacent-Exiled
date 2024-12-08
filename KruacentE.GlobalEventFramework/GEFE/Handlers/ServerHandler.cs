@@ -28,16 +28,14 @@ namespace GEFExiled.Handlers
             Log.Debug("end starting round");
         }
 
-		public void OnEndingRound(EndingRoundEventArgs ev)
+		public void OnEndingRound(EndingRoundEventArgs _)
 		{
-            Log.Debug("ending round");
-            
-            
-            Log.Debug("stopping coroutine");
-            //this._plugin.StopCoroutines();
-            Log.Debug("unsubbing events");
             _activeGE.ForEach(e => e.UnsubscribeEvent());
-            Log.Debug("round end");
         }
-	}
+        public void OnRestartingRound()
+        {
+            _activeGE.ForEach(e => e.UnsubscribeEvent());
+        }
+
+    }
 }
