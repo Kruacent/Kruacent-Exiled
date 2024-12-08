@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using MEC;
 using GEFExiled.GEFE.API.Features;
 using PlayerHandler = Exiled.Events.Handlers.Player;
@@ -23,21 +22,41 @@ namespace GEFExiled.GEFE.Examples.GE
         ///<inheritdoc/>
         public override IEnumerator<float> Start()
         {
+            this.players = Player.List.Where(p => !p.IsNPC).ToList();
             this.players.ShuffleList();
-            pos = new List<Vector3>();
+            pos = new List<Vector3>(players.Count);
+            for (int i = 0; i < players.Count; i++)
+            {
+                pos.Add(Vector3.zero); 
+            }
+            Log.Debug($"before while");
             while (!Round.IsEnded)
             {
-                yield return Timing.WaitForSeconds(Random.Range(120, 240));
+                
+                Log.Debug($"waiting for {GetType().Name}");
+                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(5, 5)); //120 240
                 for (int i = 0; i < this.players.Count; i++)
                 {
-                    pos[i] = this.players[i].Position;
+                    Log.Debug($"old position of player {this.players[i]} : {this.players[i].Position}");
+                    var player = this.players[i];
+                    pos[i] = player.Position;
+                    Log.Debug("------");
                 }
+
                 ShiftLeft(this.players);
+                Log.Debug("shifted players");
                 for (int i = 0; i < this.players.Count; i++)
                 {
-                    this.players[i].Position = pos[i];
+                    Log.Debug("before tp");
+                    this.players[i].Teleport(pos[i]);
+                    Log.Debug($"new position of player {this.players[i]} : {this.players[i].Position}");
                 }
-                pos.Clear();
+                Log.Debug($"tp player");
+                for (int i = 0; i < players.Count; i++)
+                {
+                    pos.Add(Vector3.zero);
+                }
+                Log.Debug($"cleared");
             }
         }
 
@@ -54,21 +73,26 @@ namespace GEFExiled.GEFE.Examples.GE
 
         private void OnJoined(JoinedEventArgs ev)
         {
-            this.players.Add(ev.Player);
+            if (!ev.Player.IsNPC)
+            {
+                this.players.Add(ev.Player);
+                this.pos.Add(ev.Player.Position);
+            }
         }
 
         private void ShiftLeft<T>(List<T> lst)
         {
-            for (int i = 1; i < lst.Count; i++)
+            if (lst.Count > 0)
             {
-                lst[i - 1] = lst[i];
-            }
-
-            for (int i = lst.Count - 1; i < lst.Count; i++)
-            {
-                lst[i] = default;
+                T firstElement = lst[0];
+                for (int i = 1; i < lst.Count; i++)
+                {
+                    lst[i - 1] = lst[i];
+                }
+                lst[lst.Count - 1] = firstElement;
             }
         }
+
 
     }
 }
