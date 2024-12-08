@@ -1,11 +1,8 @@
 ﻿using Exiled.API.Features;
 using GEFExiled.GEFE.API.Features;
+using MEC;
 using PlayerRoles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Utils.NonAllocLINQ;
 
 namespace GEFExiled.GEFE.Examples.GE
 {
@@ -17,7 +14,16 @@ namespace GEFExiled.GEFE.Examples.GE
         public override double Weight { get; set; } = 1;
         public override IEnumerator<float> Start()
         {
+            var listScp = Player.List.Where(p => p.IsScp && p.Role.Type != RoleTypeId.Scp0492).ToList().ToDictionary(p => p, p => p.MaxHealth/3);
+
+            yield return Timing.WaitUntilTrue(() => Round.ElapsedTime.TotalMinutes >= 15);
+            listScp.ForEach(k => k.Key.MaxHealth += k.Value);
+
+            yield return Timing.WaitUntilTrue(() => Round.ElapsedTime.TotalMinutes >= 30);
+            listScp.ForEach(k => k.Key.MaxHealth += k.Value);
+
             yield return 0;
+            
         }
 
     }
