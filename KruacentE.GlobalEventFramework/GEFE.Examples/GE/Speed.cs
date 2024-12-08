@@ -2,6 +2,7 @@
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp173;
 using GEFExiled.GEFE.API.Features;
 using MEC;
 using System;
@@ -30,14 +31,20 @@ namespace GEFExiled.GEFE.Examples.GE
         public override void SubscribeEvent()
         {
             PlayerHandler.ChangingRole += ReactivateEffectSpawn;
+            Exiled.Events.Handlers.Scp173.Blinking += SpeedyNut;
         }
 
         public override void UnsubscribeEvent()
         {
             PlayerHandler.ChangingRole -= ReactivateEffectSpawn;
+            Exiled.Events.Handlers.Scp173.Blinking -= SpeedyNut;
             Player.List.ToList().ForEach(p => p.DisableEffect<MovementBoost>());
         }
 
+        private void SpeedyNut(BlinkingEventArgs ev)
+        {
+            ev.BlinkCooldown = ev.BlinkCooldown/2;
+        }
 
         private void ReactivateEffectSpawn(ChangingRoleEventArgs ev)
         {
