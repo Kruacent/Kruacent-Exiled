@@ -2,10 +2,13 @@
 using Exiled.API.Features;
 using System.Collections.Generic;
 using ServerHandle = Exiled.Events.Handlers.Server;
+using Nine14Handle = Exiled.Events.Handlers.Scp914;
 using MEC;
 using Exiled.API.Features.Doors;
 using System.Linq;
 using Exiled.API.Interfaces;
+using Exiled.Events.EventArgs.Scp914;
+using Scp914;
 
 namespace KE.Misc
 {
@@ -20,6 +23,8 @@ namespace KE.Misc
 
             serverHandler = new ServerHandler();
             ServerHandle.RoundStarted += serverHandler.OnRoundStarted;
+            Nine14Handle.UpgradingPlayer += OnUpgradingPlayer;
+
         }
 
         public override void OnDisabled()
@@ -104,5 +109,28 @@ namespace KE.Misc
         {
             e.TryStart(0, true);
         }
+
+
+        private void OnUpgradingPlayer(UpgradingPlayerEventArgs ev)
+        {
+            Teleport(ev.Player,ev.KnobSetting);
+
+            ChangingRole(ev.Player);
+        }
+
+
+        private void Teleport(Player p,Scp914KnobSetting knob)
+        {
+            if(knob == Scp914KnobSetting.Fine && UnityEngine.Random.value < 0.01f)
+                p.Teleport(Room.Random(ZoneType.Entrance));
+            if(knob == Scp914KnobSetting.Coarse && UnityEngine.Random.value < .25f)
+                p.Teleport(Room.Random(ZoneType.LightContainment));
+        }
+
+        private void ChangingRole(Player p)
+        {
+
+        }
+
     }
 }
