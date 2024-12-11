@@ -25,8 +25,9 @@ namespace GEFExiled.GEFE.Examples.GE
 
         public override IEnumerator<float> Start()
         {
+            yield return Timing.WaitForSeconds(1);
             Player.List.ToList().ForEach(p => p.EnableEffect<MovementBoost>(MovementBoost,999999999, true));
-            yield return 0;
+            
         }
         public override void SubscribeEvent()
         {
