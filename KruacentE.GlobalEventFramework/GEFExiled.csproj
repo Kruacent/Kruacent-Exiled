@@ -12,6 +12,9 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
+    <Reference Include="BlackoutKruacent">
+      <HintPath>..\KruacentE.BlackoutNDoor\bin\Debug\net48\BlackoutKruacent.dll</HintPath>
+    </Reference>
     <Reference Include="Mirror">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Mirror.dll</HintPath>
     </Reference>
