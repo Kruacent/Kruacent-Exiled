@@ -2,7 +2,6 @@
 using Exiled.API.Features;
 using Exiled.Events.Commands.Reload;
 using Exiled.Loader;
-using GEFExiled.API.Utils;
 using GEFExiled.GEFE.API.Features;
 using GEFExiled.GEFE.API.Utils;
 using MEC;
@@ -46,6 +45,7 @@ namespace GEFExiled.GEFE.Examples.GE
             {
                 if (otherPlugin is BlackoutKruacent.MainPlugin blackout)
                 {
+                    Log.Info("Found BlackOutNDoors");
                     blackout.ServerHandler.Cooldown = NewCooldown;
                 }
 
