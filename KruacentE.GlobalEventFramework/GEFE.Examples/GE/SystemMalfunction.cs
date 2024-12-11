@@ -1,4 +1,8 @@
-﻿using Exiled.API.Features;
+﻿using BlackoutKruacent;
+using Exiled.API.Features;
+using Exiled.Events.Commands.Reload;
+using Exiled.Loader;
+using GEFExiled.API.Utils;
 using GEFExiled.GEFE.API.Features;
 using GEFExiled.GEFE.API.Utils;
 using MEC;
@@ -17,9 +21,11 @@ namespace GEFExiled.GEFE.Examples.GE
         public override string Name { get; set; } = "System Malfunction";
         public override string Description { get; set; } = "On dirait que les systèmes informatiques sont défaillants";
         public override double Weight { get; set; } = 1;
+        public int NewCooldown { get; set; } = 180;
 
         public override IEnumerator<float> Start()
         {
+            MoreBlackOutNDoors();
             Coroutine.LaunchCoroutine(EarlyNuke());
             yield return 0;
         }
@@ -32,5 +38,19 @@ namespace GEFExiled.GEFE.Examples.GE
             Warhead.Start();
             Log.Debug($"kaboom");
         }
+
+        private void MoreBlackOutNDoors()
+        {
+            var otherPlugin = Loader.Plugins.FirstOrDefault(plugin => plugin.Name == "BlackOutNDoors");
+            if (otherPlugin != null)
+            {
+                if (otherPlugin is BlackoutKruacent.MainPlugin blackout)
+                {
+                    blackout.ServerHandler.Cooldown = NewCooldown;
+                }
+
+            }
+        }
+        
     }
 }

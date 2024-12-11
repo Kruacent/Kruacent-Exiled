@@ -8,12 +8,14 @@ using System.Linq;
 
 namespace BlackoutKruacent.API.Features
 {
-    internal class Controller
+    public class Controller
     {
+
+        
         /// <summary>
         /// Select a random zone and close and lock all door of the zone
         /// </summary>
-        public IEnumerator<float> RandomDoorStuck()
+        internal IEnumerator<float> RandomDoorStuck()
         {
             yield return Timing.WaitForOneFrame;
             var zone = SelectZone();
