@@ -4,6 +4,9 @@ using GEFExiled.GEFE.API.Features;
 using PlayerHandler = Exiled.Events.Handlers.Player;
 using Exiled.Events.EventArgs.Player;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
+
 
 namespace GEFExiled.GEFE.Examples.GE
 {
@@ -22,7 +25,7 @@ namespace GEFExiled.GEFE.Examples.GE
         ///<inheritdoc/>
         public override IEnumerator<float> Start()
         {
-            this.players = Player.List.Where(p => !p.IsNPC).ToList();
+            this.players = Player.List.ToList().Where(p => !p.IsNPC).ToList();
             this.players.ShuffleList();
             pos = new List<Vector3>(players.Count);
             for (int i = 0; i < players.Count; i++)
@@ -34,7 +37,7 @@ namespace GEFExiled.GEFE.Examples.GE
             {
                 
                 Log.Debug($"waiting for {GetType().Name}");
-                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(5, 5)); //120 240
+                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(120, 240)); //120 240
                 for (int i = 0; i < this.players.Count; i++)
                 {
                     Log.Debug($"old position of player {this.players[i]} : {this.players[i].Position}");

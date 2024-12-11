@@ -30,10 +30,12 @@ namespace GEFExiled.Handlers
 
 		public void OnEndingRound(EndingRoundEventArgs _)
 		{
+            Log.Debug("ending round");
             _activeGE.ForEach(e => e.UnsubscribeEvent());
         }
         public void OnRestartingRound()
         {
+            Log.Debug("restarting");
             _activeGE.ForEach(e => e.UnsubscribeEvent());
         }
 

@@ -17,7 +17,7 @@ namespace BlackoutKruacent.API.Features
         /// </summary>
         internal IEnumerator<float> RandomDoorStuck()
         {
-            yield return Timing.WaitForOneFrame;
+            yield return Timing.WaitUntilTrue(() => Round.IsStarted);
             var zone = SelectZone();
             Log.Debug($"DoorStuck in {zone}");
             yield return Timing.WaitUntilFalse(() => Cassie.IsSpeaking);
@@ -52,7 +52,7 @@ namespace BlackoutKruacent.API.Features
         /// </summary>
         public IEnumerator<float> RandomBlackout()
         {
-            yield return Timing.WaitForOneFrame;
+            yield return Timing.WaitUntilTrue(() => Round.IsStarted);
 
             var zone = SelectZone();
             yield return Timing.WaitUntilFalse(() => Cassie.IsSpeaking);
