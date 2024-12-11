@@ -34,7 +34,7 @@ namespace GEFExiled.GEFE.API.Features
 
         public static void Register(IGlobalEvent globalEvent)
         {
-            Log.Debug("REGISTERING" + globalEvent.Name);
+            Log.Debug($"REGISTERING {globalEvent.Name}");
             if (GlobalEvents.ContainsKey(globalEvent.Id))
             {
                 Log.Warn($"id already used for {GlobalEvents.TryGetValue(globalEvent.Id, out IGlobalEvent geAlready)}");
