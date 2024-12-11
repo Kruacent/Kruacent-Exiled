@@ -9,6 +9,7 @@ using Player = Exiled.Events.Handlers.Player;
 using Exiled.API.Features;
 using Exiled.API.Extensions;
 using UnityEngine;
+using CustomPlayerEffects;
 
 /// <inheritdoc />
 [CustomItem(ItemType.Adrenaline)]
@@ -105,12 +106,12 @@ public class AdrenalineDrogue : CustomItem
     {
         /* EFFET DE LA DROGUE */
         joueur.ShowHint("Vous êtes actuellement sous effet de la cocaïne liquide !");
-        joueur.EnableEffect(EffectType.MovementBoost, 40, true);
-        joueur.EnableEffect(EffectType.RainbowTaste, 30, true);
-        joueur.EnableEffect(EffectType.InsufficientLighting, 30, true);
-        joueur.EnableEffect(EffectType.BodyshotReduction, 30, true);
-        joueur.EnableEffect(EffectType.Vitality, 30, true);
-        joueur.EnableEffect(EffectType.Ghostly, 30, true);
+        joueur.EnableEffect<MovementBoost>(40, true);
+        joueur.EnableEffect<RainbowTaste>(30, true);
+        joueur.EnableEffect<InsufficientLighting>(30, true);
+        joueur.EnableEffect<BodyshotReduction>(30, true);
+        joueur.EnableEffect<Vitality>(30, true);
+        joueur.EnableEffect<Ghostly>(30, true);
         joueur.Health = 173;
 
         yield return Timing.WaitForSeconds(30);
@@ -164,16 +165,16 @@ public class AdrenalineDrogue : CustomItem
         joueur.DisplayNickname = "Sou Hiyori";
 
         joueur.DisableAllEffects();
-        joueur.EnableEffect(EffectType.SilentWalk, 10);
-        joueur.EnableEffect(EffectType.MovementBoost, 35);
+        joueur.EnableEffect<SilentWalk>(10);
+        joueur.EnableEffect<MovementBoost>(35);
 
 
         yield return Timing.WaitForSeconds(UnityEngine.Random.Range(10, 20));
 
         if (joueur.IsAlive)
         {
-            int randomNumber = UnityEngine.Random.Range(1, 6);
-
+            // range min INCLUSIVE max EXCLUSIVE so it goes from 1 to 5
+            int randomNumber = UnityEngine.Random.Range(1, 6); 
             switch (randomNumber)
             {
                 case 1:
@@ -200,6 +201,7 @@ public class AdrenalineDrogue : CustomItem
 
                     float elapsedTime = 0f;
 
+                    //could use a event instead of checking every frame
                     while (elapsedTime < duration)
                     {
                         if (joueur.IsJumping)
@@ -222,7 +224,7 @@ public class AdrenalineDrogue : CustomItem
                     break;
                 case 3:
                     Log.Debug("Muet");
-                    joueur.ShowHint("Vous avez perdu votre langue ! (esperons que celui-ci repousse)");
+                    joueur.ShowHint("Vous avez perdu votre langue ! (esperons que celle-ci repousse)");
                     joueur.Mute();
                     yield return Timing.WaitForSeconds(UnityEngine.Random.Range(30, 100));
                     joueur.ShowHint("Je crois que c'est bon, ça a repoussé !");
