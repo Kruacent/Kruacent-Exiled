@@ -7,23 +7,29 @@ using System.Collections.Generic;
 
 namespace BlackoutKruacent.Handlers
 {
-    internal class ServerHandler
+    public class ServerHandler
     {
+        public int Cooldown { get; set; } = -1 ;
         internal double ChanceBO { get; set; } = MainPlugin.Instance.Config.InitialChanceBO;
         private Controller controller;
         internal ServerHandler(Controller con)
         {
             controller = con;
         }
-        public void OnRoundStarted()
+        internal void OnRoundStarted()
         {
             Timing.RunCoroutine(Update());
         }
 
         private IEnumerator<float> Update()
         {
+            yield return Timing.WaitUntilTrue(() => Round.InProgress);
             Log.Debug("startUpdate");
-            var wait = UnityEngine.Random.Range(MainPlugin.Instance.Config.MinInterval, MainPlugin.Instance.Config.MaxInterval);
+            int wait;
+            if (Cooldown == -1)
+                wait = UnityEngine.Random.Range(MainPlugin.Instance.Config.MinInterval, MainPlugin.Instance.Config.MaxInterval);
+            else
+                wait = Cooldown;
             Log.Debug($"waiting for {wait}");
             yield return Timing.WaitForSeconds(wait);
             while (true)
@@ -50,7 +56,6 @@ namespace BlackoutKruacent.Handlers
                 ChanceBO = -(1 / 60) * Round.ElapsedTime.TotalMinutes + 0.5;
                 Log.Debug($"new ChanceBO = {ChanceBO}");
             }
-            Log.Debug("end");
         }
         
     }
