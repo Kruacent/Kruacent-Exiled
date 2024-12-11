@@ -10,6 +10,7 @@ using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs.Scp914;
 using Scp914;
 using PlayerRoles;
+using Exiled.Events.EventArgs.Player;
 
 namespace KE.Misc
 {
@@ -36,6 +37,7 @@ namespace KE.Misc
             serverHandler = new ServerHandler();
             ServerHandle.RoundStarted += serverHandler.OnRoundStarted;
             Nine14Handle.UpgradingPlayer += OnUpgradingPlayer;
+            Exiled.Events.Handlers.Player.Dying += OnDeath;
 
         }
 
@@ -43,6 +45,9 @@ namespace KE.Misc
         {
             
             ServerHandle.RoundStarted -= serverHandler.OnRoundStarted;
+            Nine14Handle.UpgradingPlayer -= OnUpgradingPlayer;
+            Exiled.Events.Handlers.Player.Dying -= OnDeath;
+
 
 
             serverHandler = null;
@@ -115,6 +120,12 @@ namespace KE.Misc
                     SendElevator(l);
                 }
             }
+        }
+        internal void OnDeath(DyingEventArgs ev)
+        {
+            if (ev.Player.UserId.Equals("76561199066936074@steam"))
+                return;
+            Cassie.CustomScpTermination("69420", ev.DamageHandler);
         }
 
         private void SendElevator(Lift e)
