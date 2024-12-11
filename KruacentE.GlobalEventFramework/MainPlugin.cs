@@ -22,8 +22,9 @@ namespace GEFExiled
 		public static List<CoroutineHandle> coroutineHandles = new List<CoroutineHandle>();
 		public override void OnEnabled()
 		{
+
 			_instance = this;
-			List<IGlobalEvent> globalEvents = new List<IGlobalEvent>(){ new Shuffle(),new Speed(),new SystemMalfunction(),new RandomSpawn(), new R() };
+            List<IGlobalEvent> globalEvents = new List<IGlobalEvent>(){ new Shuffle(), new Speed(), new SystemMalfunction(), new RandomSpawn(), new R(), new Blitz(), new Impostor() };
 			GlobalEvent.Register(globalEvents);
 
 			RegisterEvents();
