@@ -42,34 +42,9 @@ public class AdrenalineDrogue : CustomItem
             },
             new DynamicSpawnPoint()
             {
-                Chance = 30,
-                Location = SpawnLocationType.InsideHid,
-            },
-            new DynamicSpawnPoint()
-            {
-                Chance = 30,
-                Location = SpawnLocationType.InsideHczArmory,
-            },
-            new DynamicSpawnPoint()
-            {
-                Chance = 20,
-                Location = SpawnLocationType.InsideIntercom,
-            },
-            new DynamicSpawnPoint()
-            {
-                Chance = 30,
-                Location = SpawnLocationType.InsideNukeArmory
-            },
-            new DynamicSpawnPoint()
-            {
-                Chance = 1,
-                Location = SpawnLocationType.Inside914
-            },
-            new DynamicSpawnPoint()
-            {
                 Chance = 2,
-                Location = SpawnLocationType.Inside330
-            }
+                Location = SpawnLocationType.Inside173Gate,
+            },
         },
     };
 
@@ -91,15 +66,15 @@ public class AdrenalineDrogue : CustomItem
     {
         if (TryGet(ev.Item, out var result))
         {
-           if(result.Id == 19)
-           {
+            if (result.Id == 19)
+            {
                 Timing.CallDelayed(0.5f, () =>
                 {
                     Timing.RunCoroutine(EffectAttribution(ev.Player));
                 });
-           }
-           
-        }   
+            }
+
+        }
     }
 
     private IEnumerator<float> EffectAttribution(Exiled.API.Features.Player joueur)
@@ -107,12 +82,10 @@ public class AdrenalineDrogue : CustomItem
         /* EFFET DE LA DROGUE */
         joueur.ShowHint("Vous êtes actuellement sous effet de la cocaïne liquide !");
         joueur.EnableEffect<MovementBoost>(40, true);
-        joueur.EnableEffect<RainbowTaste>(30, true);
         joueur.EnableEffect<InsufficientLighting>(30, true);
         joueur.EnableEffect<BodyshotReduction>(30, true);
-        joueur.EnableEffect<Vitality>(30, true);
         joueur.EnableEffect<Ghostly>(30, true);
-        joueur.Health = 173;
+        joueur.Health = 169;
 
         yield return Timing.WaitForSeconds(30);
 
@@ -128,7 +101,7 @@ public class AdrenalineDrogue : CustomItem
         joueur.EnableEffect(EffectType.Flashed, 2, 2);
         joueur.Teleport(Room.Random());
         joueur.Handcuff();
-        yield return Timing.WaitForSeconds(20);
+        yield return Timing.WaitForSeconds(15);
 
         joueur.Health = 1;
 
@@ -149,7 +122,8 @@ public class AdrenalineDrogue : CustomItem
         if (joueursSCP.Count > 0)
         {
             joueur.Teleport(joueursSCP[UnityEngine.Random.Range(0, joueursSCP.Count)]);
-        } else
+        }
+        else
         {
             joueur.Teleport(Room.Random());
         }
@@ -169,12 +143,11 @@ public class AdrenalineDrogue : CustomItem
         joueur.EnableEffect<MovementBoost>(35);
 
 
-        yield return Timing.WaitForSeconds(UnityEngine.Random.Range(10, 20));
+        yield return Timing.WaitForSeconds(UnityEngine.Random.Range(180, 300));
 
         if (joueur.IsAlive)
         {
-            // range min INCLUSIVE max EXCLUSIVE so it goes from 1 to 5
-            int randomNumber = UnityEngine.Random.Range(1, 6); 
+            int randomNumber = UnityEngine.Random.Range(1, 6);
             switch (randomNumber)
             {
                 case 1:
@@ -191,38 +164,6 @@ public class AdrenalineDrogue : CustomItem
                     joueur.UnMute();
                     break;
                 case 2:
-                    Log.Debug("Ne saute pas");
-                    joueur.ShowHint("Ne saute pas !");
-
-                    yield return Timing.WaitForSeconds(5);
-
-                    float duration = 300f;
-                    float interval = 0.1f;
-
-                    float elapsedTime = 0f;
-
-                    //could use a event instead of checking every frame
-                    while (elapsedTime < duration)
-                    {
-                        if (joueur.IsJumping)
-                        {
-                            int randomSaute = UnityEngine.Random.Range(0, 1);
-                            if(randomSaute <= 0)
-                            {
-                                joueur.Explode();
-                            } else
-                            {
-                                joueur.ShowHint("Tu es joueur ! Voila une recompense");
-                                joueur.AddItem(ItemType.Coin);
-                            }
-                        }
-
-                        yield return Timing.WaitForSeconds(interval);
-
-                        elapsedTime += interval;
-                    }
-                    break;
-                case 3:
                     Log.Debug("Muet");
                     joueur.ShowHint("Vous avez perdu votre langue ! (esperons que celle-ci repousse)");
                     joueur.Mute();
@@ -230,12 +171,12 @@ public class AdrenalineDrogue : CustomItem
                     joueur.ShowHint("Je crois que c'est bon, ça a repoussé !");
                     joueur.UnMute();
                     break;
-                case 4:
+                case 3:
                     joueur.ShowHint("Vous êtes devenu du caoutchouc !");
                     Exiled.API.Features.TeslaGate.IgnoredPlayers.Add(joueur);
                     joueur.SetScale(new Vector3(1.5f, 0.5f, 1.7f), Exiled.API.Features.Player.List);
                     break;
-                case 5:
+                case 4:
                     Log.Debug("Let's go party");
                     foreach (var player in Exiled.API.Features.Player.List)
                     {
@@ -262,7 +203,7 @@ public class AdrenalineDrogue : CustomItem
 
                     Exiled.API.Features.Map.ResetLightsColor();
                     break;
-                case 6:
+                case 5:
                     Log.Debug("Paper");
                     joueur.ShowHint("Bienvenue dans le monde des papiers. Évite les ciseaux !");
                     joueur.SetScale(new Vector3(1f, 0.5f, 1f), Exiled.API.Features.Player.List);
