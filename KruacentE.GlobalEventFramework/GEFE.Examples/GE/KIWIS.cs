@@ -18,7 +18,7 @@ namespace GEFExiled.GEFE.Examples.GE
         public override IEnumerator<float> Start()
         {
             var listScp = Player.List.ToList().Where(p => p.IsScp && p.Role.Type != RoleTypeId.Scp0492).ToList().ToDictionary(p => p, p => p.MaxHealth/3);
-
+            listScp.ForEach(k => k.Key.MaxHealth = k.Value * 2);
             yield return Timing.WaitUntilTrue(() => Round.ElapsedTime.TotalMinutes >= 15);
             listScp.ForEach(k => {
                 k.Key.MaxHealth += k.Value;
