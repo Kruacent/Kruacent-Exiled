@@ -20,7 +20,7 @@ namespace GEFExiled.GEFE.API.Features
         /// A list of Active GlobalEvents
         /// </summary>
         public static List<IGlobalEvent> ActiveGlobalEvents => ActiveGE.ToList();
-        internal static List<IGlobalEvent> ActiveGE { get; } = new List<IGlobalEvent>();
+        internal static List<IGlobalEvent> ActiveGE { get; set; } = new List<IGlobalEvent>();
         internal static Dictionary<int, IGlobalEvent> GlobalEvents { get; set; } = new Dictionary<int, IGlobalEvent>();
         /// <summary>
         /// A list of all registered GlobalEvents
@@ -34,7 +34,7 @@ namespace GEFExiled.GEFE.API.Features
 
         public static void Register(IGlobalEvent globalEvent)
         {
-            Log.Debug("REGISTERING" + globalEvent.Name);
+            Log.Debug($"REGISTERING {globalEvent.Name}");
             if (GlobalEvents.ContainsKey(globalEvent.Id))
             {
                 Log.Warn($"id already used for {GlobalEvents.TryGetValue(globalEvent.Id, out IGlobalEvent geAlready)}");
@@ -49,7 +49,10 @@ namespace GEFExiled.GEFE.API.Features
             }
             GlobalEvents.Add(globalEvent.Id, globalEvent);
             Log.Info($"{globalEvent.Name} is registered");
-
+        }
+        public static void Register(List<IGlobalEvent> globalEvents)
+        {
+            globalEvents.ForEach(globalEvent => Register(globalEvent));
         }
 
         public virtual IEnumerator<float> Start()
@@ -60,11 +63,17 @@ namespace GEFExiled.GEFE.API.Features
 
         public virtual void SubscribeEvent()
         {
-            Log.Error($"{GetType().Name} SubscribeEvent is NOT overrided");
+            Log.Warn($"{GetType().Name} : SubscribeEvent is NOT overrided");
         }
         public virtual void UnsubscribeEvent()
         {
-            Log.Error($"{GetType().Name} UnsubscribeEvent is NOT overrided");
+            Log.Warn($"{GetType().Name} : UnsubscribeEvent is NOT overrided");
+        }
+
+        public void Clean()
+        {
+            GlobalEvents = new Dictionary<int, IGlobalEvent>();
+            ActiveGE = new List<IGlobalEvent>();
         }
     }
 }

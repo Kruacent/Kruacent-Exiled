@@ -1,15 +1,12 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Features;
-using GlobalEventFrameworkEXILED.API.Utils;
-using InventorySystem;
-using System.Linq;
-using Exiled.API.Features.Items;
-using Exiled.API.Extensions;
-using Exiled.API.Enums;
-using InventorySystem.Items.Firearms.Attachments.Components;
-using Exiled.API.Structs;
+﻿using Exiled.API.Features;
 using MEC;
 using GEFExiled.GEFE.API.Features;
+using PlayerHandler = Exiled.Events.Handlers.Player;
+using Exiled.Events.EventArgs.Player;
+using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
+
 
 namespace GEFExiled.GEFE.Examples.GE
 {
@@ -22,59 +19,83 @@ namespace GEFExiled.GEFE.Examples.GE
         ///<inheritdoc/>
         public override string Description { get; set; } = "et ça fait roomba café dans le scp";
         ///<inheritdoc/>
-        public override double Weight { get; set; } = 1;
-        private Player[] players = Player.List.ToArray();
-        private List<Item>[] inventories;
+        public override double Weight { get; set; } = 0;
+        private List<Player> players;
+        private List<Vector3> pos;
         ///<inheritdoc/>
         public override IEnumerator<float> Start()
         {
-            Coroutine.LaunchCoroutine(Update());
-            yield return 0;
-        }
-
-        public Shuffle()
-        {
-            inventories = new List<Item>[players.Length];
-            for (int i = 0; i < players.Length; i++)
+            this.players = Player.List.ToList().Where(p => !p.IsNPC).ToList();
+            this.players.ShuffleList();
+            pos = new List<Vector3>(players.Count);
+            for (int i = 0; i < players.Count; i++)
             {
-                inventories[i] = players[i].Items.ToList();
+                pos.Add(Vector3.zero); 
             }
-        }
-        private IEnumerator<float> Update()
-        {
+            Log.Debug($"before while");
             while (!Round.IsEnded)
             {
-                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(120, 240));
-
-
-            }
-        }
-        //sprainte 9 fèr lé non ki rest
-        private void Shuffling(int decale)
-        {
-            for (int i = 0; i < players.Length; i++)
-            {
-
-            }
-        }
-
-        private void ChangeInventory(int pid)
-        {
-            var fire = new Dictionary<Firearm, IEnumerable<AttachmentIdentifier>>();
-            players[pid].ClearItems();
-            foreach (Item item in inventories[pid])
-            {
-                //is a firearm
-                if (item is Firearm firearm)
+                
+                Log.Debug($"waiting for {GetType().Name}");
+                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(120, 240)); //120 240
+                for (int i = 0; i < this.players.Count; i++)
                 {
-                    fire.Add(firearm, firearm.AttachmentIdentifiers);
-                    players[pid].AddItem(fire);
+                    Log.Debug($"old position of player {this.players[i]} : {this.players[i].Position}");
+                    var player = this.players[i];
+                    pos[i] = player.Position;
+                    Log.Debug("------");
                 }
-                else
+
+                ShiftLeft(this.players);
+                Log.Debug("shifted players");
+                for (int i = 0; i < this.players.Count; i++)
                 {
-                    players[pid].AddItem(item);
+                    Log.Debug("before tp");
+                    this.players[i].Teleport(pos[i]);
+                    Log.Debug($"new position of player {this.players[i]} : {this.players[i].Position}");
                 }
+                Log.Debug($"tp player");
+                for (int i = 0; i < players.Count; i++)
+                {
+                    pos.Add(Vector3.zero);
+                }
+                Log.Debug($"cleared");
             }
         }
+
+        public override void SubscribeEvent()
+        {
+            PlayerHandler.Joined += OnJoined;
+        }
+
+        public override void UnsubscribeEvent()
+        {
+            PlayerHandler.Joined -= OnJoined;
+        }
+
+
+        private void OnJoined(JoinedEventArgs ev)
+        {
+            if (!ev.Player.IsNPC)
+            {
+                this.players.Add(ev.Player);
+                this.pos.Add(ev.Player.Position);
+            }
+        }
+
+        private void ShiftLeft<T>(List<T> lst)
+        {
+            if (lst.Count > 0)
+            {
+                T firstElement = lst[0];
+                for (int i = 1; i < lst.Count; i++)
+                {
+                    lst[i - 1] = lst[i];
+                }
+                lst[lst.Count - 1] = firstElement;
+            }
+        }
+
+
     }
 }

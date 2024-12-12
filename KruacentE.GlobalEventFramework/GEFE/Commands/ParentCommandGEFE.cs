@@ -1,6 +1,5 @@
-using GEFExiled.Commands;
 
-namespace KruacentExiled.KruacentE.GlobalEventFramework.GEFE.Commands
+namespace GEFExiled.GEFE.Commands
 {
     using CommandSystem;
     using System;

@@ -8,35 +8,36 @@ namespace BlackoutKruacent
 {
     public class MainPlugin : Plugin<Config>
     {
+        public override string Name => "BlackOutNDoors";
         internal static MainPlugin Instance;
-        private Controller _c;
-        private ServerHandler _server;
+        private Controller Controller;
+        public ServerHandler ServerHandler { get; private set; }
 
         public override void OnEnabled()
         {
             Instance = this;
-            _c = new Controller();
+            Controller = new Controller();
             this.RegisterEvent();
         }
         public override void OnDisabled()
         {
 
             Instance = null;
-            _c = null;
+            Controller = null;
             this.UnregisterEvent();
         }
 
         private void RegisterEvent() 
         {
-            _server = new ServerHandler(_c);
-            Server.RoundStarted += _server.OnRoundStarted;
+            ServerHandler = new ServerHandler(Controller);
+            Server.RoundStarted += ServerHandler.OnRoundStarted;
 
         }
         private void UnregisterEvent() 
         {
-            Server.RoundStarted -= _server.OnRoundStarted;
+            Server.RoundStarted -= ServerHandler.OnRoundStarted;
 
-            _server = null;
+            ServerHandler = null;
         }
 
 

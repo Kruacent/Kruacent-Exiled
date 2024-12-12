@@ -8,6 +8,7 @@ using Player = Exiled.API.Features.Player;
 using GEFExiled.GEFE.API.Features;
 using GEFExiled.GEFE.API.Interfaces;
 using GEFExiled.GEFE.Examples.GE;
+using ServerHandler = Exiled.Events.Handlers.Server;
 namespace GEFExiled
 {
     internal class MainPlugin : Plugin<Config>
@@ -21,11 +22,13 @@ namespace GEFExiled
 		public static List<CoroutineHandle> coroutineHandles = new List<CoroutineHandle>();
 		public override void OnEnabled()
 		{
+
 			_instance = this;
-			GlobalEvent.Register(new SystemMalfunction());
-			GlobalEvent.Register(new Shuffle());
-			
+            List<IGlobalEvent> globalEvents = new List<IGlobalEvent>(){ new Shuffle(), new Speed(), new SystemMalfunction(), new RandomSpawn(), new R(), new Blitz(), new Impostor() };
+			GlobalEvent.Register(globalEvents);
+
 			RegisterEvents();
+			
 			base.OnEnabled();
         }
 
@@ -41,58 +44,75 @@ namespace GEFExiled
 		{
 			_server = new Handlers.ServerHandler(this);
 
-			Exiled.Events.Handlers.Server.RoundStarted += _server.OnRoundStarted;
-			Exiled.Events.Handlers.Server.EndingRound += _server.OnEndingRound;
+            ServerHandler.RoundStarted += _server.OnRoundStarted;
+            ServerHandler.EndingRound += _server.OnEndingRound;
+			ServerHandler.RestartingRound += _server.OnRestartingRound;
+
 		}
 
 		private void UnregisterEvents()
 		{
-			Exiled.Events.Handlers.Server.RoundStarted -= _server.OnRoundStarted;
-			Exiled.Events.Handlers.Server.EndingRound -= _server.OnEndingRound;
+            ServerHandler.RoundStarted -= _server.OnRoundStarted;
+            ServerHandler.EndingRound -= _server.OnEndingRound;
+            ServerHandler.RestartingRound -= _server.OnRestartingRound;
 
-			_server = null;
+            _server = null;
 		}
 
 		public void Show()
 		{
-			foreach (Player player in Player.List)
+			var random = UnityEngine.Random.value;
+
+            foreach (Player player in Player.List)
 			{
-                Exiled.API.Features.Broadcast b = new Exiled.API.Features.Broadcast();
-				b.Content = ShowText();
-				b.Duration = 10;
-				player.Broadcast(b);
+                Exiled.API.Features.Broadcast b = new Exiled.API.Features.Broadcast
+                {
+                    Content = ShowText(random > .5f),
+                    Duration = 10
+                };
+                player.Broadcast(b);
 			}
 		}
 
-		private String ShowText()
+		private String ShowText(bool redacted = false)
 		{
 			String result = "Global Events: ";
 			for (int i = 0; i < GlobalEvent.ActiveGE.Count(); i++)
 			{
-				result += GlobalEvent.ActiveGE[i].Description;
-				if (GlobalEvent.ActiveGE.Count() > 1)
+				
+
+                if (redacted)
+				{
+                    result += GlobalEvent.ActiveGE[i].Description;
+				}
+				else
+				{
+					result += "[REDACTED]";
+				}
+				
+				if (GlobalEvent.ActiveGE.Count() > 1 && i < GlobalEvent.ActiveGE.Count()-1)
 				{
 					result += ",";
 				}
 			}
+
+
 			return result;
 		}
 
-		public void ChooseGE()
+		public List<IGlobalEvent> ChooseGE()
 		{
-            Log.Debug("Choosine ge");
             List<IGlobalEvent> activeGE = ChooseRandomGE();
-            Log.Debug("et go les ga c la fin du randomge");
+			Log.Debug($"activeGE size : {activeGE.Count}");
+			Log.Info($"Global Event(s) : ");
 
-            foreach (IGlobalEvent ge in activeGE)
+			foreach (IGlobalEvent ge in activeGE)
 			{
-				Log.Debug($"GE : {ge.Name}");
+				Log.Info(ge.Name);
 				var a = Timing.RunCoroutine(ge.Start());
-                Log.Debug("fin start corutn");
-                coroutineHandles.Add(a); //crash
-				Log.Debug("fin add corutn");
+                coroutineHandles.Add(a); //crash when using other ge from other assembly
             }
-            Log.Debug("fin choosein ge");
+			return activeGE;
         }
 
 
@@ -105,10 +125,15 @@ namespace GEFExiled
 			double randomWeight = UnityEngine.Random.value * totalWeight;
 			double cumulativeWeight = 0.0;
 
-			
+			result.Add(gelist[UnityEngine.Random.Range(0, gelist.Count)]);
+
+			GlobalEvent.ActiveGE = result.ToList();
+
+			return result;
+
+			// yes it's dead but they deserve it
 			for (int i = 0; i < nbGE; i++)
 			{
-                Log.Debug("start foreach");
                 bool found = false;
 				foreach (IGlobalEvent ge in gelist)
 				{
@@ -116,20 +141,17 @@ namespace GEFExiled
 
 					if (randomWeight <= cumulativeWeight)
 					{
-                        Log.Debug("hon hon hon le add du if");
                         result.Add(ge);
 						break;
 					}
 				}
 				if (!found)
 				{
-                    Log.Debug("nsm on a pa trouvé");
                     result.Add(gelist.Last());
 					gelist.Remove(gelist.Last());
 				}
 
 			}
-            Log.Debug("fin :D");
             return result;
 		}
 

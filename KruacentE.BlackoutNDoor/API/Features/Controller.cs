@@ -8,14 +8,16 @@ using System.Linq;
 
 namespace BlackoutKruacent.API.Features
 {
-    internal class Controller
+    public class Controller
     {
+
+        
         /// <summary>
         /// Select a random zone and close and lock all door of the zone
         /// </summary>
-        public IEnumerator<float> RandomDoorStuck()
+        internal IEnumerator<float> RandomDoorStuck()
         {
-            yield return Timing.WaitForOneFrame;
+            yield return Timing.WaitUntilTrue(() => Round.IsStarted);
             var zone = SelectZone();
             Log.Debug($"DoorStuck in {zone}");
             yield return Timing.WaitUntilFalse(() => Cassie.IsSpeaking);
@@ -58,7 +60,7 @@ namespace BlackoutKruacent.API.Features
         /// </summary>
         public IEnumerator<float> RandomBlackout()
         {
-            yield return Timing.WaitForOneFrame;
+            yield return Timing.WaitUntilTrue(() => Round.IsStarted);
 
             var zone = SelectZone();
             yield return Timing.WaitUntilFalse(() => Cassie.IsSpeaking);

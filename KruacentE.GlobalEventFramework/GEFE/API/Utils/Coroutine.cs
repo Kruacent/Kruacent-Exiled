@@ -1,7 +1,7 @@
 ﻿using MEC;
 using System.Collections.Generic;
 
-namespace GEFExiled.API.Utils
+namespace GEFExiled.GEFE.API.Utils
 {
 	public static class Coroutine
 	{
