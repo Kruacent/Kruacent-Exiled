@@ -8,8 +8,14 @@ using System.Threading.Tasks;
 
 namespace KruacentExiled.KruacentE.Misc
 {
+    /// <summary>
+    /// The elevator will random activate in the round
+    /// </summary>
     internal class AutoElevator
     {
+        /// <summary>
+        /// Start the auto elevator loop
+        /// </summary>
         internal IEnumerator<float> StartElevator()
         {
             while (!Round.IsEnded)

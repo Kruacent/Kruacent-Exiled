@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Exiled.API.Features;
 using MEC;
 
 namespace KE.Misc
@@ -17,7 +18,7 @@ namespace KE.Misc
                 MainPlugin.Instance.ClassDDoor.ClassDDoorGoesBoom();
             if(MainPlugin.Instance.Config.AutoNukeAnnoucement)
                 Timing.RunCoroutine(MainPlugin.Instance.NukeAnnouncement());
-            if(MainPlugin.Instance.Config.PeanutLockDown)
+            if(MainPlugin.Instance.Config.PeanutLockDown && Player.List.Where(p => p.Role.Type == PlayerRoles.RoleTypeId.Scp173).Count() > 0)
                 Timing.RunCoroutine(MainPlugin.Instance.PeanutLockdown());
             if(MainPlugin.Instance.Config.AutoElevator)
                 Timing.RunCoroutine(MainPlugin.Instance.AutoElevator.StartElevator());

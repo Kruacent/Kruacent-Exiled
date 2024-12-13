@@ -11,8 +11,14 @@ using System.Threading.Tasks;
 
 namespace KruacentExiled.KruacentE.Misc
 {
+    /// <summary>
+    /// Everything about classD door
+    /// </summary>
     internal class ClassDDoor
     {
+        /// <summary>
+        /// Class d door randomly explode at the start of the round
+        /// </summary>
         internal void ClassDDoorGoesBoom()
         {
             if (UnityEngine.Random.Range(0, 101) < MainPlugin.Instance.Config.ChanceClassDDoorGoesBoom)

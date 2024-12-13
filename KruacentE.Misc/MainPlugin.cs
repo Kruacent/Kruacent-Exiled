@@ -29,8 +29,8 @@ namespace KE.Misc
             _914 = new _914();
             AutoElevator = new AutoElevator();
             ClassDDoor = new ClassDDoor();
-
             ServerHandler = new ServerHandler();
+
             ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;
             Nine14Handle.UpgradingPlayer += _914.OnUpgradingPlayer;
             Exiled.Events.Handlers.Player.Dying += ScpNoeDeathMessage;
@@ -43,7 +43,6 @@ namespace KE.Misc
             Nine14Handle.UpgradingPlayer -= _914.OnUpgradingPlayer;
             Exiled.Events.Handlers.Player.Dying -= ScpNoeDeathMessage;
 
-
             _914 = null;
             ClassDDoor = null;
             ServerHandler = null;
@@ -52,13 +51,17 @@ namespace KE.Misc
         }
 
 
-
+        /// <summary>
+        /// Set the Friendly Fire to true or false at random
+        /// </summary>
         internal void RandomFF()
         {
             Server.FriendlyFire = UnityEngine.Random.Range(0, 101) < Instance.Config.ChanceFF;
         }
 
-
+        /// <summary>
+        /// C.A.S.S.I.E. announce 5 min before the autonuke
+        /// </summary>
         internal IEnumerator<float> NukeAnnouncement()
         {
             yield return Timing.WaitUntilTrue(() => 25 <= Round.ElapsedTime.TotalMinutes);
@@ -66,7 +69,10 @@ namespace KE.Misc
                 "Warning automatic warhead will detonate in <color=#FF0000>5</color> minutes");
         }
 
-
+        /// <summary>
+        /// Lock SCP-173 in its cell for an amount of time determine by the number of player
+        /// Formula : timeLock = 135-nbPlayer*15
+        /// </summary>
         internal IEnumerator<float> PeanutLockdown()
         {
             Door peanutDoor = Door.List.ToList().Where(x => x.Type == DoorType.Scp173NewGate).ToList()[0];
@@ -77,11 +83,16 @@ namespace KE.Misc
             peanutDoor.Unlock();
         }
         
-
-
+        /// <summary>
+        /// Special death message when Delecons dies as a SCP
+        /// </summary>
+        /// <param name="ev"></param>
         internal void ScpNoeDeathMessage(DyingEventArgs ev)
         {
-            if (!ev.Player.UserId.Equals("76561199066936074@steam"))
+            Player player = ev.Player;
+            if (!player.UserId.Equals("76561199066936074@steam"))
+                return;
+            if (!player.IsScp)
                 return;
             Cassie.CustomScpTermination("69420", ev.DamageHandler);
         }
