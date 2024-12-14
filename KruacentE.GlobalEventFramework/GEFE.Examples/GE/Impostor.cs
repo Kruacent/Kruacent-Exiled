@@ -28,7 +28,8 @@ namespace GEFExiled.GEFE.Examples.GE
         private void ChangingPlayer()
         {
             // Liste des joueurs vivants
-            List<Player> playerInServer = Player.List.Where(p => p.IsAlive).ToList();
+            List<Player> serverPlayer = Player.List.Where(p => p.IsAlive).ToList();
+            List<Player> playerInServer = serverPlayer.Where(p => !p.IsNPC).ToList();
 
             if (playerInServer.Count < 2)
             {
