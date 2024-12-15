@@ -24,7 +24,7 @@ namespace GEFExiled
 		{
 
 			_instance = this;
-            List<IGlobalEvent> globalEvents = new List<IGlobalEvent>(){ new Shuffle(), new Speed(), new SystemMalfunction(), new RandomSpawn(), new R(), new Blitz(), new Impostor() };
+            List<IGlobalEvent> globalEvents = new List<IGlobalEvent>(){ new Shuffle(), new Speed(), new SystemMalfunction(), new RandomSpawn(), new R(), new Blitz() };
 			GlobalEvent.Register(globalEvents);
 
 			RegisterEvents();
@@ -45,7 +45,7 @@ namespace GEFExiled
 			_server = new Handlers.ServerHandler(this);
 
             ServerHandler.RoundStarted += _server.OnRoundStarted;
-            ServerHandler.EndingRound += _server.OnEndingRound;
+            ServerHandler.RoundEnded += _server.OnEndingRound;
 			ServerHandler.RestartingRound += _server.OnRestartingRound;
 
 		}
@@ -53,7 +53,7 @@ namespace GEFExiled
 		private void UnregisterEvents()
 		{
             ServerHandler.RoundStarted -= _server.OnRoundStarted;
-            ServerHandler.EndingRound -= _server.OnEndingRound;
+            ServerHandler.RoundEnded -= _server.OnEndingRound;
             ServerHandler.RestartingRound -= _server.OnRestartingRound;
 
             _server = null;

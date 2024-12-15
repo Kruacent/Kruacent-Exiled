@@ -27,26 +27,44 @@ namespace GEFExiled.GEFE.Examples.GE
 
         private void ChangingPlayer()
         {
-            List<Player> playerInServer = Player.List.ToList();
+            // Liste des joueurs vivants
+            List<Player> playerInServer = Player.List.Where(p => !p.IsNPC && p.IsAlive).ToList();
+
+            if (playerInServer.Count < 2)
+            {
+                Log.Warn("Pas assez de joueurs vivants pour effectuer un échange !");
+                return;
+            }
+
+            // Debug : afficher la liste initiale des joueurs avec leurs rôles
+            Log.Debug("===== Liste des joueurs avant permutation =====");
+
+            playerInServer.ForEach(p => Log.Debug($"{p.Nickname} ({p.Role})"));
+
+            // Mélanger la liste des joueurs
             playerInServer.ShuffleList();
 
-            //Affichage des joueurs pour le debug
-            playerInServer.ForEach(x => Log.Debug("Joueur : " + x.Nickname));
+            // Copier les données actuelles des joueurs
+            var originalNicknames = playerInServer.Select(p => p.Nickname).ToList();
+            var originalRoles = playerInServer.Select(p => p.Role).ToList();
 
-            foreach (Player player in playerInServer)
+            // Permutation circulaire des rôles et pseudonymes
+            for (int i = 0; i < playerInServer.Count; i++)
             {
-                Player otherPlayer = playerInServer.RandomItem();
+                int nextIndex = (i + 1) % playerInServer.Count;
+                playerInServer[i].ChangeAppearance(originalRoles[nextIndex]);
+                playerInServer[i].DisplayNickname = originalNicknames[nextIndex];
+            }
 
-
-                Log.Debug("Joueur Target : " + otherPlayer.Nickname);
-                Log.Debug("Role du Target : " + otherPlayer.Role);
-
-                player.ChangeAppearance(otherPlayer.Role);
-                player.DisplayNickname = otherPlayer.Nickname;
-
-                playerInServer.Remove(otherPlayer);
+            // Debug : afficher les correspondances après permutation
+            Log.Debug("===== Correspondances après permutation =====");
+            for (int i = 0; i < playerInServer.Count; i++)
+            {
+                int nextIndex = (i + 1) % playerInServer.Count;
+                Log.Debug($"{originalNicknames[i]} ({originalRoles[i]}) -> {originalNicknames[nextIndex]} ({originalRoles[nextIndex]})");
             }
         }
+
 
     }
 }
