@@ -28,8 +28,7 @@ namespace GEFExiled.GEFE.Examples.GE
         private void ChangingPlayer()
         {
             // Liste des joueurs vivants
-            List<Player> serverPlayer = Player.List.Where(p => p.IsAlive).ToList();
-            List<Player> playerInServer = serverPlayer.Where(p => !p.IsNPC).ToList();
+            List<Player> playerInServer = Player.List.Where(p => !p.IsNPC && p.IsAlive).ToList();
 
             if (playerInServer.Count < 2)
             {
@@ -39,10 +38,8 @@ namespace GEFExiled.GEFE.Examples.GE
 
             // Debug : afficher la liste initiale des joueurs avec leurs rôles
             Log.Debug("===== Liste des joueurs avant permutation =====");
-            foreach (var player in playerInServer)
-            {
-                Log.Debug($"{player.Nickname} ({player.Role})");
-            }
+
+            playerInServer.ForEach(p => Log.Debug($"{p.Nickname} ({p.Role})"));
 
             // Mélanger la liste des joueurs
             playerInServer.ShuffleList();
