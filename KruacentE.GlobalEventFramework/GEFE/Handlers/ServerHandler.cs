@@ -34,13 +34,13 @@ namespace GEFExiled.Handlers
 		{
             Log.Debug("ending round");
             _activeGE.ForEach(e => e.UnsubscribeEvent());
-            Timing.KillCoroutines();
+            //Timing.KillCoroutines();
         }
         public void OnRestartingRound()
         {
             Log.Debug("restarting");
             _activeGE.ForEach(e => e.UnsubscribeEvent());
-            Timing.KillCoroutines();    
+            //Timing.KillCoroutines();    
         }
 
     }
