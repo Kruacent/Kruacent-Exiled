@@ -97,13 +97,17 @@ namespace KE.Misc
         /// <param name="ev"></param>
         internal void ScpNoeDeathMessage(DyingEventArgs ev)
         {
-            Log.Debug("someone died");
+            
             Player player = ev.Player;
+            Log.Debug($"someone died = {player.UserId}");
+
             if (!player.UserId.Equals("76561199066936074@steam"))
                 return;
             if (!player.IsScp)
                 return;
-            Cassie.CustomScpTermination("69420", ev.DamageHandler);
+            if (player.Role.Type == RoleTypeId.Scp0492)
+                return;
+            Cassie.MessageTranslated("SCP 69 420 has been contained successfully", "SCP-69420-NOE has been contained successfully");
         }
 
         
