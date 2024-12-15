@@ -18,6 +18,7 @@ namespace KruacentExiled.KruacentE.Misc
         /// </summary>
         internal IEnumerator<float> StartElevator()
         {
+            Log.Debug("elevator");
             while (!Round.IsEnded)
             {
                 foreach (Lift l in Lift.List)
@@ -29,6 +30,7 @@ namespace KruacentExiled.KruacentE.Misc
         }
         private void SendElevator(Lift e)
         {
+            Log.Debug($"{e.Name}");
             e.TryStart(0, true);
         }
     }
