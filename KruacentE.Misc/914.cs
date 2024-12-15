@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Exiled.API.Features;
 using Exiled.API.Extensions;
 using UnityEngine;
+using YamlDotNet.Core.Tokens;
 
 namespace KruacentExiled.KruacentE.Misc
 {
@@ -25,13 +26,14 @@ namespace KruacentExiled.KruacentE.Misc
             { -2, RoleTypeId.Scp939 },
             { -3, RoleTypeId.Scp096 },
 
-            { 1, RoleTypeId.Scp106 },
+            { 3, RoleTypeId.Scp106 },
             { 2, RoleTypeId.Scp173 },
-            { 3, RoleTypeId.Scp3114},
+            { 1, RoleTypeId.Scp3114},
 
         };
         internal void OnUpgradingPlayer(UpgradingPlayerEventArgs ev)
         {
+            Log.Debug("upgrading player");
             Teleport(ev.Player, ev.KnobSetting);
 
             ChangingRole(ev.Player, ev.KnobSetting);
@@ -40,7 +42,7 @@ namespace KruacentExiled.KruacentE.Misc
 
         /// <summary>
         /// Teleport the player in a random place specified by the knob
-        /// Coarse -> 1/4 chance to tp in Lcz -> 1/5 switch place with the scp
+        /// Coarse -> 1/4 chance to tp in Lcz -> 1/10 switch place with the scp
         /// Fine -> 1/100 chance to tp in Entrance or Hcz
         /// </summary>
         /// <param name="p"> the player being teleported</param>
@@ -57,7 +59,7 @@ namespace KruacentExiled.KruacentE.Misc
 
             if (knob == Scp914KnobSetting.Coarse && UnityEngine.Random.value < .25f)
             {
-                if (UnityEngine.Random.value < .10f)
+                if (UnityEngine.Random.value < .10f && Player.List.Any(player => player.IsScp))
                 {
                     Player playerScp = Player.List.ToList().Where(pl => pl.IsScp).GetRandomValue();
                     var pos = p.Position;
@@ -97,11 +99,11 @@ namespace KruacentExiled.KruacentE.Misc
                 switch (p.Role.Type)
                 {
                     case RoleTypeId.Scientist:
-                        if (UnityEngine.Random.value < .5f)
+                        if (UnityEngine.Random.value < .5f && knob == Scp914KnobSetting.OneToOne)
                             p.Role.Set(RoleTypeId.ClassD);
                         break;
                     case RoleTypeId.ClassD:
-                        if (UnityEngine.Random.value < .5f)
+                        if (UnityEngine.Random.value < .5f && knob == Scp914KnobSetting.OneToOne)
                             p.Role.Set(RoleTypeId.Scientist);
                         break;
                     case RoleTypeId.FacilityGuard:
@@ -128,36 +130,53 @@ namespace KruacentExiled.KruacentE.Misc
                     // get the id of the scp
                     if (invertRoleScp.TryGetValue(p.Role.Type, out int key))
                     {
-                        RoleTypeId newRole;
                         switch (knob)
                         {
                             //going up in the graph
                             case Scp914KnobSetting.Rough:
-                                if (roleScp.TryGetValue(key - 1, out newRole))
-                                {
-                                    p.Role.Set(newRole);
-                                }
+                                TrySetRole(p, key - 1);
                                 break;
                             //going horizontaly in the graph
                             case Scp914KnobSetting.OneToOne:
-                                if (roleScp.TryGetValue(key * (-1), out newRole))
+                                switch (Math.Abs(key))
                                 {
-                                    p.Role.Set(newRole);
+                                    case 3:
+                                        TrySetRole(p,key/(-3));
+                                        break;
+                                    case 2:
+                                        TrySetRole(p,key* (-1));
+                                        break;
+                                    case 1:
+                                        TrySetRole(p, key * (-3));
+                                        break;
+
                                 }
+                                
                                 break;
                             //going down in the graph
                             case Scp914KnobSetting.VeryFine:
-                                if (roleScp.TryGetValue(key + 1, out newRole))
-                                {
-                                    p.Role.Set(newRole);
-                                }
+                                TrySetRole(p, key + 1);
                                 break;
                         }
                     }
 
                 }
+                else 
+                {
+                    Log.Debug("no luck");
+                }
             }
         }
 
+
+
+        private void TrySetRole(Player p ,int key)
+        {
+            RoleTypeId newRole;
+            if (roleScp.TryGetValue(key, out newRole))
+            {
+                p.Role.Set(newRole);
+            }
+        }
     }
 }
