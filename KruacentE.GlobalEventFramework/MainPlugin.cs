@@ -24,7 +24,7 @@ namespace GEFExiled
 		{
 
 			_instance = this;
-            List<IGlobalEvent> globalEvents = new List<IGlobalEvent>(){ new Shuffle(), new Speed(), new SystemMalfunction(), new RandomSpawn(), new R(), new Blitz() };
+			List<IGlobalEvent> globalEvents = new List<IGlobalEvent>() { new Shuffle(), new Speed(), new SystemMalfunction(), new RandomSpawn(), new R(), new Blitz(), new KIWIS(), new Impostor() };
 			GlobalEvent.Register(globalEvents);
 
 			RegisterEvents();
