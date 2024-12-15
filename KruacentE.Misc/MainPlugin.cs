@@ -57,6 +57,7 @@ namespace KE.Misc
         internal void RandomFF()
         {
             Server.FriendlyFire = UnityEngine.Random.Range(0, 101) < Instance.Config.ChanceFF;
+            Log.Info($"Friendly Fire : {Server.FriendlyFire}");
         }
 
         /// <summary>
@@ -64,6 +65,7 @@ namespace KE.Misc
         /// </summary>
         internal IEnumerator<float> NukeAnnouncement()
         {
+            Log.Debug("autonuke announcement : on");
             yield return Timing.WaitUntilTrue(() => 25 <= Round.ElapsedTime.TotalMinutes);
             Cassie.MessageTranslated("Warning automatic warhead will detonate in 5 minutes", 
                 "Warning automatic warhead will detonate in <color=#FF0000>5</color> minutes");
@@ -75,12 +77,18 @@ namespace KE.Misc
         /// </summary>
         internal IEnumerator<float> PeanutLockdown()
         {
+            if(!Player.List.Any(p => p.Role.Type == RoleTypeId.Scp173))
+            {
+                yield return 0;
+            }
+            Log.Debug("peanut lockdown");
             Door peanutDoor = Door.List.ToList().Where(x => x.Type == DoorType.Scp173NewGate).ToList()[0];
             peanutDoor.IsOpen = false;
             peanutDoor.ChangeLock(DoorLockType.Lockdown2176);
             yield return Timing.WaitForSeconds(135-Player.List.Count*15);
             peanutDoor.IsOpen = true;
             peanutDoor.Unlock();
+            Log.Debug("peanut free");
         }
         
         /// <summary>
@@ -89,6 +97,7 @@ namespace KE.Misc
         /// <param name="ev"></param>
         internal void ScpNoeDeathMessage(DyingEventArgs ev)
         {
+            Log.Debug("someone died");
             Player player = ev.Player;
             if (!player.UserId.Equals("76561199066936074@steam"))
                 return;
