@@ -23,6 +23,7 @@ namespace KruacentExiled.KruacentE.Misc
         {
             if (UnityEngine.Random.Range(0, 101) < MainPlugin.Instance.Config.ChanceClassDDoorGoesBoom)
             {
+                Log.Debug("ClassD's door exploded");
                 foreach (Door door in Door.List)
                 {
                     if (door.Type == DoorType.PrisonDoor)
@@ -30,7 +31,7 @@ namespace KruacentExiled.KruacentE.Misc
                         if (door is IDamageableDoor dBoyDoor && !dBoyDoor.IsDestroyed)
                         {
                             dBoyDoor.Break();
-                            Log.Debug("ClassD's door exploded");
+                            
                         }
                     }
                 }
