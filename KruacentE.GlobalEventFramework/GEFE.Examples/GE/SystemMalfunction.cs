@@ -1,5 +1,6 @@
 ﻿using BlackoutKruacent;
 using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Exiled.Events.Commands.Reload;
 using Exiled.Loader;
 using GEFExiled.GEFE.API.Features;
@@ -10,6 +11,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Interactables.Interobjects.DoorUtils;
+using Exiled.API.Enums;
+using Exiled.API.Extensions;
 
 namespace GEFExiled.GEFE.Examples.GE
 {
@@ -26,7 +30,17 @@ namespace GEFExiled.GEFE.Examples.GE
         {
             MoreBlackOutNDoors();
             Coroutine.LaunchCoroutine(EarlyNuke());
-            yield return 0;
+            
+            CoroutineHandle handle;
+            while(Round.InProgress){
+                //todo change so it happen more frequently 
+                Timing.WaitForSeconds((float)Round.ElapsedTime.TotalSeconds);
+                List<IEnumerator<float>> l = new []{CheckpointMalfunction(),GateLockdown(),ElevatorLockdown()}.ToList();
+                handle = Coroutine.LaunchCoroutine(l[UnityEngine.Random.Range(0,3)]);
+                yield return Timing.WaitUntilDone(handle);
+
+            }
+
         }
 
         private IEnumerator<float> EarlyNuke()
@@ -50,6 +64,28 @@ namespace GEFExiled.GEFE.Examples.GE
                 }
 
             }
+        }
+
+        private IEnumerator<float> CheckpointMalfunction(){
+            yield return Timing.WaitForSeconds(UnityEngine.Random.Range(20,60));
+            var checkpoints = Door.List.Where(d => d.IsCheckpoint).ToList().RandomItem().IsOpen =true;
+            
+        }
+
+        private IEnumerator<float> GateLockdown(){
+            var gates = Door.List.Where(d => d.Type == DoorType.GateA ||d.Type == DoorType.GateB);
+            var gate = gates.GetRandomValue();
+            gate.IsOpen = false;
+            var timelock = UnityEngine.Random.Range(10,30);
+            gate.Lock(timelock,DoorLockType.Isolation);
+            yield return Timing.WaitForSeconds(timelock);
+        }
+
+        private IEnumerator<float> ElevatorLockdown(){
+            var lift = Lift.Random;
+            lift.ChangeLock(DoorLockReason.Isolation);
+            yield return Timing.WaitForSeconds(UnityEngine.Random.Range(10,20));
+            lift.ChangeLock(DoorLockReason.None);
         }
         
     }
