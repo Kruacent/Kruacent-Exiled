@@ -37,7 +37,7 @@ namespace GEFExiled.GEFE.Examples.GE
             {
                 
                 Log.Debug($"waiting for {GetType().Name}");
-                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(120, 240)); //120 240
+                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(300, 900));
                 for (int i = 0; i < this.players.Count; i++)
                 {
                     Log.Debug($"old position of player {this.players[i]} : {this.players[i].Position}");
