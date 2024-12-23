@@ -17,13 +17,13 @@ namespace GEFExiled
 
 		internal Handlers.ServerHandler _server;
 
-		internal static MainPlugin _instance;
+		internal static MainPlugin Instance {get;private set;}
 
 		public static List<CoroutineHandle> coroutineHandles = new List<CoroutineHandle>();
 		public override void OnEnabled()
 		{
 
-			_instance = this;
+            Instance = this;
 			List<IGlobalEvent> globalEvents = new List<IGlobalEvent>() { new Shuffle(), new Speed(), new SystemMalfunction(), new RandomSpawn(), new R(), new Blitz(), new KIWIS(), new Impostor() };
 			GlobalEvent.Register(globalEvents);
 
@@ -37,13 +37,14 @@ namespace GEFExiled
 			UnregisterEvents();
 			Timing.KillCoroutines();
 			base.OnDisabled();
-			_instance = null;
+            Instance = null;
 		}
 
 		private void RegisterEvents()
 		{
 			_server = new Handlers.ServerHandler(this);
 
+			ServerHandler.WaitingForPlayers += _server.OnWaitingForPlayers;
             ServerHandler.RoundStarted += _server.OnRoundStarted;
             ServerHandler.RoundEnded += _server.OnEndingRound;
 			ServerHandler.RestartingRound += _server.OnRestartingRound;
@@ -100,11 +101,11 @@ namespace GEFExiled
 			return result;
 		}
 
-		public List<IGlobalEvent> ChooseGE()
+		public List<IGlobalEvent> ChooseGE(int numberOfGlobalEvent = 1)
 		{
-            List<IGlobalEvent> activeGE = ChooseRandomGE();
+            List<IGlobalEvent> activeGE = ChooseRandomGE(numberOfGlobalEvent);
 			Log.Debug($"activeGE size : {activeGE.Count}");
-			Log.Info($"Global Event(s) : ");
+			Log.Info($"Global Event(s) ({numberOfGlobalEvent}): ");
 
 			foreach (IGlobalEvent ge in activeGE)
 			{
@@ -115,49 +116,45 @@ namespace GEFExiled
 			return activeGE;
         }
 
-
 		private List<IGlobalEvent> ChooseRandomGE(int nbGE = 1)
 		{
 			List<IGlobalEvent> result = new List<IGlobalEvent>();
-			List<IGlobalEvent> gelist = GlobalEvent.GlobalEventsList.ToList();
 
-			double totalWeight = GlobalEvent.GlobalEventsList.Sum(x => x.Weight);
-			double randomWeight = UnityEngine.Random.value * totalWeight;
-			double cumulativeWeight = 0.0;
+			List<IGlobalEvent> weightedPool = new List<IGlobalEvent>();
+			foreach (IGlobalEvent ge in GlobalEvent.GlobalEventsList)
+			{
+				for (int i = 0; i < ge.Weight; i++)
+				{
+					weightedPool.Add(ge);
+					Log.Debug($"getochoose : {ge.Name} ");
+				}
+			}
 
-			result.Add(gelist[UnityEngine.Random.Range(0, gelist.Count)]);
+			nbGE = Math.Min(nbGE, GlobalEvent.GlobalEventsList.Count); 
 
+			for (int i = 0; i < nbGE; i++)
+			{
+				int randomIndex = UnityEngine.Random.Range(0, weightedPool.Count);
+				IGlobalEvent selectedGE = weightedPool[randomIndex];
+
+				result.Add(selectedGE);
+
+				weightedPool.RemoveAll(e => e == selectedGE);
+			}
+
+			// Step 3: Update the active global events
 			GlobalEvent.ActiveGE = result.ToList();
 
 			return result;
-
-			// yes it's dead but they deserve it
-			for (int i = 0; i < nbGE; i++)
-			{
-                bool found = false;
-				foreach (IGlobalEvent ge in gelist)
-				{
-					cumulativeWeight += ge.Weight;
-
-					if (randomWeight <= cumulativeWeight)
-					{
-                        result.Add(ge);
-						break;
-					}
-				}
-				if (!found)
-				{
-                    result.Add(gelist.Last());
-					gelist.Remove(gelist.Last());
-				}
-
-			}
-            return result;
 		}
 
 		public void StopCoroutines()
 		{
-			Timing.KillCoroutines();
-		}
+			coroutineHandles.ForEach(coroutineHandle =>
+			{
+				Timing.KillCoroutines(coroutineHandle);
+			});
+
+        }
 	}
 }
