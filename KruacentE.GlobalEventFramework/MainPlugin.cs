@@ -53,6 +53,7 @@ namespace GEFExiled
 
 		private void UnregisterEvents()
 		{
+            ServerHandler.WaitingForPlayers -= _server.OnWaitingForPlayers;
             ServerHandler.RoundStarted -= _server.OnRoundStarted;
             ServerHandler.RoundEnded -= _server.OnEndingRound;
             ServerHandler.RestartingRound -= _server.OnRestartingRound;
