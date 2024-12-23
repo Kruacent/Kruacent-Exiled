@@ -14,10 +14,16 @@ namespace GEFExiled.GEFE.Examples.GE
         public override int Id { get; set; } = 32;
         public override string Name { get; set; } = "KIWIS";
         public override string Description { get; set; } = "Kill It While It's Small";
-        public override double Weight { get; set; } = 1;
+        public override int Weight { get; set; } = 1;
         public override IEnumerator<float> Start()
         {
             var listScp = Player.List.ToList().Where(p => p.IsScp && p.Role.Type != RoleTypeId.Scp0492).ToList().ToDictionary(p => p, p => p.MaxHealth/3);
+
+            listScp.ForEach(k =>
+            {
+                k.Key.MaxHealth = k.Value * 2;
+                k.Key.Health = k.Key.MaxHealth;
+            });
 
             yield return Timing.WaitUntilTrue(() => Round.ElapsedTime.TotalMinutes >= 15);
             listScp.ForEach(k => {

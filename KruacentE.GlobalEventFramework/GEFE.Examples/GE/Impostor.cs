@@ -13,7 +13,7 @@ namespace GEFExiled.GEFE.Examples.GE
         public override int Id { get; set; } = 30;
         public override string Name { get; set; } = "Impostor";
         public override string Description { get; set; } = "Ne vous fiez pas aux apparences !";
-        public override double Weight { get; set; } = 1;
+        public override int Weight { get; set; } = 1;
 
         public override IEnumerator<float> Start()
         {

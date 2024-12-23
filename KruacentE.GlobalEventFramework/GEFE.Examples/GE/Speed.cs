@@ -19,7 +19,7 @@ namespace GEFExiled.GEFE.Examples.GE
         public override int Id { get; set; } = 30;
         public override string Name { get; set; } = "Speed";
         public override string Description { get; set; } = "Gas! gas! gas!";
-        public override double Weight { get; set; } = 1;
+        public override int Weight { get; set; } = 1;
         [Description("the movement speed that will be added to the player")]
         public byte MovementBoost { get; set; } = 100;
 

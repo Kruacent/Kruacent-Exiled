@@ -23,7 +23,7 @@ namespace GEFExiled.GEFE.Examples.GE
         public override int Id { get; set; } = 1;
         public override string Name { get; set; } = "System Malfunction";
         public override string Description { get; set; } = "On dirait que les systèmes informatiques sont défaillants";
-        public override double Weight { get; set; } = 1;
+        public override int Weight { get; set; } = 1;
         public int NewCooldown { get; set; } = 180;
 
         public override IEnumerator<float> Start()

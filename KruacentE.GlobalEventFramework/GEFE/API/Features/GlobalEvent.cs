@@ -30,7 +30,7 @@ namespace GEFExiled.GEFE.API.Features
         public virtual int Id { get; set; } = -1;
         public virtual string Name { get; set; } = "GE NOT SET";
         public virtual string Description { get; set; } = "DESC NOT SET";
-        public virtual double Weight { get; set; } = 1;
+        public virtual int Weight { get; set; } = 1;
 
         public static void Register(IGlobalEvent globalEvent)
         {
