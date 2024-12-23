@@ -16,7 +16,7 @@ namespace GEFExiled.GEFE.Examples.GE
         public override int Id { get; set; } = 38;
         public override string Name { get; set; } = "OpenBar";
         public override string Description { get; set; } = "j'espère que vous avez pas prévu de kampé";
-        public override double Weight { get; set; } = 1;
+        public override int Weight { get; set; } = 1;
         public override IEnumerator<float> Start()
         {
             var doors = Door.List.Where(d => new[] { DoorType.GateA, DoorType.GateB, DoorType.HczArmory, DoorType.HID,DoorType.Intercom,DoorType.Scp049Armory,DoorType.Scp096,DoorType.Scp106Primary,DoorType.Scp106Secondary,DoorType.Scp330,DoorType.Scp330Chamber,DoorType.Scp914Gate }.Contains(d.Type)).ToList();

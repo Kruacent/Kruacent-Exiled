@@ -26,7 +26,7 @@ namespace GEFExiled.GEFE.API.Interfaces
         /// <summary>
         /// The chance this GE will be choosed at the start of a round
         /// </summary>
-        double Weight { get; set; }
+        int Weight { get; set; }
 
         /// <summary>
         /// Is launched at the start of a round
