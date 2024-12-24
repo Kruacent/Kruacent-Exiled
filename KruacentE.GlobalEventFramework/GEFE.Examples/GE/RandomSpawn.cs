@@ -9,12 +9,21 @@ using System.Threading.Tasks;
 
 namespace GEFExiled.GEFE.Examples.GE
 {
+    /// <summary>
+    /// All spawn are random at the start of the game (NTF & Chaos not included)
+    /// Note: all role spawn with each other except SCPs
+    /// </summary>
     public class RandomSpawn : GlobalEvent
     {
+        ///<inheritdoc/>
         public override int Id { get; set; } = 32;
+        ///<inheritdoc/>
         public override string Name { get; set; } = "RandomSpawn";
+        ///<inheritdoc/>
         public override string Description { get; set; } = "Les spawns sont random";
+        ///<inheritdoc/>
         public override int Weight { get; set; } = 1;
+        ///<inheritdoc/>
         public override IEnumerator<float> Start()
         {
             Room room = Room.Random();

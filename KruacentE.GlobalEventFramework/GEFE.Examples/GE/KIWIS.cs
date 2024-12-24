@@ -9,16 +9,25 @@ using System.Linq;
 
 namespace GEFExiled.GEFE.Examples.GE
 {
+    /// <summary>
+    /// The scp start with 2/3 of it's life and end with 4/3 of it's vanilla life 
+    /// </summary>
     public class KIWIS : GlobalEvent
     {
+        ///<inheritdoc/>
         public override int Id { get; set; } = 32;
+        ///<inheritdoc/>
         public override string Name { get; set; } = "KIWIS";
+        ///<inheritdoc/>
         public override string Description { get; set; } = "Kill It While It's Small";
+        ///<inheritdoc/>
         public override int Weight { get; set; } = 1;
+        ///<inheritdoc/>
         public override IEnumerator<float> Start()
         {
             var listScp = Player.List.ToList().Where(p => p.IsScp && p.Role.Type != RoleTypeId.Scp0492).ToList().ToDictionary(p => p, p => p.MaxHealth/3);
 
+            //set the health of all starting scps to 2/3 of their vanilla max health
             listScp.ForEach(k =>
             {
                 k.Key.MaxHealth = k.Value * 2;

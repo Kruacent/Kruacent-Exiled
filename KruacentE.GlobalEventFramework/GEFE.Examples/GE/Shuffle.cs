@@ -10,6 +10,9 @@ using System.Linq;
 
 namespace GEFExiled.GEFE.Examples.GE
 {
+    /// <summary>
+    /// Every some amount of time all player take the position of another
+    /// </summary>
     public class Shuffle : GlobalEvent
     {
         ///<inheritdoc/>
@@ -62,17 +65,16 @@ namespace GEFExiled.GEFE.Examples.GE
                 Log.Debug($"cleared");
             }
         }
-
+    /   //<inheritdoc/>
         public override void SubscribeEvent()
         {
             PlayerHandler.Joined += OnJoined;
         }
-
+        ///<inheritdoc/>
         public override void UnsubscribeEvent()
         {
             PlayerHandler.Joined -= OnJoined;
         }
-
 
         private void OnJoined(JoinedEventArgs ev)
         {
@@ -82,7 +84,11 @@ namespace GEFExiled.GEFE.Examples.GE
                 this.pos.Add(ev.Player.Position);
             }
         }
-
+        /// <summary>
+        /// Shift a List to the left
+        /// </summary>
+        /// <typeparam name="T">the type of the List</typeparam>
+        /// <param name="lst"> the List to shift</param>
         private void ShiftLeft<T>(List<T> lst)
         {
             if (lst.Count > 0)

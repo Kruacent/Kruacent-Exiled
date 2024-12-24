@@ -28,7 +28,7 @@ namespace GEFExiled.Handlers
 
         public void OnWaitingForPlayers()
         {
-            MainPlugin.Instance.StopCoroutines();
+            GlobalEvent.StopCoroutines();
         }
 
 		public void OnEndingRound(RoundEndedEventArgs _)

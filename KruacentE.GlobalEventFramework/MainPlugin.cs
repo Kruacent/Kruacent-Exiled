@@ -19,7 +19,6 @@ namespace GEFExiled
 
 		internal static MainPlugin Instance {get;private set;}
 
-		public static List<CoroutineHandle> coroutineHandles = new List<CoroutineHandle>();
 		public override void OnEnabled()
 		{
 
@@ -112,7 +111,7 @@ namespace GEFExiled
 			{
 				Log.Info(ge.Name);
 				var a = Timing.RunCoroutine(ge.Start());
-                coroutineHandles.Add(a); //crash when using other ge from other assembly
+                GlobalEvent.coroutineHandles.Add(a); //crash when using other ge from other assembly
             }
 			return activeGE;
         }
@@ -149,13 +148,6 @@ namespace GEFExiled
 			return result;
 		}
 
-		public void StopCoroutines()
-		{
-			coroutineHandles.ForEach(coroutineHandle =>
-			{
-				Timing.KillCoroutines(coroutineHandle);
-			});
 
-        }
 	}
 }

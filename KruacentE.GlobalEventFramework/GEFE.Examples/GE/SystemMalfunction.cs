@@ -17,15 +17,30 @@ using Exiled.API.Extensions;
 
 namespace GEFExiled.GEFE.Examples.GE
 {
-
+    /// <summary>
+    /// <b>The original</b>
+    /// <list type="bullet">
+    /// <item>The nuke can go off random from 15 to 30 min in the round (can be disable like a normal nuke)</item>
+    /// <item>If BlackoutNDoor is enabled in the server, increase the frequence of blackouts and door lockdowns</item>
+    /// <item>Can lock Elevator and Gate for an amount of time</item>
+    /// <item>Checkpoints can open randomly</item>
+    /// </list>
+    /// </summary>
     public class SystemMalfunction : GlobalEvent
     {
+        /// <inheritdoc/>
         public override int Id { get; set; } = 1;
+        /// <inheritdoc/>        
         public override string Name { get; set; } = "System Malfunction";
+        /// <inheritdoc/>
         public override string Description { get; set; } = "On dirait que les systèmes informatiques sont défaillants";
+        /// <inheritdoc/>
         public override int Weight { get; set; } = 1;
+        /// <summary>
+        /// Set the cooldown for the BlackoutNDoor
+        /// </summary>
         public int NewCooldown { get; set; } = 180;
-
+        /// <inheritdoc/>
         public override IEnumerator<float> Start()
         {
             MoreBlackOutNDoors();
