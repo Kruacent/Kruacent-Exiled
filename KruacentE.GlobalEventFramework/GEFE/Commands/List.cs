@@ -28,7 +28,7 @@
                 {
                     result += "[ ]";
                 }
-                result += $" {ge.Id} : {ge.Name} : {ge.Description}";
+                result += $" {ge.Id} : {ge.Name} : {ge.Description}\n";
             }
             response = result;
             return true;
