@@ -28,6 +28,7 @@ namespace GEFExiled.Handlers
 
         public void OnWaitingForPlayers()
         {
+            
             GlobalEvent.StopCoroutines();
         }
 
