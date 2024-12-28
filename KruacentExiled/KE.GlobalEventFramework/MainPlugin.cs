@@ -5,17 +5,16 @@ using System.Linq;
 using MEC;
 using Exiled.API.Enums;
 using Player = Exiled.API.Features.Player;
-using GEFExiled.GEFE.API.Features;
-using GEFExiled.GEFE.API.Interfaces;
-using GEFExiled.GEFE.Examples.GE;
+using KruacentE.GlobalEventFramework.GEFE.API.Features;
+using KruacentE.GlobalEventFramework.GEFE.API.Interfaces;
 using ServerHandler = Exiled.Events.Handlers.Server;
-namespace GEFExiled
+namespace KruacentE.GlobalEventFramework
 {
     internal class MainPlugin : Plugin<Config>
 	{
 		public override PluginPriority Priority => PluginPriority.Highest;
 
-		internal Handlers.ServerHandler _server;
+		internal GEFE.Handlers.ServerHandler _server;
 
 		internal static MainPlugin Instance {get;private set;}
 
@@ -23,8 +22,9 @@ namespace GEFExiled
 		{
 
             Instance = this;
-			List<IGlobalEvent> globalEvents = new List<IGlobalEvent>() { new Shuffle(), new Speed(), new SystemMalfunction(), new RandomSpawn(), new R(), new Blitz(), new KIWIS(), new Impostor() };
-			GlobalEvent.Register(globalEvents);
+			Loader.Instance.Load();
+			
+
 
 			RegisterEvents();
 			
@@ -41,7 +41,8 @@ namespace GEFExiled
 
 		private void RegisterEvents()
 		{
-			_server = new Handlers.ServerHandler(this);
+			_server = new GEFE.Handlers.ServerHandler(this);
+
 
 			ServerHandler.WaitingForPlayers += _server.OnWaitingForPlayers;
             ServerHandler.RoundStarted += _server.OnRoundStarted;

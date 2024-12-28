@@ -1,21 +1,15 @@
-﻿using BlackoutKruacent;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using Exiled.API.Features.Doors;
-using Exiled.Events.Commands.Reload;
-using Exiled.Loader;
-using GEFExiled.GEFE.API.Features;
-using GEFExiled.GEFE.API.Utils;
+using KruacentE.GlobalEventFramework.GEFE.API.Features;
+using KruacentE.GlobalEventFramework.GEFE.API.Utils;
 using MEC;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Interactables.Interobjects.DoorUtils;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 
-namespace GEFExiled.GEFE.Examples.GE
+namespace KruacentE.GlobalEventFramework.Examples.GE
 {
     /// <summary>
     /// <b>The original</b>
@@ -69,9 +63,10 @@ namespace GEFExiled.GEFE.Examples.GE
 
         private void MoreBlackOutNDoors()
         {
-            var otherPlugin = Loader.Plugins.FirstOrDefault(plugin => plugin.Name == "BlackOutNDoors");
+            var otherPlugin = Exiled.Loader.Loader.Plugins.FirstOrDefault(plugin => plugin.Name == "BlackOutNDoors");
             if (otherPlugin != null)
             {
+                
                 if (otherPlugin is BlackoutKruacent.MainPlugin blackout)
                 {
                     Log.Info("Found BlackOutNDoors");

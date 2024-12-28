@@ -1,5 +1,5 @@
 ﻿using Exiled.API.Features;
-using GEFExiled.GEFE.API.Features;
+using KruacentE.GlobalEventFramework.GEFE.API.Features;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GEFExiled.GEFE.Examples.GE
+namespace KruacentE.GlobalEventFramework.Examples.GE
 {
     /// <summary>
     /// All spawn are random at the start of the game (NTF & Chaos not included)
