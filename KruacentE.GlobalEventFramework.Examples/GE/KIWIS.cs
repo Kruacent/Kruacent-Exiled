@@ -1,13 +1,13 @@
 ﻿using Exiled.API.Features;
-using GEFExiled.GEFE.API.Features;
 using MEC;
 using PlayerRoles;
 using Utils.NonAllocLINQ;
 using System.Collections.Generic;
 using System.Linq;
+using KruacentE.GlobalEventFramework.GEFE.API.Features;
 
 
-namespace GEFExiled.GEFE.Examples.GE
+namespace KruacentE.GlobalEventFramework.Examples.GE
 {
     /// <summary>
     /// The scp start with 2/3 of it's life and end with 4/3 of it's vanilla life 

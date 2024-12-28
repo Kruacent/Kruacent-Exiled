@@ -1,6 +1,6 @@
 ﻿using Exiled.API.Features;
 using MEC;
-using GEFExiled.GEFE.API.Features;
+using KruacentE.GlobalEventFramework.GEFE.API.Features;
 using PlayerHandler = Exiled.Events.Handlers.Player;
 using Exiled.Events.EventArgs.Player;
 using UnityEngine;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-namespace GEFExiled.GEFE.Examples.GE
+namespace KruacentE.GlobalEventFramework.Examples.GE
 {
     /// <summary>
     /// Every some amount of time all player take the position of another
@@ -65,7 +65,7 @@ namespace GEFExiled.GEFE.Examples.GE
                 Log.Debug($"cleared");
             }
         }
-    /   //<inheritdoc/>
+        ///<inheritdoc/>
         public override void SubscribeEvent()
         {
             PlayerHandler.Joined += OnJoined;

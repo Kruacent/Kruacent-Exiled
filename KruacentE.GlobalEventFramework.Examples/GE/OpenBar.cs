@@ -1,5 +1,5 @@
 ﻿using Exiled.API.Features.Doors;
-using GEFExiled.GEFE.API.Features;
+using KruacentE.GlobalEventFramework.GEFE.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Map;
 
-namespace GEFExiled.GEFE.Examples.GE
+namespace KruacentE.GlobalEventFramework.Examples.GE
 {
     public class OpenBar : GlobalEvent
     {
@@ -19,7 +19,7 @@ namespace GEFExiled.GEFE.Examples.GE
         public override int Weight { get; set; } = 1;
         public override IEnumerator<float> Start()
         {
-            var doors = Door.List.Where(d => new[] { DoorType.GateA, DoorType.GateB, DoorType.HczArmory, DoorType.HID,DoorType.Intercom,DoorType.Scp049Armory,DoorType.Scp096,DoorType.Scp106Primary,DoorType.Scp106Secondary,DoorType.Scp330,DoorType.Scp330Chamber,DoorType.Scp914Gate }.Contains(d.Type)).ToList();
+            var doors = Door.List.Where(d => new[] { DoorType.GateA, DoorType.GateB, DoorType.HczArmory, DoorType.HIDChamber,DoorType.Intercom,DoorType.Scp049Armory,DoorType.Scp096,DoorType.Scp106Primary,DoorType.Scp106Secondary,DoorType.Scp330,DoorType.Scp330Chamber,DoorType.Scp914Gate }.Contains(d.Type)).ToList();
             UnlockAndOpen(doors);
 
             yield return 0;

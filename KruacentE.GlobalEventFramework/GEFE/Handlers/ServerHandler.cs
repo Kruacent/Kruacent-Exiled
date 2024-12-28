@@ -1,10 +1,10 @@
 ﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Server;
 using System.Collections.Generic;
-using GEFExiled.GEFE.API.Interfaces;
+using KruacentE.GlobalEventFramework.GEFE.API.Interfaces;
+using KruacentE.GlobalEventFramework.GEFE.API.Features;
 
-
-namespace GEFExiled.Handlers
+namespace KruacentE.GlobalEventFramework.GEFE.Handlers
 {
 	internal class ServerHandler
 	{

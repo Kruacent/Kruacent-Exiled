@@ -1,12 +1,12 @@
 ﻿using Player = Exiled.API.Features.Player;
-using GEFExiled.GEFE.API.Features;
 using System.Collections.Generic;
+using KruacentE.GlobalEventFramework.GEFE.API.Features;
 using MEC;
 using System.Linq;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 
-namespace GEFExiled.GEFE.Examples.GE
+namespace KruacentE.GlobalEventFramework.Examples.GE
 {
     public class Impostor : GlobalEvent
     {

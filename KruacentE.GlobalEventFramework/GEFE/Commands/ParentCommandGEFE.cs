@@ -1,5 +1,5 @@
 
-namespace GEFExiled.GEFE.Commands
+namespace KruacentE.GlobalEventFramework.GEFE.Commands
 {
     using CommandSystem;
     using System;
@@ -22,7 +22,7 @@ namespace GEFExiled.GEFE.Commands
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if(arguments.Count() == 0){
+            if(arguments.Count == 0){
                 response = "subcommand available : list";
                 return true;
             }
