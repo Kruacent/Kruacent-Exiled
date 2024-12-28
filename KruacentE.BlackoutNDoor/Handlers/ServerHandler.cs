@@ -20,6 +20,7 @@ namespace BlackoutKruacent.Handlers
         {
             Timing.RunCoroutine(Update());
         }
+        
 
         private IEnumerator<float> Update()
         {
