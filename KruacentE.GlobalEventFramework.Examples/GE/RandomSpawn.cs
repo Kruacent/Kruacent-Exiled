@@ -1,5 +1,5 @@
 ﻿using Exiled.API.Features;
-using GEFExiled.GEFE.API.Features;
+using KruacentE.GlobalEventFramework.GEFE.API.Features;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -7,14 +7,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GEFExiled.GEFE.Examples.GE
+namespace KruacentE.GlobalEventFramework.Examples.GE
 {
+    /// <summary>
+    /// All spawn are random at the start of the game (NTF & Chaos not included)
+    /// Note: all role spawn with each other except SCPs
+    /// </summary>
     public class RandomSpawn : GlobalEvent
     {
+        ///<inheritdoc/>
         public override int Id { get; set; } = 32;
+        ///<inheritdoc/>
         public override string Name { get; set; } = "RandomSpawn";
+        ///<inheritdoc/>
         public override string Description { get; set; } = "Les spawns sont random";
-        public override double Weight { get; set; } = 1;
+        ///<inheritdoc/>
+        public override int Weight { get; set; } = 1;
+        ///<inheritdoc/>
         public override IEnumerator<float> Start()
         {
             Room room = Room.Random();

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MEC;
 
-namespace GEFExiled.GEFE.API.Interfaces
+namespace KruacentE.GlobalEventFramework.GEFE.API.Interfaces
 {
     public interface IGlobalEvent
     {
@@ -26,15 +26,19 @@ namespace GEFExiled.GEFE.API.Interfaces
         /// <summary>
         /// The chance this GE will be choosed at the start of a round
         /// </summary>
-        double Weight { get; set; }
+        int Weight { get; set; }
 
         /// <summary>
         /// Is launched at the start of a round
         /// </summary>
         IEnumerator<float> Start();
-
+        /// <summary>
+        /// The method used to subcribe to event like with normal plugins
+        /// </summary>
         void SubscribeEvent();
-
+        /// <summary>
+        /// The method used to unsubcribe to event like with normal plugins
+        /// </summary>
         void UnsubscribeEvent();
     }
 }

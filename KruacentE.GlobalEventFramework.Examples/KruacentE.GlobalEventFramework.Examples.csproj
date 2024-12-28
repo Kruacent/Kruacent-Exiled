@@ -3,9 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
   </PropertyGroup>
-
+	
   <ItemGroup>
-    <PackageReference Include="ExMod.Exiled" Version="8.14.1" />
+    <PackageReference Include="ExMod.Exiled" Version="9.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,8 +15,8 @@
     <Reference Include="BlackoutKruacent">
       <HintPath>..\KruacentE.BlackoutNDoor\bin\Debug\net48\BlackoutKruacent.dll</HintPath>
     </Reference>
-    <Reference Include="Mirror">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Mirror.dll</HintPath>
+    <Reference Include="KruacentE.GlobalEventFramework">
+      <HintPath>..\KruacentE.GlobalEventFramework\bin\Debug\net48\KruacentE.GlobalEventFramework.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.dll</HintPath>
@@ -24,10 +24,6 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="GEFE.Examples\Handlers\" />
   </ItemGroup>
 
 </Project>

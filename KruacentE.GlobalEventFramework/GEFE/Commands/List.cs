@@ -1,11 +1,11 @@
-﻿namespace GEFExiled.GEFE.Commands
+﻿namespace KruacentE.GlobalEventFramework.GEFE.Commands
 {
     using Exiled.API.Features;
     using Exiled.API.Features.Pickups;
     using System;
     using CommandSystem;
     using System.Runtime.InteropServices.WindowsRuntime;
-    using GEFE.API.Interfaces;
+    using KruacentE.GlobalEventFramework.GEFE.API.Interfaces;
     using GEFE.API.Features;
 
     public class List : ICommand
@@ -28,7 +28,7 @@
                 {
                     result += "[ ]";
                 }
-                result += $" {ge.Id} : {ge.Name} : {ge.Description}";
+                result += $" {ge.Id} : {ge.Name} : {ge.Description}\n";
             }
             response = result;
             return true;

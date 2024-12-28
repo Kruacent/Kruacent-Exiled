@@ -1,6 +1,6 @@
 ﻿using Exiled.API.Features;
 using MEC;
-using GEFExiled.GEFE.API.Features;
+using KruacentE.GlobalEventFramework.GEFE.API.Features;
 using PlayerHandler = Exiled.Events.Handlers.Player;
 using Exiled.Events.EventArgs.Player;
 using UnityEngine;
@@ -8,8 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-namespace GEFExiled.GEFE.Examples.GE
+namespace KruacentE.GlobalEventFramework.Examples.GE
 {
+    /// <summary>
+    /// Every some amount of time all player take the position of another
+    /// </summary>
     public class Shuffle : GlobalEvent
     {
         ///<inheritdoc/>
@@ -19,7 +22,7 @@ namespace GEFExiled.GEFE.Examples.GE
         ///<inheritdoc/>
         public override string Description { get; set; } = "et ça fait roomba café dans le scp";
         ///<inheritdoc/>
-        public override double Weight { get; set; } = 0;
+        public override int Weight { get; set; } = 0;
         private List<Player> players;
         private List<Vector3> pos;
         ///<inheritdoc/>
@@ -37,7 +40,7 @@ namespace GEFExiled.GEFE.Examples.GE
             {
                 
                 Log.Debug($"waiting for {GetType().Name}");
-                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(120, 240)); //120 240
+                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(300, 900));
                 for (int i = 0; i < this.players.Count; i++)
                 {
                     Log.Debug($"old position of player {this.players[i]} : {this.players[i].Position}");
@@ -62,17 +65,16 @@ namespace GEFExiled.GEFE.Examples.GE
                 Log.Debug($"cleared");
             }
         }
-
+        ///<inheritdoc/>
         public override void SubscribeEvent()
         {
             PlayerHandler.Joined += OnJoined;
         }
-
+        ///<inheritdoc/>
         public override void UnsubscribeEvent()
         {
             PlayerHandler.Joined -= OnJoined;
         }
-
 
         private void OnJoined(JoinedEventArgs ev)
         {
@@ -82,7 +84,11 @@ namespace GEFExiled.GEFE.Examples.GE
                 this.pos.Add(ev.Player.Position);
             }
         }
-
+        /// <summary>
+        /// Shift a List to the left
+        /// </summary>
+        /// <typeparam name="T">the type of the List</typeparam>
+        /// <param name="lst"> the List to shift</param>
         private void ShiftLeft<T>(List<T> lst)
         {
             if (lst.Count > 0)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MEC;
-using GEFExiled.GEFE.API.Interfaces;
+using KruacentE.GlobalEventFramework.GEFE.API.Interfaces;
 using Exiled.CustomItems.API.Features;
 using System.Reflection;
 using Exiled.API.Features.Attributes;
@@ -12,7 +12,7 @@ using System;
 using Exiled.API.Extensions;
 using Exiled.API.Features.Pools;
 
-namespace GEFExiled.GEFE.API.Features
+namespace KruacentE.GlobalEventFramework.GEFE.API.Features
 {
     public class GlobalEvent : IGlobalEvent
     {
@@ -21,20 +21,24 @@ namespace GEFExiled.GEFE.API.Features
         /// </summary>
         public static List<IGlobalEvent> ActiveGlobalEvents => ActiveGE.ToList();
         internal static List<IGlobalEvent> ActiveGE { get; set; } = new List<IGlobalEvent>();
+        internal static List<CoroutineHandle> coroutineHandles = new List<CoroutineHandle>();
         internal static Dictionary<int, IGlobalEvent> GlobalEvents { get; set; } = new Dictionary<int, IGlobalEvent>();
         /// <summary>
         /// A list of all registered GlobalEvents
         /// </summary>
         public static List<IGlobalEvent> GlobalEventsList => GlobalEvents.Values.ToList();
-        public static HashSet<GlobalEvent> Registered { get; } = new HashSet<GlobalEvent>();
+        ///<inheritdoc/>
         public virtual int Id { get; set; } = -1;
+        ///<inheritdoc/>
         public virtual string Name { get; set; } = "GE NOT SET";
+        ///<inheritdoc/>
         public virtual string Description { get; set; } = "DESC NOT SET";
-        public virtual double Weight { get; set; } = 1;
+        ///<inheritdoc/>
+        public virtual int Weight { get; set; } = 1;
 
         public static void Register(IGlobalEvent globalEvent)
         {
-            Log.Debug($"REGISTERING {globalEvent.Name}");
+            Log.Send($"REGISTERING {globalEvent.Name}", Discord.LogLevel.Info, ConsoleColor.Blue);
             if (GlobalEvents.ContainsKey(globalEvent.Id))
             {
                 Log.Warn($"id already used for {GlobalEvents.TryGetValue(globalEvent.Id, out IGlobalEvent geAlready)}");
@@ -54,26 +58,41 @@ namespace GEFExiled.GEFE.API.Features
         {
             globalEvents.ForEach(globalEvent => Register(globalEvent));
         }
-
+        ///<inheritdoc/>
         public virtual IEnumerator<float> Start()
         {
             Log.Error($"{GetType().Name} Start is NOT overrided");
             yield return Timing.WaitForSeconds(30f);
         }
-
+        ///<inheritdoc/>
         public virtual void SubscribeEvent()
         {
             Log.Warn($"{GetType().Name} : SubscribeEvent is NOT overrided");
         }
+        ///<inheritdoc/>
         public virtual void UnsubscribeEvent()
         {
             Log.Warn($"{GetType().Name} : UnsubscribeEvent is NOT overrided");
         }
-
-        public void Clean()
+        /// <summary>
+        /// Create new List/Dictionary for the Global Event storage
+        /// </summary>
+        internal void Clean()
         {
             GlobalEvents = new Dictionary<int, IGlobalEvent>();
             ActiveGE = new List<IGlobalEvent>();
+        }
+
+        /// <summary>
+        /// Stop all Coroutine from GE
+        /// </summary>
+        internal static void StopCoroutines()
+		{
+			coroutineHandles.ForEach(coroutineHandle =>
+			{
+				Timing.KillCoroutines(coroutineHandle);
+			});
+
         }
     }
 }

@@ -1,24 +1,39 @@
 ﻿using Exiled.API.Features;
-using GEFExiled.GEFE.API.Features;
 using MEC;
 using PlayerRoles;
 using Utils.NonAllocLINQ;
 using System.Collections.Generic;
 using System.Linq;
+using KruacentE.GlobalEventFramework.GEFE.API.Features;
 
 
-namespace GEFExiled.GEFE.Examples.GE
+namespace KruacentE.GlobalEventFramework.Examples.GE
 {
+    /// <summary>
+    /// The scp start with 2/3 of it's life and end with 4/3 of it's vanilla life 
+    /// </summary>
     public class KIWIS : GlobalEvent
     {
+        ///<inheritdoc/>
         public override int Id { get; set; } = 32;
+        ///<inheritdoc/>
         public override string Name { get; set; } = "KIWIS";
+        ///<inheritdoc/>
         public override string Description { get; set; } = "Kill It While It's Small";
-        public override double Weight { get; set; } = 1;
+        ///<inheritdoc/>
+        public override int Weight { get; set; } = 1;
+        ///<inheritdoc/>
         public override IEnumerator<float> Start()
         {
             var listScp = Player.List.ToList().Where(p => p.IsScp && p.Role.Type != RoleTypeId.Scp0492).ToList().ToDictionary(p => p, p => p.MaxHealth/3);
-            listScp.ForEach(k => k.Key.MaxHealth = k.Value * 2);
+
+            //set the health of all starting scps to 2/3 of their vanilla max health
+            listScp.ForEach(k =>
+            {
+                k.Key.MaxHealth = k.Value * 2;
+                k.Key.Health = k.Key.MaxHealth;
+            });
+
             yield return Timing.WaitUntilTrue(() => Round.ElapsedTime.TotalMinutes >= 15);
             listScp.ForEach(k => {
                 k.Key.MaxHealth += k.Value;

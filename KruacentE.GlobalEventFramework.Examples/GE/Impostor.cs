@@ -1,19 +1,19 @@
 ﻿using Player = Exiled.API.Features.Player;
-using GEFExiled.GEFE.API.Features;
 using System.Collections.Generic;
+using KruacentE.GlobalEventFramework.GEFE.API.Features;
 using MEC;
 using System.Linq;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 
-namespace GEFExiled.GEFE.Examples.GE
+namespace KruacentE.GlobalEventFramework.Examples.GE
 {
     public class Impostor : GlobalEvent
     {
         public override int Id { get; set; } = 30;
         public override string Name { get; set; } = "Impostor";
         public override string Description { get; set; } = "Ne vous fiez pas aux apparences !";
-        public override double Weight { get; set; } = 1;
+        public override int Weight { get; set; } = 1;
 
         public override IEnumerator<float> Start()
         {
