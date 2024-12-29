@@ -19,22 +19,18 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         {
             foreach (IPlugin<IConfig> plugin in Exiled.Loader.Loader.Plugins.Where(pl => pl.Name != MainPlugin.Instance.Name))
             {
-                Log.Debug($"checking {plugin.Name}");
+                if(MainPlugin.Instance.Config.ShowRegisteringLog) Log.Debug($"checking {plugin.Name}");
                 foreach (Type type in plugin.Assembly.GetTypes())
                 {
                     try
                     {
-                        Log.Debug($"    checking {type.Name}");
+                        if (MainPlugin.Instance.Config.ShowRegisteringLog) Log.Debug($"    checking {type.Name}");
                         if (type.IsSubclassOf(typeof(IGlobalEvent)) || type.IsSubclassOf(typeof(GlobalEvent)))
                         {
-                            Log.Debug("good");
                             ActivePlugins.Add(plugin);
 
-                            Log.Debug("creating instance");
                             IGlobalEvent ge = Activator.CreateInstance(type) as IGlobalEvent;
-                            Log.Debug("registering");
                             GlobalEvent.Register(ge);
-                            Log.Debug("end register");
                         }
                     }catch(System.Exception e)
                     {
