@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArmeKruacent
+namespace KE.Items
 {
     public class Config : IConfig
     {

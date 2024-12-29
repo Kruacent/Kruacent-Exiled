@@ -5,10 +5,10 @@ using System.Linq;
 using MEC;
 using Exiled.API.Enums;
 using Player = Exiled.API.Features.Player;
-using KruacentE.GlobalEventFramework.GEFE.API.Features;
-using KruacentE.GlobalEventFramework.GEFE.API.Interfaces;
+using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using ServerHandler = Exiled.Events.Handlers.Server;
-namespace KruacentE.GlobalEventFramework
+namespace KE.GlobalEventFramework
 {
     internal class MainPlugin : Plugin<Config>
 	{

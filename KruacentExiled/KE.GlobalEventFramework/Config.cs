@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KruacentE.GlobalEventFramework
+namespace KE.GlobalEventFramework
 {
 	internal class Config : IConfig
 	{

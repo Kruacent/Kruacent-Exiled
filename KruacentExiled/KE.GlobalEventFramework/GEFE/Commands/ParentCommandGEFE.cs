@@ -1,5 +1,5 @@
 
-namespace KruacentE.GlobalEventFramework.GEFE.Commands
+namespace KE.GlobalEventFramework.GEFE.Commands
 {
     using CommandSystem;
     using System;

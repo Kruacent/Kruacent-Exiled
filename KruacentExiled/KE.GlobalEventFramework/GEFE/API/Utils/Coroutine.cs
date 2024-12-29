@@ -1,7 +1,7 @@
 ﻿using MEC;
 using System.Collections.Generic;
 
-namespace KruacentE.GlobalEventFramework.GEFE.API.Utils
+namespace KE.GlobalEventFramework.GEFE.API.Utils
 {
 	public static class Coroutine
 	{

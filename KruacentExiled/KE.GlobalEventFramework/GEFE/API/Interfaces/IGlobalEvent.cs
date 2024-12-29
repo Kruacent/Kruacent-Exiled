@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MEC;
 
-namespace KruacentE.GlobalEventFramework.GEFE.API.Interfaces
+namespace KE.GlobalEventFramework.GEFE.API.Interfaces
 {
     public interface IGlobalEvent
     {

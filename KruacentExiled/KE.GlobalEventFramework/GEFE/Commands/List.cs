@@ -1,11 +1,11 @@
-﻿namespace KruacentE.GlobalEventFramework.GEFE.Commands
+﻿namespace KE.GlobalEventFramework.GEFE.Commands
 {
     using Exiled.API.Features;
     using Exiled.API.Features.Pickups;
     using System;
     using CommandSystem;
     using System.Runtime.InteropServices.WindowsRuntime;
-    using KruacentE.GlobalEventFramework.GEFE.API.Interfaces;
+    using GEFE.API.Interfaces;
     using GEFE.API.Features;
 
     public class List : ICommand

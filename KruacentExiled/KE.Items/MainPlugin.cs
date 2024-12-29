@@ -3,7 +3,7 @@ using Exiled.API.Features;
 using Exiled.CustomItems.API.Features;
 using System;
 
-namespace ArmeKruacent
+namespace KE.Items
 {
     public class MainPlugin : Plugin<Config>
     {

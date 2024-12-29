@@ -12,7 +12,7 @@ using Exiled.Events.EventArgs.Map;
 using PlayerRoles;
 using UnityEngine;
 
-namespace ArmeKruacent.Items
+namespace KE.Items.Items
 {
     //grenade qui tp
     public class TPGrenada : CustomGrenade

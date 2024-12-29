@@ -1,13 +1,13 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Interfaces;
-using KruacentE.GlobalEventFramework.GEFE.API.Interfaces;
+using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KruacentE.GlobalEventFramework.GEFE.API.Features
+namespace KE.GlobalEventFramework.GEFE.API.Features
 {
     internal class Loader
     {

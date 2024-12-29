@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MEC;
-using KruacentE.GlobalEventFramework.GEFE.API.Interfaces;
+using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using Exiled.CustomItems.API.Features;
 using System.Reflection;
 using Exiled.API.Features.Attributes;
@@ -12,7 +12,7 @@ using System;
 using Exiled.API.Extensions;
 using Exiled.API.Features.Pools;
 
-namespace KruacentE.GlobalEventFramework.GEFE.API.Features
+namespace KE.GlobalEventFramework.GEFE.API.Features
 {
     public class GlobalEvent : IGlobalEvent
     {
