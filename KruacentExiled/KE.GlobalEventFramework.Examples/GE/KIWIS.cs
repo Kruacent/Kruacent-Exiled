@@ -4,10 +4,10 @@ using PlayerRoles;
 using Utils.NonAllocLINQ;
 using System.Collections.Generic;
 using System.Linq;
-using KruacentE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Features;
 
 
-namespace KruacentE.GlobalEventFramework.Examples.GE
+namespace KE.GlobalEventFramework.Examples.GE
 {
     /// <summary>
     /// The scp start with 2/3 of it's life and end with 4/3 of it's vanilla life 

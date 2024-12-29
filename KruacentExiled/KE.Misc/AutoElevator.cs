@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KruacentExiled.KruacentE.Misc
+namespace KE.Misc
 {
     /// <summary>
     /// The elevator will random activate in the round

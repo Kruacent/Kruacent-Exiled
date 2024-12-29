@@ -1,6 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Items;
-using KruacentE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Features;
 using MEC;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KruacentE.GlobalEventFramework.Examples.GE
+namespace KE.GlobalEventFramework.Examples.GE
 {
     /// <summary>
     /// Spawn fused grenades in random rooms in the map 

@@ -1,13 +1,7 @@
-﻿using Exiled.API.Features;
-using KruacentE.GlobalEventFramework.GEFE.API.Features;
-using PlayerRoles;
-using System;
+﻿using KE.GlobalEventFramework.GEFE.API.Features;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace KruacentE.GlobalEventFramework.Examples.GE
+namespace KE.GlobalEventFramework.Examples.GE
 {
     /// <summary>
     /// Literally does nothing

@@ -1,11 +1,11 @@
-﻿using BlackoutKruacent.API.Features;
-using BlackoutKruacent.Handlers;
+﻿using KE.BlackoutNDoor.API.Features;
+using KE.BlackoutNDoor.Handlers;
 using Exiled.API.Features;
 using System;
 using System.ComponentModel;
 using Server = Exiled.Events.Handlers.Server;
 
-namespace BlackoutKruacent
+namespace KE.BlackoutNDoor
 {
     public class MainPlugin : Plugin<Config>
     {

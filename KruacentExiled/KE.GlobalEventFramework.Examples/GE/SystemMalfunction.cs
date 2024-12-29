@@ -1,7 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Doors;
-using KruacentE.GlobalEventFramework.GEFE.API.Features;
-using KruacentE.GlobalEventFramework.GEFE.API.Utils;
+using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Utils;
 using MEC;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using Interactables.Interobjects.DoorUtils;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 
-namespace KruacentE.GlobalEventFramework.Examples.GE
+namespace KE.GlobalEventFramework.Examples.GE
 {
     /// <summary>
     /// <b>The original</b>
@@ -67,7 +67,7 @@ namespace KruacentE.GlobalEventFramework.Examples.GE
             if (otherPlugin != null)
             {
                 
-                if (otherPlugin is BlackoutKruacent.MainPlugin blackout)
+                if (otherPlugin is BlackoutNDoor.MainPlugin blackout)
                 {
                     Log.Info("Found BlackOutNDoors");
                     blackout.ServerHandler.Cooldown = NewCooldown;

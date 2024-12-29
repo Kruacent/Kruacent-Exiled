@@ -1,11 +1,11 @@
-﻿using BlackoutKruacent.API.Features;
+﻿using KE.BlackoutNDoor.API.Features;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Server;
 using MEC;
 using PluginAPI.Events;
 using System.Collections.Generic;
 
-namespace BlackoutKruacent.Handlers
+namespace KE.BlackoutNDoor.Handlers
 {
     public class ServerHandler
     {

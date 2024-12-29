@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Exiled.API.Features;
 
-namespace GEFE.Examples
+namespace KE.GlobalEventFramework.Examples
 {
     internal class MainPlugin : Plugin<Config>
     {

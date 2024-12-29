@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GEFE.Examples
+namespace KE.GlobalEventFramework.Examples
 {
     internal class Config : IConfig
     {

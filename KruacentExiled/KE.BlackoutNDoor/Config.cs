@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlackoutKruacent
+namespace KE.BlackoutNDoor
 {
     public class Config : IConfig
     {

@@ -12,7 +12,7 @@ using Exiled.API.Extensions;
 using UnityEngine;
 using YamlDotNet.Core.Tokens;
 
-namespace KruacentExiled.KruacentE.Misc
+namespace KE.Misc
 {
     /// <summary>
     /// Everything 914 related
