@@ -63,7 +63,7 @@ namespace KruacentE.GlobalEventFramework.Examples.GE
 
         private void MoreBlackOutNDoors()
         {
-            var otherPlugin = Exiled.Loader.Loader.Plugins.FirstOrDefault(plugin => plugin.Name == "BlackOutNDoors");
+            var otherPlugin = Exiled.Loader.Loader.Plugins.FirstOrDefault(plugin => plugin.Name == "KE.BlackoutDoor");
             if (otherPlugin != null)
             {
                 

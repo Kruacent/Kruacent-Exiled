@@ -1,6 +1,7 @@
 ﻿using BlackoutKruacent.API.Features;
 using BlackoutKruacent.Handlers;
 using Exiled.API.Features;
+using System;
 using System.ComponentModel;
 using Server = Exiled.Events.Handlers.Server;
 
@@ -8,7 +9,9 @@ namespace BlackoutKruacent
 {
     public class MainPlugin : Plugin<Config>
     {
-        public override string Name => "BlackOutNDoors";
+        public override string Author => "Patrique";
+        public override Version Version => new Version(1,0,0);
+        public override string Name => "KE.BlackoutDoor";
         internal static MainPlugin Instance;
         private Controller Controller;
         public ServerHandler ServerHandler { get; private set; }

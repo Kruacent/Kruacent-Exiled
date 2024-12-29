@@ -12,7 +12,10 @@ namespace KruacentE.GlobalEventFramework
 {
     internal class MainPlugin : Plugin<Config>
 	{
-		public override PluginPriority Priority => PluginPriority.Highest;
+        public override string Author => "Patrique";
+        public override string Name => "KE.GEFramework";
+        public override Version Version => new Version(1, 0, 0);
+        public override PluginPriority Priority => PluginPriority.Highest;
 
 		internal GEFE.Handlers.ServerHandler _server;
 

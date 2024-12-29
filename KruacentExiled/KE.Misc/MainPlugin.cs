@@ -12,11 +12,16 @@ using Scp914;
 using PlayerRoles;
 using Exiled.Events.EventArgs.Player;
 using KruacentExiled.KruacentE.Misc;
+using System;
 
 namespace KE.Misc
 {
+
     public class MainPlugin : Plugin<Config>
     {
+        public override string Author => "Patrique";
+        public override string Name => "KEMisc";
+        public override Version Version => new Version(1, 0, 0);
         internal static MainPlugin Instance { get; private set; }
         private ServerHandler ServerHandler;
         internal _914 _914 { get; private set; }
