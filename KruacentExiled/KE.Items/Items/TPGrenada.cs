@@ -33,11 +33,6 @@ namespace ArmeKruacent.Items
                 new DynamicSpawnPoint()
                 {
                     Chance = 50,
-                    Location = SpawnLocationType.InsideLocker,
-                },
-                new DynamicSpawnPoint()
-                {
-                    Chance = 50,
                     Location = SpawnLocationType.InsideHczArmory,
                 },
                 new DynamicSpawnPoint()
