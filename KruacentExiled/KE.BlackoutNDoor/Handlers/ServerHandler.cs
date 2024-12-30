@@ -11,14 +11,18 @@ namespace KE.BlackoutNDoor.Handlers
     {
         public int Cooldown { get; set; } = -1 ;
         internal double ChanceBO { get; set; } = MainPlugin.Instance.Config.InitialChanceBO;
-        private Controller controller;
+        private readonly Controller  Controller;
+        private static CoroutineHandle Handle;
         internal ServerHandler(Controller con)
         {
-            controller = con;
+            Controller = con;
         }
         internal void OnRoundStarted()
         {
-            Timing.RunCoroutine(Update());
+            Log.Debug($"handle = {Handle}");
+            Timing.KillCoroutines(Handle);
+            Handle = Timing.RunCoroutine(Update());
+            
         }
         
 
@@ -33,21 +37,25 @@ namespace KE.BlackoutNDoor.Handlers
                 wait = Cooldown;
             Log.Debug($"waiting for {wait}");
             yield return Timing.WaitForSeconds(wait);
-            while (true)
+            while (Round.InProgress)
             {
                 var a = UnityEngine.Random.value;
                 Log.Debug("random =" + a);
-                if (a <= ChanceBO)
+                if (Round.InProgress)
                 {
-                    Log.Debug("BlackOut");
-                    CoroutineHandle coroutine = Timing.RunCoroutine(controller.RandomBlackout());
-                    yield return Timing.WaitUntilDone(coroutine);
-                }
-                else
-                { 
-                    Log.Debug("DoorStuck");
-                    CoroutineHandle coroutine = Timing.RunCoroutine(controller.RandomDoorStuck());
-                    yield return Timing.WaitUntilDone(coroutine);
+                    if (a <= ChanceBO)
+                    {
+                        Log.Debug("BlackOut");
+
+                        CoroutineHandle coroutine = Timing.RunCoroutine(Controller.RandomBlackout());
+                        yield return Timing.WaitUntilDone(coroutine);
+                    }
+                    else
+                    {
+                        Log.Debug("DoorStuck");
+                        CoroutineHandle coroutine = Timing.RunCoroutine(Controller.RandomDoorStuck());
+                        yield return Timing.WaitUntilDone(coroutine);
+                    }
                 }
                 wait = UnityEngine.Random.Range(MainPlugin.Instance.Config.MinInterval, MainPlugin.Instance.Config.MaxInterval);
                 Log.Debug($"waiting : {wait}");
