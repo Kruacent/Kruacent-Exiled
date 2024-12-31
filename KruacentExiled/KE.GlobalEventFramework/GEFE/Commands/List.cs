@@ -16,7 +16,7 @@
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            string result = "List of all global event ([o] if it's active in the round ; [ ] otherwise) : \n";
+            string result = "List of all global event ([o] if it's active in the round ; [ ] otherwise) : ";
             foreach (IGlobalEvent ge in GlobalEvent.GlobalEvents.Values)
             {
 

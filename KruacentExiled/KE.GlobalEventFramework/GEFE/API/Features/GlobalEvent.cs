@@ -41,7 +41,8 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
             Log.Send($"REGISTERING {globalEvent.Name}", Discord.LogLevel.Info, ConsoleColor.Blue);
             if (GlobalEvents.ContainsKey(globalEvent.Id))
             {
-                Log.Warn($"id already used");
+                Log.Warn($"id already used for {GlobalEvents.TryGetValue(globalEvent.Id, out IGlobalEvent geAlready)}");
+                Log.Warn("Trying to attribute a new id...");
                 int key = 0;
                 while (GlobalEvents.ContainsKey(key))
                 {
