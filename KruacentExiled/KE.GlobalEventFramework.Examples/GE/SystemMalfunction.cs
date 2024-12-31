@@ -49,7 +49,21 @@ namespace KE.GlobalEventFramework.Examples.GE
                 yield return Timing.WaitUntilDone(handle);
 
             }
+            
 
+        }
+        public override void UnsubscribeEvent()
+        {
+            var otherPlugin = Exiled.Loader.Loader.Plugins.FirstOrDefault(plugin => plugin.Name == "KE.BlackoutDoor");
+            if (otherPlugin != null)
+            {
+
+                if (otherPlugin is BlackoutNDoor.MainPlugin blackout)
+                {
+                    blackout.ServerHandler.Cooldown = -1;
+                }
+
+            }
         }
 
         private IEnumerator<float> EarlyNuke()
