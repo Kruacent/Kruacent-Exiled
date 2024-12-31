@@ -35,6 +35,9 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         public virtual string Description { get; set; } = "DESC NOT SET";
         ///<inheritdoc/>
         public virtual int Weight { get; set; } = 1;
+        ///<inheritdoc/>
+        public virtual int[] IncompatibleGE { get; set; } = new int[0];
+
 
         public static void Register(IGlobalEvent globalEvent)
         {

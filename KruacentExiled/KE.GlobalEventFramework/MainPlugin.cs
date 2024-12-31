@@ -115,7 +115,7 @@ namespace KE.GlobalEventFramework
 			{
 				Log.Info(ge.Name);
 				var a = Timing.RunCoroutine(ge.Start());
-                GlobalEvent.coroutineHandles.Add(a); //crash when using other ge from other assembly
+                GlobalEvent.coroutineHandles.Add(a); 
             }
 			return activeGE;
         }
@@ -144,7 +144,8 @@ namespace KE.GlobalEventFramework
 				result.Add(selectedGE);
 
 				weightedPool.RemoveAll(e => e == selectedGE);
-			}
+                weightedPool.RemoveAll(e => selectedGE.IncompatibleGE.Contains(e.Id));
+            }
 
 			// Step 3: Update the active global events
 			GlobalEvent.ActiveGE = result.ToList();

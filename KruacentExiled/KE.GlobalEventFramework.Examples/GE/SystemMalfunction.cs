@@ -34,6 +34,8 @@ namespace KE.GlobalEventFramework.Examples.GE
         /// Set the cooldown for the BlackoutNDoor
         /// </summary>
         public int NewCooldown { get; set; } = 180;
+
+        public override int[] IncompatibleGE { get; set; } = { 38 };
         /// <inheritdoc/>
         public override IEnumerator<float> Start()
         {

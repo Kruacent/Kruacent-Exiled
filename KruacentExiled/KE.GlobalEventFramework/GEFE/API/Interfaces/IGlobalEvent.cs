@@ -27,6 +27,11 @@ namespace KE.GlobalEventFramework.GEFE.API.Interfaces
         /// The chance this GE will be choosed at the start of a round
         /// </summary>
         int Weight { get; set; }
+        /// <summary>
+        /// The ids of incompatible Globals Events 
+        /// Note: You can't have the same GE twice in the same round
+        /// </summary>
+        int[] IncompatibleGE { get; set; }
 
         /// <summary>
         /// Is launched at the start of a round
