@@ -35,12 +35,15 @@ namespace KE.GlobalEventFramework.Examples.GE
             });
 
             yield return Timing.WaitUntilTrue(() => Round.ElapsedTime.TotalMinutes >= 15);
+
+            listScp = listScp.Where(p => p.Key.IsScp && p.Key.Role.Type != RoleTypeId.Scp0492).ToList().ToDictionary(p => p.Key, p => p.Value);
             listScp.ForEach(k => {
                 k.Key.MaxHealth += k.Value;
                 k.Key.Heal(k.Value);
             });
 
             yield return Timing.WaitUntilTrue(() => Round.ElapsedTime.TotalMinutes >= 30);
+            listScp = listScp.Where(p => p.Key.IsScp && p.Key.Role.Type != RoleTypeId.Scp0492).ToList().ToDictionary(p => p.Key, p => p.Value);
             listScp.ForEach(k => {
                 k.Key.MaxHealth += k.Value;
                 k.Key.Heal(k.Value);
