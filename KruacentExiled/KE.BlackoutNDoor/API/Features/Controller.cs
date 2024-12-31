@@ -10,7 +10,7 @@ namespace KE.BlackoutNDoor.API.Features
 {
     public class Controller
     {
-
+        private DoorType[] BlacklistedDoor = { DoorType.ElevatorGateA, DoorType.ElevatorGateB, DoorType.ElevatorLczA, DoorType.ElevatorLczB, DoorType.ElevatorNuke, DoorType.ElevatorScp049, DoorType.UnknownElevator };
         
         /// <summary>
         /// Select a random zone and close and lock all door of the zone
@@ -27,19 +27,19 @@ namespace KE.BlackoutNDoor.API.Features
             // if the zone is light and there is only 30s left then skip
             if (!(zone == ZoneType.LightContainment && Map.DecontaminationState == DecontaminationState.Countdown && Warhead.IsInProgress))
             {
-                
                 List<Door> doorList = Door.List
-                    .Where(d => !new[] { DoorType.ElevatorGateA, DoorType.ElevatorGateB, DoorType.ElevatorLczA, DoorType.ElevatorLczB, DoorType.ElevatorNuke, DoorType.ElevatorScp049, DoorType.UnknownElevator }.Contains(d.Type))
+                    .Where(d => !BlacklistedDoor.Contains(d.Type))
                     .ToList();
                 var ge = Generator.List.Where(g => g.IsEngaged);
                 if(ge.ToList().Count != 3)
                 {
                     doorList = Door.List
-                        .Where(d => !new[] { DoorType.Scp079First, DoorType.Scp079Second }.Contains(d.Type))
+                        .Where(d => !BlacklistedDoor.Union(new[] { DoorType.Scp079First, DoorType.Scp079Second  }).Contains(d.Type))
                         .ToList();
                 }
                 foreach (Door door in doorList)
                 {
+                    
                     if (door.Zone == zone)
                     {
                         door.IsOpen = false;
