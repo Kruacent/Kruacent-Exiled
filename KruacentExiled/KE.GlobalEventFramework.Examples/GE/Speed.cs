@@ -21,7 +21,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     public class Speed : GlobalEvent
     {
         ///<inheritdoc/>
-        public override int Id { get; set; } = 30;
+        public override int Id { get; set; } = 1042;
         ///<inheritdoc/>
         public override string Name { get; set; } = "Speed";
         ///<inheritdoc/>

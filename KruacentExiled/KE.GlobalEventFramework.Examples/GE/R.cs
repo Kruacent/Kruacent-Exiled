@@ -9,7 +9,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     public class R : GlobalEvent
     {
         ///<inheritdoc/>
-        public override int Id { get; set; } = 32;
+        public override int Id { get; set; } = 0;
         ///<inheritdoc/>
         public override string Name { get; set; } = "nothing";
         ///<inheritdoc/>

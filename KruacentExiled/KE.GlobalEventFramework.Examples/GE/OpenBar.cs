@@ -13,7 +13,7 @@ namespace KE.GlobalEventFramework.Examples.GE
 {
     public class OpenBar : GlobalEvent
     {
-        public override int Id { get; set; } = 38;
+        public override int Id { get; set; } = 1048;
         public override string Name { get; set; } = "OpenBar";
         public override string Description { get; set; } = "j'espère que vous avez pas prévu de kampé";
         public override int Weight { get; set; } = 1;

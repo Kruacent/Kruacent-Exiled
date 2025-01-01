@@ -10,7 +10,7 @@ namespace KE.GlobalEventFramework.Examples.GE
 {
     public class Impostor : GlobalEvent
     {
-        public override int Id { get; set; } = 30;
+        public override int Id { get; set; } = 1044;
         public override string Name { get; set; } = "Impostor";
         public override string Description { get; set; } = "Ne vous fiez pas aux apparences !";
         public override int Weight { get; set; } = 1;

@@ -23,7 +23,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     public class SystemMalfunction : GlobalEvent
     {
         /// <inheritdoc/>
-        public override int Id { get; set; } = 1;
+        public override int Id { get; set; } = 1041;
         /// <inheritdoc/>        
         public override string Name { get; set; } = "System Malfunction";
         /// <inheritdoc/>
