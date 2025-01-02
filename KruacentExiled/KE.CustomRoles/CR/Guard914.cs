@@ -14,12 +14,13 @@ namespace KE.CustomRoles.CR
     {
         public override string Name { get; set; } = "guard914";
         public override string Description { get; set; } = "Tu es <b>Le</b> <color=#6B6B38>garde de SCP-914</color> \nTu commences à 914 \nmais on a volé ta carte \net ntm aussi";
-        public override uint Id { get; set; } = 1;
+        public override uint Id { get; set; } = 1040;
         public override string CustomInfo { get; set; } = "Garde de 914";
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
         public override bool KeepRoleOnDeath { get ; set ; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
+        public override bool IgnoreSpawnSystem { get; set; } = true;
 
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
