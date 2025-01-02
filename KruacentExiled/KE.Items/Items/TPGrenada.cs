@@ -15,10 +15,11 @@ using UnityEngine;
 namespace KE.Items.Items
 {
     //grenade qui tp
+    [CustomItem(ItemType.GrenadeHE)]
     public class TPGrenada : CustomGrenade
     {
         private List<Player> effectedPlayers = new List<Player>();
-        public override uint Id { get; set; } = 1400;
+        public override uint Id { get; set; } = 1405;
         public override string Name { get; set; } = "Teleportation Grenade";
         public override string Description { get; set; } = "This grenade does 0 damage but teleport nearby players in a random place (does work in other dimension ;3 )";
         public override float Weight { get; set; } = 0.65f;
