@@ -15,7 +15,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     public class KIWIS : GlobalEvent
     {
         ///<inheritdoc/>
-        public override int Id { get; set; } = 32;
+        public override uint Id { get; set; } = 1047;
         ///<inheritdoc/>
         public override string Name { get; set; } = "KIWIS";
         ///<inheritdoc/>

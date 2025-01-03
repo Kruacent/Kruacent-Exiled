@@ -16,7 +16,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     public class RandomSpawn : GlobalEvent
     {
         ///<inheritdoc/>
-        public override int Id { get; set; } = 32;
+        public override uint Id { get; set; } = 1043;
         ///<inheritdoc/>
         public override string Name { get; set; } = "RandomSpawn";
         ///<inheritdoc/>

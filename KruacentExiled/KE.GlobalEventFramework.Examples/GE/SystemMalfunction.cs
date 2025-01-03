@@ -23,7 +23,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     public class SystemMalfunction : GlobalEvent
     {
         /// <inheritdoc/>
-        public override int Id { get; set; } = 1;
+        public override uint Id { get; set; } = 1041;
         /// <inheritdoc/>        
         public override string Name { get; set; } = "System Malfunction";
         /// <inheritdoc/>
@@ -34,6 +34,8 @@ namespace KE.GlobalEventFramework.Examples.GE
         /// Set the cooldown for the BlackoutNDoor
         /// </summary>
         public int NewCooldown { get; set; } = 180;
+
+        public override uint[] IncompatibleGE { get; set; } = { 38 };
         /// <inheritdoc/>
         public override IEnumerator<float> Start()
         {

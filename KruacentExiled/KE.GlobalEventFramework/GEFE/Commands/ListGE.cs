@@ -8,7 +8,7 @@
     using GEFE.API.Interfaces;
     using GEFE.API.Features;
 
-    public class List : ICommand
+    public class ListGE : ICommand
     {
         public string Command { get; } = "list";
         public string[] Aliases { get; } = new string[] { "l", "ls" };
@@ -16,7 +16,7 @@
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            string result = "List of all global event ([o] if it's active in the round ; [ ] otherwise) : ";
+            string result = "List of all global event ([o] if it's active in the round ; [ ] otherwise) : \n";
             foreach (IGlobalEvent ge in GlobalEvent.GlobalEvents.Values)
             {
 
