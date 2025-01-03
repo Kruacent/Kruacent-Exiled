@@ -149,8 +149,6 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         {
             List<IGlobalEvent> activeGE = ChooseRandomGE(numberOfGlobalEvent);
             Log.Debug($"activeGE size : {activeGE.Count}");
-            Log.Info($"Global Event(s) ({numberOfGlobalEvent}): ");
-
 
             return activeGE;
         }
