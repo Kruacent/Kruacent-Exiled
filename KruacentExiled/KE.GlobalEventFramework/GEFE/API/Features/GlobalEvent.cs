@@ -15,13 +15,13 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         public static List<IGlobalEvent> ActiveGlobalEvents => ActiveGE.ToList();
         internal static List<IGlobalEvent> ActiveGE { get; set; } = new List<IGlobalEvent>();
         internal static List<CoroutineHandle> coroutineHandles = new List<CoroutineHandle>();
-        internal static Dictionary<int, IGlobalEvent> GlobalEvents { get; private set; } = new Dictionary<int, IGlobalEvent>();
+        internal static Dictionary<uint, IGlobalEvent> GlobalEvents { get; private set; } = new Dictionary<uint, IGlobalEvent>();
         /// <summary>
         /// A list of all registered GlobalEvents
         /// </summary>
         public static List<IGlobalEvent> GlobalEventsList => GlobalEvents.Values.ToList();
         ///<inheritdoc/>
-        public abstract int Id { get; set; }
+        public abstract uint Id { get; set; }
         ///<inheritdoc/>
         public abstract string Name { get; set; }
         ///<inheritdoc/>
@@ -29,7 +29,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         ///<inheritdoc/>
         public abstract int Weight { get; set; }
         ///<inheritdoc/>
-        public virtual int[] IncompatibleGE { get; set; } = new int[0];
+        public virtual uint[] IncompatibleGE { get; set; } = new uint[0];
 
 
 
@@ -77,7 +77,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
             });
         }
 
-        public static bool TryGet(int id, out IGlobalEvent globalEvent)
+        public static bool TryGet(uint id, out IGlobalEvent globalEvent)
         {
             globalEvent = Get(id);
             return globalEvent != null;
@@ -89,7 +89,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
             {
                 throw new System.Exception("name can't be null or empty");
             }
-            globalEvent = int.TryParse(name, out int id) ? Get(id) : Get(name);
+            globalEvent = uint.TryParse(name, out uint id) ? Get(id) : Get(name);
 
             return globalEvent != null;
         }
@@ -99,7 +99,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
             return GlobalEvents.Values.FirstOrDefault(ge => ge.Name == name);
         }
 
-        public static IGlobalEvent Get(int id)
+        public static IGlobalEvent Get(uint id)
         {
             return GlobalEvents.TryGetValue(id, out IGlobalEvent globalEvent) ? globalEvent : null;
         }

@@ -12,7 +12,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Interfaces
         /// <summary>
         /// the UNIQUE id of the Global Event
         /// </summary>
-        int Id { get; set; }
+        uint Id { get; set; }
         /// <summary>
         /// Name used in the logs on the RA
         /// </summary>
@@ -31,7 +31,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Interfaces
         /// The ids of incompatible Globals Events 
         /// Note: You can't have the same GE twice in the same round
         /// </summary>
-        int[] IncompatibleGE { get; set; }
+        uint[] IncompatibleGE { get; set; }
 
         /// <summary>
         /// Is launched at the start of a round

@@ -16,7 +16,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     public class Shuffle : GlobalEvent
     {
         ///<inheritdoc/>
-        public override int Id { get; set; } = 1045;
+        public override uint Id { get; set; } = 1045;
         ///<inheritdoc/>
         public override string Name { get; set; } = "Shuffle";
         ///<inheritdoc/>

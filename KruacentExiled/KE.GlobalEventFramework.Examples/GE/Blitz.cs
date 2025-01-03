@@ -16,7 +16,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     public class Blitz : GlobalEvent
     {
         ///<inheritdoc/>
-        public override int Id { get; set; } = 1046;
+        public override uint Id { get; set; } = 1046;
         ///<inheritdoc/>
         public override string Name { get; set; } = "Blitz";
         ///<inheritdoc/>
