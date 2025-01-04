@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.GlobalEventFramework", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.GlobalEventFramework.Examples", "KE.GlobalEventFramework.Examples\KE.GlobalEventFramework.Examples.csproj", "{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.CustomRoles", "KE.CustomRoles\KE.CustomRoles.csproj", "{D43DC96A-6034-45EB-B39E-6B291BD0A07C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D43DC96A-6034-45EB-B39E-6B291BD0A07C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D43DC96A-6034-45EB-B39E-6B291BD0A07C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D43DC96A-6034-45EB-B39E-6B291BD0A07C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D43DC96A-6034-45EB-B39E-6B291BD0A07C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
