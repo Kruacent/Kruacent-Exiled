@@ -23,6 +23,7 @@ namespace KE.Misc
         internal _914 _914 { get; private set; }
         internal AutoElevator AutoElevator { get; private set; }
         internal ClassDDoor ClassDDoor { get; private set; }
+        internal Candy Candy { get; private set; }
 
         public override void OnEnabled()
         {
@@ -31,10 +32,21 @@ namespace KE.Misc
             AutoElevator = new AutoElevator();
             ClassDDoor = new ClassDDoor();
             ServerHandler = new ServerHandler();
+            if (Instance.Config.ChancePinkCandy >= 0 && Instance.Config.ChancePinkCandy <= 100)
+            {
+                Candy = new Candy();
+                Exiled.Events.Handlers.Scp330.InteractingScp330 += Candy.InteractingScp330;
+            }
+            else
+            {
+                Log.Error("ChancePinkCandy must be between 0 and 100");
+            }
+
 
             ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;
             Nine14Handle.UpgradingPlayer += _914.OnUpgradingPlayer;
             Exiled.Events.Handlers.Player.Dying += ScpNoeDeathMessage;
+            
 
         }
 
@@ -43,7 +55,14 @@ namespace KE.Misc
             ServerHandle.RoundStarted -= ServerHandler.OnRoundStarted;
             Nine14Handle.UpgradingPlayer -= _914.OnUpgradingPlayer;
             Exiled.Events.Handlers.Player.Dying -= ScpNoeDeathMessage;
+            if (Instance.Config.ChancePinkCandy >= 0 && Instance.Config.ChancePinkCandy <= 100)
+            {
+                Exiled.Events.Handlers.Scp330.InteractingScp330 -= Candy.InteractingScp330;
+                Candy = null;
+            }
+                
 
+            
             _914 = null;
             ClassDDoor = null;
             ServerHandler = null;
