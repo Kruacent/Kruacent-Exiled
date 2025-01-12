@@ -9,11 +9,11 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.API.Features;
 using UnityEngine;
 using System.Linq;
-[CustomItem(ItemType.SCP1853)]
 
+[CustomItem(ItemType.SCP1853)]
 public class Defibrilator : CustomItem
 {
-    public override uint Id { get; set; } = 20;
+    public override uint Id { get; set; } = 1401;
     public override string Name { get; set; } = "DF-001";
     public override string Description { get; set; } = "Le défibrilateur, il permet de réanimer une personne qui à une perte de conscience, on va réanimer la personne la plus proche du joueur qui l'utilise (le lieu de mort et non où se trouve le corps)";
     public override float Weight { get; set; } = 0.65f;
