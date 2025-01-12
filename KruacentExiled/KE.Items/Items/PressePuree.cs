@@ -17,7 +17,7 @@ namespace KE.Items.Items
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime { get; set; } = 1.5f;
         public override bool ExplodeOnCollision { get; set; } = true;
-        public float DamageModifier { get; set; } = 0.9f;
+        public float DamageModifier { get; set; } = 0.4f;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 5,
