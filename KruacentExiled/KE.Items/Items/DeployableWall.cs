@@ -16,7 +16,7 @@ namespace KE.Items.Items
     public class DeployableWall : CustomItem, ILumosItem
     {
         
-        public override uint Id { get; set; } = 1407;
+        public override uint Id { get; set; } = 1408;
         public override string Name { get; set; } = "Deployable Wall";
         public override string Description { get; set; } = "Drop to deploy a wall, and throw to just throw the card";
         public override float Weight { get; set; } = 0.65f;

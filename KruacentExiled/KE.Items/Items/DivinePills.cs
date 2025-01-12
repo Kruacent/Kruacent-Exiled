@@ -19,7 +19,7 @@ using KE.Items.Interface;
 public class DivinePills : CustomItem, ILumosItem
 {
     /// <inheritdoc/>
-    public override uint Id { get; set; } = 1406;
+    public override uint Id { get; set; } = 1407;
 
     /// <inheritdoc/>
     public override string Name { get; set; } = "Divine Pills";
