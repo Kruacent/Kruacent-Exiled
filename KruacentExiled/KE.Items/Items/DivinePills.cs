@@ -78,11 +78,21 @@ public class DivinePills : CustomItem, ILumosItem
 
     private void OnUsingItem(UsedItemEventArgs ev)
     {
-        
+        if (!Check(ev.Item))
+        {
+            return;
+        }
         if (TryGet(ev.Item, out var result) && result.Id == Id)
         {
             Player player = ev.Player;
             var random = Random.Range(0, 100);
+
+            if(Player.List.Where(x => x.Role == RoleTypeId.Spectator).Count() == 0)
+            {
+                player.ShowHint("No spectators to respawn");
+                return;
+            }
+
             if (random <= 25)
             {
                 player.Kill("unlucky bro");
