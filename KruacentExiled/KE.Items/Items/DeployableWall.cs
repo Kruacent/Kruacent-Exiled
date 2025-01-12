@@ -11,7 +11,6 @@ using MEC;
 
 namespace KE.Items.Items
 {
-    //grenade qui tp
     [CustomItem(ItemType.KeycardJanitor)]
     public class DeployableWall : CustomItem, ILumosItem
     {

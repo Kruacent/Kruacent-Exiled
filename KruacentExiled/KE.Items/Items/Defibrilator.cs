@@ -9,8 +9,8 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.API.Features;
 using UnityEngine;
 using System.Linq;
-[CustomItem(ItemType.SCP1853)]
 
+[CustomItem(ItemType.SCP1853)]
 public class Defibrilator : CustomItem
 {
     public override uint Id { get; set; } = 1401;

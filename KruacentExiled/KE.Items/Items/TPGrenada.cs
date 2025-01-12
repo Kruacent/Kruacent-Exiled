@@ -15,7 +15,6 @@ using UnityEngine;
 
 namespace KE.Items.Items
 {
-    //grenade qui tp
     [CustomItem(ItemType.GrenadeHE)]
     public class TPGrenada : CustomGrenade, ILumosItem
     {
@@ -122,9 +121,4 @@ namespace KE.Items.Items
         }
     }
 
-    //bonbon quand tu manges ça donne une armes random
-    /*public class RandomWeaponCandy : CustomItem
-    {
-
-    }*/
 }
