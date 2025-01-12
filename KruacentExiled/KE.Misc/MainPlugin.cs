@@ -41,7 +41,8 @@ namespace KE.Misc
             {
                 Log.Error("ChancePinkCandy must be between 0 and 100");
             }
-
+            Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
+            Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
 
             ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;
             Nine14Handle.UpgradingPlayer += _914.OnUpgradingPlayer;
@@ -60,9 +61,10 @@ namespace KE.Misc
                 Exiled.Events.Handlers.Scp330.InteractingScp330 -= Candy.InteractingScp330;
                 Candy = null;
             }
-                
-
             
+
+
+
             _914 = null;
             ClassDDoor = null;
             ServerHandler = null;
