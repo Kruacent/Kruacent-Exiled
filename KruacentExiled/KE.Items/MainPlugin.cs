@@ -16,17 +16,21 @@ namespace KE.Items
     {
         public override string Author => "Patrique & OmerGS";
         public override string Name => "KEItems";
+        internal Sound Sound { get; private set; }
         internal static MainPlugin Instance { get; private set; }
         public override Version Version => new Version(1, 0, 0);
         private Dictionary<Pickup, Light> pl = new Dictionary<Pickup, Light>();
         public override void OnEnabled()
         {
             Instance = this;
+            Sound = new Sound();
+
+
             CustomItem.RegisterItems();
             Exiled.Events.Handlers.Player.DroppedItem += Drop;
             Exiled.Events.Handlers.Player.PickingUpItem += Pick;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
-
+            
             base.OnEnabled();
         }
 
@@ -38,6 +42,7 @@ namespace KE.Items
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
 
             base.OnDisabled();
+            Sound = null;
             Instance = null;
         }
 
