@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     /// All spawn are random at the start of the game (NTF & Chaos not included)
     /// Note: all role spawn with each other except SCPs
     /// </summary>
-    public class RandomSpawn : GlobalEvent
+    public class RandomSpawn : GlobalEvent,IStart
     {
         ///<inheritdoc/>
         public override uint Id { get; set; } = 1043;
@@ -24,7 +25,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override int Weight { get; set; } = 1;
         ///<inheritdoc/>
-        public override IEnumerator<float> Start()
+        public IEnumerator<float> Start()
         {
             Room room = Room.Random();
             foreach (RoleTypeId r in Enum.GetValues(typeof(RoleTypeId)))

@@ -1,6 +1,7 @@
 ﻿using Player = Exiled.API.Features.Player;
 using System.Collections.Generic;
 using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using MEC;
 using System.Linq;
 using Exiled.API.Extensions;
@@ -8,14 +9,14 @@ using Exiled.API.Features;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
-    public class Impostor : GlobalEvent
+    public class Impostor : GlobalEvent, IStart
     {
         public override uint Id { get; set; } = 1044;
         public override string Name { get; set; } = "Impostor";
         public override string Description { get; set; } = "Ne vous fiez pas aux apparences !";
         public override int Weight { get; set; } = 1;
 
-        public override IEnumerator<float> Start()
+        public IEnumerator<float> Start()
         {
             while (!Round.IsEnded)
             {

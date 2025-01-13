@@ -8,6 +8,7 @@ using System.Linq;
 using Interactables.Interobjects.DoorUtils;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
+using KE.GlobalEventFramework.GEFE.API.Interfaces;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
@@ -20,7 +21,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     /// <item>Checkpoints can open randomly</item>
     /// </list>
     /// </summary>
-    public class SystemMalfunction : GlobalEvent
+    public class SystemMalfunction : GlobalEvent,IStart,IEvent
     {
         /// <inheritdoc/>
         public override uint Id { get; set; } = 1041;
@@ -36,8 +37,9 @@ namespace KE.GlobalEventFramework.Examples.GE
         public int NewCooldown { get; set; } = 180;
 
         public override uint[] IncompatibleGE { get; set; } = { 38 };
+        private BlackoutNDoor.MainPlugin BlackoutNDoor;
         /// <inheritdoc/>
-        public override IEnumerator<float> Start()
+        public IEnumerator<float> Start()
         {
             MoreBlackOutNDoors();
             Coroutine.LaunchCoroutine(EarlyNuke());
@@ -45,7 +47,7 @@ namespace KE.GlobalEventFramework.Examples.GE
             CoroutineHandle handle;
             while(Round.InProgress){
                 //todo change so it happen more frequently 
-                Timing.WaitForSeconds((float)Round.ElapsedTime.TotalSeconds);
+                yield return Timing.WaitForSeconds(300);
                 List<IEnumerator<float>> l = new []{CheckpointMalfunction(),GateLockdown(),ElevatorLockdown()}.ToList();
                 handle = Coroutine.LaunchCoroutine(l[UnityEngine.Random.Range(0,3)]);
                 yield return Timing.WaitUntilDone(handle);
@@ -54,18 +56,24 @@ namespace KE.GlobalEventFramework.Examples.GE
             
 
         }
-        public override void UnsubscribeEvent()
+        public void SubscribeEvent()
         {
+            //Searching for the plugin
             var otherPlugin = Exiled.Loader.Loader.Plugins.FirstOrDefault(plugin => plugin.Name == "KE.BlackoutDoor");
             if (otherPlugin != null)
             {
 
                 if (otherPlugin is BlackoutNDoor.MainPlugin blackout)
                 {
-                    blackout.ServerHandler.Cooldown = -1;
+                    Log.Info("Found BlackOutNDoors");
+                    BlackoutNDoor = blackout;
                 }
 
             }
+        }
+        public void UnsubscribeEvent()
+        {
+            BlackoutNDoor = null;
         }
 
         private IEnumerator<float> EarlyNuke()
@@ -79,17 +87,7 @@ namespace KE.GlobalEventFramework.Examples.GE
 
         private void MoreBlackOutNDoors()
         {
-            var otherPlugin = Exiled.Loader.Loader.Plugins.FirstOrDefault(plugin => plugin.Name == "KE.BlackoutDoor");
-            if (otherPlugin != null)
-            {
-                
-                if (otherPlugin is BlackoutNDoor.MainPlugin blackout)
-                {
-                    Log.Info("Found BlackOutNDoors");
-                    blackout.ServerHandler.Cooldown = NewCooldown;
-                }
-
-            }
+            BlackoutNDoor.ServerHandler.Cooldown = NewCooldown;
         }
 
         private IEnumerator<float> CheckpointMalfunction(){

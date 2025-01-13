@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp173;
 using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using MEC;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     /// Everyone has a movement boost effect (stackable)
     /// Maybe inspired by Dr Bright's Mayhem
     /// </summary>
-    public class Speed : GlobalEvent
+    public class Speed : GlobalEvent,IStart,IEvent
     {
         ///<inheritdoc/>
         public override uint Id { get; set; } = 1042;
@@ -33,20 +34,20 @@ namespace KE.GlobalEventFramework.Examples.GE
         /// </summary>
         public byte MovementBoost { get; set; } = 100;
         ///<inheritdoc/>
-        public override IEnumerator<float> Start()
+        public IEnumerator<float> Start()
         {
             yield return Timing.WaitForSeconds(1);
             Player.List.ToList().ForEach(p => p.EnableEffect<MovementBoost>(MovementBoost,999999999, true));
             
         }
         ///<inheritdoc/>
-        public override void SubscribeEvent()
+        public void SubscribeEvent()
         {
             PlayerHandler.ChangingRole += ReactivateEffectSpawn;
             Exiled.Events.Handlers.Scp173.Blinking += SpeedyNut;
         }
         ///<inheritdoc/>
-        public override void UnsubscribeEvent()
+        public void UnsubscribeEvent()
         {
             PlayerHandler.ChangingRole -= ReactivateEffectSpawn;
             Exiled.Events.Handlers.Scp173.Blinking -= SpeedyNut;
