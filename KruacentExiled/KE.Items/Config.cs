@@ -10,6 +10,7 @@ namespace KE.Items
     public class Config : IConfig
     {
         public bool IsEnabled { get; set; } = true;
-        public bool Debug { get; set; } = false;
+        public bool Debug { get; set; } = true;
+        public float RefreshRate { get; set; } = .5f;
     }
 }
