@@ -1,7 +1,5 @@
 ﻿using Exiled.API.Features;
 using Exiled.CustomRoles.API.Features;
-using KE.CustomRoles.CR;
-using System.ComponentModel;
 
 
 namespace KE.CustomRoles
@@ -17,6 +15,8 @@ namespace KE.CustomRoles
             Instance = this;
 
             CustomRole.RegisterRoles(false,null);
+            this.SubscribeEvents();
+            Controller.controller.CustomRoleGiver();
 
             base.OnEnabled();
         }
@@ -27,7 +27,28 @@ namespace KE.CustomRoles
             CustomRole.UnregisterRoles();
 
             Instance = null;
+            this.UnsubscribeEvents();
+
             base.OnDisabled();
+        }
+
+
+
+
+        public void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Server.RoundStarted += CustomRoleImplement;
+        }
+
+        /// <inheritdoc/>
+        public void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Server.RoundStarted -= CustomRoleImplement;
+        }
+
+        public void CustomRoleImplement()
+        {
+            Controller.controller.CustomRoleGiver();
         }
     }
 }
