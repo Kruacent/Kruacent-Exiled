@@ -59,6 +59,7 @@ namespace KE.Items.Items
                 ev.IsAllowed = true;
                 return;
             }
+            
             ev.IsAllowed = false;
             ev.Player.ShowHint("You have dropped a deployable wall");
             ev.Player.RemoveItem(ev.Item);
@@ -73,6 +74,7 @@ namespace KE.Items.Items
             Vector3 spawnPos = pos + forward * distance;
             Vector3 rotat = new Vector3(0, rotation.eulerAngles.y, 0);
 
+            MainPlugin.Instance.Sound.PlayClip("build", spawnPos);
             Primitive wall = Primitive.Create(PrimitiveType.Cube, spawnPos, rotat, new Vector3(4, 4, 0.2f),true);
             wall.Collidable = true;
             wall.Visible = true;
