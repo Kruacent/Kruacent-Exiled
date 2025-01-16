@@ -149,7 +149,15 @@ public class DivinePills : CustomItem, ILumosItem
             return;
         }
         Player respawning = Player.List.Where(x => x.Role == RoleTypeId.Spectator).GetRandomValue();
-        respawning.Role.Set(player.Role);
+        switch (player.Role.Side)
+        {
+            case Side.ChaosInsurgency:
+                respawning.Role.Set(RoleTypeId.ChaosRifleman);
+                break;
+            case Side.Mtf:
+                respawning.Role.Set(RoleTypeId.NtfPrivate);
+                break;
+        }
         if (random > 75)
         {
             respawning.Teleport(player);
