@@ -13,18 +13,16 @@ using UnityEngine;
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.GrenadeHE)]
-    public class Molotov : CustomGrenade, ILumosItem
+    public class HealZone : CustomGrenade, ILumosItem
     {
-        public override uint Id { get; set; } = 1409;
-        public override string Name { get; set; } = "Cocktail Molotov";
-        public override string Description { get; set; } = "ARSON";
+        public override uint Id { get; set; } = 1410;
+        public override string Name { get; set; } = "Heal Zone";
+        public override string Description { get; set; } = "Allow to heal you and your ally";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime { get; set; } = 5f;
         public override bool ExplodeOnCollision { get; set; } = true;
         public float DamageModifier { get; set; } = 0f;
-        public UnityEngine.Color Color { get; set; } = UnityEngine.Color.yellow;
-        private const float RefreshRate = 0.5f;
-        private const float Duration = 20f;
+        public UnityEngine.Color Color { get; set; } = UnityEngine.Color.green;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 3,
@@ -34,21 +32,21 @@ namespace KE.Items.Items
                 {
                     Chance = 75,
                     UseChamber = true,
-                    Type = LockerType.Misc,
+                    Type = LockerType.Medkit,
                     Zone = ZoneType.Entrance,
                 },
                 new LockerSpawnPoint()
                 {
                     Chance = 50,
                     UseChamber = true,
-                    Type = LockerType.Misc,
+                    Type = LockerType.Medkit,
                     Zone = ZoneType.LightContainment,
                 },
                 new LockerSpawnPoint()
                 {
-                    Chance = 50,
+                    Chance = 100,
                     UseChamber = true,
-                    Type = LockerType.Misc,
+                    Type = LockerType.Medkit,
                     Zone = ZoneType.HeavyContainment,
                 },
             },
@@ -58,11 +56,11 @@ namespace KE.Items.Items
                 new RoomSpawnPoint()
                 {
                     Chance = 75,
-                    Room = RoomType.LczGlassBox,
+                    Room = RoomType.HczHid,
                 },
                 new RoomSpawnPoint()
                 {
-                    Chance = 100,
+                    Chance = 50,
                     Room = RoomType.HczNuke,
                 },
             },
@@ -75,38 +73,40 @@ namespace KE.Items.Items
             ev.TargetsToAffect.Clear();
 
             Player playerThrowingGrenade = ev.Player;
-            Vector3 molotovPosition = ev.Position;
-            Primitive wall = Primitive.Create(PrimitiveType.Cylinder, molotovPosition, null, new Vector3(cylinderSize, 0.01f, cylinderSize), true);
+            Vector3 healZonePosition = ev.Position;
+            Primitive wall = Primitive.Create(PrimitiveType.Cylinder, healZonePosition, null, new Vector3(cylinderSize, 0.01f, cylinderSize), true);
             wall.Collidable = false;
             wall.Visible = true;
 
-            wall.Color = Color.red;
+            wall.Color = Color.green;
 
-            var coroutineHandler = Timing.RunCoroutine(DamageInMolotovZone(wall.Position, cylinderSize, playerThrowingGrenade));
+            var coroutineHandler = Timing.RunCoroutine(HealZoneHeal(wall.Position, cylinderSize, playerThrowingGrenade));
 
-            Timing.CallDelayed(Duration, () => {
+            Timing.CallDelayed(20, () => {
                 wall.UnSpawn();
                 Timing.KillCoroutines(coroutineHandler);
                 wall.Destroy();
             });          
         }
 
-        private IEnumerator<float> DamageInMolotovZone(Vector3 wallPosition, float cylinderSize, Player playerThrowingGrenade)
+        private IEnumerator<float> HealZoneHeal(Vector3 wallPosition, float cylinderSize, Player playerThrowingGrenade)
         {
             while (true)
             {
-                foreach (Player player in Player.List)
+                foreach (Player player in Exiled.API.Features.Player.List)
                 {
+                    // Check if a player is in the zone.
                     if (IsPlayerInZone(player, wallPosition, cylinderSize))
                     {
-                        if (Exiled.API.Features.Server.FriendlyFire || playerThrowingGrenade.Role.Team != player.Role.Team || playerThrowingGrenade == player)
+                        if(playerThrowingGrenade.Role.Team == player.Role.Team)
                         {
-                            player.Hurt(player.Health / 150, DamageType.Bleeding);
+                            player.Heal(1);
                         }
                     }
                 }
 
-                yield return Timing.WaitForSeconds(RefreshRate);
+                // Waiting 0.5s before re-check.
+                yield return Timing.WaitForSeconds(0.5f);
             }
         }
 
