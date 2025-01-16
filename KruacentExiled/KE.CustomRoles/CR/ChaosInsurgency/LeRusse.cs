@@ -9,7 +9,7 @@ namespace KE.CustomRoles.CR.ClassD
     [CustomRole(RoleTypeId.ChaosConscript)]
     internal class Russe : Exiled.CustomRoles.API.Features.CustomRole
     {
-        public override string Name { get; set; } = "Le Russe";
+        public override string Name { get; set; } = "Russe";
         public override string Description { get; set; } = "Tu es un <color=#FFC0CB>maitre de jeu</color> \ntu dois faire la roulette russe avec les autres joueurs";
         public override uint Id { get; set; } = 1051;
         public override string CustomInfo { get; set; } = "Le Russe";
