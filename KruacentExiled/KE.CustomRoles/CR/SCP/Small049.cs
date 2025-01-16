@@ -1,5 +1,7 @@
 ﻿using Exiled.API.Features.Attributes;
+using Exiled.API.Features.Roles;
 using PlayerRoles;
+using PluginAPI.Roles;
 using UnityEngine;
 
 namespace KE.CustomRoles.CR.SCP
@@ -11,7 +13,7 @@ namespace KE.CustomRoles.CR.SCP
         public override string Description { get; set; } = "u are a smoll doctor";
         public override uint Id { get; set; } = 1045;
         public override string CustomInfo { get; set; } = "Small Doctor";
-        public override int MaxHealth { get; set; } = 100;
+        public override int MaxHealth { get; set; } = 2300;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scp049;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;

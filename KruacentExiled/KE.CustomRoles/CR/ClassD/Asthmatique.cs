@@ -1,6 +1,8 @@
-﻿using Exiled.API.Features.Attributes;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features.Attributes;
 using PlayerRoles;
 using UnityEngine;
+using Utils.NonAllocLINQ;
 
 namespace KE.CustomRoles.CR.ClassD
 {
@@ -16,8 +18,12 @@ namespace KE.CustomRoles.CR.ClassD
         public override bool KeepRoleOnDeath { get; set; } = true;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
         public override bool IgnoreSpawnSystem { get; set; } = true;
-
-        public override float SpawnChance { get; set; } = 100;
-        public override Vector3 Scale { get; set; } = new Vector3(1, 0.75f, 1);
+        public override void Init()
+        {
+            TrackedPlayers.ForEach(p => {
+                p.EnableEffect(EffectType.Scp1853, -1);
+                p.EnableEffect(EffectType.Exhausted, -1);
+            });
+        }
     }
 }

@@ -27,7 +27,7 @@ namespace KE.CustomRoles.CR.ClassD
           $"{ItemType.GunRevolver}",
           $"{ItemType.Radio}",
           $"{ItemType.Adrenaline}",
-          $"{ItemType.GrenadeHE}",
+          $"{ItemType.KeycardChaosInsurgency}",
           $"{ItemType.GrenadeHE}",
           $"{ItemType.GrenadeHE}",
           $"{ItemType.GrenadeHE}"
