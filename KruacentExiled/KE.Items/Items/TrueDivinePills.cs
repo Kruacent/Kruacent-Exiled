@@ -21,7 +21,7 @@ using Exiled.Events.EventArgs.Scp914;
 public class TrueDivinePills : CustomItem, ILumosItem
 {
     /// <inheritdoc/>
-    public override uint Id { get; set; } = 1409;
+    public override uint Id { get; set; } = 1410;
 
     /// <inheritdoc/>
     public override string Name { get; set; } = "True Divine Pills";
