@@ -9,6 +9,7 @@ using Interactables.Interobjects.DoorUtils;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
+using System;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
@@ -37,17 +38,18 @@ namespace KE.GlobalEventFramework.Examples.GE
         public int NewCooldown { get; set; } = 180;
 
         public override uint[] IncompatibleGE { get; set; } = { 38 };
-        private BlackoutNDoor.MainPlugin BlackoutNDoor;
+        private BlackoutNDoor.MainPlugin BlackoutNDoor = null;
         /// <inheritdoc/>
         public IEnumerator<float> Start()
         {
+            Log.Debug("system malfunction start");
             MoreBlackOutNDoors();
             Coroutine.LaunchCoroutine(EarlyNuke());
-            
+
             CoroutineHandle handle;
             while(Round.InProgress){
-                //todo change so it happen more frequently 
-                yield return Timing.WaitForSeconds(300);
+                Log.Debug("system malfunction");
+                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(200, 300));
                 List<IEnumerator<float>> l = new []{CheckpointMalfunction(),GateLockdown(),ElevatorLockdown()}.ToList();
                 handle = Coroutine.LaunchCoroutine(l[UnityEngine.Random.Range(0,3)]);
                 yield return Timing.WaitUntilDone(handle);
@@ -67,6 +69,7 @@ namespace KE.GlobalEventFramework.Examples.GE
                 {
                     Log.Info("Found BlackOutNDoors");
                     BlackoutNDoor = blackout;
+                    return;
                 }
 
             }
@@ -87,16 +90,33 @@ namespace KE.GlobalEventFramework.Examples.GE
 
         private void MoreBlackOutNDoors()
         {
-            BlackoutNDoor.ServerHandler.Cooldown = NewCooldown;
-        }
-
-        private IEnumerator<float> CheckpointMalfunction(){
-            yield return Timing.WaitForSeconds(UnityEngine.Random.Range(20,60));
-            var checkpoints = Door.List.Where(d => d.IsCheckpoint).ToList().RandomItem().IsOpen =true;
+            try
+            {
+                if (BlackoutNDoor != null)
+                {
+                    if (BlackoutNDoor.ServerHandler != null)
+                        BlackoutNDoor.ServerHandler.Cooldown = NewCooldown;
+                    else
+                        Log.Error("server handler null");
+                }
+                    
+            }
+            catch(Exception e)
+            {
+                Log.Error(e);
+            }
             
         }
 
+        private IEnumerator<float> CheckpointMalfunction(){
+            Log.Debug("CheckpointMalfunction");
+            var checkpoints = Door.List.Where(d => d.IsCheckpoint).ToList().RandomItem().IsOpen =true;
+            yield return Timing.WaitForSeconds(UnityEngine.Random.Range(20, 60));
+
+        }
+
         private IEnumerator<float> GateLockdown(){
+            Log.Debug("GateLockdown");
             var gates = Door.List.Where(d => d.Type == DoorType.GateA ||d.Type == DoorType.GateB);
             var gate = gates.GetRandomValue();
             gate.IsOpen = false;
@@ -106,6 +126,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         }
 
         private IEnumerator<float> ElevatorLockdown(){
+            Log.Debug("ElevatorLockdown");
             var lift = Lift.Random;
             lift.ChangeLock(DoorLockReason.Isolation);
             yield return Timing.WaitForSeconds(UnityEngine.Random.Range(10,20));

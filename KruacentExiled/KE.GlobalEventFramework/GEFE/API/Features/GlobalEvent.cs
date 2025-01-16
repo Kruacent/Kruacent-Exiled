@@ -149,11 +149,13 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
             {
                 if(ge is IEvent geEvent)
                 {
+                    Log.Debug($"{ge.Name} implements IEvent, subscribing events");
                     geEvent.SubscribeEvent();
                 }
 
                 if(ge is IStart geStart)
                 {
+                    Log.Debug($"{ge.Name} implements IStart, starting");
                     CoroutineHandle a = Timing.RunCoroutine(geStart.Start());
                     coroutineHandles.Add(a);
                 }
