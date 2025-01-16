@@ -23,6 +23,8 @@ namespace KE.Items.Items
         public override bool ExplodeOnCollision { get; set; } = true;
         public float DamageModifier { get; set; } = 0;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.yellow;
+        private const float RefreshRate = 0.5f;
+        private const float Duration = 20f;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 3,
@@ -80,7 +82,7 @@ namespace KE.Items.Items
 
             var coroutineHandler = Timing.RunCoroutine(DamageInMolotovZone(wall.Position, cylinderSize, playerThrowingGrenade));
 
-            Timing.CallDelayed(20, () => {
+            Timing.CallDelayed(Duration, () => {
                 wall.UnSpawn();
                 Timing.KillCoroutines(coroutineHandler);
                 wall.Destroy();
@@ -91,30 +93,18 @@ namespace KE.Items.Items
         {
             while (true)
             {
-                foreach (Player player in Exiled.API.Features.Player.List)
+                foreach (Player player in Player.List)
                 {
-                    // Check if a player is in the zone.
                     if (IsPlayerInZone(player, wallPosition, cylinderSize))
                     {
-                        // Friendly Fire Enabled
-                        if (Exiled.API.Features.Server.FriendlyFire)
+                        if (Exiled.API.Features.Server.FriendlyFire || playerThrowingGrenade.Role.Team != player.Role.Team || playerThrowingGrenade == player)
                         {
                             player.Hurt(player.Health / 150, DamageType.Bleeding);
-
-                        }
-                        // Friendly Fire Disabled
-                        else
-                        {
-                            if(playerThrowingGrenade.Role.Team != player.Role.Team || playerThrowingGrenade == player)
-                            {
-                                player.Hurt(player.Health / 150, DamageType.Bleeding);
-                            } 
                         }
                     }
                 }
 
-                // Waiting 0.5s before re-check.
-                yield return Timing.WaitForSeconds(0.5f);
+                yield return Timing.WaitForSeconds(RefreshRate);
             }
         }
 
