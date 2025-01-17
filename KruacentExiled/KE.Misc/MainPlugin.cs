@@ -24,6 +24,7 @@ namespace KE.Misc
         internal AutoElevator AutoElevator { get; private set; }
         internal ClassDDoor ClassDDoor { get; private set; }
         internal Candy Candy { get; private set; }
+        internal SurfaceLight SurfaceLight { get; private set; }
 
         public override void OnEnabled()
         {
@@ -31,6 +32,7 @@ namespace KE.Misc
             _914 = new _914();
             AutoElevator = new AutoElevator();
             ClassDDoor = new ClassDDoor();
+            SurfaceLight = new SurfaceLight();
             ServerHandler = new ServerHandler();
             if (Instance.Config.ChancePinkCandy >= 0 && Instance.Config.ChancePinkCandy <= 100)
             {
@@ -68,6 +70,7 @@ namespace KE.Misc
             ServerHandler = null;
             AutoElevator = null;
             Instance = null;
+            SurfaceLight = null;
         }
 
 
