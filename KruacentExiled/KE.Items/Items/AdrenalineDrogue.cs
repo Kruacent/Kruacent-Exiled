@@ -10,10 +10,11 @@ using Exiled.API.Features;
 using Exiled.API.Extensions;
 using UnityEngine;
 using CustomPlayerEffects;
+using KE.Items.Interface;
 
 /// <inheritdoc />
 [CustomItem(ItemType.Adrenaline)]
-public class AdrenalineDrogue : CustomItem
+public class AdrenalineDrogue : CustomItem, ILumosItem
 {
     /// <inheritdoc/>
     public override uint Id { get; set; } = 1402;
@@ -22,10 +23,12 @@ public class AdrenalineDrogue : CustomItem
     public override string Name { get; set; } = "DA-020";
 
     /// <inheritdoc/>
-    public override string Description { get; set; } = "La bonne drogue là, si vous le prenez vous êtes ienb pendant 20 secondes puis vous vous sentez pas bien !";
+    public override string Description { get; set; } = "you need to test it !";
 
     /// <inheritdoc/>
     public override float Weight { get; set; } = 0.65f;
+    public UnityEngine.Color Color { get; set; } = UnityEngine.Color.yellow;
+
 
     public List<Exiled.API.Features.Player> joueursSCP = new List<Exiled.API.Features.Player>();
 
@@ -44,6 +47,24 @@ public class AdrenalineDrogue : CustomItem
             {
                 Chance = 2,
                 Location = SpawnLocationType.Inside173Gate,
+            },
+        },
+
+        LockerSpawnPoints = new List<LockerSpawnPoint>
+        {
+            new LockerSpawnPoint()
+            {
+                Chance = 20,
+                UseChamber = true,
+                Type = LockerType.Misc,
+                Zone = ZoneType.Entrance,
+            },
+            new LockerSpawnPoint()
+            {
+                Chance = 25,
+                UseChamber = true,
+                Type = LockerType.Medkit,
+                Zone = ZoneType.HeavyContainment,
             },
         },
     };
@@ -151,7 +172,7 @@ public class AdrenalineDrogue : CustomItem
             switch (randomNumber)
             {
                 case 1:
-                    Log.Debug(joueur.Nickname + " a changé d'apparence !");
+                    Log.Debug(joueur.Nickname + " changed his skin !");
                     joueur.PlayShieldBreakSound();
 
                     joueur.ChangeAppearance(joueursSCP[0].Role);
@@ -165,14 +186,14 @@ public class AdrenalineDrogue : CustomItem
                     break;
                 case 2:
                     Log.Debug("Muet");
-                    joueur.ShowHint("Vous avez perdu votre langue ! (esperons que celle-ci repousse)");
+                    joueur.ShowHint("You lost your ability to talk, (git good)");
                     joueur.Mute();
                     yield return Timing.WaitForSeconds(UnityEngine.Random.Range(30, 100));
-                    joueur.ShowHint("Je crois que c'est bon, ça a repoussé !");
+                    joueur.ShowHint("I think you found your ability");
                     joueur.UnMute();
                     break;
                 case 3:
-                    joueur.ShowHint("Vous êtes devenu du caoutchouc !");
+                    joueur.ShowHint("You are caoutchouc man");
                     Exiled.API.Features.TeslaGate.IgnoredPlayers.Add(joueur);
                     joueur.SetScale(new Vector3(1.5f, 0.5f, 1.7f), Exiled.API.Features.Player.List);
                     break;
@@ -180,7 +201,7 @@ public class AdrenalineDrogue : CustomItem
                     Log.Debug("Let's go party");
                     foreach (var player in Exiled.API.Features.Player.List)
                     {
-                        player.ShowHint(joueur.Nickname + " à commencer une fête d'anniversaire !");
+                        player.ShowHint("It's " + joueur.Nickname + " birthday !");
                     }
 
                     float duration2 = 30f;
@@ -205,7 +226,7 @@ public class AdrenalineDrogue : CustomItem
                     break;
                 case 5:
                     Log.Debug("Paper");
-                    joueur.ShowHint("Bienvenue dans le monde des papiers. Évite les ciseaux !");
+                    joueur.ShowHint("You are a paper ! Yippee !");
                     joueur.SetScale(new Vector3(1f, 0.5f, 1f), Exiled.API.Features.Player.List);
                     break;
             }
