@@ -11,6 +11,6 @@ namespace KE.Items
     {
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = true;
-        public float RefreshRate { get; set; } = .5f;
+        public float RefreshRate { get; set; } = .01f;
     }
 }
