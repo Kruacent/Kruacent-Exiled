@@ -28,7 +28,7 @@ namespace KE.Misc
 
             { 3, RoleTypeId.Scp106 },
             { 2, RoleTypeId.Scp173 },
-            { 1, RoleTypeId.Scp3114},
+            { 1, RoleTypeId.Scp096},
 
         };
         internal void OnUpgradingPlayer(UpgradingPlayerEventArgs ev)
