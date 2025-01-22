@@ -11,6 +11,7 @@ using Exiled.API.Extensions;
 using UnityEngine;
 using CustomPlayerEffects;
 using KE.Items.Interface;
+using System.Linq;
 
 /// <inheritdoc />
 [CustomItem(ItemType.Adrenaline)]
@@ -100,11 +101,27 @@ public class AdrenalineDrogue : CustomItem, ILumosItem
 
     private IEnumerator<float> EffectAttribution(Exiled.API.Features.Player joueur)
     {
+        bool gasgas = false;
+
         /* EFFET DE LA DROGUE */
         joueur.ShowHint("Vous êtes actuellement sous effet de la cocaïne liquide !");
-        joueur.EnableEffect<MovementBoost>(40, true);
+
+        var movementBoostEffect = joueur.ActiveEffects.FirstOrDefault(e => e is MovementBoost) as MovementBoost;
+
+        if (movementBoostEffect != null)
+        {
+            float currentIntensity = movementBoostEffect.Intensity;
+            joueur.EnableEffect<MovementBoost>(currentIntensity+50, true);
+            gasgas = true;
+        }
+        else
+        {
+            joueur.EnableEffect<MovementBoost>(50, true);
+        }
+
+
         joueur.EnableEffect<InsufficientLighting>(30, true);
-        joueur.EnableEffect<BodyshotReduction>(30, true);
+        joueur.EnableEffect<BodyshotReduction>(40, true);
         joueur.EnableEffect<Ghostly>(30, true);
         joueur.Health = 169;
 
@@ -161,7 +178,13 @@ public class AdrenalineDrogue : CustomItem, ILumosItem
 
         joueur.DisableAllEffects();
         joueur.EnableEffect<SilentWalk>(10);
-        joueur.EnableEffect<MovementBoost>(35);
+        if (gasgas)
+        {
+            joueur.EnableEffect<MovementBoost>(130, true);
+        } else
+        {
+            joueur.EnableEffect<MovementBoost>(30, true);
+        }
 
 
         yield return Timing.WaitForSeconds(UnityEngine.Random.Range(180, 300));
