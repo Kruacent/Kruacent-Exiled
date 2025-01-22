@@ -24,6 +24,7 @@ namespace KE.Misc
         internal AutoElevator AutoElevator { get; private set; }
         internal ClassDDoor ClassDDoor { get; private set; }
         internal Candy Candy { get; private set; }
+        internal SCPBuff SCPBuff { get; private set; }
 
         public override void OnEnabled()
         {
@@ -43,6 +44,7 @@ namespace KE.Misc
             }
             Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
             Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
+            SCPBuff = new SCPBuff();
 
             ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;
             Nine14Handle.UpgradingPlayer += _914.OnUpgradingPlayer;
@@ -68,6 +70,7 @@ namespace KE.Misc
             _914 = null;
             ClassDDoor = null;
             ServerHandler = null;
+            SCPBuff = null;
             AutoElevator = null;
             Instance = null;
         }
