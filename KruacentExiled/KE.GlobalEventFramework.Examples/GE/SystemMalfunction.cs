@@ -10,6 +10,11 @@ using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using System;
+using Exiled.Events.EventArgs.Player;
+using System.Security.Policy;
+using PlayerRoles;
+using Utils.NonAllocLINQ;
+using KeycardPermissions = Exiled.API.Enums.KeycardPermissions;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
@@ -22,7 +27,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     /// <item>Checkpoints can open randomly</item>
     /// </list>
     /// </summary>
-    public class SystemMalfunction : GlobalEvent,IStart,IEvent
+    public class SystemMalfunction : GlobalEvent, IStart, IEvent
     {
         /// <inheritdoc/>
         public override uint Id { get; set; } = 1041;
@@ -32,21 +37,29 @@ namespace KE.GlobalEventFramework.Examples.GE
         public override string Description { get; set; } = "On dirait que les systèmes informatiques sont défaillants";
         /// <inheritdoc/>
         public override int Weight { get; set; } = 1;
+        public override uint[] IncompatibleGE { get; set; } = { 38 };
         /// <summary>
         /// Set the cooldown for the BlackoutNDoor
         /// </summary>
         public int NewCooldown { get; set; } = 180;
-
-        public override uint[] IncompatibleGE { get; set; } = { 38 };
         private BlackoutNDoor.MainPlugin BlackoutNDoor = null;
+        public sbyte Malfunction { get; private set; } = 15;
+        public sbyte MalfunctionAdd { get; set; } = 1;
+
+        private bool[] CassieVoiceLine = new[] {true, true , true , true , true };
+        public bool CassieYapYap { get; private set; } = false;
+        private Dictionary<Door,KeycardPermissions> doorkeys = Door.List.ToDictionary(d => d, d=> d.KeycardPermissions);
+
+
         /// <inheritdoc/>
         public IEnumerator<float> Start()
         {
             Log.Debug("system malfunction start");
-            MoreBlackOutNDoors();
-            Coroutine.LaunchCoroutine(EarlyNuke());
-
+            //MoreBlackOutNDoors();
+            //Coroutine.LaunchCoroutine(EarlyNuke());
+            Coroutine.LaunchCoroutine(Tick());
             CoroutineHandle handle;
+
             while(Round.InProgress){
                 Log.Debug("system malfunction");
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(200, 300));
@@ -55,11 +68,166 @@ namespace KE.GlobalEventFramework.Examples.GE
                 yield return Timing.WaitUntilDone(handle);
 
             }
-            
+        }
+
+        private IEnumerator<float> Tick()
+        {
+            Log.Debug("in tick");
+            while (Round.InProgress)
+            {
+                Log.Debug($"Malfunction={Malfunction}");
+                CassieVoice(Malfunction);
+                yield return Timing.WaitForSeconds(5);//60
+                Malfunction += MalfunctionAdd;
+                Malfunction += AdditionnalMalfunction();
+                
+            }
+            yield return 0;
+        }
+
+        private void CassieVoice(sbyte malfunction)
+        {
+            if(malfunction <= 0 && (CassieVoiceLine[0] || CassieYapYap ))
+            {
+                Cassie.MessageTranslated("Malfunctions back to more stable levels",
+                        "Malfunctions back to more stable levels", false, false);
+                CassieVoiceLine[0] = false;
+                return;
+            }
+
+            //force decontamination
+            if(malfunction >= 25 && (CassieVoiceLine[1] || CassieYapYap) && !Map.IsLczDecontaminated && Map.IsDecontaminationEnabled)
+            {
+                string msg = "Malfunctions levels above . 25 percent . . decontamination of Light Containment Zone in . 30 seconds";
+                Cassie.MessageTranslated(msg,
+                    "Malfunctions levels above 25%, decontamination of Light Containment Zone in 30 seconds", false, false);
+                CassieVoiceLine[1] = false;
+                Door.List.ToList().ForEach(d =>
+                {
+                    if (d.Zone == ZoneType.LightContainment)
+                    {
+                        if (!d.IsElevator)
+                        {
+                            d.ChangeLock(DoorLockType.DecontEvacuate);
+                            d.IsOpen = true;
+                        }
+                        
+                    }
+                });
+                Timing.CallDelayed(30+Cassie.CalculateDuration(msg), () =>
+                {
+                    Map.StartDecontamination();
+                    Door.List.ToList().ForEach(d =>
+                    {
+                        if(d.Type == DoorType.ElevatorLczA || d.Type == DoorType.ElevatorLczB)
+                            d.DoorLockType = DoorLockType.DecontLockdown;
+                    });
+                });
+                return;
+            }
+
+            //remove the lock on every doors
+            if (malfunction >= 50 && (CassieVoiceLine[2] || CassieYapYap))
+            {
+                CassieVoiceLine[2] = false;
+                Cassie.MessageTranslated("Malfunctions levels above . 50 percent . . terminating all door locks",
+                    "Malfunctions levels above 50 percent, terminating all door locks", false, false);
+                Door.List.ToList().ForEach(d =>
+                {
+                    if (d.IsKeycardDoor)
+                        d.KeycardPermissions = KeycardPermissions.None;
+                    
+                });
+                return;
+            }
+
+            //reput the locks
+            if(malfunction < 40 && (CassieVoiceLine[3] || CassieYapYap))
+            {
+                CassieVoiceLine[3] = false;
+                doorkeys.ForEach(dk => 
+                {
+                    dk.Key.KeycardPermissions = dk.Value;
+                });
+                
+                return;
+            }
+
+            //nuke
+            if (malfunction >= 90)
+            {
+                if ((CassieVoiceLine[4] || CassieYapYap))
+                {
+                    CassieVoiceLine[4] = false;
+                    string msg = "Malfunctions levels above . 90 percent . . starting emergency warhead";
+                    Cassie.MessageTranslated(msg,
+                       "Malfunctions levels above 90%, starting emergency warhead", false, false);
+                }
+                Warhead.Start();
+                Warhead.IsLocked = true;
+                Timing.RunCoroutine(CheckNuke());
+                return;
+            }
 
         }
+
+        private IEnumerator<float> CheckNuke()
+        {
+            while (Warhead.IsInProgress)
+            {
+                yield return Timing.WaitForSeconds(5);
+                if (Malfunction <= 85)
+                {
+                    Log.Debug($"Malfunction low enough ({Malfunction}) disabling the nuke");
+                    Warhead.Stop();
+                    Warhead.IsLocked = false;
+                    break;
+                }
+            }
+        }
+
+        private sbyte AdditionnalMalfunction()
+        {
+            sbyte result = 0;
+            //generator reduce the malfunction
+            result -= (sbyte) (Generator.List.Count(x => x.IsEngaged)*3);
+            //number of scp increase 3 (except zombies)
+            result += (sbyte) (Player.List.Count(p => p.Role.Side == Side.Scp && p.Role != RoleTypeId.Scp0492) * 3);
+            //number of zombies increase 1
+            result += (sbyte)Player.List.Count(p => p.Role == RoleTypeId.Scp0492);
+
+
+            return result;
+
+        }
+
+
+        private void OnDying(DyingEventArgs ev)
+        {
+            switch (ev.Player.Role.Side)
+            {
+                case Side.Mtf:
+                    Malfunction += 1;
+                    break;
+                case Side.ChaosInsurgency :
+                    Malfunction -= 1;
+                    break;
+                case Side.Scp:
+                    if(ev.Player.Role != RoleTypeId.Scp0492)
+                        Malfunction -= 10;
+                    else Malfunction -= 1;
+                    break;
+            }
+        }
+
+
         public void SubscribeEvent()
         {
+
+            Exiled.Events.Handlers.Player.Dying += OnDying;
+            //revice zombie add malfunction levle
+
+
             //Searching for the plugin
             var otherPlugin = Exiled.Loader.Loader.Plugins.FirstOrDefault(plugin => plugin.Name == "KE.BlackoutDoor");
             if (otherPlugin != null)
@@ -77,6 +245,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         public void UnsubscribeEvent()
         {
             BlackoutNDoor = null;
+            Exiled.Events.Handlers.Player.Dying -= OnDying;
         }
 
         private IEnumerator<float> EarlyNuke()
