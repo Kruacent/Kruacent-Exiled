@@ -38,14 +38,14 @@ namespace KE.Items.Items
             {
                 new LockerSpawnPoint()
                 {
-                    Chance = 50,
+                    Chance = 10,
                     Type = LockerType.ExperimentalWeapon
                 }
             }
         };
 
         public override float Damage { get; set; }
-        public override byte ClipSize { get; set; } = 4;
+        public override byte ClipSize { get; set; } = 2;
 
         [Description("Whether or not players will need actual frag grenades in their inventory to use as ammo. If false, the weapon's base ammo type is used instead.")]
         public bool UseGrenades { get; set; } = true;
