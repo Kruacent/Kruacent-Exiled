@@ -19,5 +19,6 @@ namespace KE.Misc
         public bool AutoElevator { get; set; } = true;
         [Description("Chance to get a pink candy (0-100)")]
         public int ChancePinkCandy { get; set; } = 10;
+        public bool SurfaceLight { get; set; } = true;
     }
 }
