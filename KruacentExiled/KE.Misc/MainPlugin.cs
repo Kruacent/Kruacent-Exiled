@@ -9,6 +9,7 @@ using System.Linq;
 using PlayerRoles;
 using Exiled.Events.EventArgs.Player;
 using System;
+using MapGeneration;
 
 namespace KE.Misc
 {
@@ -112,11 +113,28 @@ namespace KE.Misc
             Log.Debug("peanut lockdown");
             Door peanutDoor = Door.List.ToList().Where(x => x.Type == DoorType.Scp173NewGate).ToList()[0];
             peanutDoor.IsOpen = false;
-            peanutDoor.ChangeLock(DoorLockType.Lockdown2176);
-            yield return Timing.WaitForSeconds(135-Player.List.Count*15);
+            peanutDoor.ChangeLock(DoorLockType.Isolation);
+            var a = Timing.RunCoroutine(Timer(135 - Player.List.Count * 15,Player.List.Where(p=> p.Role == RoleTypeId.Scp173).ToList(), "u r free :3"));
+            yield return Timing.WaitUntilDone(a);
             peanutDoor.IsOpen = true;
             peanutDoor.Unlock();
             Log.Debug("peanut free");
+        }
+
+
+        private IEnumerator<float> Timer(int secondsWaiting,List<Player> playerToShow, string msg = "done")
+        {
+            while (secondsWaiting >= 0)
+            {
+                Hint hint = new Hint()
+                {
+                    Content = $"{secondsWaiting}",
+                    Duration = 1
+                };
+                playerToShow.ForEach(p => p.ShowHint(hint));
+                yield return Timing.WaitForSeconds(1);
+                secondsWaiting--;
+            }
         }
         
         /// <summary>
