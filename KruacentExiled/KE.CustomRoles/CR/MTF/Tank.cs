@@ -24,7 +24,7 @@ namespace KE.CustomRoles.CR.ClassD
         public override bool IgnoreSpawnSystem { get; set; } = true;
 
         public override float SpawnChance { get; set; } = 100;
-        public override Vector3 Scale { get; set; } = new Vector3(1.75f, 1.75f, 1.75f);
+        public override Vector3 Scale { get; set; } = new Vector3(1.15f, 1.15f, 1.15f);
 
         public override List<string> Inventory { get; set; } = new List<string>()
        {
@@ -33,7 +33,7 @@ namespace KE.CustomRoles.CR.ClassD
           $"{ItemType.Radio}",
           $"{ItemType.GrenadeHE}",
           $"{ItemType.Adrenaline}",
-          $"{ItemType.Painkillers}",
+          $"{ItemType.KeycardMTFCaptain}",
           $"{ItemType.Painkillers}",
           $"{ItemType.ArmorHeavy}"
         };
