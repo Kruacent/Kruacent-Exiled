@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
+using InventorySystem.Items.Keycards;
 using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,11 +38,7 @@ namespace KE.CustomRoles.CR.Scientist
        {
           $"{ItemType.Medkit}",
           $"{ItemType.Adrenaline}",
-          $"{ItemType.None}",
-          $"{ItemType.KeycardZoneManager}",
-          $"{ItemType.None}",
-          $"{ItemType.None}",
-          $"{ItemType.None}",
+          $"{ItemType.KeycardZoneManager}"
         };
     }
 }

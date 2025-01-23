@@ -26,10 +26,7 @@ namespace KE.CustomRoles.CR.Scientist
           $"{ItemType.Coin}",
           $"{ItemType.Coin}",
           $"{ItemType.Coin}",
-          $"{ItemType.Coin}",
-          $"{ItemType.None}",
-          $"{ItemType.None}",
-          $"{ItemType.None}"
+          $"{ItemType.Coin}"
         };
     }
 }
