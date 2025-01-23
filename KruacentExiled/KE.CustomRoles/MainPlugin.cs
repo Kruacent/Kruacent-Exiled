@@ -17,7 +17,6 @@ namespace KE.CustomRoles
 
             CustomRole.RegisterRoles(false,null);
             this.SubscribeEvents();
-            Controller.controller.CustomRoleGiver();
 
             base.OnEnabled();
         }
