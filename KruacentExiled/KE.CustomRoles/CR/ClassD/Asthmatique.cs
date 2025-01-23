@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Enums;
+using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using PlayerRoles;
 using UnityEngine;
@@ -18,12 +19,10 @@ namespace KE.CustomRoles.CR.ClassD
         public override bool KeepRoleOnDeath { get; set; } = true;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
         public override bool IgnoreSpawnSystem { get; set; } = true;
-        public override void Init()
+        public override void AddRole(Player player)
         {
-            TrackedPlayers.ForEach(p => {
-                p.EnableEffect(EffectType.Scp1853, -1);
-                p.EnableEffect(EffectType.Exhausted, -1);
-            });
+            player.EnableEffect(EffectType.Scp1853, -1,true);
+            player.EnableEffect(EffectType.Exhausted, -1, true);
         }
     }
 }
