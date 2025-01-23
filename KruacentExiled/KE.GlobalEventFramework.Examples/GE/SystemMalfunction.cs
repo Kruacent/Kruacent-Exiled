@@ -15,6 +15,7 @@ using System.Security.Policy;
 using PlayerRoles;
 using Utils.NonAllocLINQ;
 using KeycardPermissions = Exiled.API.Enums.KeycardPermissions;
+using Exiled.Events.EventArgs.Scp049;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
@@ -43,12 +44,23 @@ namespace KE.GlobalEventFramework.Examples.GE
         /// </summary>
         public int NewCooldown { get; set; } = 180;
         private BlackoutNDoor.MainPlugin BlackoutNDoor = null;
-        public sbyte Malfunction { get; private set; } = 15;
+        private sbyte _malfunction = 15;
+        public sbyte Malfunction 
+        { 
+            get { return _malfunction; } 
+            private set 
+            {
+                if (value > 125) _malfunction = 125;
+                else if (value < -50) _malfunction = 50;
+                else _malfunction = value;
+            } 
+        } 
         public sbyte MalfunctionAdd { get; set; } = 1;
 
         private bool[] CassieVoiceLine = new[] {true, true , true , true , true };
         public bool CassieYapYap { get; private set; } = false;
         private Dictionary<Door,KeycardPermissions> doorkeys = Door.List.ToDictionary(d => d, d=> d.KeycardPermissions);
+        private CoroutineHandle _checkNuke;
 
 
         /// <inheritdoc/>
@@ -66,8 +78,8 @@ namespace KE.GlobalEventFramework.Examples.GE
                 List<IEnumerator<float>> l = new []{CheckpointMalfunction(),GateLockdown(),ElevatorLockdown()}.ToList();
                 handle = Coroutine.LaunchCoroutine(l[UnityEngine.Random.Range(0,3)]);
                 yield return Timing.WaitUntilDone(handle);
-
             }
+            yield return 0;
         }
 
         private IEnumerator<float> Tick()
@@ -77,12 +89,10 @@ namespace KE.GlobalEventFramework.Examples.GE
             {
                 Log.Debug($"Malfunction={Malfunction}");
                 CassieVoice(Malfunction);
-                yield return Timing.WaitForSeconds(5);//60
+                yield return Timing.WaitForSeconds(60);
                 Malfunction += MalfunctionAdd;
                 Malfunction += AdditionnalMalfunction();
-                
             }
-            yield return 0;
         }
 
         private void CassieVoice(sbyte malfunction)
@@ -117,10 +127,14 @@ namespace KE.GlobalEventFramework.Examples.GE
                 Timing.CallDelayed(30+Cassie.CalculateDuration(msg), () =>
                 {
                     Map.StartDecontamination();
+
                     Door.List.ToList().ForEach(d =>
                     {
-                        if(d.Type == DoorType.ElevatorLczA || d.Type == DoorType.ElevatorLczB)
-                            d.DoorLockType = DoorLockType.DecontLockdown;
+                        if(d.IsElevator && (d.Type == DoorType.ElevatorLczA || d.Type == DoorType.ElevatorLczB))
+                        {
+                            d.Lock(DoorLockType.DecontEvacuate);
+                            d.IsOpen = false;
+                        }
                     });
                 });
                 return;
@@ -156,16 +170,21 @@ namespace KE.GlobalEventFramework.Examples.GE
             //nuke
             if (malfunction >= 90)
             {
-                if ((CassieVoiceLine[4] || CassieYapYap))
+                if (CassieVoiceLine[4] || CassieYapYap)
                 {
                     CassieVoiceLine[4] = false;
                     string msg = "Malfunctions levels above . 90 percent . . starting emergency warhead";
                     Cassie.MessageTranslated(msg,
                        "Malfunctions levels above 90%, starting emergency warhead", false, false);
                 }
-                Warhead.Start();
-                Warhead.IsLocked = true;
-                Timing.RunCoroutine(CheckNuke());
+
+                if (!Warhead.IsInProgress)
+                {
+                    Warhead.Start();
+                    Warhead.IsLocked = true;
+                    Timing.KillCoroutines(_checkNuke);
+                    _checkNuke = Timing.RunCoroutine(CheckNuke());
+                }
                 return;
             }
 
@@ -176,11 +195,12 @@ namespace KE.GlobalEventFramework.Examples.GE
             while (Warhead.IsInProgress)
             {
                 yield return Timing.WaitForSeconds(5);
+                Log.Debug("check nuke : "+Malfunction);
                 if (Malfunction <= 85)
                 {
                     Log.Debug($"Malfunction low enough ({Malfunction}) disabling the nuke");
-                    Warhead.Stop();
                     Warhead.IsLocked = false;
+                    Warhead.Stop();
                     break;
                 }
             }
@@ -188,15 +208,13 @@ namespace KE.GlobalEventFramework.Examples.GE
 
         private sbyte AdditionnalMalfunction()
         {
-            sbyte result = 0;
+            sbyte result = (sbyte) UnityEngine.Random.Range(-2,3);
             //generator reduce the malfunction
             result -= (sbyte) (Generator.List.Count(x => x.IsEngaged)*3);
             //number of scp increase 3 (except zombies)
             result += (sbyte) (Player.List.Count(p => p.Role.Side == Side.Scp && p.Role != RoleTypeId.Scp0492) * 3);
             //number of zombies increase 1
             result += (sbyte)Player.List.Count(p => p.Role == RoleTypeId.Scp0492);
-
-
             return result;
 
         }
@@ -213,11 +231,15 @@ namespace KE.GlobalEventFramework.Examples.GE
                     Malfunction -= 1;
                     break;
                 case Side.Scp:
-                    if(ev.Player.Role != RoleTypeId.Scp0492)
-                        Malfunction -= 10;
+                    if(ev.Player.Role != RoleTypeId.Scp0492) Malfunction -= 10;
                     else Malfunction -= 1;
                     break;
             }
+        }
+
+        private void OnFinishingRevive(FinishingRecallEventArgs ev)
+        {
+            Malfunction += 3;
         }
 
 
@@ -225,7 +247,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         {
 
             Exiled.Events.Handlers.Player.Dying += OnDying;
-            //revice zombie add malfunction levle
+            Exiled.Events.Handlers.Scp049.FinishingRecall += OnFinishingRevive;
 
 
             //Searching for the plugin
@@ -246,6 +268,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         {
             BlackoutNDoor = null;
             Exiled.Events.Handlers.Player.Dying -= OnDying;
+            Exiled.Events.Handlers.Scp049.FinishingRecall -= OnFinishingRevive;
         }
 
         private IEnumerator<float> EarlyNuke()
@@ -288,7 +311,7 @@ namespace KE.GlobalEventFramework.Examples.GE
             Log.Debug("GateLockdown");
             var gates = Door.List.Where(d => d.Type == DoorType.GateA ||d.Type == DoorType.GateB);
             var gate = gates.GetRandomValue();
-            gate.IsOpen = false;
+            gate.IsOpen = UnityEngine.Random.value <= .5f ? false : true ;
             var timelock = UnityEngine.Random.Range(10,30);
             gate.Lock(timelock,DoorLockType.Isolation);
             yield return Timing.WaitForSeconds(timelock);
