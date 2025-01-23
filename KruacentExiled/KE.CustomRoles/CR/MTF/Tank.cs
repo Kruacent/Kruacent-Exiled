@@ -6,6 +6,7 @@ using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace KE.CustomRoles.CR.ClassD
 {
@@ -66,14 +67,14 @@ namespace KE.CustomRoles.CR.ClassD
         private IEnumerator<float> EffectAttribution(Exiled.API.Features.Player player)
         {
             int nbMunition = player.GetAmmo(AmmoType.Nato762) / 100;
-            byte nbMunitionByte = (byte) nbMunition;    
+            byte nbMunitionByte = (byte) nbMunition;
 
             if (UnityEngine.Random.Range(0, 1) > 0.5f){
                 player.DisableEffect(EffectType.Slowness);
                 player.EnableEffect(EffectType.Slowness, nbMunitionByte, 99999, false);
             }
 
-            yield return Timing.WaitForSeconds(3);
+            yield return 0;
         }
     }
 }

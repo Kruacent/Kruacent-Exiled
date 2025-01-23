@@ -24,13 +24,7 @@ namespace KE.CustomRoles.CR.ClassD
 
         public override List<string> Inventory { get; set; } = new List<string>()
        {
-          $"{CandyKindID.Rainbow}",
-          $"{ItemType.None}",
-          $"{ItemType.None}",
-          $"{ItemType.None}",
-          $"{ItemType.None}",
-          $"{ItemType.None}",
-          $"{ItemType.None}"
+          $"{CandyKindID.Rainbow}"
         };
     }
 }

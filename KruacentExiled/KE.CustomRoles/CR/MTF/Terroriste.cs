@@ -27,6 +27,7 @@ namespace KE.CustomRoles.CR.ClassD
           $"{ItemType.GrenadeHE}",
           $"{ItemType.GrenadeHE}",
           $"{ItemType.GrenadeHE}",
+          $"{ItemType.GrenadeHE}",
           $"{ItemType.GunE11SR}",
           $"{ItemType.Adrenaline}",
           $"{ItemType.KeycardMTFOperative}",

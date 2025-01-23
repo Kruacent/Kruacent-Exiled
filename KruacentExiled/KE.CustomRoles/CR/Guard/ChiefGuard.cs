@@ -27,8 +27,7 @@ namespace KE.CustomRoles.CR.Guard
           $"{ItemType.GunCrossvec}",
           $"{ItemType.Medkit}",
           $"{ItemType.Flashlight}",
-          $"{ItemType.KeycardMTFPrivate}",
-          $"{ItemType.None}"
+          $"{ItemType.KeycardMTFPrivate}"
         };
 
         public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new Dictionary<AmmoType, ushort>()
