@@ -1,11 +1,9 @@
 ﻿using Exiled.API.Features;
-using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using KE.GlobalEventFramework.GEFE.API.Features;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using MEC;
-using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -105,14 +103,6 @@ namespace KE.GlobalEventFramework.Examples.GE
                                     if (!ev.Attacker.IsScp)
                                     {
                                         GiveRandomRewardPlayer(ev.Attacker);
-                                    } else
-                                    {
-                                        if(ev.Attacker.Role == RoleTypeId.Scp0492)
-                                        {
-                                            Item item = Item.Create(ItemType.Jailbird);
-                                            ev.Attacker.AddItem(item);
-                                            ev.Attacker.CurrentItem = item;
-                                        }
                                     }
 
                                     Exiled.Events.Handlers.Player.Dying -= OnPlayerDeath;
@@ -147,7 +137,7 @@ namespace KE.GlobalEventFramework.Examples.GE
 
                     if (UnityEngine.Random.Range(0, 100) < RareEvent)
                     {
-                        player.MaxHealth = 150;
+                        player.MaxHealth = 125;
                         player.Broadcast(5, "Another gift for you !");
                     }
                 }
