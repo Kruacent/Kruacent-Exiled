@@ -132,6 +132,7 @@ namespace KE.Misc
                     Duration = 1
                 };
                 playerToShow.ForEach(p => p.ShowHint(hint));
+                playerToShow.RemoveAll(p => p.Role != RoleTypeId.Scp173);
                 yield return Timing.WaitForSeconds(1);
                 secondsWaiting--;
             }
