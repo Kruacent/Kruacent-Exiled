@@ -37,8 +37,6 @@ namespace KE.CustomRoles
             Exiled.Events.Handlers.Server.RoundStarted += CustomRoleImplement;
             Exiled.Events.Handlers.Server.RespawnedTeam += CustomRoleRespawning;
         }
-
-        /// <inheritdoc/>
         public void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Server.RoundStarted -= CustomRoleImplement;
@@ -48,12 +46,12 @@ namespace KE.CustomRoles
 
         public void CustomRoleImplement()
         {
-            Controller.controller.CustomRoleGiver();
+            Controller.controller.GiveRole(Player.List);
         }
 
-        public void CustomRoleRespawning(RespawnedTeamEventArgs _)
+        public void CustomRoleRespawning(RespawnedTeamEventArgs ev)
         {
-            Controller.controller.CustomRoleGiver();
+            Controller.controller.GiveRole(ev.Players);
         }
     }
 }
