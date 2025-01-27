@@ -9,9 +9,9 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.API.Features.Toys;
 using Player = Exiled.API.Features.Player;
 using MEC;
-using CustomPlayerEffects;
 using Exiled.API.Features.Items;
-using Exiled.API.Features;
+using Model = KE.Items.Models.Model;
+using KE.Items.Models;
 
 namespace KE.Items.Items
 {
@@ -24,7 +24,7 @@ namespace KE.Items.Items
         public override float Weight { get; set; } = 0.65f;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.yellow;
 
-        private const float RefreshRate = 0.5f;
+        private const float RefreshRate = .01f;
         private const int MineActivationTime = 10;
         private const float MineRadius = 0.7f;
 
@@ -84,14 +84,17 @@ namespace KE.Items.Items
             ev.IsAllowed = false;
             ev.Player.RemoveItem(ev.Item);
 
-            SpawnMine(ev.Player, ev.Player.Position);
+            Model m = new MineModel();
+
+            m.Spawn(new Vector3(ev.Player.Position.x, ev.Player.Position.y - .8f, ev.Player.Position.z));
+
+            //SpawnMine(ev.Player, new Vector3(ev.Player.Position.x,ev.Player.Position.y - .8f,ev.Player.Position.z));
 
         }
 
         private void SpawnMine(Player player, Vector3 playerPosition)
         {
             Vector3 minePosition = playerPosition;
-            minePosition.y -= 0.8f;
 
             // The base part of mine
             Primitive mine = Primitive.Create(PrimitiveType.Cylinder, minePosition, null, new Vector3(MineRadius, 0.01f, MineRadius), true);
@@ -120,7 +123,8 @@ namespace KE.Items.Items
 
         private IEnumerator<float> ActiveMine(Primitive mine, float cylinderSize)
         {
-            while (true)
+            bool endWhile = true;
+            while (endWhile)
             {
                 foreach (Player player in Player.List)
                 {
@@ -130,7 +134,7 @@ namespace KE.Items.Items
 
                         // Delete the mine
                         mine.UnSpawn();
-                        Timing.KillCoroutines();
+                        endWhile = false;
                         mine.Destroy();
                         yield break;
                     }
