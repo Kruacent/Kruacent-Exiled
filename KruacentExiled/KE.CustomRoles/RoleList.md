@@ -1,6 +1,6 @@
 # Custom Roles
 
-| ID     | Item Name             | Description                              | Role          |
+| ID     | Role Name             | Description                              | Role          |
 |--------|-----------------------|------------------------------------------|---------------|
 | 1401   | Enfant                | Smaller than normal                               | Class-D       |
 | 1402   | Asthmatique     | Reduce stamina, better aim with SCP-1853. | Class-D       |
