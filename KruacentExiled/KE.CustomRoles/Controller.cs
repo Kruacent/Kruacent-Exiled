@@ -2,37 +2,51 @@
 using Exiled.API.Features;
 using Exiled.CustomRoles.API.Features;
 using PlayerRoles;
+using System.Collections.Generic;
+using System.Linq;
 using Utils.NonAllocLINQ;
 
 namespace KE.CustomRoles
 {
     internal class Controller
     {
+        /// <summary>
+        /// The chance of having a CustomRole
+        /// </summary>
         public const int Chance = 40;
         public static Controller controller = new Controller();
 
         private Controller() { }
 
-        internal void CustomRoleGiver()
+        /// <summary>
+        /// Gives a CustomRole to a player
+        /// </summary>
+        /// <param name="player"></param>
+        internal void GiveRole(Player player)
         {
-            CustomRole.Registered.ForEach(x => Log.Debug("- " + x.ToString()));
-
-            foreach (Player player in Exiled.API.Features.Player.List)
+            if (player == null)
+                return;
+            if (UnityEngine.Random.Range(0, 100) > Chance)
             {
-                if (UnityEngine.Random.Range(0,100) < Chance)
-                {
-                    CustomRole cr;
-
-                    do
-                    {
-                        cr = CustomRole.Registered.GetRandomValue();
-                    }
-                    while (cr.Role != player.Role);
-
-                    cr.AddRole(player);
-                }
+                Log.Debug("no luck");
+                return;
             }
+                
+            CustomRole cr = CustomRole.Registered.GetRandomValue(c => c.Role == player.Role);
+            Log.Debug($"{player.Id} : {cr.Name}");
+            cr?.AddRole(player);
         }
 
+        /// <summary>
+        /// Gives CustomRoles to multiple players
+        /// </summary>
+        /// <param name="players"></param>
+        internal void GiveRole(IEnumerable<Player> players)
+        {
+            foreach (Player p in players)
+            {
+                GiveRole(p);
+            }
+        }
     }
 }
