@@ -40,7 +40,8 @@ namespace KE.CustomRoles.CR.ClassD
 
         public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new Dictionary<AmmoType, ushort>()
         {
-          { AmmoType.Nato762, 500}
+          { AmmoType.Nato762, 500},
+          { AmmoType.Nato556, 500}
         };
 
         protected override void SubscribeEvents()
