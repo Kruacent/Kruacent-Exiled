@@ -18,6 +18,7 @@ namespace KE.Items
         public override string Name => "KEItems";
         internal Sound Sound { get; private set; }
         internal static MainPlugin Instance { get; private set; }
+        public float Intensity { get; set; } = .5f;
         public override Version Version => new Version(1, 0, 0);
         private Dictionary<Pickup, Light> pl = new Dictionary<Pickup, Light>();
         public override void OnEnabled()
@@ -93,7 +94,7 @@ namespace KE.Items
                     if(CustomItem.TryGet(x.Key, out CustomItem cui) && cui is ILumosItem ci)
                     {
                         Light light = Light.Create(x.Key.Position, null, null, true, ci.Color);
-                        light.Intensity = 0.5f;
+                        light.Intensity = Intensity;
                         if (x.Value != null)
                         {
                             Light val = x.Value;
