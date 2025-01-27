@@ -9,7 +9,7 @@ namespace KE.CustomRoles.CR.SCP
     {
         public override string Name { get; set; } = "Paper049";
         public override string Description { get; set; } = "u are a paper doctor";
-        public override uint Id { get; set; } = 1047;
+        public override uint Id { get; set; } = 1407;
         public override string CustomInfo { get; set; } = "Paper Doctor";
         public override int MaxHealth { get; set; } = 2300;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scp049;

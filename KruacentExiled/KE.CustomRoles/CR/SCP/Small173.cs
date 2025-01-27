@@ -9,7 +9,7 @@ namespace KE.CustomRoles.CR.SCP
     {
         public override string Name { get; set; } = "Tall173";
         public override string Description { get; set; } = " <color=#F00>Tall NUT</color> \nu tol\n fuck you";
-        public override uint Id { get; set; } = 1046;
+        public override uint Id { get; set; } = 1409;
         public override string CustomInfo { get; set; } = "Small Peanuts";
         public override int MaxHealth { get; set; } = 4500;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scp173;

@@ -11,7 +11,7 @@ namespace KE.CustomRoles.CR.ClassD
     {
         public override string Name { get; set; } = "Russe";
         public override string Description { get; set; } = "Tu es un <color=#FFC0CB>maitre de jeu</color> \ntu dois faire la roulette russe avec les autres joueurs";
-        public override uint Id { get; set; } = 1051;
+        public override uint Id { get; set; } = 1410;
         public override string CustomInfo { get; set; } = "Le Russe";
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.ChaosConscript;
