@@ -15,7 +15,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     public class CassieGoCrazy : GlobalEvent, IStart
     {
         ///<inheritdoc/>
-        public override uint Id { get; set; } = 1059;
+        public override uint Id { get; set; } = 1049;
         ///<inheritdoc/>
         public override string Name { get; set; } = "Cassie Go Crazy";
         ///<inheritdoc/>
