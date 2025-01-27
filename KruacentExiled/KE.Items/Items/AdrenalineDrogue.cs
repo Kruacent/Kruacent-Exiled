@@ -88,7 +88,7 @@ public class AdrenalineDrogue : CustomItem, ILumosItem
     {
         if (TryGet(ev.Item, out var result))
         {
-            if (result.Id == 19)
+            if (result.Id == Id)
             {
                 Timing.CallDelayed(0.5f, () =>
                 {

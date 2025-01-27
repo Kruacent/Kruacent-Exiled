@@ -11,7 +11,7 @@ namespace KE.Items.Items
     {
         public override uint Id { get; set; } = 1412;
         public override string Name { get; set; } = "Impact Flash";
-        public override string Description { get; set; } = "The flashligh explode at impact";
+        public override string Description { get; set; } = "The grenade explode at impact";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime { get; set; } = 3f;
         public override bool ExplodeOnCollision { get; set; } = true;

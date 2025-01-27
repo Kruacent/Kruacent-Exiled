@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.GrenadeHE)]
+    [CustomItem(ItemType.GrenadeFlash)]
     public class HealZone : CustomGrenade, ILumosItem
     {
         public override uint Id { get; set; } = 1411;

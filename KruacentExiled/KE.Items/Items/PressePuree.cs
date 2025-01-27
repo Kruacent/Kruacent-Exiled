@@ -1,10 +1,12 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
+using Exiled.Events.EventArgs.Scp914;
 
 namespace KE.Items.Items
 {
@@ -22,29 +24,66 @@ namespace KE.Items.Items
         {
             Limit = 5,
             DynamicSpawnPoints = new List<DynamicSpawnPoint>
-        {
-            new DynamicSpawnPoint()
             {
-                Chance = 50,
-                Location = SpawnLocationType.InsideHczArmory,
+                new DynamicSpawnPoint()
+                {
+                    Chance = 50,
+                    Location = SpawnLocationType.InsideHczArmory,
+                },
+                new DynamicSpawnPoint()
+                {
+                    Chance = 5,
+                    Location = SpawnLocationType.Inside914,
+                },
+                new DynamicSpawnPoint()
+                {
+                    Chance= 50,
+                    Location = SpawnLocationType.Inside049Armory,
+                },
+                new DynamicSpawnPoint()
+                {
+                    Chance= 50,
+                    Location = SpawnLocationType.InsideLczArmory,
+                }
             },
-            new DynamicSpawnPoint()
-            {
-                Chance =2,
-                Location = SpawnLocationType.Inside914,
-            },
-            new DynamicSpawnPoint()
-            {
-                Chance=50,
-                Location = SpawnLocationType.Inside049Armory,
-            },
-            new DynamicSpawnPoint()
-            {
-                Chance=50,
-                Location = SpawnLocationType.InsideLczArmory,
-            }
-        },
-
         };
+
+
+        protected override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Scp914.UpgradingInventoryItem += OnUpgrading;
+            base.SubscribeEvents();
+        }
+
+        /// <inheritdoc/>
+        protected override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Scp914.UpgradingInventoryItem -= OnUpgrading;
+            base.UnsubscribeEvents();
+        }
+
+        private void OnUpgrading(UpgradingInventoryItemEventArgs ev)
+        {
+            if (!Check(ev.Item))
+                return;
+            if (ev.KnobSetting != Scp914.Scp914KnobSetting.VeryFine)
+                return;
+
+            var rng = UnityEngine.Random.Range(0, 101);
+            Log.Debug($"inventory {Name} : {rng}");
+            if (rng < 10)
+            {
+                //success
+                ev.Player.RemoveItem(ev.Item);
+                TryGive(ev.Player, "Sainte Grenada");
+                ev.IsAllowed = true;
+            }
+            else
+            {
+                ev.Player.ShowHint("no luck");
+                ev.IsAllowed = false;
+            }
+
+        }
     }
 }
