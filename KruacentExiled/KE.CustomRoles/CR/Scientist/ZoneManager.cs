@@ -12,7 +12,7 @@ namespace KE.CustomRoles.CR.Scientist
     {
         public override string Name { get; set; } = "ZoneManager";
         public override string Description { get; set; } = "Tu es un <color=#0d7979>Zone Manager</color> \nT'as une carte de zone manager (d'où le nom) \nTu commences à heavy \nBon courage...";
-        public override uint Id { get; set; } = 1404;
+        public override uint Id { get; set; } = 1044;
         public override string CustomInfo { get; set; } = "ZoneManager";
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scientist;

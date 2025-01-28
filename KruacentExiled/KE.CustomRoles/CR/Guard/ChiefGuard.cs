@@ -10,7 +10,7 @@ namespace KE.CustomRoles.CR.Guard
     {
         public override string Name { get; set; } = "ChiefGuard";
         public override string Description { get; set; } = "Tu es un <color=#70C3FF>Chef des gardes du site</color> \nT'as une carte de private \net un crossvec";
-        public override uint Id { get; set; } = 1406;
+        public override uint Id { get; set; } = 1046;
         public override string CustomInfo { get; set; } = "Chef des Gardes";
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;

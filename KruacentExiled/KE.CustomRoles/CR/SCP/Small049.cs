@@ -11,7 +11,7 @@ namespace KE.CustomRoles.CR.SCP
     {
         public override string Name { get; set; } = "Small049";
         public override string Description { get; set; } = "u are a smoll doctor";
-        public override uint Id { get; set; } = 1408;
+        public override uint Id { get; set; } = 1048;
         public override string CustomInfo { get; set; } = "Small Doctor";
         public override int MaxHealth { get; set; } = 2300;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scp049;
