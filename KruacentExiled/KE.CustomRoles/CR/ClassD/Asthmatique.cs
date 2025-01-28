@@ -21,6 +21,7 @@ namespace KE.CustomRoles.CR.ClassD
         public override bool IgnoreSpawnSystem { get; set; } = true;
         public override void AddRole(Player player)
         {
+            player.ShowHint("Tu es <color=#BFFF00>asthmatique</color>\nT'as stamina est réduit de moitié\nMais tu vises mieux");
             player.EnableEffect(EffectType.Scp1853, -1,true);
             player.EnableEffect(EffectType.Exhausted, -1, true);
         }
