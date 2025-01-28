@@ -16,7 +16,7 @@ namespace KE.Items.Items
     [CustomItem(ItemType.GrenadeHE)]
     public class SainteGrenada : CustomGrenade, ILumosItem
     {
-        public override uint Id { get; set; } = 1415;
+        public override uint Id { get; set; } = 1055;
         public override string Name { get; set; } = "Sainte Grenada";
         public override string Description { get; set; } = "Worms reference !?";
         public override float Weight { get; set; } = 1.5f;

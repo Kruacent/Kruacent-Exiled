@@ -2,19 +2,19 @@
 
 | ID     | Item Name             | Description        |
 |--------|-----------------------|--------------------|
-| 1401   | Defibrillator          | Used to revive a player. |
-| 1402   | Adrenaline Drogue        | Temporarily boosts a player's abilities. |
-| 1403   | No Item                | No item associated. |
-| 1404   | No Item                | No item associated. |
-| 1405   | TP Granada             | Teleporting grenade. |
-| 1406   | PressePurée          | Grenade explode at impact |
-| 1407   | Divine Pill            | Respawn a random spectator.  |
-| 1408   | Deployable Wall        | Creates a temporary wall. |
-| 1409   | Molotov                | Create a damage zone |
-| 1410   | True Divine Pills      | Respawn every spectator. |
-| 1411   | Heal Zone              | Area that heals allies. |
-| 1412   | Impact Flash           | Flash exploding at impact. |
-| 1413   | Mine                   | Explosive mine. |
+| 1041   | Defibrillator          | Used to revive a player. |
+| 1042   | Adrenaline Drogue        | Temporarily boosts a player's abilities. |
+| 1043   | No Item                | No item associated. |
+| 1044   | No Item                | No item associated. |
+| 1045   | TP Granada             | Teleporting grenade. |
+| 1046   | PressePurée          | Grenade explode at impact |
+| 1047   | Divine Pill            | Respawn a random spectator.  |
+| 1048   | Deployable Wall        | Creates a temporary wall. |
+| 1049   | Molotov                | Create a damage zone |
+| 1050   | True Divine Pills      | Respawn every spectator. |
+| 1051   | Heal Zone              | Area that heals allies. |
+| 1052   | Impact Flash           | Flash exploding at impact. |
+| 1053   | Mine                   | Explosive mine. |
 
 ## Description
 

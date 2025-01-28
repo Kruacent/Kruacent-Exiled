@@ -18,7 +18,7 @@ namespace KE.Items.Items
     [CustomItem(ItemType.KeycardJanitor)]
     public class Mine : CustomItem, ILumosItem
     {
-        public override uint Id { get; set; } = 1413;
+        public override uint Id { get; set; } = 1053;
         public override string Name { get; set; } = "Mine";
         public override string Description { get; set; } = "Drop to deploy the mine, little advice : don't step on it";
         public override float Weight { get; set; } = 0.65f;

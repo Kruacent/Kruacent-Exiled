@@ -9,7 +9,7 @@ namespace KE.Items.Items
     [CustomItem(ItemType.GrenadeFlash)]
     public class ImpactFlash : CustomGrenade
     {
-        public override uint Id { get; set; } = 1412;
+        public override uint Id { get; set; } = 1052;
         public override string Name { get; set; } = "Impact Flash";
         public override string Description { get; set; } = "The grenade explode at impact";
         public override float Weight { get; set; } = 0.65f;

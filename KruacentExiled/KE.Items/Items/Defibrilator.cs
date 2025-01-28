@@ -14,7 +14,7 @@ using KE.Items.Interface;
 [CustomItem(ItemType.SCP1853)]
 public class Defibrilator : CustomItem, ILumosItem
 {
-    public override uint Id { get; set; } = 1401;
+    public override uint Id { get; set; } = 1041;
     public override string Name { get; set; } = "Defibrilator";
     public override string Description { get; set; } = "The defibrillator is used to revive a person who has lost consciousness. It will revive the person closest to the player who uses it (the location of death, not where the body is).";
     public override float Weight { get; set; } = 0.65f;

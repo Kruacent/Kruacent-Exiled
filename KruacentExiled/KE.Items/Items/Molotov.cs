@@ -15,7 +15,7 @@ namespace KE.Items.Items
     [CustomItem(ItemType.GrenadeFlash)]
     public class Molotov : CustomGrenade, ILumosItem
     {
-        public override uint Id { get; set; } = 1409;
+        public override uint Id { get; set; } = 1049;
         public override string Name { get; set; } = "Cocktail Molotov";
         public override string Description { get; set; } = "ARSON";
         public override float Weight { get; set; } = 0.65f;
