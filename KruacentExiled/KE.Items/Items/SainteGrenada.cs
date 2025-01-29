@@ -16,12 +16,12 @@ namespace KE.Items.Items
     [CustomItem(ItemType.GrenadeHE)]
     public class SainteGrenada : CustomGrenade, ILumosItem
     {
-        public override uint Id { get; set; } = 1415;
+        public override uint Id { get; set; } = 1055;
         public override string Name { get; set; } = "Sainte Grenada";
         public override string Description { get; set; } = "Worms reference !?";
         public override float Weight { get; set; } = 1.5f;
         public override float FuseTime { get; set; } = 1.5f;
-        public override bool ExplodeOnCollision { get; set; } = true;
+        public override bool ExplodeOnCollision { get; set; } = false;
         public float DamageModifier { get; set; } = 3f;
         public Color Color { get; set; } = Color.red;
 
@@ -35,14 +35,7 @@ namespace KE.Items.Items
 
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
-            Limit = 1,
-            DynamicSpawnPoints = new List<DynamicSpawnPoint>
-            {
-                new DynamicSpawnPoint() { Chance = 20, Location = SpawnLocationType.InsideHczArmory, },
-                new DynamicSpawnPoint() { Chance = 10, Location = SpawnLocationType.Inside914, },
-                new DynamicSpawnPoint() { Chance= 20, Location = SpawnLocationType.Inside049Armory, },
-                new DynamicSpawnPoint() { Chance= 20, Location = SpawnLocationType.InsideLczArmory, }
-            },
+
         };
 
         protected override void OnExploding(ExplodingGrenadeEventArgs ev)

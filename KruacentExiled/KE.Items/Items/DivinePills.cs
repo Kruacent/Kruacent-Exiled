@@ -24,7 +24,7 @@ using Exiled.API.Features.Pickups;
 public class DivinePills : CustomItem, ILumosItem
 {
     /// <inheritdoc/>
-    public override uint Id { get; set; } = 1407;
+    public override uint Id { get; set; } = 1047;
 
     /// <inheritdoc/>
     public override string Name { get; set; } = "Divine Pills";

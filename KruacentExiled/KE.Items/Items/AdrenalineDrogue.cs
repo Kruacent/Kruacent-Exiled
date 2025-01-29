@@ -18,7 +18,7 @@ using System.Linq;
 public class AdrenalineDrogue : CustomItem, ILumosItem
 {
     /// <inheritdoc/>
-    public override uint Id { get; set; } = 1402;
+    public override uint Id { get; set; } = 1042;
 
     /// <inheritdoc/>
     public override string Name { get; set; } = "DA-020";
@@ -88,7 +88,7 @@ public class AdrenalineDrogue : CustomItem, ILumosItem
     {
         if (TryGet(ev.Item, out var result))
         {
-            if (result.Id == 19)
+            if (result.Id == Id)
             {
                 Timing.CallDelayed(0.5f, () =>
                 {
