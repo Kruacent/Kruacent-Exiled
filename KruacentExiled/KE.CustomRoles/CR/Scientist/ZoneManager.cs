@@ -28,7 +28,7 @@ namespace KE.CustomRoles.CR.Scientist
             {
                 new DynamicSpawnPoint()
                 {
-                    Location = Exiled.API.Enums.SpawnLocationType.InsideNukeArmory,
+                    Location = Exiled.API.Enums.SpawnLocationType.InsideHidLower,
                     Chance = 100,
                 }
             }

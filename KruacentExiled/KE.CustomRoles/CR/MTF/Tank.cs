@@ -14,8 +14,8 @@ namespace KE.CustomRoles.CR.ClassD
     internal class Tank : Exiled.CustomRoles.API.Features.CustomRole
     {
         public override string Name { get; set; } = "Tank";
-        public override string Description { get; set; } = "Tu es un <color=#FFC0CB>TANK</color> tu es débuff mais ta force de tir est démultiplié";
-        public override uint Id { get; set; } = 1050;
+        public override string Description { get; set; } = "Tu es un <color=#FFC0CB>TANK</color> tu es débuff mais ta force de tir est démultiplié (fait attention à tes balles)";
+        public override uint Id { get; set; } = 1051;
         public override string CustomInfo { get; set; } = "Tank";
         public override int MaxHealth { get; set; } = 200;
         public override RoleTypeId Role { get; set; } = RoleTypeId.NtfCaptain;
@@ -40,7 +40,8 @@ namespace KE.CustomRoles.CR.ClassD
 
         public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new Dictionary<AmmoType, ushort>()
         {
-          { AmmoType.Nato762, 500}
+          { AmmoType.Nato762, 500},
+          { AmmoType.Nato556, 500}
         };
 
         protected override void SubscribeEvents()
