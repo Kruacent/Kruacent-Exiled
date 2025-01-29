@@ -20,7 +20,7 @@ namespace KE.Items.Items
         public override string Name { get; set; } = "Sainte Grenada";
         public override string Description { get; set; } = "Worms reference !?";
         public override float Weight { get; set; } = 1.5f;
-        public override float FuseTime { get; set; } = 1.5f;
+        public override float FuseTime { get; set; } = 7.5f;
         public override bool ExplodeOnCollision { get; set; } = false;
         public float DamageModifier { get; set; } = 3f;
         public Color Color { get; set; } = Color.red;
