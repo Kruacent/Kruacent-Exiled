@@ -70,8 +70,7 @@ namespace KE.Items.Items
 
         };
 
-        [System.Obsolete]
-        protected override void OnDropping(DroppingItemEventArgs ev)
+        protected override void OnDroppingItem(DroppingItemEventArgs ev)
         {
             if(!Check(ev.Item)) 
                 return;
@@ -84,29 +83,16 @@ namespace KE.Items.Items
             ev.IsAllowed = false;
             ev.Player.RemoveItem(ev.Item);
 
-            Model m = new MineModel();
+            MineModel m = new MineModel();
 
-            m.Spawn(new Vector3(ev.Player.Position.x, ev.Player.Position.y - .8f, ev.Player.Position.z));
+            //put the mine on the floor
+            m.Spawn(ev.Player.Position-new Vector3(0,ev.Player.Scale.y),new Quaternion());
 
-            //SpawnMine(ev.Player, new Vector3(ev.Player.Position.x,ev.Player.Position.y - .8f,ev.Player.Position.z));
-
-        }
-
-        private void SpawnMine(Player player, Vector3 playerPosition)
-        {
-            Vector3 minePosition = playerPosition;
-
-            // The base part of mine
-            Primitive mine = Primitive.Create(PrimitiveType.Cylinder, minePosition, null, new Vector3(MineRadius, 0.01f, MineRadius), true);
-            mine.Collidable = true;
-            mine.Visible = true;
-            mine.Color = Color.black;
-
-            Timing.RunCoroutine(WaitAndActivateMine(player, mine));
+            Timing.RunCoroutine(WaitAndActivateMine(ev.Player, m));
         }
 
 
-        private IEnumerator<float> WaitAndActivateMine(Player player, Primitive mine)
+        private IEnumerator<float> WaitAndActivateMine(Player player, MineModel mine)
         {
             int countdown = MineActivationTime;
             while (countdown > 0)
@@ -121,22 +107,22 @@ namespace KE.Items.Items
             Timing.RunCoroutine(ActiveMine(mine, MineRadius));
         }
 
-        private IEnumerator<float> ActiveMine(Primitive mine, float cylinderSize)
+        private IEnumerator<float> ActiveMine(MineModel mine, float cylinderSize)
         {
+            Timing.RunCoroutine(mine.Activate());
             bool endWhile = true;
             while (endWhile)
             {
                 foreach (Player player in Player.List)
                 {
-                    if (IsPlayerInZone(player, mine.Position, cylinderSize, 2))
+                    if (IsPlayerInZone(player, mine.Position, cylinderSize, 3))
                     {
                         ((ExplosiveGrenade)Item.Create(ItemType.GrenadeHE)).SpawnActive(mine.Position).FuseTime = 0f;
 
                         // Delete the mine
                         mine.UnSpawn();
                         endWhile = false;
-                        mine.Destroy();
-                        yield break;
+                        break;
                     }
                 }
 

@@ -11,10 +11,10 @@ namespace KE.Items.Models
     internal abstract class Model
     {
         internal Vector3 Position { get; set; }
-        protected List<AdminToy> Toys { get; set; }
-        internal abstract void Spawn(Vector3 spawnPos);
+        protected List<AdminToy> Toys { get; set; } = new List<AdminToy> { };
+        internal abstract void Spawn(Vector3 spawnPos, Quaternion rotation);
 
-        internal void Unspawn()
+        internal void UnSpawn()
         {
             foreach (AdminToy primitive in Toys)
             {
