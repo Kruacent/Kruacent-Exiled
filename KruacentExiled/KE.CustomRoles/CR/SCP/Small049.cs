@@ -1,13 +1,12 @@
 ﻿using Exiled.API.Features.Attributes;
-using Exiled.API.Features.Roles;
+using Exiled.CustomRoles.API.Features;
 using PlayerRoles;
-using PluginAPI.Roles;
 using UnityEngine;
 
 namespace KE.CustomRoles.CR.SCP
 {
     [CustomRole(RoleTypeId.Scp049)]
-    internal class Small049 : Exiled.CustomRoles.API.Features.CustomRole
+    internal class Small049 : CustomRole
     {
         public override string Name { get; set; } = "Small049";
         public override string Description { get; set; } = "u are a smoll doctor";
