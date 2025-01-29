@@ -54,7 +54,7 @@ public class TrueDivinePills : CustomItem, ILumosItem
         base.UnsubscribeEvents();
     }
 
-    protected override void OnDropping(DroppingItemEventArgs ev)
+    protected override void OnDroppingItem(DroppingItemEventArgs ev)
     {
         if (!Check(ev.Item))
             return;

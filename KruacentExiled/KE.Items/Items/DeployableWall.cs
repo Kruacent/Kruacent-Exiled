@@ -50,7 +50,7 @@ namespace KE.Items.Items
 
 
 
-        protected override void OnDropping(DroppingItemEventArgs ev)
+        protected override void OnDroppingItem(DroppingItemEventArgs ev)
         {
             if(!Check(ev.Item)) 
                 return;
@@ -73,7 +73,7 @@ namespace KE.Items.Items
             Vector3 forward = rotation * Vector3.forward;
             Vector3 spawnPos = pos + forward * distance;
             Vector3 rotat = new Vector3(0, rotation.eulerAngles.y, 0);
-
+            
             MainPlugin.Instance.Sound.PlayClip("build", spawnPos);
             Primitive wall = Primitive.Create(PrimitiveType.Cube, spawnPos, rotat, new Vector3(4, 4, 0.2f),true);
             wall.Collidable = true;
