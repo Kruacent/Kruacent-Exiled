@@ -12,7 +12,7 @@ using System.Drawing.Imaging;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
-    public class BrokenGenerator : GlobalEvent, IStart
+    public class BrokenGenerator : GlobalEvent, IStart, IEvent
     {
         public override uint Id { get; set; } = 1050;
         public override string Name { get; set; } = "Broken Generator";
