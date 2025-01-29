@@ -14,7 +14,7 @@ namespace KE.CustomRoles.CR.ClassD
         public override string Name { get; set; } = "Asthmatique";
         public override string Description { get; set; } = "Tu es <color=#BFFF00>asthmatique</color>\nT'as stamina est réduit de moitié\nMais tu vises mieux";
         public override uint Id { get; set; } = 1042;
-        public override string CustomInfo { get; set; } = "Asmathique";
+        public override string CustomInfo { get; set; } = "Asthmatique";
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
         public override bool KeepRoleOnDeath { get; set; } = true;
