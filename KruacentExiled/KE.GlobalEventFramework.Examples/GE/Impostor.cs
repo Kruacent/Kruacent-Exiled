@@ -20,16 +20,17 @@ namespace KE.GlobalEventFramework.Examples.GE
         {
             while (!Round.IsEnded)
             {
-                int randomNumber = UnityEngine.Random.Range(180, 300);
-                yield return Timing.WaitForSeconds(randomNumber);
-                ChangingPlayer();
+                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(180, 300));
+
+                ChangingHumanApparence();
+                ChangingSCPApparence();
             }
         }
 
-        private void ChangingPlayer()
+        private void ChangingHumanApparence()
         {
             // Liste des joueurs vivants
-            List<Player> playerInServer = Player.List.Where(p => !p.IsNPC && p.IsAlive).ToList();
+            List<Player> playerInServer = Player.List.Where(p => !p.IsNPC && p.IsAlive && !p.IsScp).ToList();
 
             if (playerInServer.Count < 2)
             {
@@ -66,6 +67,13 @@ namespace KE.GlobalEventFramework.Examples.GE
             }
         }
 
+        private void ChangingSCPApparence()
+        {
+            Player randomHumanPlayer = Player.List.Where(p => !p.IsNPC && p.IsAlive && !p.IsScp).ToList().GetRandomValue();
 
+            Player randomScpPlayer = Player.List.Where(p => !p.IsNPC && p.IsAlive && p.IsScp).ToList().GetRandomValue();
+
+            randomScpPlayer.ChangeAppearance(randomHumanPlayer.Role);
+        }
     }
 }
