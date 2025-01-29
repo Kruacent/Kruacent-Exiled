@@ -17,13 +17,15 @@ namespace KE.GlobalEventFramework.GEFE.Commands
 
         public override void LoadGeneratedCommands()
         {
-            RegisterCommand(new List());
+            RegisterCommand(new ListGE());
+            RegisterCommand(new ForceGE());
+            RegisterCommand(new ForceNbGE());
         }
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if(arguments.Count == 0){
-                response = "subcommand available : list";
+                response = "subcommand available : list, force, nb";
                 return true;
             }
             response = "";

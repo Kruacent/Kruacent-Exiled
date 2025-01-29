@@ -16,7 +16,7 @@ using CustomPlayerEffects;
 public class AdrenalineDrogue : CustomItem
 {
     /// <inheritdoc/>
-    public override uint Id { get; set; } = 19;
+    public override uint Id { get; set; } = 1402;
 
     /// <inheritdoc/>
     public override string Name { get; set; } = "DA-020";

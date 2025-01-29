@@ -9,22 +9,24 @@ using Exiled.API.Features.Pools;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Map;
+using KE.Items.Interface;
 using PlayerRoles;
 using UnityEngine;
 
 namespace KE.Items.Items
 {
-    //grenade qui tp
-    public class TPGrenada : CustomGrenade
+    [CustomItem(ItemType.GrenadeHE)]
+    public class TPGrenada : CustomGrenade, ILumosItem
     {
         private List<Player> effectedPlayers = new List<Player>();
-        public override uint Id { get; set; } = 20;
+        public override uint Id { get; set; } = 1405;
         public override string Name { get; set; } = "Teleportation Grenade";
         public override string Description { get; set; } = "This grenade does 0 damage but teleport nearby players in a random place (does work in other dimension ;3 )";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime { get; set; } = 1.5f;
         public override bool ExplodeOnCollision { get; set; } = true;
         public float DamageModifier { get; set; } = 0.05f;
+        public UnityEngine.Color Color { get; set; } = UnityEngine.Color.cyan;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 5,
@@ -119,9 +121,4 @@ namespace KE.Items.Items
         }
     }
 
-    //bonbon quand tu manges ça donne une armes random
-    /*public class RandomWeaponCandy : CustomItem
-    {
-
-    }*/
 }

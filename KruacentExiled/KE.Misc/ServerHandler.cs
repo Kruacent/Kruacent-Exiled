@@ -22,6 +22,8 @@ namespace KE.Misc
                 Timing.RunCoroutine(MainPlugin.Instance.PeanutLockdown());
             if(MainPlugin.Instance.Config.AutoElevator)
                 Timing.RunCoroutine(MainPlugin.Instance.AutoElevator.StartElevator());
+            if (MainPlugin.Instance.Config.SurfaceLight)
+                MainPlugin.Instance.SurfaceLight.ChangeSurfaceLight();
         }
     }
 }
