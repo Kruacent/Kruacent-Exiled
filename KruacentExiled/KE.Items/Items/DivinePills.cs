@@ -136,7 +136,7 @@ public class DivinePills : CustomItem, ILumosItem
         Player player = ev.Player;
         
 
-        if(Player.List.Where(x => x.Role == RoleTypeId.Spectator).Count() == 0)
+        if(Player.List.Count(x => x.Role == RoleTypeId.Spectator) == 0)
         {
             player.ShowHint("No spectators to respawn");
             ev.IsAllowed = false;
@@ -148,7 +148,7 @@ public class DivinePills : CustomItem, ILumosItem
             player.Kill("unlucky bro");
             return;
         }
-        Player respawning = Player.List.Where(x => x.Role == RoleTypeId.Spectator).GetRandomValue();
+        Player respawning = Player.List.GetRandomValue(x => x.Role == RoleTypeId.Spectator);
         switch (player.Role.Side)
         {
             case Side.ChaosInsurgency:
@@ -158,8 +158,10 @@ public class DivinePills : CustomItem, ILumosItem
                 respawning.Role.Set(RoleTypeId.NtfPrivate);
                 break;
         }
+
         if (random > 75)
         {
+            Log.Debug("tp");
             respawning.Teleport(player);
         }
     }
