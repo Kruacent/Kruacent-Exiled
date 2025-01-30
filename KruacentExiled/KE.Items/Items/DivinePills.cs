@@ -13,19 +13,24 @@ using CustomPlayerEffects;
 using System.Linq;
 using PlayerRoles;
 using KE.Items.Interface;
+using Exiled.CustomItems.API.EventArgs;
+using Exiled.Events.EventArgs.Scp914;
+using Exiled.API.Features.Items;
+using System.Data;
+using Exiled.API.Features.Pickups;
 
 /// <inheritdoc />
 [CustomItem(ItemType.Painkillers)]
 public class DivinePills : CustomItem, ILumosItem
 {
     /// <inheritdoc/>
-    public override uint Id { get; set; } = 1407;
+    public override uint Id { get; set; } = 1047;
 
     /// <inheritdoc/>
     public override string Name { get; set; } = "Divine Pills";
 
     /// <inheritdoc/>
-    public override string Description { get; set; } = "25% chance you die\n 75% you respawn someone";
+    public override string Description { get; set; } = "25% chance you die\n 75% you respawn someone\n 10% to upgrade in 914 on very fine";
 
     /// <inheritdoc/>
     public override float Weight { get; set; } = 0.65f;
@@ -65,45 +70,99 @@ public class DivinePills : CustomItem, ILumosItem
     /// <inheritdoc/>
     protected override void SubscribeEvents()
     {
-        PlayerHandle.UsedItem += OnUsingItem;
+        PlayerHandle.UsingItem += OnUsingItem;
+        Exiled.Events.Handlers.Scp914.UpgradingInventoryItem += OnUpgrading;
+        //Exiled.Events.Handlers.Scp914.UpgradingPickup += Up; //break the lights
         base.SubscribeEvents();
     }
 
     /// <inheritdoc/>
     protected override void UnsubscribeEvents()
     {
-        PlayerHandle.UsedItem -= OnUsingItem;
+        PlayerHandle.UsingItem -= OnUsingItem;
+        Exiled.Events.Handlers.Scp914.UpgradingInventoryItem -= OnUpgrading;
+        //Exiled.Events.Handlers.Scp914.UpgradingPickup -= Up; //break the lights
         base.UnsubscribeEvents();
     }
 
-    private void OnUsingItem(UsedItemEventArgs ev)
+    private void Up(UpgradingPickupEventArgs ev)
+    {
+        if (!Check(ev.Pickup))
+            return;
+        if (ev.KnobSetting != Scp914.Scp914KnobSetting.VeryFine)
+            return;
+        var rng = Random.value;
+        Log.Debug($"pickup {Name} : {rng}");
+        if (rng < .1f)
+        {
+            //success
+            ev.Pickup.Destroy();
+            TrySpawn("True Divine Pills",ev.OutputPosition,out Pickup _);
+            ev.IsAllowed = true;
+        }
+        else
+            ev.IsAllowed = false;
+    }
+
+    private void OnUpgrading(UpgradingInventoryItemEventArgs ev)
+    {
+        if (!Check(ev.Item))
+            return;
+        if (ev.KnobSetting != Scp914.Scp914KnobSetting.VeryFine)
+            return;
+        var rng = Random.value;
+        Log.Debug($"inventory {Name} : {rng}");
+        if (rng < .1f)
+        {
+            //success
+            ev.Player.RemoveItem(ev.Item);
+            TryGive(ev.Player, "True Divine Pills");
+            ev.IsAllowed = true;
+        }
+        else
+        {
+            ev.Player.ShowHint("no luck");
+            ev.IsAllowed = false;
+        }
+
+    }
+
+    private void OnUsingItem(UsingItemEventArgs ev)
     {
         if (!Check(ev.Item))
         {
             return;
         }
-        if (TryGet(ev.Item, out var result) && result.Id == Id)
+        Player player = ev.Player;
+        
+
+        if(Player.List.Count(x => x.Role == RoleTypeId.Spectator) == 0)
         {
-            Player player = ev.Player;
-            var random = Random.Range(0, 100);
+            player.ShowHint("No spectators to respawn");
+            ev.IsAllowed = false;
+            return;
+        }
+        var random = Random.Range(0, 100);
+        if (random <= 25)
+        {
+            player.Kill("unlucky bro");
+            return;
+        }
+        Player respawning = Player.List.GetRandomValue(x => x.Role == RoleTypeId.Spectator);
+        switch (player.Role.Side)
+        {
+            case Side.ChaosInsurgency:
+                respawning.Role.Set(RoleTypeId.ChaosRifleman);
+                break;
+            case Side.Mtf:
+                respawning.Role.Set(RoleTypeId.NtfPrivate);
+                break;
+        }
 
-            if(Player.List.Where(x => x.Role == RoleTypeId.Spectator).Count() == 0)
-            {
-                player.ShowHint("No spectators to respawn");
-                return;
-            }
-
-            if (random <= 25)
-            {
-                player.Kill("unlucky bro");
-                return;
-            }
-            Player respawning = Player.List.Where(x => x.Role == RoleTypeId.Spectator).GetRandomValue();
-            respawning.Role.Set(player.Role);
-            if (random > 75)
-            {
-                respawning.Position = player.Position;
-            }
+        if (random > 75)
+        {
+            Log.Debug("tp");
+            respawning.Teleport(player);
         }
     }
 

@@ -15,7 +15,7 @@ namespace KE.Items.Items
     public class DeployableWall : CustomItem, ILumosItem
     {
         
-        public override uint Id { get; set; } = 1408;
+        public override uint Id { get; set; } = 1048;
         public override string Name { get; set; } = "Deployable Wall";
         public override string Description { get; set; } = "Drop to deploy a wall, and throw to just throw the card";
         public override float Weight { get; set; } = 0.65f;
@@ -50,7 +50,7 @@ namespace KE.Items.Items
 
 
 
-        protected override void OnDropping(DroppingItemEventArgs ev)
+        protected override void OnDroppingItem(DroppingItemEventArgs ev)
         {
             if(!Check(ev.Item)) 
                 return;
@@ -59,6 +59,7 @@ namespace KE.Items.Items
                 ev.IsAllowed = true;
                 return;
             }
+            
             ev.IsAllowed = false;
             ev.Player.ShowHint("You have dropped a deployable wall");
             ev.Player.RemoveItem(ev.Item);
@@ -72,7 +73,8 @@ namespace KE.Items.Items
             Vector3 forward = rotation * Vector3.forward;
             Vector3 spawnPos = pos + forward * distance;
             Vector3 rotat = new Vector3(0, rotation.eulerAngles.y, 0);
-
+            
+            MainPlugin.Instance.Sound.PlayClip("build", spawnPos);
             Primitive wall = Primitive.Create(PrimitiveType.Cube, spawnPos, rotat, new Vector3(4, 4, 0.2f),true);
             wall.Collidable = true;
             wall.Visible = true;

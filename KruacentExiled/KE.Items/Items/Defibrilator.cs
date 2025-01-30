@@ -9,26 +9,34 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.API.Features;
 using UnityEngine;
 using System.Linq;
+using KE.Items.Interface;
 
 [CustomItem(ItemType.SCP1853)]
-public class Defibrilator : CustomItem
+public class Defibrilator : CustomItem, ILumosItem
 {
-    public override uint Id { get; set; } = 1401;
-    public override string Name { get; set; } = "DF-001";
-    public override string Description { get; set; } = "Le défibrilateur, il permet de réanimer une personne qui à une perte de conscience, on va réanimer la personne la plus proche du joueur qui l'utilise (le lieu de mort et non où se trouve le corps)";
+    public override uint Id { get; set; } = 1041;
+    public override string Name { get; set; } = "Defibrilator";
+    public override string Description { get; set; } = "The defibrillator is used to revive a person who has lost consciousness. It will revive the person closest to the player who uses it (the location of death, not where the body is).";
     public override float Weight { get; set; } = 0.65f;
+    public UnityEngine.Color Color { get; set; } = UnityEngine.Color.cyan;
+
 
     private ConcurrentDictionary<Player, Vector3> positionMort = new ConcurrentDictionary<Player, Vector3>();
 
     public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
     {
-        Limit = 2,
+        Limit = 4,
         DynamicSpawnPoints = new List<DynamicSpawnPoint>
         {
-            new DynamicSpawnPoint() { Chance = 100, Location = SpawnLocationType.Inside079Secondary },
-            new DynamicSpawnPoint() { Chance = 10, Location = SpawnLocationType.InsideHidRight },
-            new DynamicSpawnPoint() { Chance = 10, Location = SpawnLocationType.InsideHidLeft },
+            new DynamicSpawnPoint() { Chance = 50, Location = SpawnLocationType.Inside079Secondary },
+            new DynamicSpawnPoint() { Chance = 20, Location = SpawnLocationType.InsideHidLower },
+            new DynamicSpawnPoint() { Chance = 20, Location = SpawnLocationType.InsideHidUpper },
         },
+
+        LockerSpawnPoints = new List<LockerSpawnPoint>
+        {
+             new LockerSpawnPoint(){ Chance=50, Type = LockerType.Medkit, },
+        }
     };
 
     protected override void SubscribeEvents()
@@ -69,7 +77,7 @@ public class Defibrilator : CustomItem
     {
         if (TryGet(ev.Item, out var result) && result.Id == 20)
         {
-            Timing.CallDelayed(0.5f, () =>
+            Timing.CallDelayed(2f, () =>
             {
                 ev.Player.DisableEffect(EffectType.Scp1853);
                 Timing.RunCoroutine(EffectAttribution(ev.Player));
@@ -79,13 +87,14 @@ public class Defibrilator : CustomItem
 
     private IEnumerator<float> EffectAttribution(Player joueur)
     {
+        joueur.DisableEffect(EffectType.Scp1853);
         Log.Debug("Utilisation item");
         Log.Debug("Nombre de mort : " + positionMort.Count());
 
         if (positionMort.Count == 0)
         {
-            joueur.Broadcast(5, "Il n'y a pas de morts actuellement.", Broadcast.BroadcastFlags.Normal, true);
-            Exiled.CustomItems.API.Features.CustomItem.TryGive(joueur, 20);
+            joueur.Broadcast(5, "There is no death", Broadcast.BroadcastFlags.Normal, true);
+            Exiled.CustomItems.API.Features.CustomItem.TryGive(joueur, 1401);
         }
         else
         {
@@ -112,12 +121,12 @@ public class Defibrilator : CustomItem
 
                 closestDeadPlayer.IsGodModeEnabled = true;
                 closestDeadPlayer.Role.Set(joueur.Role);
-                closestDeadPlayer.Health = 10;
+                closestDeadPlayer.Health = 40;
 
                 closestDeadPlayer.Teleport(joueur.Position);
 
-                closestDeadPlayer.Broadcast(5, joueur.Nickname + " t'as réanimé !", Broadcast.BroadcastFlags.Normal, true);
-                joueur.Broadcast(5, "Tu as réanimé " + closestDeadPlayer.Nickname + " !", Broadcast.BroadcastFlags.Normal, true);
+                closestDeadPlayer.Broadcast(5, joueur.Nickname + " revived you!", Broadcast.BroadcastFlags.Normal, true);
+                joueur.Broadcast(5, "You revived " + closestDeadPlayer.Nickname + "!", Broadcast.BroadcastFlags.Normal, true);
 
                 yield return Timing.WaitForSeconds(1);
 

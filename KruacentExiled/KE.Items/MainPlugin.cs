@@ -16,17 +16,22 @@ namespace KE.Items
     {
         public override string Author => "Patrique & OmerGS";
         public override string Name => "KEItems";
+        internal Sound Sound { get; private set; }
         internal static MainPlugin Instance { get; private set; }
+        public float Intensity { get; set; } = .5f;
         public override Version Version => new Version(1, 0, 0);
         private Dictionary<Pickup, Light> pl = new Dictionary<Pickup, Light>();
         public override void OnEnabled()
         {
             Instance = this;
+            Sound = new Sound();
+
+
             CustomItem.RegisterItems();
             Exiled.Events.Handlers.Player.DroppedItem += Drop;
             Exiled.Events.Handlers.Player.PickingUpItem += Pick;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
-
+            
             base.OnEnabled();
         }
 
@@ -38,6 +43,7 @@ namespace KE.Items
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
 
             base.OnDisabled();
+            Sound = null;
             Instance = null;
         }
 
@@ -83,29 +89,19 @@ namespace KE.Items
             }
             while (Round.InProgress)
             {
-                Log.Debug("boop");
-
                 foreach (var x in pl.ToList())
                 {
                     if(CustomItem.TryGet(x.Key, out CustomItem cui) && cui is ILumosItem ci)
                     {
                         Light light = Light.Create(x.Key.Position, null, null, true, ci.Color);
-                        light.Intensity = 0.5f;
-                        Log.Debug("preif");
+                        light.Intensity = Intensity;
                         if (x.Value != null)
                         {
-                            Log.Debug("pre val");
                             Light val = x.Value;
-                            Log.Debug($"destroy light {val.Position}");
                             val.UnSpawn();
-                            Log.Debug("pre destroy");
                             val.Destroy();
                         }
-                        else
-                            Log.Debug("first cretate");
-                        Log.Debug("reasigne");
                         pl[x.Key] = light;
-                        Log.Debug("post reasigne");
                         //Log.Debug(x.Key.Position+";"+x.Value.Position);
                     }
                     else
@@ -116,10 +112,8 @@ namespace KE.Items
                         pl.Remove(x.Key);
                     }
                 }
-                Log.Debug("waiting");
-                yield return Timing.WaitForSeconds(0.1f);
+                yield return Timing.WaitForSeconds(Instance.Config.RefreshRate);
             }
-            Log.Debug("end while");
 
         }
 
