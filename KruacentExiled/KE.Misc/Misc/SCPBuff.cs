@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace KE.Misc
+namespace KE.Misc.Misc
 {
     internal class SCPBuff
     {
@@ -24,7 +24,7 @@ namespace KE.Misc
                 List<Player> peanuts = Player.List.Where(p => p.Role == RoleTypeId.Scp173).ToList();
                 peanuts.ForEach(p =>
                 {
-                    AddHumeShield(p, CheckPlayerAround(p,4));
+                    AddHumeShield(p, CheckPlayerAround(p, 4));
                 });
                 yield return Timing.WaitForSeconds(RefreshRate);
             }
@@ -51,7 +51,7 @@ namespace KE.Misc
             return result;
         }
 
-        
+
         private bool IsPlayerInZone(Player player, Vector3 zonePosition, float radius, float height)
         {
             // Calculate the horizontal distance (x, z)
@@ -64,7 +64,7 @@ namespace KE.Misc
             float verticalDifference = Mathf.Abs(player.Position.y - zonePosition.y);
 
             // Check if the player is in the 3d zone.
-            return horizontalDistance <= (radius / 2) && verticalDifference <= (height / 2);
+            return horizontalDistance <= radius / 2 && verticalDifference <= height / 2;
         }
 
 

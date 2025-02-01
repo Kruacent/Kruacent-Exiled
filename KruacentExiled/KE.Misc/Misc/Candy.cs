@@ -7,13 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using InventorySystem.Items.Usables.Scp330;
 
-namespace KE.Misc
+namespace KE.Misc.Misc
 {
     internal class Candy
     {
         public void InteractingScp330(InteractingScp330EventArgs ev)
         {
-            if(UnityEngine.Random.Range(0, 100) < MainPlugin.Instance.Config.ChancePinkCandy)
+            if (UnityEngine.Random.Range(0, 100) < MainPlugin.Instance.Config.ChancePinkCandy)
             {
                 ev.Candy = CandyKindID.Pink;
             }

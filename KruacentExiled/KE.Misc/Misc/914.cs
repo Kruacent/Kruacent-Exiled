@@ -12,7 +12,7 @@ using Exiled.API.Extensions;
 using UnityEngine;
 using YamlDotNet.Core.Tokens;
 
-namespace KE.Misc
+namespace KE.Misc.Misc
 {
     /// <summary>
     /// Everything 914 related
@@ -28,7 +28,7 @@ namespace KE.Misc
 
             { 3, RoleTypeId.Scp106 },
             { 2, RoleTypeId.Scp173 },
-            { 1, RoleTypeId.Scp096},
+            { 1, RoleTypeId.Scp079 },
 
         };
         internal void OnUpgradingPlayer(UpgradingPlayerEventArgs ev)
@@ -65,7 +65,7 @@ namespace KE.Misc
                     var pos = p.Position;
                     p.Teleport(playerScp.Position);
                     playerScp.Teleport(pos);
-                    
+
                 }
                 else
                     p.Teleport(Room.Random(ZoneType.LightContainment));
@@ -141,17 +141,17 @@ namespace KE.Misc
                                 switch (Math.Abs(key))
                                 {
                                     case 3:
-                                        TrySetRole(p,key/(-3));
+                                        TrySetRole(p, key / -3);
                                         break;
                                     case 2:
-                                        TrySetRole(p,key* (-1));
+                                        TrySetRole(p, key * -1);
                                         break;
                                     case 1:
-                                        TrySetRole(p, key * (-3));
+                                        TrySetRole(p, key * -3);
                                         break;
 
                                 }
-                                
+
                                 break;
                             //going down in the graph
                             case Scp914KnobSetting.VeryFine:
@@ -161,7 +161,7 @@ namespace KE.Misc
                     }
 
                 }
-                else 
+                else
                 {
                     Log.Debug("no luck");
                 }
@@ -170,7 +170,7 @@ namespace KE.Misc
 
 
 
-        private void TrySetRole(Player p ,int key)
+        private void TrySetRole(Player p, int key)
         {
             RoleTypeId newRole;
             if (roleScp.TryGetValue(key, out newRole))

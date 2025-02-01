@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace KE.Misc
+namespace KE.Misc.Misc
 {
     /// <summary>
     /// Everything about Surface Light
@@ -16,21 +16,21 @@ namespace KE.Misc
         /// </summary>
         internal void ChangeSurfaceLight()
         {
-            List<UnityEngine.Color> colors = new [] 
+            List<Color> colors = new[]
             {
-                Color.cyan, 
-                Color.red, 
-                Color.green, 
-                Color.white, 
+                Color.cyan,
+                Color.red,
+                Color.green,
+                Color.white,
                 Color.blue
             }.ToList();
 
             // Select a random color
-            Color randomColor = colors[UnityEngine.Random.Range(0, colors.Count)];
+            Color randomColor = colors[Random.Range(0, colors.Count)];
 
             foreach (var room in Room.List.Where(r => r.Type == RoomType.Surface))
             {
-                room.Color = randomColor; 
+                room.Color = randomColor;
             }
 
             Log.Info($"Changed Surface light color to {randomColor}.");

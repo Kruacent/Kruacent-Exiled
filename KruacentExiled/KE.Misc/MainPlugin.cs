@@ -10,6 +10,7 @@ using PlayerRoles;
 using Exiled.Events.EventArgs.Player;
 using System;
 using MapGeneration;
+using KE.Misc.Misc;
 
 namespace KE.Misc
 {
@@ -121,7 +122,10 @@ namespace KE.Misc
             Log.Debug("peanut free");
         }
 
+        private void A(Func<bool> a)
+        {
 
+        }
         private IEnumerator<float> Timer(int secondsWaiting,List<Player> playerToShow, string msg = "done")
         {
             while (secondsWaiting >= 0)

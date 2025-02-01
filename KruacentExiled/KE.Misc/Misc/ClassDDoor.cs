@@ -2,14 +2,13 @@
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.API.Interfaces;
-using KE.Misc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Misc
+namespace KE.Misc.Misc
 {
     /// <summary>
     /// Everything about classD door
@@ -31,7 +30,7 @@ namespace KE.Misc
                         if (door is IDamageableDoor dBoyDoor && !dBoyDoor.IsDestroyed)
                         {
                             dBoyDoor.Break();
-                            
+
                         }
                     }
                 }
