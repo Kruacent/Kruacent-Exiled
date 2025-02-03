@@ -9,8 +9,8 @@ using System.Linq;
 using PlayerRoles;
 using Exiled.Events.EventArgs.Player;
 using System;
-using MapGeneration;
 using KE.Misc.Misc;
+using KE.Misc.Handlers;
 
 namespace KE.Misc
 {
@@ -121,18 +121,13 @@ namespace KE.Misc
             peanutDoor.Unlock();
             Log.Debug("peanut free");
         }
-
-        private void A(Func<bool> a)
-        {
-
-        }
         private IEnumerator<float> Timer(int secondsWaiting,List<Player> playerToShow, string msg = "done")
         {
             while (secondsWaiting >= 0)
             {
                 Hint hint = new Hint()
                 {
-                    Content = $"{secondsWaiting}",
+                    Content = $"{secondsWaiting} seconds",
                     Duration = 1
                 };
                 playerToShow.ForEach(p => p.ShowHint(hint));
@@ -140,6 +135,7 @@ namespace KE.Misc
                 yield return Timing.WaitForSeconds(1);
                 secondsWaiting--;
             }
+            playerToShow.ForEach(p => p.ShowHint(msg));
         }
         
         /// <summary>

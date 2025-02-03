@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using Exiled.API.Features;
 using MEC;
 
-namespace KE.Misc
+namespace KE.Misc.Handlers
 {
     internal class ServerHandler
     {
+        CoroutineHandle coroutineHandle;
         public void OnRoundStarted()
         {
             if(MainPlugin.Instance.Config.ChanceFF >= 0 && MainPlugin.Instance.Config.ChanceFF <= 100)
@@ -17,7 +18,7 @@ namespace KE.Misc
             if (MainPlugin.Instance.Config.ChanceClassDDoorGoesBoom >= 0 && MainPlugin.Instance.Config.ChanceClassDDoorGoesBoom <= 100)
                 MainPlugin.Instance.ClassDDoor.ClassDDoorGoesBoom();
             if(MainPlugin.Instance.Config.AutoNukeAnnoucement)
-                Timing.RunCoroutine(MainPlugin.Instance.NukeAnnouncement());
+                Timing.RunCoroutineSingleton(MainPlugin.Instance.NukeAnnouncement(), coroutineHandle,SingletonBehavior.Abort);
             if(MainPlugin.Instance.Config.PeanutLockDown && Player.List.Where(p => p.Role.Type == PlayerRoles.RoleTypeId.Scp173).Count() > 0)
                 Timing.RunCoroutine(MainPlugin.Instance.PeanutLockdown());
             if(MainPlugin.Instance.Config.AutoElevator)
