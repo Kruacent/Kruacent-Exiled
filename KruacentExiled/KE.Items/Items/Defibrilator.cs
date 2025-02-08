@@ -18,8 +18,7 @@ public class Defibrilator : CustomItem, ILumosItem
     public override string Name { get; set; } = "Defibrilator";
     public override string Description { get; set; } = "The defibrillator is used to revive a person who has lost consciousness. It will revive the person closest to the player who uses it (the location of death, not where the body is).";
     public override float Weight { get; set; } = 0.65f;
-    public UnityEngine.Color Color { get; set; } = UnityEngine.Color.cyan;
-
+    public UnityEngine.Color Color { get; set; } = UnityEngine.Color.magenta;
 
     private ConcurrentDictionary<Player, Vector3> positionMort = new ConcurrentDictionary<Player, Vector3>();
 
@@ -35,13 +34,13 @@ public class Defibrilator : CustomItem, ILumosItem
 
         LockerSpawnPoints = new List<LockerSpawnPoint>
         {
-             new LockerSpawnPoint(){ Chance=50, Type = LockerType.Medkit, },
+             new LockerSpawnPoint(){ Chance= 50, Type = LockerType.Medkit, },
         }
     };
 
     protected override void SubscribeEvents()
     {
-        Exiled.Events.Handlers.Player.UsedItem += OnUsingItem;
+        Exiled.Events.Handlers.Player.UsingItem += OnUsingItem;
         Exiled.Events.Handlers.Player.Dying += OnDeathEvent;
         Exiled.Events.Handlers.Player.Spawned += OnSpawningEvent;
         base.SubscribeEvents();
@@ -49,7 +48,7 @@ public class Defibrilator : CustomItem, ILumosItem
 
     protected override void UnsubscribeEvents()
     {
-        Exiled.Events.Handlers.Player.UsedItem -= OnUsingItem;
+        Exiled.Events.Handlers.Player.UsingItem -= OnUsingItem;
         Exiled.Events.Handlers.Player.Dying -= OnDeathEvent;
         Exiled.Events.Handlers.Player.Spawned -= OnSpawningEvent;
         base.UnsubscribeEvents();
@@ -73,16 +72,20 @@ public class Defibrilator : CustomItem, ILumosItem
         }
     }
 
-    private void OnUsingItem(UsedItemEventArgs ev)
+    private void OnUsingItem(UsingItemEventArgs ev)
     {
-        if (TryGet(ev.Item, out var result) && result.Id == 20)
+        if (!Check(ev.Player.CurrentItem))
         {
-            Timing.CallDelayed(2f, () =>
-            {
-                ev.Player.DisableEffect(EffectType.Scp1853);
-                Timing.RunCoroutine(EffectAttribution(ev.Player));
-            });
+            return;
         }
+
+        Timing.CallDelayed(1f, () =>
+        {
+            ev.IsAllowed = false;
+            ev.Player.RemoveItem(ev.Item);
+
+            Timing.RunCoroutine(EffectAttribution(ev.Player));
+        });
     }
 
     private IEnumerator<float> EffectAttribution(Player joueur)
@@ -94,7 +97,7 @@ public class Defibrilator : CustomItem, ILumosItem
         if (positionMort.Count == 0)
         {
             joueur.Broadcast(5, "There is no death", Broadcast.BroadcastFlags.Normal, true);
-            Exiled.CustomItems.API.Features.CustomItem.TryGive(joueur, 1401);
+            Exiled.CustomItems.API.Features.CustomItem.TryGive(joueur, 1041);
         }
         else
         {
