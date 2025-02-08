@@ -9,6 +9,7 @@ using KE.Items.Interface;
 using Player = Exiled.API.Features.Player;
 using MEC;
 using UnityEngine;
+using PlayerRoles;
 
 namespace KE.Items.Items
 {
@@ -27,7 +28,7 @@ namespace KE.Items.Items
         private const float Duration = 20f;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
-            Limit = 3,
+            Limit = 2,
             LockerSpawnPoints = new List<LockerSpawnPoint>
             {
                 new LockerSpawnPoint()
@@ -62,7 +63,7 @@ namespace KE.Items.Items
                 },
                 new RoomSpawnPoint()
                 {
-                    Chance = 100,
+                    Chance = 50,
                     Room = RoomType.HczNuke,
                 },
             },
@@ -93,6 +94,9 @@ namespace KE.Items.Items
 
         private IEnumerator<float> DamageInMolotovZone(Vector3 wallPosition, float cylinderSize, Player playerThrowingGrenade)
         {
+            // Dictionary that stores the time each player has spent inside the zone (in seconds).
+            Dictionary<Player, float> playerTimeInZone = new Dictionary<Player, float>();
+
             while (true)
             {
                 foreach (Player player in Player.List)
@@ -101,7 +105,38 @@ namespace KE.Items.Items
                     {
                         if (Exiled.API.Features.Server.FriendlyFire || playerThrowingGrenade.Role.Team != player.Role.Team || playerThrowingGrenade == player)
                         {
-                            player.Hurt(player.Health / 150, DamageType.Bleeding);
+                            if (player.IsHuman || player.Role == RoleTypeId.Scp0492)
+                            {
+                                if (playerTimeInZone.ContainsKey(player))
+                                {
+                                    // increase time each frame.
+                                    playerTimeInZone[player] += Time.deltaTime; 
+                                }
+                                else
+                                {
+                                    // Init the time in dictionnary of the player.
+                                    playerTimeInZone[player] = Time.deltaTime; 
+                                }
+
+                                // time of player spend inside of molotov zone.
+                                float timeInZone = playerTimeInZone[player];
+
+                                // Beginning it willbe 5dm/s, after it will be linearly higher the damage until 20dm/s. 
+                                float damage = Mathf.Lerp(2.5f, 10f, timeInZone / 20f);
+
+                                // double damage if it's zombie cuz it has more hp.
+                                if (player.Role == RoleTypeId.Scp0492)
+                                {
+                                    damage *= 2.5f;
+                                }
+
+                                player.Hurt(damage, DamageType.Bleeding);
+                            }
+                            else if (player.IsScp)
+                            {
+                                player.Hurt(player.Health / 150, DamageType.Bleeding);
+                            }
+
                         }
                     }
                 }
@@ -109,6 +144,7 @@ namespace KE.Items.Items
                 yield return Timing.WaitForSeconds(RefreshRate);
             }
         }
+
 
         private bool IsPlayerInZone(Player player, Vector3 zonePosition, float radius)
         {
