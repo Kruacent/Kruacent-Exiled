@@ -100,8 +100,7 @@ namespace KE.Items.Items
                     {
                         if(playerThrowingGrenade.Role.Team == player.Role.Team)
                         {
-                            player.Heal(3);
-                            player.ArtificialHealth += 2;
+                            player.Heal(1);
                         }
                     }
                 }
