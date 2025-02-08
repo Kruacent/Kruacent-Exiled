@@ -11,7 +11,10 @@ namespace KE.Misc.Misc
     internal class SCPBuff
     {
         internal const float RefreshRate = 1f;
-        internal SCPBuff()
+        internal SCPBuff() { }
+
+
+        internal void StartBuff()
         {
             Timing.RunCoroutine(PeanutShield());
         }

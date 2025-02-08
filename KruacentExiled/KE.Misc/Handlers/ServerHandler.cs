@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Exiled.API.Features;
 using MEC;
 
@@ -25,6 +21,7 @@ namespace KE.Misc.Handlers
                 Timing.RunCoroutine(MainPlugin.Instance.AutoElevator.StartElevator());
             if (MainPlugin.Instance.Config.SurfaceLight)
                 MainPlugin.Instance.SurfaceLight.ChangeSurfaceLight();
+            MainPlugin.Instance.SCPBuff.StartBuff();
         }
     }
 }
