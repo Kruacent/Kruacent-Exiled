@@ -187,7 +187,7 @@ public class AdrenalineDrogue : CustomItem, ILumosItem
         }
 
 
-        yield return Timing.WaitForSeconds(UnityEngine.Random.Range(180, 300));
+        yield return Timing.WaitForSeconds(UnityEngine.Random.Range(60, 120));
 
         if (joueur.IsAlive)
         {
