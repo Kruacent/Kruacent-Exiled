@@ -26,12 +26,12 @@ namespace KE.GlobalEventFramework.Examples.GE
         /// <summary>
         /// The cooldown between 2 cassie event
         /// </summary>
-        public int Cooldown { get; set; } = 280;
+        public int Cooldown { get; set; } = 380;
 
         /// <summary>
         /// Percentage for rare event to occur
         /// </summary>
-        public int RareEvent { get; set; } = 7;
+        public int RareEvent { get; set; } = 2;
 
         /// <summary>
         /// Starts a coroutine to perform random actions during the game.
@@ -56,9 +56,13 @@ namespace KE.GlobalEventFramework.Examples.GE
 
                     // Starting the Warhead
                     case 2:
-                        Warhead.Start();
+                        if (!Warhead.IsDetonated)
+                        {
+                            Warhead.Start();
+                        }
                         break;
-                    
+
+
                     // Change Map Color to Cyan
                     case 3:
                         Map.ChangeLightsColor(UnityEngine.Color.cyan);
@@ -73,7 +77,8 @@ namespace KE.GlobalEventFramework.Examples.GE
                         Map.TurnOffAllLights(2, Exiled.API.Enums.ZoneType.HeavyContainment);
                         Map.TurnOffAllLights(2, Exiled.API.Enums.ZoneType.Entrance);
 
-                        Warhead.Start();
+                        if(!Warhead.IsDetonated)
+                            Warhead.Start();
 
                         for (int i = 0; i < 10; i++)
                         {
@@ -94,7 +99,7 @@ namespace KE.GlobalEventFramework.Examples.GE
                         {
                             Player target = nonScpPlayers[UnityEngine.Random.Range(0, nonScpPlayers.Count)];
                             
-                            Cassie.Message("New target : " +  target);
+                            Cassie.Message("New target : " +  target.Nickname, true, true, true);
 
                             void OnPlayerDeath(DyingEventArgs ev)
                             {
@@ -123,9 +128,7 @@ namespace KE.GlobalEventFramework.Examples.GE
                 {
                     var items = new List<ItemType>
                     {
-                        ItemType.Jailbird,
                         ItemType.ParticleDisruptor,
-                        ItemType.MicroHID,
                         ItemType.Coin,
                         ItemType.KeycardO5,
                         ItemType.SCP268
