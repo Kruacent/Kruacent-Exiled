@@ -71,8 +71,6 @@ public class DivinePills : CustomItem, ILumosItem
     protected override void SubscribeEvents()
     {
         PlayerHandle.UsingItem += OnUsingItem;
-        Exiled.Events.Handlers.Scp914.UpgradingInventoryItem += OnUpgrading;
-        //Exiled.Events.Handlers.Scp914.UpgradingPickup += Up; //break the lights
         base.SubscribeEvents();
     }
 
@@ -80,12 +78,10 @@ public class DivinePills : CustomItem, ILumosItem
     protected override void UnsubscribeEvents()
     {
         PlayerHandle.UsingItem -= OnUsingItem;
-        Exiled.Events.Handlers.Scp914.UpgradingInventoryItem -= OnUpgrading;
-        //Exiled.Events.Handlers.Scp914.UpgradingPickup -= Up; //break the lights
         base.UnsubscribeEvents();
     }
 
-    private void Up(UpgradingPickupEventArgs ev)
+    protected override void OnUpgrading(UpgradingEventArgs ev)
     {
         if (!Check(ev.Pickup))
             return;
@@ -97,15 +93,17 @@ public class DivinePills : CustomItem, ILumosItem
         {
             //success
             ev.Pickup.Destroy();
-            TrySpawn("True Divine Pills",ev.OutputPosition,out Pickup _);
+            TrySpawn("True Divine Pills", ev.OutputPosition, out Pickup a);
+            
             ev.IsAllowed = true;
         }
         else
             ev.IsAllowed = false;
     }
 
-    private void OnUpgrading(UpgradingInventoryItemEventArgs ev)
+    protected override void OnUpgrading(UpgradingItemEventArgs ev)
     {
+
         if (!Check(ev.Item))
             return;
         if (ev.KnobSetting != Scp914.Scp914KnobSetting.VeryFine)
@@ -124,7 +122,6 @@ public class DivinePills : CustomItem, ILumosItem
             ev.Player.ShowHint("no luck");
             ev.IsAllowed = false;
         }
-
     }
 
     private void OnUsingItem(UsingItemEventArgs ev)

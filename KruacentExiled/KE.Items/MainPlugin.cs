@@ -55,7 +55,6 @@ namespace KE.Items
                 Light val = pl[pickup];
                 if (val != null)
                 {
-                    val.UnSpawn();
                     val.Destroy();
                 }
                 pl.Remove(pickup);
@@ -77,7 +76,6 @@ namespace KE.Items
 
         internal IEnumerator<float> LightP()
         {
-            
             foreach (var p in Pickup.List)
             {
                 if (p != null)
@@ -87,8 +85,10 @@ namespace KE.Items
                 }
 
             }
+
             while (Round.InProgress)
             {
+                
                 foreach (var x in pl.ToList())
                 {
                     if(CustomItem.TryGet(x.Key, out CustomItem cui) && cui is ILumosItem ci)
@@ -98,7 +98,6 @@ namespace KE.Items
                         if (x.Value != null)
                         {
                             Light val = x.Value;
-                            val.UnSpawn();
                             val.Destroy();
                         }
                         pl[x.Key] = light;
@@ -107,7 +106,6 @@ namespace KE.Items
                     else
                     {
                         Light val = x.Value;
-                        val.UnSpawn();
                         val.Destroy();
                         pl.Remove(x.Key);
                     }
