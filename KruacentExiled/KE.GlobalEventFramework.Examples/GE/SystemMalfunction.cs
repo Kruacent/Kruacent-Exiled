@@ -16,7 +16,7 @@ using PlayerRoles;
 using Utils.NonAllocLINQ;
 using KeycardPermissions = Exiled.API.Enums.KeycardPermissions;
 using Exiled.Events.EventArgs.Scp049;
-using KE.GlobalEventFramework.Examples.API;
+using KE.GlobalEventFramework.Examples.API.Feature;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {

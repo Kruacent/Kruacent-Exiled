@@ -7,36 +7,63 @@ using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Utils.NonAllocLINQ;
 
-namespace KE.GlobalEventFramework.Examples.API
+namespace KE.GlobalEventFramework.Examples.API.Feature
 {
     public class Malfunctions
     {
 
         private sbyte _malfunction = 15;
+        public const sbyte Lower = -50;
+        public const sbyte Higher = 125;
         public sbyte Malfunction
         {
             get { return _malfunction; }
-            private set
+            set
             {
-                if (value > 125) _malfunction = 125;
-                else if (value < -50) _malfunction = -50;
+                if (value > Higher) _malfunction = Higher;
+                else if (value < Lower) _malfunction = Lower;
                 else _malfunction = value;
             }
         }
+
+        public MalfunctionLevel MalfunctionLevels
+        {
+            get{return (MalfunctionLevel)Malfunction;}
+        }
+
+        private HashSet<MalfunctionEffect> MalfunctionEffects = new HashSet<MalfunctionEffect>();
+
         public sbyte MalfunctionAdd { get; set; } = 1;
 
         private bool[] CassieVoiceLine = new[] { true, true, true, true, true };
-        public bool CassieYapYap { get; private set; } = false;
+        private string[] msg = new[]
+        {
+            "Malfunctions back to more stable levels",
+            "Malfunctions levels above . 25 percent . . decontamination of Light Containment Zone in . 30 seconds",
+            "Malfunctions levels above . 50 percent . . terminating all door locks",
+            "",
+            "Malfunctions levels above . 90 percent . . starting emergency warhead",
+        };
+
+        private string[] msgtrans = new[]
+        {
+            "Malfunctions back to more stable levels",
+            "Malfunctions levels above 25%, decontamination of Light Containment Zone in 30 seconds",
+            "Malfunctions levels above 50%, terminating all door locks",
+            "",
+            "Malfunctions levels above 90%, starting emergency warhead",
+
+        };
+        public bool CassieYapYap { get; set; } = false;
         private Dictionary<Door, KeycardPermissions> doorkeys = Door.List.ToDictionary(d => d, d => d.KeycardPermissions);
         private CoroutineHandle _checkNuke;
         internal Malfunctions() { }
-
-
 
         internal IEnumerator<float> Tick()
         {
@@ -54,55 +81,53 @@ namespace KE.GlobalEventFramework.Examples.API
 
         private void CassieVoice(sbyte malfunction)
         {
-            if (malfunction <= 0 && (CassieVoiceLine[0] || CassieYapYap))
+            if (malfunction <= 0)
             {
-                Cassie.MessageTranslated("Malfunctions back to more stable levels",
-                        "Malfunctions back to more stable levels", false, false);
-                CassieVoiceLine[0] = false;
+                CassieSay(0);
                 return;
             }
 
             //force decontamination
-            if (malfunction >= 25 && (CassieVoiceLine[1] || CassieYapYap) && !Map.IsLczDecontaminated && Map.IsDecontaminationEnabled)
+            if (malfunction >= 25)
             {
-                string msg = "Malfunctions levels above . 25 percent . . decontamination of Light Containment Zone in . 30 seconds";
-                Cassie.MessageTranslated(msg,
-                    "Malfunctions levels above 25%, decontamination of Light Containment Zone in 30 seconds", false, false);
-                CassieVoiceLine[1] = false;
-                Door.List.ToList().ForEach(d =>
+                if (!Map.IsLczDecontaminated && Map.IsDecontaminationEnabled)
                 {
-                    if (d.Zone == ZoneType.LightContainment)
-                    {
-                        if (!d.IsElevator)
-                        {
-                            d.ChangeLock(DoorLockType.DecontEvacuate);
-                            d.IsOpen = true;
-                        }
-
-                    }
-                });
-                Timing.CallDelayed(30 + Cassie.CalculateDuration(msg), () =>
-                {
-                    Map.StartDecontamination();
-
+                    string msg = CassieSay(1);
                     Door.List.ToList().ForEach(d =>
                     {
-                        if (d.IsElevator && (d.Type == DoorType.ElevatorLczA || d.Type == DoorType.ElevatorLczB))
+                        if (d.Zone == ZoneType.LightContainment)
                         {
-                            d.Lock(DoorLockType.DecontEvacuate);
-                            d.IsOpen = false;
+                            if (!d.IsElevator)
+                            {
+                                d.ChangeLock(DoorLockType.DecontEvacuate);
+                                d.IsOpen = true;
+                            }
+
                         }
                     });
-                });
-                return;
+                    Timing.CallDelayed(30 + Cassie.CalculateDuration(msg), () =>
+                    {
+                        Map.StartDecontamination();
+
+                        Door.List.ToList().ForEach(d =>
+                        {
+                            if (d.IsElevator && (d.Type == DoorType.ElevatorLczA || d.Type == DoorType.ElevatorLczB))
+                            {
+                                d.Lock(DoorLockType.DecontEvacuate);
+                                d.IsOpen = false;
+                            }
+                        });
+                    });
+                    return;
+                }
+
             }
 
+
             //remove the lock on every doors
-            if (malfunction >= 50 && (CassieVoiceLine[2] || CassieYapYap))
+            if (malfunction >= 50)
             {
-                CassieVoiceLine[2] = false;
-                Cassie.MessageTranslated("Malfunctions levels above . 50 percent . . terminating all door locks",
-                    "Malfunctions levels above 50 percent, terminating all door locks", false, false);
+                string msg = CassieSay(2);
                 Door.List.ToList().ForEach(d =>
                 {
                     if (d.IsKeycardDoor)
@@ -145,6 +170,19 @@ namespace KE.GlobalEventFramework.Examples.API
                 return;
             }
 
+        }
+
+        private string CassieSay(int id)
+        {
+            if (!string.IsNullOrEmpty(msg[id]))
+                return "";
+            if (CassieVoiceLine[id] || CassieYapYap)
+            {
+                CassieVoiceLine[id] = false;
+
+                Cassie.MessageTranslated(msg[id], msgtrans[id], false, false);
+            }
+            return msg[id];
         }
 
         private IEnumerator<float> CheckNuke()
@@ -201,6 +239,13 @@ namespace KE.GlobalEventFramework.Examples.API
 
 
 
-
+        public enum MalfunctionLevel
+        {
+            VeryLowMalfunction = 0,
+            LowMalfunction = 25,
+            MediumMalfunction = 50,
+            HighMalfunction = 75,
+            VeryHighMalfunction = 100,
+        }
     }
 }
