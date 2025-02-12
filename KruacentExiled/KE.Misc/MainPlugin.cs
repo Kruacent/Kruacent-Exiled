@@ -130,7 +130,7 @@ namespace KE.Misc
                     Content = $"{secondsWaiting} seconds",
                     Duration = 1
                 };
-                playerToShow.ForEach(p => p.ShowHint(hint));
+                playerToShow.ForEach(p => p.ShowHint(hint,0));
                 playerToShow.RemoveAll(p => p.Role != RoleTypeId.Scp173);
                 yield return Timing.WaitForSeconds(1);
                 secondsWaiting--;
