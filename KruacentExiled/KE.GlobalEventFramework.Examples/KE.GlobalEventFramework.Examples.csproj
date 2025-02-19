@@ -5,12 +5,13 @@
   </PropertyGroup>
 	
   <ItemGroup>
-    <PackageReference Include="ExMod.Exiled" Version="9.4.0" />
+    <PackageReference Include="ExMod.Exiled" Version="9.5.0" />
   </ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\KE.GlobalEventFramework\KE.GlobalEventFramework.csproj" />
 		<ProjectReference Include="..\KE.BlackoutNDoor\KE.BlackoutNDoor.csproj" />
+		<ProjectReference Include="..\KE.Utils\KE.Utils.csproj" />
 	</ItemGroup>
 
   <ItemGroup>

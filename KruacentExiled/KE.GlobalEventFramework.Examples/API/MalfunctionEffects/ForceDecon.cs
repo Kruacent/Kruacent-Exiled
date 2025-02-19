@@ -3,13 +3,15 @@
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
+using KE.GlobalEventFramework.Examples.API.Feature;
 using MEC;
 using System.Linq;
 
-namespace KE.GlobalEventFramework.Examples.API.MalfunctionEffect
+namespace KE.GlobalEventFramework.Examples.API.MalfunctionEffects
 {
-    internal class ForceDecon : Feature.MalfunctionEffect
+    internal class ForceDecon : MalfunctionEffect
     {
+        public override string Name { get; } = "Forced Decontamination";
         public override string VoiceLine { get; } = "Malfunctions levels above . 25 percent . . decontamination of Light Containment Zone in . 30 seconds";
         public override string VoiceLineTranslated { get; } = "Malfunctions levels above 25%, decontamination of Light Containment Zone in 30 seconds";
         public override sbyte MalfunctionActivation { get; } = 25;

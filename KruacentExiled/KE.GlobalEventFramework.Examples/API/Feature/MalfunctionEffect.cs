@@ -8,6 +8,7 @@ namespace KE.GlobalEventFramework.Examples.API.Feature
 {
     public abstract class MalfunctionEffect
     {
+        public abstract string Name { get; }
         public abstract string VoiceLine { get; }
         public abstract string VoiceLineTranslated { get; }
         public abstract sbyte MalfunctionActivation { get; }

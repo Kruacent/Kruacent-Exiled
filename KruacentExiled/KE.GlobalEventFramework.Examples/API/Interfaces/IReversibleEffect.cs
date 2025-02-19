@@ -8,7 +8,10 @@ namespace KE.GlobalEventFramework.Examples.API.Interfaces
 {
     internal interface IReversibleEffect
     {
+        string VoiceLineDeactivate { get; }
+        string VoiceLineDeactivateTranslated { get; }
         sbyte MalfunctionDeactivation { get; }
-        void EffectDeactivate();
+        void DeactivateEffect();
+
     }
 }

@@ -46,7 +46,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         /// </summary>
         public int NewCooldown { get; set; } = 180;
         private BlackoutNDoor.MainPlugin BlackoutNDoor = null;
-        private Malfunctions Malfunction;
+        public static Malfunctions Malfunction { get; private set; }
         
 
 
@@ -56,7 +56,7 @@ namespace KE.GlobalEventFramework.Examples.GE
             Log.Debug("system malfunction start");
             //MoreBlackOutNDoors();
             //Coroutine.LaunchCoroutine(EarlyNuke());
-            Malfunction = new Malfunctions();
+            
             Coroutine.LaunchCoroutine(Malfunction.Tick());
             CoroutineHandle handle;
 
@@ -73,13 +73,13 @@ namespace KE.GlobalEventFramework.Examples.GE
 
         public void SubscribeEvent()
         {
-
+            Malfunction = new Malfunctions();
             Exiled.Events.Handlers.Player.Dying += Malfunction.OnDying;
             Exiled.Events.Handlers.Scp049.FinishingRecall += Malfunction.OnFinishingRevive;
 
 
             //Searching for the plugin
-            var otherPlugin = Exiled.Loader.Loader.Plugins.FirstOrDefault(plugin => plugin.Name == "KE.BlackoutDoor");
+            /*var otherPlugin = Exiled.Loader.Loader.Plugins.FirstOrDefault(plugin => plugin.Name == "KE.BlackoutDoor");
             if (otherPlugin != null)
             {
 
@@ -90,13 +90,14 @@ namespace KE.GlobalEventFramework.Examples.GE
                     return;
                 }
 
-            }
+            }*/
         }
         public void UnsubscribeEvent()
         {
             BlackoutNDoor = null;
             Exiled.Events.Handlers.Player.Dying -= Malfunction.OnDying;
             Exiled.Events.Handlers.Scp049.FinishingRecall -= Malfunction.OnFinishingRevive;
+            Malfunction = null;
         }
 
         private IEnumerator<float> EarlyNuke()

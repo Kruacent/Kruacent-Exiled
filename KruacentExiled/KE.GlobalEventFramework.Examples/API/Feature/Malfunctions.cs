@@ -1,8 +1,12 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
+using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp049;
+using KE.GlobalEventFramework.Examples.API.Interfaces;
+using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using MEC;
 using PlayerRoles;
 using System;
@@ -34,172 +38,116 @@ namespace KE.GlobalEventFramework.Examples.API.Feature
 
         public MalfunctionLevel MalfunctionLevels
         {
-            get{return (MalfunctionLevel)Malfunction;}
+            get{return (MalfunctionLevel) Malfunction;}
         }
 
-        private HashSet<MalfunctionEffect> MalfunctionEffects = new HashSet<MalfunctionEffect>();
+        private static HashSet<MalfunctionEffect> _malfunctionEffects = new HashSet<MalfunctionEffect>();
+        public static HashSet<MalfunctionEffect> MalfunctionEffects => _malfunctionEffects.ToList().ToHashSet();
+        private static Dictionary<MalfunctionEffect, bool> _voiced;
+        private static Dictionary<MalfunctionEffect, bool> _voicedDeactivate;
 
+        public static bool EffectAlreadyActivated(MalfunctionEffect effect)
+        {
+            return _voiced[effect];
+        }
+
+        public sbyte PreviousMalfunction { get; private set; }
         public sbyte MalfunctionAdd { get; set; } = 1;
-
-        private bool[] CassieVoiceLine = new[] { true, true, true, true, true };
-        private string[] msg = new[]
+        public MalfunctionDisplay MalfunctionDisplay { get; private set; }
+        
+        
+        internal Malfunctions(bool display = true)
         {
-            "Malfunctions back to more stable levels",
-            "Malfunctions levels above . 25 percent . . decontamination of Light Containment Zone in . 30 seconds",
-            "Malfunctions levels above . 50 percent . . terminating all door locks",
-            "",
-            "Malfunctions levels above . 90 percent . . starting emergency warhead",
-        };
+            try
+            {
+                if (display)
+                    MalfunctionDisplay = new MalfunctionDisplay(this);
+                else
+                    MalfunctionDisplay = null;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex + "\nRueI is probably missing : put it in dependency or disable the display");
+                MalfunctionDisplay = null;
+            }
+           
+            LoadMalfunctionsEffect();
+        }
 
-        private string[] msgtrans = new[]
+        public bool IsDisplayEnabled()
         {
-            "Malfunctions back to more stable levels",
-            "Malfunctions levels above 25%, decontamination of Light Containment Zone in 30 seconds",
-            "Malfunctions levels above 50%, terminating all door locks",
-            "",
-            "Malfunctions levels above 90%, starting emergency warhead",
+            return MalfunctionDisplay != null;
+        }
 
-        };
-        public bool CassieYapYap { get; set; } = false;
-        private Dictionary<Door, KeycardPermissions> doorkeys = Door.List.ToDictionary(d => d, d => d.KeycardPermissions);
-        private CoroutineHandle _checkNuke;
-        internal Malfunctions() { }
+        private void LoadMalfunctionsEffect()
+        {
+            foreach (IPlugin<IConfig> plugin in Exiled.Loader.Loader.Plugins.Where(pl => pl.Name != MainPlugin.Instance.Name))
+            {
+                foreach (Type type in plugin.Assembly.GetTypes())
+                {
+                    try
+                    {
+                        if (type.IsSubclassOf(typeof(MalfunctionEffect)))
+                        {
+                            MalfunctionEffect me = Activator.CreateInstance(type) as MalfunctionEffect;
+                            _malfunctionEffects.Add(me);
+                        }
+                    }
+                    catch (System.Exception e)
+                    {
+                        Log.Error($"Error registering in plugin {plugin.Name} : {e.Message}");
+                    }
+                }
+            }
+            _voiced = _malfunctionEffects.ToDictionary(m => m, m => false);
+            _voicedDeactivate = _malfunctionEffects.Where(m => m is IReversibleEffect).ToDictionary(m => m, m => false);
+        }
+
 
         internal IEnumerator<float> Tick()
         {
-            Log.Debug("in tick");
             while (Round.InProgress)
             {
-                Log.Debug($"Malfunction={Malfunction}");
-                CassieVoice(Malfunction);
-                yield return Timing.WaitForSeconds(60);
+                PreviousMalfunction = Malfunction;
                 Malfunction += MalfunctionAdd;
                 Malfunction += AdditionnalMalfunction();
+                CheckMalfunctionEffect(Malfunction);
+                Log.Debug($"Malfunction={Malfunction}");
+                yield return Timing.WaitForSeconds(60);
             }
         }
 
 
-        private void CassieVoice(sbyte malfunction)
-        {
-            if (malfunction <= 0)
-            {
-                CassieSay(0);
-                return;
-            }
 
-            //force decontamination
-            if (malfunction >= 25)
+        private void CheckMalfunctionEffect(sbyte malfunction)
+        {
+            foreach (MalfunctionEffect me in _malfunctionEffects)
             {
-                if (!Map.IsLczDecontaminated && Map.IsDecontaminationEnabled)
+                if (malfunction >= me.MalfunctionActivation)
                 {
-                    string msg = CassieSay(1);
-                    Door.List.ToList().ForEach(d =>
+                    if (!_voiced[me])
                     {
-                        if (d.Zone == ZoneType.LightContainment)
-                        {
-                            if (!d.IsElevator)
-                            {
-                                d.ChangeLock(DoorLockType.DecontEvacuate);
-                                d.IsOpen = true;
-                            }
+                        _voiced[me] = true;
+                        Cassie.MessageTranslated(me.VoiceLine,me.VoiceLineTranslated,false,false);
+                    }
+                    me.ActivateEffect();
+                }
 
-                        }
-                    });
-                    Timing.CallDelayed(30 + Cassie.CalculateDuration(msg), () =>
+                if(me is IReversibleEffect re && malfunction < re.MalfunctionDeactivation)
+                {
+                    if (!_voicedDeactivate[me])
                     {
-                        Map.StartDecontamination();
-
-                        Door.List.ToList().ForEach(d =>
-                        {
-                            if (d.IsElevator && (d.Type == DoorType.ElevatorLczA || d.Type == DoorType.ElevatorLczB))
-                            {
-                                d.Lock(DoorLockType.DecontEvacuate);
-                                d.IsOpen = false;
-                            }
-                        });
-                    });
-                    return;
+                        _voicedDeactivate[me] = true;
+                        Cassie.MessageTranslated(re.VoiceLineDeactivate, re.VoiceLineDeactivateTranslated, false, false);
+                    }
+                    re.DeactivateEffect();
                 }
-
-            }
-
-
-            //remove the lock on every doors
-            if (malfunction >= 50)
-            {
-                string msg = CassieSay(2);
-                Door.List.ToList().ForEach(d =>
-                {
-                    if (d.IsKeycardDoor)
-                        d.KeycardPermissions = KeycardPermissions.None;
-
-                });
-                return;
-            }
-
-            //reput the locks
-            if (malfunction < 40 && (CassieVoiceLine[3] || CassieYapYap))
-            {
-                CassieVoiceLine[3] = false;
-                doorkeys.ForEach(dk =>
-                {
-                    dk.Key.KeycardPermissions = dk.Value;
-                });
-
-                return;
-            }
-
-            //nuke
-            if (malfunction >= 90)
-            {
-                if (CassieVoiceLine[4] || CassieYapYap)
-                {
-                    CassieVoiceLine[4] = false;
-                    string msg = "Malfunctions levels above . 90 percent . . starting emergency warhead";
-                    Cassie.MessageTranslated(msg,
-                       "Malfunctions levels above 90%, starting emergency warhead", false, false);
-                }
-
-                if (!Warhead.IsInProgress)
-                {
-                    Warhead.Start();
-                    Warhead.IsLocked = true;
-                    Timing.KillCoroutines(_checkNuke);
-                    _checkNuke = Timing.RunCoroutine(CheckNuke());
-                }
-                return;
             }
 
         }
 
-        private string CassieSay(int id)
-        {
-            if (!string.IsNullOrEmpty(msg[id]))
-                return "";
-            if (CassieVoiceLine[id] || CassieYapYap)
-            {
-                CassieVoiceLine[id] = false;
+        
 
-                Cassie.MessageTranslated(msg[id], msgtrans[id], false, false);
-            }
-            return msg[id];
-        }
-
-        private IEnumerator<float> CheckNuke()
-        {
-            while (Warhead.IsInProgress)
-            {
-                yield return Timing.WaitForSeconds(5);
-                Log.Debug("check nuke : " + Malfunction);
-                if (Malfunction <= 85)
-                {
-                    Log.Debug($"Malfunction low enough ({Malfunction}) disabling the nuke");
-                    Warhead.IsLocked = false;
-                    Warhead.Stop();
-                    break;
-                }
-            }
-        }
 
         private sbyte AdditionnalMalfunction()
         {
