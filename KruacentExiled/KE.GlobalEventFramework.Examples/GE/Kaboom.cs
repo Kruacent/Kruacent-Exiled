@@ -16,7 +16,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     public class Kaboom : GlobalEvent, IEvent
     {
         ///<inheritdoc/>
-        public override uint Id { get; set; } = 0;
+        public override uint Id { get; set; } = 1052;
         ///<inheritdoc/>
         public override string Name { get; set; } = "Kaboom";
         ///<inheritdoc/>
