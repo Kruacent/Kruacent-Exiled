@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.GlobalEventFramework.Examples.API.MalfunctionEffect
+namespace KE.Utils.Extensions
 {
-    internal class Locks
+    internal class RoomExtension
     {
     }
 }
