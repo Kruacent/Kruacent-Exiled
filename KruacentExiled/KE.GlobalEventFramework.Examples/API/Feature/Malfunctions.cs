@@ -143,7 +143,6 @@ namespace KE.GlobalEventFramework.Examples.API.Feature
                     re.DeactivateEffect();
                 }
             }
-
         }
 
         
@@ -158,6 +157,8 @@ namespace KE.GlobalEventFramework.Examples.API.Feature
             result += (sbyte)(Player.List.Count(p => p.Role.Side == Side.Scp && p.Role != RoleTypeId.Scp0492) * 3);
             //number of zombies increase 1
             result += (sbyte)Player.List.Count(p => p.Role == RoleTypeId.Scp0492);
+            //reduce when walking
+
             return result;
 
         }
@@ -175,7 +176,7 @@ namespace KE.GlobalEventFramework.Examples.API.Feature
                     break;
                 case Side.Scp:
                     if (ev.Player.Role != RoleTypeId.Scp0492) Malfunction -= 10;
-                    else Malfunction -= 1;
+                    else Malfunction -= 2;
                     break;
             }
         }
