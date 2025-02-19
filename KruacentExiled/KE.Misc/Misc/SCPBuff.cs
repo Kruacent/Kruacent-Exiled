@@ -27,7 +27,7 @@ namespace KE.Misc.Misc
                 List<Player> peanuts = Player.List.Where(p => p.Role == RoleTypeId.Scp173).ToList();
                 peanuts.ForEach(p =>
                 {
-                    AddHumeShield(p, CheckPlayerAround(p, 4));
+                    AddHumeShield(p, CheckPlayerAround(p, 6));
                 });
                 yield return Timing.WaitForSeconds(RefreshRate);
             }
@@ -49,7 +49,7 @@ namespace KE.Misc.Misc
                 if (player == p) continue;
                 if (player.Role.Side == p.Role.Side && !countFriendly) continue;
                 if (IsPlayerInZone(player, p.Position, radius, radius))
-                    result++;
+                    result += 5;
             }
             return result;
         }
