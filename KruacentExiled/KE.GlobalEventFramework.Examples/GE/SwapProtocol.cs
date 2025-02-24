@@ -6,6 +6,8 @@ using MEC;
 using System.Linq;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Enums;
+using static UnityEngine.GraphicsBuffer;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
@@ -21,7 +23,7 @@ namespace KE.GlobalEventFramework.Examples.GE
             while (!Round.IsEnded)
             {
                 // every 5 min
-                yield return Timing.WaitForSeconds(300);
+                yield return Timing.WaitForSeconds(10);
                 ChangingPlayer();
             }
         }
@@ -33,7 +35,7 @@ namespace KE.GlobalEventFramework.Examples.GE
 
             if (playerInServer.Count < 2)
             {
-                Log.Warn("Pas assez de joueurs vivants pour effectuer un échange !");
+                Log.Debug("Pas assez de joueurs vivants pour effectuer un échange !");
                 return;
             }
 
@@ -50,7 +52,45 @@ namespace KE.GlobalEventFramework.Examples.GE
             for (int i = 0; i < playerInServer.Count; i++)
             {
                 int nextIndex = (i + 1) % playerInServer.Count;
-                playerInServer[i].Role.Set(playersRoles[nextIndex]);
+
+                var player = playerInServer[i];
+                var target = playerInServer[nextIndex];
+
+                // Récupération des objets
+                List<ItemType> items1 = player.Items.Select(item => item.Type).ToList();
+                List<ItemType> items2 = target.Items.Select(item => item.Type).ToList();
+
+                // Sauvegarde et suppression des munitions
+                Dictionary<AmmoType, ushort> ammo1 = new Dictionary<AmmoType, ushort>();
+                Dictionary<AmmoType, ushort> ammo2 = new Dictionary<AmmoType, ushort>();
+
+                for (int j = 0; j < player.Ammo.Count; j++)
+                {
+                    ammo1.Add(player.Ammo.ElementAt(j).Key.GetAmmoType(), player.Ammo.ElementAt(j).Value);
+                    player.SetAmmo(ammo1.ElementAt(j).Key, 0);
+                }
+                for (int j = 0; j < target.Ammo.Count; j++)
+                {
+                    ammo2.Add(target.Ammo.ElementAt(j).Key.GetAmmoType(), target.Ammo.ElementAt(j).Value);
+                    target.SetAmmo(ammo2.ElementAt(j).Key, 0);
+                }
+
+                // Changement de rôle
+                player.Role.Set(playersRoles[nextIndex], PlayerRoles.RoleSpawnFlags.AssignInventory);
+
+                // Attribution des inventaires
+                target.ResetInventory(items1);
+                player.ResetInventory(items2);
+
+                // Attribution des munitions
+                foreach (var ammo in ammo2)
+                {
+                    player.SetAmmo(ammo.Key, ammo.Value);
+                }
+                foreach (var ammo in ammo1)
+                {
+                    target.SetAmmo(ammo.Key, ammo.Value);
+                }
             }
         }
 
