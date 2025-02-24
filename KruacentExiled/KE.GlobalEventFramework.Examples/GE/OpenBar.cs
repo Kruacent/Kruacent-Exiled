@@ -17,7 +17,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         public override uint Id { get; set; } = 1048;
         public override string Name { get; set; } = "OpenBar";
         public override string Description { get; set; } = "j'espère que vous avez pas prévu de kampé";
-        public override int Weight { get; set; } = 1;
+        public override int Weight { get; set; } = 0;
         public override uint[] IncompatibleGE { get; set; } = { 1 };
         public IEnumerator<float> Start()
         {
