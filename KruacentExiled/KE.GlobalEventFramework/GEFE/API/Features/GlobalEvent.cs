@@ -88,13 +88,13 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
 
         private static void Show()
         {
-            var random = UnityEngine.Random.value;
+            var random = UnityEngine.Random.Range(0,101);
 
             foreach (Player player in Player.List)
             {
                 Exiled.API.Features.Broadcast b = new Exiled.API.Features.Broadcast
                 {
-                    Content = ShowText(random > .5f),
+                    Content = ShowText(random < MainPlugin.Instance.Config.ChanceRedacted),
                     Duration = 10
                 };
                 player.Broadcast(b);
