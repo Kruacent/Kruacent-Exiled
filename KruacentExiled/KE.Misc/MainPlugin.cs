@@ -19,7 +19,7 @@ namespace KE.Misc
     {
         public override string Author => "Patrique";
         public override string Name => "KEMisc";
-        public override Version Version => new Version(1, 0, 0);
+        public override Version Version => new Version(1, 1, 0);
         internal static MainPlugin Instance { get; private set; }
         private ServerHandler ServerHandler;
         internal _914 _914 { get; private set; }
@@ -28,6 +28,7 @@ namespace KE.Misc
         internal Candy Candy { get; private set; }
         internal SurfaceLight SurfaceLight { get; private set; }
         internal SCPBuff SCPBuff { get; private set; }
+        internal Spawn Spawn { get; private set; }
 
         public override void OnEnabled()
         {
@@ -37,6 +38,8 @@ namespace KE.Misc
             ClassDDoor = new ClassDDoor();
             SurfaceLight = new SurfaceLight();
             ServerHandler = new ServerHandler();
+            Spawn = new Spawn();
+            SCPBuff = new SCPBuff();
             if (Instance.Config.ChancePinkCandy >= 0 && Instance.Config.ChancePinkCandy <= 100)
             {
                 Candy = new Candy();
@@ -48,13 +51,15 @@ namespace KE.Misc
             }
             Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
             Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
-            SCPBuff = new SCPBuff();
 
+
+            Exiled.Events.Handlers.Player.ChangingRole += SCPBuff.BecomingSCP;
+            ServerHandle.RoundStarted += Spawn.OnRoundStarted;
             ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;
             Nine14Handle.UpgradingPlayer += _914.OnUpgradingPlayer;
             Exiled.Events.Handlers.Player.Dying += ScpNoeDeathMessage;
-            
 
+            
         }
 
         public override void OnDisabled()
@@ -62,6 +67,7 @@ namespace KE.Misc
             ServerHandle.RoundStarted -= ServerHandler.OnRoundStarted;
             Nine14Handle.UpgradingPlayer -= _914.OnUpgradingPlayer;
             Exiled.Events.Handlers.Player.Dying -= ScpNoeDeathMessage;
+            ServerHandle.RoundStarted -= Spawn.OnRoundStarted;
             if (Instance.Config.ChancePinkCandy >= 0 && Instance.Config.ChancePinkCandy <= 100)
             {
                 Exiled.Events.Handlers.Scp330.InteractingScp330 -= Candy.InteractingScp330;
@@ -96,6 +102,7 @@ namespace KE.Misc
         internal IEnumerator<float> NukeAnnouncement()
         {
             Log.Debug("autonuke announcement : on");
+            
             yield return Timing.WaitUntilTrue(() => 25 <= Round.ElapsedTime.TotalMinutes);
             Cassie.MessageTranslated("Warning automatic warhead will detonate in 5 minutes", 
                 "Warning automatic warhead will detonate in <color=#FF0000>5</color> minutes");
@@ -123,6 +130,7 @@ namespace KE.Misc
         }
         private IEnumerator<float> Timer(int secondsWaiting,List<Player> playerToShow, string msg = "done")
         {
+            float position = 0;
             while (secondsWaiting >= 0)
             {
                 Hint hint = new Hint()
@@ -130,12 +138,12 @@ namespace KE.Misc
                     Content = $"{secondsWaiting} seconds",
                     Duration = 1
                 };
-                playerToShow.ForEach(p => p.ShowHint(hint,0));
+                playerToShow.ForEach(p => p.ShowHint(hint, position));
                 playerToShow.RemoveAll(p => p.Role != RoleTypeId.Scp173);
                 yield return Timing.WaitForSeconds(1);
                 secondsWaiting--;
             }
-            playerToShow.ForEach(p => p.ShowHint(msg));
+            playerToShow.ForEach(p => p.ShowHint(msg, position));
         }
         
         /// <summary>
