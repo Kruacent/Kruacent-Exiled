@@ -1,4 +1,6 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Extensions;
+using Exiled.API.Features;
+using Exiled.Events.EventArgs.Player;
 using Exiled.Permissions.Commands.Permissions;
 using MEC;
 using PlayerRoles;
@@ -11,12 +13,26 @@ namespace KE.Misc.Misc
     internal class SCPBuff
     {
         internal const float RefreshRate = 1f;
+        internal float IncreaseSCPHealth { get; } = 1.5f;
         internal SCPBuff() { }
 
 
         internal void StartBuff()
         {
             Timing.RunCoroutine(PeanutShield());
+            
+        }
+
+       internal void BecomingSCP(ChangingRoleEventArgs ev)
+        {
+            if (!ev.NewRole.IsScp() || ev.NewRole == RoleTypeId.Scp0492) return;
+            if(ev.Player.Role == RoleTypeId.None) return;
+            Player p = ev.Player;
+            Timing.CallDelayed(2, () =>
+            {
+                p.MaxHealth *= IncreaseSCPHealth;
+                p.Health = p.MaxHealth;
+            });
         }
 
 
