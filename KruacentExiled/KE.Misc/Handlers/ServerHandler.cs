@@ -19,7 +19,7 @@ namespace KE.Misc.Handlers
                 Timing.RunCoroutine(MainPlugin.Instance.PeanutLockdown());
             if(MainPlugin.Instance.Config.AutoElevator)
                 Timing.RunCoroutine(MainPlugin.Instance.AutoElevator.StartElevator());
-            if (MainPlugin.Instance.Config.SurfaceLight)
+            if (MainPlugin.Instance.Config.SurfaceLight && UnityEngine.Random.value < .75f)
                 MainPlugin.Instance.SurfaceLight.ChangeSurfaceLight();
             MainPlugin.Instance.SCPBuff.StartBuff();
         }

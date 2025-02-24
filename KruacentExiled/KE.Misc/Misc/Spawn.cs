@@ -36,6 +36,7 @@ namespace KE.Misc.Misc
             if (roleScp == RoleTypeId.Scp096 || roleScp == RoleTypeId.Scp079)
             {
                 player.Role.Set(RoleTypeId.Scp173);
+                //TODO the commands
                 //ChangeScp(player);
             }
         }
