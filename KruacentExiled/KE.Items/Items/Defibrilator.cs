@@ -67,7 +67,7 @@ public class Defibrilator : CustomItem, ILumosItem
     {
         if (ev.Player.IsAlive)
         {
-            Log.Debug("Enlèvement du joueur");
+            
             positionMort.TryRemove(ev.Player, out _);
         }
     }

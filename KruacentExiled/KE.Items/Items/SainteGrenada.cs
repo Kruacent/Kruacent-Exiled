@@ -8,6 +8,7 @@ using Exiled.API.Features.Items;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Map;
+using Exiled.Events.EventArgs.Player;
 using KE.Items.Interface;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ namespace KE.Items.Items
         public override string Name { get; set; } = "Sainte Grenada";
         public override string Description { get; set; } = "Worms reference !?";
         public override float Weight { get; set; } = 1.5f;
-        public override float FuseTime { get; set; } = 7.5f;
+        public override float FuseTime { get; set; } = 6f;
         public override bool ExplodeOnCollision { get; set; } = false;
         public float DamageModifier { get; set; } = 3f;
         public Color Color { get; set; } = Color.red;
@@ -38,6 +39,10 @@ namespace KE.Items.Items
 
         };
 
+        protected override void OnThrownProjectile(ThrownProjectileEventArgs ev)
+        {
+            MainPlugin.Instance.Sound.PlayClip("worms", ev.Projectile.GameObject,4,75);
+        }
         protected override void OnExploding(ExplodingGrenadeEventArgs ev)
         {
             ev.Projectile.Scale = new Vector3(GrenadeSize, GrenadeSize, GrenadeSize);
@@ -52,6 +57,8 @@ namespace KE.Items.Items
                 ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
                 grenade.SpawnActive(spawnPosition).FuseTime = 0f;
             }
+
+
         }
     }
 }

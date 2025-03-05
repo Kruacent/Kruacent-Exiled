@@ -52,9 +52,7 @@ namespace KE.Items.Lights
 
             if (pl.ContainsKey(pickup))
             {
-                Log.Debug(pickup.ToString());
                 Light val = pl[pickup];
-                Log.Debug(val);
                 val?.Destroy();
                 pl.Remove(pickup);
             }

@@ -32,6 +32,8 @@ namespace KE.Items
             UpgradeHandler = new UpgradeHandler();
             LightsHandler = new LightsHandler();
 
+            Sound.LoadClips();
+
             CustomItem.RegisterItems();
             UpgradeHandler.SubscribeEvents();
             LightsHandler.SubscribeEvents();

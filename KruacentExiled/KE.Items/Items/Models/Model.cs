@@ -14,11 +14,25 @@ namespace KE.Items.Items.Models
         protected List<AdminToy> Toys { get; set; } = new List<AdminToy> { };
         internal abstract void Spawn(Vector3 spawnPos, Quaternion rotation);
 
-        internal void UnSpawn()
+        internal void Destroy()
         {
             foreach (AdminToy primitive in Toys)
             {
                 primitive.Destroy();
+            }
+        }
+        internal void UnSpawn()
+        {
+            foreach (AdminToy primitive in Toys)
+            {
+                primitive.UnSpawn();
+            }
+        }
+        internal void Spawn()
+        {
+            foreach (AdminToy primitive in Toys)
+            {
+                primitive.Spawn();
             }
         }
     }

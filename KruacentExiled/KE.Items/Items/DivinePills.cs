@@ -22,10 +22,11 @@ using KE.Items.ItemEffects;
 using KE.Items.Upgrade;
 using Scp914;
 using System.Collections.ObjectModel;
+using KE.Items;
 
 /// <inheritdoc />
 [CustomItem(ItemType.Painkillers)]
-public class DivinePills : CustomItem, ILumosItem, ISwichableEffect, IUpgradableCustomItem
+public class DivinePills : KECustomItem, ILumosItem, ISwichableEffect, IUpgradableCustomItem
 {
     /// <inheritdoc/>
     public override uint Id { get; set; } = 1047;
