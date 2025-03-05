@@ -2,20 +2,15 @@
 using Exiled.API.Enums;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
-using Exiled.API.Features.Toys;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Map;
 using KE.Items.Interface;
-using Player = Exiled.API.Features.Player;
-using MEC;
-using UnityEngine;
-using PlayerRoles;
 using KE.Items.ItemEffects;
 
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.GrenadeFlash)]
-    public class Molotov : CustomGrenade, ILumosItem, ICustomItem
+    public class Molotov : CustomGrenade, ILumosItem, ISwichableEffect
     {
         public override uint Id { get; set; } = 1049;
         public override string Name { get; set; } = "Cocktail Molotov";
@@ -23,7 +18,6 @@ namespace KE.Items.Items
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime { get; set; } = 5f;
         public override bool ExplodeOnCollision { get; set; } = true;
-        public float DamageModifier { get; set; } = 0f;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.yellow;
         public CustomItemEffect Effect { get; set; }
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
@@ -72,12 +66,14 @@ namespace KE.Items.Items
 
         public Molotov()
         {
-            Effect = new MolotovEffect();
+            Effect = new MineEffect();
         }
 
         protected override void OnExploding(ExplodingGrenadeEventArgs ev)
         {
-            //Effect.OnExploding(ev);
+            
+            Effect.Effect(ev);
+            ev.TargetsToAffect.Clear();
         }
 
     }

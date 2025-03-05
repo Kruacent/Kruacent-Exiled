@@ -8,18 +8,21 @@ using UnityEngine;
 using Exiled.Events.EventArgs.Player;
 using Exiled.API.Features.Toys;
 using MEC;
+using KE.Items.ItemEffects;
 
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.KeycardJanitor)]
-    public class DeployableWall : CustomItem, ILumosItem
+    public class DeployableWall : CustomItem, ILumosItem, ISwichableEffect
     {
         
         public override uint Id { get; set; } = 1048;
         public override string Name { get; set; } = "Deployable Wall";
         public override string Description { get; set; } = "Drop to deploy a wall, and throw to just throw the card";
         public override float Weight { get; set; } = 0.65f;
-        public UnityEngine.Color Color { get; set; } = UnityEngine.Color.green;
+        public Color Color { get; set; } = Color.green;
+
+        public CustomItemEffect Effect { get; set; }
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 2,
@@ -47,13 +50,13 @@ namespace KE.Items.Items
 
         };
 
-
-
+        public DeployableWall()
+        {
+            Effect = new DeployableWallEffect();
+        }
 
         protected override void OnDroppingItem(DroppingItemEventArgs ev)
         {
-            if(!Check(ev.Item)) 
-                return;
             if (ev.IsThrown)
             {
                 ev.IsAllowed = true;
@@ -61,38 +64,12 @@ namespace KE.Items.Items
             }
             
             ev.IsAllowed = false;
-            ev.Player.ShowHint("You have dropped a deployable wall");
             ev.Player.RemoveItem(ev.Item);
-            SpawnWall(ev.Player.Position,ev.Player.Rotation);
+            Effect.Effect(ev);
 
         }
 
-        private void SpawnWall(Vector3 pos, Quaternion rotation)
-        {
-            float distance = 2;
-            Vector3 forward = rotation * Vector3.forward;
-            Vector3 spawnPos = pos + forward * distance;
-            Vector3 rotat = new Vector3(0, rotation.eulerAngles.y, 0);
-            
-            MainPlugin.Instance.Sound.PlayClip("build", spawnPos);
-            Primitive wall = Primitive.Create(PrimitiveType.Cube, spawnPos, rotat, new Vector3(4, 4, 0.2f),true);
-            wall.Collidable = true;
-            wall.Visible = true;
-            Timing.CallDelayed(10, () => {
-                wall.UnSpawn();
-                wall.Destroy();
-            });
-            Timing.CallDelayed(5, () =>
-            {
-                wall.Color= Color.yellow;
-            });
-            Timing.CallDelayed(8, () =>
-            {
-                wall.Color = Color.red;
-            }); 
-
-
-        }
+        
 
     }
 

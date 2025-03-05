@@ -14,7 +14,7 @@ using KE.Items.ItemEffects;
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.GrenadeFlash)]
-    public class HealZone : CustomGrenade, ILumosItem, ICustomItem
+    public class HealZone : CustomGrenade, ILumosItem, ISwichableEffect
     {
         public override uint Id { get; set; } = 1051;
         public override string Name { get; set; } = "Heal Zone";
@@ -22,7 +22,6 @@ namespace KE.Items.Items
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime { get; set; } = 5f;
         public override bool ExplodeOnCollision { get; set; } = true;
-        public float DamageModifier { get; set; } = 0f;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.green;
         public CustomItemEffect Effect { get; set; }
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
@@ -75,7 +74,9 @@ namespace KE.Items.Items
 
         protected override void OnExploding(ExplodingGrenadeEventArgs ev)
         {
-            //Effect.OnExploding(ev);
+            
+            Effect.Effect(ev);
+            ev.TargetsToAffect.Clear();
         }
     }
 }

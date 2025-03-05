@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Map;
+using Exiled.Events.EventArgs.Player;
 using KE.Items.Interface;
 using MEC;
 using System;
@@ -12,17 +13,31 @@ using UnityEngine;
 
 namespace KE.Items.ItemEffects
 {
-    public class HealZoneEffect : CustomGrenadeEffect
+    public class HealZoneEffect : CustomItemEffect
     {
 
-        public override void OnExploding(ExplodingGrenadeEventArgs ev)
+        public override void Effect(UsedItemEventArgs ev)
+        {
+            SetZone(ev.Player, ev.Player.Position);
+        }
+        public override void Effect(DroppingItemEventArgs ev)
+        {
+            SetZone(ev.Player, ev.Player.Position);
+        }
+
+        public override void Effect(ExplodingGrenadeEventArgs ev)
+        {
+            SetZone(ev.Player, ev.Player.Position, ev.TargetsToAffect);
+        }
+
+        private void SetZone(Player player, Vector3 position, HashSet<Player> targets = null)
         {
             float cylinderSize = 5;
 
-            ev.TargetsToAffect.Clear();
+            targets?.Clear();
 
-            Player playerThrowingGrenade = ev.Player;
-            Vector3 healZonePosition = ev.Position;
+            Player playerThrowingGrenade = player;
+            Vector3 healZonePosition = position;
             Primitive wall = Primitive.Create(PrimitiveType.Cylinder, healZonePosition, null, new Vector3(cylinderSize, 0.01f, cylinderSize), true);
             wall.Collidable = false;
             wall.Visible = true;

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Items.Extension
+namespace KE.Items.Interface
 {
-    public static class CustomItemExtension
+    public interface ISwichableEffect
     {
-
+        CustomItemEffect Effect { get; set; }
     }
 }

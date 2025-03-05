@@ -18,10 +18,14 @@ using Exiled.Events.EventArgs.Scp914;
 using Exiled.API.Features.Items;
 using System.Data;
 using Exiled.API.Features.Pickups;
+using KE.Items.ItemEffects;
+using KE.Items.Upgrade;
+using Scp914;
+using System.Collections.ObjectModel;
 
 /// <inheritdoc />
 [CustomItem(ItemType.Painkillers)]
-public class DivinePills : CustomItem, ILumosItem
+public class DivinePills : CustomItem, ILumosItem, ISwichableEffect, IUpgradableCustomItem
 {
     /// <inheritdoc/>
     public override uint Id { get; set; } = 1047;
@@ -35,6 +39,11 @@ public class DivinePills : CustomItem, ILumosItem
     /// <inheritdoc/>
     public override float Weight { get; set; } = 0.65f;
     public UnityEngine.Color Color { get; set; } = UnityEngine.Color.yellow;
+    public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade { get; private set; } = new Dictionary<Scp914KnobSetting, UpgradeProperties>()
+        {
+            //very fine -> true divine pills 10%
+            { Scp914KnobSetting.VeryFine,new UpgradeProperties(10, 1050)}
+        };
 
     /// <inheritdoc/>
     public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
@@ -67,100 +76,30 @@ public class DivinePills : CustomItem, ILumosItem
 
     };
 
+    public CustomItemEffect Effect { get;set; }
+    public DivinePills()
+    {
+        Effect = new DivinePillsEffect();
+    }
+
     /// <inheritdoc/>
     protected override void SubscribeEvents()
     {
-        PlayerHandle.UsingItem += OnUsingItem;
+        PlayerHandle.UsedItem += OnUsedItem;
         base.SubscribeEvents();
     }
 
     /// <inheritdoc/>
     protected override void UnsubscribeEvents()
     {
-        PlayerHandle.UsingItem -= OnUsingItem;
+        PlayerHandle.UsedItem -= OnUsedItem;
         base.UnsubscribeEvents();
     }
 
-    protected override void OnUpgrading(UpgradingEventArgs ev)
+    private void OnUsedItem(UsedItemEventArgs ev)
     {
-        if (!Check(ev.Pickup))
-            return;
-        if (ev.KnobSetting != Scp914.Scp914KnobSetting.VeryFine)
-            return;
-        var rng = Random.value;
-        Log.Debug($"pickup {Name} : {rng}");
-        if (rng < .1f)
-        {
-            //success
-            ev.Pickup.Destroy();
-            TrySpawn("True Divine Pills", ev.OutputPosition, out Pickup a);
-            
-            ev.IsAllowed = true;
-        }
-        else
-            ev.IsAllowed = false;
-    }
-
-    protected override void OnUpgrading(UpgradingItemEventArgs ev)
-    {
-
-        if (!Check(ev.Item))
-            return;
-        if (ev.KnobSetting != Scp914.Scp914KnobSetting.VeryFine)
-            return;
-        var rng = Random.value;
-        Log.Debug($"inventory {Name} : {rng}");
-        if (rng < .1f)
-        {
-            //success
-            ev.Player.RemoveItem(ev.Item);
-            TryGive(ev.Player, "True Divine Pills");
-            ev.IsAllowed = true;
-        }
-        else
-        {
-            ev.Player.ShowHint("no luck");
-            ev.IsAllowed = false;
-        }
-    }
-
-    private void OnUsingItem(UsingItemEventArgs ev)
-    {
-        if (!Check(ev.Item))
-        {
-            return;
-        }
-        Player player = ev.Player;
-        
-
-        if(Player.List.Count(x => x.Role == RoleTypeId.Spectator) == 0)
-        {
-            player.ShowHint("No spectators to respawn");
-            ev.IsAllowed = false;
-            return;
-        }
-        var random = Random.Range(0, 100);
-        if (random <= 25)
-        {
-            player.Kill("unlucky bro");
-            return;
-        }
-        Player respawning = Player.List.GetRandomValue(x => x.Role == RoleTypeId.Spectator);
-        switch (player.Role.Side)
-        {
-            case Side.ChaosInsurgency:
-                respawning.Role.Set(RoleTypeId.ChaosRifleman);
-                break;
-            case Side.Mtf:
-                respawning.Role.Set(RoleTypeId.NtfPrivate);
-                break;
-        }
-
-        if (random > 75)
-        {
-            Log.Debug("tp");
-            respawning.Teleport(player);
-        }
+        if (!Check(ev.Item)) return;
+        Effect.Effect(ev);
     }
 
 }

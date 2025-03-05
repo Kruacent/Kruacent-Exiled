@@ -12,21 +12,21 @@ using MEC;
 using Exiled.API.Features.Items;
 using Model = KE.Items.Models.Model;
 using KE.Items.Models;
+using KE.Items.ItemEffects;
 
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.KeycardJanitor)]
-    public class Mine : CustomItem, ILumosItem
+    public class Mine : CustomItem, ILumosItem, ISwichableEffect
     {
         public override uint Id { get; set; } = 1053;
         public override string Name { get; set; } = "Mine";
         public override string Description { get; set; } = "Drop to deploy the mine, little advice : don't step on it";
         public override float Weight { get; set; } = 0.65f;
-        public UnityEngine.Color Color { get; set; } = UnityEngine.Color.yellow;
+        public Color Color { get; set; } = Color.yellow;
 
-        private const float RefreshRate = .01f;
-        private const int MineActivationTime = 10;
-        private const float MineRadius = 0.7f;
+        public CustomItemEffect Effect { get; set; }
+
 
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
@@ -70,79 +70,28 @@ namespace KE.Items.Items
 
         };
 
+        public Mine()
+        {
+            Effect = new MineEffect();
+        }
+
         protected override void OnDroppingItem(DroppingItemEventArgs ev)
         {
-            if(!Check(ev.Item)) 
-                return;
+            
+
             if (ev.IsThrown)
             {
                 ev.IsAllowed = true;
                 return;
             }
-            
+
             ev.IsAllowed = false;
             ev.Player.RemoveItem(ev.Item);
+            Effect.Effect(ev);
 
-            MineModel m = new MineModel();
-
-            //put the mine on the floor
-            m.Spawn(ev.Player.Position-new Vector3(0,ev.Player.Scale.y),new Quaternion());
-
-            Timing.RunCoroutine(WaitAndActivateMine(ev.Player, m));
         }
 
 
-        private IEnumerator<float> WaitAndActivateMine(Player player, MineModel mine)
-        {
-            int countdown = MineActivationTime;
-            while (countdown > 0)
-            {
-                player.ShowHint($"The mine will be active in {countdown} seconds !", 1f);
-                yield return Timing.WaitForSeconds(1f);
-                countdown--;
-            }
-
-            // Message final lorsque la mine s'active
-            player.ShowHint("Mine activated !");
-            Timing.RunCoroutine(ActiveMine(mine, MineRadius));
-        }
-
-        private IEnumerator<float> ActiveMine(MineModel mine, float cylinderSize)
-        {
-            Timing.RunCoroutine(mine.Activate());
-            bool endWhile = true;
-            while (endWhile)
-            {
-                foreach (Player player in Player.List)
-                {
-                    if (IsPlayerInZone(player, mine.Position, cylinderSize, 3))
-                    {
-                        ((ExplosiveGrenade)Item.Create(ItemType.GrenadeHE)).SpawnActive(mine.Position).FuseTime = 0f;
-
-                        // Delete the mine
-                        mine.UnSpawn();
-                        endWhile = false;
-                        break;
-                    }
-                }
-
-                yield return Timing.WaitForSeconds(RefreshRate);
-            }
-        }
-
-        private bool IsPlayerInZone(Player player, Vector3 zonePosition, float radius, float height)
-        {
-            // Calculate the horizontal distance (x, z)
-            float horizontalDistance = Vector3.Distance(
-                new Vector3(player.Position.x, 0, player.Position.z),
-                new Vector3(zonePosition.x, 0, zonePosition.z)
-            );
-
-            // Calculate the vertical difference (y)
-            float verticalDifference = Mathf.Abs(player.Position.y - zonePosition.y);
-
-            // Check if the player is in the 3d zone.
-            return horizontalDistance <= (radius / 2) && verticalDifference <= (height / 2);
-        }
+        
     }
 }

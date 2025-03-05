@@ -7,30 +7,40 @@ using PlayerRoles;
 using Exiled.API.Enums;
 using System.Collections.Generic;
 using UnityEngine;
+using Exiled.Events.EventArgs.Player;
 
 namespace KE.Items.ItemEffects
 {
-    public class MolotovEffect : CustomGrenadeEffect
+    public class MolotovEffect : CustomItemEffect
     {
         public const float RefreshRate = 0.5f;
         public const float Duration = 20f;
         public float CylinderSize { get; set; } = 5;
 
 
-        public void Effect()
+        public override void Effect(UsedItemEventArgs ev)
         {
-
-            
+            SetZone(ev.Player, ev.Player.Position);
+        }
+        public override void Effect(DroppingItemEventArgs ev)
+        {
+            SetZone(ev.Player, ev.Player.Position);
         }
 
-        public void Effect(ExplodingGrenadeEventArgs ev)
+        public override void Effect(ExplodingGrenadeEventArgs ev)
+        {
+            SetZone(ev.Player, ev.Player.Position,ev.TargetsToAffect);
+        }
+
+
+        private void SetZone(Player player,Vector3 position,HashSet<Player> targets = null)
         {
             float cylinderSize = CylinderSize;
 
-            ev.TargetsToAffect.Clear();
+            targets?.Clear();
 
-            Player playerThrowingGrenade = ev.Player;
-            Vector3 molotovPosition = ev.Position;
+            Player playerThrowingGrenade = player;
+            Vector3 molotovPosition = position;
             Primitive wall = Primitive.Create(PrimitiveType.Cylinder, molotovPosition, null, new Vector3(cylinderSize, 0.01f, cylinderSize), true);
             wall.Collidable = false;
             wall.Visible = true;
@@ -45,6 +55,7 @@ namespace KE.Items.ItemEffects
                 wall.Destroy();
             });
         }
+
 
 
         private IEnumerator<float> DamageInMolotovZone(Vector3 wallPosition, float cylinderSize, Player playerThrowingGrenade)

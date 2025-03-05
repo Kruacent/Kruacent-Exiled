@@ -45,6 +45,7 @@ namespace KE.Items.Items
         }
         private void OnUsedItem(UsedItemEventArgs ev)
         {
+            if (!Check(ev.Item)) return;
             Player player = ev.Player;
             Quaternion rotation = player.Rotation;
 
