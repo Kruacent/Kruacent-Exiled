@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Light = Exiled.API.Features.Toys.Light;
 
-namespace KE.Items.Models
+namespace KE.Items.Items.Models
 {
     internal class MineModel : Model
     {

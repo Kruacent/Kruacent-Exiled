@@ -9,7 +9,7 @@ using System.Linq;
 using UnityEngine;
 using Light = Exiled.API.Features.Toys.Light;
 
-namespace KE.Items.Models
+namespace KE.Items.Items.Models
 {
     internal class DeployWallModel : Model
     {

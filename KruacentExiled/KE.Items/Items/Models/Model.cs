@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace KE.Items.Models
+namespace KE.Items.Items.Models
 {
     internal abstract class Model
     {

@@ -10,8 +10,7 @@ using Exiled.API.Features.Toys;
 using Player = Exiled.API.Features.Player;
 using MEC;
 using Exiled.API.Features.Items;
-using Model = KE.Items.Models.Model;
-using KE.Items.Models;
+using Model = KE.Items.Items.Models.Model;
 using KE.Items.ItemEffects;
 
 namespace KE.Items.Items

@@ -3,7 +3,7 @@ using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using KE.Items.Interface;
-using KE.Items.Models;
+using KE.Items.Items.Models;
 using MEC;
 using System;
 using System.Collections.Generic;
