@@ -13,7 +13,8 @@ namespace KE.BlackoutNDoor
         public override Version Version => new Version(1,0,0);
         public override string Name => "KE.BlackoutDoor";
         internal static MainPlugin Instance;
-        private Controller Controller;
+        internal Controller Controller { get; private set; }
+
         public ServerHandler ServerHandler { get; private set; }
 
         public override void OnEnabled()
@@ -32,7 +33,7 @@ namespace KE.BlackoutNDoor
 
         private void RegisterEvent() 
         {
-            ServerHandler = new ServerHandler(Controller);
+            ServerHandler = new ServerHandler();
             Server.RoundStarted += ServerHandler.OnRoundStarted;
 
         }

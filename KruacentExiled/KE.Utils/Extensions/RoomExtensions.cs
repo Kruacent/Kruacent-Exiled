@@ -4,8 +4,10 @@ using Discord;
 
 namespace KE.BlackoutNDoor.Extensions
 {
+    //todo move to utils
     public static class RoomExtensions
     {
+        
         public static bool IsSafe(this Room room)
         {
             return IsSafe(room.Zone);
@@ -27,5 +29,8 @@ namespace KE.BlackoutNDoor.Extensions
             }
             return result;
         }
+
+
+
     }
 }

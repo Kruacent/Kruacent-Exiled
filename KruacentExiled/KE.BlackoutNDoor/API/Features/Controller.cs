@@ -1,192 +1,107 @@
 ﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
+using KE.BlackoutNDoor.API.Features.RoundEffects;
+using KE.BlackoutNDoor.Events.EventArgs.RoundEffect;
 using MEC;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+using Waits;
+using YamlDotNet.Core.Events;
 
 namespace KE.BlackoutNDoor.API.Features
 {
+    
     public class Controller
-    {
-        private DoorType[] BlacklistedDoor = { DoorType.ElevatorGateA, DoorType.ElevatorGateB, DoorType.ElevatorLczA, DoorType.ElevatorLczB, DoorType.ElevatorNuke, DoorType.ElevatorScp049, DoorType.UnknownElevator };
+    {        
+
+        private HashSet<RoundEffect> RoundEffects = [];
+
+        public Controller()
+        {
+            RoundEffects.Add(new Blackout());
+            RoundEffects.Add(new DoorStuck());
+        }
+
         
-        /// <summary>
-        /// Select a random zone and close and lock all door of the zone
-        /// </summary>
-        internal IEnumerator<float> RandomDoorStuck()
+
+        public IEnumerator<float> Update()
         {
-            yield return Timing.WaitUntilTrue(() => Round.IsStarted);
-            var zone = SelectZone();
-            Log.Debug($"DoorStuck in {zone}");
-            yield return Timing.WaitUntilFalse(() => Cassie.IsSpeaking);
-            CassieVoiceLine(zone, false);
-            yield return Timing.WaitUntilFalse(() => Cassie.IsSpeaking);
-            yield return Timing.WaitForSeconds(MainPlugin.Instance.Config.DurationMalfunction);
-            // if the zone is light and there is only 30s left then skip
-            if (!(zone == ZoneType.LightContainment && Map.DecontaminationState == DecontaminationState.Countdown && Warhead.IsInProgress))
+            int wait = UnityEngine.Random.Range(MainPlugin.Instance.Config.MinInterval, MainPlugin.Instance.Config.MaxInterval);
+            if (MainPlugin.Instance.Config.Debug) wait = 20;
+
+
+            do
             {
-                List<Door> doorList = Door.List
-                    .Where(d => !BlacklistedDoor.Contains(d.Type))
-                    .ToList();
-                var ge = Generator.List.Where(g => g.IsEngaged);
-                if(ge.ToList().Count != 3)
+                if (Warhead.IsInProgress) continue;
+
+                RoundEffect roundEffect = SelectRoundEffect();
+                var zone = roundEffect.SelectZone();
+                Log.Debug("zone="+zone);
+                Log.Debug($"waiting : {wait}");
+                yield return Timing.WaitForSeconds(wait);
+                PreRoundEffectEventArgs args = new(zone, roundEffect);
+                Events.Handlers.RoundEffect.OnPreRoundEffect(args);
+                if (args.IsAllowed)
                 {
-                    doorList = Door.List
-                        .Where(d => !BlacklistedDoor.Union(new[] { DoorType.Scp079First, DoorType.Scp079Second  }).Contains(d.Type))
-                        .ToList();
+                    var timeyapping = CassieVoiceLine(zone, roundEffect);
+                    yield return Timing.WaitForSeconds(5+ timeyapping);
+                    roundEffect.Effect(zone);
+                    yield return Timing.WaitForSeconds(MainPlugin.Instance.Config.DurationMalfunction);
+                    roundEffect.StopEffect(zone);
+                    Events.Handlers.RoundEffect.OnPostRoundEffect(new(zone, roundEffect));
                 }
-                foreach (Door door in doorList)
-                {
-                    
-                    if (door.Zone == zone)
-                    {
-                        door.IsOpen = false;
-                        door.ChangeLock(DoorLockType.Lockdown2176);
-                        Timing.CallDelayed(MainPlugin.Instance.Config.DurationMalfunction / 2, () => door.IsOpen = true);
-                        Timing.CallDelayed(MainPlugin.Instance.Config.DurationMalfunction, () => door.Unlock());
-                        if (UnityEngine.Random.value < .5f)
-                        {
-                            door.IsOpen = false;
-                        }
-                    }
-                }
-            }
+                
+            } while (Round.InProgress);
+
+
         }
 
-        /// <summary>
-        /// Select a random zone and blackout it
-        /// </summary>
-        public IEnumerator<float> RandomBlackout()
+        private RoundEffect SelectRoundEffect()
         {
-            yield return Timing.WaitUntilTrue(() => Round.IsStarted);
+            return RoundEffects.GetRandomValue();
+        }
 
-            var zone = SelectZone();
-            yield return Timing.WaitUntilFalse(() => Cassie.IsSpeaking);
-            CassieVoiceLine(zone, true);
-            yield return Timing.WaitUntilFalse(() => Cassie.IsSpeaking);
-            yield return Timing.WaitForSeconds(MainPlugin.Instance.Config.DurationMalfunction);
-            Log.Debug($"BlackOut in {zone}");
+        private float CassieVoiceLine(ZoneType zone,RoundEffect round)
+        {
+            string nameEvent = round.EventTranslation;
+            string msg = $"Warning {nameEvent} in {GetZoneName(zone)} in 5 seconds";
+            string colorzone = GetZoneColor(zone).ToHex();
+            string msgTranslated = $"<color=#F00>Warning</color> {nameEvent} In <color={colorzone.Remove(colorzone.Length-2)}>{GetZoneName(zone)}</color> in 5 seconds";
+
+            Cassie.MessageTranslated(msg, msgTranslated, true, false, true);
+            return Cassie.CalculateDuration(msg);
             
-
-            Map.TurnOffAllLights(MainPlugin.Instance.Config.DurationMalfunction, zone);
         }
 
-
-        private void CassieVoiceLine(ZoneType zone,bool isBlackout)
+        private Color GetZoneColor(ZoneType zone)
         {
-            if (isBlackout)
+            return zone switch
             {
-                switch (zone)
-                {
-                    case ZoneType.LightContainment:
-                        Cassie.MessageTranslated("Warning Failure Of All Lights In Light Containment Zone in 5 seconds",
-                            "<color=#F00>Warning</color> Failure Of All Lights In <color=#1BBB9B>Light</color> Containment Zone in 5 seconds", false, false);
-                        break;
-                    case ZoneType.HeavyContainment:
-                        Cassie.MessageTranslated("Warning Failure Of All Lights In Heavy Containment Zone in 5 seconds",
-                            "<color=#F00>Warning</color> Failure Of All Lights In <color=#431919>Heavy</color> Containment Zone in 5 seconds", false, false);
-                        break;
-                    case ZoneType.Entrance:
-                        Cassie.MessageTranslated("Warning Failure Of All Lights In Entrance Zone in 5 seconds",
-                            "<color=#F00>Warning</color> Failure Of All Lights In <color=#FFFF00>Entrance</color> Zone in 5 seconds", false, false);
-                        break ;
-                    case ZoneType.Surface:
-                        Cassie.MessageTranslated("Warning Failure Of All Lights In Surface in 5 seconds",
-                            "<color=#FF0000>Warning</color> Failure Of All Lights In <color=#FF0000>Surface</color> in 5 seconds", false, false);
-                        break ;
-                    case ZoneType.Unspecified:
-                        Cassie.MessageTranslated("Warning Failure Of All Lights In All Of The Facility in 5 seconds", 
-                            "<color=#FF0000>Warning</color> Failure Of All Lights In <color=#FF0000>All</color> Of The Facility in 5 seconds", false, false);
-                        break;
-                }
-            }
-            else
-            {
-                switch (zone)
-                {
-                    case ZoneType.LightContainment:
-                        Cassie.MessageTranslated("Door system malfunction in Light Containment Zone in 5 seconds",
-                            "Door system malfunction in <color=#1BBB9B>Light</color> containment zone in 5 seconds", false,false);
-                        break;
-                    case ZoneType.HeavyContainment:
-                        Cassie.MessageTranslated("Door system malfunction in Heavy Containment Zone in 5 seconds",
-                            "Door system malfunction in <color=#431919>Heavy</color> zone in 5 seconds", false, false);
-                        break;
-                    case ZoneType.Entrance:
-                        Cassie.MessageTranslated("Door system malfunction in Entrance zone in 5 seconds",
-                            "Door system malfunction in <color=#ffff00>Entrance</color> zone in 5 seconds", false, false);
-                        break;
-                    case ZoneType.Surface:
-                        Cassie.MessageTranslated("Door system malfunction in Surface Zone in 5 seconds",
-                            "Door system malfunction in <color=#F00>Surface</color> zone in 5 seconds", false, false);
-                        break;
-                    case ZoneType.Unspecified:
-                        Cassie.MessageTranslated("Door system malfunction in All of the facility in 5 seconds",
-                            "Door system malfunction in <color=#ff0000>All</color> of the facility in 5 seconds", false, false);
-                        break;
-                }
-            }
+                ZoneType.LightContainment => new Color(0.1058f, 0.7333f, 0.6078f),
+                ZoneType.HeavyContainment => new Color(0.2627f, 0.0980f, 0.0980f),
+                ZoneType.Entrance => new Color(1, 1, 0),
+                _ => new Color(1, 0, 0)
+            };
         }
 
-        /// <summary>
-        /// Select a random zone
-        /// If the nuke is detonated return only SurfaceZone
-        /// </summary>
-        /// <returns>a zone</returns>
-        private ZoneType SelectZone() 
+
+        private string GetZoneName(ZoneType zone)
         {
-            ZoneType z = ZoneType.Unspecified;
-            float random = UnityEngine.Random.value;
-            if (Warhead.IsDetonated)
+            return zone switch
             {
-                z=  ZoneType.Surface;
-            }
-            if (!Map.IsLczDecontaminated)
-            {
-                z=  GetZoneType(GetProbabilityIndex(MainPlugin.Instance.Config.ChancePreConta, random));
-            }
-            else
-            {
-                z= GetZoneType(GetProbabilityIndex(MainPlugin.Instance.Config.ChancePostConta, random));
-            }
-            Log.Debug($"zone={z}");
-            return z;
+                ZoneType.LightContainment => "Light Containment Zone",
+                ZoneType.HeavyContainment => "Heavy Containment Zone",
+                ZoneType.Entrance => "Entrance Zone",
+                ZoneType.Surface => "Surface",
+                ZoneType.Unspecified => "All of the facility",
+                _ => "somewhere"
+            };
         }
 
-        private int GetProbabilityIndex(float[] probabilities, float randomValue)
-        {
-            float cumulative = 0f;
 
-            for (int i = 0; i < probabilities.Length; i++)
-            {
-                cumulative += probabilities[i];
-                if (randomValue <= cumulative)
-                {
-                    return i;
-                }
-            }
-
-            throw new ArgumentException("Random value is outside the range of probabilities.");
-        }
-
-        private ZoneType GetZoneType(int index)
-        {
-            switch (index)
-            {
-                case 0:
-                    return ZoneType.LightContainment;
-                case 1:
-                    return ZoneType.HeavyContainment;
-                case 2:
-                    return ZoneType.Entrance;
-                case 3:
-                    return ZoneType.Surface;
-                default:
-                case 4:
-                    return ZoneType.Unspecified;
-            }
-        }
+        
     }
 }
