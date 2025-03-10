@@ -2,21 +2,22 @@
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.CustomRoles.API.Features;
+using KE.CustomRoles.API;
 using PlayerRoles;
 using UnityEngine;
 using Utils.NonAllocLINQ;
 
-namespace KE.CustomRoles.CR.ClassD
+namespace KE.CustomRoles.CR.Human
 {
-    [CustomRole(RoleTypeId.ClassD)]
-    internal class Asthmatique : CustomRole
+    [CustomRole(RoleTypeId.None)]
+    internal class Asthmatique : GlobalCustomRole
     {
+        public override SideEnum Side { get; set; } = SideEnum.Human;
         public override string Name { get; set; } = "Asthmatique";
         public override string Description { get; set; } = "Tu es <color=#BFFF00>asthmatique</color>\nT'as stamina est réduit de moitié\nMais tu vises mieux";
         public override uint Id { get; set; } = 1042;
         public override string CustomInfo { get; set; } = "Asthmatique";
         public override int MaxHealth { get; set; } = 100;
-        public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
         public override bool KeepRoleOnDeath { get; set; } = true;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
         public override bool IgnoreSpawnSystem { get; set; } = true;

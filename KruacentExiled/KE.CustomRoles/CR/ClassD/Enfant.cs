@@ -27,4 +27,5 @@ namespace KE.CustomRoles.CR.ClassD
           $"{CandyKindID.Rainbow}"
         };
     }
+    
 }

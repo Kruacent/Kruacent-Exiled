@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.CustomRoles.API.Features;
+using KE.CustomRoles.API;
 using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace KE.CustomRoles
         /// <summary>
         /// The chance of having a CustomRole
         /// </summary>
-        public const int Chance = 40;
+        public const int Chance = 100;
         public static Controller controller = new Controller();
 
         private Controller() { }
@@ -26,13 +27,13 @@ namespace KE.CustomRoles
         {
             if (player == null)
                 return;
-            if (UnityEngine.Random.Range(0, 100) > Chance)
+            if (UnityEngine.Random.Range(0, 101) > Chance)
             {
                 Log.Debug("no luck");
                 return;
             }
                 
-            CustomRole cr = CustomRole.Registered.GetRandomValue(c => c.Role == player.Role);
+            CustomRole cr = CustomRole.Registered.GetRandomValue(c => c.Role == player.Role || c is GlobalCustomRole cgr && cgr.Side == SideClass.Get(player.Role.Side));
             Log.Debug($"{player.Id} : {cr.Name}");
             cr?.AddRole(player);
         }
