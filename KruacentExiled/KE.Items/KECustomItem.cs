@@ -31,7 +31,7 @@ namespace KE.Items
         {
             if (CustomItems.Instance.Config.PickedUpHint.Show)
             {
-                string show = string.Format(CustomItems.Instance.Config.PickedUpHint.Content, c.Name, c.Description) + "\n";
+                string show =  $"<b>{c.Name}</b>\n{c.Description} \n";
                 if (c is IUpgradableCustomItem ci)
                 {
                     foreach (var a in ci.Upgrade)
@@ -39,7 +39,7 @@ namespace KE.Items
                         show += $"{a.Value.Chance}% chance of upgrading on {a.Key}\n";
                     }
                 }
-                DisplayPlayer.Get(player).Hint((float)HintPlacement.CustomItem, show, (int)CustomItems.Instance.Config.PickedUpHint.Duration);
+                DisplayPlayer.Get(player).Hint((float)HintPlacement.CustomItem, "<align=right>" +show+"</align>", (int)CustomItems.Instance.Config.PickedUpHint.Duration);
                 //player.ShowHint(show, (int)CustomItems.Instance.Config.PickedUpHint.Duration);
 
             }
