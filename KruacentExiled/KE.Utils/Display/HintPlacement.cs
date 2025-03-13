@@ -10,6 +10,6 @@ namespace KE.Utils.Display
     {
         GlobalEvent = 900,
         CustomItem = 200,
-        CustomRole = 400,
+        Effects = 700,
     }
 }

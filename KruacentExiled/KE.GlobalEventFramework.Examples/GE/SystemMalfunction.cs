@@ -45,7 +45,6 @@ namespace KE.GlobalEventFramework.Examples.GE
         /// Set the cooldown for the BlackoutNDoor
         /// </summary>
         public int NewCooldown { get; set; } = 180;
-        private BlackoutNDoor.MainPlugin BlackoutNDoor = null;
         public static Malfunctions Malfunction { get; private set; }
         
 
@@ -94,7 +93,6 @@ namespace KE.GlobalEventFramework.Examples.GE
         }
         public void UnsubscribeEvent()
         {
-            BlackoutNDoor = null;
             Exiled.Events.Handlers.Player.Dying -= Malfunction.OnDying;
             Exiled.Events.Handlers.Scp049.FinishingRecall -= Malfunction.OnFinishingRevive;
             Malfunction = null;
@@ -109,25 +107,6 @@ namespace KE.GlobalEventFramework.Examples.GE
             Log.Debug($"kaboom");
         }
 
-        private void MoreBlackOutNDoors()
-        {
-            try
-            {
-                if (BlackoutNDoor != null)
-                {
-                    if (BlackoutNDoor.ServerHandler != null)
-                        BlackoutNDoor.ServerHandler.Cooldown = NewCooldown;
-                    else
-                        Log.Error("server handler null");
-                }
-                    
-            }
-            catch(Exception e)
-            {
-                Log.Error(e);
-            }
-            
-        }
 
         private IEnumerator<float> CheckpointMalfunction(){
             Log.Debug("CheckpointMalfunction");

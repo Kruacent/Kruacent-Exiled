@@ -4,6 +4,7 @@ using System.Linq;
 using MEC;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using System;
+using KE.Utils.Display;
 
 namespace KE.GlobalEventFramework.GEFE.API.Features
 {
@@ -92,12 +93,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
 
             foreach (Player player in Player.List)
             {
-                Exiled.API.Features.Broadcast b = new Exiled.API.Features.Broadcast
-                {
-                    Content = ShowText(random < MainPlugin.Instance.Config.ChanceRedacted),
-                    Duration = 10
-                };
-                player.Broadcast(b);
+                DisplayPlayer.Get(player).Hint((float)HintPlacement.GlobalEvent, ShowText(random < MainPlugin.Instance.Config.ChanceRedacted), 10);
             }
         }
 
