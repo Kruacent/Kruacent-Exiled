@@ -2,15 +2,14 @@
 using Exiled.API.Enums;
 using Discord;
 
-namespace KE.BlackoutNDoor.Extensions
+namespace KE.Utils.Extensions
 {
-    //todo move to utils
     public static class RoomExtensions
     {
-        
+
         public static bool IsSafe(this Room room)
         {
-            return IsSafe(room.Zone);
+            return room.Zone.IsSafe();
         }
 
 

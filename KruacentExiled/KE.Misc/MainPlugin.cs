@@ -11,6 +11,12 @@ using Exiled.Events.EventArgs.Player;
 using System;
 using KE.Misc.Misc;
 using KE.Misc.Handlers;
+using KE.Utils.Display;
+using KE.Utils.Display.Enums;
+using Exiled.API.Extensions;
+using Exiled.Events.Commands.Hub;
+using RueI.Displays;
+using RueI.Extensions;
 
 namespace KE.Misc
 {
@@ -114,37 +120,46 @@ namespace KE.Misc
         /// </summary>
         internal IEnumerator<float> PeanutLockdown()
         {
-            if(!Player.List.Any(p => p.Role.Type == RoleTypeId.Scp173))
-            {
-                yield return 0;
-            }
             Log.Debug("peanut lockdown");
-            Door peanutDoor = Door.List.ToList().Where(x => x.Type == DoorType.Scp173NewGate).ToList()[0];
+            Door peanutDoor = Door.List.First(x => x.Type == DoorType.Scp173NewGate);
             peanutDoor.IsOpen = false;
             peanutDoor.ChangeLock(DoorLockType.Isolation);
-            var a = Timing.RunCoroutine(Timer(135 - Player.List.Count * 15,Player.List.Where(p=> p.Role == RoleTypeId.Scp173).ToList(), "u r free :3"));
+            CoroutineHandle a;
+            if (MainPlugin.Instance.Config.Debug)
+                a = Timing.RunCoroutine(Timer(120, "u r free :3"));
+            else
+                a = Timing.RunCoroutine(Timer(135 - Player.List.Count * 15, "u r free :3"));
+             
             yield return Timing.WaitUntilDone(a);
             peanutDoor.IsOpen = true;
             peanutDoor.Unlock();
             Log.Debug("peanut free");
         }
-        private IEnumerator<float> Timer(int secondsWaiting,List<Player> playerToShow, string msg = "done")
+        private IEnumerator<float> Timer(int secondsWaiting, string msg = "done")
         {
-            float position = 0;
+            List<Player> playerToShow = [.. Player.List];
             while (secondsWaiting >= 0)
             {
-                Hint hint = new Hint()
+                playerToShow.RemoveAll(p => p.CurrentRoom.Type != RoomType.Hcz049);
+                playerToShow.AddRange(Player.List.Where(p => p.CurrentRoom.Type == RoomType.Hcz049));
+
+                RueIHint hint = new(HPosition.Center, VPosition.CustomRole, $"{secondsWaiting} seconds left for SCP-173's spawn", 1);
+                playerToShow.ForEach(p => 
                 {
-                    Content = $"{secondsWaiting} seconds",
-                    Duration = 1
-                };
-                playerToShow.ForEach(p => p.ShowHint(hint, position));
-                playerToShow.RemoveAll(p => p.Role != RoleTypeId.Scp173);
+                    DisplayCore c = DisplayCore.Get(p.ReferenceHub);
+                    c.SetElemTemp($"<align={HPosition.Center.ToString().ToLower()}>"+hint.RawContent+"</align>", (int)hint.Position.VPosition, TimeSpan.FromSeconds(hint.Duration), new RueI.Displays.Scheduling.TimedElemRef<RueI.Elements.SetElement>());
+                    //DisplayPlayer.Get(p).Hint(hint)
+                });
                 yield return Timing.WaitForSeconds(1);
                 secondsWaiting--;
             }
-            playerToShow.ForEach(p => p.ShowHint(msg, position));
+            playerToShow.ForEach(p => DisplayPlayer.Get(p).Hint(new Position(HPosition.Center,VPosition.CustomRole),msg));
         }
+
+
+        
+
+        
         
         /// <summary>
         /// Special death message when Delecons dies as a SCP

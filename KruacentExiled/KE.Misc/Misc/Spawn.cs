@@ -1,22 +1,31 @@
-﻿using Exiled.API.Extensions;
+﻿using CommandSystem;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Attributes;
+using Exiled.CustomRoles.API.Features;
+using KE.Utils.Display;
+using MEC;
 using PlayerRoles;
+using RueI.Elements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KE.Misc.Misc
 {
     public class Spawn
     {
-
-        //heal reduit Malfunction
+        private bool _set035 = true;
+        private Dictionary<Player,Element> _players = [];
         public void OnRoundStarted()
         {
-            HashSet<Player> pl = Player.List.Where(p => p.IsScp).ToHashSet();
+            if (!MainPlugin.Instance.Config.ScpPreferences) return;
 
+            HashSet<Player> pl;
+            if (!MainPlugin.Instance.Config.Debug)
+                pl = Player.List.Where(p => p.IsScp).ToHashSet();
+            else
+                pl = [.. Player.List];
 
             foreach (Player player in pl)
             {
@@ -26,6 +35,7 @@ namespace KE.Misc.Misc
 
         private void SetScpPreferences(Player player)
         {
+            Config config = MainPlugin.Instance.Config;
             Dictionary<RoleTypeId, int> chancescp = player.ScpPreferences.Preferences.ToDictionary(p => p.Key, p => p.Value + 6);
 
 
@@ -33,24 +43,29 @@ namespace KE.Misc.Misc
             Log.Debug($"Scp ({player.Nickname}) is {roleScp} previous : {player.Role.Type}");
 
             player.Role.Set(roleScp);
-            if (roleScp == RoleTypeId.Scp096 || roleScp == RoleTypeId.Scp079)
+            if (roleScp == RoleTypeId.Scp096 || roleScp == RoleTypeId.Scp079 && !config.Scp035Enabled || config.Debug)
             {
-                player.Role.Set(RoleTypeId.Scp173);
-                //TODO the commands
-                //ChangeScp(player);
+                float timetodecide = 60;
+                RueIHint h = new (Utils.Display.Enums.HPosition.Center, Utils.Display.Enums.VPosition.CustomRole, "You're a support class \nYou can change your scp by doing the command .scp <scp number>\n(eg .scp 173 -> scp-173)", timetodecide);
+                var a = DisplayPlayer.Get(player).Hint(h);
+                ChangeSCP._players.Add(player,a);
+                Timing.CallDelayed(timetodecide, () =>
+                {
+                    ChangeSCP._players.Remove(player);
+                    DisplayPlayer.Get(player).RemoveHint(a);
+                });
             }
-        }
-
-
-        private void ChangeScp(Player player)
-        {
-            Hint h = new Hint()
+            if (config.Scp035Enabled && roleScp == RoleTypeId.Scp079)
             {
-                Content = "You're a support class \nYou can change your scp by doing the command .scp <scp number>\n(eg .scp 173 -> scp-173)",
-                Duration = 60,
-            };
-            player.ShowHint(h, 100);
-
+                _set035 = !_set035;
+                if (_set035)
+                {
+                    Player pl = Player.List.GetRandomValue(p => p.Role == RoleTypeId.ClassD || p.Role == RoleTypeId.Scientist);
+                    CustomRole scp = CustomRole.Registered.FirstOrDefault(c => c.Id == 10);
+                    scp.AddRole(pl);
+                }
+                
+            }
         }
 
 
@@ -71,5 +86,63 @@ namespace KE.Misc.Misc
 
             return weightedPool[randomIndex];
         }
+    }
+
+    [CustomRole(RoleTypeId.Tutorial)]
+    public class Scp035 : CustomRole
+    {
+        public override uint Id { get; set; } = 10;
+        public override string Description { get; set; } = "t'es un humain dans la team des scp en gros ";
+        public override int MaxHealth { get; set; } = 600;
+        public override string Name { get; set; } = "SCP-035";
+        public override string CustomInfo { get; set; } = string.Empty;
+    }
+
+
+
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class ChangeSCP : ICommand
+    {
+        internal static Dictionary<Player,Element> _players = new();
+        public string Command { get; } = "scp";
+        public string[] Aliases { get; } = new string[] {  };
+        public string Description { get; } = "change scp";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Player psender = Player.Get(sender);
+
+            if (psender == null)
+            {
+                response = string.Empty;
+                return false;
+            }
+
+            if (!_players.ContainsKey(psender))
+            {
+                response = "you're not authorized to use this command";
+                return false;
+            }
+            if(arguments.Count < 1)
+            {
+                response = "not enough argument usage: .scp <scp number> \n(eg .scp Scp173 -> scp-173)";
+                return false;
+            }
+
+            string scp = arguments.At(0);
+            if (!Enum.TryParse(scp, out RoleTypeId roleType) && roleType.IsScp() && roleType != RoleTypeId.Scp0492)
+            {
+                response = "wrong scp number";
+                return false;
+            }
+            
+            psender.Role.Set(roleType);
+            DisplayPlayer.Get(psender).RemoveHint(_players[psender]);
+            _players.Remove(psender);
+
+            response = $"you're now SCP-{scp}";
+            return true;
+        }
+
     }
 }

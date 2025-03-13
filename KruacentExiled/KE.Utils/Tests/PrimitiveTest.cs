@@ -23,10 +23,5 @@ namespace KE.Utils.Tests
             p = Primitive.Create(pl.Position+ UnityEngine.Vector3.back,null,null,true,UnityEngine.Color.red);
             p.SetFakePrimitive(null);
         }
-
-        public static void TestTrucquegtrouvesurlediscorddexiled(Player pl)
-        {
-            
-        }
     }
 }

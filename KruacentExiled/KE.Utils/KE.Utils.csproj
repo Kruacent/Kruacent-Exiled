@@ -6,13 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="API\Enums\**" />
-	  <EmbeddedResource Remove="API\Enums\**" />
-	  <None Remove="API\Enums\**" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="ExMod.Exiled" Version="9.5.1" />
+		<PackageReference Include="ExMod.Exiled" Version="9.5.0" />
 		<PackageReference Include="RueI" Version="2.1.1" />
 	</ItemGroup>
 

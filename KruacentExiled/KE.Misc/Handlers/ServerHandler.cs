@@ -6,7 +6,7 @@ namespace KE.Misc.Handlers
 {
     internal class ServerHandler
     {
-        CoroutineHandle coroutineHandle;
+        private CoroutineHandle coroutineHandle;
         public void OnRoundStarted()
         {
             if(MainPlugin.Instance.Config.ChanceFF >= 0 && MainPlugin.Instance.Config.ChanceFF <= 100)
@@ -15,7 +15,7 @@ namespace KE.Misc.Handlers
                 MainPlugin.Instance.ClassDDoor.ClassDDoorGoesBoom();
             if(MainPlugin.Instance.Config.AutoNukeAnnoucement)
                 Timing.RunCoroutineSingleton(MainPlugin.Instance.NukeAnnouncement(), coroutineHandle,SingletonBehavior.Abort);
-            if(MainPlugin.Instance.Config.PeanutLockDown && Player.List.Where(p => p.Role.Type == PlayerRoles.RoleTypeId.Scp173).Count() > 0)
+            if(MainPlugin.Instance.Config.PeanutLockDown)
                 Timing.RunCoroutine(MainPlugin.Instance.PeanutLockdown());
             if(MainPlugin.Instance.Config.AutoElevator)
                 Timing.RunCoroutine(MainPlugin.Instance.AutoElevator.StartElevator());

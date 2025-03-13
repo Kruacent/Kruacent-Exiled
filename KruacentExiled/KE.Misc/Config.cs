@@ -20,5 +20,8 @@ namespace KE.Misc
         [Description("Chance to get a pink candy (0-100)")]
         public int ChancePinkCandy { get; set; } = 10;
         public bool SurfaceLight { get; set; } = true;
+
+        public bool ScpPreferences { get; set; } = true;
+        public bool Scp035Enabled { get; set; } = true;
     }
 }
