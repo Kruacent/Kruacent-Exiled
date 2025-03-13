@@ -18,7 +18,7 @@ using UnityEngine;
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.SCP1576)]
-    public class Scp3136 : CustomItem
+    public class Scp3136 : KECustomItem
     {
         public override uint Id { get; set; } = 1057;
         public override string Name { get; set; } = "SCP-3136";

@@ -10,9 +10,10 @@ using Exiled.API.Features;
 using UnityEngine;
 using System.Linq;
 using KE.Items.Interface;
+using KE.Items;
 
 [CustomItem(ItemType.SCP1853)]
-public class Defibrilator : CustomItem, ILumosItem
+public class Defibrilator : KECustomItem, ILumosItem
 {
     public override uint Id { get; set; } = 1041;
     public override string Name { get; set; } = "Defibrilator";

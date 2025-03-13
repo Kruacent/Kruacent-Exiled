@@ -17,7 +17,7 @@ using UnityEngine;
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.GrenadeHE)]
-    public class TPGrenada : CustomGrenade, ILumosItem, ISwichableEffect
+    public class TPGrenada : KECustomGrenade, ILumosItem, ISwichableEffect
     {
         
         public override uint Id { get; set; } = 1045;

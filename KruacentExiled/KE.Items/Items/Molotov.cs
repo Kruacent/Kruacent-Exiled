@@ -10,7 +10,7 @@ using KE.Items.ItemEffects;
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.GrenadeFlash)]
-    public class Molotov : CustomGrenade, ILumosItem, ISwichableEffect
+    public class Molotov : KECustomGrenade, ILumosItem, ISwichableEffect
     {
         public override uint Id { get; set; } = 1049;
         public override string Name { get; set; } = "Cocktail Molotov";

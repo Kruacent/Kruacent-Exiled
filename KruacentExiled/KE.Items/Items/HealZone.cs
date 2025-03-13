@@ -14,7 +14,7 @@ using KE.Items.ItemEffects;
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.GrenadeFlash)]
-    public class HealZone : CustomGrenade, ILumosItem, ISwichableEffect
+    public class HealZone : KECustomGrenade, ILumosItem, ISwichableEffect
     {
         public override uint Id { get; set; } = 1051;
         public override string Name { get; set; } = "Heal Zone";

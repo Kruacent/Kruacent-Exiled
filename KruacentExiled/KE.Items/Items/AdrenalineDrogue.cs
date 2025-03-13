@@ -12,10 +12,11 @@ using UnityEngine;
 using CustomPlayerEffects;
 using KE.Items.Interface;
 using System.Linq;
+using KE.Items;
 
 /// <inheritdoc />
 [CustomItem(ItemType.Adrenaline)]
-public class AdrenalineDrogue : CustomItem, ILumosItem
+public class AdrenalineDrogue : KECustomItem, ILumosItem
 {
     /// <inheritdoc/>
     public override uint Id { get; set; } = 1042;

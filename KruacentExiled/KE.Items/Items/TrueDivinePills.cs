@@ -15,10 +15,11 @@ using PlayerRoles;
 using KE.Items.Interface;
 using Exiled.CustomItems.API.EventArgs;
 using Exiled.Events.EventArgs.Scp914;
+using KE.Items;
 
 /// <inheritdoc />
 [CustomItem(ItemType.SCP500)]
-public class TrueDivinePills : CustomItem, ILumosItem
+public class TrueDivinePills : KECustomItem, ILumosItem
 {
     /// <inheritdoc/>
     public override uint Id { get; set; } = 1050;

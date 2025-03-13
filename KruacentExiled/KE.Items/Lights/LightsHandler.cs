@@ -95,7 +95,7 @@ namespace KE.Items.Lights
                         }
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     
                 }

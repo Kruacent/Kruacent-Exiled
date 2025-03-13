@@ -16,7 +16,7 @@ using KE.Items.ItemEffects;
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.KeycardJanitor)]
-    public class Mine : CustomItem, ILumosItem, ISwichableEffect
+    public class Mine : KECustomItem, ILumosItem, ISwichableEffect
     {
         public override uint Id { get; set; } = 1053;
         public override string Name { get; set; } = "Mine";

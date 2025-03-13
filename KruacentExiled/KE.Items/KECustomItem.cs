@@ -3,11 +3,13 @@ using Exiled.API.Features.Items;
 using Exiled.CustomItems;
 using Exiled.CustomItems.API.Features;
 using KE.Items.Interface;
+using KE.Utils.Display;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace KE.Items
 {
@@ -16,36 +18,29 @@ namespace KE.Items
         
         protected override void ShowPickedUpMessage(Player player)
         {
-            if (CustomItems.Instance.Config.PickedUpHint.Show)
-            {
-                string show = string.Format(CustomItems.Instance.Config.PickedUpHint.Content, Name, Description) + "\n";
-                if (this is IUpgradableCustomItem ci)
-                {
-                    foreach(var a in ci.Upgrade)
-                    {
-                        show += $"{a.Value.Chance}% chance of upgrading on {a.Key}\n";
-                    }
-                }
-                
-                player.ShowHint(show, (int)CustomItems.Instance.Config.PickedUpHint.Duration);
-
-            }
+            Message(this, player);
         }
 
         protected override void ShowSelectedMessage(Player player)
         {
+            Message(this, player);
+        }
+
+
+        internal static void Message(CustomItem c,Player player)
+        {
             if (CustomItems.Instance.Config.PickedUpHint.Show)
             {
-                string show = string.Format(CustomItems.Instance.Config.PickedUpHint.Content, Name, Description) + "\n";
-                if (this is IUpgradableCustomItem ci)
+                string show = string.Format(CustomItems.Instance.Config.PickedUpHint.Content, c.Name, c.Description) + "\n";
+                if (c is IUpgradableCustomItem ci)
                 {
                     foreach (var a in ci.Upgrade)
                     {
                         show += $"{a.Value.Chance}% chance of upgrading on {a.Key}\n";
                     }
                 }
-
-                player.ShowHint(show, (int)CustomItems.Instance.Config.PickedUpHint.Duration);
+                DisplayPlayer.Get(player).Hint((float)HintPlacement.CustomItem, show, (int)CustomItems.Instance.Config.PickedUpHint.Duration);
+                //player.ShowHint(show, (int)CustomItems.Instance.Config.PickedUpHint.Duration);
 
             }
         }

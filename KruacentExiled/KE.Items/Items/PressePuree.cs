@@ -11,7 +11,7 @@ using Exiled.Events.EventArgs.Scp914;
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.GrenadeHE)]
-    public class PressePuree : CustomGrenade
+    public class PressePuree : KECustomGrenade
     {
         public override uint Id { get; set; } = 1046;
         public override string Name { get; set; } = "Presse Purée";

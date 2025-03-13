@@ -13,7 +13,7 @@ using KE.Items.ItemEffects;
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.KeycardJanitor)]
-    public class DeployableWall : CustomItem, ILumosItem, ISwichableEffect
+    public class DeployableWall : KECustomItem, ILumosItem, ISwichableEffect
     {
         
         public override uint Id { get; set; } = 1048;

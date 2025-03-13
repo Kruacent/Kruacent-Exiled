@@ -9,6 +9,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\KE.Utils\KE.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Assembly-CSharp-firstpass" HintPath="$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll" />
     <Reference Include="Exiled.CustomItems" HintPath="$(EXILED_REFERENCES)\Exiled.CustomItems.dll" />
     <Reference Include="System.ComponentModel.Composition" HintPath="$(EXILED_REFERENCES)\System.ComponentModel.Composition.dll" />

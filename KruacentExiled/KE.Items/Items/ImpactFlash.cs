@@ -7,7 +7,7 @@ using Exiled.CustomItems.API.Features;
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.GrenadeFlash)]
-    public class ImpactFlash : CustomGrenade
+    public class ImpactFlash : KECustomGrenade
     {
         public override uint Id { get; set; } = 1052;
         public override string Name { get; set; } = "Impact Flash";
