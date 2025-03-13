@@ -4,6 +4,7 @@ using Exiled.CustomItems;
 using Exiled.CustomItems.API.Features;
 using KE.Items.Interface;
 using KE.Utils.Display;
+using KE.Utils.Display.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,9 @@ namespace KE.Items
         {
             if (CustomItems.Instance.Config.PickedUpHint.Show)
             {
-                string show =  $"<b>{c.Name}</b>\n{c.Description} \n";
+
+                
+                string show =  $"<b>{c.Name}</b>\n{c.Description}\n";
                 if (c is IUpgradableCustomItem ci)
                 {
                     foreach (var a in ci.Upgrade)
@@ -39,7 +42,9 @@ namespace KE.Items
                         show += $"{a.Value.Chance}% chance of upgrading on {a.Key}\n";
                     }
                 }
-                DisplayPlayer.Get(player).Hint((float)HintPlacement.CustomItem, "<align=right>" +show+"</align>", (int)CustomItems.Instance.Config.PickedUpHint.Duration);
+
+                RueIHint hint = new(HPosition.Right, VPosition.CustomItem, show, CustomItems.Instance.Config.PickedUpHint.Duration);
+                DisplayPlayer.Get(player).Hint(hint);
                 //player.ShowHint(show, (int)CustomItems.Instance.Config.PickedUpHint.Duration);
 
             }

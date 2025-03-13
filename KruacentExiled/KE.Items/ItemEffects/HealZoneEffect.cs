@@ -27,14 +27,12 @@ namespace KE.Items.ItemEffects
 
         public override void Effect(ExplodingGrenadeEventArgs ev)
         {
-            SetZone(ev.Player, ev.Player.Position, ev.TargetsToAffect);
+            SetZone(ev.Player, ev.Position);
         }
 
-        private void SetZone(Player player, Vector3 position, HashSet<Player> targets = null)
+        private void SetZone(Player player, Vector3 position)
         {
             float cylinderSize = 5;
-
-            targets?.Clear();
 
             Player playerThrowingGrenade = player;
             Vector3 healZonePosition = position;

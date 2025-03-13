@@ -66,7 +66,7 @@ namespace KE.Items.Items
 
         public Molotov()
         {
-            Effect = new MineEffect();
+            Effect = new MolotovEffect();
         }
 
         protected override void OnExploding(ExplodingGrenadeEventArgs ev)

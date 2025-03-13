@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Utils.Display
+namespace KE.Utils.Display.Enums
 {
-    public enum HintPlacement
+    public enum HPosition
     {
-        GlobalEvent = 900,
-        CustomItem = 200,
-        CustomRole = 400,
+        Left,
+        Center,
+        Right,
     }
 }
