@@ -93,7 +93,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
 
             foreach (Player player in Player.List)
             {
-                DisplayPlayer.Get(player).Hint((float)HintPlacement.GlobalEvent, ShowText(random < MainPlugin.Instance.Config.ChanceRedacted), 10);
+                DisplayPlayer.Get(player).Hint(new (KE.Utils.Display.Enums.HPosition.Center,KE.Utils.Display.Enums.VPosition.GlobalEvent, ShowText(random < MainPlugin.Instance.Config.ChanceRedacted), 10));
             }
         }
 

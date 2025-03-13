@@ -3,6 +3,7 @@ using InventorySystem.Items.Firearms.Modules;
 using KE.GlobalEventFramework.Examples.API.Interfaces;
 using KE.Utils;
 using KE.Utils.Display;
+using KE.Utils.Display.Enums;
 using MEC;
 using PlayerRoles;
 using System;
@@ -50,13 +51,13 @@ namespace KE.GlobalEventFramework.Examples.API.Feature
 
             foreach (Player p in Player.List.Where(p => p.Role == RoleTypeId.Spectator))
             {
-                DisplayPlayer.Get(p).Hint((float)HintPlacement.Effects, hint,RefreshRate+.01f);
+                DisplayPlayer.Get(p).Hint(new(HPosition.Right,VPosition.GlobalEvent, hint,RefreshRate+.01f));
             }
         }
 
         private string GetHint()
         {
-            return $"<align=right> {GetCurrentMalfunction()}\n{GetAllEffect()}</align>";
+            return $"{GetCurrentMalfunction()}\n{GetAllEffect()}";
         }
 
 
