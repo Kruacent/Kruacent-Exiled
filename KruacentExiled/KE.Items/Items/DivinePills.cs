@@ -35,7 +35,7 @@ public class DivinePills : KECustomItem, ILumosItem, ISwichableEffect, IUpgradab
     public override string Name { get; set; } = "Divine Pills";
 
     /// <inheritdoc/>
-    public override string Description { get; set; } = "25% chance you die\n 75% you respawn someone\n 10% to upgrade in 914 on very fine";
+    public override string Description { get; set; } = "25% chance you die\n 75% you respawn someone\n";
 
     /// <inheritdoc/>
     public override float Weight { get; set; } = 0.65f;
