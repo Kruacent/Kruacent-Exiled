@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features.Items;
+﻿using Exiled.API.Features;
+using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace Map.GamblingZone
         {
             new(ItemType.Jailbird,5,1),
             new(ItemType.ParticleDisruptor,5,1),
+            new(ItemType.Radio,15,-1),
         };
 
         public LootTable()
@@ -30,7 +32,7 @@ namespace Map.GamblingZone
             int totalWeight = 0;
             foreach (DroppableItem drop in _items)
             {
-                if(drop.HasReachCap())
+                if(!drop.HasReachCap())
                     totalWeight += drop.Chance;
             }
 
@@ -42,7 +44,8 @@ namespace Map.GamblingZone
 
             foreach (DroppableItem drop in _items)
             {
-                cumulativeSum += drop.Chance;
+                if(!drop.HasReachCap())
+                    cumulativeSum += drop.Chance;
                 if (randValue < cumulativeSum)
                     return drop;
             }
@@ -51,7 +54,9 @@ namespace Map.GamblingZone
         }
         public Item GetRandomItem()
         {
-            return ChooseRandomItem().GetItem();
+            DroppableItem item = ChooseRandomItem();
+            Log.Debug("random item =" + item);
+            return item.GetItem();
         }
     }
 }

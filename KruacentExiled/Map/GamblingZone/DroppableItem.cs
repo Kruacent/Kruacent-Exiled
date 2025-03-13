@@ -60,7 +60,12 @@ namespace Map.GamblingZone
 
         internal bool HasReachCap()
         {
-            return CurrentCap >= ItemCap;
+            return CurrentCap >= ItemCap && ItemCap != -1;
+        }
+
+        public override string ToString()
+        {
+            return Item.ToString();
         }
     }
 }

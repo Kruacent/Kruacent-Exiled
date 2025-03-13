@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.GlobalEventFramework.Exa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.CustomRoles", "KE.CustomRoles\KE.CustomRoles.csproj", "{4AA4C3E0-E62F-49CE-AD80-0B5C6249EB48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Map", "Map\Map.csproj", "{CCEF1C1D-B701-443E-AC23-72A174446868}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.Map", "Map\KE.Map.csproj", "{CCEF1C1D-B701-443E-AC23-72A174446868}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
