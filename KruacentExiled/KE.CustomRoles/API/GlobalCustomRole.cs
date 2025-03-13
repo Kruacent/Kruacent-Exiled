@@ -29,27 +29,7 @@ namespace KE.CustomRoles.API
             Log.Debug($"{Name}: Adding role to {player.Nickname}.");
             TrackedPlayers.Add(player);
 
-            if (!BlacklistedRole.Contains(player.Role))
-            {
-                switch (KeepPositionOnSpawn)
-                {
-                    case true when KeepInventoryOnSpawn:
-                        player.Role.Set(player.Role, SpawnReason.ForceClass, RoleSpawnFlags.None);
-                        break;
-                    case true:
-                        player.Role.Set(player.Role, SpawnReason.ForceClass, RoleSpawnFlags.AssignInventory);
-                        break;
-                    default:
-                        {
-                            if (KeepInventoryOnSpawn && player.IsAlive)
-                                player.Role.Set(player.Role, SpawnReason.ForceClass, RoleSpawnFlags.UseSpawnpoint);
-                            else
-                                player.Role.Set(player.Role, SpawnReason.ForceClass, RoleSpawnFlags.All);
-                            break;
-                        }
-                }
-            }
-
+            
             Timing.CallDelayed(
                 0.25f,
                 () =>
