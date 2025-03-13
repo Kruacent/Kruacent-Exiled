@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.GlobalEventFramework", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.GlobalEventFramework.Examples", "KE.GlobalEventFramework.Examples\KE.GlobalEventFramework.Examples.csproj", "{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.Utils", "KE.Utils\KE.Utils.csproj", "{D6B3068A-9DD1-4469-9BFE-5771168DFCBD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6B3068A-9DD1-4469-9BFE-5771168DFCBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6B3068A-9DD1-4469-9BFE-5771168DFCBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6B3068A-9DD1-4469-9BFE-5771168DFCBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6B3068A-9DD1-4469-9BFE-5771168DFCBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
