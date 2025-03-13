@@ -1,13 +1,14 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
+using KE.CustomRoles.API;
 using PlayerRoles;
 using System.Collections.Generic;
 
 namespace KE.CustomRoles.CR.Guard
 {
     [CustomRole(RoleTypeId.FacilityGuard)]
-    internal class Guard914 : Exiled.CustomRoles.API.Features.CustomRole
+    internal class Guard914 : KECustomRole
     {
         public override string Name { get; set; } = "guard914";
         public override string Description { get; set; } = "Tu es <b>Le</b> <color=#6B6B38>garde de SCP-914</color> \nTu commences à 914 \nmais on a volé ta carte \net ntm aussi";
@@ -17,7 +18,6 @@ namespace KE.CustomRoles.CR.Guard
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
-        public override bool IgnoreSpawnSystem { get; set; } = true;
 
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {

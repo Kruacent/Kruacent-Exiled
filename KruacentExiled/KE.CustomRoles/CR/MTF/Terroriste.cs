@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features.Attributes;
+using KE.CustomRoles.API;
 using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine;
 namespace KE.CustomRoles.CR.ClassD
 {
     [CustomRole(RoleTypeId.NtfSergeant)]
-    internal class Terroriste : Exiled.CustomRoles.API.Features.CustomRole
+    internal class Terroriste : KECustomRole
     {
         public override string Name { get; set; } = "Terroriste";
         public override string Description { get; set; } = "Tu es un <color=#FFC0CB>Terroriste</color> \nne fait pas exploser la facilité \ntu commences avec des grenades";
@@ -17,7 +18,6 @@ namespace KE.CustomRoles.CR.ClassD
         public override RoleTypeId Role { get; set; } = RoleTypeId.NtfSergeant;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
-        public override bool IgnoreSpawnSystem { get; set; } = true;
 
         public override float SpawnChance { get; set; } = 100;
         public override Vector3 Scale { get; set; } = new Vector3(1, 1, 1);

@@ -7,11 +7,12 @@ using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using KE.CustomRoles.API;
 
 namespace KE.CustomRoles.CR.ClassD
 {
     [CustomRole(RoleTypeId.NtfCaptain)]
-    internal class Tank : Exiled.CustomRoles.API.Features.CustomRole
+    internal class Tank : KECustomRole
     {
         public override string Name { get; set; } = "Tank";
         public override string Description { get; set; } = "Tu es un <color=#FFC0CB>TANK</color> tu es débuff mais ta force de tir est démultiplié (fait attention à tes balles)";
@@ -21,7 +22,6 @@ namespace KE.CustomRoles.CR.ClassD
         public override RoleTypeId Role { get; set; } = RoleTypeId.NtfCaptain;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
-        public override bool IgnoreSpawnSystem { get; set; } = true;
 
         public override float SpawnChance { get; set; } = 100;
         public override Vector3 Scale { get; set; } = new Vector3(1.15f, 1.15f, 1.15f);

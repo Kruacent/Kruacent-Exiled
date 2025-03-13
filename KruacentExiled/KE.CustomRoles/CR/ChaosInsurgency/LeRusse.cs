@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features.Attributes;
+using KE.CustomRoles.API;
 using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine;
 namespace KE.CustomRoles.CR.ClassD
 {
     [CustomRole(RoleTypeId.ChaosConscript)]
-    internal class Russe : Exiled.CustomRoles.API.Features.CustomRole
+    internal class Russe : KECustomRole
     {
         public override string Name { get; set; } = "Russe";
         public override string Description { get; set; } = "Tu es un <color=#FFC0CB>maitre de jeu</color> \ntu dois faire la roulette russe avec les autres joueurs";
@@ -17,7 +18,6 @@ namespace KE.CustomRoles.CR.ClassD
         public override RoleTypeId Role { get; set; } = RoleTypeId.ChaosConscript;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
-        public override bool IgnoreSpawnSystem { get; set; } = true;
 
         public override float SpawnChance { get; set; } = 100;
         public override Vector3 Scale { get; set; } = new Vector3(1.4f, 1.2f, 1.3f);

@@ -20,7 +20,7 @@ namespace KE.CustomRoles.CR.Human
         public override int MaxHealth { get; set; } = 100;
         public override bool KeepRoleOnDeath { get; set; } = true;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
-        public override bool IgnoreSpawnSystem { get; set; } = true;
+        
         protected override void RoleAdded(Player player)
         {
             player.EnableEffect(EffectType.Scp1853, -1, true);

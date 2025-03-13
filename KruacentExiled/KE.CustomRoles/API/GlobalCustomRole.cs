@@ -17,7 +17,8 @@ using UnityEngine;
 
 namespace KE.CustomRoles.API
 {
-    public abstract class GlobalCustomRole : CustomRole
+
+    public abstract class GlobalCustomRole : KECustomRole
     {
         public override RoleTypeId Role { get; set; } = RoleTypeId.None;
         public abstract SideEnum Side { get; set; }
