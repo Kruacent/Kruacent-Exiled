@@ -1,4 +1,6 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
+using Exiled.API.Features;
 using KE.GlobalEventFramework.GEFE.API.Features;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using PlayerRoles;
@@ -24,12 +26,14 @@ namespace KE.GlobalEventFramework.Examples.GE
         public override string Description { get; set; } = "Les spawns sont random";
         ///<inheritdoc/>
         public override int Weight { get; set; } = 1;
+        public IEnumerable<RoomType> BlacklistedRooms { get; } = new HashSet<RoomType>() { RoomType.EzShelter,RoomType.HczTestRoom};
         ///<inheritdoc/>
         public IEnumerator<float> Start()
         {
-            Room room = Room.Random();
+            Room room;
             foreach (RoleTypeId r in Enum.GetValues(typeof(RoleTypeId)))
             {
+                room = Room.List.GetRandomValue(r => !BlacklistedRooms.Contains(r.Type));
                 foreach (Player p in Player.List)
                 {
 
@@ -39,7 +43,7 @@ namespace KE.GlobalEventFramework.Examples.GE
                     }
 
                 }
-                room = Room.Random();
+                
             }
             yield return 0;
         }
