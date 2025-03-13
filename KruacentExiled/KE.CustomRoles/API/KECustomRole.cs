@@ -5,6 +5,7 @@ using Exiled.API.Features.Pools;
 using Exiled.CustomRoles.API.Features;
 using InventorySystem.Configs;
 using KE.Utils.Display;
+using KE.Utils.Display.Enums;
 using MEC;
 using PlayerRoles;
 using System;
@@ -24,7 +25,8 @@ namespace KE.CustomRoles.API
 
             string show = $"<b>{Name}</b>\n {Description}";
 
-            DisplayPlayer.Get(player).Hint((float)HintPlacement.CustomItem, "<align=left>"+ show + "</align>", Exiled.CustomRoles.CustomRoles.Instance.Config.GotRoleHint.Duration);
+            RueIHint r = new(HPosition.Left, VPosition.CustomItem, show, Exiled.CustomRoles.CustomRoles.Instance.Config.GotRoleHint.Duration);
+            DisplayPlayer.Get(player).Hint(r);
         }
 
         public override void AddRole(Exiled.API.Features.Player player)

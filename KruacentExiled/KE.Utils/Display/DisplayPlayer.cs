@@ -1,4 +1,6 @@
 ﻿using Exiled.API.Features;
+using Exiled.API.Interfaces;
+using KE.Utils.Display.Enums;
 using MEC;
 using RueI.Displays;
 using RueI.Elements;
@@ -15,6 +17,7 @@ namespace KE.Utils.Display
     {
         private static Dictionary<Player,DisplayPlayer> _displays = new();
         private RueI.Displays.Display _display;
+        private Dictionary<Position, Element> _hints = new();
         private Player _player;
         public Player Player { get { return _player; } }
         public static DisplayPlayer Get(Player player)
@@ -30,31 +33,46 @@ namespace KE.Utils.Display
             _display = new (DisplayCore.Get(player.ReferenceHub));
         }
 
-        public Element Hint(float position, string text)
+        public Element Hint(Position position, string text)
         {
-            SetElement element = new(position, text);
+            if (_hints.ContainsKey(position)) return null;
+            SetElement element = new((float)position.VPosition, $"<align={position.HPosition}>" + text + "</align>");
             _display.Elements.Add(element);
+            _hints.Add(position, element);
             UpdateCore(_player);
             return element;
         }
 
 
-        public Element Hint(float position,string text,float seconds)
+        public Element Hint(Position position,string text,float seconds)
         {
-            SetElement element = new(position, text);
+            if (_hints.ContainsKey(position)) return null;
+            SetElement element = new((float)position.VPosition, $"<align={position.HPosition.ToString().ToLower()}>"+text+"</align>");
             _display.Elements.Add(element);
+            _hints.Add(position, element);
             UpdateCore(_player);
             Timing.CallDelayed(seconds, () =>
             {
                 _display.Elements.Remove(element);
+                _hints.Remove(position);
                 UpdateCore(_player);
             });
             return element;
         }
 
-        public bool RemoveHint(Element elem)
+
+        public Element Hint(RueIHint hint)
         {
-            bool result = _display.Elements.Remove(elem);
+            if (hint.Duration < 0)
+                return Hint(hint.Position, hint.RawContent);
+            return Hint(hint.Position,hint.RawContent,hint.Duration);
+        }
+
+        public bool RemoveHint(Position placement)
+        {
+            if (!_hints.ContainsKey(placement)) return false;
+            bool result = _display.Elements.Remove(_hints[placement]);
+            _hints.Remove(placement);
             UpdateCore(_player);
             return result;
         }
@@ -62,9 +80,32 @@ namespace KE.Utils.Display
 
         public static void UpdateCore(Player player) => DisplayCore.Get(player.ReferenceHub).Update();
 
+        
+    }
+    public struct Position
+    {
+        private HPosition _hposition;
+        public HPosition HPosition { get { return _hposition; } }
+        private VPosition _vposition;
+        public VPosition VPosition { get { return _vposition; } }
 
+        public Position(HPosition hposition, VPosition vposition)
+        {
+            _hposition = hposition;
+            _vposition = vposition;
+        }
+
+        public override bool Equals(object obj)
+        {
+            Position pos = (Position)obj;
+            return pos.VPosition == VPosition && pos.HPosition == HPosition;
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 
 
-        
+
 }
