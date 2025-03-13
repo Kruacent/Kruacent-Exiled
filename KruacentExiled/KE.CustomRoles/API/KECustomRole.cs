@@ -13,8 +13,10 @@ namespace KE.CustomRoles.API
         public override bool IgnoreSpawnSystem { get; set; } = true;
         protected override void ShowMessage(Exiled.API.Features.Player player)
         {
-            DisplayPlayer.Get(player).Hint((float)HintPlacement.CustomItem, "<align=left>"+ string.Format(Exiled.CustomRoles.CustomRoles.Instance.Config.GotRoleHint.Content+ "</align>", Name, Description), Exiled.CustomRoles.CustomRoles.Instance.Config.GotRoleHint.Duration);
 
+            string show = $"<b>{Name}</b>\n {Description}";
+
+            DisplayPlayer.Get(player).Hint((float)HintPlacement.CustomItem, "<align=left>"+ show + "</align>", Exiled.CustomRoles.CustomRoles.Instance.Config.GotRoleHint.Duration);
         }
     }
 }
