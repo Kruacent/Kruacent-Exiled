@@ -14,7 +14,7 @@ namespace KE.CustomRoles.CR.Human
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;
         public override string Name { get; set; } = "Diabetique";
-        public override string Description { get; set; } = "Tu es <color=#FFFF00>asthmatique</color>\nT'as stamina est réduit de moitié\nMais tu vises mieux";
+        public override string Description { get; set; } = "Tu es <color=#FFFF00>diabetique</color>\nT'as mangé le crambleu au pomme de mael";
         public override uint Id { get; set; } = 1054;
         public override string CustomInfo { get; set; } = "Diabetique";
         public override int MaxHealth { get; set; } = 100;
