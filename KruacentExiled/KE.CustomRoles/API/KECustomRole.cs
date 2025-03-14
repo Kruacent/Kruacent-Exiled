@@ -19,8 +19,8 @@ namespace KE.CustomRoles.API
 {
     public abstract class KECustomRole : CustomRole
     {
-        public override bool IgnoreSpawnSystem { get; set; } = true;
-        protected override void ShowMessage(Exiled.API.Features.Player player)
+        public sealed override bool IgnoreSpawnSystem { get; set; } = true;
+        protected override void ShowMessage(Player player)
         {
 
             string show = $"<b>{Name}</b>\n {Description}";
@@ -29,7 +29,7 @@ namespace KE.CustomRoles.API
             DisplayPlayer.Get(player).Hint(r);
         }
 
-        public override void AddRole(Exiled.API.Features.Player player)
+        public override void AddRole(Player player)
         {
             Exiled.API.Features.Player player2 = player;
             Log.Debug(Name + ": Adding role to " + player2.Nickname + ".");
@@ -135,5 +135,10 @@ namespace KE.CustomRoles.API
 
             player2.SendConsoleMessage(StringBuilderPool.Pool.ToStringReturn(stringBuilder), "green");
         }
+
+        /// <summary>
+        /// The chance of having this role NOT the chance to have a role
+        /// </summary>
+        public override abstract float SpawnChance { get; set; }
     }
 }

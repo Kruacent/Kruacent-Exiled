@@ -14,10 +14,13 @@ namespace KE.CustomRoles
         /// <summary>
         /// The chance of having a CustomRole
         /// </summary>
-        public const int Chance = 100;
-        public static Controller controller = new Controller();
+        public const int Chance = 40;
 
-        private Controller() { }
+
+        internal Dictionary<CustomRole, float> GetAvailableCustomRole(Player player)
+        {
+            return CustomRole.Registered.Where(c => c.Role == player.Role || c is GlobalCustomRole cgr && cgr.Side == SideClass.Get(player.Role.Side)).ToDictionary(c => c, c=> c.SpawnChance);
+        }
 
         /// <summary>
         /// Gives a CustomRole to a player
@@ -32,11 +35,27 @@ namespace KE.CustomRoles
                 Log.Debug("no luck");
                 return;
             }
-                
-            CustomRole cr = CustomRole.Registered.GetRandomValue(c => c.Role == player.Role || c is GlobalCustomRole cgr && cgr.Side == SideClass.Get(player.Role.Side));
+            
+            CustomRole cr = AssignRole(GetAvailableCustomRole(player));
             Log.Debug($"{player.Id} : {cr.Name}");
             cr?.AddRole(player);
         }
+
+        private CustomRole AssignRole(Dictionary<CustomRole, float> roleChances)
+        {
+            float totalWeight = roleChances.Values.Sum();
+            float randomValue = UnityEngine.Random.Range(0f, totalWeight);
+
+            foreach (var role in roleChances)
+            {
+                randomValue -= role.Value;
+                if (randomValue <= 0)
+                    return role.Key;
+            }
+
+            return roleChances.Keys.First();
+        }
+
 
         /// <summary>
         /// Gives CustomRoles to multiple players

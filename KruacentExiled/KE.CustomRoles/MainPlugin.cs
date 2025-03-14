@@ -2,6 +2,7 @@
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Server;
 using MEC;
+using System;
 
 
 namespace KE.CustomRoles
@@ -9,28 +10,32 @@ namespace KE.CustomRoles
     public class MainPlugin : Plugin<Config>
     {
         public override string Name { get; } = "KE.CustomRoles";
+        public override string Author => "Patrique & OmerGS";
+        public override Version Version => new(1, 1, 0);
         public static MainPlugin Instance;
+        private Controller _controller;
 
         public override void OnEnabled()
         {
             
             Instance = this;
+            _controller = new Controller();
 
             CustomRole.RegisterRoles(false,null);
             this.SubscribeEvents();
 
-            base.OnEnabled();
         }
 
         public override void OnDisabled()
         {
             
             CustomRole.UnregisterRoles();
+           
 
-            Instance = null;
+
             this.UnsubscribeEvents();
-
-            base.OnDisabled();
+            _controller = null;
+            Instance = null;
         }
 
         public void SubscribeEvents()
@@ -47,13 +52,13 @@ namespace KE.CustomRoles
 
         public void CustomRoleImplement()
         {
-            Controller.controller.GiveRole(Player.List);
+            _controller.GiveRole(Player.List);
             
         }
 
         public void CustomRoleRespawning(RespawnedTeamEventArgs ev)
         {
-            Controller.controller.GiveRole(ev.Players);
+            _controller.GiveRole(ev.Players);
         }
     }
 }
