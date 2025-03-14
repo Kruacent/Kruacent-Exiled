@@ -26,5 +26,11 @@ namespace KE.CustomRoles.CR.Human
             player.EnableEffect(EffectType.Scp1853, -1, true);
             player.EnableEffect(EffectType.Exhausted, -1, true);
         }
+
+        protected override void RoleRemoved(Player player)
+        {
+            player.DisableEffect(EffectType.Scp1853);
+            player.DisableEffect(EffectType.Exhausted);
+        }
     }
 }

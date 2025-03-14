@@ -18,7 +18,7 @@ namespace KE.CustomRoles.CR.Human
         public override SideEnum Side { get; set; } = SideEnum.Human;
         public override string Name { get; set; } = "Alzheimer";
         public override string Description { get; set; } = "Tu es <color=#0f0f0f>Vieux</color>";
-        public override uint Id { get; set; } = 1054;
+        public override uint Id { get; set; } = 1056;
         public override string CustomInfo { get; set; } = "Vieux";
         public override int MaxHealth { get; set; } = 100;
         public override bool KeepRoleOnDeath { get; set; } = true;
