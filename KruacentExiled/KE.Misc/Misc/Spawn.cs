@@ -3,9 +3,12 @@ using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.CustomRoles.API.Features;
+using Exiled.Events.EventArgs.Server;
+using KE.Misc.Misc.CR;
 using KE.Utils.Display;
 using MEC;
 using PlayerRoles;
+using RueI.Displays;
 using RueI.Elements;
 using System;
 using System.Collections.Generic;
@@ -21,11 +24,7 @@ namespace KE.Misc.Misc
         {
             if (!MainPlugin.Instance.Config.ScpPreferences) return;
 
-            HashSet<Player> pl;
-            if (!MainPlugin.Instance.Config.Debug)
-                pl = Player.List.Where(p => p.IsScp).ToHashSet();
-            else
-                pl = [.. Player.List];
+            HashSet<Player> pl = [.. Player.List];
 
             foreach (Player player in pl)
             {
@@ -43,30 +42,55 @@ namespace KE.Misc.Misc
             Log.Debug($"Scp ({player.Nickname}) is {roleScp} previous : {player.Role.Type}");
 
             player.Role.Set(roleScp);
-            if (roleScp == RoleTypeId.Scp096 || roleScp == RoleTypeId.Scp079 && !config.Scp035Enabled || config.Debug)
-            {
-                float timetodecide = 60;
-                RueIHint h = new (Utils.Display.Enums.HPosition.Center, Utils.Display.Enums.VPosition.CustomRole, "You're a support class \nYou can change your scp by doing the command .scp <scp number>\n(eg .scp 173 -> scp-173)", timetodecide);
-                var a = DisplayPlayer.Get(player).Hint(h);
-                ChangeSCP._players.Add(player,a);
-                Timing.CallDelayed(timetodecide, () =>
-                {
-                    ChangeSCP._players.Remove(player);
-                    DisplayPlayer.Get(player).RemoveHint(a);
-                });
-            }
+            SupportClassBackup(player);
             if (config.Scp035Enabled && roleScp == RoleTypeId.Scp079)
             {
-                _set035 = !_set035;
-                if (_set035)
+                Player pl = Player.List.GetRandomValue(p => p.Role == RoleTypeId.ClassD || p.Role == RoleTypeId.Scientist);
+                RoleTypeId otherScp = ChooseRandomRole(pl.ScpPreferences.Preferences.ToDictionary(p => p.Key, p => p.Value + 6));
+
+                if(otherScp == RoleTypeId.Scp079)
                 {
-                    Player pl = Player.List.GetRandomValue(p => p.Role == RoleTypeId.ClassD || p.Role == RoleTypeId.Scientist);
-                    CustomRole scp = CustomRole.Registered.FirstOrDefault(c => c.Id == 10);
-                    scp.AddRole(pl);
+                    _set035 = !_set035;
+                    if (_set035)
+                    {
+                        CustomRole scp = CustomRole.Registered.FirstOrDefault(c => c.Id == 10);
+                        scp.AddRole(pl);
+                    }
+                    else
+                    {
+                        pl.Role.Set(otherScp);
+                    }
+                }
+                else
+                {
+                    pl.Role.Set(otherScp);
+                    SupportClassBackup(pl);
+                    Timing.CallDelayed(1f, () =>
+                    {
+                        pl.MaxHealth /= 2;
+                        pl.Health = pl.MaxHealth;
+                    });
                 }
                 
             }
         }
+
+
+        private void SupportClassBackup(Player player)
+        {
+            if (player.Role == RoleTypeId.Scp096 || player.Role == RoleTypeId.Scp079 && !MainPlugin.Instance.Config.Scp035Enabled || MainPlugin.Instance.Config.Debug) return;
+            float timetodecide = 60;
+            RueIHint h = new(Utils.Display.Enums.HPosition.Center-50, Utils.Display.Enums.VPosition.CustomRole, "You're a support class \nYou can change your scp by doing the command .scp <scp number>\n(eg .scp 173 -> scp-173)", timetodecide);
+            var a = DisplayPlayer.Get(player).Hint(h);
+            ChangeSCP._players.Add(player, a);
+            Timing.CallDelayed(timetodecide, () =>
+            {
+                ChangeSCP._players.Remove(player);
+                DisplayPlayer.Get(player).RemoveHint(a);
+            });
+        }
+
+        
 
 
         private RoleTypeId ChooseRandomRole(Dictionary<RoleTypeId, int> chancescp)
@@ -86,16 +110,16 @@ namespace KE.Misc.Misc
 
             return weightedPool[randomIndex];
         }
-    }
 
-    [CustomRole(RoleTypeId.Tutorial)]
-    public class Scp035 : CustomRole
-    {
-        public override uint Id { get; set; } = 10;
-        public override string Description { get; set; } = "t'es un humain dans la team des scp en gros ";
-        public override int MaxHealth { get; set; } = 600;
-        public override string Name { get; set; } = "SCP-035";
-        public override string CustomInfo { get; set; } = string.Empty;
+        public void EndingRound(EndingRoundEventArgs ev)
+        {
+            if (Scp035._trackedPlayers.Count <= 0) return;
+
+            if (ev.ClassList.mtf_and_guards != 0 || ev.ClassList.scientists != 0) ev.IsAllowed = false;
+            else if (ev.ClassList.class_ds != 0 || ev.ClassList.chaos_insurgents != 0) ev.IsAllowed = false;
+            else if (ev.ClassList.scps_except_zombies + ev.ClassList.zombies > 0) ev.IsAllowed = true;
+            else ev.IsAllowed = true;
+        }
     }
 
 
@@ -132,7 +156,7 @@ namespace KE.Misc.Misc
             string scp = arguments.At(0);
             if (!Enum.TryParse(scp, out RoleTypeId roleType) && roleType.IsScp() && roleType != RoleTypeId.Scp0492)
             {
-                response = "wrong scp number";
+                response = "wrong scp number \n(eg .scp Scp173 -> scp-173)";
                 return false;
             }
             

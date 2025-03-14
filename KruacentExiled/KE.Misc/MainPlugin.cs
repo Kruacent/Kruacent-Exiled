@@ -17,6 +17,8 @@ using Exiled.API.Extensions;
 using Exiled.Events.Commands.Hub;
 using RueI.Displays;
 using RueI.Extensions;
+using Exiled.CustomRoles.API.Features;
+using KE.Misc.Misc.CR;
 
 namespace KE.Misc
 {
@@ -64,7 +66,8 @@ namespace KE.Misc
             ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;
             Nine14Handle.UpgradingPlayer += _914.OnUpgradingPlayer;
             Exiled.Events.Handlers.Player.Dying += ScpNoeDeathMessage;
-
+            ServerHandle.EndingRound += Spawn.EndingRound;
+            CustomRole.RegisterRoles(false, null, true, this.Assembly);
             
         }
 
@@ -74,13 +77,14 @@ namespace KE.Misc
             Nine14Handle.UpgradingPlayer -= _914.OnUpgradingPlayer;
             Exiled.Events.Handlers.Player.Dying -= ScpNoeDeathMessage;
             ServerHandle.RoundStarted -= Spawn.OnRoundStarted;
+            ServerHandle.EndingRound -= Spawn.EndingRound;
             if (Instance.Config.ChancePinkCandy >= 0 && Instance.Config.ChancePinkCandy <= 100)
             {
                 Exiled.Events.Handlers.Scp330.InteractingScp330 -= Candy.InteractingScp330;
                 Candy = null;
             }
-            
 
+            CustomRole.UnregisterRoles([typeof(Scp035)]);
 
 
             _914 = null;

@@ -23,8 +23,15 @@ namespace KE.Misc.Misc
             
         }
 
-       internal void BecomingSCP(ChangingRoleEventArgs ev)
+
+        internal void BuffXp()
         {
+            
+        }
+
+        internal void BecomingSCP(ChangingRoleEventArgs ev)
+        {
+            
             if (!ev.NewRole.IsScp() || ev.NewRole == RoleTypeId.Scp0492) return;
             if(ev.Player.Role == RoleTypeId.None) return;
             Player p = ev.Player;
