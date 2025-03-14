@@ -3,14 +3,16 @@ using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
+using KE.CustomRoles.API;
 using PlayerRoles;
+using PlayerRoles.Spectating;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace KE.CustomRoles.CR.ClassD
 {
     [CustomRole(RoleTypeId.ClassD)]
-    internal class Mime : Exiled.CustomRoles.API.Features.CustomRole
+    internal class Mime : KECustomRole
     {
         public override string Name { get; set; } = "mime";
         public override string Description { get; set; } = "Tu es un <color=#FFC0CB>Mime</color> \nTu ne peux pas parler\nmais tu fais très peu de bruit quand tu marches\net t'es tout plat";
@@ -20,8 +22,6 @@ namespace KE.CustomRoles.CR.ClassD
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
-        public override bool IgnoreSpawnSystem { get; set; } = true;
-
         public override float SpawnChance { get; set; } = 100;
         public override Vector3 Scale { get; set; } = new Vector3(0.1f, 1, 1);
 
