@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using InventorySystem.Items.Keycards;
+using KE.CustomRoles.API;
 using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,7 @@ using UnityEngine;
 namespace KE.CustomRoles.CR.Scientist
 {
     [CustomRole(RoleTypeId.Scientist)]
-    internal class ZoneManager : Exiled.CustomRoles.API.Features.CustomRole
+    internal class ZoneManager : KECustomRole
     {
         public override string Name { get; set; } = "ZoneManager";
         public override string Description { get; set; } = "Tu es un <color=#0d7979>Zone Manager</color> \nT'as une carte de zone manager (d'où le nom) \nTu commences à heavy \nBon courage...";
@@ -18,7 +19,6 @@ namespace KE.CustomRoles.CR.Scientist
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scientist;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
-        public override bool IgnoreSpawnSystem { get; set; } = true;
 
         public override float SpawnChance { get; set; } = 100;
 

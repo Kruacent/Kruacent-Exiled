@@ -1,8 +1,11 @@
-﻿/*using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Pools;
 using Exiled.CustomRoles.API.Features;
+using InventorySystem.Configs;
+using LiteNetLib4Mirror.Open.Nat;
 using MEC;
 using PlayerRoles;
 using System;
@@ -14,37 +17,19 @@ using UnityEngine;
 
 namespace KE.CustomRoles.API
 {
-    [CustomRole(PlayerRoles.RoleTypeId.CustomRole)]
-    public abstract class GlobalCustomRole : CustomRole
+
+    public abstract class GlobalCustomRole : KECustomRole
     {
         public override RoleTypeId Role { get; set; } = RoleTypeId.None;
+        public abstract SideEnum Side { get; set; }
         public virtual IEnumerable<RoleTypeId> BlacklistedRole { get; } = new List<RoleTypeId>();
         public override void AddRole(Player player)
         {
+            if (SideClass.Get(player.Role.Side) != Side) return;
             Log.Debug($"{Name}: Adding role to {player.Nickname}.");
             TrackedPlayers.Add(player);
 
-            if (!BlacklistedRole.Contains(player.Role))
-            {
-                switch (KeepPositionOnSpawn)
-                {
-                    case true when KeepInventoryOnSpawn:
-                        player.Role.Set(Role, SpawnReason.ForceClass, RoleSpawnFlags.None);
-                        break;
-                    case true:
-                        player.Role.Set(Role, SpawnReason.ForceClass, RoleSpawnFlags.AssignInventory);
-                        break;
-                    default:
-                        {
-                            if (KeepInventoryOnSpawn && player.IsAlive)
-                                player.Role.Set(Role, SpawnReason.ForceClass, RoleSpawnFlags.UseSpawnpoint);
-                            else
-                                player.Role.Set(Role, SpawnReason.ForceClass, RoleSpawnFlags.All);
-                            break;
-                        }
-                }
-            }
-
+            
             Timing.CallDelayed(
                 0.25f,
                 () =>
@@ -124,5 +109,34 @@ namespace KE.CustomRoles.API
             }
         }
 
+
+
     }
-}*/
+
+    public enum SideEnum
+    {
+        Human,
+        SCP,
+        None,
+    }
+
+    public static class SideClass
+    {
+        public static SideEnum Get(Exiled.API.Enums.Side side)
+        {
+            switch (side)
+            {
+                case Exiled.API.Enums.Side.Scp:
+                    return SideEnum.SCP;
+                case Exiled.API.Enums.Side.Tutorial:
+                case Exiled.API.Enums.Side.Mtf:
+                case Exiled.API.Enums.Side.ChaosInsurgency:
+                    return SideEnum.Human;
+                case Exiled.API.Enums.Side.None: 
+                    return SideEnum.None;
+            }
+            return SideEnum.None;
+        }
+    }
+    
+}

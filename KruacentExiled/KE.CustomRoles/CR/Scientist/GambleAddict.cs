@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features.Attributes;
+using KE.CustomRoles.API;
 using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine;
 namespace KE.CustomRoles.CR.Scientist
 {
     [CustomRole(RoleTypeId.Scientist)]
-    internal class GambleAddict : Exiled.CustomRoles.API.Features.CustomRole
+    internal class GambleAddict : KECustomRole
     {
         public override string Name { get; set; } = "GambleAddict";
         public override string Description { get; set; } = "Tu es un <color=#FFFF7C>Gamble Addict</color> \nT'as trade ton kit et ta carte contre 4 pièces \nfais en bon usage";
@@ -16,7 +17,6 @@ namespace KE.CustomRoles.CR.Scientist
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scientist;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
-        public override bool IgnoreSpawnSystem { get; set; } = true;
 
         public override float SpawnChance { get; set; } = 100;
         public override Vector3 Scale { get; set; } = new Vector3(1, 1, 1);

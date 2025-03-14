@@ -15,7 +15,7 @@ namespace KE.CustomRoles.CR.SCP
     {
         public override string Name { get; set; } = "SCP-049-2-Door";
         public override string Description { get; set; } = "U can open lock door with ur ability clapclapclap";
-        public override uint Id { get; set; } = 1056;
+        public override uint Id { get; set; } = 1053;
         public override string CustomInfo { get; set; } = "SCP-049-2-Door";
         public override int MaxHealth { get; set; } = 400;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scp0492;

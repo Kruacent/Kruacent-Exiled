@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Server;
+using MEC;
 
 
 namespace KE.CustomRoles
@@ -47,6 +48,7 @@ namespace KE.CustomRoles
         public void CustomRoleImplement()
         {
             Controller.controller.GiveRole(Player.List);
+            
         }
 
         public void CustomRoleRespawning(RespawnedTeamEventArgs ev)

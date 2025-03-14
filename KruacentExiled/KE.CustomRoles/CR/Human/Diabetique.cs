@@ -1,0 +1,29 @@
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
+using Exiled.API.Features.Attributes;
+using Exiled.CustomRoles.API.Features;
+using KE.CustomRoles.API;
+using PlayerRoles;
+using UnityEngine;
+using Utils.NonAllocLINQ;
+
+namespace KE.CustomRoles.CR.Human
+{
+    [CustomRole(RoleTypeId.None)]
+    internal class Diabetique : GlobalCustomRole
+    {
+        public override SideEnum Side { get; set; } = SideEnum.Human;
+        public override string Name { get; set; } = "Diabetique";
+        public override string Description { get; set; } = "Tu es <color=#FFFF00>asthmatique</color>\nT'as stamina est réduit de moitié\nMais tu vises mieux";
+        public override uint Id { get; set; } = 1054;
+        public override string CustomInfo { get; set; } = "Diabetique";
+        public override int MaxHealth { get; set; } = 100;
+        public override bool KeepRoleOnDeath { get; set; } = true;
+        public override bool KeepRoleOnChangingRole { get; set; } = true;
+        
+        protected override void RoleAdded(Player player)
+        {
+            player.EnableEffect(EffectType.Scp207, -1, true);
+        }
+    }
+}

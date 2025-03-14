@@ -1,12 +1,13 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features.Attributes;
+using KE.CustomRoles.API;
 using PlayerRoles;
 using System.Collections.Generic;
 
 namespace KE.CustomRoles.CR.Guard
 {
     [CustomRole(RoleTypeId.FacilityGuard)]
-    internal class ChiefGuard : Exiled.CustomRoles.API.Features.CustomRole
+    internal class ChiefGuard : KECustomRole
     {
         public override string Name { get; set; } = "ChiefGuard";
         public override string Description { get; set; } = "Tu es un <color=#70C3FF>Chef des gardes du site</color> \nT'as une carte de private \net un crossvec";
@@ -16,7 +17,6 @@ namespace KE.CustomRoles.CR.Guard
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
-        public override bool IgnoreSpawnSystem { get; set; } = true;
 
         public override float SpawnChance { get; set; } = 100;
 
