@@ -90,29 +90,7 @@ namespace KE.Utils.Display
 
         
     }
-    public struct Position
-    {
-        private HPosition _hposition;
-        public HPosition HPosition { get { return _hposition; } }
-        private VPosition _vposition;
-        public VPosition VPosition { get { return _vposition; } }
-
-        public Position(HPosition hposition, VPosition vposition)
-        {
-            _hposition = hposition;
-            _vposition = vposition;
-        }
-
-        public override bool Equals(object obj)
-        {
-            Position pos = (Position)obj;
-            return pos.VPosition == VPosition && pos.HPosition == HPosition;
-        }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-    }
+    
 
 
 
