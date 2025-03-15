@@ -20,9 +20,11 @@ namespace KE.CustomRoles.API
 
     public abstract class GlobalCustomRole : KECustomRole
     {
-        public override RoleTypeId Role { get; set; } = RoleTypeId.None;
+        public sealed override RoleTypeId Role { get; set; } = RoleTypeId.None;
         public abstract SideEnum Side { get; set; }
-        public virtual IEnumerable<RoleTypeId> BlacklistedRole { get; } = new List<RoleTypeId>();
+        public virtual IEnumerable<RoleTypeId> BlacklistedRole { get; } = new HashSet<RoleTypeId>();
+        public override bool KeepInventoryOnSpawn { get; set; } = true;
+
         public override void AddRole(Player player)
         {
             if (SideClass.Get(player.Role.Side) != Side) return;
@@ -58,8 +60,8 @@ namespace KE.CustomRoles.API
                 });
 
             Log.Debug($"{Name}: Setting health values.");
+            player.MaxHealth *= MaxHealthMultiplicator; 
             player.Health = MaxHealth;
-            player.MaxHealth = MaxHealth;
             player.Scale = Scale;
 
             Vector3 position = GetSpawnPosition();
@@ -110,6 +112,9 @@ namespace KE.CustomRoles.API
         }
 
 
+        public sealed override int MaxHealth { get; set; }
+        public virtual float MaxHealthMultiplicator { get; set; } = 1;
+
 
     }
 
@@ -122,20 +127,15 @@ namespace KE.CustomRoles.API
 
     public static class SideClass
     {
-        public static SideEnum Get(Exiled.API.Enums.Side side)
+        public static SideEnum Get(Side side)
         {
-            switch (side)
+            return side switch
             {
-                case Exiled.API.Enums.Side.Scp:
-                    return SideEnum.SCP;
-                case Exiled.API.Enums.Side.Tutorial:
-                case Exiled.API.Enums.Side.Mtf:
-                case Exiled.API.Enums.Side.ChaosInsurgency:
-                    return SideEnum.Human;
-                case Exiled.API.Enums.Side.None: 
-                    return SideEnum.None;
-            }
-            return SideEnum.None;
+                Side.Scp => SideEnum.SCP,
+                Side.Tutorial or Side.Mtf or Side.ChaosInsurgency => SideEnum.Human,
+                Side.None => SideEnum.None,
+                _ => SideEnum.None,
+            };
         }
     }
     
