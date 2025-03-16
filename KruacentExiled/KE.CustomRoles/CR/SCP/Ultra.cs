@@ -7,6 +7,7 @@ using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -26,6 +27,7 @@ namespace KE.CustomRoles.CR.SCP
         public override float MaxHealthMultiplicator { get; set; } = 1f;
         public override float SpawnChance { get; set; } = 100;
         public const float RefreshRate = 20;
+        public const int SizeText = 20;
         protected override void RoleAdded(Player player)
         {
             _handles.Add(player, Timing.RunCoroutine(DisplayInfos(player)));
@@ -41,13 +43,12 @@ namespace KE.CustomRoles.CR.SCP
 
         private IEnumerator<float> DisplayInfos(Player player)
         {
-            DisplayPlayer display = DisplayPlayer.Get(player);
-
             RueIHint hint;
             while (true)
             {
+                Log.Debug("Ultra : showing");
                 hint = new(Utils.Display.Enums.HPosition.Left, Utils.Display.Enums.VPosition.CustomRoleEffect, PlayerInZone(), RefreshRate);
-                display.Hint(hint);
+                DisplayPlayer.Get(player).Hint(hint);
                 yield return Timing.WaitForSeconds(RefreshRate);
             }
         }
@@ -55,20 +56,18 @@ namespace KE.CustomRoles.CR.SCP
 
         private string PlayerInZone()
         {
-            StringBuilder sb = new();
+            string result = $"<size={SizeText}>";
             int nbPlayer;
             foreach(ZoneType zone in Enum.GetValues(typeof(ZoneType)))
             {
                 nbPlayer = GetPlayerInZone(zone);
-                if (nbPlayer > 0)
+                if (nbPlayer > 0 || MainPlugin.Instance.Config.Debug)
                 {
-                    sb.Append(zone.ToString());
-                    sb.Append(" : ");
-                    sb.Append(nbPlayer);
-                    sb.AppendLine();
+                    result += zone.ToString() + " : " + nbPlayer + "\n";
                 }
             }
-            return sb.ToString();
+            result += "</size>";
+            return result;
         }
 
         private int GetPlayerInZone(ZoneType zone)
