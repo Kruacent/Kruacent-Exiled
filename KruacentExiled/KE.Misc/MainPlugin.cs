@@ -129,7 +129,7 @@ namespace KE.Misc
             peanutDoor.IsOpen = false;
             peanutDoor.ChangeLock(DoorLockType.Isolation);
             CoroutineHandle a;
-            if (MainPlugin.Instance.Config.Debug)
+            if (Instance.Config.Debug)
                 a = Timing.RunCoroutine(Timer(120, "u r free :3"));
             else
                 a = Timing.RunCoroutine(Timer(135 - Player.List.Count * 15, "u r free :3"));
@@ -147,18 +147,20 @@ namespace KE.Misc
                 playerToShow.RemoveAll(p => p.CurrentRoom.Type != RoomType.Hcz049);
                 playerToShow.AddRange(Player.List.Where(p => p.CurrentRoom.Type == RoomType.Hcz049));
 
-                RueIHint hint = new(HPosition.Center, VPosition.CustomRole, $"{secondsWaiting} seconds left for SCP-173's spawn", 1);
+                //RueIHint hint = new(HPosition.Center, VPosition.CustomRole, $"{secondsWaiting} seconds left for SCP-173's spawn");
                 playerToShow.ForEach(p => 
                 {
-                    DisplayCore c = DisplayCore.Get(p.ReferenceHub);
-                    c.SetElemTemp($"<align={HPosition.Center.ToString().ToLower()}>"+hint.RawContent+"</align>", (int)hint.Position.VPosition, TimeSpan.FromSeconds(hint.Duration), new RueI.Displays.Scheduling.TimedElemRef<RueI.Elements.SetElement>());
-                    //DisplayPlayer.Get(p).Hint(hint)
+                    //DisplayPlayer.Get(p).Hint(new Position(HPosition.Center, 600), hub => $"{secondsWaiting} seconds left for SCP-173's spawn");
+                    //DisplayCore c = DisplayCore.Get(p.ReferenceHub);
+                    //c.SetElemTemp($"<align={HPosition.Center.ToString().ToLower()}>"+hint.RawContent+"</align>", (int)hint.Position.VPosition, TimeSpan.FromSeconds(hint.Duration), new RueI.Displays.Scheduling.TimedElemRef<RueI.Elements.SetElement>());
+                    //DisplayPlayer.Get(p).Hint(new Position(HPosition.Center,600), $"{secondsWaiting} seconds left for SCP-173's spawn",1);
                 });
                 yield return Timing.WaitForSeconds(1);
                 secondsWaiting--;
             }
             playerToShow.ForEach(p => DisplayPlayer.Get(p).Hint(new Position(HPosition.Center,VPosition.CustomRole),msg));
         }
+
 
 
         
