@@ -27,7 +27,7 @@ namespace KE.Utils.Display
             return _displays[player];
         }
 
-        public DisplayPlayer(Player player)
+        private DisplayPlayer(Player player)
         {
             _player = player;
             _display = new (DisplayCore.Get(player.ReferenceHub));

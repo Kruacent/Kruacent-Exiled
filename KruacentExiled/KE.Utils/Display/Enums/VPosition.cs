@@ -9,6 +9,7 @@ namespace KE.Utils.Display.Enums
     public enum VPosition
     {
         GlobalEvent = 900,
+        CustomRoleEffect = 600,
         CustomItem = 200,
         CustomRole = 400,
     }
