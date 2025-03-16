@@ -11,6 +11,7 @@ using Exiled.API.Features;
 using Exiled.API.Extensions;
 using UnityEngine;
 using YamlDotNet.Core.Tokens;
+using Exiled.CustomRoles.API.Features;
 
 namespace KE.Misc.Misc
 {
@@ -175,7 +176,15 @@ namespace KE.Misc.Misc
             RoleTypeId newRole;
             if (roleScp.TryGetValue(key, out newRole))
             {
-                p.Role.Set(newRole);
+                if(newRole == RoleTypeId.Scp079)
+                {
+                    //035
+                    CustomRole.Registered.FirstOrDefault(c => c.Id == 10).AddRole(p);
+                }
+                else
+                {
+                    p.Role.Set(newRole);
+                }
             }
         }
     }
