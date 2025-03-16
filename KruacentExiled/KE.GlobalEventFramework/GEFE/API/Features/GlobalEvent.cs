@@ -5,6 +5,7 @@ using MEC;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using System;
 using KE.Utils.Display;
+using Exiled.Events.Commands.PluginManager;
 
 namespace KE.GlobalEventFramework.GEFE.API.Features
 {
@@ -91,19 +92,27 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         {
             var random = UnityEngine.Random.Range(0,101);
 
+            ShowConsole();
             foreach (Player player in Player.List)
             {
                 DisplayPlayer.Get(player).Hint(new (KE.Utils.Display.Enums.HPosition.Center,KE.Utils.Display.Enums.VPosition.GlobalEvent, ShowText(random < MainPlugin.Instance.Config.ChanceRedacted), 10));
             }
         }
 
-        private static String ShowText(bool redacted = false)
+        private static void ShowConsole()
         {
-            String result = "Global Events: ";
             Log.Info($"Global Event(s) ({ActiveGE.Count()}): ");
             for (int i = 0; i < ActiveGE.Count(); i++)
             {
                 Log.Info(ActiveGE[i].Name);
+            }
+        }
+
+        private static string ShowText(bool redacted = false)
+        {
+            string result = "Global Events: ";
+            for (int i = 0; i < ActiveGE.Count(); i++)
+            {
                 if (redacted)
                 {
                     result += ActiveGE[i].Description;
