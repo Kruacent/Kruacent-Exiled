@@ -81,7 +81,7 @@ namespace KE.Misc.Misc
         {
             if (player.Role == RoleTypeId.Scp096 || player.Role == RoleTypeId.Scp079 && !MainPlugin.Instance.Config.Scp035Enabled || MainPlugin.Instance.Config.Debug) return;
             float timetodecide = 60;
-            RueIHint h = new(Utils.Display.Enums.HPosition.Center-50, Utils.Display.Enums.VPosition.CustomRole, "You're a support class \nYou can change your scp by doing the command .scp <scp number>\n(eg .scp 173 -> scp-173)", timetodecide);
+            RueIHint h = new(Utils.Display.Enums.HPosition.Center, Utils.Display.Enums.VPosition.CustomRole, "You're a support class \nYou can change your scp by doing the command .scp <scp number>\n(eg .scp 173 -> scp-173)", timetodecide);
             var a = DisplayPlayer.Get(player).Hint(h);
             ChangeSCP._players.Add(player, a);
             Timing.CallDelayed(timetodecide, () =>
