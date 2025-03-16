@@ -24,7 +24,7 @@ namespace KE.Misc.Misc
         {
             if (!MainPlugin.Instance.Config.ScpPreferences) return;
 
-            HashSet<Player> pl = [.. Player.List];
+            HashSet<Player> pl = Player.List.Where(p=> p.IsScp).ToHashSet();
 
             foreach (Player player in pl)
             {
