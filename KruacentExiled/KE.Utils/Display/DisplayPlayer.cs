@@ -4,12 +4,14 @@ using KE.Utils.Display.Enums;
 using MEC;
 using RueI.Displays;
 using RueI.Elements;
+using RueI.Elements.Delegates;
 using RueI.Elements.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace KE.Utils.Display
 {
@@ -39,7 +41,17 @@ namespace KE.Utils.Display
             SetElement element = new((float)position.VPosition, $"<align={position.HPosition}>" + text + "</align>");
             _display.Elements.Add(element);
             _hints.Add(position, element);
-            UpdateCore(_player);
+            UpdateCore();
+            return element;
+        }
+
+        [Obsolete("doesn't work don't use it",true)]
+        public DynamicElement Hint(Position position, GetContent getContent)
+        {
+            DynamicElement element = new(getContent, position.RawVPosition);
+            _display.Elements.Add(element);
+            _hints.Add(position, element);
+            UpdateCore();
             return element;
         }
 
@@ -50,12 +62,12 @@ namespace KE.Utils.Display
             SetElement element = new((float)position.VPosition, $"<align={position.HPosition.ToString().ToLower()}>"+text+"</align>");
             _display.Elements.Add(element);
             _hints.Add(position, element);
-            UpdateCore(_player);
+            UpdateCore();
             Timing.CallDelayed(seconds, () =>
             {
                 _display.Elements.Remove(element);
                 _hints.Remove(position);
-                UpdateCore(_player);
+                UpdateCore();
             });
             return element;
         }
@@ -73,7 +85,7 @@ namespace KE.Utils.Display
             if (!_hints.ContainsKey(placement)) return false;
             bool result = _display.Elements.Remove(_hints[placement]);
             _hints.Remove(placement);
-            UpdateCore(_player);
+            UpdateCore();
             return result;
         }
 
@@ -81,11 +93,11 @@ namespace KE.Utils.Display
         {
             bool result = _display.Elements.Remove(elem);
             _hints.Remove(_hints.First(x => x.Value == elem).Key);
-            UpdateCore(_player);
+            UpdateCore();
             return result;
         }
 
-
+        private void UpdateCore() => UpdateCore(_player);
         public static void UpdateCore(Player player) => DisplayCore.Get(player.ReferenceHub).Update();
 
         
