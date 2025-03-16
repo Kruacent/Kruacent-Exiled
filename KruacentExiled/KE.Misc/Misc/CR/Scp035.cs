@@ -50,6 +50,7 @@ namespace KE.Misc.Misc.CR
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Shot += OnShot;
             Exiled.Events.Handlers.Player.ActivatingGenerator += OnActivatingGenerator;
+            Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
         }
 
         protected override void UnsubscribeEvents()
@@ -57,9 +58,15 @@ namespace KE.Misc.Misc.CR
             Exiled.Events.Handlers.Player.EnteringPocketDimension -= OnEnteringPocketDimension;
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
             Exiled.Events.Handlers.Player.Shot -= OnShot;
+            Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
             Exiled.Events.Handlers.Player.ActivatingGenerator -= OnActivatingGenerator;
         }
 
+        private void OnVoiceChatting(VoiceChattingEventArgs ev)
+        {
+            if (!Check(ev.Player)) return;
+            ev.VoiceModule.CurrentChannel = VoiceChat.VoiceChatChannel.ScpChat;
+        }
 
         private void OnEnteringPocketDimension(EnteringPocketDimensionEventArgs ev)
         {
