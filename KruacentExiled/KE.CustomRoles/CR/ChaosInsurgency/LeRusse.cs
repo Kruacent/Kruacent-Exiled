@@ -5,7 +5,7 @@ using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KE.CustomRoles.CR.ClassD
+namespace KE.CustomRoles.CR.ChaosInsurgency
 {
     [CustomRole(RoleTypeId.ChaosConscript)]
     internal class Russe : KECustomRole

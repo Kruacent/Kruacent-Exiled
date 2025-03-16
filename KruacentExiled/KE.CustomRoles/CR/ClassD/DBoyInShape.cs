@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using CustomPlayerEffects;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
@@ -14,43 +15,43 @@ using System.Linq;
 using UnityEngine;
 using Utils.NonAllocLINQ;
 
-namespace KE.CustomRoles.CR.Human
+namespace KE.CustomRoles.CR.ClassD
 {
-    [CustomRole(RoleTypeId.None)]
-    internal class DBoyInShape : GlobalCustomRole
+    [CustomRole(RoleTypeId.ClassD)]
+    internal class DBoyInShape : KECustomRole
     {
-        public override SideEnum Side { get; set; } = SideEnum.Human;
         public override string Name { get; set; } = "DBoyInShape";
         public override string Description { get; set; } = "";
         public override uint Id { get; set; } = 1058;
         public override string CustomInfo { get; set; } = "DBoyInShape";
-        public override int MaxHealth { get; set; } = 100;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
-        
-        private const float SpeedReduction = 0.85f;
+        public override float SpawnChance { get; set; } = 100;
+        public override int MaxHealth { get; set; } = 100;
+
+        private const byte _speedReduction = 15;
 
         protected override void RoleAdded(Player player)
         {
-            player.EnableEffect(EffectType.MovementBoost, 5, SpeedReduction);
+            player.EnableEffect(EffectType.Slowness, 5, _speedReduction);
         }
 
         protected override void RoleRemoved(Player player)
         {
-            player.DisableEffect(EffectType.MovementBoost);
+            player.DisableEffect(EffectType.Slowness);
         }
 
         protected override void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.InteractingDoor += InterractingDoor;
+            Exiled.Events.Handlers.Player.InteractingDoor += InteractingDoor;
         }
 
         protected override void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.InteractingDoor -= InterractingDoor;
+            Exiled.Events.Handlers.Player.InteractingDoor -= InteractingDoor;
         }
 
-        public void InterractingDoor(InteractingDoorEventArgs ev)
+        public void InteractingDoor(InteractingDoorEventArgs ev)
         {
             if (ev.IsAllowed) return;
             if (!Check(ev.Player)) return;
@@ -83,13 +84,8 @@ namespace KE.CustomRoles.CR.Human
             }
             else
             {
-                ev.Player.Health -= damage;
-
-                if(ev.Player.Health <= 0)
-                {
-                    ev.Player.Kill(DamageType.SeveredHands);
-                }
                 Log.Info($"{ev.Player.Nickname} a échoué à ouvrir une {ev.Door.Type} et a perdu {damage} HP !");
+                ev.Player.Hurt(damage, DamageType.SeveredHands);
             }
         }
     }

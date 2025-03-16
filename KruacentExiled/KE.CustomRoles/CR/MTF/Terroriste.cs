@@ -5,7 +5,7 @@ using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KE.CustomRoles.CR.ClassD
+namespace KE.CustomRoles.CR.MTF
 {
     [CustomRole(RoleTypeId.NtfSergeant)]
     internal class Terroriste : KECustomRole

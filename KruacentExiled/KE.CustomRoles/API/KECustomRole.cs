@@ -8,11 +8,8 @@ using KE.Utils.Display;
 using KE.Utils.Display.Enums;
 using MEC;
 using PlayerRoles;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace KE.CustomRoles.API
@@ -20,7 +17,7 @@ namespace KE.CustomRoles.API
     public abstract class KECustomRole : CustomRole
     {
         public sealed override bool IgnoreSpawnSystem { get; set; } = true;
-        protected override void ShowMessage(Player player)
+        protected sealed override void ShowMessage(Player player)
         {
 
             string show = $"<b>{Name}</b>\n {Description}";
@@ -31,7 +28,7 @@ namespace KE.CustomRoles.API
 
         public override void AddRole(Player player)
         {
-            Exiled.API.Features.Player player2 = player;
+            Player player2 = player;
             Log.Debug(Name + ": Adding role to " + player2.Nickname + ".");
             TrackedPlayers.Add(player2);
             if (Role != RoleTypeId.None)

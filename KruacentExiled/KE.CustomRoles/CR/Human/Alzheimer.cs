@@ -20,9 +20,9 @@ namespace KE.CustomRoles.CR.Human
         public override string Description { get; set; } = "Tu es <color=#0f0f0f>Vieux</color>";
         public override uint Id { get; set; } = 1056;
         public override string CustomInfo { get; set; } = "Vieux";
-        public override int MaxHealth { get; set; } = 100;
         public override bool KeepRoleOnDeath { get; set; } = true;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
+        public override float SpawnChance { get; set; } = 100;
         protected override void RoleAdded(Player player)
         {
             _coroutines.Add(player, Timing.RunCoroutine(Teleport(player)));
