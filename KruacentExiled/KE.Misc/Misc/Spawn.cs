@@ -35,6 +35,7 @@ namespace KE.Misc.Misc
         private void SetScpPreferences(Player player)
         {
             Config config = MainPlugin.Instance.Config;
+            if(config == null) return;
             Dictionary<RoleTypeId, int> chancescp = player.ScpPreferences.Preferences.ToDictionary(p => p.Key, p => p.Value + 6);
 
 
