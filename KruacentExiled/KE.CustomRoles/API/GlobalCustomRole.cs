@@ -27,7 +27,12 @@ namespace KE.CustomRoles.API
 
         public override void AddRole(Player player)
         {
-            if (SideClass.Get(player.Role.Side) != Side) return;
+            SideEnum side = SideClass.Get(player.Role.Side);
+            if (side != Side)
+            {
+                Log.Error($"tried to give a global custom role to a player in the wrong side ({side} instead of {Side})");
+                return;
+            }
             Log.Debug($"{Name}: Adding role to {player.Nickname}.");
             TrackedPlayers.Add(player);
 
@@ -61,7 +66,7 @@ namespace KE.CustomRoles.API
 
             Log.Debug($"{Name}: Setting health values.");
             player.MaxHealth *= MaxHealthMultiplicator; 
-            player.Health = MaxHealth;
+            player.Health = player.MaxHealth;
             player.Scale = Scale;
 
             Vector3 position = GetSpawnPosition();
