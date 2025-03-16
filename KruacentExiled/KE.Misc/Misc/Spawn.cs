@@ -1,4 +1,5 @@
 ﻿using CommandSystem;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
@@ -56,6 +57,7 @@ namespace KE.Misc.Misc
                     {
                         CustomRole scp = CustomRole.Registered.FirstOrDefault(c => c.Id == 10);
                         scp.AddRole(pl);
+                        pl.Teleport(SpawnLocationType.Inside096);
                     }
                     else
                     {
