@@ -58,7 +58,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         /// </summary>
         private void SpeedyNut(BlinkingEventArgs ev)
         {
-            ev.BlinkCooldown = ev.BlinkCooldown/2;
+            ev.BlinkCooldown = ev.BlinkCooldown/4;
         }
 
         /// <summary>

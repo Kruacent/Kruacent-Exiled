@@ -26,7 +26,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         public override string Description { get; set; } = "Les spawns sont random";
         ///<inheritdoc/>
         public override int Weight { get; set; } = 1;
-        public IEnumerable<RoomType> BlacklistedRooms { get; } = new HashSet<RoomType>() { RoomType.EzShelter,RoomType.HczTestRoom};
+        public IEnumerable<RoomType> BlacklistedRooms { get; } = new HashSet<RoomType>() { RoomType.EzShelter,RoomType.HczTestRoom,RoomType.EzCollapsedTunnel};
         ///<inheritdoc/>
         public IEnumerator<float> Start()
         {
