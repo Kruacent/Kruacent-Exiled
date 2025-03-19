@@ -14,7 +14,7 @@ namespace KE.Items.Items.Models
     internal class DeployWallModel : Model
     {
         const float distance = 2;
-        internal override void Spawn(Vector3 spawnPos, Quaternion rotation)
+        internal override void Create(Vector3 spawnPos, Quaternion rotation)
         {
 
             Vector3 forward = rotation * Vector3.forward;

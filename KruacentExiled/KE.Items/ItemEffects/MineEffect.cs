@@ -59,7 +59,7 @@ namespace KE.Items.ItemEffects
             MineModel m = new MineModel();
 
             //put the mine on the floor
-            m.Spawn(pos, new Quaternion());
+            m.Create(pos, new Quaternion());
 
             Timing.RunCoroutine(WaitAndActivateMine(p, m));
         }

@@ -12,7 +12,7 @@ namespace KE.Items.Items.Models
     {
         internal Vector3 Position { get; set; }
         protected List<AdminToy> Toys { get; set; } = new List<AdminToy> { };
-        internal abstract void Spawn(Vector3 spawnPos, Quaternion rotation);
+        internal abstract void Create(Vector3 spawnPos, Quaternion rotation);
 
         internal void Destroy()
         {

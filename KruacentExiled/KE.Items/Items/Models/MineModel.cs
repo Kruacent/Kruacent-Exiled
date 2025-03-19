@@ -12,7 +12,7 @@ namespace KE.Items.Items.Models
     internal class MineModel : Model
     {
         private Light _light;
-        internal override void Spawn(Vector3 spawnPos, Quaternion _)
+        internal override void Create(Vector3 spawnPos, Quaternion _)
         {
             //spawn + offset
             Position = spawnPos + new Vector3(0, .05f);
