@@ -1,0 +1,151 @@
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
+using Exiled.API.Features.Attributes;
+using Exiled.API.Features.Items;
+using Exiled.API.Features.Spawn;
+using Exiled.API.Features.Toys;
+using Exiled.CustomItems.API.Features;
+using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Server;
+using MEC;
+using PlayerRoles;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.Tracing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+using VoiceChat.Codec;
+using VoiceChat.Codec.Enums;
+using VoiceChat.Networking;
+
+namespace KE.Items.Items
+{
+    [CustomItem(ItemType.SCP1576)]
+    public class Scp7045 : KECustomItem
+    {
+
+        private static readonly OpusDecoder _decoder = new();
+        private static readonly OpusEncoder _encoder = new(OpusApplicationType.Voip);
+        private static readonly Dictionary<Player,Speaker> _speakers = new ();
+        public override uint Id { get; set; } = 1800;
+        public override string Name { get; set; } = "SCP-7045";
+        public override string Description { get; set; } = "A weird looking radio";
+        public override float Weight { get; set; } = 0.65f;
+
+        private bool _recordingMode= true;
+        private bool _someoneUsingItem = false;
+        private AudioMessage _message;
+        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        {
+            Limit = 1,
+            LockerSpawnPoints = new List<LockerSpawnPoint>()
+            {
+                new LockerSpawnPoint()
+                {
+                    Type = LockerType.Scp1576Pedestal,
+                    UseChamber = true,
+                    Chance = .5f
+                }
+            }
+        };
+
+        protected override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.UsedItem += OnUsedItem;
+            Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
+
+
+        }
+        protected override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.UsedItem -= OnUsedItem;
+            Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
+        }
+
+        private void OnUsedItem(UsedItemEventArgs ev)
+        {
+            
+            if (!Check(ev.Item)) return;
+            Scp1576 item = (Scp1576)ev.Item;
+            Timing.CallDelayed(.5f, () => item.StopTransmitting());
+
+        }
+
+        public const int sampleSize = 480;
+
+        private List<float> _recordingBuffer = new();
+        private bool _isRecording = false;
+        private float _lastVoiceTime = 0f; // Timestamp of last voice packet
+        private void OnVoiceChatting(VoiceChattingEventArgs ev)
+        {
+            if (!Check(ev.Player.CurrentItem)) return;
+            Speaker speaker;
+            byte speakerid = (byte)ev.Player.Id;
+            if (!_speakers.TryGetValue(ev.Player, out speaker))
+            {
+                _speakers[ev.Player] = Speaker.Create(speakerid, ev.Player.Position);
+            }
+            speaker = _speakers[ev.Player];
+
+            VoiceMessage message = ev.VoiceMessage;
+            if (!_isRecording)
+            {
+                _recordingBuffer.Clear();
+                _isRecording = true;
+                Timing.RunCoroutine(CheckIfRecordingFinished(speaker)); // Start the "stop talking" check
+            }
+
+            // Decode voice data and append to the shared buffer
+            float[] decodedBuffer = new float[sampleSize];
+            _decoder.Decode(message.Data, message.DataLength, decodedBuffer);
+            _recordingBuffer.AddRange(decodedBuffer);
+
+            // Update the last time voice data was received
+            _lastVoiceTime = Time.time;
+        }
+
+        private IEnumerator<float> CheckIfRecordingFinished(Speaker speaker)
+        {
+            while (_isRecording)
+            {
+                // Wait a short time before checking again
+                yield return Timing.WaitForSeconds(0.2f);
+
+                // If no voice data has been received for 0.5s, stop recording
+                if (Time.time - _lastVoiceTime >= 0.5f)
+                {
+                    _isRecording = false;
+
+                    float[] finalRecording = _recordingBuffer.ToArray();
+                    Log.Info($"Final recorded voice message length: {finalRecording.Length} samples.");
+
+                    Timing.RunCoroutine(PlayVoice(finalRecording, speaker.Base.NetworkControllerId));
+                }
+            }
+        }
+
+
+        private IEnumerator<float> PlayVoice(float[] data,byte speakerid)
+        {
+            for (int i = 0; i < data.Length; i += sampleSize)
+            {
+                byte[] encodedData = new byte[512];
+                float[] decodedBuffer = data.Skip(i).Take(sampleSize).ToArray();
+                int dataLen = _encoder.Encode(decodedBuffer, encodedData);
+                _message = new AudioMessage(speakerid, encodedData, dataLen);
+                foreach(Player player in Player.List)
+                    player.ReferenceHub.connectionToClient.Send(_message);
+                yield return Timing.WaitForOneFrame;
+
+            }
+            
+        }
+
+
+
+
+
+    }
+}

@@ -7,26 +7,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using Exiled.Events.EventArgs.Player;
 using Exiled.API.Features.Toys;
-using Player = Exiled.API.Features.Player;
 using MEC;
-using Exiled.API.Features.Items;
-using Model = KE.Items.Items.Models.Model;
 using KE.Items.ItemEffects;
 
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.KeycardJanitor)]
-    public class Mine : KECustomItem, ILumosItem, ISwichableEffect
+    public class DeployableWall : KECustomItem, ILumosItem, ISwichableEffect
     {
-        public override uint Id { get; set; } = 1053;
-        public override string Name { get; set; } = "Mine";
-        public override string Description { get; set; } = "Drop to deploy the mine, little advice : don't step on it";
+        
+        public override uint Id { get; set; } = 1048;
+        public override string Name { get; set; } = "Deployable Wall";
+        public override string Description { get; set; } = "Drop to deploy a wall, and throw to just throw the card";
         public override float Weight { get; set; } = 0.65f;
-        public Color Color { get; set; } = Color.yellow;
+        public Color Color { get; set; } = Color.green;
 
         public CustomItemEffect Effect { get; set; }
-
-
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 2,
@@ -34,63 +30,47 @@ namespace KE.Items.Items
             {
                 new DynamicSpawnPoint()
                 {
-                    Chance= 25,
+                    Chance=25,
                     Location = SpawnLocationType.Inside049Armory,
                 },
                 new DynamicSpawnPoint()
                 {
-                    Chance= 25,
-                    Location = SpawnLocationType.InsideEscapeSecondary,
-                },
-                new DynamicSpawnPoint()
-                {
-                    Chance= 25,
-                    Location = SpawnLocationType.InsideGateA,
-                },
-                new DynamicSpawnPoint()
-                {
-                    Chance= 25,
-                    Location = SpawnLocationType.InsideGateB,
+                    Chance=25,
+                    Location = SpawnLocationType.InsideLczArmory,
                 }
             },
             LockerSpawnPoints = new List<LockerSpawnPoint>
             {
                 new LockerSpawnPoint()
                 {
-                    Chance= 20,
-                    Type = LockerType.Misc,
-                },
-                new LockerSpawnPoint()
-                {
-                    Chance= 20,
+                    Chance=50,
                     Type = LockerType.RifleRack,
                 },
             }
 
         };
 
-        public Mine()
+        public DeployableWall()
         {
-            Effect = new MineEffect();
+            Effect = new DeployableWallEffect();
         }
 
         protected override void OnDroppingItem(DroppingItemEventArgs ev)
         {
-            
-
             if (ev.IsThrown)
             {
                 ev.IsAllowed = true;
                 return;
             }
-
+            
             ev.IsAllowed = false;
             ev.Player.RemoveItem(ev.Item);
             Effect.Effect(ev);
 
         }
 
-
         
+
     }
+
 }
