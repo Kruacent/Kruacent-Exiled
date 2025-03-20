@@ -9,7 +9,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     public class R : GlobalEvent
     {
         ///<inheritdoc/>
-        public override int Id { get; set; } = 32;
+        public override uint Id { get; set; } = 0;
         ///<inheritdoc/>
         public override string Name { get; set; } = "nothing";
         ///<inheritdoc/>
@@ -17,10 +17,6 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override int Weight { get; set; } = 3;
         ///<inheritdoc/>
-        public override IEnumerator<float> Start()
-        {
-            yield return 0;
-        }
 
     }
 }
