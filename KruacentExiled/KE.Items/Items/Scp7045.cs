@@ -34,8 +34,6 @@ namespace KE.Items.Items
         public override string Description { get; set; } = "A weird looking radio";
         public override float Weight { get; set; } = 0.65f;
 
-        private bool _recordingMode= true;
-        private bool _someoneUsingItem = false;
         private AudioMessage _message;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
@@ -64,14 +62,66 @@ namespace KE.Items.Items
             Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        private bool _isItemActive = false;
+
         private void OnUsedItem(UsedItemEventArgs ev)
         {
-            
             if (!Check(ev.Item)) return;
+
             Scp1576 item = (Scp1576)ev.Item;
-            Timing.CallDelayed(.5f, () => item.StopTransmitting());
+
+            if (!_isItemActive)
+            {
+                _isItemActive = true;
+                _recordingBuffer.Clear();
+                _isRecording = true;
+                _lastVoiceTime = Time.time;
+                Log.Info("Enregistrement activé...");
+
+                Speaker speaker;
+                byte speakerid = (byte)ev.Player.Id;
+
+                if (!_speakers.TryGetValue(ev.Player, out speaker))
+                    _speakers[ev.Player] = Speaker.Create(speakerid, ev.Player.Position);
+
+                Timing.RunCoroutine(CheckIfRecordingFinished(_speakers[ev.Player]));
+            }
+            else
+            {
+                _isItemActive = false;
+                _isRecording = false;
+                Log.Info("Enregistrement terminé.");
+
+                Log.Info("Recording buffer : " + _recordingBuffer.ToArray().Count());
+                if (_recordingBuffer.Count > 0)
+                {
+                    float[] finalRecording = _recordingBuffer.ToArray();
+                    Timing.RunCoroutine(PlayVoice(finalRecording, (byte)ev.Player.Id));
+                }
+
+                item.StopTransmitting();
+            }
+
 
         }
+
+
 
         public const int sampleSize = 480;
 
@@ -80,7 +130,8 @@ namespace KE.Items.Items
         private float _lastVoiceTime = 0f; // Timestamp of last voice packet
         private void OnVoiceChatting(VoiceChattingEventArgs ev)
         {
-            if (!Check(ev.Player.CurrentItem)) return;
+            if (!_isItemActive || !Check(ev.Player.CurrentItem)) return;
+
             Speaker speaker;
             byte speakerid = (byte)ev.Player.Id;
             if (!_speakers.TryGetValue(ev.Player, out speaker))
@@ -90,22 +141,20 @@ namespace KE.Items.Items
             speaker = _speakers[ev.Player];
 
             VoiceMessage message = ev.VoiceMessage;
-            if (!_isRecording)
+
+            // Si on est en mode enregistrement et que l'item est activé, on enregistre la voix
+            if (_isRecording)
             {
-                _recordingBuffer.Clear();
-                _isRecording = true;
-                Timing.RunCoroutine(CheckIfRecordingFinished(speaker)); // Start the "stop talking" check
+                float[] decodedBuffer = new float[sampleSize];
+                _decoder.Decode(message.Data, message.DataLength, decodedBuffer);
+                _recordingBuffer.AddRange(decodedBuffer);
+
+                // Mettre à jour le timestamp de la dernière voix reçue
+                _lastVoiceTime = Time.time;
             }
-
-            // Decode voice data and append to the shared buffer
-            float[] decodedBuffer = new float[sampleSize];
-            _decoder.Decode(message.Data, message.DataLength, decodedBuffer);
-            _recordingBuffer.AddRange(decodedBuffer);
-
-            // Update the last time voice data was received
-            _lastVoiceTime = Time.time;
         }
 
+        
         private IEnumerator<float> CheckIfRecordingFinished(Speaker speaker)
         {
             while (_isRecording)
@@ -117,14 +166,15 @@ namespace KE.Items.Items
                 if (Time.time - _lastVoiceTime >= 0.5f)
                 {
                     _isRecording = false;
-
+    
                     float[] finalRecording = _recordingBuffer.ToArray();
                     Log.Info($"Final recorded voice message length: {finalRecording.Length} samples.");
 
-                    Timing.RunCoroutine(PlayVoice(finalRecording, speaker.Base.NetworkControllerId));
+                    //Timing.RunCoroutine(PlayVoice(finalRecording, speaker.Base.NetworkControllerId));
                 }
             }
         }
+        
 
 
         private IEnumerator<float> PlayVoice(float[] data,byte speakerid)
@@ -138,14 +188,7 @@ namespace KE.Items.Items
                 foreach(Player player in Player.List)
                     player.ReferenceHub.connectionToClient.Send(_message);
                 yield return Timing.WaitForOneFrame;
-
             }
-            
         }
-
-
-
-
-
     }
 }
