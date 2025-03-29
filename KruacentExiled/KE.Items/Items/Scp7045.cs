@@ -1,12 +1,17 @@
 ﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Spawn;
 using Exiled.API.Features.Toys;
+using Exiled.CustomItems;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
+using KE.Items.Interface;
+using KE.Utils.Display.Enums;
+using KE.Utils.Display;
 using MEC;
 using PlayerRoles;
 using System;
@@ -62,22 +67,6 @@ namespace KE.Items.Items
             Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         private bool _isItemActive = false;
 
         private void OnUsedItem(UsedItemEventArgs ev)
@@ -101,6 +90,8 @@ namespace KE.Items.Items
                     _speakers[ev.Player] = Speaker.Create(speakerid, ev.Player.Position);
 
                 Timing.RunCoroutine(CheckIfRecordingFinished(_speakers[ev.Player]));
+                Timing.RunCoroutine(DisplayCountdown(ev.Player));
+
             }
             else
             {
@@ -118,6 +109,11 @@ namespace KE.Items.Items
                 item.StopTransmitting();
             }
 
+            Log.Info("BeforeTeleport");
+
+            TeleportItem(item, ev.Player);
+
+            Log.Info("AfterTeleport");
 
         }
 
@@ -154,7 +150,39 @@ namespace KE.Items.Items
             }
         }
 
-        
+
+        private const float itemDuration = 15f;
+
+        private IEnumerator<float> DisplayCountdown(Player p)
+        {
+            float countdown = itemDuration;
+
+            while (countdown > 0)
+            {
+                string showCountdown = $"Remaining: {countdown:F1}s";
+                RueIHint hint = new RueIHint(HPosition.Center, VPosition.CustomItem, showCountdown, 1f);
+
+                DisplayPlayer.Get(p).Hint(hint);
+
+                yield return Timing.WaitForSeconds(1f);
+                countdown -= 1f;
+            }
+        }
+
+        private IEnumerator<float> CheckIfRecordingFinished(Speaker speaker)
+        {
+            Log.Info($"Recording started. Duration: {itemDuration}s.");
+
+            yield return Timing.WaitForSeconds(itemDuration);
+
+            _isRecording = false;
+
+            float[] finalRecording = _recordingBuffer.ToArray();
+            Log.Info($"Recording finished. Length: {finalRecording.Length} samples.");
+            //Timing.RunCoroutine(PlayVoice(finalRecording, speaker.Base.NetworkControllerId));
+        }
+
+        /*
         private IEnumerator<float> CheckIfRecordingFinished(Speaker speaker)
         {
             while (_isRecording)
@@ -174,6 +202,7 @@ namespace KE.Items.Items
                 }
             }
         }
+        */
         
 
 
@@ -189,6 +218,36 @@ namespace KE.Items.Items
                     player.ReferenceHub.connectionToClient.Send(_message);
                 yield return Timing.WaitForOneFrame;
             }
+        }
+
+        private void TeleportItem(Scp1576 item, Player p)
+        {
+            Player nextPlayer = Player.List.Where(x => x.IsHuman).GetRandomValue();
+
+            Log.Info("NextPlayer  : " + nextPlayer);
+
+            Room closeRoom = findNearbyRoom(nextPlayer, 2);
+
+            Log.Info("Room  : " + closeRoom);
+
+            item.CreatePickup(closeRoom.Position, null, true);
+
+            Log.Info("PickupCreated");
+            p.RemoveItem(item, false);
+        }
+
+        private Room findNearbyRoom(Player p, int depth)
+        {
+            HashSet<Room> rooms = new HashSet<Room>(p.CurrentRoom.NearestRooms);
+            for (int i = 0; i < depth; i++)
+            {
+                // Copier les nouvelles rooms avant de les ajouter
+                HashSet<Room> newRooms = new HashSet<Room>(rooms.SelectMany(r => r.NearestRooms));
+                rooms.UnionWith(newRooms);
+            }
+
+            // Si rooms est vide, on retourne une salle aléatoire
+            return rooms.Count > 0 ? rooms.GetRandomValue() : Room.Random();
         }
     }
 }
