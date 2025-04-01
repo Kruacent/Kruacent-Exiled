@@ -5,13 +5,9 @@ using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Spawn;
 using Exiled.API.Features.Toys;
-using Exiled.CustomItems;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
-using KE.Items.Interface;
-using KE.Utils.Display.Enums;
-using KE.Utils.Display;
 using MEC;
 using PlayerRoles;
 using System;
@@ -33,7 +29,7 @@ namespace KE.Items.Items
 
         private static readonly OpusDecoder _decoder = new();
         private static readonly OpusEncoder _encoder = new(OpusApplicationType.Voip);
-        private static readonly Dictionary<Player,Speaker> _speakers = new ();
+        private static readonly Dictionary<Player, Speaker> _speakers = new();
         public override uint Id { get; set; } = 1800;
         public override string Name { get; set; } = "SCP-7045";
         public override string Description { get; set; } = "A weird looking radio";
@@ -83,15 +79,7 @@ namespace KE.Items.Items
                 _lastVoiceTime = Time.time;
                 Log.Info("Enregistrement activé...");
 
-                Speaker speaker;
-                byte speakerid = (byte)ev.Player.Id;
-
-                if (!_speakers.TryGetValue(ev.Player, out speaker))
-                    _speakers[ev.Player] = Speaker.Create(speakerid, ev.Player.Position);
-
-                Timing.RunCoroutine(CheckIfRecordingFinished(_speakers[ev.Player]));
-                Timing.RunCoroutine(DisplayCountdown(ev.Player));
-
+                Timing.RunCoroutine(CheckIfRecordingFinished(item, ev.Player));
             }
             else
             {
@@ -102,19 +90,19 @@ namespace KE.Items.Items
                 Log.Info("Recording buffer : " + _recordingBuffer.ToArray().Count());
                 if (_recordingBuffer.Count > 0)
                 {
+                    Speaker speaker;
+                    byte speakerid = (byte)ev.Player.Id;
+
+                    if (!_speakers.TryGetValue(ev.Player, out speaker))
+                        _speakers[ev.Player] = Speaker.Create(speakerid, ev.Player.Position);
+
                     float[] finalRecording = _recordingBuffer.ToArray();
-                    Timing.RunCoroutine(PlayVoice(finalRecording, (byte)ev.Player.Id));
+                    Timing.RunCoroutine(PlayVoice(finalRecording, (byte)ev.Player.Id, item, ev.Player));
                 }
 
                 item.StopTransmitting();
+
             }
-
-            Log.Info("BeforeTeleport");
-
-            TeleportItem(item, ev.Player);
-
-            Log.Info("AfterTeleport");
-
         }
 
 
@@ -150,40 +138,7 @@ namespace KE.Items.Items
             }
         }
 
-
-        private const float itemDuration = 15f;
-
-        private IEnumerator<float> DisplayCountdown(Player p)
-        {
-            float countdown = itemDuration;
-
-            while (countdown > 0)
-            {
-                string showCountdown = $"Remaining: {countdown:F1}s";
-                RueIHint hint = new RueIHint(HPosition.Center, VPosition.CustomItem, showCountdown, 1f);
-
-                DisplayPlayer.Get(p).Hint(hint);
-
-                yield return Timing.WaitForSeconds(1f);
-                countdown -= 1f;
-            }
-        }
-
-        private IEnumerator<float> CheckIfRecordingFinished(Speaker speaker)
-        {
-            Log.Info($"Recording started. Duration: {itemDuration}s.");
-
-            yield return Timing.WaitForSeconds(itemDuration);
-
-            _isRecording = false;
-
-            float[] finalRecording = _recordingBuffer.ToArray();
-            Log.Info($"Recording finished. Length: {finalRecording.Length} samples.");
-            //Timing.RunCoroutine(PlayVoice(finalRecording, speaker.Base.NetworkControllerId));
-        }
-
-        /*
-        private IEnumerator<float> CheckIfRecordingFinished(Speaker speaker)
+        private IEnumerator<float> CheckIfRecordingFinished(Scp1576 item, Player p)
         {
             while (_isRecording)
             {
@@ -194,19 +149,18 @@ namespace KE.Items.Items
                 if (Time.time - _lastVoiceTime >= 0.5f)
                 {
                     _isRecording = false;
-    
+
                     float[] finalRecording = _recordingBuffer.ToArray();
                     Log.Info($"Final recorded voice message length: {finalRecording.Length} samples.");
 
                     //Timing.RunCoroutine(PlayVoice(finalRecording, speaker.Base.NetworkControllerId));
                 }
             }
+
+            TeleportItem(item, p);
         }
-        */
-        
 
-
-        private IEnumerator<float> PlayVoice(float[] data,byte speakerid)
+        private IEnumerator<float> PlayVoice(float[] data, byte speakerid, Scp1576 item, Player p)
         {
             for (int i = 0; i < data.Length; i += sampleSize)
             {
@@ -214,15 +168,18 @@ namespace KE.Items.Items
                 float[] decodedBuffer = data.Skip(i).Take(sampleSize).ToArray();
                 int dataLen = _encoder.Encode(decodedBuffer, encodedData);
                 _message = new AudioMessage(speakerid, encodedData, dataLen);
-                foreach(Player player in Player.List)
+                foreach (Player player in Player.List)
                     player.ReferenceHub.connectionToClient.Send(_message);
                 yield return Timing.WaitForOneFrame;
             }
+
+            item.CreatePickup(Room.Random().Position, null, true);
+            p.RemoveItem(item, false);
         }
 
         private void TeleportItem(Scp1576 item, Player p)
         {
-            Player nextPlayer = Player.List.Where(x => x.IsHuman).GetRandomValue();
+            Player nextPlayer = Player.List.Where(x => x.IsHuman && x != p).GetRandomValue();
 
             Log.Info("NextPlayer  : " + nextPlayer);
 
