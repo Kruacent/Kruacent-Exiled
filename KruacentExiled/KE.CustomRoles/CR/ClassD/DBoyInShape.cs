@@ -21,9 +21,10 @@ namespace KE.CustomRoles.CR.ClassD
     internal class DBoyInShape : KECustomRole
     {
         public override string Name { get; set; } = "DBoyInShape";
-        public override string Description { get; set; } = "";
+        public override string Description { get; set; } = "Dammmmnnnnnnn les gates";
         public override uint Id { get; set; } = 1058;
         public override string CustomInfo { get; set; } = "DBoyInShape";
+        public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
         public override float SpawnChance { get; set; } = 100;
