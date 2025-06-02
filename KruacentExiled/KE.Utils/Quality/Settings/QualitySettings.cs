@@ -5,40 +5,55 @@ using KE.Utils.Quality.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
 using UserSettings.ServerSpecific;
 
 namespace KE.Utils.Quality.Settings
 {
-    internal class QualitySettings
+    public class QualitySettings
     {
 
         private static int _idQuality = 0;
         private static int _idModels = 1;
-        public QualitySettings()
+        private SettingBase[] _settings;
+        public QualitySettings(Action<Player,SettingBase> onChanged)
         {
             HeaderSetting header = new("Quality Settings");
-            SettingBase[] settings = new SettingBase[]
-            {
+            _settings =
+            [
                 header,
-                new TwoButtonsSetting(_idQuality,"ModelQuality","Low","High"),
-                new TwoButtonsSetting(_idModels,"Pickup models","off","on")
-            };
-            SettingBase.Register(settings);
-            SettingBase.SendToAll();
-
-            
-
+                new DropdownSetting(_idQuality,"ModelQuality",["Low","Medium", "High"],onChanged:onChanged),
+                new TwoButtonsSetting(_idModels,"Pickup models","Disabled","Enabled", onChanged:onChanged)
+            ];
         }
+
+        internal void Register()
+        {
+            SettingBase.Register(_settings);
+            SettingBase.SendToAll();
+        }
+
+        internal void Unregister()
+        {
+            SettingBase.Unregister(settings:_settings);
+        }
+
+
+
 
         public static ModelQuality Get(Player p)
         {
-            if (!SettingBase.TryGetSetting<TwoButtonsSetting>(p, _idQuality, out var setting)) return ModelQuality.None;
-            if (setting.IsSecond)
-                return ModelQuality.High;
-            else
-                return ModelQuality.Low;
+            if (!SettingBase.TryGetSetting<DropdownSetting>(p, _idQuality, out var setting)) return ModelQuality.None;
+
+            return setting.SelectedOption switch
+            {
+                "Low" => ModelQuality.Low,
+                "Medium" => ModelQuality.Medium,
+                "High" => ModelQuality.High,
+                _ => ModelQuality.None,
+            };
         }
 
 

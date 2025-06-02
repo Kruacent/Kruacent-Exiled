@@ -6,28 +6,26 @@ using KE.Items.Interface;
 using System.Collections.Generic;
 using UnityEngine;
 using Exiled.Events.EventArgs.Player;
-using Exiled.API.Features.Toys;
-using Player = Exiled.API.Features.Player;
-using MEC;
-using Exiled.API.Features.Items;
-using Model = KE.Items.Items.Models.Model;
 using KE.Items.ItemEffects;
+using KE.Utils.Quality.Models;
+using KE.Utils.Quality.Models.Examples;
+using MEC;
 
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.KeycardJanitor)]
-    public class Mine : KECustomItem, ILumosItem, ISwichableEffect
+    public class Mine : KECustomItem, ILumosItem, ISwichableEffect, ICustomPickupModel
     {
         public override uint Id { get; set; } = 1053;
         public override string Name { get; set; } = "Mine";
         public override string Description { get; set; } = "Drop to deploy the mine, little advice : don't step on it";
         public override float Weight { get; set; } = 0.65f;
         public Color Color { get; set; } = Color.yellow;
-
+        public ModelPrefab PickupModel { get; set; }
         public CustomItemEffect Effect { get; set; }
 
 
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = null;/*new SpawnProperties()
         {
             Limit = 2,
             DynamicSpawnPoints = new List<DynamicSpawnPoint>
@@ -67,11 +65,30 @@ namespace KE.Items.Items
                 },
             }
 
-        };
+        };*/
 
         public Mine()
         {
             Effect = new MineEffect();
+            
+        }
+
+        private void SetPickup()
+        {
+            PickupModel = new MineModelPickup();
+        }
+
+        protected override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Server.RoundStarted += SetPickup;
+            base.SubscribeEvents();
+        }
+
+        protected override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Server.RoundStarted -= SetPickup;
+            Exiled.Events.Handlers.Server.RoundStarted -= SetPickup;
+            base.UnsubscribeEvents();
         }
 
         protected override void OnDroppingItem(DroppingItemEventArgs ev)

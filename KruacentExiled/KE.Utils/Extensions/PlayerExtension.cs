@@ -1,4 +1,6 @@
-﻿using Exiled.API.Features;
+﻿using CustomPlayerEffects;
+using Exiled.API.Enums;
+using Exiled.API.Features;
 using Mirror;
 using System;
 using System.Collections.Generic;
@@ -30,6 +32,21 @@ namespace KE.Utils.Extensions
                 Log.Error(string.Format("{0}: {1}", "SetFakeInvis", arg));
             }
         }
+
+
+
+
+        public static void AddLevelEffect(this Player p,EffectType type, int intensity)
+        {
+
+            
+            if (!p.TryGetEffect(type, out var effect))
+                p.ChangeEffectIntensity(type, (byte)(effect.Intensity + intensity));
+            else
+                p.EnableEffect(type, (byte)intensity);
+        }
+
+
 
     }
 }

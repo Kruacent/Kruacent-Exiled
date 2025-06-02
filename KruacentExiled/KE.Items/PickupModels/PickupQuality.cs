@@ -1,20 +1,24 @@
-﻿
-using Exiled.API.Features.Toys;
+﻿using Exiled.API.Features;
+using Exiled.API.Features.Pickups;
 using Exiled.CustomItems.API.Features;
 using InventorySystem.Items.Pickups;
 using KE.Items.Interface;
+using KE.Utils.Quality.Models;
 using MEC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Pickup = InventorySystem.Items.Pickups.ItemPickupBase;
 
-namespace KE.Items.Lights
+
+namespace KE.Items.PickupModels
 {
-    internal class LightsHandler
+    internal class PickupQuality
     {
-        public float Intensity { get; set; } = .5f;
-        private readonly Dictionary<Pickup, Light> pl = new Dictionary<Pickup, Light>();
+        public const float RefreshRate = .1f;
+        private readonly Dictionary<Pickup, Model> pl = new ();
         public void SubscribeEvents()
         {
             ItemPickupBase.OnPickupAdded += AddPickup;
@@ -31,14 +35,15 @@ namespace KE.Items.Lights
 
         private void OnRoundStarted()
         {
-            Timing.RunCoroutine(LightP());
-            
+            Timing.RunCoroutine(ModelLoop());
+
         }
 
 
         private void AddPickup(ItemPickupBase pickup)
         {
-            if (Check(pickup))
+            
+            if (CustomItem.TryGet(Exiled.API.Features.Pickups.Pickup.Get(pickup), out CustomItem cui) && cui is ICustomPickupModel ci)
             {
                 pl.Add(pickup, null);
             }
@@ -50,63 +55,78 @@ namespace KE.Items.Lights
 
             if (pl.ContainsKey(pickup))
             {
-                Light val = pl[pickup];
+                Model val = pl[pickup];
                 val?.Destroy();
                 pl.Remove(pickup);
             }
         }
 
-        
 
-        private IEnumerator<float> LightP()
+
+        private IEnumerator<float> ModelLoop()
         {
             while (true)
             {
                 try
                 {
-
-
                     foreach (var x in pl.ToList())
                     {
-                        if (x.Key == null)
+                        Pickup pickup = x.Key;
+                        Model oldModel = x.Value;
+                        if (pickup == null)
                         {
                             pl.Remove(x.Key);
                             continue;
                         }
-                        if (CustomItem.TryGet(Exiled.API.Features.Pickups.Pickup.Get(x.Key), out CustomItem cui) && cui is ILumosItem ci)
+                        if (CustomItem.TryGet(Exiled.API.Features.Pickups.Pickup.Get(pickup), out CustomItem cui) && cui is ICustomPickupModel ci)
                         {
-                            if (x.Key == null) continue;
-                            Light light = Light.Create(x.Key.Position, null, null, true, ci.Color);
-                            light.Intensity = Intensity;
-                            if (x.Value != null)
+                            if (ci.PickupModel == null)
                             {
-                                Light val = x.Value;
-                                val?.Destroy();
+                                continue;
                             }
-                            pl[x.Key] = light;
+                            ModelPrefab modelpre = ci.PickupModel;
+
+
+
+                            if (oldModel != null)
+                            {
+
+                                if (oldModel.Prefab == ci.PickupModel && oldModel.Position == pickup.Position && oldModel.Rotation == pickup.Rotation)
+                                {
+                                    continue;
+                                }
+                                oldModel.Destroy();
+
+                            }
+                            Model model = modelpre.Create(pickup.Position, pickup.Rotation);
+
+
+                            pl[x.Key] = model;
                         }
                         else
                         {
-                            Light val = x.Value;
+                            Model val = x.Value;
                             val?.Destroy();
                             pl.Remove(x.Key);
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    
+                    Log.Error(e);
                 }
-                yield return Timing.WaitForSeconds(MainPlugin.Instance.Config.LightRefreshRate);
+                yield return Timing.WaitForSeconds(RefreshRate);
+
             }
 
         }
 
+        
+         
+
         public static bool Check(Pickup pickup)
         {
-            return CustomItem.TryGet(Exiled.API.Features.Pickups.Pickup.Get(pickup), out CustomItem item) && item is ILumosItem;
+            return CustomItem.TryGet(Exiled.API.Features.Pickups.Pickup.Get(pickup), out CustomItem item) && item is ICustomPickupModel;
         }
-        
-
     }
 }
