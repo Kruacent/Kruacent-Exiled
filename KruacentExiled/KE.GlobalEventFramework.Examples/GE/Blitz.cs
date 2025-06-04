@@ -1,22 +1,19 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using MEC;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
     /// <summary>
     /// Spawn fused grenades in random rooms in the map 
     /// </summary>
-    public class Blitz : GlobalEvent
+    public class Blitz : GlobalEvent, IStart
     {
         ///<inheritdoc/>
-        public override int Id { get; set; } = 1;
+        public override uint Id { get; set; } = 1046;
         ///<inheritdoc/>
         public override string Name { get; set; } = "Blitz";
         ///<inheritdoc/>
@@ -32,7 +29,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         /// </summary>
         public int NbGrenadeSpawned { get; set; } = 5;
         ///<inheritdoc/>
-        public override IEnumerator<float> Start()
+        public IEnumerator<float> Start()
         {
             while (!Round.IsEnded)
             {
