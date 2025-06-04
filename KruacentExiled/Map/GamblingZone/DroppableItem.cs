@@ -8,10 +8,12 @@ using Exiled.CustomItems.API.Features;
 using UnityEngine;
 using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
+using Exiled.API.Features.Toys;
+using KE.Map.Utils;
 
-namespace Map.GamblingZone
+namespace KE.Map.GamblingZone
 {
-    internal class DroppableItem
+    public class DroppableItem : IEquatable<DroppableItem>
     {
         private ItemType _item;
         internal ItemType Item { get { return _item; } }
@@ -31,7 +33,7 @@ namespace Map.GamblingZone
         internal int ItemCap
         {
             get { return _itemCap; }
-            set { _itemCap = value; } 
+            set { _itemCap = value; }
         }
 
         private int _currentCap = 0;
@@ -44,11 +46,17 @@ namespace Map.GamblingZone
 
 
 
-        internal DroppableItem(ItemType item, int chance,int itemCap = -1)
+        internal DroppableItem(ItemType item, int chance, int itemCap = -1)
         {
+            
             _item = item;
             Chance = chance;
             ItemCap = itemCap;
+        }
+        public static implicit operator DroppableItem(ItemType d) => new(d,1,-1);
+        public bool Equals(DroppableItem other)
+        {
+            return other.Item == Item && other.Chance == Chance && other.ItemCap == this.ItemCap && this.CurrentCap == other.CurrentCap;
         }
 
         internal Items GetItem()

@@ -7,12 +7,11 @@ using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Pickups;
 using Mirror;
 using PlayerRoles;
-using PluginAPI.Roles;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KE.Map.Quality
+namespace KE.Map.Utils
 {
     internal class SendFakePrimitives
     {

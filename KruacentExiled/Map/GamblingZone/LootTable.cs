@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Map.GamblingZone
+namespace KE.Map.GamblingZone
 {
     internal class LootTable
     {
@@ -16,15 +16,15 @@ namespace Map.GamblingZone
         {
             new(ItemType.Jailbird,5,1),
             new(ItemType.ParticleDisruptor,5,1),
-            new(ItemType.Radio,15,-1),
+            new(ItemType.Radio,15),
         };
 
         public LootTable()
         {
         }
-        public LootTable(HashSet<DroppableItem> items)
+        public LootTable(IEnumerable<DroppableItem> items)
         {
-            _items = items;
+            _items = items.ToHashSet();
         }
 
         private DroppableItem ChooseRandomItem()
@@ -32,7 +32,7 @@ namespace Map.GamblingZone
             int totalWeight = 0;
             foreach (DroppableItem drop in _items)
             {
-                if(!drop.HasReachCap())
+                if (!drop.HasReachCap())
                     totalWeight += drop.Chance;
             }
 
@@ -44,7 +44,7 @@ namespace Map.GamblingZone
 
             foreach (DroppableItem drop in _items)
             {
-                if(!drop.HasReachCap())
+                if (!drop.HasReachCap())
                     cumulativeSum += drop.Chance;
                 if (randValue < cumulativeSum)
                     return drop;

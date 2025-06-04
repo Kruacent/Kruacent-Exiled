@@ -1,55 +1,100 @@
-﻿using Exiled.API.Extensions;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
-using Exiled.API.Features.Spawn;
-using Exiled.Events.EventArgs.Player;
-using PlayerRoles;
-using PluginAPI.Roles;
+using Exiled.API.Features.Toys;
+using KE.Map.Utils;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-namespace Map.GamblingZone
+namespace KE.Map.GamblingZone
 {
     public class GamblingRoom
     {
-        internal static HashSet<GamblingRoom> List { get; }= new HashSet<GamblingRoom>();
+        private static readonly HashSet<GamblingRoom> _list = new HashSet<GamblingRoom>();
+        public static HashSet<GamblingRoom> List => new(_list);
 
-        private Room _room;
+
+
+        private HashSet<Primitive> _model;
+        private float _pickupTime = 30;
+        private InteractiblePickup _pickup;
+        private Vector3 _position;
+        private Vector3 _scale;
         private LootTable _lootTable;
 
-        internal GamblingRoom(Room room, LootTable lootTable)
+        internal GamblingRoom(Room room, LootTable lootTable, Vector3? offset = null)
         {
-            _room = room;
-            List.Add(this);
+            Init(room.Position,   lootTable, offset);
+        }
+
+
+        internal GamblingRoom(Door door, LootTable lootTable, Vector3? offset = null)
+        {
+            Init(door.Position,   lootTable,offset);
+        }
+
+        internal GamblingRoom(Vector3 position, LootTable lootTable, Vector3? offset = null)
+        {
+            Init(position, lootTable, offset);
+        }
+
+
+
+        private void Init(Vector3 position,LootTable lootTable,Vector3? offset = null)
+        {
+            
+            
+
+            Log.Debug("position w/out offset "+position);
+            _position = position + (offset ?? new Vector3());
+            Log.Debug("position w/ offset "+_position);
+            _list.Add(this);
+            
+            _pickup = new InteractiblePickup(ItemType.Medkit, _position+ Vector3.up, new Vector3(1,0,1)*3, _pickupTime, new());
+            
+            _pickup.AddAction(OnPickup);
+
+            CreateModel(_position);
             _lootTable = lootTable;
         }
 
-        public bool IsInGamblingRoom(Player p)
+
+        private void CreateModel(Vector3 positionWithOffset)
         {
-            return _room.Players.Contains(p);
+            _model = new()
+            {
+                Primitive.Create(PrimitiveType.Sphere,positionWithOffset,null,null,true,Color.red),
+                Primitive.Create(PrimitiveType.Cube,positionWithOffset,null,new(2,.5f,2),true)
+            };
+            foreach(Primitive p in _model)
+            {
+                p.Collidable = true;
+            }
         }
+
 
         public void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.DroppedItem += OnDropped;
+            
         }
         public void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.DroppedItem -= OnDropped;
+            foreach (Primitive p in _model)
+            {
+                p.Destroy();
+            }
+            _pickup.Destroy();
         }
 
 
-        public void OnDropped(DroppedItemEventArgs ev)
+        public void OnPickup(Player player)
         {
-            if (ev.Player == null) return;
-            if(ev.Pickup == null) return;
-            if (Vector3.Distance(ev.Player.Position, _room.Position) > 8.2f) return;
-            if (!IsInGamblingRoom(ev.Player)) return;
-            ev.Pickup.Destroy();
+            if (player.CurrentItem == null) return;
+            if (player == null) return;
             Item item = _lootTable.GetRandomItem();
-            ev.Player.AddItem(item);
-            ev.Player.DropItem(item);
+            player.CurrentItem.Destroy();
+            player.AddItem(item);
+            player.DropItem(item,false);
         }
     }
 }
