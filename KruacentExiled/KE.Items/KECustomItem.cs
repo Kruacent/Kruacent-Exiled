@@ -1,16 +1,9 @@
 ﻿using Exiled.API.Features;
-using Exiled.API.Features.Items;
 using Exiled.CustomItems;
 using Exiled.CustomItems.API.Features;
 using KE.Items.Interface;
 using KE.Utils.Display;
 using KE.Utils.Display.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace KE.Items
 {

@@ -14,12 +14,12 @@ namespace KE.Utils.Extensions
 
         public static void SetAsPickupAdminToy(this AdminToy toy, bool autoSync = true)
         {
-            QualityHandler.Instance.QualityToysHandler.SetAsPickup(toy, autoSync);
+            QualityHandler.Instance.QualityToysHandler.SetAsPickup(toy);
         }
 
         public static void SetQuality(this AdminToy toy, ModelQuality modelQuality,bool autoSync = true)
         {
-            QualityHandler.Instance.QualityToysHandler.SetQuality(toy, modelQuality, autoSync);
+            QualityHandler.Instance.QualityToysHandler.SetQuality(toy, modelQuality);
         }
     }
 }

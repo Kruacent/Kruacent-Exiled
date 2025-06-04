@@ -51,7 +51,7 @@ namespace KE.Items
 
             
 
-            Exiled.Events.Handlers.Server.RoundStarted += Test;
+            //Exiled.Events.Handlers.Server.RoundStarted += Test;
 
 
             CustomItem.RegisterItems();
@@ -80,5 +80,13 @@ namespace KE.Items
         }
 
 
+
+        private void TestQuality()
+        {
+            /*Vector3 pos = 
+            Primitive c = Primitive.Create()
+
+            QualityHandler.QualityToysHandler.SetQuality()*/
+        }
     }
 }

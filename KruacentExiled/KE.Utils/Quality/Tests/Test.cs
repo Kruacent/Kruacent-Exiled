@@ -59,7 +59,7 @@ namespace KE.Utils.Quality.Tests
             for (int i = 0; i < count; i++)
             {
                 Primitive c = Primitive.Create(pos + new Vector3(UnityEngine.Random.Range(0f, maxSpread), UnityEngine.Random.Range(0f, maxSpread), UnityEngine.Random.Range(0f, maxSpread)), scale: scale);
-                QualityHandler.QualityToysHandler.SetQuality(c, Enums.ModelQuality.Medium, false);
+                QualityHandler.QualityToysHandler.SetQuality(c, Enums.ModelQuality.Medium);
             }
             QualityHandler.QualityToysHandler.Sync();
             yield return 0;

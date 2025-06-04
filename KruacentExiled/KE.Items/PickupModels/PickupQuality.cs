@@ -15,6 +15,7 @@ using Pickup = InventorySystem.Items.Pickups.ItemPickupBase;
 
 namespace KE.Items.PickupModels
 {
+    [Obsolete("scrapped",true)]
     internal class PickupQuality
     {
         public const float RefreshRate = .1f;

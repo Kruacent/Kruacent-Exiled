@@ -29,13 +29,13 @@ namespace KE.Utils.Quality.Settings
             ];
         }
 
-        internal void Register()
+        public void Register()
         {
             SettingBase.Register(_settings);
             SettingBase.SendToAll();
         }
 
-        internal void Unregister()
+        public void Unregister()
         {
             SettingBase.Unregister(settings:_settings);
         }
