@@ -19,7 +19,7 @@ namespace KE.Utils.Quality.Tests
         private QualityHandler QualityHandler;
 
 
-        public Test(QualityHandler q)
+        private Test(QualityHandler q)
         {
             QualityHandler = q;
             try

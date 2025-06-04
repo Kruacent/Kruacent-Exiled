@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Utils.Display.Enums
+namespace KE.Utils.API.Display.Enums
 {
     public enum VPosition
     {

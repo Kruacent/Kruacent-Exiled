@@ -1,6 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Interfaces;
-using KE.Utils.Display.Enums;
+using KE.Utils.API.Display.Enums;
 using MEC;
 using RueI.Displays;
 using RueI.Elements;
@@ -11,11 +11,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Utils.Display
+namespace KE.Utils.API.Display
 {
     public class DisplayPlayer
     {
-        private static Dictionary<Player,DisplayPlayer> _displays = new();
+        private static Dictionary<Player, DisplayPlayer> _displays = new();
         private RueI.Displays.Display _display;
         private Dictionary<Position, Element> _hints = new();
         private Player _player;
@@ -30,7 +30,7 @@ namespace KE.Utils.Display
         public DisplayPlayer(Player player)
         {
             _player = player;
-            _display = new (DisplayCore.Get(player.ReferenceHub));
+            _display = new(DisplayCore.Get(player.ReferenceHub));
         }
 
         public Element Hint(Position position, string text)
@@ -44,10 +44,10 @@ namespace KE.Utils.Display
         }
 
 
-        public Element Hint(Position position,string text,float seconds)
+        public Element Hint(Position position, string text, float seconds)
         {
             if (_hints.ContainsKey(position)) return null;
-            SetElement element = new((float)position.VPosition, $"<align={position.HPosition.ToString().ToLower()}>"+text+"</align>");
+            SetElement element = new((float)position.VPosition, $"<align={position.HPosition.ToString().ToLower()}>" + text + "</align>");
             _display.Elements.Add(element);
             _hints.Add(position, element);
             UpdateCore(_player);
@@ -65,7 +65,7 @@ namespace KE.Utils.Display
         {
             if (hint.Duration < 0)
                 return Hint(hint.Position, hint.RawContent);
-            return Hint(hint.Position,hint.RawContent,hint.Duration);
+            return Hint(hint.Position, hint.RawContent, hint.Duration);
         }
 
         public bool RemoveHint(Position placement)
@@ -80,7 +80,7 @@ namespace KE.Utils.Display
 
         public static void UpdateCore(Player player) => DisplayCore.Get(player.ReferenceHub).Update();
 
-        
+
     }
     public struct Position
     {

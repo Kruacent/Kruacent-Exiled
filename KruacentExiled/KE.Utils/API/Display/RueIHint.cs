@@ -1,11 +1,11 @@
-﻿using KE.Utils.Display.Enums;
+﻿using KE.Utils.API.Display.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Utils.Display
+namespace KE.Utils.API.Display
 {
     public class RueIHint
     {
@@ -21,7 +21,7 @@ namespace KE.Utils.Display
             _position = new(hposition, vposition);
             _content = content;
         }
-        public RueIHint(HPosition hposition, VPosition vposition, string content,float duration)
+        public RueIHint(HPosition hposition, VPosition vposition, string content, float duration)
         {
             _position = new(hposition, vposition);
             _content = content;

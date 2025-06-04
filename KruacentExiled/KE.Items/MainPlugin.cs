@@ -31,8 +31,9 @@ namespace KE.Items
         internal UpgradeHandler UpgradeHandler { get; private set; }
         internal LightsHandler LightsHandler { get; private set; }
         internal static MainPlugin Instance { get; private set; }
-        internal PickupQuality PickupQuality { get; private set; }
-        internal QualityHandler QualityHandler { get; private set; }
+        //scrapped
+        //internal PickupQuality PickupQuality { get; private set; }
+        //internal QualityHandler QualityHandler { get; private set; }
 
         public override PluginPriority Priority => PluginPriority.Low;
         public override Version Version => new (1, 0, 0);
@@ -41,8 +42,8 @@ namespace KE.Items
         {
             Instance = this;
             Sound = new Sound();
-            QualityHandler = QualityHandler.Instance;
-            QualityHandler.Register();
+            //QualityHandler = QualityHandler.Instance;
+            //QualityHandler.Register();
             UpgradeHandler = new UpgradeHandler();
             LightsHandler = new LightsHandler();
             //PickupQuality = new PickupQuality();
@@ -55,7 +56,7 @@ namespace KE.Items
 
 
             CustomItem.RegisterItems();
-            PickupQuality?.SubscribeEvents();
+            //PickupQuality?.SubscribeEvents();
             UpgradeHandler.SubscribeEvents();
             LightsHandler.SubscribeEvents();
 
@@ -67,12 +68,12 @@ namespace KE.Items
             CustomItem.UnregisterItems();
             UpgradeHandler?.UnsubscribeEvents();
             LightsHandler?.UnsubscribeEvents();
-            PickupQuality?.UnsubscribeEvents();
-            QualityHandler?.Unregister();
+            //PickupQuality?.UnsubscribeEvents();
+            //QualityHandler?.Unregister();
 
             base.OnDisabled();
-            QualityHandler = null;
-            PickupQuality = null;
+            //QualityHandler = null;
+            //PickupQuality = null;
             LightsHandler = null;
             Sound = null;
             UpgradeHandler = null;

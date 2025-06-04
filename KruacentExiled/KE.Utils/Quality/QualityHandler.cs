@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KE.Utils.Quality
 {
-    [Obsolete("scrapped", true)]
+    [Obsolete("scrapped", false)]
     internal class QualityHandler
     {
         public QualitySettings QualitySettings { get; private set; }

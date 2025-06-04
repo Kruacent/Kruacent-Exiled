@@ -2,8 +2,8 @@
 using Exiled.CustomItems;
 using Exiled.CustomItems.API.Features;
 using KE.Items.Interface;
-using KE.Utils.Display;
-using KE.Utils.Display.Enums;
+using KE.Utils.API.Display;
+using KE.Utils.API.Display.Enums;
 
 namespace KE.Items
 {
