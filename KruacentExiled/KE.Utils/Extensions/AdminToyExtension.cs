@@ -1,7 +1,8 @@
 ﻿using AdminToys;
 using Exiled.API.Features;
 using Exiled.API.Features.Toys;
-using Mirror;
+using KE.Utils.Quality;
+using KE.Utils.Quality.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,25 +14,16 @@ namespace KE.Utils.Extensions
 {
     public static class AdminToyExtension
     {
-        public static void SetFakePrimitive(this AdminToy at, Player playertoshow)
+
+        public static void SetAsPickupAdminToy(this AdminToy toy, bool autoSync = true)
         {
-            AdminToyBase atb = at.AdminToyBase;
-            NetworkIdentity identity = atb.netIdentity;
-            if (playertoshow == null)
-            {
-                identity.RemoveClientAuthority();
-                return;
-            }
+            QualityHandler.Instance.QualityToysHandler.SetAsPickup(toy);
+        }
             NetworkIdentity playerIdentity = playertoshow.NetworkIdentity;
 
-            if (identity != null && playerIdentity != null)
-            {
-                // Remove authority from previous owners (if any)
-                identity.RemoveClientAuthority();
-
-                // Assign authority to the target player
-                identity.AssignClientAuthority(playerIdentity.connectionToClient);
-            }
+        public static void SetQuality(this AdminToy toy, ModelQuality modelQuality,bool autoSync = true)
+        {
+            QualityHandler.Instance.QualityToysHandler.SetQuality(toy, modelQuality);
         }
 
     }
