@@ -8,6 +8,7 @@ using Exiled.API.Enums;
 using System.Collections.Generic;
 using UnityEngine;
 using Exiled.Events.EventArgs.Player;
+using Light = Exiled.API.Features.Toys.Light;
 
 namespace KE.Items.ItemEffects
 {
@@ -41,17 +42,21 @@ namespace KE.Items.ItemEffects
             Player playerThrowingGrenade = player;
             Vector3 molotovPosition = position;
             Primitive wall = Primitive.Create(PrimitiveType.Cylinder, molotovPosition, null, new Vector3(cylinderSize, 0.01f, cylinderSize), true);
+            var l = Light.Create(position, null, null, false);
+            l.Color = new Color(255,128,0);
+            l.Intensity = .05f;
+            l.Spawn();
             wall.Collidable = false;
             wall.Visible = true;
 
-            wall.Color = Color.red;
+            wall.Color = new Color(255, 128, 0);
 
             var coroutineHandler = Timing.RunCoroutine(DamageInMolotovZone(wall.Position, cylinderSize, playerThrowingGrenade));
 
             Timing.CallDelayed(Duration, () => {
-                wall.UnSpawn();
                 Timing.KillCoroutines(coroutineHandler);
                 wall.Destroy();
+                l.Destroy();
             });
         }
 
