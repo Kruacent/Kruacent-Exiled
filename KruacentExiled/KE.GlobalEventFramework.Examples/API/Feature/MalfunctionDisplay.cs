@@ -2,8 +2,8 @@
 using InventorySystem.Items.Firearms.Modules;
 using KE.GlobalEventFramework.Examples.API.Interfaces;
 using KE.Utils;
-using KE.Utils.API.Display;
-using KE.Utils.API.Display.Enums;
+using KE.Utils.API.Displays.DisplayRuei;
+using KE.Utils.API.Displays.DisplayRuei.Enums;
 using MEC;
 using PlayerRoles;
 using System;

@@ -1,9 +1,12 @@
 ﻿using Exiled.API.Features;
-using Exiled.CustomItems;
 using Exiled.CustomItems.API.Features;
+using MHints = HintServiceMeow.Core.Models.Hints.Hint;
 using KE.Items.Interface;
-using KE.Utils.API.Display;
-using KE.Utils.API.Display.Enums;
+using System.Text;
+using KE.Utils.API.Displays.DisplayMeow;
+using MEC;
+using HintServiceMeow.Core.Extension;
+using HintServiceMeow.Core.Utilities;
 
 namespace KE.Items
 {
@@ -12,35 +15,68 @@ namespace KE.Items
         
         protected override void ShowPickedUpMessage(Player player)
         {
-            Message(this, player);
+            Log.Debug("pickup");
+            Message(this, player,true);
         }
 
         protected override void ShowSelectedMessage(Player player)
         {
+            Log.Debug("select");
             Message(this, player);
         }
 
 
-        internal static void Message(CustomItem c,Player player)
+        internal static void Message(CustomItem c, Player player, bool pickedUp = false)
         {
-            if (CustomItems.Instance.Config.PickedUpHint.Show)
-            {
 
-                
-                string show =  $"<b>{c.Name}</b>\n{c.Description}\n";
+
+
+            StringBuilder builder = new();
+
+            if (MainPlugin.Instance.SettingsHandler.GetPrefixes(player))
+            {
+                if (pickedUp)
+                {
+                    builder.Append("(P)");
+                }
+                else
+                {
+                    builder.Append("(I)");
+                }
+            }
+            else
+            {
+                if (pickedUp)
+                {
+                    builder.Append("You've picked up ");
+                }
+                else
+                {
+                    builder.Append("You've selected up ");
+                }
+            }
+
+            builder.AppendLine($"<b>{c.Name}</b>");
+            if (MainPlugin.Instance.SettingsHandler.GetDescriptionsSettings(player))
+            {
+                builder.AppendLine(c.Description);
                 if (c is IUpgradableCustomItem ci)
                 {
                     foreach (var a in ci.Upgrade)
                     {
-                        show += $"{a.Value.Chance}% chance of upgrading on {a.Key}\n";
+                        builder.AppendLine($"<b>{c.Name}</b>");
                     }
                 }
-
-                RueIHint hint = new(HPosition.Right, VPosition.CustomItem, show, CustomItems.Instance.Config.PickedUpHint.Duration);
-                DisplayPlayer.Get(player).Hint(hint);
-                //player.ShowHint(show, (int)CustomItems.Instance.Config.PickedUpHint.Duration);
-
+            
             }
+
+
+            Log.Debug("adding hint");
+            
+            DisplayHandler.Instance.AddHint(MainPlugin.HintPlacement, player, builder.ToString(),10);
+
+            
         }
+
     }
 }

@@ -1,25 +1,12 @@
 ﻿
 using Exiled.API.Enums;
-using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.API.Features.Pickups;
-using Exiled.API.Features.Toys;
 using Exiled.CustomItems.API.Features;
-using Exiled.Events.EventArgs.Player;
-using KE.Items.Interface;
 using KE.Items.Lights;
-using KE.Items.PickupModels;
+using KE.Items.Settings;
 using KE.Items.Upgrade;
-using KE.Utils.Quality;
-using KE.Utils.Quality.Settings;
-using KE.Utils.Quality.Tests;
-using MEC;
-using PlayerRoles;
-using PluginAPI.Roles;
+using KE.Utils.API.Displays.DisplayMeow;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 namespace KE.Items
 {
@@ -31,6 +18,10 @@ namespace KE.Items
         internal UpgradeHandler UpgradeHandler { get; private set; }
         internal LightsHandler LightsHandler { get; private set; }
         internal static MainPlugin Instance { get; private set; }
+        internal SettingsHandler SettingsHandler { get; private set; }
+
+        internal static readonly HintPlacement HintPlacement = new(0, 400, HintServiceMeow.Core.Enum.HintAlignment.Center);
+
         //scrapped
         //internal PickupQuality PickupQuality { get; private set; }
         //internal QualityHandler QualityHandler { get; private set; }
@@ -45,8 +36,9 @@ namespace KE.Items
             //QualityHandler = QualityHandler.Instance;
             //QualityHandler.Register();
             UpgradeHandler = new UpgradeHandler();
-            LightsHandler = new LightsHandler();
+            LightsHandler = new LightsHandler(); // lights color and intensity broken
             //PickupQuality = new PickupQuality();
+            SettingsHandler = new();
 
             Sound.LoadClips();
 
@@ -57,6 +49,7 @@ namespace KE.Items
 
             CustomItem.RegisterItems();
             //PickupQuality?.SubscribeEvents();
+            SettingsHandler.SubscribeEvents();
             UpgradeHandler.SubscribeEvents();
             LightsHandler.SubscribeEvents();
 
@@ -70,10 +63,13 @@ namespace KE.Items
             LightsHandler?.UnsubscribeEvents();
             //PickupQuality?.UnsubscribeEvents();
             //QualityHandler?.Unregister();
+            SettingsHandler.UnsubscribeEvents();
 
             base.OnDisabled();
             //QualityHandler = null;
             //PickupQuality = null;
+            
+            SettingsHandler = null;
             LightsHandler = null;
             Sound = null;
             UpgradeHandler = null;
@@ -82,12 +78,6 @@ namespace KE.Items
 
 
 
-        private void TestQuality()
-        {
-            /*Vector3 pos = 
-            Primitive c = Primitive.Create()
 
-            QualityHandler.QualityToysHandler.SetQuality()*/
-        }
     }
 }

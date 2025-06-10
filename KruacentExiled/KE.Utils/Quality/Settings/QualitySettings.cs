@@ -1,14 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
-using Exiled.Events.Commands.Hub;
 using KE.Utils.Quality.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime;
-using System.Text;
-using System.Threading.Tasks;
-using UserSettings.ServerSpecific;
 
 namespace KE.Utils.Quality.Settings
 {
@@ -17,6 +10,7 @@ namespace KE.Utils.Quality.Settings
 
         private static int _idQuality = 0;
         private static int _idModels = 1;
+        private static int _idSlider = 2;
         private SettingBase[] _settings;
         public QualitySettings(Action<Player,SettingBase> onChanged)
         {

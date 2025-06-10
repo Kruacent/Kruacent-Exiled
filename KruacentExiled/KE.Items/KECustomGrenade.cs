@@ -8,7 +8,7 @@ namespace KE.Items
         
         protected override void ShowPickedUpMessage(Player player)
         {
-            KECustomItem.Message(this,player);
+            KECustomItem.Message(this,player,true);
         }
 
         protected override void ShowSelectedMessage(Player player)

@@ -3,11 +3,12 @@ using Exiled.API.Features.Items;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Scp914;
 using KE.Items.Interface;
+using KE.Utils.API.Interfaces;
 using Scp914;
 
 namespace KE.Items.Upgrade
 {
-    internal class UpgradeHandler
+    internal class UpgradeHandler : IUsingEvents
     {
 
         public void SubscribeEvents()
