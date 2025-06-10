@@ -83,14 +83,17 @@ namespace KE.Map
             g.SubscribeEvents();
 
 
-            lcz173.RequiredPermissions = DoorPermissionFlags.All;
+            if (Config.Debug)
+            {
+                var door = KEDoor.Create(null, RoleTypeId.Scp049.GetRandomSpawnLocation().Position, new());
+
+                var d2 = KEDoor.Create(null, RoleTypeId.Scp049.GetRandomSpawnLocation().Position + Vector3.forward * 2, new());
+
+                door.LinkOtherDoor(d2);
+            }
 
 
-            var door = KEDoor.Create(null,RoleTypeId.Scp049.GetRandomSpawnLocation().Position, new());
-
-            var d2 =KEDoor.Create(null,RoleTypeId.Scp049.GetRandomSpawnLocation().Position+Vector3.forward*2, new());
-
-            door.LinkOtherDoor(d2);
+            
 
         }
 
