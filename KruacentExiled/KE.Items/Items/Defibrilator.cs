@@ -11,6 +11,7 @@ using UnityEngine;
 using System.Linq;
 using KE.Items.Interface;
 using KE.Items;
+using KE.Items.Extensions;
 
 [CustomItem(ItemType.SCP1853)]
 public class Defibrilator : KECustomItem, ILumosItem
@@ -97,7 +98,7 @@ public class Defibrilator : KECustomItem, ILumosItem
 
         if (positionMort.Count == 0)
         {
-            joueur.Broadcast(5, "There is no death", Broadcast.BroadcastFlags.Normal, true);
+            joueur.ItemEffectHint("There is no death");
             Exiled.CustomItems.API.Features.CustomItem.TryGive(joueur, 1041);
         }
         else
@@ -129,8 +130,8 @@ public class Defibrilator : KECustomItem, ILumosItem
 
                 closestDeadPlayer.Teleport(joueur.Position);
 
-                closestDeadPlayer.Broadcast(5, joueur.Nickname + " revived you!", Broadcast.BroadcastFlags.Normal, true);
-                joueur.Broadcast(5, "You revived " + closestDeadPlayer.Nickname + "!", Broadcast.BroadcastFlags.Normal, true);
+                closestDeadPlayer.ItemEffectHint(joueur.Nickname + " revived you!");
+                joueur.ItemEffectHint("You revived " + closestDeadPlayer.Nickname + "!");
 
                 yield return Timing.WaitForSeconds(1);
 

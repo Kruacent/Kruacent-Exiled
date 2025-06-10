@@ -7,6 +7,7 @@ using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
 using HintServiceMeow.Core.Extension;
 using HintServiceMeow.Core.Utilities;
+using System.Reflection;
 
 namespace KE.Items
 {
@@ -71,12 +72,23 @@ namespace KE.Items
             }
 
 
-            Log.Debug("adding hint");
-            
-            DisplayHandler.Instance.AddHint(MainPlugin.HintPlacement, player, builder.ToString(),10);
+            float delay = MainPlugin.Instance.SettingsHandler.GetTime(player);
+            DisplayHandler.Instance.AddHint(MainPlugin.HintPlacement, player, builder.ToString(),delay);
 
             
         }
+
+
+
+
+        public static void ItemEffectHint(Player player,string text)
+        {
+            float delay = MainPlugin.Instance.SettingsHandler.GetTimeEffect(player);
+
+
+            DisplayHandler.Instance.AddHint(MainPlugin.ItemEffectPlacement, player,text , delay);
+        }
+        
 
     }
 }

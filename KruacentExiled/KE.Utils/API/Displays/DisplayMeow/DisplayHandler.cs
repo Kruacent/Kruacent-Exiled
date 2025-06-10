@@ -17,35 +17,46 @@ namespace KE.Utils.API.Displays.DisplayMeow
         private DisplayHandler() { }
 
 
-        public void TempHint(AbstractHint hint, Player p,float delay)
-        {
-            var dis = PlayerDisplay.Get(p);
-            dis.AddHint(hint);
-            dis.RemoveAfter(hint, delay);
 
-        }
 
 
 
         public MHint AddHint(HintPlacement hintPlacement, Player player, string text, float delay)
         {
             var dis = PlayerDisplay.Get(player);
-            MHint hint = new()
+            string id = $"{player.Id}_{hintPlacement.XCoordinate}_{hintPlacement.YCoordinate}";
+            MHint hint;
+
+            if (!dis.TryGetHint(id, out var aHint))
             {
-                Text = text,
-                XCoordinate = hintPlacement.XCoordinate,
-                YCoordinate = hintPlacement.YCoordinate,
-                Alignment = hintPlacement.HintAlignment
-            };
-            dis.AddHint(hint);
-            Timing.CallDelayed(delay, () =>
+                hint = new()
+                {
+                    Text = text,
+                    XCoordinate = hintPlacement.XCoordinate,
+                    YCoordinate = hintPlacement.YCoordinate,
+                    Alignment = hintPlacement.HintAlignment,
+                    Id = id
+
+                };
+                dis.AddHint(hint);
+
+            }
+            else
             {
-                Log.Debug("remvoving hint");
-                dis.RemoveHint(hint);
-            });
+                
+                hint = (MHint)aHint;
+                hint.Hide = false;
+                hint.Text = text;
+            }
+
+            
+            hint.HideAfter(delay);
             return hint;
         }
 
+
+
+        
 
         
 

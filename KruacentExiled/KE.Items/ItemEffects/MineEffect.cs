@@ -2,6 +2,7 @@
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
+using KE.Items.Extensions;
 using KE.Items.Interface;
 using KE.Items.Items.Models;
 using MEC;
@@ -70,13 +71,13 @@ namespace KE.Items.ItemEffects
             int countdown = MineActivationTime;
             while (countdown > 0)
             {
-                player.ShowHint($"The mine will be active in {countdown} seconds !", 1f);
+                player.ItemEffectHint($"The mine will be active in {countdown} seconds !");
                 yield return Timing.WaitForSeconds(1f);
                 countdown--;
             }
 
             // Message final lorsque la mine s'active
-            player.ShowHint("Mine activated !");
+            player.ItemEffectHint("Mine activated !");
             Timing.RunCoroutine(ActiveMine(mine, MineRadius));
         }
 

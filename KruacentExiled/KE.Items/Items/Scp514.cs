@@ -19,7 +19,7 @@ namespace KE.Items.Items
     public class Scp514 : KECustomItem
     {
         public override uint Id { get; set; } = 1070;
-        public override string Name { get; set; } = "Scp514";
+        public override string Name { get; set; } = "SCP-514";
         public override string Description { get; set; } = "birb";
         public override float Weight { get; set; } = 0.65f;
         public float TimeActive { get; set; } = 3;

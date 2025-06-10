@@ -5,6 +5,7 @@ using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Interfaces;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
+using KE.Items.Extensions;
 using KE.Items.Interface;
 using PlayerRoles;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace KE.Items.ItemEffects
         {
             if (Player.List.Count(x => x.Role == RoleTypeId.Spectator) == 0)
             {
-                player.ShowHint("No spectators to respawn");
+                player.ItemEffectHint("No spectators to respawn");
                 /*
                 could be used for a deniable event
                 if(ev != null) 

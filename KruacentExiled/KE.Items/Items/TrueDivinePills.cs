@@ -59,17 +59,19 @@ public class TrueDivinePills : KECustomItem, ILumosItem
     {
         if (!Check(ev.Item))
             return;
+
         if (ev.IsThrown)
         {
             ev.IsAllowed = true;
             return;
         }
+        Player player = ev.Player;
 
         tp = !tp;
         if (tp)
-            ev.Player.ShowHint("Players will spawn to you");
+            KECustomItem.ItemEffectHint(player, "Players will spawn to you");
         else
-            ev.Player.ShowHint("Players won't spawn to you");
+            KECustomItem.ItemEffectHint(player, "Players won't spawn to you");
         ev.IsAllowed = false;
         
         
@@ -86,7 +88,7 @@ public class TrueDivinePills : KECustomItem, ILumosItem
 
         if (Player.List.Where(x => x.Role == RoleTypeId.Spectator).Count() == 0)
         {
-            player.ShowHint("No one to respawn");
+            KECustomItem.ItemEffectHint(player, "No one to respawn");
             ev.IsAllowed = false;
             return;
         }

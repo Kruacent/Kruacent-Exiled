@@ -7,11 +7,14 @@ using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Scp914;
+using KE.Items.Interface;
+using KE.Items.Upgrade;
+using Scp914;
 
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.GrenadeHE)]
-    public class PressePuree : KECustomGrenade
+    public class PressePuree : KECustomGrenade, IUpgradableCustomItem
     {
         public override uint Id { get; set; } = 1046;
         public override string Name { get; set; } = "Presse Purée";
@@ -48,42 +51,10 @@ namespace KE.Items.Items
             },
         };
 
-
-        protected override void SubscribeEvents()
+        public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade { get; private set; } = new Dictionary<Scp914KnobSetting, UpgradeProperties>()
         {
-            Exiled.Events.Handlers.Scp914.UpgradingInventoryItem += OnUpgrading;
-            base.SubscribeEvents();
-        }
-
-        /// <inheritdoc/>
-        protected override void UnsubscribeEvents()
-        {
-            Exiled.Events.Handlers.Scp914.UpgradingInventoryItem -= OnUpgrading;
-            base.UnsubscribeEvents();
-        }
-
-        private void OnUpgrading(UpgradingInventoryItemEventArgs ev)
-        {
-            if (!Check(ev.Item))
-                return;
-            if (ev.KnobSetting != Scp914.Scp914KnobSetting.VeryFine)
-                return;
-
-            var rng = UnityEngine.Random.Range(0, 101);
-            Log.Debug($"inventory {Name} : {rng}");
-            if (rng < 5)
-            {
-                //success
-                ev.Player.RemoveItem(ev.Item);
-                TryGive(ev.Player, "Sainte Grenada");
-                ev.IsAllowed = true;
-            }
-            else
-            {
-                ev.Player.ShowHint("no luck");
-                ev.IsAllowed = false;
-            }
-
-        }
+            //very fine -> true divine pills 10%
+            { Scp914KnobSetting.VeryFine,new UpgradeProperties(5, 1055)}
+        };
     }
 }

@@ -20,6 +20,7 @@ namespace KE.Items
         internal static MainPlugin Instance { get; private set; }
         internal SettingsHandler SettingsHandler { get; private set; }
 
+        internal static readonly HintPlacement ItemEffectPlacement = new(0, 200, HintServiceMeow.Core.Enum.HintAlignment.Center);
         internal static readonly HintPlacement HintPlacement = new(0, 400, HintServiceMeow.Core.Enum.HintAlignment.Center);
 
         //scrapped

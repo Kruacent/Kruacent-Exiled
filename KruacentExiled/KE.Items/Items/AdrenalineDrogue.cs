@@ -13,6 +13,7 @@ using CustomPlayerEffects;
 using KE.Items.Interface;
 using System.Linq;
 using KE.Items;
+using KE.Items.Extensions;
 
 /// <inheritdoc />
 [CustomItem(ItemType.Adrenaline)]
@@ -105,7 +106,7 @@ public class AdrenalineDrogue : KECustomItem, ILumosItem
         bool gasgas = false;
 
         /* EFFET DE LA DROGUE */
-        joueur.ShowHint("Vous êtes actuellement sous effet de la cocaïne liquide !");
+        joueur.ItemEffectHint("Vous êtes actuellement sous effet de la cocaïne liquide !");
 
         var movementBoostEffect = joueur.ActiveEffects.FirstOrDefault(e => e is MovementBoost) as MovementBoost;
 
@@ -128,7 +129,7 @@ public class AdrenalineDrogue : KECustomItem, ILumosItem
 
         yield return Timing.WaitForSeconds(30);
 
-        joueur.ShowHint("Mince vous êtes perdu chez le papi Rian !");
+        joueur.ItemEffectHint("Mince vous êtes perdu chez le papi Rian !");
         joueur.Health = 9420;
 
         joueur.IsGodModeEnabled = true;
@@ -210,14 +211,14 @@ public class AdrenalineDrogue : KECustomItem, ILumosItem
                     break;
                 case 2:
                     Log.Debug("Muet");
-                    joueur.ShowHint("You lost your ability to talk, (git good)");
+                    joueur.ItemEffectHint("You lost your ability to talk, (git good)");
                     joueur.Mute();
                     yield return Timing.WaitForSeconds(UnityEngine.Random.Range(30, 100));
                     joueur.ShowHint("I think you found your ability");
                     joueur.UnMute();
                     break;
                 case 3:
-                    joueur.ShowHint("You are caoutchouc man");
+                    joueur.ItemEffectHint("You are caoutchouc man");
                     Exiled.API.Features.TeslaGate.IgnoredPlayers.Add(joueur);
                     joueur.SetScale(new Vector3(1.5f, 0.5f, 1.7f), Exiled.API.Features.Player.List);
                     break;
@@ -250,7 +251,7 @@ public class AdrenalineDrogue : KECustomItem, ILumosItem
                     break;
                 case 5:
                     Log.Debug("Paper");
-                    joueur.ShowHint("You are a paper ! Yippee !");
+                    joueur.ItemEffectHint("You are a paper ! Yippee !");
                     joueur.SetScale(new Vector3(1f, 0.5f, 1f), Exiled.API.Features.Player.List);
                     break;
             }

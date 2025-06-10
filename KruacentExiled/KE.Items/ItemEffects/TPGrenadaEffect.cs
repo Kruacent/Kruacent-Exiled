@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.API.Features.Pools;
@@ -21,6 +22,13 @@ namespace KE.Items.ItemEffects
         private List<Player> effectedPlayers = new List<Player>();
         [Description("What roles will not be able to be affected by Implosion Grenades. Keeping SCP-173 on this list is highly recommended.")]
         public HashSet<RoleTypeId> BlacklistedRoles { get; set; } = new HashSet<RoleTypeId>() { RoleTypeId.Scp173, RoleTypeId.Scp106, RoleTypeId.Scp049, RoleTypeId.Scp096, RoleTypeId.Scp3114, RoleTypeId.Scp0492, RoleTypeId.Scp939 };
+
+        public HashSet<RoomType> BlacklistedRooms { get; } = new()
+        {
+            RoomType.HczTestRoom,
+            RoomType.HczTesla,
+            RoomType.Lcz173,
+        };
 
         public override void Effect(UsedItemEventArgs ev)
         {
@@ -71,10 +79,10 @@ namespace KE.Items.ItemEffects
 
         private Room RandomRoom()
         {
-            Room room = Room.Random();
+            Room room = Room.List.GetRandomValue((Room r) => !BlacklistedRooms.Contains(r.Type));
             if (Warhead.IsDetonated)
             {
-                return Room.Random(ZoneType.Surface);
+                return RandomRoom(ZoneType.Surface);
             }
 
             if (Map.IsLczDecontaminated)
@@ -83,16 +91,23 @@ namespace KE.Items.ItemEffects
                 Log.Debug($"random={random}");
                 if (random <= 0.33f)
                 {
-                    return Room.Random(ZoneType.HeavyContainment);
+                    return RandomRoom(ZoneType.HeavyContainment);
                 }
                 if (random > 0.33f && random <= 0.66f)
                 {
-                    return Room.Random(ZoneType.Entrance);
+                    return RandomRoom(ZoneType.Entrance);
                 }
-                return Room.Random(ZoneType.Surface);
+                return RandomRoom(ZoneType.Surface);
             }
+
             Log.Debug($"roomZone={room.Zone}");
             return room;
+        }
+
+
+        private Room RandomRoom(ZoneType zone)
+        {
+            return Room.List.GetRandomValue((Room r) => !BlacklistedRooms.Contains(r.Type) && r.Zone == zone);
         }
     }
 }
