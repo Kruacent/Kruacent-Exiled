@@ -22,7 +22,7 @@ namespace KE.Misc.Misc.CR
         public override RoleTypeId Role { get; set; } = RoleTypeId.Tutorial;
         public override int MaxHealth { get; set; } = 600;
         public override string Name { get; set; } = "SCP-035";
-        public override string CustomInfo { get; set; } = string.Empty;
+        public override string CustomInfo { get; set; } = "SCP-035";
         public override bool IgnoreSpawnSystem { get; set; } = true;
         public override SpawnProperties SpawnProperties { get; set; } = new()
         {
