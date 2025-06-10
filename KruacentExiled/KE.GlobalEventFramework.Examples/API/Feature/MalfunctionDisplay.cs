@@ -1,16 +1,10 @@
 ﻿using Exiled.API.Features;
-using InventorySystem.Items.Firearms.Modules;
 using KE.GlobalEventFramework.Examples.API.Interfaces;
-using KE.Utils;
-using KE.Utils.API.Displays.DisplayRuei;
-using KE.Utils.API.Displays.DisplayRuei.Enums;
+using KE.GlobalEventFramework.GEFE.API.Features.Hints;
 using MEC;
 using PlayerRoles;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KE.GlobalEventFramework.Examples.API.Feature
 {
@@ -51,7 +45,7 @@ namespace KE.GlobalEventFramework.Examples.API.Feature
 
             foreach (Player p in Player.List.Where(p => p.Role == RoleTypeId.Spectator))
             {
-                DisplayPlayer.Get(p).Hint(new(HPosition.Right,VPosition.GlobalEvent, hint,RefreshRate+.01f));
+                DisplayHints.AddHintEffect(p, hint, .1f);
             }
         }
 

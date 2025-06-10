@@ -1,17 +1,12 @@
 ﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
-using Exiled.Events.EventArgs.Item;
 using Exiled.Events.EventArgs.Player;
-using InventorySystem.Items.Usables;
 using KE.GlobalEventFramework.GEFE.API.Features;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
-using PluginAPI.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {

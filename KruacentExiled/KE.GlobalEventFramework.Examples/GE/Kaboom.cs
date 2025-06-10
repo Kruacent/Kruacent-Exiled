@@ -4,13 +4,6 @@ using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using KE.GlobalEventFramework.GEFE.API.Features;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DoorType = Exiled.API.Enums.DoorType;
-
 namespace KE.GlobalEventFramework.Examples.GE
 {
     public class Kaboom : GlobalEvent, IEvent

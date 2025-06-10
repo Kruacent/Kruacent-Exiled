@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	  <Reference Include="HintServiceMeow" HintPath="$(EXILED_REFERENCES)\HintServiceMeow-Exiled.dll" />
     <Reference Include="Assembly-CSharp-firstpass" HintPath="$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll" />
 	<Reference Include="UnityEngine" HintPath="$(EXILED_REFERENCES)\UnityEngine.dll" />
 	<Reference Include="UnityEngine.CoreModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll" />

@@ -23,7 +23,7 @@ namespace KE.GlobalEventFramework.Examples.GE
             while (!Round.IsEnded)
             {
                 // every 5 min
-                yield return Timing.WaitForSeconds(10);
+                yield return Timing.WaitForSeconds(60*5);
                 ChangingPlayer();
             }
         }

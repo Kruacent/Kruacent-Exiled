@@ -1,8 +1,6 @@
 ﻿using KE.BlackoutNDoor.API.Features;
 using Exiled.API.Features;
-using Exiled.Events.EventArgs.Server;
 using MEC;
-using PluginAPI.Events;
 using System.Collections.Generic;
 
 namespace KE.BlackoutNDoor.Handlers

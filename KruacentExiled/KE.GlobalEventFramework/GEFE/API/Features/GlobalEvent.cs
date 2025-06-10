@@ -4,8 +4,8 @@ using System.Linq;
 using MEC;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using System;
-using KE.Utils.Display;
 using Exiled.Events.Commands.PluginManager;
+using KE.Utils.API.Displays.DisplayMeow;
 
 namespace KE.GlobalEventFramework.GEFE.API.Features
 {
@@ -95,7 +95,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
             ShowConsole();
             foreach (Player player in Player.List)
             {
-                DisplayPlayer.Get(player).Hint(new (KE.Utils.Display.Enums.HPosition.Center,KE.Utils.Display.Enums.VPosition.GlobalEvent, ShowText(random < MainPlugin.Instance.Config.ChanceRedacted), 10));
+                DisplayHandler.Instance.AddHint(MainPlugin.GEAnnouncement, player, ShowText(random < MainPlugin.Instance.Config.ChanceRedacted), 10);
             }
         }
 

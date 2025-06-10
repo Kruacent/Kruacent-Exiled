@@ -66,7 +66,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         /// </summary>
         private void ReactivateEffectSpawn(ChangingRoleEventArgs ev)
         {
-            Timing.CallDelayed(1f, () => ev.Player.EnableEffect<MovementBoost>(MovementBoost, 999999999, true));
+            Timing.CallDelayed(.1f, () => ev.Player.EnableEffect<MovementBoost>(MovementBoost, 999999999, true));
             
         }
     }

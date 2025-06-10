@@ -9,6 +9,7 @@ using KE.GlobalEventFramework.GEFE.API.Features;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using ServerHandler = Exiled.Events.Handlers.Server;
 using Discord;
+using KE.Utils.API.Displays.DisplayMeow;
 namespace KE.GlobalEventFramework
 {
     internal class MainPlugin : Plugin<Config>
@@ -20,7 +21,11 @@ namespace KE.GlobalEventFramework
 
 		internal GEFE.Handlers.ServerHandler _server;
 
-		internal static MainPlugin Instance {get;private set;}
+
+		public static readonly HintPlacement GEAnnouncement = new(0, 100, HintServiceMeow.Core.Enum.HintAlignment.Center);
+		public static readonly HintPlacement GEEffect = new(360, 300, HintServiceMeow.Core.Enum.HintAlignment.Right);
+
+        internal static MainPlugin Instance {get;private set;}
 
 		public override void OnEnabled()
 		{

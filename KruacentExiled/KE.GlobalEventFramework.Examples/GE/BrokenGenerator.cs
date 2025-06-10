@@ -16,7 +16,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     {
         public override uint Id { get; set; } = 1050;
         public override string Name { get; set; } = "Broken Generator";
-        public override string Description { get; set; } = "Repair the generator to be able to see !";
+        public override string Description { get; set; } = "Repair the generator to be able to see!";
         public override int Weight { get; set; } = 0;
 
         //add event to avoid blackouts

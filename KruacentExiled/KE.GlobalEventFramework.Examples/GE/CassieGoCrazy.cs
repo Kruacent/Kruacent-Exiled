@@ -2,7 +2,9 @@
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Features.Hints;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
+using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
 using System.Collections.Generic;
 using System.Linq;
@@ -141,7 +143,7 @@ namespace KE.GlobalEventFramework.Examples.GE
                     if (UnityEngine.Random.Range(0, 100) < RareEvent)
                     {
                         player.MaxHealth = 125;
-                        player.Broadcast(5, "Another gift for you !");
+                        DisplayHints.AddHintEffect(player, "Another gift for you!", 5);
                     }
                 }
 
