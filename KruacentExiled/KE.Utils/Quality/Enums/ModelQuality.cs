@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Utils.Display.Enums
+namespace KE.Utils.Quality.Enums
 {
-    public enum HPosition
+    public enum ModelQuality
     {
-        Left,
-        Center,
-        Right,
+        None = -1,
+        Low,
+        Medium,
+        High,
     }
 }
