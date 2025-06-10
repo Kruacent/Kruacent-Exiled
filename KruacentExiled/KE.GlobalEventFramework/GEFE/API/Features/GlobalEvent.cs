@@ -95,7 +95,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
             ShowConsole();
             foreach (Player player in Player.List)
             {
-                DisplayHandler.Instance.AddHint(MainPlugin.GEAnnouncement, player, ShowText(random < MainPlugin.Instance.Config.ChanceRedacted), 10);
+                DisplayHandler.Instance.AddHint(MainPlugin.GEAnnouncement, player, ShowText(random < MainPlugin.Instance.Config.ChanceRedacted), 10).FontSize = 30;
             }
         }
 

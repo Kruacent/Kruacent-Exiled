@@ -22,7 +22,7 @@ namespace KE.GlobalEventFramework
 		internal GEFE.Handlers.ServerHandler _server;
 
 
-		public static readonly HintPlacement GEAnnouncement = new(0, 100, HintServiceMeow.Core.Enum.HintAlignment.Center);
+		public static readonly HintPlacement GEAnnouncement = new(0, 50, HintServiceMeow.Core.Enum.HintAlignment.Center);
 		public static readonly HintPlacement GEEffect = new(360, 300, HintServiceMeow.Core.Enum.HintAlignment.Right);
 
         internal static MainPlugin Instance {get;private set;}
