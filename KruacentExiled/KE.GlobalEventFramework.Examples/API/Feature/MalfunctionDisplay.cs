@@ -11,7 +11,7 @@ namespace KE.GlobalEventFramework.Examples.API.Feature
     public class MalfunctionDisplay
     {
         private Malfunctions _malfunction;
-        public float RefreshRate { get; set; } = 5;
+        public float RefreshRate { get; set; } = 1;
         private CoroutineHandle _coroutineHandle;
         public MalfunctionDisplay(Malfunctions malfunction)
         {
@@ -45,7 +45,7 @@ namespace KE.GlobalEventFramework.Examples.API.Feature
 
             foreach (Player p in Player.List.Where(p => p.Role == RoleTypeId.Spectator))
             {
-                DisplayHints.AddHintEffect(p, hint, .1f);
+                DisplayHints.AddHintEffect(p, hint, RefreshRate);
             }
         }
 
