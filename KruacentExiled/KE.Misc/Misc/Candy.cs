@@ -9,8 +9,18 @@ using InventorySystem.Items.Usables.Scp330;
 
 namespace KE.Misc.Misc
 {
-    internal class Candy
+    internal class Candy : MiscFeature
     {
+
+        public override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Scp330.InteractingScp330 += InteractingScp330;
+        }
+
+        public override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Scp330.InteractingScp330 -= InteractingScp330;
+        }
         public void InteractingScp330(InteractingScp330EventArgs ev)
         {
             if (UnityEngine.Random.Range(0, 100) < MainPlugin.Instance.Config.ChancePinkCandy)

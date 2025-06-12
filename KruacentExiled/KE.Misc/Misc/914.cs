@@ -18,7 +18,7 @@ namespace KE.Misc.Misc
     /// <summary>
     /// Everything 914 related
     /// </summary>
-    internal class _914
+    internal class _914 : MiscFeature
     {
 
         internal Dictionary<int, RoleTypeId> roleScp = new Dictionary<int, RoleTypeId>()
@@ -32,6 +32,17 @@ namespace KE.Misc.Misc
             { 1, RoleTypeId.Scp079 },
 
         };
+
+        public override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Scp914.UpgradingPlayer += OnUpgradingPlayer;
+        }
+
+        public override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Scp914.UpgradingPlayer -= OnUpgradingPlayer;
+        }
+
         internal void OnUpgradingPlayer(UpgradingPlayerEventArgs ev)
         {
             Log.Debug("upgrading player");

@@ -3,37 +3,55 @@ using Exiled.API.Features;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Extensions;
 
 namespace KE.Misc.Misc
 {
     /// <summary>
     /// Everything about Surface Light
     /// </summary>
-    internal class SurfaceLight
+    internal class SurfaceLight : MiscFeature
     {
-        /// <summary>
-        /// Change Surface Light Color
-        /// </summary>
-        internal void ChangeSurfaceLight()
+
+        private HashSet<Color> _colors = new()
         {
-            List<Color> colors = new[]
-            {
-                Color.cyan,
-                Color.red,
-                Color.green,
-                Color.white,
-                Color.blue
-            }.ToList();
+            Color.cyan,
+            Color.red,
+            Color.green,
+            Color.white,
+            Color.blue
+        };
+
+
+        public override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
+        }
+
+        public override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
+
+        }
+
+
+        private void OnRoundStarted()
+        {
+            if(Random.value < .75f)
+                ChangeSurfaceLight();
+        }
+
+        private void ChangeSurfaceLight()
+        {
 
             // Select a random color
-            Color randomColor = colors[Random.Range(0, colors.Count)];
-
+            Color randomColor = _colors.GetRandomValue();
             foreach (var room in Room.List.Where(r => r.Type == RoomType.Surface))
             {
                 room.Color = randomColor;
             }
 
-            Log.Info($"Changed Surface light color to {randomColor}.");
+            Log.Debug($"Changed Surface light color to {randomColor}.");
         }
     }
 }

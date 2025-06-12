@@ -11,12 +11,6 @@ using Exiled.Events.EventArgs.Player;
 using System;
 using KE.Misc.Misc;
 using KE.Misc.Handlers;
-using KE.Utils.Display;
-using KE.Utils.Display.Enums;
-using Exiled.API.Extensions;
-using Exiled.Events.Commands.Hub;
-using RueI.Displays;
-using RueI.Extensions;
 using Exiled.CustomRoles.API.Features;
 using KE.Misc.Misc.CR;
 
@@ -37,6 +31,7 @@ namespace KE.Misc
         internal SurfaceLight SurfaceLight { get; private set; }
         internal SCPBuff SCPBuff { get; private set; }
         internal Spawn Spawn { get; private set; }
+        internal FriendlyFire FriendlyFire { get; private set; }
 
         public override void OnEnabled()
         {
@@ -48,63 +43,42 @@ namespace KE.Misc
             ServerHandler = new ServerHandler();
             Spawn = new Spawn();
             SCPBuff = new SCPBuff();
-            if (Instance.Config.ChancePinkCandy >= 0 && Instance.Config.ChancePinkCandy <= 100)
-            {
-                Candy = new Candy();
-                Exiled.Events.Handlers.Scp330.InteractingScp330 += Candy.InteractingScp330;
-            }
-            else
-            {
-                Log.Error("ChancePinkCandy must be between 0 and 100");
-            }
+            FriendlyFire = new();
+            Candy = new Candy();
             Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
             Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
 
-
+            MiscFeature.SubscribeAllEvents();
             Exiled.Events.Handlers.Player.ChangingRole += SCPBuff.BecomingSCP;
-            ServerHandle.RoundStarted += Spawn.OnRoundStarted;
             ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;
-            Nine14Handle.UpgradingPlayer += _914.OnUpgradingPlayer;
             Exiled.Events.Handlers.Player.Dying += ScpNoeDeathMessage;
-            ServerHandle.EndingRound += Spawn.EndingRound;
             CustomRole.RegisterRoles(false, null, true, this.Assembly);
             
         }
 
+
         public override void OnDisabled()
         {
             ServerHandle.RoundStarted -= ServerHandler.OnRoundStarted;
-            Nine14Handle.UpgradingPlayer -= _914.OnUpgradingPlayer;
             Exiled.Events.Handlers.Player.Dying -= ScpNoeDeathMessage;
-            ServerHandle.RoundStarted -= Spawn.OnRoundStarted;
-            ServerHandle.EndingRound -= Spawn.EndingRound;
-            if (Instance.Config.ChancePinkCandy >= 0 && Instance.Config.ChancePinkCandy <= 100)
-            {
-                Exiled.Events.Handlers.Scp330.InteractingScp330 -= Candy.InteractingScp330;
-                Candy = null;
-            }
+            MiscFeature.UnsubscribeAllEvents();
+
 
             CustomRole.UnregisterRoles([typeof(Scp035)]);
 
 
             _914 = null;
+            Candy = null;
             ClassDDoor = null;
             ServerHandler = null;
             SCPBuff = null;
+            Spawn = null;
             AutoElevator = null;
-            Instance = null;
+            FriendlyFire = null;
             SurfaceLight = null;
+            Instance = null;
         }
 
-
-        /// <summary>
-        /// Set the Friendly Fire to true or false at random
-        /// </summary>
-        internal void RandomFF()
-        {
-            Server.FriendlyFire = UnityEngine.Random.Range(0, 101) < Instance.Config.ChanceFF;
-            Log.Info($"Friendly Fire : {Server.FriendlyFire}");
-        }
 
         /// <summary>
         /// C.A.S.S.I.E. announce 5 min before the autonuke
@@ -124,8 +98,9 @@ namespace KE.Misc
         /// </summary>
         internal IEnumerator<float> PeanutLockdown()
         {
+            
             Log.Debug("peanut lockdown");
-            Door peanutDoor = Door.List.First(x => x.Type == DoorType.Scp173NewGate);
+            Door peanutDoor = Door.List.First(x => x.Type == DoorType.Scp173NewGate); // broken 049 gate is considered as 173 new gate for some reason
             peanutDoor.IsOpen = false;
             peanutDoor.ChangeLock(DoorLockType.Isolation);
             CoroutineHandle a;
@@ -158,7 +133,7 @@ namespace KE.Misc
                 yield return Timing.WaitForSeconds(1);
                 secondsWaiting--;
             }
-            playerToShow.ForEach(p => DisplayPlayer.Get(p).Hint(new Position(HPosition.Center,VPosition.CustomRole),msg));
+            //playerToShow.ForEach(p => DisplayPlayer.Get(p).Hint(new Position(HPosition.Center,VPosition.CustomRole),msg));
         }
 
 

@@ -19,7 +19,6 @@ namespace KE.Utils.Extensions
         {
             QualityHandler.Instance.QualityToysHandler.SetAsPickup(toy);
         }
-            NetworkIdentity playerIdentity = playertoshow.NetworkIdentity;
 
         public static void SetQuality(this AdminToy toy, ModelQuality modelQuality,bool autoSync = true)
         {
