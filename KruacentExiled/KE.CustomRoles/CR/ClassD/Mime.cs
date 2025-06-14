@@ -3,7 +3,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
-using KE.CustomRoles.API;
+using KE.CustomRoles.API.Features;
 using PlayerRoles;
 using PlayerRoles.Spectating;
 using System.Collections.Generic;

@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features.Attributes;
+﻿using Exiled.API.Features;
+using Exiled.API.Features.Attributes;
 using Exiled.CustomRoles.API.Features;
 using KE.CustomRoles.Abilities;
 using PlayerRoles;
@@ -28,5 +29,16 @@ namespace KE.CustomRoles.CR.SCP
         {
             new OpenDoor()
         };
+
+
+        protected override void RoleAdded(Player player)
+        {
+            Log.Debug("adding 0493dror");
+        }
+
+        protected override void RoleRemoved(Player player)
+        {
+            Log.Debug("removing 0493dror");
+        }
     }
 }

@@ -5,6 +5,7 @@ using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Pools;
 using Exiled.CustomRoles.API.Features;
 using InventorySystem.Configs;
+using KE.Utils.API.Displays.DisplayMeow;
 using LiteNetLib4Mirror.Open.Nat;
 using MEC;
 using PlayerRoles;
@@ -15,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace KE.CustomRoles.API
+namespace KE.CustomRoles.API.Features
 {
 
     public abstract class GlobalCustomRole : KECustomRole
@@ -36,7 +37,7 @@ namespace KE.CustomRoles.API
             Log.Debug($"{Name}: Adding role to {player.Nickname}.");
             TrackedPlayers.Add(player);
 
-            
+
             Timing.CallDelayed(
                 0.25f,
                 () =>
@@ -65,7 +66,7 @@ namespace KE.CustomRoles.API
                 });
 
             Log.Debug($"{Name}: Setting health values.");
-            player.MaxHealth *= MaxHealthMultiplicator; 
+            player.MaxHealth *= MaxHealthMultiplicator;
             player.Health = player.MaxHealth;
             player.Scale = Scale;
 
@@ -87,7 +88,6 @@ namespace KE.CustomRoles.API
             }
 
             ShowMessage(player);
-            ShowBroadcast(player);
             RoleAdded(player);
             player.UniqueRole = Name;
             player.TryAddCustomRoleFriendlyFire(Name, CustomRoleFFMultiplier);
@@ -120,7 +120,24 @@ namespace KE.CustomRoles.API
         public sealed override int MaxHealth { get; set; }
         public virtual float MaxHealthMultiplicator { get; set; } = 1;
 
+        protected override void ShowMessage(Player player)
+        {
+            string show;
+            if (player.IsScp)
+            {
+                show = $"<b>{Name} {player.Role.Name}</b>\n {Description}";
+            }
+            else
+            {
+                show = $"<b>{Name}</b>\n {Description}";
+            }
 
+
+            //todo settings
+            float delay = 20;
+
+            DisplayHandler.Instance.AddHint(MainPlugin.CRHint, player, show, delay);
+        }
     }
 
     public enum SideEnum
@@ -143,5 +160,5 @@ namespace KE.CustomRoles.API
             };
         }
     }
-    
+
 }

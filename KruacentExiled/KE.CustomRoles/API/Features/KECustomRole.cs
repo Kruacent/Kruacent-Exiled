@@ -3,36 +3,49 @@ using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Pools;
 using Exiled.CustomRoles.API.Features;
+using Exiled.Events.Commands.PluginManager;
+using Exiled.Events.EventArgs.Player;
 using InventorySystem.Configs;
-using KE.Utils.Display;
-using KE.Utils.Display.Enums;
+using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace KE.CustomRoles.API
+namespace KE.CustomRoles.API.Features
 {
     public abstract class KECustomRole : CustomRole
     {
         public sealed override bool IgnoreSpawnSystem { get; set; } = true;
-        protected sealed override void ShowMessage(Player player)
+        protected override void ShowMessage(Player player)
         {
 
             string show = $"<b>{Name}</b>\n {Description}";
 
-            RueIHint r = new(HPosition.Left, VPosition.CustomItem, show, Exiled.CustomRoles.CustomRoles.Instance.Config.GotRoleHint.Duration);
-            DisplayPlayer.Get(player).Hint(r);
+            //todo settings
+            float delay = 20;
+
+            DisplayHandler.Instance.AddHint(MainPlugin.CRHint, player, show, delay);
+        }
+
+
+
+        protected void ShowEffectHint(Player player, string text)
+        {
+            //todo settings
+            float delay = 20;
+            DisplayHandler.Instance.AddHint(MainPlugin.CREffect, player, text, delay);
         }
 
         public override void AddRole(Player player)
         {
             Player player2 = player;
             Log.Debug(Name + ": Adding role to " + player2.Nickname + ".");
-            TrackedPlayers.Add(player2);
+            
             if (Role != RoleTypeId.None)
             {
+
                 if (KeepPositionOnSpawn)
                 {
                     if (KeepInventoryOnSpawn)
@@ -53,35 +66,32 @@ namespace KE.CustomRoles.API
                     player2.Role.Set(Role, SpawnReason.ForceClass, RoleSpawnFlags.AssignInventory);
                 }
             }
+            TrackedPlayers.Add(player2);
 
             Timing.CallDelayed(0.25f, delegate
             {
                 if (!KeepInventoryOnSpawn)
                 {
-                    Log.Debug(Name + ": Clearing " + player2.Nickname + "'s inventory.");
                     player2.ClearInventory();
                 }
 
                 foreach (string item in Inventory)
                 {
-                    Log.Debug(Name + ": Adding " + item + " to inventory.");
                     TryAddItem(player2, item);
                 }
 
                 if (Ammo.Count > 0)
                 {
-                    Log.Debug(Name + ": Adding Ammo to " + player2.Nickname + " inventory.");
                     AmmoType[] values = EnumUtils<AmmoType>.Values;
                     foreach (AmmoType ammoType in values)
                     {
                         if (ammoType != 0)
                         {
-                            player2.SetAmmo(ammoType, (ushort)(Ammo.ContainsKey(ammoType) ? ((Ammo[ammoType] == ushort.MaxValue) ? InventoryLimits.GetAmmoLimit(ammoType.GetItemType(), player2.ReferenceHub) : Ammo[ammoType]) : 0));
+                            player2.SetAmmo(ammoType, (ushort)(Ammo.ContainsKey(ammoType) ? Ammo[ammoType] == ushort.MaxValue ? InventoryLimits.GetAmmoLimit(ammoType.GetItemType(), player2.ReferenceHub) : Ammo[ammoType] : 0));
                         }
                     }
                 }
             });
-            Log.Debug(Name + ": Setting health values.");
             player2.Health = MaxHealth;
             player2.MaxHealth = MaxHealth;
             player2.Scale = Scale;
@@ -91,7 +101,6 @@ namespace KE.CustomRoles.API
                 player2.Position = spawnPosition;
             }
 
-            Log.Debug(Name + ": Setting player info");
             player2.CustomInfo = player2.CustomName + "\n" + CustomInfo;
             player2.InfoArea &= ~(PlayerInfoArea.Nickname | PlayerInfoArea.Role);
             if (CustomAbilities != null)
@@ -137,5 +146,8 @@ namespace KE.CustomRoles.API
         /// The chance of having this role NOT the chance to have a role
         /// </summary>
         public override abstract float SpawnChance { get; set; }
+        
+
+
     }
 }

@@ -1,15 +1,12 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
-using KE.CustomRoles.API;
-using KE.Utils.Display;
+using KE.CustomRoles.API.Features;
 using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 
 namespace KE.CustomRoles.CR.SCP
 {
@@ -19,7 +16,7 @@ namespace KE.CustomRoles.CR.SCP
         private static Dictionary<Player, CoroutineHandle> _handles = new();
         public override SideEnum Side { get; set; } = SideEnum.SCP;
         public override string Name { get; set; } = "Ultra";
-        public override string Description { get; set; } = "";
+        public override string Description { get; set; } = "You can sense where people are located";
         public override uint Id { get; set; } = 1079;
         public override string CustomInfo { get; set; } = "Ultra";
         public override bool KeepRoleOnDeath { get; set; } = false;
@@ -43,12 +40,11 @@ namespace KE.CustomRoles.CR.SCP
 
         private IEnumerator<float> DisplayInfos(Player player)
         {
-            RueIHint hint;
+            
             while (true)
             {
                 Log.Debug("Ultra : showing");
-                hint = new(Utils.Display.Enums.HPosition.Left, Utils.Display.Enums.VPosition.CustomRoleEffect, PlayerInZone(), RefreshRate);
-                DisplayPlayer.Get(player).Hint(hint);
+                ShowEffectHint(player, PlayerInZone());
                 yield return Timing.WaitForSeconds(RefreshRate);
             }
         }

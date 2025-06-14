@@ -6,7 +6,7 @@ using Exiled.API.Features.Attributes;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
-using KE.CustomRoles.API;
+using KE.CustomRoles.API.Features;
 using MEC;
 using PlayerRoles;
 using System;

@@ -7,7 +7,7 @@ using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using KE.CustomRoles.API;
+using KE.CustomRoles.API.Features;
 
 namespace KE.CustomRoles.CR.MTF
 {

@@ -1,7 +1,7 @@
 ﻿using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using InventorySystem.Items.Keycards;
-using KE.CustomRoles.API;
+using KE.CustomRoles.API.Features;
 using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,7 +28,7 @@ namespace KE.CustomRoles.CR.Scientist
             {
                 new DynamicSpawnPoint()
                 {
-                    Location = Exiled.API.Enums.SpawnLocationType.InsideHidLower,
+                    Location = Exiled.API.Enums.SpawnLocationType.InsideHidUpper,
                     Chance = 100,
                 }
             }

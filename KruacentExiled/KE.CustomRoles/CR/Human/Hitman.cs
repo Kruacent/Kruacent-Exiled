@@ -4,16 +4,11 @@ using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
-using Hints;
-using KE.CustomRoles.API;
-using KE.Utils.Display;
+using KE.CustomRoles.API.Features;
 using MEC;
 using PlayerRoles;
-using PluginAPI.Events;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
-using Utils.NonAllocLINQ;
 
 namespace KE.CustomRoles.CR.Human
 {
@@ -30,8 +25,8 @@ namespace KE.CustomRoles.CR.Human
         public override bool KeepRoleOnChangingRole { get; set; } = true;
         public override float SpawnChance { get; set; } = 100;
 
-        private Player TargetPlayer { get; set; } = null;
-        private Player TheHitman { get; set; } = null;
+        private Player TargetPlayer;
+        private Player TheHitman;
 
         private void NerfHitman()
         {
@@ -58,12 +53,18 @@ namespace KE.CustomRoles.CR.Human
 
             this.TheHitman = player;
             // Target cannot be NPC, SCP or the Hitman
-            this.TargetPlayer = Player.List.Where(x => x.IsHuman && x != player /*&& !x.IsNPC*/).GetRandomValue();
+            this.TargetPlayer = Player.List.Where(x => x.IsHuman && x != player && !x.IsNPC).GetRandomValue();
+
+            if(TargetPlayer == null)
+            {
+                Log.Warn("no other human player");
+                return;
+            }
+
 
 
             Log.Debug($"Target showing to Hitman, target is : {TargetPlayer.Nickname}");
-            RueIHint hint = new(Utils.Display.Enums.HPosition.Center, Utils.Display.Enums.VPosition.CustomRoleEffect, $"The Target is {TargetPlayer.Nickname}", 5);
-            DisplayPlayer.Get(player).Hint(hint);
+            ShowEffectHint(player, $"The Target is {TargetPlayer.Nickname}");
 
             if (this.TheHitman.Role.Side == this.TargetPlayer.Role.Side && !Server.FriendlyFire)
             {
@@ -95,10 +96,10 @@ namespace KE.CustomRoles.CR.Human
         {
             if (ev.Player != this.TargetPlayer) return;
 
+            
             Log.Info($"Target {this.TargetPlayer.Nickname} escaped");
+            ShowEffectHint(TheHitman, $"The target ({this.TargetPlayer.Nickname}) has escaped, you lost the contract");
 
-            RueIHint hint = new(Utils.Display.Enums.HPosition.Center, Utils.Display.Enums.VPosition.CustomRoleEffect, $"The target ({this.TargetPlayer.Nickname}) has escaped, you lost the contract", 5);
-            DisplayPlayer.Get(this.TheHitman).Hint(hint);
 
             NerfHitman();
 
@@ -114,16 +115,14 @@ namespace KE.CustomRoles.CR.Human
             // Hitman killed the target
             if (ev.Player == this.TargetPlayer && ev.Attacker == this.TheHitman)
             {
-                RueIHint hint = new(Utils.Display.Enums.HPosition.Center, Utils.Display.Enums.VPosition.CustomRoleEffect, $"You killed the target ({this.TargetPlayer.Nickname})", 5);
-                DisplayPlayer.Get(this.TheHitman).Hint(hint);
+                ShowEffectHint(TheHitman, $"You killed the target ({this.TargetPlayer.Nickname}), you achieved the contract");
                 BuffHitman();
 
                 this.TargetPlayer = null;
             }
             else
             {
-                RueIHint hint = new(Utils.Display.Enums.HPosition.Center, Utils.Display.Enums.VPosition.CustomRoleEffect, $"The target ({this.TargetPlayer.Nickname}) is dead, you lost the contract", 5);
-                DisplayPlayer.Get(this.TheHitman).Hint(hint);
+                ShowEffectHint(TheHitman, $"The target ({this.TargetPlayer.Nickname}) is dead, you lost the contract");
                 NerfHitman();
 
                 this.TargetPlayer = null;
@@ -169,8 +168,8 @@ namespace KE.CustomRoles.CR.Human
                         if (!hasLogged)
                         {
                             Log.Info(this.TargetPlayer + " " + message);
-                            RueIHint hint = new(Utils.Display.Enums.HPosition.Center, Utils.Display.Enums.VPosition.CustomRoleEffect, message, 5);
-                            DisplayPlayer.Get(this.TargetPlayer).Hint(hint);
+
+                            ShowEffectHint(TargetPlayer, message);
                             ResetLogs(ref proximityAlerts);
                             proximityAlerts[i] = (distance, message, true);
                         }
@@ -180,9 +179,8 @@ namespace KE.CustomRoles.CR.Human
                     {
                         if (!hasLogged)
                         {
+                            ShowEffectHint(TargetPlayer, message);
                             Log.Info(this.TargetPlayer + " " + message);
-                            RueIHint hint = new(Utils.Display.Enums.HPosition.Center, Utils.Display.Enums.VPosition.CustomRoleEffect, message, 5);
-                            DisplayPlayer.Get(this.TargetPlayer).Hint(hint);
                             ResetLogs(ref proximityAlerts);
                             proximityAlerts[i] = (distance, message, true);
                         }
@@ -192,9 +190,8 @@ namespace KE.CustomRoles.CR.Human
                     {
                         if (!hasLogged)
                         {
+                            ShowEffectHint(TargetPlayer, message);
                             Log.Info(this.TargetPlayer + " " + message);
-                            RueIHint hint = new(Utils.Display.Enums.HPosition.Center, Utils.Display.Enums.VPosition.CustomRoleEffect, message, 5);
-                            DisplayPlayer.Get(this.TargetPlayer).Hint(hint);
                             ResetLogs(ref proximityAlerts);
                             proximityAlerts[i] = (distance, message, true);
                         }

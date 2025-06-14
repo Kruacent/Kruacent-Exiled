@@ -1,6 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features.Attributes;
-using KE.CustomRoles.API;
+using KE.CustomRoles.API.Features;
 using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,7 +20,7 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
         public override bool KeepRoleOnChangingRole { get; set; } = false;
 
         public override float SpawnChance { get; set; } = 100;
-        public override Vector3 Scale { get; set; } = new Vector3(1.4f, 1.2f, 1.3f);
+        public override Vector3 Scale { get; set; } = new Vector3(1.1f, 1f, 1.1f);
 
         public override List<string> Inventory { get; set; } = new List<string>()
        {

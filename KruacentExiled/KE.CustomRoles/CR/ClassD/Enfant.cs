@@ -1,6 +1,6 @@
 ﻿using Exiled.API.Features.Attributes;
 using InventorySystem.Items.Usables.Scp330;
-using KE.CustomRoles.API;
+using KE.CustomRoles.API.Features;
 using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;

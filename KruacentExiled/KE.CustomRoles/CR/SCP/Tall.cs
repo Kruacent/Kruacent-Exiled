@@ -1,5 +1,5 @@
 ﻿using Exiled.API.Features.Attributes;
-using KE.CustomRoles.API;
+using KE.CustomRoles.API.Features;
 using PlayerRoles;
 using UnityEngine;
 

@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Server;
+using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
 using System;
 
@@ -14,6 +15,8 @@ namespace KE.CustomRoles
         public override Version Version => new(1, 1, 0);
         public static MainPlugin Instance;
         private Controller _controller;
+        public static readonly HintPlacement CRHint = new(0, 750);
+        public static readonly HintPlacement CREffect = new(700, 300);
 
         public override void OnEnabled()
         {
@@ -21,7 +24,7 @@ namespace KE.CustomRoles
             Instance = this;
             _controller = new Controller();
 
-            CustomRole.RegisterRoles(false,null);
+            CustomRole.RegisterRoles(false,null,true,Assembly);
             this.SubscribeEvents();
 
         }

@@ -1,7 +1,7 @@
 ﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.CustomRoles.API.Features;
-using KE.CustomRoles.API;
+using KE.CustomRoles.API.Features;
 using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +22,7 @@ namespace KE.CustomRoles
             return CustomRole.Registered.Where(c => c.Role == player.Role || c is GlobalCustomRole cgr && cgr.Side == SideClass.Get(player.Role.Side)).ToDictionary(c => c, c=> c.SpawnChance);
         }
 
+
         /// <summary>
         /// Gives a CustomRole to a player
         /// </summary>
@@ -35,6 +36,7 @@ namespace KE.CustomRoles
                 Log.Debug("no luck");
                 return;
             }
+            
             
             CustomRole cr = AssignRole(GetAvailableCustomRole(player));
             Log.Debug($"{player.Id} : {cr.Name}");
