@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using Exiled.API.Interfaces;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Server;
 using KE.Utils.API.Displays.DisplayMeow;
@@ -8,7 +9,7 @@ using System;
 
 namespace KE.CustomRoles
 {
-    public class MainPlugin : Plugin<Config>
+    public class MainPlugin : Plugin<Config,Translations>
     {
         public override string Name { get; } = "KE.CustomRoles";
         public override string Author => "Patrique & OmerGS";
@@ -17,6 +18,7 @@ namespace KE.CustomRoles
         private Controller _controller;
         public static readonly HintPlacement CRHint = new(0, 750);
         public static readonly HintPlacement CREffect = new(700, 300);
+        public static Translations Translations => Instance?.Translation;
 
         public override void OnEnabled()
         {
