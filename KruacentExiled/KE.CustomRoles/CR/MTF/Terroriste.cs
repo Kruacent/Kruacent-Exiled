@@ -10,10 +10,9 @@ namespace KE.CustomRoles.CR.MTF
     [CustomRole(RoleTypeId.NtfSergeant)]
     internal class Terroriste : KECustomRole
     {
-        public override string Name { get; set; } = "Terroriste";
         public override string Description { get; set; } = "Tu es un <color=#FFC0CB>Terroriste</color> \nne fait pas exploser la facilité \ntu commences avec des grenades";
         public override uint Id { get; set; } = 1052;
-        public override string CustomInfo { get; set; } = "Terroriste";
+        public override string PublicName { get; set; } = "Terroriste";
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.NtfSergeant;
         public override bool KeepRoleOnDeath { get; set; } = false;

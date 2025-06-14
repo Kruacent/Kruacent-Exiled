@@ -15,10 +15,9 @@ namespace KE.CustomRoles.CR.SCP
     {
         private static Dictionary<Player, CoroutineHandle> _handles = new();
         public override SideEnum Side { get; set; } = SideEnum.SCP;
-        public override string Name { get; set; } = "Ultra";
         public override string Description { get; set; } = "You can sense where people are located";
         public override uint Id { get; set; } = 1079;
-        public override string CustomInfo { get; set; } = "Ultra";
+        public override string PublicName { get; set; } = "Ultra";
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float MaxHealthMultiplicator { get; set; } = 1f;

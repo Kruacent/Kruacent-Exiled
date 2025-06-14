@@ -23,10 +23,9 @@ namespace KE.CustomRoles.CR.SCP
     public class SCP457 : KECustomRole, ISCPPreferences
     {
 
-        public override string Name { get; set; } = "SCP-457";
         public override string Description { get; set; } = "";
         public override uint Id { get; set; } = 1084;
-        public override string CustomInfo { get; set; } = "SCP-457";
+        public override string PublicName { get; set; } = "SCP-457";
         public override int MaxHealth { get; set; } = 3900;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scp106;
         public override bool KeepRoleOnDeath { get; set; } = false;

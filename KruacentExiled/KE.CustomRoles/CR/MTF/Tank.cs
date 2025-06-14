@@ -14,10 +14,9 @@ namespace KE.CustomRoles.CR.MTF
     [CustomRole(RoleTypeId.NtfCaptain)]
     internal class Tank : KECustomRole
     {
-        public override string Name { get; set; } = "Tank";
         public override string Description { get; set; } = "Tu es un <color=#FFC0CB>TANK</color> tu es débuff mais ta force de tir est démultiplié (fait attention à tes balles)";
         public override uint Id { get; set; } = 1051;
-        public override string CustomInfo { get; set; } = "Tank";
+        public override string PublicName { get; set; } = "Tank";
         public override int MaxHealth { get; set; } = 200;
         public override RoleTypeId Role { get; set; } = RoleTypeId.NtfCaptain;
         public override bool KeepRoleOnDeath { get; set; } = false;

@@ -20,7 +20,7 @@ namespace KE.CustomRoles.CR.Human
         public override string Name { get; set; } = "Hitman";
         public override string Description { get; set; } = "Tu es <color=#0f0f0f>Hitman</color>";
         public override uint Id { get; set; } = 1059;
-        public override string CustomInfo { get; set; } = "";
+        public override string PublicName { get; set; } = string.Empty;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
         public override float SpawnChance { get; set; } = 100;

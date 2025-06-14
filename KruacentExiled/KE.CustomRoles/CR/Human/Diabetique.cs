@@ -14,10 +14,9 @@ namespace KE.CustomRoles.CR.Human
     internal class Diabetique : GlobalCustomRole
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;
-        public override string Name { get; set; } = "Diabetique";
         public override string Description { get; set; } = "Tu es <color=#FFFF00>diabetique</color>\nT'as mangé le crambleu au pomme de mael";
         public override uint Id { get; set; } = 1054;
-        public override string CustomInfo { get; set; } = "Diabetique";
+        public override string PublicName { get; set; } = "Diabetique";
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;

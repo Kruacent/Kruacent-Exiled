@@ -10,6 +10,7 @@ using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 using UnityEngine;
 
@@ -17,16 +18,39 @@ namespace KE.CustomRoles.API.Features
 {
     public abstract class KECustomRole : CustomRole
     {
+
+        public override string Name
+        {
+            get
+            {
+                return GetType().Name;
+            }
+            set
+            {
+                
+            }
+        }
+
+
+
+        public sealed override string CustomInfo { get; set; }
+        public abstract string PublicName { get; set; }
+
+
+
         public sealed override bool IgnoreSpawnSystem { get; set; } = true;
         protected override void ShowMessage(Player player)
         {
 
-            string show = $"<b>{Name}</b>\n {Description}";
+            string msg = MainPlugin.Translations.GettingNewRole;
+            msg = msg.Replace("%Name%", PublicName).Replace("%Desc%",Description);
+            
+
 
             //todo settings
             float delay = 20;
 
-            DisplayHandler.Instance.AddHint(MainPlugin.CRHint, player, show, delay);
+            DisplayHandler.Instance.AddHint(MainPlugin.CRHint, player, msg, delay);
         }
 
 
@@ -101,7 +125,7 @@ namespace KE.CustomRoles.API.Features
                 player2.Position = spawnPosition;
             }
 
-            player2.CustomInfo = player2.CustomName + "\n" + CustomInfo;
+            player2.CustomInfo = player2.CustomName + "\n" + PublicName;
             player2.InfoArea &= ~(PlayerInfoArea.Nickname | PlayerInfoArea.Role);
             if (CustomAbilities != null)
             {

@@ -10,10 +10,9 @@ namespace KE.CustomRoles.CR.ClassD
     [CustomRole(RoleTypeId.ClassD)]
     internal class Enfant : KECustomRole
     {
-        public override string Name { get; set; } = "enfant";
         public override string Description { get; set; } = "Tu es un <color=#FFC0CB>Enfant</color> \ndo not the kid \ntu commences avec un bonbon arc-en-ciel \n t'es un peu plus petit que la normal";
         public override uint Id { get; set; } = 1041;
-        public override string CustomInfo { get; set; } = "Enfant";
+        public override string PublicName { get; set; } = "Enfant";
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
         public override bool KeepRoleOnDeath { get; set; } = true;
