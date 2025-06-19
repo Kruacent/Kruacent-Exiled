@@ -9,6 +9,7 @@ using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
+using KE.Items.Features;
 using KE.Items.Interface;
 using UnityEngine;
 

@@ -22,7 +22,7 @@ using KE.Items.ItemEffects;
 using KE.Items.Upgrade;
 using Scp914;
 using System.Collections.ObjectModel;
-using KE.Items;
+using KE.Items.Features;
 
 /// <inheritdoc />
 [CustomItem(ItemType.Painkillers)]

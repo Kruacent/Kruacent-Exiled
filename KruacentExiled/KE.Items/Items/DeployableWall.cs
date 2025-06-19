@@ -9,6 +9,7 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.API.Features.Toys;
 using MEC;
 using KE.Items.ItemEffects;
+using KE.Items.Features;
 
 namespace KE.Items.Items
 {

@@ -10,6 +10,7 @@ using Player = Exiled.API.Features.Player;
 using MEC;
 using UnityEngine;
 using KE.Items.ItemEffects;
+using KE.Items.Features;
 
 namespace KE.Items.Items
 {

@@ -1,10 +1,14 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using Exiled.API.Features.Pickups;
+using Exiled.API.Features.Pickups.Projectiles;
+using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using KE.Items.Extensions;
 using KE.Items.Interface;
 using KE.Items.Items.Models;
+using KE.Utils.API.Interfaces;
 using MEC;
 using System;
 using System.Collections.Generic;
@@ -15,7 +19,7 @@ using UnityEngine;
 
 namespace KE.Items.ItemEffects
 {
-    public class MineEffect : CustomItemEffect
+    public class MineEffect : CustomItemEffect, IUsingEvents
     {
         private const float RefreshRate = .01f;
         private const int MineActivationTime = 10;
@@ -34,6 +38,19 @@ namespace KE.Items.ItemEffects
             PlaceMine(ev.Player,ev.Position);
         }
 
+        public void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Map.ExplodingGrenade += OnExplodingGrenade;
+        }
+        public void UnsubscribeEvents()
+        {
+
+        }
+
+        private void OnExplodingGrenade(ExplodingGrenadeEventArgs ev)
+        {
+            
+        }
 
         /// <summary>
         /// Place the mine at the feet of the player
@@ -65,6 +82,22 @@ namespace KE.Items.ItemEffects
             Timing.RunCoroutine(WaitAndActivateMine(p, m));
         }
 
+        private ExplosiveGrenade _grenade;
+        private ExplosiveGrenade Grenade
+        {
+            get
+            {
+                if (_grenade == null)
+                {
+                    _grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
+                    _grenade.MaxRadius = 3;
+                    _grenade.ScpDamageMultiplier = 1f;
+                    _grenade.FuseTime = 0f;
+                }
+                return _grenade;
+            }
+        }
+
 
         private IEnumerator<float> WaitAndActivateMine(Player player, MineModel mine)
         {
@@ -84,18 +117,29 @@ namespace KE.Items.ItemEffects
         private IEnumerator<float> ActiveMine(MineModel mine, float cylinderSize)
         {
             Timing.RunCoroutine(mine.Activate());
-            bool endWhile = true;
-            while (endWhile)
+            bool isActivated = true;
+            while (isActivated)
             {
+
+                foreach (IWorldSpace p in Pickup.List)
+                {
+                    if (IsPositionInZone(p.Position,mine.Position, cylinderSize, 3))
+                    {
+                        Grenade.SpawnActive(mine.Position);
+                        DestroyMine(mine);
+                        isActivated = false;
+                        break;
+                    }
+                }
+
                 foreach (Player player in Player.List)
                 {
-                    if (IsPlayerInZone(player, mine.Position, cylinderSize, 3))
-                    {
-                        ((ExplosiveGrenade)Item.Create(ItemType.GrenadeHE)).SpawnActive(mine.Position).FuseTime = 0f;
 
-                        // Delete the mine
-                        mine.UnSpawn();
-                        endWhile = false;
+                    if (isActivated && IsPlayerInZone(player, mine.Position, cylinderSize, 3))
+                    {
+                        Grenade.SpawnActive(mine.Position);
+                        DestroyMine(mine);
+                        isActivated = false;
                         break;
                     }
                 }
@@ -104,16 +148,29 @@ namespace KE.Items.ItemEffects
             }
         }
 
+        private void DestroyMine(MineModel mine)
+        {
+            mine.Destroy();
+            UnsubscribeEvents();
+        }
+
+
         private bool IsPlayerInZone(Player player, Vector3 zonePosition, float radius, float height)
+        {
+            return IsPositionInZone(player.Position, zonePosition, radius, height);
+
+        }
+
+        private bool IsPositionInZone(Vector3 position, Vector3 zonePosition, float radius, float height)
         {
             // Calculate the horizontal distance (x, z)
             float horizontalDistance = Vector3.Distance(
-                new Vector3(player.Position.x, 0, player.Position.z),
+                new Vector3(position.x, 0, position.z),
                 new Vector3(zonePosition.x, 0, zonePosition.z)
             );
 
             // Calculate the vertical difference (y)
-            float verticalDifference = Mathf.Abs(player.Position.y - zonePosition.y);
+            float verticalDifference = Mathf.Abs(position.y - zonePosition.y);
 
             // Check if the player is in the 3d zone.
             return horizontalDistance <= (radius / 2) && verticalDifference <= (height / 2);

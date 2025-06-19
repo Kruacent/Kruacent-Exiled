@@ -8,6 +8,7 @@ using Exiled.API.Features.Toys;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
+using KE.Items.Features;
 using MEC;
 using PlayerRoles;
 using System;

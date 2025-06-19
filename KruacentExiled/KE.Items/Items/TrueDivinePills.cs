@@ -15,7 +15,7 @@ using PlayerRoles;
 using KE.Items.Interface;
 using Exiled.CustomItems.API.EventArgs;
 using Exiled.Events.EventArgs.Scp914;
-using KE.Items;
+using KE.Items.Features;
 
 /// <inheritdoc />
 [CustomItem(ItemType.SCP500)]

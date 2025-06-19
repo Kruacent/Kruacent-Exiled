@@ -7,6 +7,7 @@ using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Scp914;
+using KE.Items.Features;
 using KE.Items.Interface;
 using KE.Items.Upgrade;
 using Scp914;

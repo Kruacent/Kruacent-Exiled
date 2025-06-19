@@ -10,6 +10,7 @@ using KE.Items.ItemEffects;
 using KE.Utils.Quality.Models;
 using KE.Utils.Quality.Models.Examples;
 using MEC;
+using KE.Items.Features;
 
 namespace KE.Items.Items
 {
@@ -86,7 +87,6 @@ namespace KE.Items.Items
 
         protected override void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Server.RoundStarted -= SetPickup;
             Exiled.Events.Handlers.Server.RoundStarted -= SetPickup;
             base.UnsubscribeEvents();
         }

@@ -9,15 +9,15 @@ using HintServiceMeow.Core.Extension;
 using HintServiceMeow.Core.Utilities;
 using System.Reflection;
 
-namespace KE.Items
+namespace KE.Items.Features
 {
     public abstract class KECustomItem : CustomItem
     {
-        
+
         protected override void ShowPickedUpMessage(Player player)
         {
             Log.Debug("pickup");
-            Message(this, player,true);
+            Message(this, player, true);
         }
 
         protected override void ShowSelectedMessage(Player player)
@@ -68,27 +68,27 @@ namespace KE.Items
                         builder.AppendLine($"<b>{c.Name}</b>");
                     }
                 }
-            
+
             }
 
 
             float delay = MainPlugin.Instance.SettingsHandler.GetTime(player);
-            DisplayHandler.Instance.AddHint(MainPlugin.HintPlacement, player, builder.ToString(),delay);
+            DisplayHandler.Instance.AddHint(MainPlugin.HintPlacement, player, builder.ToString(), delay);
 
-            
+
         }
 
 
 
 
-        public static void ItemEffectHint(Player player,string text)
+        public static void ItemEffectHint(Player player, string text)
         {
             float delay = MainPlugin.Instance.SettingsHandler.GetTimeEffect(player);
 
 
-            DisplayHandler.Instance.AddHint(MainPlugin.ItemEffectPlacement, player,text , delay);
+            DisplayHandler.Instance.AddHint(MainPlugin.ItemEffectPlacement, player, text, delay);
         }
-        
+
 
     }
 }

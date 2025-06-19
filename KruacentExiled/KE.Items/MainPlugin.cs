@@ -1,12 +1,18 @@
 ﻿
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Toys;
 using Exiled.CustomItems.API.Features;
 using KE.Items.Lights;
 using KE.Items.Settings;
 using KE.Items.Upgrade;
 using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Models;
+using PlayerRoles;
 using System;
+using UnityEngine;
+using Light = Exiled.API.Features.Toys.Light;
 
 namespace KE.Items
 {
@@ -43,7 +49,7 @@ namespace KE.Items
 
             Sound.LoadClips();
 
-            
+
 
             //Exiled.Events.Handlers.Server.RoundStarted += Test;
 
@@ -53,7 +59,6 @@ namespace KE.Items
             SettingsHandler.SubscribeEvents();
             UpgradeHandler.SubscribeEvents();
             LightsHandler.SubscribeEvents();
-
             base.OnEnabled();
         }
 
@@ -66,16 +71,15 @@ namespace KE.Items
             //QualityHandler?.Unregister();
             SettingsHandler.UnsubscribeEvents();
 
-            base.OnDisabled();
             //QualityHandler = null;
             //PickupQuality = null;
-            
             SettingsHandler = null;
             LightsHandler = null;
             Sound = null;
             UpgradeHandler = null;
             Instance = null;
         }
+
 
 
 

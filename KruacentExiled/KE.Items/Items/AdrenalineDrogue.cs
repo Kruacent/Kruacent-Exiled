@@ -12,8 +12,8 @@ using UnityEngine;
 using CustomPlayerEffects;
 using KE.Items.Interface;
 using System.Linq;
-using KE.Items;
 using KE.Items.Extensions;
+using KE.Items.Features;
 
 /// <inheritdoc />
 [CustomItem(ItemType.Adrenaline)]
