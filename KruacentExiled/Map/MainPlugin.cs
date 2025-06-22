@@ -42,8 +42,9 @@ namespace KE.Map
             {
                 models.UnsubscribeEvents();
                 models.DestroyInstance();
-            }*/
+            }
 
+            models.DestroyInstance();*/
             Instance = null;
         }
 
