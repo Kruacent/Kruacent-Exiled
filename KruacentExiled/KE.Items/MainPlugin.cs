@@ -8,7 +8,6 @@ using KE.Items.Lights;
 using KE.Items.Settings;
 using KE.Items.Upgrade;
 using KE.Utils.API.Displays.DisplayMeow;
-using KE.Utils.API.Models;
 using PlayerRoles;
 using System;
 using UnityEngine;
