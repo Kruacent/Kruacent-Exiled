@@ -8,6 +8,10 @@
 	<ItemGroup>
 		<PackageReference Include="ExMod.Exiled" Version="9.6.0" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\KE.Utils\KE.Utils.csproj" />
+	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="Assembly-CSharp-firstpass" HintPath="$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll" />
 		<Reference Include="HintServiceMeow" HintPath="$(EXILED_REFERENCES)\HintServiceMeow-Exiled.dll" />

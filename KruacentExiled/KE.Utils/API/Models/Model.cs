@@ -37,6 +37,20 @@ namespace KE.Utils.API.Models
             get { return _id; }
         }
 
+        internal Primitive centerPrim;
+
+        public void SetCenterPrimitive(bool show)
+        {
+            if (show)
+            {
+                centerPrim.UnSpawn();
+            }
+            else
+            {
+                centerPrim.Spawn(); 
+            }
+        }
+
 
 
         public void Add(Primitive p)
@@ -103,7 +117,8 @@ namespace KE.Utils.API.Models
             }
 
             Log.Debug("created model id=" + m.Id);
-
+            m.centerPrim = Primitive.Create(position, null, Vector3.one/5, true, new(1, 0, 0, .25f));
+            m.centerPrim.Collidable = false;
 
             return m;
         }

@@ -82,7 +82,7 @@ namespace KE.Utils.API.Models
 
         // Name.Center\nAdminToyType.ATPosition.ATRotationEuler.ATScale.LightPrimitiveColor.PrimitiveType.PrimitiveCollidable.LightIntensity\n and repeat
         //
-        public static void Save(Model m)
+        public static void Save(this Model m)
         {
             
             StringBuilder b = new();

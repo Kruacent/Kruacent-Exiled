@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KE.Utils.API.Models;
 
 namespace KE.Utils.API.Models.Commands
 {
-    internal class ListModel : ICommand
+    public class ListModel : ICommand
     {
 
         public string Command { get; } = "list";
@@ -21,7 +22,7 @@ namespace KE.Utils.API.Models.Commands
         {
             StringBuilder b = new();
             b.AppendLine($"Models ({Model.Models.Count}) :");
-            foreach(Model m in Model.Models)
+            foreach (Model m in Model.Models)
             {
                 b.AppendLine($"({m.Id}) - {m.Name} pos: {m.Id}");
             }

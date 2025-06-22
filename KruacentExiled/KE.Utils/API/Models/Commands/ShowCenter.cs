@@ -5,18 +5,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KE.Utils.API.Models;
 
 namespace KE.Utils.API.Models.Commands
 {
-    public class SelectModel : ICommand
+    public class ShowCenter : ICommand
     {
 
-        public string Command { get; } = "select";
+        public string Command { get; } = "show";
 
-        public string[] Aliases { get; } = { "s" };
+        public string[] Aliases { get; } = { "sh" };
 
-        public string Description { get; } = "select an existing";
+        public string Description { get; } = "toggle the center of the model";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
@@ -28,15 +27,25 @@ namespace KE.Utils.API.Models.Commands
                 return false;
             }
 
-            if (!Model.TryGet(int.Parse(arguments.At(1)), out Model m))
+            Model m = Models.Instance.ModelCreator.ModelSelected;
+
+            if(m == null)
             {
-                response = "model not found";
+                response = "no model selected";
                 return false;
             }
-            response = $"model ({m.Name}) selected {m.Center}";
-            Models.Instance.ModelCreator.ModelSelected = m;
+            
+            if(!bool.TryParse(arguments.At(0),out bool result))
+            {
+                response = "write true or false";
+                return false;
+            }
+
+            m.SetCenterPrimitive(result);
+
+            response = "done";
+
             return true;
         }
-
     }
 }

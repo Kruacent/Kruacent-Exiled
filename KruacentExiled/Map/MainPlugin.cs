@@ -10,6 +10,7 @@ using Interactables.Interobjects.DoorUtils;
 using KE.Map.Doors;
 using KE.Map.GamblingZone;
 using KE.Map.Utils;
+using KE.Utils.API.Models;
 using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,12 +20,16 @@ namespace KE.Map
     public class MainPlugin : Plugin<Config>
     {
         public static MainPlugin Instance { get; private set; }
+        public Models models => Models.Instance;
         public override void OnEnabled()
         {
+            
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
             //Exiled.Events.Handlers.Server.RoundStarted += SendFakePrimitives.Join;
-
+            if(Config.Debug)
+                models?.SubscribeEvents();
+            
             Instance = this;
         }
 
@@ -33,6 +38,11 @@ namespace KE.Map
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
             //Exiled.Events.Handlers.Server.RoundStarted -= SendFakePrimitives.Join;
+            if (Config.Debug)
+            {
+                models.UnsubscribeEvents();
+                models.DestroyInstance();
+            }
 
             Instance = null;
         }
@@ -42,6 +52,7 @@ namespace KE.Map
 
         private void OnGenerated()
         {
+            
             Door lcz173 = Door.Get(Exiled.API.Enums.DoorType.Scp173Gate);
             HashSet<DroppableItem> normal = new()
             {
@@ -78,7 +89,9 @@ namespace KE.Map
             };
 
 
-            var g = new GamblingRoom(lcz173, new(normal), -lcz173.Transform.forward * 5f);
+            var g = new GamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position, new(normal));
+
+            //var g = new GamblingRoom(lcz173, new(normal), -lcz173.Transform.forward * 5f);
             
             g.SubscribeEvents();
 
@@ -96,7 +109,7 @@ namespace KE.Map
             
 
         }
-
+        
         private void OnRoundEnded(RoundEndedEventArgs ev)
         {
             foreach (var g in GamblingRoom.List)
