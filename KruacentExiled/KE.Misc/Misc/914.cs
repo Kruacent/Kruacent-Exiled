@@ -29,7 +29,7 @@ namespace KE.Misc.Misc
 
             { 3, RoleTypeId.Scp106 },
             { 2, RoleTypeId.Scp173 },
-            { 1, RoleTypeId.Scp079 },
+            { 1, RoleTypeId.Scp3114 },
 
         };
 
