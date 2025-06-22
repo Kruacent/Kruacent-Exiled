@@ -54,7 +54,7 @@ namespace KE.Map.GamblingZone
             
             _pickup.AddAction(OnPickup);
 
-            CreateModel(_position);
+            //CreateModel(_position);
             _lootTable = lootTable;
         }
 

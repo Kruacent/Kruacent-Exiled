@@ -20,15 +20,15 @@ namespace KE.Map
     public class MainPlugin : Plugin<Config>
     {
         public static MainPlugin Instance { get; private set; }
-        public Models models => Models.Instance;
+        //public Models models => Models.Instance;
         public override void OnEnabled()
         {
             
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
             //Exiled.Events.Handlers.Server.RoundStarted += SendFakePrimitives.Join;
-            if(Config.Debug)
-                models?.SubscribeEvents();
+            //if(Config.Debug)
+                //models?.SubscribeEvents();
             
             Instance = this;
         }
@@ -38,11 +38,11 @@ namespace KE.Map
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
             //Exiled.Events.Handlers.Server.RoundStarted -= SendFakePrimitives.Join;
-            if (Config.Debug)
+            /*if (Config.Debug)
             {
                 models.UnsubscribeEvents();
                 models.DestroyInstance();
-            }
+            }*/
 
             Instance = null;
         }
@@ -89,7 +89,7 @@ namespace KE.Map
             };
 
 
-            var g = new GamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position, new(normal));
+            var g = new GamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down*2, new(normal));
 
             //var g = new GamblingRoom(lcz173, new(normal), -lcz173.Transform.forward * 5f);
             
