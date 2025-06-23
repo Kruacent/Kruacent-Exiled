@@ -45,9 +45,7 @@ namespace KE.Map.GamblingZone
             
             
 
-            Log.Debug("position w/out offset "+position);
             _position = position + (offset ?? new Vector3());
-            Log.Debug("position w/ offset "+_position);
             _list.Add(this);
             
             _pickup = new InteractiblePickup(ItemType.Medkit, _position+ Vector3.up, new Vector3(1,0,1)*3, _pickupTime, new());

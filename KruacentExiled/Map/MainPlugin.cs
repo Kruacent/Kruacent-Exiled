@@ -8,6 +8,7 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using Interactables.Interobjects.DoorUtils;
 using KE.Map.Doors;
+using KE.Map.EasterEggs;
 using KE.Map.GamblingZone;
 using KE.Map.Utils;
 using KE.Utils.API.Models;
@@ -21,9 +22,14 @@ namespace KE.Map
     {
         public static MainPlugin Instance { get; private set; }
         //public Models models => Models.Instance;
+        private Capybaras Capybaras;
         public override void OnEnabled()
         {
-            
+
+            Capybaras = new();
+
+
+            Capybaras.SubscribeEvents();
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
             //Exiled.Events.Handlers.Server.RoundStarted += SendFakePrimitives.Join;
@@ -38,6 +44,7 @@ namespace KE.Map
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
             //Exiled.Events.Handlers.Server.RoundStarted -= SendFakePrimitives.Join;
+            Capybaras.UnsubscribeEvents();
             /*if (Config.Debug)
             {
                 models.UnsubscribeEvents();
@@ -45,6 +52,7 @@ namespace KE.Map
             }
 
             models.DestroyInstance();*/
+            Capybaras = null;
             Instance = null;
         }
 
