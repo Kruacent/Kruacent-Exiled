@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using InventorySystem.Items.Usables.Scp330;
 
-namespace KE.Misc.Misc
+namespace KE.Misc.Features
 {
     internal class Candy : MiscFeature
     {

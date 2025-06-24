@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Extensions;
 
-namespace KE.Misc.Misc
+namespace KE.Misc.Features
 {
     /// <summary>
     /// Everything about Surface Light

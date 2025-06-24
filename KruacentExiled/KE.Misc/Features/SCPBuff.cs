@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace KE.Misc.Misc
+namespace KE.Misc.Features
 {
     internal class SCPBuff
     {

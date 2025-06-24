@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Misc.Misc
+namespace KE.Misc.Features
 {
     /// <summary>
     /// The elevator will random activate in the round

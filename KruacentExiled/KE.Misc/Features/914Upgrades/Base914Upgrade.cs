@@ -1,0 +1,60 @@
+﻿using Exiled.API.Features;
+using Exiled.CustomItems.API.Features;
+using Exiled.Events.EventArgs.Scp914;
+using KE.Utils.API.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+
+namespace KE.Misc.Features._914Upgrades
+{
+    public abstract class Base914Upgrade : IUsingEvents
+    {
+
+        protected abstract float Chance { get; }
+
+        public void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Scp914.UpgradingPlayer += InternalUpgradingPlayer;
+        }
+
+        public void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Scp914.UpgradingPlayer -= InternalUpgradingPlayer;
+        }
+
+        private void InternalUpgradingPlayer(UpgradingPlayerEventArgs ev)
+        {
+            if (!ev.IsAllowed) return;
+            if (!LuckCheck()) return;
+            OnUpgradingPlayer(ev);
+        }
+
+
+        /// <summary>
+        /// Auto check the probability with the <see cref="Chance"/> and if it's allowed
+        /// </summary>
+        protected virtual void OnUpgradingPlayer(UpgradingPlayerEventArgs ev)
+        {
+
+        }
+
+        protected bool LuckCheck()
+        {
+            return UnityEngine.Random.Range(0f, 100f) < Mathf.Clamp(Chance, 0f, 100f);
+        }
+
+        /// <summary>
+        /// Check luck with a differente value than <see cref="Chance"/>
+        /// </summary>
+        /// <returns>true if it passed the luck check ; false otherwise</returns>
+        protected bool LuckCheck(float chance)
+        {
+            return UnityEngine.Random.Range(0f, 100f) < Mathf.Clamp(chance, 0f, 100f);
+        }
+
+    }
+}

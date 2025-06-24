@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Misc.Misc
+namespace KE.Misc.Features
 {
     /// <summary>
     /// Everything about classD door

@@ -2,17 +2,16 @@
 using Exiled.API.Features;
 using System.Collections.Generic;
 using ServerHandle = Exiled.Events.Handlers.Server;
-using Nine14Handle = Exiled.Events.Handlers.Scp914;
 using MEC;
 using Exiled.API.Features.Doors;
 using System.Linq;
 using PlayerRoles;
 using Exiled.Events.EventArgs.Player;
 using System;
-using KE.Misc.Misc;
+using KE.Misc.Features;
 using KE.Misc.Handlers;
 using Exiled.CustomRoles.API.Features;
-using KE.Misc.Misc.CR;
+using KE.Misc.Features.CR;
 
 namespace KE.Misc
 {

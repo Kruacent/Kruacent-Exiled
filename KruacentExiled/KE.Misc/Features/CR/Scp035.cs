@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Misc.Misc.CR
+namespace KE.Misc.Features.CR
 {
     [CustomRole(RoleTypeId.Tutorial)]
     public class Scp035 : CustomRole

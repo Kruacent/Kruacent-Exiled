@@ -3,7 +3,7 @@ using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Server;
-using KE.Misc.Misc.CR;
+using KE.Misc.Features.CR;
 using KE.Utils.API.Interfaces;
 using MEC;
 using PlayerRoles;
@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace KE.Misc.Misc
+namespace KE.Misc.Features
 {
     internal class Spawn : MiscFeature
     {
