@@ -49,7 +49,7 @@ namespace KE.CustomRoles.Settings
 
         private void OnSettingValueReceived(ReferenceHub hub, ServerSpecificSettingBase settingBase)
         {
-            ActiveAbility.
+            
 
 
             if (settingBase is SSKeybindSetting keyindSetting && keyindSetting.SettingId == id && keyindSetting.SyncIsPressed)
