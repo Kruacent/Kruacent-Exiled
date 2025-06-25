@@ -23,7 +23,7 @@ namespace KE.CustomRoles.CR.Human
         public override string PublicName { get; set; } = string.Empty;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
-        public override float SpawnChance { get; set; } = 100;
+        public override float SpawnChance { get; set; } = 0;
 
         private Player TargetPlayer;
         private Player TheHitman;

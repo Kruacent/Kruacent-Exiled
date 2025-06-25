@@ -16,6 +16,6 @@ namespace KE.CustomRoles.CR.SCP
         public override float MaxHealthMultiplicator { get; set; } = 1.1f;
         public override float SpawnChance { get; set; } = 100;
         public override SideEnum Side { get; set; } = SideEnum.SCP;
-        public override Vector3 Scale { get; set; } = new Vector3(1, 1.15f, 1);
+        public override Vector3 Scale { get; set; } = new Vector3(1, 1.10f, 1);
     }
 }
