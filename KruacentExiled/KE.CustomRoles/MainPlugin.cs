@@ -21,14 +21,15 @@ namespace KE.CustomRoles
         public static readonly HintPlacement CRHint = new(0, 750);
         public static readonly HintPlacement CREffect = new(700, 300);
         public static Translations Translations => Instance?.Translation;
-        private SettingHandler SettingHandler;
+        private SettingHandler _settingHandler;
+        internal static SettingHandler SettingHandler => Instance?._settingHandler;
 
         public override void OnEnabled()
         {
             
             Instance = this;
             _controller = new Controller();
-            SettingHandler = new();
+            _settingHandler = new();
 
 
             SettingHandler.SubscribeEvents();
@@ -45,6 +46,7 @@ namespace KE.CustomRoles
 
 
             this.UnsubscribeEvents();
+            _settingHandler = null;
             _controller = null;
             Instance = null;
         }

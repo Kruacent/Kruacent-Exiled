@@ -9,8 +9,10 @@ using InventorySystem.Configs;
 using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
 using PlayerRoles;
+using PlayerRoles.FirstPersonControl.Thirdperson;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
 
@@ -42,13 +44,18 @@ namespace KE.CustomRoles.API.Features
         protected override void ShowMessage(Player player)
         {
 
-            string msg = MainPlugin.Translations.GettingNewRole;
-            msg = msg.Replace("%Name%", PublicName).Replace("%Desc%",Description);
-            
+            //string msg = MainPlugin.Translations.GettingNewRole;
+            //msg = msg.Replace("%Name%", PublicName).Replace("%Desc%",Description);
+
+            string msg = $"<b>{Name}</b>";
+
+            if (MainPlugin.SettingHandler.GetDescriptionsSettings(player))
+            {
+                msg += $"\n {Description}";
+            }
 
 
-            //todo settings
-            float delay = 20;
+            float delay = MainPlugin.SettingHandler.GetTime(player);
 
             DisplayHandler.Instance.AddHint(MainPlugin.CRHint, player, msg, delay);
         }
@@ -57,8 +64,7 @@ namespace KE.CustomRoles.API.Features
 
         protected void ShowEffectHint(Player player, string text)
         {
-            //todo settings
-            float delay = 20;
+            float delay = MainPlugin.SettingHandler.GetTime(player); ;
             DisplayHandler.Instance.AddHint(MainPlugin.CREffect, player, text, delay);
         }
 

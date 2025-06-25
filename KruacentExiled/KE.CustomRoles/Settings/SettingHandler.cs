@@ -14,30 +14,34 @@ namespace KE.CustomRoles.Settings
 {
     internal class SettingHandler : IUsingEvents
     {
-        private int id =143;
+        private int id;
+        private int _idTimeCustomRole = 144;
+        private int _idDesc = 143;
         private IReadOnlyCollection<SettingBase> settings;
         public SettingHandler()
         {
 
             settings = new List<SettingBase>()
             {
-                new KeybindSetting(id, "testkey", default),
+                new HeaderSetting ("Custom Roles Hint Settings"),
+                new TwoButtonsSetting(_idDesc,"Descriptions","Disabled","Enabled",true,"hide/show the description the Custom Role "),
+                new SliderSetting(_idTimeCustomRole,"Time shown",0,30,20),
             };
         }
 
         public void SubscribeEvents()
         {
             SettingBase.Register(settings);
-            ServerSpecificSettingsSync.ServerOnSettingValueReceived += OnSettingValueReceived;
+            //ServerSpecificSettingsSync.ServerOnSettingValueReceived += OnSettingValueReceived;
             Exiled.Events.Handlers.Player.Verified += OnVerified;
 
         }
 
         public void UnsubscribeEvents()
         {
-            ServerSpecificSettingsSync.ServerOnSettingValueReceived -= OnSettingValueReceived;
+            //ServerSpecificSettingsSync.ServerOnSettingValueReceived -= OnSettingValueReceived;
             Exiled.Events.Handlers.Player.Verified -= OnVerified;
-            SettingBase.Unregister((p => p.Id == p.Id), settings);
+            SettingBase.Unregister(predicate:null, settings);
         }
 
 
@@ -56,6 +60,25 @@ namespace KE.CustomRoles.Settings
             {
                 Log.Debug("pressed");
             }
+        }
+
+
+        internal float GetTime(Player p)
+        {
+            if (!SettingBase.TryGetSetting<SliderSetting>(p, _idTimeCustomRole, out var setting)) return 20;
+            return setting.SliderValue;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns> true if the player wants description ; false otherwise</returns>
+        internal bool GetDescriptionsSettings(Player p)
+        {
+            if (!SettingBase.TryGetSetting<TwoButtonsSetting>(p, _idDesc, out var setting)) return true;
+            return setting.IsSecond;
         }
 
     }
