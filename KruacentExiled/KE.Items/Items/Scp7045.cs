@@ -24,7 +24,8 @@ using VoiceChat.Networking;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.SCP1576)]
+    //[CustomItem(ItemType.SCP1576)]
+    //Sound bad quality
     public class Scp7045 : KECustomItem
     {
 
