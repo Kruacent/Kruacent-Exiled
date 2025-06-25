@@ -1,7 +1,9 @@
 ﻿using Exiled.API.Features;
+using Exiled.API.Features.Core.UserSettings;
 using Exiled.API.Interfaces;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Server;
+using KE.CustomRoles.Settings;
 using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
 using System;
@@ -19,13 +21,17 @@ namespace KE.CustomRoles
         public static readonly HintPlacement CRHint = new(0, 750);
         public static readonly HintPlacement CREffect = new(700, 300);
         public static Translations Translations => Instance?.Translation;
+        private SettingHandler SettingHandler;
 
         public override void OnEnabled()
         {
             
             Instance = this;
             _controller = new Controller();
+            SettingHandler = new();
 
+
+            SettingHandler.SubscribeEvents();
             CustomRole.RegisterRoles(false,null,true,Assembly);
             this.SubscribeEvents();
 
@@ -35,7 +41,7 @@ namespace KE.CustomRoles
         {
             
             CustomRole.UnregisterRoles();
-           
+            SettingHandler.UnsubscribeEvents();
 
 
             this.UnsubscribeEvents();
