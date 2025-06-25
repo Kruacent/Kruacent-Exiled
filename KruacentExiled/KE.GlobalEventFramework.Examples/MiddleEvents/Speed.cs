@@ -1,34 +1,30 @@
 ﻿using CustomPlayerEffects;
-using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp173;
+using InventorySystem.Items.Usables;
 using KE.GlobalEventFramework.GEFE.API.Features;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using MEC;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using Utils.NonAllocLINQ;
-using PlayerHandler = Exiled.Events.Handlers.Player;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace KE.GlobalEventFramework.Examples.GE
+namespace KE.GlobalEventFramework.Examples.MiddleEvents
 {
-    /// <summary>
-    /// Everyone has a movement boost effect (stackable)
-    /// Maybe inspired by Dr Bright's Mayhem
-    /// </summary>
-    public class Speed : GlobalEvent,IStart,IEvent
+    public class SpeedM : MiddleEvent, IStart, IReversible
     {
         ///<inheritdoc/>
-        public override uint Id { get; set; } = 1042;
+        public override uint Id { get; set; } = 10042;
         ///<inheritdoc/>
-        public override string Name { get; set; } = "Speed";
+        public override string Name { get; set; } = "SpeedM";
         ///<inheritdoc/>
         public override string Description { get; set; } = "Gas! gas! gas!";
         ///<inheritdoc/>
-        public override int WeightedChance { get; set; } = 1;
+        public override int WeightedChance { get; set; } = 0;
+        public override uint[] IncompatibleEvents => 
         /// <summary>
         /// intensity of the movement boost effect
         /// </summary>
@@ -37,28 +33,35 @@ namespace KE.GlobalEventFramework.Examples.GE
         public IEnumerator<float> Start()
         {
             yield return Timing.WaitForSeconds(1);
-            Player.List.ToList().ForEach(p => p.EnableEffect<MovementBoost>(MovementBoost,999999999, true));
-            
+            Player.List.ToList().ForEach(p => p.EnableEffect<MovementBoost>(MovementBoost, 999999999, true));
+
         }
         ///<inheritdoc/>
-        public void SubscribeEvent()
+
+        protected override void SubscribeEvent()
         {
-            PlayerHandler.ChangingRole += ReactivateEffectSpawn;
+            Exiled.Events.Handlers.Player.ChangingRole += ReactivateEffectSpawn;
             Exiled.Events.Handlers.Scp173.Blinking += SpeedyNut;
         }
         ///<inheritdoc/>
-        public void UnsubscribeEvent()
+        protected override void UnsubscribeEvent()
         {
-            PlayerHandler.ChangingRole -= ReactivateEffectSpawn;
+            Exiled.Events.Handlers.Player.ChangingRole -= ReactivateEffectSpawn;
             Exiled.Events.Handlers.Scp173.Blinking -= SpeedyNut;
+            
+        }
+
+        public void OnDisable()
+        {
             Player.List.ToList().ForEach(p => p.DisableEffect<MovementBoost>());
         }
+
         /// <summary>
         /// Decrease the blink cooldown of SCP-173
         /// </summary>
         private void SpeedyNut(BlinkingEventArgs ev)
         {
-            ev.BlinkCooldown = ev.BlinkCooldown/4;
+            ev.BlinkCooldown = ev.BlinkCooldown / 4;
         }
 
         /// <summary>
@@ -67,7 +70,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         private void ReactivateEffectSpawn(ChangingRoleEventArgs ev)
         {
             Timing.CallDelayed(.1f, () => ev.Player.EnableEffect<MovementBoost>(MovementBoost, 999999999, true));
-            
+
         }
     }
 }

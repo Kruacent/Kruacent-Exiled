@@ -38,9 +38,9 @@ namespace KE.GlobalEventFramework.Examples.GE
         /// <inheritdoc/>
         public override string Description { get; set; } = "On dirait que les systèmes informatiques sont défaillants";
         /// <inheritdoc/>
-        public override int Weight { get; set; } = 1;
+        public override int WeightedChance { get; set; } = 1;
         ///<inheritdoc/>
-        public override uint[] IncompatibleGE { get; set; } = { 38 };
+        public override uint[] IncompatibleEvents { get; set; } = { 38 };
         /// <summary>
         /// Set the cooldown for the BlackoutNDoor
         /// </summary>

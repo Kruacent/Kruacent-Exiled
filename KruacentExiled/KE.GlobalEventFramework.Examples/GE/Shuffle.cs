@@ -23,7 +23,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override string Description { get; set; } = "et ça fait roomba café dans le scp";
         ///<inheritdoc/>
-        public override int Weight { get; set; } = 0;
+        public override int WeightedChance { get; set; } = 0;
         private List<Player> players;
         private List<Vector3> pos;
         ///<inheritdoc/>

@@ -15,7 +15,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override string Description { get; set; } = "Les portes sont piegés attention!";
         ///<inheritdoc/>
-        public override int Weight { get; set; } = 1;
+        public override int WeightedChance { get; set; } = 1;
 
 
         public const float BaseChanceElevator = .05f;

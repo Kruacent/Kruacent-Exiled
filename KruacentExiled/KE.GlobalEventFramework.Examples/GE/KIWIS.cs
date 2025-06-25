@@ -22,7 +22,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override string Description { get; set; } = "Kill It While It's Small";
         ///<inheritdoc/>
-        public override int Weight { get; set; } = 1;
+        public override int WeightedChance { get; set; } = 1;
         ///<inheritdoc/>
         public IEnumerator<float> Start()
         {

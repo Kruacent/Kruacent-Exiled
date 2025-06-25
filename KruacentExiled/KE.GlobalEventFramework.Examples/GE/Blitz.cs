@@ -19,7 +19,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override string Description { get; set; } = "éteignez les lumières la luftwaffe arrive";
         ///<inheritdoc/>
-        public override int Weight { get; set; } = 1;
+        public override int WeightedChance => 1;
         /// <summary>
         /// The cooldown between 2 spawn of grenades
         /// </summary>

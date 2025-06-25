@@ -20,6 +20,7 @@ namespace KE.GlobalEventFramework.GEFE.Commands
             RegisterCommand(new ListGE());
             RegisterCommand(new ForceGE());
             RegisterCommand(new ForceNbGE());
+            RegisterCommand(new ForceMiddleEvent());
         }
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)

@@ -16,7 +16,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         public override uint Id { get; set; } = 1051;
         public override string Name { get; set; } = "SwapProtocol";
         public override string Description { get; set; } = "EEEEEEEET c'est parti la roulette tourne";
-        public override int Weight { get; set; } = 1;
+        public override int WeightedChance { get; set; } = 1;
 
         public IEnumerator<float> Start()
         {

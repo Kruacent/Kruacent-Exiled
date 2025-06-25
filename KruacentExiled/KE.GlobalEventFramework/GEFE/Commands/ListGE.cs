@@ -17,10 +17,10 @@
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             string result = "List of all global event ([o] if it's active in the round ; [ ] otherwise) : \n";
-            foreach (IGlobalEvent ge in GlobalEvent.GlobalEvents.Values)
+            foreach (GlobalEvent ge in GlobalEvent.GlobalEventsList)
             {
 
-                if (GlobalEvent.ActiveGlobalEvents.Contains(ge))
+                if (ge.IsActive)
                 {
                     result += "[o]";
                 }

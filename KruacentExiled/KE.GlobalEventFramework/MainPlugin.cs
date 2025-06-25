@@ -16,10 +16,9 @@ namespace KE.GlobalEventFramework
 	{
         public override string Author => "Patrique";
         public override string Name => "KE.GEFramework";
-        public override Version Version => new Version(1, 0, 0);
+        public override Version Version => new Version(2, 0, 0);
         public override PluginPriority Priority => PluginPriority.Highest;
 
-		internal GEFE.Handlers.ServerHandler _server;
 
 
 		public static readonly HintPlacement GEAnnouncement = new(0, 50, HintServiceMeow.Core.Enum.HintAlignment.Center);
@@ -31,43 +30,17 @@ namespace KE.GlobalEventFramework
 		{
 
             Instance = this;
-			Loader.Instance.Load();
-			
 
+			KEEvents.OnEnabled();
 
-			RegisterEvents();
-			
 			base.OnEnabled();
         }
 
 		public override void OnDisabled()
 		{
-			UnregisterEvents();
-			Timing.KillCoroutines();
+			KEEvents.OnDisabled();
 			base.OnDisabled();
             Instance = null;
-		}
-
-		private void RegisterEvents()
-		{
-			_server = new GEFE.Handlers.ServerHandler();
-
-
-			ServerHandler.WaitingForPlayers += _server.OnWaitingForPlayers;
-            ServerHandler.RoundStarted += _server.OnRoundStarted;
-            ServerHandler.RoundEnded += _server.OnEndingRound;
-			ServerHandler.RestartingRound += _server.OnRestartingRound;
-
-		}
-
-		private void UnregisterEvents()
-		{
-            ServerHandler.WaitingForPlayers -= _server.OnWaitingForPlayers;
-            ServerHandler.RoundStarted -= _server.OnRoundStarted;
-            ServerHandler.RoundEnded -= _server.OnEndingRound;
-            ServerHandler.RestartingRound -= _server.OnRestartingRound;
-
-            _server = null;
 		}
 
 		

@@ -38,9 +38,9 @@
                         NbGE = -1;
                         return false;
                     }
-                    if(nbge > GlobalEvent.GlobalEventsList.Count)
+                    if(nbge > GlobalEvent.GlobalEventsList.Count())
                     {
-                        response = $"You can't force {nbge} global event, there are only {GlobalEvent.GlobalEventsList.Count} global events";
+                        response = $"You can't force {nbge} global event, there are only {GlobalEvent.GlobalEventsList.Count()} global events";
                         NbGE = -1;
                         return false;
                     }

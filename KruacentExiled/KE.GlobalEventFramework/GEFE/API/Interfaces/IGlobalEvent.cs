@@ -7,6 +7,8 @@ using MEC;
 
 namespace KE.GlobalEventFramework.GEFE.API.Interfaces
 {
+
+    [Obsolete("Use GlobalEvent instead",true)]
     public interface IGlobalEvent
     {
         /// <summary>

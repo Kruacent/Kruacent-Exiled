@@ -23,7 +23,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override string Description { get; set; } = "Crazy Cassie !";
         ///<inheritdoc/>
-        public override int Weight { get; set; } = 1;
+        public override int WeightedChance { get; set; } = 1;
 
         /// <summary>
         /// The cooldown between 2 cassie event
