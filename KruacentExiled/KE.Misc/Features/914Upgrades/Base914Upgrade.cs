@@ -16,12 +16,12 @@ namespace KE.Misc.Features._914Upgrades
 
         protected abstract float Chance { get; }
 
-        public void SubscribeEvents()
+        public virtual void SubscribeEvents()
         {
             Exiled.Events.Handlers.Scp914.UpgradingPlayer += InternalUpgradingPlayer;
         }
 
-        public void UnsubscribeEvents()
+        public virtual void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Scp914.UpgradingPlayer -= InternalUpgradingPlayer;
         }

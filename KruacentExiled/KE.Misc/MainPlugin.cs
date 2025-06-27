@@ -47,6 +47,8 @@ namespace KE.Misc
             Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
             Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
 
+
+
             MiscFeature.SubscribeAllEvents();
             Exiled.Events.Handlers.Player.ChangingRole += SCPBuff.BecomingSCP;
             ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;

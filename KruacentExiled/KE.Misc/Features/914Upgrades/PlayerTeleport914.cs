@@ -19,17 +19,33 @@ namespace KE.Misc.Features._914Upgrades
         protected override float Chance => 100;
         protected override void OnUpgradingPlayer(UpgradingPlayerEventArgs ev)
         {
+            Log.Debug("Upgrade");
             Player player = ev.Player;
             Room room;
             if (ev.KnobSetting == Scp914KnobSetting.Fine && LuckCheck(1))
             {
-                room =ZoneType.Entrance.RandomSafeRoom();
+                try
+                {
+                    room = ZoneType.Entrance.RandomSafeRoom();
+                }
+                catch (Exception)
+                {
+                    room = Room.Random(ZoneType.Entrance);
+                }
+                
                 if(room != null)
                     player.Teleport(room);
             }
             if(ev.KnobSetting == Scp914KnobSetting.Coarse && LuckCheck(25))
             {
-                room = ZoneType.LightContainment.RandomSafeRoom();
+                try
+                {
+                    room = ZoneType.Entrance.RandomSafeRoom();
+                }
+                catch (Exception)
+                {
+                    room = Room.Random(ZoneType.LightContainment);
+                }
                 if (room != null)
                     player.Teleport(room);
             } 

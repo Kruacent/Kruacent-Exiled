@@ -12,7 +12,6 @@ namespace KE.Misc.Features._914Upgrades
     public abstract class Base914PlayerUpgrade : Base914Upgrade
     {
 
-
         protected override abstract void OnUpgradingPlayer(UpgradingPlayerEventArgs ev);
 
 
