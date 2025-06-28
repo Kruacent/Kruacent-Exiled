@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Pools;
 using Exiled.CustomRoles.API.Features;
+using Exiled.Events.EventArgs.Player;
 using InventorySystem.Configs;
 using KE.Utils.API.Displays.DisplayMeow;
 using LiteNetLib4Mirror.Open.Nat;
@@ -23,12 +24,41 @@ namespace KE.CustomRoles.API.Features
     {
         public sealed override RoleTypeId Role { get; set; } = RoleTypeId.None;
         public abstract SideEnum Side { get; set; }
-        public virtual IEnumerable<RoleTypeId> BlacklistedRole { get; } = new HashSet<RoleTypeId>();
         public override bool KeepInventoryOnSpawn { get; set; } = true;
+        public override bool RemovalKillsPlayer => false;
+
+        protected override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.SpawningRagdoll += InternalSpawningRagdoll;
+
+            base.SubscribeEvents();
+        }
+
+        protected override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.SpawningRagdoll -= InternalSpawningRagdoll;
+
+            base.UnsubscribeEvents();
+        }
+
+        private void InternalSpawningRagdoll(SpawningRagdollEventArgs ev)
+        {
+
+            //letting this event go disconnect everyone idk why
+            if (Check(ev.Player))
+            {
+                ev.IsAllowed = false;
+
+                Ragdoll.CreateAndSpawn(ev.Role, ev.Player.Nickname, ev.DamageHandlerBase, ev.Position, ev.Rotation);
+            }
+        }
+
+
 
         public override void AddRole(Player player)
         {
             SideEnum side = SideClass.Get(player.Role.Side);
+            
             if (side != Side)
             {
                 Log.Error($"tried to give a global custom role to a player in the wrong side ({side} instead of {Side})");
@@ -36,6 +66,14 @@ namespace KE.CustomRoles.API.Features
             }
             Log.Debug($"{Name}: Adding role to {player.Nickname}.");
             TrackedPlayers.Add(player);
+            foreach(Player p in TrackedPlayers.ToList())
+            {
+                if(p.Id == player.Id)
+                {
+                    Log.Debug("he is in the tracked");
+                }
+            }
+
 
 
             Timing.CallDelayed(
@@ -115,6 +153,49 @@ namespace KE.CustomRoles.API.Features
                 player.SendConsoleMessage(StringBuilderPool.Pool.ToStringReturn(builder), "green");
             }
         }
+        public override void RemoveRole(Player player)
+        {
+            
+
+            Log.Debug($"player in {Name}:");
+            foreach (Player p in TrackedPlayers.ToList())
+            {
+                if (p.Id == player.Id)
+                {
+                    Log.Debug($"{p.Id} is in");
+                }
+            }
+
+            if (!TrackedPlayers.Contains(player))
+            {
+                return;
+            }
+
+            Log.Debug(Name + ": Removing role from " + player.Nickname + $"({player.Id})");
+            TrackedPlayers.Remove(player);
+            player.CustomInfo = string.Empty;
+            player.InfoArea |= PlayerInfoArea.Nickname | PlayerInfoArea.Role;
+            player.Scale = Vector3.one;
+            if (CustomAbilities != null)
+            {
+                foreach (CustomAbility customAbility in CustomAbilities)
+                {
+                    customAbility.RemoveAbility(player);
+                }
+            }
+
+            RoleRemoved(player);
+            player.UniqueRole = string.Empty;
+            player.TryRemoveCustomeRoleFriendlyFire(Name);
+            if (RemovalKillsPlayer)
+            {
+                //player.Role.Set(RoleTypeId.Spectator);
+            }
+            Log.Debug(Name + ": finish Removing role from " + player.Nickname + $"({player.Id})");
+
+        }
+
+
 
 
         public sealed override int MaxHealth { get; set; }

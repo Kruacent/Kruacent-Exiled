@@ -172,12 +172,17 @@ namespace KE.CustomRoles.API.Features
             player2.SendConsoleMessage(StringBuilderPool.Pool.ToStringReturn(stringBuilder), "green");
         }
 
+
+        
+
         /// <summary>
         /// The chance of having this role NOT the chance to have a role
         /// </summary>
         public override abstract float SpawnChance { get; set; }
-        
 
+
+
+     
 
     }
 }

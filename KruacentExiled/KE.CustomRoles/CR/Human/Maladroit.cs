@@ -35,6 +35,7 @@ namespace KE.CustomRoles.CR.Human
 
         protected override void RoleRemoved(Player player)
         {
+            if (!_coroutines.ContainsKey(player)) return;
             Timing.KillCoroutines(_coroutines[player]);
             _coroutines.Remove(player);
         }

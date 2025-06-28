@@ -39,7 +39,7 @@ namespace KE.CustomRoles.CR.SCP
 
         private IEnumerator<float> DisplayInfos(Player player)
         {
-            
+
             while (true)
             {
                 Log.Debug("Ultra : showing");
@@ -53,7 +53,7 @@ namespace KE.CustomRoles.CR.SCP
         {
             string result = $"<size={SizeText}>";
             int nbPlayer;
-            foreach(ZoneType zone in Enum.GetValues(typeof(ZoneType)))
+            foreach (ZoneType zone in Enum.GetValues(typeof(ZoneType)))
             {
                 nbPlayer = GetPlayerInZone(zone);
                 if (nbPlayer > 0 || MainPlugin.Instance.Config.Debug)
