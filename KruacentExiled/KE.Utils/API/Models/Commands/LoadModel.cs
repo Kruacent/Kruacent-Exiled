@@ -1,5 +1,6 @@
 ﻿using CommandSystem;
 using Exiled.API.Features;
+using KE.Utils.API.Models.Blueprints;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace KE.Utils.API.Models.Commands
 {
-    public class SelectModel : ICommand
+    public class LoadModel : ICommand
     {
 
-        public string Command { get; } = "select";
+        public string Command { get; } = "load";
 
-        public string[] Aliases { get; } = { "s" };
+        public string[] Aliases { get; } = { "lo" };
 
-        public string Description { get; } = "select an existing model";
+        public string Description { get; } = "load a model";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
@@ -26,27 +27,28 @@ namespace KE.Utils.API.Models.Commands
                 response = "This player can't do this command";
                 return false;
             }
+
             if (arguments.Count < 1)
             {
                 response = "not enough arguments";
                 return false;
             }
+
             if (!int.TryParse(arguments.At(0),out int id))
             {
-                response = "not an id";
+                response = "enter id";
                 return false;
             }
 
-
-
-
-            if (!Model.TryGet(id, out Model m))
+            if(!ModelBlueprint.TryGet(id,out var mbp))
             {
-                response = "model not found";
+                response = "blueprint not found";
                 return false;
             }
-            response = $"model ({m.Name}) selected {m.Center}";
-            Models.Instance.ModelCreator.ModelHandler.SelectedModel = m;
+            
+            var m =Model.Create(mbp, p.Position);
+
+            response = $"Created model ({m.Name}) at {m.Center}";
             return true;
         }
 

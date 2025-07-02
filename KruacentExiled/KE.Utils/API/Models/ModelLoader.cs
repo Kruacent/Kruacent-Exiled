@@ -8,30 +8,52 @@ using Exiled.API.Features.Toys;
 using UnityEngine;
 using Light = Exiled.API.Features.Toys.Light;
 using Exiled.API.Enums;
+using KE.Utils.API.Models.Blueprints;
 namespace KE.Utils.API.Models
 {
     public static class ModelLoader
     {
         public static string Path => Paths.Configs + @"\";
         private static readonly char SEPARATOR = '_';
+        public static string Extension => ".modelscpsl";
 
 
-        public static Model Load(string filename)
+        public static IEnumerable<ModelBlueprint> LoadAll()
+        {
+            List<ModelBlueprint> m = new();
+
+            string[] raw =  Directory.GetFiles(Path, "*" + Extension);
+
+            foreach (string d in raw)
+            {
+                Log.Info("loading="+d);
+                m.Add(Load(string.Empty,d));
+            }
+
+            return m;
+        }
+
+        public static ModelBlueprint Load(string filename)
         {
             return Load(Path, filename);
         }
 
-        public static Model Load(string path,string filename)
+        public static ModelBlueprint Load(string path,string filename)
         {
-            
-            string[] raw = File.ReadAllText(path+ filename).Split('\n');
-            string[] infoline = raw[0].Split(SEPARATOR);
-            foreach(string i in infoline)
+            string[] raw;
+            try
             {
-                Log.Info(i);
+                raw = File.ReadAllText(path + filename).Split('\n');
             }
+            catch(Exception e)
+            {
+                Log.Error(e);
+                return null;
+            }
+
+
+            string[] infoline = raw[0].Split(SEPARATOR);
             string name = infoline[0];
-            Vector3 center = Parser.Vector3(infoline[1]);
             List<AdminToy> toys = new();
 
 
@@ -76,53 +98,47 @@ namespace KE.Utils.API.Models
 
 
 
-            return Model.Create(center, name);
+            return ModelBlueprint.Create(name);
         }
 
 
-        // Name.Center\nAdminToyType.ATPosition.ATRotationEuler.ATScale.LightPrimitiveColor.PrimitiveType.PrimitiveCollidable.LightIntensity\n and repeat
-        //
-        public static void Save(this Model m)
+        // Name\n
+        // Primitive.Position.RotationEuler.Scale.Color.PrimitiveType.Collidable\n
+        // Light.Position.RotationEuler.Scale.Color.Intensity\n
+        // and repeat
+        public static bool Save(this ModelBlueprint m)
         {
-            
-            StringBuilder b = new();
+
             List<string> result = new();
 
-            result.Add(m.Name+SEPARATOR+m.Center);
+            result.Add(m.Name+SEPARATOR);
 
-            foreach(AdminToy t in m.Toys)
+            foreach(AdminToyBlueprint t in m.Toys)
             {
-                b.Append(t.ToyType);
-                b.Append(SEPARATOR);
-                b.Append(t.Position);
-                b.Append(SEPARATOR);
-                b.Append(t.Rotation.eulerAngles);
-                b.Append(SEPARATOR);
-                b.Append(t.Scale);
-                b.Append(SEPARATOR);
-
-                if (t is Primitive p)
-                {
-                    b.Append("#"+ColorUtility.ToHtmlStringRGBA(p.Color));
-                    b.Append(SEPARATOR);
-                    b.Append(p.Type);
-                    b.Append(SEPARATOR);
-                    b.Append(p.Collidable);
-                }
-                if(t is Light l)
-                {
-                    b.Append("#" + ColorUtility.ToHtmlStringRGBA(l.Color));
-                    b.Append(SEPARATOR);
-                    b.Append(l.Intensity);
-                }
-                result.Add(b.ToString());
-                b.Clear();
+                result.Add(t.Loadable(SEPARATOR));
             }
 
-            File.WriteAllLines(Path + m.Id + ".modelscpsl", result);
+            try
+            {
+                File.WriteAllLines(Path + m.Id + Extension, result);
+                return true;
+            }
+            catch(Exception e)
+            {
+                Log.Error(e);
+                return false;
+            }
+            
         }
 
+        public static bool Save(this Model model)
+        {
+            if (!model.LoadedFromBlueprint)
+                model.CreateBlueprint();
 
+
+            return Save(model.Blueprint);
+        }
         
 
     }

@@ -1,5 +1,6 @@
 ﻿using CommandSystem;
 using Exiled.API.Features;
+using Exiled.API.Features.Toys;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace KE.Utils.API.Models.Commands
 {
-    public class ShowCenter : ICommand
+    public class CreatePrim : ICommand
     {
 
-        public string Command { get; } = "show";
+        public string Command { get; } = "createprimitive";
 
-        public string[] Aliases { get; } = { "sh" };
+        public string[] Aliases { get; } = { "cp" }; //no not like that
 
-        public string Description { get; } = "toggle the center of the model";
+        public string Description { get; } = "create a new primitive at your position";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
@@ -27,25 +28,20 @@ namespace KE.Utils.API.Models.Commands
                 return false;
             }
 
-            Model m = Models.Instance.ModelCreator.ModelHandler.SelectedModel;
 
-            if(m == null)
+            Model m = Models.Instance.ModelCreator.SelectedModel;
+
+            if (m == null)
             {
                 response = "no model selected";
                 return false;
             }
-            
-            if(!bool.TryParse(arguments.At(0),out bool result))
-            {
-                response = "write true or false";
-                return false;
-            }
+            m.Add(p.Position);
 
-            m.SetCenterPrimitive(result);
 
-            response = "done";
-
+            response = "created!";
             return true;
         }
+
     }
 }

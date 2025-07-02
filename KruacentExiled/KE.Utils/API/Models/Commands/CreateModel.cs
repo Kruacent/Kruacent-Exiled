@@ -1,6 +1,5 @@
 ﻿using CommandSystem;
 using Exiled.API.Features;
-using KE.Utils.API.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +35,8 @@ namespace KE.Utils.API.Models.Commands
             string name = arguments.At(0);
 
             Model m = Model.Create(p.Position, name);
-            response = $"Created model ({m.Name}) at {m.Center}";
+            Models.Instance.ModelCreator.ModelHandler.SelectedModel = m;
+            response = $"Created & selected model ({m.Name}) at {m.Center}";
             return true;
         }
 

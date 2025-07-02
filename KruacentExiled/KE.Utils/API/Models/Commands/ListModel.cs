@@ -1,11 +1,11 @@
 ﻿using CommandSystem;
 using Exiled.API.Features;
+using KE.Utils.API.Models.Blueprints;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KE.Utils.API.Models;
 
 namespace KE.Utils.API.Models.Commands
 {
@@ -24,7 +24,13 @@ namespace KE.Utils.API.Models.Commands
             b.AppendLine($"Models ({Model.Models.Count}) :");
             foreach (Model m in Model.Models)
             {
-                b.AppendLine($"({m.Id}) - {m.Name} pos: {m.Id}");
+                b.AppendLine($"({m.Id}) - {m.Name} pos: {m.Center} spawned? :{m.Spawned}");
+            }
+
+            b.AppendLine($"Blueprints ({ModelBlueprint.Blueprints.Count}) :");
+            foreach (ModelBlueprint m in ModelBlueprint.Blueprints)
+            {
+                b.AppendLine($"({m.Id}) - {m.Name}");
             }
 
 

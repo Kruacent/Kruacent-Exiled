@@ -10,76 +10,43 @@ using UnityEngine;
 
 namespace KE.Utils.API.Models
 {
-    internal class SelectedModel
+    internal class ModelSelection
     {
         public const float BLINK_REFRESH_RATE = .3f;
 
 
+        internal Model SelectedModel;
         public Primitive SelectedPrimitive;
-        private Color _baseColor;
-        private CoroutineHandle _handle;
 
         public static event Action<Primitive> OnChangedSelection;
         public static event Action OnUnSelect;
-
-        internal SelectedModel()
-        {
-            
-        }
 
         public void ChangedSelectedPrim(Primitive newPrim)
         {
             if (newPrim == null) return;
 
 
-            UnSelect();
 
-            if (SelectedPrimitive == null || newPrim != SelectedPrimitive)
+            Log.Info(SelectedPrimitive == null);
+            Log.Info(newPrim.GameObject.GetInstanceID() != SelectedPrimitive?.GameObject.GetInstanceID());
+
+            if (SelectedPrimitive == null || newPrim.GameObject.GetInstanceID() != SelectedPrimitive?.GameObject.GetInstanceID())
             {
+                Log.Info("selecting");
                 OnChangedSelection?.Invoke(newPrim);
-                _baseColor = newPrim.Color;
-                _handle = Timing.RunCoroutine(Blink(newPrim));
+                SelectedPrimitive = newPrim;
             }
             else
             {
+                Log.Info("unselecting");
+                SelectedPrimitive = null;
                 OnUnSelect?.Invoke();
             }
 
         }
 
 
-        private void UnSelect()
-        {
-            if (_handle.IsRunning)
-            {
-
-                Timing.KillCoroutines(_handle);
-                SelectedPrimitive.Color = _baseColor;
-            }
-            SelectedPrimitive = null;
-        }
-
-
-        private IEnumerator<float> Blink(Primitive p)
-        {
-            SelectedPrimitive = p;
-            Color baseColor = p.Color;
-            Color baseTrans = new(baseColor.r, baseColor.g, baseColor.b, baseColor.a / 2);
-            bool transparent = false;
-            while (true)
-            {
-                if (transparent)
-                {
-                    p.Color = baseTrans;
-                }
-                else
-                {
-                    p.Color = baseColor;
-                }
-                yield return Timing.WaitForSeconds(BLINK_REFRESH_RATE);
-                transparent = !transparent;
-            }
-        }
+        
 
     }
 }

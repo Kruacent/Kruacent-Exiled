@@ -6,6 +6,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="API\Models\Events\**" />
+	  <EmbeddedResource Remove="API\Models\Events\**" />
+	  <None Remove="API\Models\Events\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="ExMod.Exiled" Version="9.6.0" />
 	</ItemGroup>
 
@@ -17,10 +23,6 @@
 		<Reference Include="UnityEngine" HintPath="$(EXILED_REFERENCES)\UnityEngine.dll" />
 		<Reference Include="UnityEngine.PhysicsModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll" />
 		<Reference Include="Mirror" HintPath="$(EXILED_REFERENCES)\Mirror.dll" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="API\Models\Events\EventsArgs\" />
 	</ItemGroup>
 
 	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">

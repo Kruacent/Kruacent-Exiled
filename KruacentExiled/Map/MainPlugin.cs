@@ -21,7 +21,7 @@ namespace KE.Map
     public class MainPlugin : Plugin<Config>
     {
         public static MainPlugin Instance { get; private set; }
-        //public Models models => Models.Instance;
+        public Models models => Models.Instance;
         private Capybaras Capybaras;
         public override void OnEnabled()
         {
@@ -33,8 +33,8 @@ namespace KE.Map
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
             //Exiled.Events.Handlers.Server.RoundStarted += SendFakePrimitives.Join;
-            //if(Config.Debug)
-                //models?.SubscribeEvents();
+            if(Config.Debug)
+                models?.SubscribeEvents();
             
             Instance = this;
         }
@@ -45,13 +45,13 @@ namespace KE.Map
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
             //Exiled.Events.Handlers.Server.RoundStarted -= SendFakePrimitives.Join;
             Capybaras.UnsubscribeEvents();
-            /*if (Config.Debug)
+            if (Config.Debug)
             {
                 models.UnsubscribeEvents();
                 models.DestroyInstance();
             }
 
-            models.DestroyInstance();*/
+            models.DestroyInstance();
             Capybaras = null;
             Instance = null;
         }
