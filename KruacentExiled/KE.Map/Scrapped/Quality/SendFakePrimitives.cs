@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KE.Map.Utils
+namespace KE.Map.Scrapped.Quality
 {
     internal class SendFakePrimitives
     {
@@ -22,9 +22,9 @@ namespace KE.Map.Utils
             HashSet<Primitive> list = new HashSet<Primitive>();
             for (int i = 0; i < 1000; i++)
             {
-                
-                
-                Primitive p = Primitive.Create(pos+new Vector3(.1f*i,0,0), null, new Vector3(.5f, 1.5f, .5f), true, Color.yellow);
+
+
+                Primitive p = Primitive.Create(pos + new Vector3(.1f * i, 0, 0), null, new Vector3(.5f, 1.5f, .5f), true, Color.yellow);
                 p.Collidable = false;
                 list.Add(p);
                 PrimitiveObjectToy primitive = p.Base;
@@ -35,7 +35,7 @@ namespace KE.Map.Utils
                     if (pl.Id % 2 == 0)
                     {
                         Log.Debug($"for player ={pl.Nickname}");
-                        pl.SendFakeSyncVar(p.Base.netIdentity, typeof(PrimitiveObjectToy), nameof(PrimitiveObjectToy.NetworkPosition), new Vector3(15000,15000,15000));
+                        pl.SendFakeSyncVar(p.Base.netIdentity, typeof(PrimitiveObjectToy), nameof(PrimitiveObjectToy.NetworkPosition), new Vector3(15000, 15000, 15000));
                     }
                     else
                     {
@@ -47,11 +47,11 @@ namespace KE.Map.Utils
                     //pl.SendFakeSyncVar(p.Base.netIdentity, typeof(PrimitiveObjectToy), nameof(PrimitiveObjectToy.NetworkPosition), pos + Vector3.forward);
                 }
             }
-            
+
         }
 
 
-        
+
         public static void Join()
         {
             //Fake();
@@ -63,10 +63,10 @@ namespace KE.Map.Utils
 
             Collider collider = pick.GameObject.GetComponentInChildren<Collider>();
 
-            
 
 
-            
+
+
             //Pickup pickupFinal = Pickup.CreateAndSpawn(ItemType.KeycardGuard, p.Position);
 
             //if (!pickupFinal.IsLocked)
@@ -79,6 +79,6 @@ namespace KE.Map.Utils
 
         }
 
-        
+
     }
 }
