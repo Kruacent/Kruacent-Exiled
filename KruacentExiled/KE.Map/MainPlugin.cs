@@ -10,8 +10,11 @@ using Interactables.Interobjects.DoorUtils;
 using KE.Map.Doors;
 using KE.Map.EasterEggs;
 using KE.Map.GamblingZone;
+using KE.Map.Surface.BlinkingBlocks;
+using KE.Map.Surface.SupplyDrops;
 using KE.Map.Utils;
 using KE.Utils.API.Models;
+using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,10 +33,12 @@ namespace KE.Map
 
 
             Capybaras.SubscribeEvents();
+            KE.Utils.API.Sounds.SoundPlayer.Instance.TryLoad();
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
+            Exiled.Events.Handlers.Server.RoundStarted += SupplyDrop.OnRoundStarted;
             //Exiled.Events.Handlers.Server.RoundStarted += SendFakePrimitives.Join;
-            if(Config.Debug)
+            if (Config.Debug)
                 models?.SubscribeEvents();
             
             Instance = this;
@@ -43,6 +48,7 @@ namespace KE.Map
         {
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+            Exiled.Events.Handlers.Server.RoundStarted -= SupplyDrop.OnRoundStarted;
             //Exiled.Events.Handlers.Server.RoundStarted -= SendFakePrimitives.Join;
             Capybaras.UnsubscribeEvents();
             if (Config.Debug)
@@ -117,6 +123,30 @@ namespace KE.Map
 
             
 
+
+            //Blinking Blocks
+            HashSet<BlinkingBlock> list = new()
+            {
+                new BlinkingBlock(new(19, 300, -44), new(), new(2, .5f, 2), BlockColor.Red),
+                new BlinkingBlock(new(19, 300, -38), new(), new(2, .5f, 2), BlockColor.Blue)
+            };
+
+            BlinkingBlocksGroup group = new(list);
+            //Timing.RunCoroutine(ShowPos());
+
+        }
+
+        private IEnumerator<float> ShowPos()
+        {
+            while (true)
+            {
+                Log.Debug("tick");
+                foreach(Player p in Player.List)
+                {
+                    Log.Debug(p.Position);
+                }
+                yield return Timing.WaitForSeconds(2);
+            }
         }
         
         private void OnRoundEnded(RoundEndedEventArgs ev)
