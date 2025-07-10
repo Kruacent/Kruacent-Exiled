@@ -13,7 +13,11 @@ namespace KE.Map
     {
         public ModelParent()
         {
-            LoadGeneratedCommands();
+            if (MainPlugin.Configs?.Debug ?? false)
+            {
+                LoadGeneratedCommands();
+            }
+
         }
 
         public override string Command => "model";

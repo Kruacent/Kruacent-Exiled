@@ -16,6 +16,8 @@ using KE.Map.Utils;
 using KE.Utils.API.Models;
 using MEC;
 using PlayerRoles;
+using PlayerRoles.FirstPersonControl;
+using Respawning;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,6 +27,7 @@ namespace KE.Map
     {
         public static MainPlugin Instance { get; private set; }
         public Models models => Models.Instance;
+        public static Config Configs => Instance?.Config;
         private Capybaras Capybaras;
         public override void OnEnabled()
         {
@@ -130,7 +133,7 @@ namespace KE.Map
                 new BlinkingBlock(new(19, 300, -44), new(), new(2, .5f, 2), BlockColor.Red),
                 new BlinkingBlock(new(19, 300, -38), new(), new(2, .5f, 2), BlockColor.Blue)
             };
-
+            
             BlinkingBlocksGroup group = new(list);
             //Timing.RunCoroutine(ShowPos());
 
@@ -140,10 +143,9 @@ namespace KE.Map
         {
             while (true)
             {
-                Log.Debug("tick");
                 foreach(Player p in Player.List)
                 {
-                    Log.Debug(p.Position);
+                    Log.Debug($"{p.Id} position : "+p.Position);
                 }
                 yield return Timing.WaitForSeconds(2);
             }

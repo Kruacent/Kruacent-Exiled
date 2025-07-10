@@ -1,19 +1,16 @@
 ﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
-using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Toys;
 using Exiled.API.Interfaces;
 using KE.Utils.API;
-using KE.Utils.Extensions;
 using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace KE.Map.Surface.SupplyDrops
@@ -58,6 +55,13 @@ namespace KE.Map.Surface.SupplyDrops
         private static Stopwatch _spawnTime;
         private static TimeSpan _nextSpawn;
         private static List<SupplyDrop> list = new();
+        public static IReadOnlyCollection<Vector3> SpawnPositions = new List<Vector3>()
+        {
+            new(-15,292,-39), //spawn chaos
+            new(40,301,-52), // above the gate
+            new(138,295,-64), //behind mtf spawn at the unopenable gate
+            new(124,289,22) //escape
+        };
         private HashSet<Primitive> primitives = new();
         private bool _detectingSomeone = false;
 
@@ -67,6 +71,7 @@ namespace KE.Map.Surface.SupplyDrops
         public static readonly string CassieMessageDrop = "Drop in surface";
         public static readonly string CassieTooMuchStealing = "";
 
+        private static SupplyDrop CurrentDrop = null;
         private static CoroutineHandle _handle;
         public SupplyDrop(Vector3 position)
         {
@@ -79,6 +84,8 @@ namespace KE.Map.Surface.SupplyDrops
             var pr = Primitive.Create(PrimitiveType.Sphere, Position, null, new(Radius, Radius, Radius), false, new(0, 1, 0, .30f));
             pr.Collidable = false;
             primitives.Add(pr);
+
+
             if (Show)
             {
                 Cassie.Message(CassieMessageDrop);
@@ -88,7 +95,7 @@ namespace KE.Map.Surface.SupplyDrops
             {
                 p.Spawn();
             }
-
+            CurrentDrop = this;
             Timing.RunCoroutine(Detecting());
         }
 
@@ -108,8 +115,13 @@ namespace KE.Map.Surface.SupplyDrops
             {
                 if (_spawnTime.Elapsed > _nextSpawn)
                 {
-                    _nextSpawn += TimeSpawn;
-                    SpawnRandom();
+                    _nextSpawn += new TimeSpan(0,0,30);
+                    if(CurrentDrop == null)
+                    {
+                        SpawnRandom();
+                    }
+                        
+                    Log.Debug("next spawn " + _nextSpawn);
                 }
                 notmax = list.Count <= MaxSupplyDrop;
                 yield return Timing.WaitForSeconds(RefreshRate);
@@ -119,14 +131,13 @@ namespace KE.Map.Surface.SupplyDrops
         private static void SpawnRandom()
         {
             //Todo random lol
-            Vector3 spawnloc = new(19, 290, -44);
-
-
+            Vector3 spawnloc = SpawnPositions.GetRandomValue();
             Log.Debug($"spawning drop at {spawnloc}");
             SupplyDrop soup = new(spawnloc);
 
 
         }
+
         public void Destroy()
         {
             float timeExplode = 10;
@@ -135,31 +146,38 @@ namespace KE.Map.Surface.SupplyDrops
             grenade.BurnDuration = timeExplode;
             grenade.SpawnActive(Position + Vector3.up);
 
-            Timing.CallDelayed(timeExplode, () =>
+            foreach (var p in primitives)
             {
-                foreach(var p in primitives)
-                {
-                    p.Destroy();
-                }
-            });
+                p.Destroy();
+            }
+            CurrentDrop = null;
+
 
         }
 
         private IEnumerator<float> Detecting()
         {
             var s = Stopwatch.StartNew();
+            var playerAlreadyIn = Player.List.Where(p => InRadius(p)).ToHashSet();
+
             _detectingSomeone = true;
             while (_detectingSomeone && s.Elapsed < TimeStaying)
             {
                 yield return Timing.WaitForSeconds(RefreshRate);
                 foreach (Player p in Player.List.Where(p=> p.IsAlive))
                 {
-                    if (OtherUtils.IsInCircle(p.Position,Position,Radius))
+                    if (!playerAlreadyIn.Contains(p) && InRadius(p))
                     {
                         Effect(p);
                         _detectingSomeone = false;
-                        Log.Debug($"Player {p.Id} got the supply drop");
-                        //break;
+                        
+                    }
+                    if (playerAlreadyIn.Contains(p))
+                    {
+                        if (!InRadius(p))
+                        {
+                            playerAlreadyIn.Remove(p);
+                        }
                     }
                 }
             }
@@ -167,11 +185,12 @@ namespace KE.Map.Surface.SupplyDrops
             Destroy();
         }
 
-
+        private bool InRadius(Player p) => OtherUtils.IsInCircle(p.Position, Position, Radius / 2);
+         
 
         private void Effect(Player p)
         {
-
+            Log.Debug($"Player {p.Id} got the supply drop");
             //todo add trapped drop (explode)
             SideClaimed = p.Role;
             PlayerClaimed = p;
@@ -190,12 +209,22 @@ namespace KE.Map.Surface.SupplyDrops
 
         private void SpawnLoot(Player p)
         {
-            p.AddItem(ItemType.GunCrossvec);
+            Faction playerFaction = p.Role.Team.GetFaction();
+            Respawn.GrantInfluence(playerFaction, 20);
+            Respawn.AdvanceTimer(playerFaction, 10);
+
+            Log.Debug("human got it!");
+            if (!p.HasItem(ItemType.GunCrossvec))
+            {
+                p.AddItem(ItemType.GunCrossvec);
+            }
+
             p.AddAmmo(AmmoType.Nato9, 50);
         }
 
         private void BuffScps()
         {
+            Log.Debug("scps got it!");
             foreach(Player p in Player.List.Where(p => p.IsScp))
             {
                 float healthAdded = p.MaxHealth * 1.3f;
