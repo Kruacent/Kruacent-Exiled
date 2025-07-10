@@ -3,6 +3,7 @@ using Exiled.API.Features.Core.UserSettings;
 using Exiled.API.Interfaces;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Server;
+using HarmonyLib;
 using KE.CustomRoles.Settings;
 using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
@@ -20,9 +21,12 @@ namespace KE.CustomRoles
         private Controller _controller;
         public static readonly HintPlacement CRHint = new(0, 750);
         public static readonly HintPlacement CREffect = new(700, 300);
+        public static readonly HintPlacement Abilities = new(0, 900,HintServiceMeow.Core.Enum.HintAlignment.Left);
         public static Translations Translations => Instance?.Translation;
         private SettingHandler _settingHandler;
         internal static SettingHandler SettingHandler => Instance?._settingHandler;
+
+        private Harmony Harmony; 
 
         public override void OnEnabled()
         {
@@ -31,7 +35,8 @@ namespace KE.CustomRoles
             _controller = new Controller();
             _settingHandler = new();
 
-
+            Harmony = new(Name);
+            Harmony.PatchAll();
             SettingHandler.SubscribeEvents();
             CustomRole.RegisterRoles(false,null,true,Assembly);
             this.SubscribeEvents();
@@ -43,7 +48,7 @@ namespace KE.CustomRoles
             
             CustomRole.UnregisterRoles();
             SettingHandler.UnsubscribeEvents();
-
+            Harmony.UnpatchAll();
 
             this.UnsubscribeEvents();
             _settingHandler = null;

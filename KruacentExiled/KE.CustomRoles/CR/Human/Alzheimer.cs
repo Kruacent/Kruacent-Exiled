@@ -2,6 +2,7 @@
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.CustomRoles.API.Features;
+using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.API.Features;
 using MEC;
 using PlayerRoles;
@@ -19,7 +20,7 @@ namespace KE.CustomRoles.CR.Human
         public override string Description { get; set; } = "Tu es <color=#0f0f0f>Vieux</color>";
         public override uint Id { get; set; } = 1056;
         public override string PublicName { get; set; } = "Vieux";
-        public override bool KeepRoleOnDeath { get; set; } = true;
+        public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
         public override float SpawnChance { get; set; } = 100;
         protected override void RoleAdded(Player player)
@@ -35,6 +36,25 @@ namespace KE.CustomRoles.CR.Human
 
             Timing.KillCoroutines(_coroutines[player]);
             _coroutines.Remove(player);
+        }
+        protected override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.UsedItem += OnUsedItem;
+            base.SubscribeEvents();
+        }
+        protected override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.UsedItem -= OnUsedItem;
+            base.UnsubscribeEvents();
+        }
+
+        private void OnUsedItem(UsedItemEventArgs ev)
+        {
+            if (!Check(ev.Player)) return;
+            if (ev.Item.Type == ItemType.SCP500)
+            {
+                RemoveRole(ev.Player);
+            }
         }
 
 

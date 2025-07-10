@@ -3,6 +3,7 @@ using Exiled.API.Features.Core.UserSettings;
 using Exiled.API.Features.Pools;
 using Exiled.CustomRoles.API;
 using Exiled.CustomRoles.API.Features;
+using Exiled.CustomRoles.API.Features.Enums;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Interfaces;
 using System;
@@ -41,14 +42,14 @@ namespace KE.CustomRoles.Settings
         public void SubscribeEvents()
         {
             SettingBase.Register(settings);
-            ServerSpecificSettingsSync.ServerOnSettingValueReceived += OnSettingValueReceived;
+            ServerSpecificSettingsSync.ServerOnSettingValueReceived += SafeOnSettingValueReceived;
             Exiled.Events.Handlers.Player.Verified += OnVerified;
 
         }
 
         public void UnsubscribeEvents()
         {
-            ServerSpecificSettingsSync.ServerOnSettingValueReceived -= OnSettingValueReceived;
+            ServerSpecificSettingsSync.ServerOnSettingValueReceived -= SafeOnSettingValueReceived;
             Exiled.Events.Handlers.Player.Verified -= OnVerified;
             SettingBase.Unregister(predicate:null, settings);
         }
@@ -60,36 +61,59 @@ namespace KE.CustomRoles.Settings
             ServerSpecificSettingsSync.SendToPlayer(ev.Player.ReferenceHub);
         }
 
+
+        private void SafeOnSettingValueReceived(ReferenceHub hub, ServerSpecificSettingBase settingBase)
+        {
+            try
+            {
+                OnSettingValueReceived( hub, settingBase);
+            }
+            catch(Exception e)
+            {
+                Log.Error(e);
+            }
+        }
+
         private void OnSettingValueReceived(ReferenceHub hub, ServerSpecificSettingBase settingBase)
         {
-            
-            if(settingBase == null)
+            if (settingBase == null)
             {
                 Log.Debug("setting null whar?");
+                return;
             }
             Player p = Player.Get(hub);
-
+            if(p == null)
+            {
+                Log.Debug("no player");
+                return;
+            }
+            //Log.Debug("get abilities");
             IEnumerable<ActiveAbility> a = p.GetActiveAbilities();
 
             if(a == null)
             {
-                Log.Debug("no abilities 1");
+                //Log.Debug("no abilities 1");
                 return;
             }
-
-
+            
             List<ActiveAbility> abilities = ListPool<ActiveAbility>.Pool.Get(a);
-            ActiveAbility currentAbility = p.GetSelectedAbility();
-            ActiveAbility want = null;
-
+            
             if (abilities.Count == 0)
             {
-                Log.Debug("no abilities 2");
+                //Log.Debug("no abilities 2");
                 return;
             }
+            //Log.Debug($" (prev : {abilities.Count}) get selected abilities");
+            ActiveAbility currentAbility = GetSelectedAbility(p);
+            //Log.Debug("finish selected");
+            ActiveAbility want = null;
+
+            
+
+
             int index = 0;
 
-
+            //Log.Debug($" (prev : {currentAbility?.Name}) check press forward");
             if (CheckPressed(settingBase, switchForwardId))
             {
                 if (currentAbility != null)
@@ -101,6 +125,7 @@ namespace KE.CustomRoles.Settings
                 
                 
             }
+            //Log.Debug($" check press backward");
             if (CheckPressed(settingBase, switchBackwardId))
             {
                 if (currentAbility != null)
@@ -120,11 +145,11 @@ namespace KE.CustomRoles.Settings
                 
                 
             }
-            
+            //Log.Debug($"select ability");
             want?.SelectAbility(p);
 
-            currentAbility = p.GetSelectedAbility();
-            Log.Debug(currentAbility.Name);
+            currentAbility = GetSelectedAbility(p);
+            //Log.Debug(currentAbility.Name);
             if (CheckPressed(settingBase,_idkeybind))
             {
                 if (CanUse(currentAbility,p, out var result))
@@ -132,10 +157,32 @@ namespace KE.CustomRoles.Settings
                     
                     currentAbility.UseAbility(p);
                 }
-                Log.Debug(result);
             }
+            Log.Debug(currentAbility?.Name);
         }
 
+        public static ActiveAbility GetSelectedAbility(Player player)
+        {
+            Player player2 = player;
+            if (ActiveAbility.AllActiveAbilities.TryGetValue(player2, out HashSet<ActiveAbility> value))
+            {
+                //Log.Debug("got all abilities");
+               // ActiveAbility sel = value.FirstOrDefault((ActiveAbility a) => a.Check(player2, CheckType.Selected));
+
+                foreach(ActiveAbility a in value)
+                {
+                    //Log.Debug("checking "+ a?.Name);
+                    if (a?.Check(player2, CheckType.Selected) ?? false)
+                    {
+                        //Log.Debug("found " + a.Name);
+                        return a;
+                    }
+                    //Log.Debug("finish checking");
+                }
+            }
+
+            return null;
+        }
 
         private bool CanUse(ActiveAbility a, Player player, out string result)
         {

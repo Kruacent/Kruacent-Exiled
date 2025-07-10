@@ -20,7 +20,6 @@ namespace KE.Utils.API.Displays.DisplayMeow
 
 
 
-
         public MHint AddHint(HintPlacement hintPlacement, Player player, string text, float delay)
         {
             var dis = PlayerDisplay.Get(player);

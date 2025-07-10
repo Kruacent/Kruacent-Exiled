@@ -65,13 +65,6 @@ namespace KE.CustomRoles.API.Features
             }
             Log.Debug($"{Name}: Adding role to {player.Nickname}.");
             TrackedPlayers.Add(player);
-            foreach(Player p in TrackedPlayers.ToList())
-            {
-                if(p.Id == player.Id)
-                {
-                    Log.Debug("he is in the tracked");
-                }
-            }
 
 
 
@@ -155,15 +148,6 @@ namespace KE.CustomRoles.API.Features
         public override void RemoveRole(Player player)
         {
             
-
-            Log.Debug($"player in {Name}:");
-            foreach (Player p in TrackedPlayers.ToList())
-            {
-                if (p.Id == player.Id)
-                {
-                    Log.Debug($"{p.Id} is in");
-                }
-            }
 
             if (!TrackedPlayers.Contains(player))
             {
