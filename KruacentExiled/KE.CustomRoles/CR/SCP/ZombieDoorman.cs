@@ -27,7 +27,8 @@ namespace KE.CustomRoles.CR.SCP
         public override float SpawnChance { get; set; } = 100;
         public override List<CustomAbility> CustomAbilities { get; set; } = new List<CustomAbility>()
         {
-            new OpenDoor()
+            new OpenDoor(),
+            new TestRotateCam()
         };
 
 

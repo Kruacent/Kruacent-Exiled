@@ -48,7 +48,6 @@ namespace KE.CustomRoles.API.Features
             if (Check(ev.Player))
             {
                 ev.IsAllowed = false;
-
                 Ragdoll.CreateAndSpawn(ev.Role, ev.Player.Nickname, ev.DamageHandlerBase, ev.Position, ev.Rotation);
             }
         }
