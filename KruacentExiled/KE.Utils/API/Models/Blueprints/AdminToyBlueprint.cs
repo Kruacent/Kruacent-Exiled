@@ -21,7 +21,7 @@ namespace KE.Utils.API.Models.Blueprints
         public Vector3 Scale { get; protected set; }
 
 
-        public static AdminToyBlueprint Create(AdminToy adminToy,Vector3 center)
+        public static AdminToyBlueprint Create(AdminToy adminToy, Vector3? center = null)
         {
             AdminToyBlueprint result;
 
@@ -29,6 +29,7 @@ namespace KE.Utils.API.Models.Blueprints
             if (adminToy.ToyType == AdminToyType.PrimitiveObject)
             {
                 result = new PrimitiveBlueprint(adminToy as Primitive);
+                
             }
             else if(adminToy.ToyType == AdminToyType.LightSource)
             {
@@ -39,7 +40,7 @@ namespace KE.Utils.API.Models.Blueprints
                 throw new NotImplementedException("only primitive and light");
             }
             
-            result.Position = adminToy.Position - center;
+            result.Position = adminToy.Position - center ?? adminToy.Position;
             result.Rotation = adminToy.Rotation.eulerAngles;
 
             return result;

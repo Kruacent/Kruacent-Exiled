@@ -27,7 +27,13 @@ namespace KE.Utils.API.Models
             foreach (string d in raw)
             {
                 Log.Info("loading="+d);
-                m.Add(Load(string.Empty,d));
+                ModelBlueprint mbp = Load(string.Empty, d);
+                if(mbp != null)
+                {
+                    Log.Info($"loaded {mbp.Name} ({mbp.Toys.Count})");
+                    m.Add(mbp);
+                }
+                
             }
 
             return m;
@@ -73,9 +79,10 @@ namespace KE.Utils.API.Models
                     ColorUtility.TryParseHtmlString(line[4], out color);
                     PrimitiveType ptype;
                     Enum.TryParse(line[5], out ptype);
-                    bool collidable = bool.Parse(line[6]);
+
+                    
                     var p = Primitive.Create(ptype, ATPos, ATRotation, ATScale, true, color);
-                    p.Collidable = collidable;
+                    p.Collidable = false;
                     toy = p;
 
                 }
@@ -98,12 +105,12 @@ namespace KE.Utils.API.Models
 
 
 
-            return ModelBlueprint.Create(name);
+            return ModelBlueprint.Create(name, toys);
         }
 
 
         // Name\n
-        // Primitive.Position.RotationEuler.Scale.Color.PrimitiveType.Collidable\n
+        // Primitive.Position.RotationEuler.Scale.Color.PrimitiveType\n
         // Light.Position.RotationEuler.Scale.Color.Intensity\n
         // and repeat
         public static bool Save(this ModelBlueprint m)
@@ -120,7 +127,7 @@ namespace KE.Utils.API.Models
 
             try
             {
-                File.WriteAllLines(Path + m.Id + Extension, result);
+                File.WriteAllLines(Path + m.Name+ Extension, result);
                 return true;
             }
             catch(Exception e)

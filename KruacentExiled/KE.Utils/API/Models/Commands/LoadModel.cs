@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace KE.Utils.API.Models.Commands
 {
@@ -16,7 +17,7 @@ namespace KE.Utils.API.Models.Commands
 
         public string[] Aliases { get; } = { "lo" };
 
-        public string Description { get; } = "load a model";
+        public string Description { get; } = "load a model from a blueprint";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
@@ -34,21 +35,29 @@ namespace KE.Utils.API.Models.Commands
                 return false;
             }
 
-            if (!int.TryParse(arguments.At(0),out int id))
+            string name = arguments.At(0);
+
+            if (string.IsNullOrEmpty(name))
             {
-                response = "enter id";
+                response = "name null or empty";
                 return false;
             }
 
-            if(!ModelBlueprint.TryGet(id,out var mbp))
+            foreach(ModelBlueprint bp in ModelBlueprint.Blueprints)
+            {
+
+                Log.Info($"{bp.Name} == {name} : {bp.Name == name}");
+            }
+
+
+            if(!ModelBlueprint.TryGet(name,out var mbp))
             {
                 response = "blueprint not found";
                 return false;
             }
-            
-            var m =Model.Create(mbp, p.Position);
 
-            response = $"Created model ({m.Name}) at {m.Center}";
+            mbp.Spawn(p.Position);
+            response = $"Created model ({mbp.Name}) at {p.Position}";
             return true;
         }
 

@@ -8,7 +8,6 @@ namespace KE.Utils.API.Models.Blueprints
     {
         public Color Color { get; }
         public PrimitiveType Type { get; }
-        public bool Collidable { get; }
 
 
         public PrimitiveBlueprint(Primitive p)
@@ -18,7 +17,6 @@ namespace KE.Utils.API.Models.Blueprints
             Scale = p.Scale;
             Color = p.Color;
             Type = p.Type;
-            Collidable = p.Collidable;
         }
 
         
@@ -26,7 +24,7 @@ namespace KE.Utils.API.Models.Blueprints
         public override AdminToy Spawn(Vector3 center)
         {
             var p  = Primitive.Create(Type,Position+center, Rotation, Scale, false);
-            p.Collidable = Collidable;
+            p.Collidable = false;
             p.Color = Color;
 
 
@@ -35,7 +33,7 @@ namespace KE.Utils.API.Models.Blueprints
 
         protected override string Load(char separator)
         {
-            return "#" + ColorUtility.ToHtmlStringRGBA(Color) + separator+Type+separator+Collidable;
+            return "#" + ColorUtility.ToHtmlStringRGBA(Color) + separator+Type;
         }
     }
 }

@@ -49,7 +49,7 @@ namespace KE.Utils.API.Models
         public static event Action<Player> IsAiming;
         public static event Action StoppedAiming;
 
-
+        
 
         public ModelCreator()
         {
@@ -62,18 +62,24 @@ namespace KE.Utils.API.Models
             ModelHandler = new();
             MovementHandler = new();
 
-
+            ModelLoader.LoadAll();
             MovementHandler.SubscribeEvents();
-            Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             Exiled.Events.Handlers.Player.DryfiringWeapon += OnDryfiringWeapon;
             Exiled.Events.Handlers.Player.TogglingWeaponFlashlight += OnTogglingWeaponFlashlight;
             Exiled.Events.Handlers.Server.RoundStarted += Test;
             Exiled.Events.Handlers.Player.AimingDownSight += OnAimingDownSight;
 
         }
-        private void OnWaitingForPlayers()
+        public void UnsubscribeEvents()
         {
-            ModelLoader.LoadAll();
+            Exiled.Events.Handlers.Player.DryfiringWeapon -= OnDryfiringWeapon;
+            Exiled.Events.Handlers.Player.TogglingWeaponFlashlight -= OnTogglingWeaponFlashlight;
+            Exiled.Events.Handlers.Player.AimingDownSight -= OnAimingDownSight;
+            Exiled.Events.Handlers.Server.RoundStarted -= Test;
+            MovementHandler.UnsubscribeEvents();
+
+            ModelHandler = null;
+            MovementHandler = null;
         }
 
         private void Test()
@@ -94,19 +100,7 @@ namespace KE.Utils.API.Models
         }
 
 
-        public void UnsubscribeEvents()
-        {
-            Exiled.Events.Handlers.Player.DryfiringWeapon -= OnDryfiringWeapon;
-            Exiled.Events.Handlers.Player.TogglingWeaponFlashlight -= OnTogglingWeaponFlashlight;
-            Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
-            Exiled.Events.Handlers.Player.AimingDownSight -= OnAimingDownSight;
-            Exiled.Events.Handlers.Server.RoundStarted -= Test;
-            //Exiled.Events.Handlers.Player.Shooting -= OnShooting;
-            MovementHandler.UnsubscribeEvents();
 
-            ModelHandler = null;
-            MovementHandler = null;
-        }
 
         private void OnAimingDownSight(AimingDownSightEventArgs ev)
         {

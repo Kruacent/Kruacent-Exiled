@@ -26,16 +26,13 @@ namespace KE.Map
 
         public override void LoadGeneratedCommands()
         {
-            RegisterCommand(new CreateModel());
-            RegisterCommand(new CreatePrim());
-            RegisterCommand(new ListModel());
-            RegisterCommand(new LoadModel());
-            RegisterCommand(new ModeMovePrim());
-            RegisterCommand(new SelectModel());
-            RegisterCommand(new ShowCenter());
-            RegisterCommand(new ChangePrimType());
-            RegisterCommand(new ChangeColor());
+            foreach (ICommand command in KE.Utils.API.Models.Commands.AllCommands.Get())
+            {
+                RegisterCommand(command);
+            }
         }
+
+        
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {

@@ -24,13 +24,13 @@ namespace KE.Utils.API.Models.Commands
             b.AppendLine($"Models ({Model.Models.Count}) :");
             foreach (Model m in Model.Models)
             {
-                b.AppendLine($"({m.Id}) - {m.Name} pos: {m.Center} spawned? :{m.Spawned}");
+                b.AppendLine($"{m.Name} pos: {m.Center} spawned? :{m.Spawned}");
             }
 
             b.AppendLine($"Blueprints ({ModelBlueprint.Blueprints.Count}) :");
             foreach (ModelBlueprint m in ModelBlueprint.Blueprints)
             {
-                b.AppendLine($"({m.Id}) - {m.Name}");
+                b.AppendLine($"{m.Name}");
             }
 
 

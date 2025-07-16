@@ -5,6 +5,7 @@ using Exiled.API.Features.Toys;
 using Exiled.API.Structs;
 using KE.Utils.API.Models.ToysSettings;
 using KE.Utils.Quality.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -25,12 +26,6 @@ namespace KE.Utils.API.Models.Blueprints
             get { return _name; }
         }
 
-        private int _id;
-        public int Id
-        {
-            get { return _id; }
-        }
-
         private ModelBlueprint() { }
 
 
@@ -39,21 +34,16 @@ namespace KE.Utils.API.Models.Blueprints
         /// 
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="id"> if > 0 overwrite same id bp </param>
         /// <returns></returns>
-        public static ModelBlueprint Create(Model model, int id = -1)
+        public static ModelBlueprint Create(Model model)
         {
-            if(id != -1)
-            {
-                
-                var oldMbp = Get(id);
-                _bps.Remove(oldMbp);
-            }
+            var oldMbp = Get(model.Name);
+            _bps.Remove(oldMbp);
 
 
             ModelBlueprint mbp = new();
+            mbp._name = model.Name;
             _bps.Add(mbp);
-            mbp._id = _bps.Count;
 
             foreach(AdminToy toy in model.Toys)
             {
@@ -64,29 +54,43 @@ namespace KE.Utils.API.Models.Blueprints
         }
 
 
-        public static ModelBlueprint Create(string name)
+        public static ModelBlueprint Create(string name,IEnumerable<AdminToy> toys = null)
         {
             ModelBlueprint mbp = new();
             _bps.Add(mbp);
-            mbp._id = _bps.Count;
 
             if (string.IsNullOrEmpty(name))
             {
-                mbp._name = "Model" + mbp.Id;
-            }
-            else
-            {
-                mbp._name = name;
+                throw new ArgumentException("name null or empty");
             }
 
+            if(toys != null)
+            {
+                foreach(AdminToy at in toys)
+                {
+                    mbp._toys.Add(AdminToyBlueprint.Create(at));
+                }
+            }
+
+
+
+            mbp._name = name;
+
             return mbp;
+        }
+
+        public void Spawn(Vector3 position)
+        {
+            Model m = Model.Create(this, position,false);
+
+
         }
 
 
         #region getters
         public static ModelBlueprint Get(string name)
         {
-            foreach (ModelBlueprint m in _bps)
+            foreach (ModelBlueprint m in Blueprints)
             {
                 if (m.Name == name)
                 {
@@ -94,22 +98,6 @@ namespace KE.Utils.API.Models.Blueprints
                 }
             }
             return null;
-        }
-
-
-        public static ModelBlueprint Get(int id)
-        {
-            foreach (ModelBlueprint m in _bps)
-            {
-                if (m.Id == id)
-                    return m;
-            }
-            return null;
-        }
-        public static bool TryGet(int id, out ModelBlueprint model)
-        {
-            model = Get(id);
-            return model != null;
         }
 
         public static bool TryGet(string name, out ModelBlueprint model)

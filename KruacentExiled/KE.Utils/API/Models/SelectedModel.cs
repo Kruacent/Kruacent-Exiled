@@ -12,10 +12,10 @@ namespace KE.Utils.API.Models
 {
     internal class ModelSelection
     {
-        public const float BLINK_REFRESH_RATE = .3f;
 
 
-        internal Model SelectedModel;
+
+        public Model SelectedModel { get; internal set; }
         public Primitive SelectedPrimitive;
 
         public static event Action<Primitive> OnChangedSelection;

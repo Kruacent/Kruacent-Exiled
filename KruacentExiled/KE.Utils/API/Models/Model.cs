@@ -1,15 +1,10 @@
 ﻿using Exiled.API.Features;
-using Exiled.API.Features.Core;
-using Exiled.API.Features.Doors;
 using Exiled.API.Features.Toys;
-using Exiled.API.Structs;
 using KE.Utils.API.Models.Blueprints;
-using KE.Utils.API.Models.ToysSettings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using Light = Exiled.API.Features.Toys.Light;
 
 namespace KE.Utils.API.Models
 {
@@ -31,12 +26,6 @@ namespace KE.Utils.API.Models
         {
             get { return _center; }
         }
-
-        private int _id;
-        public int Id
-        {
-            get { return _id; }
-        }
         private bool _spawned = true;
         public bool Spawned
         {
@@ -57,6 +46,8 @@ namespace KE.Utils.API.Models
                 return Blueprint != null;
             }
         }
+
+        
 
 
 
@@ -85,57 +76,56 @@ namespace KE.Utils.API.Models
         }
 
 
-        private void AddToy(AdminToy toy)
+        protected virtual void AddToy(AdminToy toy,bool editMode = true)
         {
+            if(toy is Primitive p && editMode)
+            {
+                p.Collidable = true;
+            }
+
+
             _toys.Add(toy);
         }
 
         private Model(Vector3 center)
         {
+            _models.Add(this);
             _center = center;
         }
 
-
-        internal static Model Create(Vector3 position, IEnumerable<AdminToy> toys, string name = "")
-        {
-            var m = Create(position, name);
-            m._toys = toys.ToHashSet();
-
-            return m;
-        }
-
-        public static Model Create(Vector3 position, string name = "")
+        public static Model Create(Vector3 position, string name)
         {
 
             Model m = new(position);
-            _models.Add(m);
-            m._id = _models.Count;
             if (string.IsNullOrEmpty(name))
             {
-                m._name = "Model" + m.Id;
+                throw new ArgumentException("name null or empty");
             }
-            else
-            {
-                m._name = name;
-            }
+            m._name = name;
 
-            Log.Debug("created model id=" + m.Id);
+            Log.Debug("created model id=" + m.Name);
             m.centerPrim = Primitive.Create(position, null, Vector3.one / 5, true, new(1, 0, 0, .25f));
             m.centerPrim.Collidable = false;
 
             return m;
         }
 
-        public static Model Create(ModelBlueprint blueprint,Vector3 position)
+
+        public static Model Create(ModelBlueprint blueprint,Vector3 position,bool editMode = false)
         {
             Model m = new(position);
-            m._id = _models.Count;
+            m._name = blueprint.Name;
 
             foreach (AdminToyBlueprint toy in blueprint.Toys)
             {
-                m.AddToy(toy.Spawn(m.Center));
-            }
+                Log.Info("create toy "+toy.AdminToyType);
+                AdminToy trueToy = toy.Spawn(m.Center);
+                
 
+                m.AddToy(trueToy, editMode);
+                
+            }
+            
             return m;
 
         }
@@ -146,13 +136,7 @@ namespace KE.Utils.API.Models
         /// </summary>
         public void CreateBlueprint()
         {
-            int oldId = -1;
-            if (LoadedFromBlueprint)
-            {
-                oldId = _blueprint.Id;
-            }
-
-            ModelBlueprint bp = ModelBlueprint.Create(this, oldId);
+            ModelBlueprint bp = ModelBlueprint.Create(this);
 
             _blueprint = bp;
             
@@ -172,22 +156,6 @@ namespace KE.Utils.API.Models
             return null;
         }
 
-        
-        public static Model Get(int id)
-        {
-            foreach(Model m in _models)
-            {
-                if (m.Id == id)
-                    return m;
-            }
-            return null;
-        }
-        public static bool TryGet(int id, out Model model)
-        {
-            model = Get(id);
-            return model != null;
-        }
-
         public static bool TryGet(string name, out Model model)
         {
             model = Get(name);
@@ -197,7 +165,7 @@ namespace KE.Utils.API.Models
 
         public override string ToString()
         {
-            return $"{Id} : {Name} center = {Center}";
+            return $"{Name} center = {Center}";
         }
         #endregion
 

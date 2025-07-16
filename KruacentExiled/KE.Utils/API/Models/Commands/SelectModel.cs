@@ -31,16 +31,18 @@ namespace KE.Utils.API.Models.Commands
                 response = "not enough arguments";
                 return false;
             }
-            if (!int.TryParse(arguments.At(0),out int id))
+            string name = arguments.At(0);
+
+            if (string.IsNullOrEmpty(name))
             {
-                response = "not an id";
+                response = "name null or empty";
                 return false;
             }
 
 
 
 
-            if (!Model.TryGet(id, out Model m))
+            if (!Model.TryGet(name, out Model m))
             {
                 response = "model not found";
                 return false;

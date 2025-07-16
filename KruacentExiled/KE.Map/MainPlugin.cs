@@ -3,6 +3,7 @@ using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Roles;
+using Exiled.API.Features.Toys;
 using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
@@ -12,13 +13,17 @@ using KE.Map.EasterEggs;
 using KE.Map.GamblingZone;
 using KE.Map.Surface.BlinkingBlocks;
 using KE.Map.Surface.SupplyDrops;
+using KE.Map.Surface.Turrets;
 using KE.Map.Utils;
 using KE.Utils.API.Models;
+using KE.Utils.API.Models.Blueprints;
 using MEC;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
 using Respawning;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using UnityEngine;
 
 namespace KE.Map
@@ -70,7 +75,7 @@ namespace KE.Map
 
         private void OnGenerated()
         {
-            
+            Turret t = new();
             Door lcz173 = Door.Get(Exiled.API.Enums.DoorType.Scp173Gate);
             HashSet<DroppableItem> normal = new()
             {
@@ -159,6 +164,7 @@ namespace KE.Map
             foreach (var g in OldGamblingRoom.List)
                 g.UnsubscribeEvents();
         }
+
     }
 
 
