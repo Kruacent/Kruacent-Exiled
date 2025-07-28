@@ -12,7 +12,7 @@ namespace KE.Utils.API
 
         public static bool IsInCircle(Vector3 pos,Vector3 centerCircle,float radius)
         {
-            return Math.Pow(pos.x - centerCircle.x, 2) + Math.Pow(pos.y - centerCircle.y, 2) <= Math.Pow(radius, 2);
+            return (pos-centerCircle).sqrMagnitude <= Math.Pow(radius, 2);
         }
     }
 }
