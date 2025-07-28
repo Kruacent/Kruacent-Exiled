@@ -17,7 +17,7 @@ namespace KE.Utils.API.Sounds
         {
             get
             {
-                if(_instance == null)
+                if (_instance == null)
                 {
                     _instance = new();
                 }
@@ -30,6 +30,7 @@ namespace KE.Utils.API.Sounds
         private bool _loaded = false;
         public bool Loaded => _loaded;
 
+        public static readonly HashSet<string> clips = new();
 
         public static string SoundLocation => Paths.Configs + "/Sounds";
         public static void Load() => Instance.TryLoad();
@@ -52,6 +53,7 @@ namespace KE.Utils.API.Sounds
             {
                 string noExFile = Path.GetFileNameWithoutExtension(file);
                 Log.Info($"loading {file} as {noExFile}");
+                clips.Add(noExFile);
                 AudioClipStorage.LoadClip(file);
             }
             _loaded = true;
@@ -65,7 +67,7 @@ namespace KE.Utils.API.Sounds
         /// <param name="pos"></param>
         /// <param name="volume"></param>
         /// <param name="maxDistance"></param>
-        public void Play(string clipName, Vector3 pos, float volume = 50f, float maxDistance = 20f, bool isSpatial = true)
+        public AudioClipPlayback Play(string clipName, Vector3 pos, float volume = 50f, float maxDistance = 20f, bool isSpatial = true)
         {
             if (!Loaded) throw new Exception("clips not loaded use SoundPlayer.Load()");
             Log.Debug($"playing {clipName} at {pos}");
@@ -79,9 +81,11 @@ namespace KE.Utils.API.Sounds
                 speaker.transform.parent = a.transform;
                 speaker.transform.localPosition = Vector3.zero;
             });
-            
+
             audioPlayer.AddClip(clipName, volume: volume);
             audioPlayer.DestroyWhenAllClipsPlayed = true;
+            return audioPlayer.AddClip(clipName, volume: volume);
+
 
         }
 
@@ -96,7 +100,7 @@ namespace KE.Utils.API.Sounds
         {
             if (!Loaded) throw new Exception("clips not loaded use SoundPlayer.Instance.Load()");
             Log.Debug($"playing {clipName} at {objectEmittingSound}");
-            
+
             var audioPlayer = AudioPlayer.CreateOrGet($"{clipName} ({objectEmittingSound})", onIntialCreation: (p) =>
             {
 
