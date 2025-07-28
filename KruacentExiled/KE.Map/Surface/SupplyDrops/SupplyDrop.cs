@@ -69,7 +69,8 @@ namespace KE.Map.Surface.SupplyDrops
         public Player PlayerClaimed { get; private set; }
 
         public static readonly string CassieMessageDrop = "Drop in surface";
-        public static readonly string CassieTooMuchStealing = "";
+        public static readonly string CassieTooMuchStealing = "Too Much Supplys Taken By SCPs";
+        public static readonly string CassieTooMuchStealingSub = "Too Much Supplies Taken By SCPs";
 
         private static SupplyDrop CurrentDrop = null;
         private static CoroutineHandle _handle;
@@ -88,7 +89,7 @@ namespace KE.Map.Surface.SupplyDrops
 
             if (Show)
             {
-                Cassie.Message(CassieMessageDrop);
+                //Cassie.Message(CassieMessageDrop);
             }
 
             foreach (var p in primitives)
@@ -102,7 +103,7 @@ namespace KE.Map.Surface.SupplyDrops
         public static void OnRoundStarted()
         {
             _spawnTime = Stopwatch.StartNew();
-            //_nextSpawn = TimeSpawn;
+            _nextSpawn = TimeSpawn;
 
             _handle = Timing.RunCoroutine(Loop());
         }
@@ -115,13 +116,13 @@ namespace KE.Map.Surface.SupplyDrops
             {
                 if (_spawnTime.Elapsed > _nextSpawn)
                 {
-                    _nextSpawn += new TimeSpan(0,0,30);
+                    _nextSpawn += TimeSpawn;
                     if(CurrentDrop == null)
                     {
                         SpawnRandom();
                     }
                         
-                    Log.Debug("next spawn " + _nextSpawn);
+                    Log.Info("next spawn " + _nextSpawn);
                 }
                 notmax = list.Count <= MaxSupplyDrop;
                 yield return Timing.WaitForSeconds(RefreshRate);
@@ -132,7 +133,7 @@ namespace KE.Map.Surface.SupplyDrops
         {
             //Todo random lol
             Vector3 spawnloc = SpawnPositions.GetRandomValue();
-            Log.Debug($"spawning drop at {spawnloc}");
+            Log.Info($"spawning drop at {spawnloc}");
             SupplyDrop soup = new(spawnloc);
 
 
@@ -227,7 +228,7 @@ namespace KE.Map.Surface.SupplyDrops
             Log.Debug("scps got it!");
             foreach(Player p in Player.List.Where(p => p.IsScp))
             {
-                float healthAdded = p.MaxHealth * 1.3f;
+                float healthAdded = p.MaxHealth * 1.2f;
                 p.MaxHealth += healthAdded;
                 p.Health += healthAdded;
                 
@@ -236,7 +237,7 @@ namespace KE.Map.Surface.SupplyDrops
 
             if (_scpSteal >= ScpStealLimit)
             {
-                Cassie.Message(CassieTooMuchStealing);
+                Cassie.MessageTranslated(CassieTooMuchStealing,CassieTooMuchStealingSub);
                 Warhead.Start(true, true);
                 _spawnTime.Stop();
                 Timing.KillCoroutines(_handle);

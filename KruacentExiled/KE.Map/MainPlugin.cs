@@ -2,28 +2,20 @@
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
-using Exiled.API.Features.Roles;
-using Exiled.API.Features.Toys;
 using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
-using Interactables.Interobjects.DoorUtils;
 using KE.Map.Doors;
 using KE.Map.EasterEggs;
 using KE.Map.GamblingZone;
 using KE.Map.Surface.BlinkingBlocks;
 using KE.Map.Surface.SupplyDrops;
 using KE.Map.Surface.Turrets;
-using KE.Map.Utils;
 using KE.Utils.API.Models;
-using KE.Utils.API.Models.Blueprints;
 using MEC;
 using PlayerRoles;
-using PlayerRoles.FirstPersonControl;
-using Respawning;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
+using System.Linq;
 using UnityEngine;
 
 namespace KE.Map
@@ -37,19 +29,34 @@ namespace KE.Map
         public override void OnEnabled()
         {
 
-            Capybaras = new();
+            //Capybaras = new();
 
 
-            Capybaras.SubscribeEvents();
+            //Capybaras.SubscribeEvents();
             KE.Utils.API.Sounds.SoundPlayer.Instance.TryLoad();
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
             Exiled.Events.Handlers.Server.RoundStarted += SupplyDrop.OnRoundStarted;
+            
+            //Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
+            //Turret.SubscribeEvents();
+
             //Exiled.Events.Handlers.Server.RoundStarted += SendFakePrimitives.Join;
-            if (Config.Debug)
-                models?.SubscribeEvents();
+            //models?.SubscribeEvents();
             
             Instance = this;
+        }
+
+        private void OnRoundStarted()
+        {
+
+            foreach(Player p in Player.List.Where(p => !p.IsNPC))
+            {
+
+                new Turret(p, RoleTypeId.ChaosConscript.GetRandomSpawnLocation().Position);
+            }
+
+            
         }
 
         public override void OnDisabled()
@@ -57,15 +64,12 @@ namespace KE.Map
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
             Exiled.Events.Handlers.Server.RoundStarted -= SupplyDrop.OnRoundStarted;
+            //Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             //Exiled.Events.Handlers.Server.RoundStarted -= SendFakePrimitives.Join;
-            Capybaras.UnsubscribeEvents();
-            if (Config.Debug)
-            {
-                models.UnsubscribeEvents();
-                models.DestroyInstance();
-            }
-
-            models.DestroyInstance();
+            //Capybaras.UnsubscribeEvents();
+            //Turret.UnsubscribeEvents();
+            //models.UnsubscribeEvents();
+            //models.DestroyInstance();
             Capybaras = null;
             Instance = null;
         }
@@ -75,7 +79,6 @@ namespace KE.Map
 
         private void OnGenerated()
         {
-            Turret t = new();
             Door lcz173 = Door.Get(Exiled.API.Enums.DoorType.Scp173Gate);
             HashSet<DroppableItem> normal = new()
             {
@@ -117,21 +120,16 @@ namespace KE.Map
             //var g = new GamblingRoom(lcz173, new(normal), -lcz173.Transform.forward * 5f);
             
             g.SubscribeEvents();
-
+            /*
 
             if (Config.Debug)
             {
                 var door = KEDoor.Create(null, RoleTypeId.Scp049.GetRandomSpawnLocation().Position, new());
-
                 var d2 = KEDoor.Create(null, RoleTypeId.Scp049.GetRandomSpawnLocation().Position + Vector3.forward * 2, new());
-
                 door.LinkOtherDoor(d2);
             }
 
-
             
-
-
             //Blinking Blocks
             HashSet<BlinkingBlock> list = new()
             {
@@ -140,7 +138,8 @@ namespace KE.Map
             };
             
             BlinkingBlocksGroup group = new(list);
-            //Timing.RunCoroutine(ShowPos());
+            Timing.RunCoroutine(ShowPos());
+            */
 
         }
 
@@ -148,10 +147,8 @@ namespace KE.Map
         {
             while (true)
             {
-                foreach(Player p in Player.List)
-                {
-                    Log.Debug($"{p.Id} position : "+p.Position);
-                }
+
+
                 yield return Timing.WaitForSeconds(2);
             }
         }

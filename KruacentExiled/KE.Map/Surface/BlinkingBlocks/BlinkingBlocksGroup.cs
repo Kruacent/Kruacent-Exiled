@@ -55,7 +55,7 @@ namespace KE.Map.Surface.BlinkingBlocks
                 {
                     b.Switch(Color);
                 }
-                Log.Debug("switch to "+Color.ToString());
+                //Log.Debug("switch to "+Color.ToString());
                 Color = GetNewColor();
             }
         }
