@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.Items", "KE.Items\KE.Items.csproj", "{2FE04C4D-7FA1-4EC5-A8AF-618EDE0C037C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.Utils", "KE.Utils\KE.Utils.csproj", "{DFEF41B3-5BD3-428A-A7BA-7A490E65C71F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.Misc", "KE.Misc\KE.Misc.csproj", "{CD822DB2-756E-4887-93AB-2D2F16BF542C}"
 EndProject
