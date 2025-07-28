@@ -23,7 +23,7 @@ namespace KE.CustomRoles.CR.SCP
     {
 
 
-        public override string Description { get; set; } = "";
+        public override string Description { get; set; } = "You passive damage around you, and can lauch fireballs by pressing the stalk button";
         public override uint Id { get; set; } = 1084;
         public override string PublicName { get; set; } = "SCP-457";
         public override int MaxHealth { get; set; } = 3900;

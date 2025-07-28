@@ -40,6 +40,8 @@ namespace KE.CustomRoles
             
             CustomRole cr = AssignRole(GetAvailableCustomRole(player));
             Log.Debug($"{player.Id} : {cr.Name}");
+
+            //error assigning cr to a player with a gcr 
             cr?.AddRole(player);
         }
 
