@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace KE.Utils.KE.Utilsmap.API.Sounds
+namespace KE.Utils.API.Sounds
 {
     public class SoundPlayer
     {

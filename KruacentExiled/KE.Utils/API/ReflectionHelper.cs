@@ -37,7 +37,7 @@ namespace KE.Utils.API
         public static IEnumerable<T> GetObjects<T>(IEnumerable<Assembly> assemblies)
         {
             List<T> result = new();
-            foreach(Assembly assembly in assemblies)
+            foreach (Assembly assembly in assemblies)
             {
                 result.AddRange(GetObjects<T>(assembly));
             }
