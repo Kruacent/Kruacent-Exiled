@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Utils.KE.Utilsmap.API
+namespace KE.Utils.API
 {
     public static class ReflectionHelper
     {
