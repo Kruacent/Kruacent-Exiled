@@ -225,6 +225,7 @@ namespace KE.CustomRoles.CR.SCP
 
         private void OnAttacking(AttackingEventArgs ev)
         {
+            if (!Check(ev.Player)) return;
             ev.IsAllowed = false;
 
         }
