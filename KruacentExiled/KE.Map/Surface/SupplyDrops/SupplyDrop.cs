@@ -165,7 +165,7 @@ namespace KE.Map.Surface.SupplyDrops
             while (_detectingSomeone && s.Elapsed < TimeStaying)
             {
                 yield return Timing.WaitForSeconds(RefreshRate);
-                foreach (Player p in Player.List.Where(p=> p.IsAlive))
+                foreach (Player p in Player.List.Where(p=> p.IsAlive && p.Role != RoleTypeId.Scp106))
                 {
                     if (!playerAlreadyIn.Contains(p) && InRadius(p))
                     {
@@ -226,7 +226,7 @@ namespace KE.Map.Surface.SupplyDrops
         private void BuffScps()
         {
             Log.Debug("scps got it!");
-            foreach(Player p in Player.List.Where(p => p.IsScp))
+            foreach(Player p in Player.List.Where(p => p.IsScp && p.Role != RoleTypeId.Scp106))
             {
                 float healthAdded = p.MaxHealth * 1.2f;
                 p.MaxHealth += healthAdded;
