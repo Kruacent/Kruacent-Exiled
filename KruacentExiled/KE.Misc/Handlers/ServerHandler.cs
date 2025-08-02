@@ -19,7 +19,7 @@ namespace KE.Misc.Handlers
             }
 
             if (MainPlugin.Instance.Config.AutoElevator)
-                Timing.RunCoroutine(MainPlugin.Instance.AutoElevator.StartElevator());
+                MainPlugin.Instance.AutoElevator.StartLoop();
             MainPlugin.Instance.SCPBuff.StartBuff();
         }
     }
