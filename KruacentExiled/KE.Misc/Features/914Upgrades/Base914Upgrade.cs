@@ -48,12 +48,17 @@ namespace KE.Misc.Features._914Upgrades
         }
 
         /// <summary>
-        /// Check luck with a differente value than <see cref="Chance"/>
+        /// Check luck with a different value than <see cref="Chance"/>
         /// </summary>
         /// <returns>true if it passed the luck check ; false otherwise</returns>
         protected bool LuckCheck(float chance)
         {
-            return UnityEngine.Random.Range(0f, 100f) < Mathf.Clamp(chance, 0f, 100f);
+            float wanted = Mathf.Clamp(chance, 0f, 100f);
+            float random = UnityEngine.Random.Range(0f, 100f);
+
+            Log.Debug($"{random} < {wanted} : {random < wanted} ");
+
+            return random < wanted ;
         }
 
     }

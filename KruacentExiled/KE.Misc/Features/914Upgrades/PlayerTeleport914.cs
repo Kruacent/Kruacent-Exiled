@@ -2,6 +2,7 @@
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Scp914;
 using KE.Utils.Extensions;
+using MEC;
 using PlayerRoles;
 using Scp914;
 using System;
@@ -21,7 +22,7 @@ namespace KE.Misc.Features._914Upgrades
         {
             Log.Debug("Upgrade");
             Player player = ev.Player;
-            Room room;
+            Room room = null;
             if (ev.KnobSetting == Scp914KnobSetting.Fine && LuckCheck(1))
             {
                 try
@@ -33,22 +34,31 @@ namespace KE.Misc.Features._914Upgrades
                     room = Room.Random(ZoneType.Entrance);
                 }
                 
-                if(room != null)
-                    player.Teleport(room);
+                
             }
             if(ev.KnobSetting == Scp914KnobSetting.Coarse && LuckCheck(25))
             {
                 try
                 {
-                    room = ZoneType.Entrance.RandomSafeRoom();
+                    room = ZoneType.LightContainment.RandomSafeRoom();
                 }
                 catch (Exception)
                 {
                     room = Room.Random(ZoneType.LightContainment);
                 }
-                if (room != null)
+            }
+
+            if (room != null)
+            {
+                //idk why but need a delay
+                Timing.CallDelayed(1f, delegate
+                {
+                    Log.Debug($"teleporting {player.Nickname} to {room.Name}");
                     player.Teleport(room);
-            } 
+                });
+                
+            }
+                
 
 
         }
