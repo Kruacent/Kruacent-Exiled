@@ -39,13 +39,11 @@ namespace KE.CustomRoles.CR.MTF
           { AmmoType.Nato9, 100}
         };
 
-
-        public override List<CustomAbility> CustomAbilities { get; set; } = new()
+        public override HashSet<Type> Abilities { get; } = new()
         {
-            new SelectPosition(),
-            new Airstrike()
+            typeof(SelectPosition),
+            typeof(Airstrike)
         };
-
 
 
     }

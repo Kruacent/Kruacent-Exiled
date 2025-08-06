@@ -4,21 +4,25 @@ using Exiled.API.Interfaces;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Server;
 using HarmonyLib;
+using KE.CustomRoles.API.Features;
 using KE.CustomRoles.Settings;
 using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
+using Microsoft.Win32;
 using System;
+using System.Linq;
 
 
 namespace KE.CustomRoles
 {
     public class MainPlugin : Plugin<Config,Translations>
     {
-        public override string Name { get; } = "KE.CustomRoles";
+        public override string Name => "KE.CustomRoles";
+        public override string Prefix => "KE.CR";
         public override string Author => "Patrique & OmerGS";
         public override Version Version => new(1, 1, 0);
         public static MainPlugin Instance;
-        private Controller _controller;
+        public static Config Configs => Instance?.Config;
         public static readonly HintPlacement CRHint = new(0, 750);
         public static readonly HintPlacement CREffect = new(700, 300);
         public static readonly HintPlacement Abilities = new(0, 900,HintServiceMeow.Core.Enum.HintAlignment.Left);
@@ -32,14 +36,14 @@ namespace KE.CustomRoles
         {
             
             Instance = this;
-            _controller = new Controller();
             _settingHandler = new();
 
             Harmony = new(Name);
             Harmony.PatchAll();
             SettingHandler.SubscribeEvents();
+            KEAbilities.Register(Assembly);
             CustomRole.RegisterRoles(false,null,true,Assembly);
-            this.SubscribeEvents();
+            SubscribeEvents();
 
         }
 
@@ -50,9 +54,10 @@ namespace KE.CustomRoles
             SettingHandler.UnsubscribeEvents();
             Harmony.UnpatchAll();
 
-            this.UnsubscribeEvents();
+            CustomAbility.UnregisterAbilities();
+            KEAbilities.Unregister();
+            UnsubscribeEvents();
             _settingHandler = null;
-            _controller = null;
             Instance = null;
         }
 
@@ -70,13 +75,13 @@ namespace KE.CustomRoles
 
         public void CustomRoleImplement()
         {
-            _controller.GiveRole(Player.List);
+            KECustomRole.GiveRole(Player.List);
             
         }
 
         public void CustomRoleRespawning(RespawnedTeamEventArgs ev)
         {
-            _controller.GiveRole(ev.Players);
+            KECustomRole.GiveRole(ev.Players);
         }
     }
 }

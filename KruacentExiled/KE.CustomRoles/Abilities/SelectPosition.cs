@@ -1,6 +1,8 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.CustomRoles.API.Features;
+using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,24 +12,23 @@ using UnityEngine;
 
 namespace KE.CustomRoles.Abilities
 {
-    [CustomAbility]
-    public class SelectPosition : ActiveAbility
+    public class SelectPosition : KEAbilities
     {
-        public override string Name { get; set; } = "SetPosition";
+        public override string Name { get; } = "SetPosition";
 
-        public override string Description { get; set; } = "Select the current position for another ability";
+        public override string Description { get;  } = "Select the current position for another ability";
 
-        public override float Duration { get; set; } = 0f;
-
-        public override float Cooldown { get; set; } = 0;
-
+        public override int Id => 2000;
+        public override float Cooldown { get; } = 0;
 
         private static Dictionary<Player, Vector3> SelectedTarget = new();
 
         protected override void AbilityUsed(Player player)
         {
             
-            if (SelectedPlayers.Contains(player))
+
+
+            if (SelectedTarget.ContainsKey(player))
             {
                 SelectedTarget[player] = player.Position;
             }

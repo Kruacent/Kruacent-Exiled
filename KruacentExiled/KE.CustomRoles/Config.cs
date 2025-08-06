@@ -11,5 +11,7 @@ namespace KE.CustomRoles
     {
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = true;
+
+        public int HeaderId { get; set; } = 1000;
     }
 }

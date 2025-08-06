@@ -1,7 +1,9 @@
-﻿using Exiled.API.Enums;
+﻿using Discord;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Pools;
+using Exiled.CustomRoles.API;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.Commands.PluginManager;
 using Exiled.Events.EventArgs.Player;
@@ -10,8 +12,10 @@ using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl.Thirdperson;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
@@ -38,7 +42,7 @@ namespace KE.CustomRoles.API.Features
         public sealed override string CustomInfo { get; set; }
         public abstract string PublicName { get; set; }
 
-
+        public virtual HashSet<Type> Abilities { get; }
 
         public sealed override bool IgnoreSpawnSystem { get; set; } = true;
         protected override void ShowMessage(Player player)
@@ -60,7 +64,7 @@ namespace KE.CustomRoles.API.Features
             DisplayHandler.Instance.AddHint(MainPlugin.CRHint, player, msg, delay);
         }
 
-
+        
 
         protected void ShowEffectHint(Player player, string text)
         {
@@ -141,6 +145,15 @@ namespace KE.CustomRoles.API.Features
                 }
             }
 
+
+            if(Abilities != null)
+            {
+                foreach(Type ability in Abilities)
+                {
+                    KEAbilities.TryAddToPlayer(ability, player2);
+                }
+            }
+
             ShowMessage(player2);
             ShowBroadcast(player2);
             RoleAdded(player2);
@@ -182,7 +195,67 @@ namespace KE.CustomRoles.API.Features
 
 
 
-     
+
+        #region Spawn
+
+        /// <summary>
+        /// The chance to get a <see cref="KECustomRole"/> at the start or a respawn
+        /// </summary>
+        public static int Chance = 40;
+
+        private static CustomRole AssignRole(Dictionary<CustomRole, float> roleChances)
+        {
+            float totalWeight = roleChances.Values.Sum();
+            float randomValue = UnityEngine.Random.Range(0f, totalWeight);
+
+            foreach (var role in roleChances)
+            {
+                randomValue -= role.Value;
+                if (randomValue <= 0)
+                    return role.Key;
+            }
+
+            return roleChances.Keys.First();
+        }
+
+        public static Dictionary<CustomRole, float> GetAvailableCustomRole(Player player)
+        {
+            return Registered.Where(c => c.Role == player.Role || c is GlobalCustomRole cgr && cgr.Side == SideClass.Get(player.Role.Side)).ToDictionary(c => c, c => c.SpawnChance);
+        }
+
+        public static void GiveRandomRole(Player player)
+        {
+            if (player == null)
+                return;
+            if (UnityEngine.Random.Range(0, 101) > Chance)
+            {
+                Log.Debug("no luck");
+                return;
+            }
+
+            if(player.GetCustomRoles().Count != 0)
+            {
+                Log.Debug("already got a cr");
+                return;
+            }
+
+
+            CustomRole cr = AssignRole(GetAvailableCustomRole(player));
+            Log.Debug($"{player.Id} : {cr.Name}");
+
+            //error assigning cr to a player with a gcr 
+            cr?.AddRole(player);
+        }
+
+        public static void GiveRole(IEnumerable<Player> players)
+        {
+            foreach (Player p in players)
+            {
+                GiveRandomRole(p);
+            }
+        }
+        #endregion
+
 
     }
 }

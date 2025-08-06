@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.CustomRoles.API.Features;
+using KE.CustomRoles.API.Features;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -11,16 +12,15 @@ using UnityEngine;
 
 namespace KE.CustomRoles.Abilities
 {
-    [CustomAbility]
-    public class Convert : ActiveAbility
+    public class Convert : KEAbilities
     {
-        public override string Name { get; set; } = "Convert";
+        public override string Name { get;  } = "Convert";
 
-        public override string Description { get; set; } = "";
+        public override string Description { get; } = "";
 
-        public override float Duration { get; set; } = 0f;
+        public override int Id => 2004;
 
-        public override float Cooldown { get; set; } = 10*60f;
+        public override float Cooldown { get;  } = 10*60f;
 
         public float MaxDistance { get; set; } = 5f;
 

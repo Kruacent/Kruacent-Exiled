@@ -3,6 +3,7 @@ using Exiled.CustomRoles.API.Features;
 using KE.CustomRoles.Abilities;
 using KE.CustomRoles.API.Features;
 using PlayerRoles;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,9 +29,9 @@ namespace KE.CustomRoles.CR.Scientist
           $"{ItemType.Coin}",
         };
 
-        public override List<CustomAbility> CustomAbilities { get; set; } = new()
+        public override HashSet<Type> Abilities { get; } = new()
         {
-            new Trade()
+            typeof(Trade)
         };
     }
 }

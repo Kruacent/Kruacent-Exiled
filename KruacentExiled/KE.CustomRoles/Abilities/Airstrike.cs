@@ -4,6 +4,7 @@ using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.API.Features.Toys;
 using Exiled.CustomRoles.API.Features;
+using KE.CustomRoles.API.Features;
 using MapGeneration;
 using MEC;
 using System;
@@ -16,16 +17,14 @@ using Light = Exiled.API.Features.Toys.Light;
 
 namespace KE.CustomRoles.Abilities
 {
-    [CustomAbility]
-    public class Airstrike : ActiveAbility
+    public class Airstrike : KEAbilities
     {
-        public override string Name { get; set; } = "Airstrike";
+        public override string Name { get;  } = "Airstrike";
 
-        public override string Description { get; set; } = "Don't overuse it or your co-op will not be happy";
+        public override string Description { get;  } = "Don't overuse it or your co-op will not be happy";
 
-        public override float Duration { get; set; } = 0f;
-
-        public override float Cooldown { get; set; } = 0f;
+        public override int Id => 2001;
+        public override float Cooldown { get; } = 0f;
 
         public float height = 5;
 

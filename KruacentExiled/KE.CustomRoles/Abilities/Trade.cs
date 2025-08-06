@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.CustomRoles.API.Features;
+using KE.CustomRoles.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +11,15 @@ using UnityEngine;
 
 namespace KE.CustomRoles.Abilities
 {
-    [CustomAbility]
-    public class Trade : ActiveAbility
+    public class Trade : KEAbilities
     {
-        public override string Name { get; set; } = "Trade";
+        public override string Name { get; } = "Trade";
 
-        public override string Description { get; set; } = "T'es lien avec le casino t'as permis d'avoir un peu plus de pièce contre un item ou pire";
+        public override string Description { get; } = "T'es lien avec le casino t'as permis d'avoir un peu plus de pièce en échange d'un item ou de pire";
 
-        public override float Duration { get; set; } = 0f;
+        public override int Id => 2002;
 
-        public override float Cooldown { get; set; } = 1f;
+        public override float Cooldown { get; } = 1f;
 
         public static float MaxHealthPercent = .1f;
 
@@ -45,10 +45,6 @@ namespace KE.CustomRoles.Abilities
             }
 
             player.AddItem(ItemType.Coin);
-
-
-
-
         }
 
     }
