@@ -161,6 +161,7 @@ namespace KE.CustomRoles.API.Features
             Log.Debug($"player {player.Nickname} lost {this}");
             if (Players.Contains(player))
             {
+                //not removed when changing role
                 Show[player].Remove(this);
                 Players.Remove(player);
                 AbilityRemoved(player);
