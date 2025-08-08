@@ -24,7 +24,7 @@ namespace KE.CustomRoles.Abilities
         public override string Description { get;  } = "Don't overuse it or your co-op will not be happy";
 
         public override int Id => 2001;
-        public override float Cooldown { get; } = 0f;
+        public override float Cooldown { get; } = 60f;
 
         public float height = 5;
 

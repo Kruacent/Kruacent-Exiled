@@ -3,6 +3,9 @@ using Exiled.API.Features.Core.UserSettings;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.API;
+using KE.Utils.API.Displays.DisplayMeow;
+using MEC;
+using PlayerRoles.Subroutines;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,10 +39,13 @@ namespace KE.CustomRoles.API.Features
 
         private Dictionary<Player, DateTime> LastUsed = new();
         private static Dictionary<System.Type, KEAbilities> TypeToAbility { get; } = new();
-        private static HeaderSetting header = new(MainPlugin.Configs.HeaderId,"Abilities");
+        private static HeaderSetting header;
+        private static bool flagHeader = false;
         private SettingBase setting;
         public HashSet<Player> Players { get; } = new HashSet<Player>();
 
+
+        private static Dictionary<Player, List<KEAbilities>> Show = new();
 
         protected KEAbilities()
         {
@@ -51,14 +57,22 @@ namespace KE.CustomRoles.API.Features
 
             if(old == null)
             {
+                if (!flagHeader)
+                {
+                    header = new(MainPlugin.Configs.HeaderId, "Abilities");
+                    SettingBase.Register([header]);
+                    flagHeader = true;
+                }
                 Log.Debug("creating keybind");
-                setting = new KeybindSetting(Id, Name, UnityEngine.KeyCode.None,hintDescription:Description,header: header);
+                setting = new KeybindSetting(Id, Name, UnityEngine.KeyCode.None,hintDescription:Description);
+                
                 SettingBase.Register([setting]);
             }
             else
             {
                 Log.Error($"setting of {this} have the same id as {old.Label}");
             }
+            StartLoop();
             TypeToAbility.Add(GetType(), this);
             InternalSubscribeEvent();
         }
@@ -143,9 +157,12 @@ namespace KE.CustomRoles.API.Features
         
         public void RemoveAbility(Player player)
         {
+
             Log.Debug($"player {player.Nickname} lost {this}");
-            if (Players.Remove(player))
+            if (Players.Contains(player))
             {
+                Show[player].Remove(this);
+                Players.Remove(player);
                 AbilityRemoved(player);
             }
         }
@@ -156,6 +173,12 @@ namespace KE.CustomRoles.API.Features
             Log.Debug($"player {player.Nickname} got {this} ({result})");
             if (result)
             {
+                if(!Show.TryGetValue(player,out var _))
+                {
+                    Show.Add(player, new());
+                }
+                Show[player].Add(this);
+
                 AbilityAdded(player);
             }
             
@@ -293,6 +316,60 @@ namespace KE.CustomRoles.API.Features
         #endregion
 
 
+        #region gui
+
+
+        private static float UpdateTime = 1f;
+        private static bool flag = false;
+        private static void StartLoop()
+        {
+            if (!flag)
+            {
+                Timing.RunCoroutine(Loop());
+                flag = true;
+            }
+        }
+        private static IEnumerator<float> Loop()
+        {
+            while (true)
+            {
+                UpdateAllGUI();
+                yield return Timing.WaitForSeconds(UpdateTime);
+            }
+        }
+        private static void UpdateAllGUI()
+        {
+            foreach(Player player in Show.Keys)
+            {
+                UpdateGUI(player);
+            }
+        }
+        private static void UpdateGUI(Player player)
+        {
+            string msg = "";
+
+            foreach (KEAbilities ability in Show[player])
+            {
+                msg += $"{ability.Name} ";
+                if (ability.CanUse(player,out var output))
+                {
+                    msg += "[READY]";
+                }
+                else
+                {
+                    DateTime dateTime = ability.LastUsed[player] + TimeSpan.FromSeconds(ability.Cooldown);
+                    msg += $"[{Math.Round((dateTime - DateTime.Now).TotalSeconds, 0)}s]";
+                }
+
+
+
+                msg += "\n";
+            }
+            DisplayHandler.Instance.AddHint(MainPlugin.Abilities, player, msg, 1f);
+        }
+
+
+        #endregion
 
         public override string ToString()
         {

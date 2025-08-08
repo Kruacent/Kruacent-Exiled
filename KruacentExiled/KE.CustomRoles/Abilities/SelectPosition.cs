@@ -19,7 +19,7 @@ namespace KE.CustomRoles.Abilities
         public override string Description { get;  } = "Select the current position for another ability";
 
         public override int Id => 2000;
-        public override float Cooldown { get; } = 0;
+        public override float Cooldown { get; } = 5f;
 
         private static Dictionary<Player, Vector3> SelectedTarget = new();
 
