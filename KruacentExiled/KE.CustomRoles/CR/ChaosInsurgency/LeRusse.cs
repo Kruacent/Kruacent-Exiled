@@ -29,12 +29,11 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
           $"{ItemType.KeycardChaosInsurgency}",
           $"{ItemType.GrenadeHE}",
           $"{ItemType.GrenadeHE}",
-          $"{ItemType.GrenadeHE}"
         };
 
         public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new Dictionary<AmmoType, ushort>()
         {
-          { AmmoType.Ammo44Cal, 100}
+          { AmmoType.Ammo44Cal, 18}
         };
     }
 }
