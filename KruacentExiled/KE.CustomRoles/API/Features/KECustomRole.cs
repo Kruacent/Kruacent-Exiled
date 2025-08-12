@@ -185,8 +185,15 @@ namespace KE.CustomRoles.API.Features
             player2.SendConsoleMessage(StringBuilderPool.Pool.ToStringReturn(stringBuilder), "green");
         }
 
+        public override void RemoveRole(Player player)
+        {
+            if (Abilities != null)
+            {
+                KEAbilities.TryRemoveFromPlayer(player);
+            }
+            base.RemoveRole(player);
+        }
 
-        
 
         /// <summary>
         /// The chance of having this role NOT the chance to have a role

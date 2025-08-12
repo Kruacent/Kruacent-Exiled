@@ -161,7 +161,6 @@ namespace KE.CustomRoles.API.Features
             Log.Debug($"player {player.Nickname} lost {this}");
             if (Players.Contains(player))
             {
-                //not removed when changing role
                 Show[player].Remove(this);
                 Players.Remove(player);
                 AbilityRemoved(player);
@@ -245,6 +244,15 @@ namespace KE.CustomRoles.API.Features
 
 
         }
+
+        public static void TryRemoveFromPlayer(Player player)
+        {
+            foreach(KEAbilities abilities in Registered)
+            {
+                abilities.RemoveAbility(player);
+            }
+        }
+
 
         public static bool CheckPressed(ServerSpecificSettingBase settingBase, int id)
         {
