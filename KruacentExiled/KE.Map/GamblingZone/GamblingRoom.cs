@@ -32,7 +32,7 @@ namespace KE.Map.GamblingZone
         {
             Init(door.Position,   lootTable,offset);
         }
-
+        
         internal GamblingRoom(Vector3 position, LootTable lootTable, Vector3? offset = null)
         {
             Init(position, lootTable, offset);
@@ -48,11 +48,11 @@ namespace KE.Map.GamblingZone
             _position = position + (offset ?? new Vector3());
             _list.Add(this);
             
-            _pickup = new InteractiblePickup(ItemType.Medkit, _position+ Vector3.up, new Vector3(1,0,1)*3, _pickupTime, new());
+            _pickup = new InteractiblePickup(ItemType.Medkit, _position, new Vector3(1,0,1)*3, _pickupTime, new());
             
             _pickup.AddAction(OnPickup);
 
-            //CreateModel(_position);
+            CreateModel(_position);
             _lootTable = lootTable;
         }
 
@@ -61,12 +61,11 @@ namespace KE.Map.GamblingZone
         {
             _model = new()
             {
-                Primitive.Create(PrimitiveType.Sphere,positionWithOffset,null,null,true,Color.red),
-                Primitive.Create(PrimitiveType.Cube,positionWithOffset,null,new(2,.5f,2),true)
+                Primitive.Create(PrimitiveType.Cube,positionWithOffset,null,null,true,Color.black),                
             };
             foreach(Primitive p in _model)
             {
-                p.Collidable = true;
+                p.Collidable = false;
             }
         }
 

@@ -115,7 +115,7 @@ namespace KE.Map
             };
 
 
-            var g = new GamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down*2, new(normal));
+            var g = new GamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, new(normal));
 
             //var g = new GamblingRoom(lcz173, new(normal), -lcz173.Transform.forward * 5f);
             
