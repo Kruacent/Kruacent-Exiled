@@ -16,8 +16,9 @@ namespace KE.Misc.Features.Auto079.Jobs
         private readonly List<Job> PriorityQueue = new();
         public NPC079 npc;
 
+        private CoroutineHandle loopHandle;
 
-        
+
 
 
         public Job defaultJob = new ScanZone();
@@ -31,7 +32,7 @@ namespace KE.Misc.Features.Auto079.Jobs
 
         public void StartLoop()
         {
-            Timing.RunCoroutineSingleton(QueueLoop(), handle, SingletonBehavior.AbortAndUnpause);
+            Timing.RunCoroutineSingleton(QueueLoop(), loopHandle, SingletonBehavior.AbortAndUnpause);
         }
         private IEnumerator<float> QueueLoop()
         {

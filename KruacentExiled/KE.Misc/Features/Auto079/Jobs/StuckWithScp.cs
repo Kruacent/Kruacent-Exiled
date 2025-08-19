@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace KE.Misc.Features.Auto079.Jobs
 {
-    public class StuckWithScp : Job
+    /*public class StuckWithScp : Job
     {
 
         protected override IEnumerator<float> Started()
@@ -33,5 +33,5 @@ namespace KE.Misc.Features.Auto079.Jobs
         }
 
 
-    }
+    }*/
 }

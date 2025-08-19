@@ -12,6 +12,7 @@ using KE.Misc.Features;
 using KE.Misc.Handlers;
 using Exiled.CustomRoles.API.Features;
 using KE.Misc.Features.CR;
+using LightContainmentZoneDecontamination;
 
 namespace KE.Misc
 {
