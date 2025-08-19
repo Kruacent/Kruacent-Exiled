@@ -10,7 +10,7 @@ using UnityEngine;
 namespace KE.CustomRoles.CR.Scientist
 {
     [CustomRole(RoleTypeId.Scientist)]
-    internal class GambleAddict : KECustomRole
+    public class GambleAddict : KECustomRole
     {
         public override string Description { get; set; } = "Tu es un <color=#FFFF7C>Gamble Addict</color> \nT'as trade ton kit et ta carte contre 2 pièces \nfais en bon usage";
         public override uint Id { get; set; } = 1043;
@@ -29,9 +29,9 @@ namespace KE.CustomRoles.CR.Scientist
           $"{ItemType.Coin}",
         };
 
-        public override HashSet<Type> Abilities { get; } = new()
+        public override HashSet<int> Abilities { get; } = new()
         {
-            typeof(Trade)
+            2002
         };
     }
 }

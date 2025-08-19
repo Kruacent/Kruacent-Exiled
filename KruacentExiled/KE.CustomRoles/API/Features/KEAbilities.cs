@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UserSettings.ServerSpecific;
+using UserSettings.UserInterfaceSettings;
 
 namespace KE.CustomRoles.API.Features
 {
@@ -37,8 +38,28 @@ namespace KE.CustomRoles.API.Features
         public abstract float Cooldown { get; }
         #endregion
 
+        public HashSet<KECustomRole> GetRoles
+        {
+            get
+            {
+                HashSet<KECustomRole> result = new();
+                foreach (KECustomRole cr in KECustomRole.KnownKECR)
+                {
+                    foreach(int abilityId in cr.Abilities)
+                    {
+                        KEAbilities ability = Get(abilityId);
+                        if (ability == this)
+                        {
+                            result.Add(cr);
+                        }
+                    }
+                }
+                return result;
+            }
+        }
         private Dictionary<Player, DateTime> LastUsed = new();
         private static Dictionary<System.Type, KEAbilities> TypeToAbility { get; } = new();
+        private static Dictionary<int, KEAbilities> IdToAbility { get; } = new();
         private static HeaderSetting header;
         private static bool flagHeader = false;
         private SettingBase setting;
@@ -53,6 +74,14 @@ namespace KE.CustomRoles.API.Features
         }
         public void Init()
         {
+            if (IdToAbility.ContainsKey(Id))
+            {
+                Log.Warn($"{Name} ({Id}) have the same id as {IdToAbility[Id].Name}. Skipping...");
+                return;
+            }
+
+
+
             SettingBase old = SettingBase.List.Where(s => s.Id == Id).FirstOrDefault();
 
             if(old == null)
@@ -65,14 +94,15 @@ namespace KE.CustomRoles.API.Features
                 }
                 Log.Debug("creating keybind");
                 setting = new KeybindSetting(Id, Name, UnityEngine.KeyCode.None,hintDescription:Description);
-                
                 SettingBase.Register([setting]);
             }
             else
             {
                 Log.Error($"setting of {this} have the same id as {old.Label}");
+                
             }
             StartLoop();
+            IdToAbility.Add(Id, this);
             TypeToAbility.Add(GetType(), this);
             InternalSubscribeEvent();
         }
@@ -124,6 +154,8 @@ namespace KE.CustomRoles.API.Features
                 UseAbility(player);
             }
         }
+
+
 
         private void OnVerified(VerifiedEventArgs ev)
         {
@@ -243,6 +275,16 @@ namespace KE.CustomRoles.API.Features
             return true;
 
 
+        }        
+        public static bool TryAddToPlayer(int abilityId,Player player)
+        {
+            if (!IdToAbility.TryGetValue(abilityId, out var ability)) return false;
+            
+
+            ability.AddAbility(player);
+            return true;
+
+
         }
 
         public static void TryRemoveFromPlayer(Player player)
@@ -324,6 +366,29 @@ namespace KE.CustomRoles.API.Features
         }
         #endregion
 
+        #region getters
+
+        public static KEAbilities Get(int id)
+        {
+            foreach(KEAbilities kEAbilities in Registered)
+            {
+                if (id == kEAbilities.Id)
+                {
+                    return kEAbilities;
+                }
+            }
+
+            return null;
+        }
+
+        public static bool TryGet(int id, out KEAbilities ability)
+        {
+            ability = Get(id);
+            return ability != null;
+        }
+
+
+        #endregion
 
         #region gui
 

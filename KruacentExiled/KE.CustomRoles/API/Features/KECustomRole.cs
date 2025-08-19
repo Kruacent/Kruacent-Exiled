@@ -38,11 +38,12 @@ namespace KE.CustomRoles.API.Features
         }
 
 
+        public static IEnumerable<KECustomRole> KnownKECR => Registered.Where(c => c is KECustomRole).Cast<KECustomRole>();
 
         public sealed override string CustomInfo { get; set; }
         public abstract string PublicName { get; set; }
 
-        public virtual HashSet<Type> Abilities { get; }
+        public virtual HashSet<int> Abilities { get; }
 
         public sealed override bool IgnoreSpawnSystem { get; set; } = true;
         protected override void ShowMessage(Player player)
@@ -148,41 +149,17 @@ namespace KE.CustomRoles.API.Features
 
             if(Abilities != null)
             {
-                foreach(Type ability in Abilities)
+                foreach(int abilityId in Abilities)
                 {
-                    KEAbilities.TryAddToPlayer(ability, player2);
+                    KEAbilities.TryAddToPlayer(abilityId, player2);
                 }
             }
 
+
             ShowMessage(player2);
-            ShowBroadcast(player2);
             RoleAdded(player2);
             player2.UniqueRole = Name;
             player2.TryAddCustomRoleFriendlyFire(Name, CustomRoleFFMultiplier);
-            if (string.IsNullOrEmpty(ConsoleMessage))
-            {
-                return;
-            }
-
-            StringBuilder stringBuilder = StringBuilderPool.Pool.Get();
-            stringBuilder.AppendLine(Name);
-            stringBuilder.AppendLine(Description);
-            stringBuilder.AppendLine();
-            stringBuilder.AppendLine(ConsoleMessage);
-            List<CustomAbility> customAbilities = CustomAbilities;
-            if (customAbilities != null && customAbilities.Count > 0)
-            {
-                stringBuilder.AppendLine(AbilityUsage);
-                stringBuilder.AppendLine("Your custom abilities are:");
-                for (int i = 1; i < CustomAbilities.Count + 1; i++)
-                {
-                    stringBuilder.AppendLine($"{i}. {CustomAbilities[i - 1].Name} - {CustomAbilities[i - 1].Description}");
-                }
-
-                stringBuilder.AppendLine("You can keybind the command for this ability by using \"cmdbind .special KEY\", where KEY is any un-used letter on your keyboard. You can also keybind each specific ability for a role in this way. For ex: \"cmdbind .special g\" or \"cmdbind .special bulldozer 1 g\"");
-            }
-
-            player2.SendConsoleMessage(StringBuilderPool.Pool.ToStringReturn(stringBuilder), "green");
         }
 
         public override void RemoveRole(Player player)
@@ -208,7 +185,19 @@ namespace KE.CustomRoles.API.Features
         /// <summary>
         /// The chance to get a <see cref="KECustomRole"/> at the start or a respawn
         /// </summary>
-        public static int Chance = 40;
+        public static int Chance
+        {
+            get
+            {
+                return chance;
+            }
+            set
+            {
+                chance = Mathf.Clamp(value, 0, 100);
+            }
+        }
+
+        private static int chance = 40;
 
         private static CustomRole AssignRole(Dictionary<CustomRole, float> roleChances)
         {
