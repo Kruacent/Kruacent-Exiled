@@ -115,7 +115,7 @@ namespace KE.CustomRoles.API.Features
             {
                 foreach (int abilityId in Abilities)
                 {
-                    KEAbilities.TryAddToPlayer(abilityId, player2);
+                    KEAbilities.TryAddToPlayer(abilityId, player);
                 }
             }
 
