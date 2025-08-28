@@ -111,39 +111,18 @@ namespace KE.CustomRoles.API.Features
             player.CustomInfo = $"{player.CustomName}\n{CustomInfo}";
             player.InfoArea &= ~(PlayerInfoArea.Role | PlayerInfoArea.Nickname);
 
-            if (CustomAbilities != null)
+            if (Abilities != null)
             {
-                foreach (CustomAbility ability in CustomAbilities)
-                    ability.AddAbility(player);
+                foreach (int abilityId in Abilities)
+                {
+                    KEAbilities.TryAddToPlayer(abilityId, player2);
+                }
             }
+
 
             ShowMessage(player);
-            RoleAdded(player);
+
             player.UniqueRole = Name;
-            player.TryAddCustomRoleFriendlyFire(Name, CustomRoleFFMultiplier);
-
-            if (!string.IsNullOrEmpty(ConsoleMessage))
-            {
-                StringBuilder builder = StringBuilderPool.Pool.Get();
-
-                builder.AppendLine(Name);
-                builder.AppendLine(Description);
-                builder.AppendLine();
-                builder.AppendLine(ConsoleMessage);
-
-                if (CustomAbilities?.Count > 0)
-                {
-                    builder.AppendLine(AbilityUsage);
-                    builder.AppendLine("Your custom abilities are:");
-                    for (int i = 1; i < CustomAbilities.Count + 1; i++)
-                        builder.AppendLine($"{i}. {CustomAbilities[i - 1].Name} - {CustomAbilities[i - 1].Description}");
-
-                    builder.AppendLine(
-                        "You can keybind the command for this ability by using \"cmdbind .special KEY\", where KEY is any un-used letter on your keyboard. You can also keybind each specific ability for a role in this way. For ex: \"cmdbind .special g\" or \"cmdbind .special bulldozer 1 g\"");
-                }
-
-                player.SendConsoleMessage(StringBuilderPool.Pool.ToStringReturn(builder), "green");
-            }
         }
         public override void RemoveRole(Player player)
         {
