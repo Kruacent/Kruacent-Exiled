@@ -2,6 +2,7 @@
 using Exiled.API.Features.Core.UserSettings;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
+using KE.CustomRoles.Settings;
 using KE.Utils.API;
 using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
@@ -12,6 +13,7 @@ using System.Linq;
 using System.Reflection;
 using UserSettings.ServerSpecific;
 using UserSettings.UserInterfaceSettings;
+using static PlayerList;
 
 namespace KE.CustomRoles.API.Features
 {
@@ -64,13 +66,15 @@ namespace KE.CustomRoles.API.Features
         private static bool flagHeader = false;
         private SettingBase setting;
         public HashSet<Player> Players { get; } = new HashSet<Player>();
+        public HashSet<Player> Selected { get; } = new();
 
 
-        private static Dictionary<Player, List<KEAbilities>> Show = new();
+
+        public static Dictionary<Player, List<KEAbilities>> PlayersAbility { get;} = new();
 
         protected KEAbilities()
         {
-
+            
         }
         public void Init()
         {
@@ -146,7 +150,8 @@ namespace KE.CustomRoles.API.Features
         {
             if (!CheckPressed(settingBase)) return;
             if (!Check(player)) return;
-            
+
+            if (!SettingHandler.Instance.GetMode(player)) return;
 
 
             if(CanUse(player,out string _))
@@ -186,14 +191,32 @@ namespace KE.CustomRoles.API.Features
 
         }
 
+
+        public void SelectAbility(Player player)
+        {
+            if (Selected.Add(player))
+            {
+                Log.Debug($"player {player.Nickname} selected ability {this}");
+                foreach (KEAbilities abilities in Registered.Where(a => a != this))
+                {
+                    abilities.UnselectAbility(player);
+                }
+            }
+        }
+
+        public void UnselectAbility(Player player)
+        {
+            Log.Debug($"player {player.Nickname} unselected ability {this}");
+            Selected.Remove(player);
+        }
         
         public void RemoveAbility(Player player)
         {
 
-            Log.Debug($"player {player.Nickname} lost {this}");
             if (Players.Contains(player))
             {
-                Show[player].Remove(this);
+                Log.Debug($"player {player.Nickname} lost {this}");
+                PlayersAbility[player].Remove(this);
                 Players.Remove(player);
                 AbilityRemoved(player);
             }
@@ -205,11 +228,11 @@ namespace KE.CustomRoles.API.Features
             Log.Debug($"player {player.Nickname} got {this} ({result})");
             if (result)
             {
-                if(!Show.TryGetValue(player,out var _))
+                if(!PlayersAbility.TryGetValue(player,out var _))
                 {
-                    Show.Add(player, new());
+                    PlayersAbility.Add(player, new());
                 }
-                Show[player].Add(this);
+                PlayersAbility[player].Add(this);
 
                 AbilityAdded(player);
             }
@@ -266,6 +289,17 @@ namespace KE.CustomRoles.API.Features
             return CheckPressed(settingBase, setting.Id);
         }
 
+        public static void UseSelected(Player player)
+        {
+            if(TryGetSelected(player,out var ability))
+            {
+                if (ability.CanUse(player, out string _))
+                {
+                    ability.UseAbility(player);
+                }
+            }
+        }
+
         public static bool TryAddToPlayer(Type typeAbility,Player player)
         {
             if (!TypeToAbility.TryGetValue(typeAbility, out var ability)) return false;
@@ -287,11 +321,37 @@ namespace KE.CustomRoles.API.Features
 
         }
 
+        public static void RemoveAllSelect(Player player)
+        {
+            if (!PlayersAbility.ContainsKey(player)) return;
+
+            foreach(KEAbilities ability in PlayersAbility[player])
+            {
+                ability.Selected.Remove(player);
+            }
+
+            UpdateGUI(player);
+        }
+
+        public static void SelectFirstAbility(Player player)
+        {
+            if(PlayersAbility.TryGetValue(player,out var list))
+            {
+                list[0].SelectAbility(player);
+
+                UpdateGUI(player);
+            }
+            
+        }
+
         public static void TryRemoveFromPlayer(Player player)
         {
             foreach(KEAbilities abilities in Registered)
             {
-                abilities.RemoveAbility(player);
+                if (abilities.Players.Contains(player))
+                {
+                    abilities.RemoveAbility(player);
+                }
             }
         }
 
@@ -387,13 +447,31 @@ namespace KE.CustomRoles.API.Features
             return ability != null;
         }
 
+        public static KEAbilities GetSelected(Player player)
+        {
+            foreach(KEAbilities ability in Registered)
+            {
+                if (ability.Selected.Contains(player))
+                {
+                    return ability;
+                }
+            }
+            return null;
+        }
+
+        public static bool TryGetSelected(Player player, out KEAbilities ability)
+        {
+            ability = GetSelected(player);
+            return ability != null;
+        }
+
 
         #endregion
 
         #region gui
 
 
-        private static float UpdateTime = 1f;
+        private static readonly float UpdateTime = 1;
         private static bool flag = false;
         private static void StartLoop()
         {
@@ -411,19 +489,25 @@ namespace KE.CustomRoles.API.Features
                 yield return Timing.WaitForSeconds(UpdateTime);
             }
         }
-        private static void UpdateAllGUI()
+        public static void UpdateAllGUI()
         {
-            foreach(Player player in Show.Keys)
+            foreach(Player player in PlayersAbility.Keys)
             {
                 UpdateGUI(player);
             }
         }
-        private static void UpdateGUI(Player player)
+        public static void UpdateGUI(Player player)
         {
             string msg = "";
 
-            foreach (KEAbilities ability in Show[player])
+            List<KEAbilities> allAbilities = PlayersAbility[player];
+
+            for (int i = 0; i < allAbilities.Count; i++)
             {
+
+
+                KEAbilities ability = allAbilities[i];
+
                 msg += $"{ability.Name} ";
                 if (ability.CanUse(player,out var output))
                 {
@@ -437,8 +521,21 @@ namespace KE.CustomRoles.API.Features
 
 
 
+                //Log.Debug($"ability {ability.Name} contain {ability.Selected.Count} ");
+                
+                if (ability.Selected.Contains(player))
+                {
+                    //todo replace with the settings
+                    msg += SettingHandler.baseArrow;
+                }
+
+
+
                 msg += "\n";
             }
+
+            //Log.Debug(msg);
+
             DisplayHandler.Instance.AddHint(MainPlugin.Abilities, player, msg, 1f);
         }
 

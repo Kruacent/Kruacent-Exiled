@@ -21,6 +21,7 @@
 		<Reference Include="UnityEngine.PhysicsModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll" />
 		<Reference Include="0Harmony" HintPath="$(EXILED_REFERENCES)\0Harmony.dll" />
 		<Reference Include="Pooling" HintPath="$(EXILED_REFERENCES)\Pooling.dll" />
+		<Reference Include="Unity.TextMeshPro" HintPath="$(EXILED_REFERENCES)\Unity.TextMeshPro.dll" />
 	</ItemGroup>
 
 	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">

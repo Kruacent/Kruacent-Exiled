@@ -153,6 +153,7 @@ namespace KE.CustomRoles.API.Features
                 {
                     KEAbilities.TryAddToPlayer(abilityId, player2);
                 }
+                KEAbilities.SelectFirstAbility(player2);
             }
 
 
