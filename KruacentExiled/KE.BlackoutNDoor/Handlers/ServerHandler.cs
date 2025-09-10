@@ -12,12 +12,9 @@ namespace KE.BlackoutNDoor.Handlers
         public int Cooldown { get; set; }
         internal double ChanceBO { get; set; } = MainPlugin.Instance.Config.InitialChanceBO;
         private static CoroutineHandle Handle;
-        internal void OnRoundStarted()
-        {
-            Log.Debug($"handle = {Handle}");
-            Timing.KillCoroutines(Handle);
-            Handle = Timing.RunCoroutine(MainPlugin.Instance.Controller.Update());
-            
-        }
+
+
+
+
     }
 }

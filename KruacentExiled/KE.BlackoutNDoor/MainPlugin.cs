@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using System;
 using System.ComponentModel;
 using Server = Exiled.Events.Handlers.Server;
+using KE.BlackoutNDoor.API.Features.RoundEffects;
 
 namespace KE.BlackoutNDoor
 {
@@ -13,35 +14,28 @@ namespace KE.BlackoutNDoor
         public override Version Version => new Version(1,0,0);
         public override string Name => "KE.BlackoutDoor";
         internal static MainPlugin Instance;
-        internal Controller Controller { get; private set; }
-
         public ServerHandler ServerHandler { get; private set; }
 
         public override void OnEnabled()
         {
             Instance = this;
-            Controller = new Controller();
             this.RegisterEvent();
         }
         public override void OnDisabled()
         {
 
             Instance = null;
-            Controller = null;
             this.UnregisterEvent();
         }
 
         private void RegisterEvent() 
         {
-            ServerHandler = new ServerHandler();
-            Server.RoundStarted += ServerHandler.OnRoundStarted;
+            RoundEffect.SubscribeEvents();
 
         }
         private void UnregisterEvent() 
         {
-            Server.RoundStarted -= ServerHandler.OnRoundStarted;
-
-            ServerHandler = null;
+            RoundEffect.UnsubscribeEvents();
         }
 
 
