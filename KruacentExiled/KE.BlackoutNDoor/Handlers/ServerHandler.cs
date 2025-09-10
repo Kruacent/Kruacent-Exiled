@@ -10,10 +10,6 @@ namespace KE.BlackoutNDoor.Handlers
     {
         [Obsolete()]
         public int Cooldown { get; set; }
-        internal double ChanceBO { get; set; } = MainPlugin.Instance.Config.InitialChanceBO;
-        private static CoroutineHandle Handle;
-
-
 
 
     }

@@ -14,7 +14,9 @@ namespace KE.BlackoutNDoor
         public override Version Version => new Version(1,0,0);
         public override string Name => "KE.BlackoutDoor";
         internal static MainPlugin Instance;
-        public ServerHandler ServerHandler { get; private set; }
+
+        [Obsolete()]
+        public ServerHandler ServerHandler { get; } = null;
 
         public override void OnEnabled()
         {
