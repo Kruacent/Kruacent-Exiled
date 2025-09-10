@@ -23,15 +23,11 @@ namespace KE.Misc.Features
             if (UnityEngine.Random.Range(0, 101) < MainPlugin.Instance.Config.ChanceClassDDoorGoesBoom)
             {
                 Log.Debug("ClassD's door exploded");
-                foreach (Door door in Door.List)
+                foreach (Door door in Door.List.Where(d => d.Type == DoorType.PrisonDoor))
                 {
-                    if (door.Type == DoorType.PrisonDoor)
+                    if (door is IDamageableDoor dBoyDoor && !dBoyDoor.IsDestroyed)
                     {
-                        if (door is IDamageableDoor dBoyDoor && !dBoyDoor.IsDestroyed)
-                        {
-                            dBoyDoor.Break();
-
-                        }
+                        dBoyDoor.Break();
                     }
                 }
             }

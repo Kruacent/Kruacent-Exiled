@@ -21,7 +21,7 @@ namespace KE.Misc.Utils
             {
                 return images;
             }
-
+            return null;
 
         }
 

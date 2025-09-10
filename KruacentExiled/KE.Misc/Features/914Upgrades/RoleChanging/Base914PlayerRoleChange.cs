@@ -29,7 +29,7 @@ namespace KE.Misc.Features._914Upgrades
             if (!LuckCheck(newRole.chance)) return;
             if (_upgradingPlayer.Contains(player)) return;
             
-            Log.Debug($"upgrading {player.Role}->{newRole.role}");
+            Log.Debug($"upgrading {player.Role.Type}->{newRole.role}");
 
 
             SetRole(player, newRole.role);

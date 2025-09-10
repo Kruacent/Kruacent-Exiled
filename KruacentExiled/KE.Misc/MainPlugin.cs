@@ -32,6 +32,8 @@ namespace KE.Misc
         internal SCPBuff SCPBuff { get; private set; }
         internal Spawn Spawn { get; private set; }
         internal FriendlyFire FriendlyFire { get; private set; }
+        internal AutoNukeAnnoucement AutoNukeAnnoucement { get; private set; }
+        
 
         public override void OnEnabled()
         {
@@ -44,13 +46,15 @@ namespace KE.Misc
             Spawn = new Spawn();
             SCPBuff = new SCPBuff();
             FriendlyFire = new();
+            AutoNukeAnnoucement = new();
             Candy = new Candy();
             Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
             Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
 
 
-
+            
             MiscFeature.SubscribeAllEvents();
+            Exiled.Events.Handlers.Server.RoundStarted += AutoNukeAnnoucement.OnRoundStarted;
             Exiled.Events.Handlers.Player.ChangingRole += SCPBuff.BecomingSCP;
             ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;
             Exiled.Events.Handlers.Player.Dying += ScpNoeDeathMessage;
@@ -63,6 +67,7 @@ namespace KE.Misc
         {
             ServerHandle.RoundStarted -= ServerHandler.OnRoundStarted;
             Exiled.Events.Handlers.Player.Dying -= ScpNoeDeathMessage;
+            Exiled.Events.Handlers.Server.RoundStarted -= AutoNukeAnnoucement.OnRoundStarted;
             MiscFeature.UnsubscribeAllEvents();
 
 
@@ -76,23 +81,13 @@ namespace KE.Misc
             SCPBuff = null;
             Spawn = null;
             AutoElevator = null;
+            AutoNukeAnnoucement = null;
             FriendlyFire = null;
             SurfaceLight = null;
             Instance = null;
         }
 
 
-        /// <summary>
-        /// C.A.S.S.I.E. announce 5 min before the autonuke
-        /// </summary>
-        internal IEnumerator<float> NukeAnnouncement()
-        {
-            Log.Debug("autonuke announcement : on");
-            
-            yield return Timing.WaitUntilTrue(() => 25 <= Round.ElapsedTime.TotalMinutes);
-            Cassie.MessageTranslated("Warning automatic warhead will detonate in 5 minutes", 
-                "Warning automatic warhead will detonate in <color=#FF0000>5</color> minutes");
-        }
 
         /// <summary>
         /// Lock SCP-173 in its cell for an amount of time determine by the number of player
@@ -152,7 +147,6 @@ namespace KE.Misc
         {
             
             Player player = ev.Player;
-            Log.Debug($"someone died = {player.UserId}");
 
             if (!player.UserId.Equals("76561199066936074@steam"))
                 return;
