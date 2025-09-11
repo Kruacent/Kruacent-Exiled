@@ -24,9 +24,9 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
 
         public override float SpawnChance { get; set; } = 100;
 
-        public override List<CustomAbility> CustomAbilities { get; set; } = new()
+        public override HashSet<int> Abilities { get; } = new()
         {
-
+            2004
         };
 
         protected override void RoleAdded(Player player)
