@@ -14,6 +14,7 @@ using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 using UnityEngine;
 using YamlDotNet.Core.Tokens;
 
@@ -22,6 +23,8 @@ namespace KE.Map.Surface.Turrets
 {
     public class Turret : IWorldSpace
     {
+        public static bool IsEnabled => MainPlugin.Configs.TurretEnabled;
+
         private readonly Npc npc;
         private readonly CoroutineHandle handle;
         public float Range { get; private set; } = 10;
@@ -62,7 +65,7 @@ namespace KE.Map.Surface.Turrets
 
         private static List<Turret> list = new();
 
-        public Turret(Player p,Vector3 position)
+        private Turret(Player p,Vector3 position)
         {
             Log.Debug($"player {p.Nickname} spawned turret");
             Id = list.Count;
@@ -94,6 +97,16 @@ namespace KE.Map.Surface.Turrets
             handle = Timing.RunCoroutine(Detect());
         }
 
+
+
+        public static Turret Create(Player owner, Vector3 position)
+        {
+            if (!IsEnabled) return null;
+
+            return new Turret(owner, position);
+
+
+        }
 
 
         private IEnumerator<float> Detect()
@@ -167,11 +180,13 @@ namespace KE.Map.Surface.Turrets
 
         public static void SubscribeEvents()
         {
+            if (!IsEnabled) return;
             Exiled.Events.Handlers.Server.EndingRound += OnEndingRound;
         }
 
         public static void UnsubscribeEvents()
         {
+            if (!IsEnabled) return;
             DestroyAll();
             Exiled.Events.Handlers.Server.EndingRound -= OnEndingRound;
 

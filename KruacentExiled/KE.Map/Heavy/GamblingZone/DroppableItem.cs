@@ -11,11 +11,11 @@ using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Toys;
 using KE.Map.Utils;
 
-namespace KE.Map.GamblingZone
+namespace KE.Map.Heavy.GamblingZone
 {
     public class DroppableItem : IEquatable<DroppableItem>
     {
-        private ItemType _item;
+        private readonly ItemType _item;
         internal ItemType Item { get { return _item; } }
         private int _chance;
         internal int Chance
@@ -23,13 +23,11 @@ namespace KE.Map.GamblingZone
             get { return _chance; }
             set
             {
-                if (_chance > 100) _chance = 100;
-                else if (_chance < 0) _chance = 0;
-                else _chance = value;
+                _chance = Mathf.Clamp(value, 0, 100);
             }
         }
 
-        private int _itemCap;
+        private int _itemCap = -1;
         internal int ItemCap
         {
             get { return _itemCap; }
@@ -48,32 +46,32 @@ namespace KE.Map.GamblingZone
 
         internal DroppableItem(ItemType item, int chance, int itemCap = -1)
         {
-            
+
             _item = item;
             Chance = chance;
             ItemCap = itemCap;
         }
-        public static implicit operator DroppableItem(ItemType d) => new(d,1,-1);
+        public static implicit operator DroppableItem(ItemType d) => new(d, 1, -1);
         public bool Equals(DroppableItem other)
         {
-            return other.Item == Item && other.Chance == Chance && other.ItemCap == this.ItemCap && this.CurrentCap == other.CurrentCap;
+            return other.Item == Item && other.Chance == Chance && other.ItemCap == ItemCap && CurrentCap == other.CurrentCap;
         }
 
-        internal Items GetItem()
+        public Items GetItem()
         {
             if (HasReachCap()) throw new Exception("Cap reached");
             CurrentCap++;
             return Items.Create(Item);
         }
 
-        internal bool HasReachCap()
+        public bool HasReachCap()
         {
             return CurrentCap >= ItemCap && ItemCap != -1;
         }
 
         public override string ToString()
         {
-            return Item.ToString();
+            return $"{Item.ToString()} : ({Chance}%) {CurrentCap}/{ItemCap}";
         }
     }
 }

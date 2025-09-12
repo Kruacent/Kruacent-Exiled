@@ -59,7 +59,7 @@ namespace KE.Map.Utils
 
         public void Destroy()
         {
-            UnsubscribEvent();
+            UnsubscribeEvent();
             _actions = null;
             _pickup.Destroy();
         }
@@ -68,10 +68,10 @@ namespace KE.Map.Utils
 
         ~InteractiblePickup()
         {
-            UnsubscribEvent();
+            UnsubscribeEvent();
         }
 
-        private void UnsubscribEvent()
+        private void UnsubscribeEvent()
         {
             Exiled.Events.Handlers.Player.PickingUpItem -= OnPickingUpItem;
         }
@@ -99,38 +99,30 @@ namespace KE.Map.Utils
 
         public static Vector3 GetPickupTrueSize(Pickup pickup)
         {
-            if (pickup?.GameObject == null)
-                return Vector3.zero;
-
-            Renderer renderer = pickup.GameObject.GetComponentInChildren<Renderer>();
-            Collider collider = pickup.GameObject.GetComponentInChildren<Collider>();
-
-            
-            if (renderer != null)
-                return renderer.bounds.size;
-
-            if (collider != null)
-                return collider.bounds.size;
-
-            return Vector3.zero;
-        }
-
+            return GetTrueSize(pickup.GameObject);
+        }        
         public Vector3 GetPickupTrueSize()
         {
-            if (_pickup.GameObject == null)
+            return GetTrueSize(_pickup.GameObject);
+        }
+
+        public static Vector3 GetTrueSize(GameObject gameObject)
+        {
+            if (gameObject == null)
                 return Vector3.zero;
 
-            Renderer renderer = _pickup.GameObject.GetComponentInChildren<Renderer>();
-            Collider collider = _pickup.GameObject.GetComponentInChildren<Collider>();
-
+            Renderer renderer = gameObject.GetComponentInChildren<Renderer>();
             if (renderer != null)
                 return renderer.bounds.size;
 
+            Collider collider = gameObject.GetComponentInChildren<Collider>();
             if (collider != null)
                 return collider.bounds.size;
 
             return Vector3.zero;
         }
+
+
 
 
         

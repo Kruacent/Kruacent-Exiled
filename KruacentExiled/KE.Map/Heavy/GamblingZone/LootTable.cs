@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
+using Exiled.API.Features.Pools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,29 +9,38 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace KE.Map.GamblingZone
+namespace KE.Map.Heavy.GamblingZone
 {
-    internal class LootTable
+    public class LootTable
     {
-        private HashSet<DroppableItem> _items = new HashSet<DroppableItem>()
-        {
-            new(ItemType.Jailbird,5,1),
-            new(ItemType.ParticleDisruptor,5,1),
-            new(ItemType.Radio,15),
-        };
+        public IReadOnlyCollection<DroppableItem> Items { get; }
 
+        /// <summary>
+        /// Create a <see cref="LootTable"/> with some testing items
+        /// </summary>
         public LootTable()
         {
+            Items = new HashSet<DroppableItem>()
+            {
+                new(ItemType.Jailbird,5,1),
+                new(ItemType.ParticleDisruptor,5,1),
+                new(ItemType.Radio,15),
+            };
+
         }
+
+        /// <summary>
+        /// Create a <see cref="LootTable"/> with customizable <see cref="DroppableItem"/>s
+        /// </summary>
         public LootTable(IEnumerable<DroppableItem> items)
         {
-            _items = items.ToHashSet();
+            Items = items.ToHashSet();
         }
 
         private DroppableItem ChooseRandomItem()
         {
             int totalWeight = 0;
-            foreach (DroppableItem drop in _items)
+            foreach (DroppableItem drop in Items)
             {
                 if (!drop.HasReachCap())
                     totalWeight += drop.Chance;
@@ -42,7 +52,7 @@ namespace KE.Map.GamblingZone
             int randValue = UnityEngine.Random.Range(0, totalWeight);
             int cumulativeSum = 0;
 
-            foreach (DroppableItem drop in _items)
+            foreach (DroppableItem drop in Items)
             {
                 if (!drop.HasReachCap())
                     cumulativeSum += drop.Chance;
@@ -52,11 +62,27 @@ namespace KE.Map.GamblingZone
             return null;
 
         }
+
         public Item GetRandomItem()
         {
             DroppableItem item = ChooseRandomItem();
             Log.Debug("random item =" + item);
             return item.GetItem();
+        }
+
+        ///<inheritdoc/>
+        public override string ToString()
+        {
+            StringBuilder builder = StringBuilderPool.Pool.Get();
+
+
+            foreach (DroppableItem item in Items)
+            {
+                builder.AppendLine(item.ToString());
+            }
+            string result = builder.ToString();
+            StringBuilderPool.Pool.Return(builder);
+            return result;
         }
     }
 }

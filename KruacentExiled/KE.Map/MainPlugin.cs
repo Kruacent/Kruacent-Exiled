@@ -7,7 +7,7 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using KE.Map.Doors;
 using KE.Map.EasterEggs;
-using KE.Map.GamblingZone;
+using KE.Map.Heavy.GamblingZone;
 using KE.Map.Surface.BlinkingBlocks;
 using KE.Map.Surface.SupplyDrops;
 using KE.Map.Surface.Turrets;
@@ -35,15 +35,11 @@ namespace KE.Map
             //Capybaras.SubscribeEvents();
             KE.Utils.API.Sounds.SoundPlayer.Instance.TryLoad();
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
-            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
-            Exiled.Events.Handlers.Server.RoundStarted += SupplyDrop.OnRoundStarted;
-            
-            //Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
+            GamblingRoom.SubscribeEvents();
+            //SupplyDrop.SubscribeEvents();
             //Turret.SubscribeEvents();
-
-            //Exiled.Events.Handlers.Server.RoundStarted += SendFakePrimitives.Join;
             //models?.SubscribeEvents();
-            
+
             Instance = this;
         }
 
@@ -53,19 +49,16 @@ namespace KE.Map
             foreach(Player p in Player.List.Where(p => !p.IsNPC))
             {
 
-                new Turret(p, RoleTypeId.ChaosConscript.GetRandomSpawnLocation().Position);
+                Turret.Create(p, RoleTypeId.ChaosConscript.GetRandomSpawnLocation().Position);
             }
-
-            
         }
 
         public override void OnDisabled()
         {
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
-            Exiled.Events.Handlers.Server.RoundStarted -= SupplyDrop.OnRoundStarted;
-            //Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
-            //Exiled.Events.Handlers.Server.RoundStarted -= SendFakePrimitives.Join;
+            GamblingRoom.UnsubscribeEvents();
+            //SupplyDrop.UnsubscribeEvents();
             //Capybaras.UnsubscribeEvents();
             //Turret.UnsubscribeEvents();
             //models.UnsubscribeEvents();
@@ -117,9 +110,8 @@ namespace KE.Map
 
             var g = new GamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, new(normal));
 
-            //var g = new GamblingRoom(lcz173, new(normal), -lcz173.Transform.forward * 5f);
             
-            g.SubscribeEvents();
+            //var g = new GamblingRoom(lcz173, new(normal), -lcz173.Transform.forward * 5f);
             /*
 
             if (Config.Debug)
@@ -143,20 +135,10 @@ namespace KE.Map
 
         }
 
-        private IEnumerator<float> ShowPos()
-        {
-            while (true)
-            {
-
-
-                yield return Timing.WaitForSeconds(2);
-            }
-        }
         
         private void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            foreach (var g in GamblingRoom.List)
-                g.UnsubscribeEvents();
+            
 
             foreach (var g in OldGamblingRoom.List)
                 g.UnsubscribeEvents();
@@ -169,5 +151,10 @@ namespace KE.Map
     {
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = true;
+        public bool SupplyDropEnabled { get; set; } = false;
+        public bool TurretEnabled { get; set; } = false;
+        public bool EasterEggEnabled { get; set; } = true;
+
+
     }
 }

@@ -17,6 +17,9 @@ namespace KE.Map.Surface.SupplyDrops
 {
     public class SupplyDrop : IPosition
     {
+
+        public static bool IsActivated => MainPlugin.Configs.SupplyDropEnabled;
+
         private static byte _scpSteal = 0;
 
         public const byte ScpStealLimit = 3;
@@ -98,6 +101,22 @@ namespace KE.Map.Surface.SupplyDrops
             }
             CurrentDrop = this;
             Timing.RunCoroutine(Detecting());
+        }
+
+
+
+
+        public static void SubscribeEvents()
+        {
+            if (!IsActivated) return;
+
+            Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
+        }
+
+        public static void UnsubscribeEvents()
+        {
+            if (!IsActivated) return;
+            Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
         }
 
         public static void OnRoundStarted()

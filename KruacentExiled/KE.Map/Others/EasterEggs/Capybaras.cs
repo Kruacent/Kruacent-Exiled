@@ -37,9 +37,6 @@ namespace KE.Map.EasterEggs
             //e
             _spinnyBaras.Add(new SpinnyBaras(_capy1));
 
-
-            var l = LabApi.Features.Wrappers.TextToy.Create(_capy1);
-            l.TextFormat = "Celui qui trouve tous les easters eggs gagne 5€ Paypal";
         }
     }
 }

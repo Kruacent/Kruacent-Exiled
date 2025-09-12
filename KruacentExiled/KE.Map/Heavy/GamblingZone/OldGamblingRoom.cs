@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace KE.Map.GamblingZone
+namespace KE.Map.Heavy.GamblingZone
 {
     public class OldGamblingRoom
     {
@@ -23,15 +23,15 @@ namespace KE.Map.GamblingZone
         private Vector3 _scale;
         private LootTable _lootTable;
 
-        internal OldGamblingRoom(Room room,Vector3 scale, LootTable lootTable, Vector3? offset = null)
+        internal OldGamblingRoom(Room room, Vector3 scale, LootTable lootTable, Vector3? offset = null)
         {
-            Init(room.Position,  scale, lootTable, offset);
+            Init(room.Position, scale, lootTable, offset);
         }
 
 
         internal OldGamblingRoom(Door door, Vector3 scale, LootTable lootTable, Vector3? offset = null)
         {
-            Init(door.Position,  scale, lootTable,offset);
+            Init(door.Position, scale, lootTable, offset);
         }
 
         internal OldGamblingRoom(Vector3 position, Vector3 scale, LootTable lootTable, Vector3? offset = null)
@@ -41,11 +41,11 @@ namespace KE.Map.GamblingZone
 
 
 
-        private void Init(Vector3 position,  Vector3 scale,LootTable lootTable,Vector3? offset = null)
+        private void Init(Vector3 position, Vector3 scale, LootTable lootTable, Vector3? offset = null)
         {
-            Log.Debug("position w/out offset "+position);
+            Log.Debug("position w/out offset " + position);
             _position = position + (offset ?? new Vector3());
-            Log.Debug("position w/ offset "+_position);
+            Log.Debug("position w/ offset " + _position);
             _scale = scale;
             _list.Add(this);
             _lootTable = lootTable;
@@ -93,5 +93,6 @@ namespace KE.Map.GamblingZone
             player.AddItem(item);
             player.DropItem(item);
         }
+
     }
 }
