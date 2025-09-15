@@ -150,7 +150,7 @@ namespace KE.Map
     public class Config : IConfig
     {
         public bool IsEnabled { get; set; } = true;
-        public bool Debug { get; set; } = true;
+        public bool Debug { get; set; } = false;
         public bool SupplyDropEnabled { get; set; } = false;
         public bool TurretEnabled { get; set; } = false;
         public bool EasterEggEnabled { get; set; } = true;
