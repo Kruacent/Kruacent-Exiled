@@ -135,7 +135,9 @@ namespace KE.Map
 
         }
 
-        
+        public override string Name => "KE.Map";
+        public override string Prefix => "KE.M";
+
         private void OnRoundEnded(RoundEndedEventArgs ev)
         {
             
