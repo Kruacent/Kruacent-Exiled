@@ -20,7 +20,8 @@ namespace KE.Misc
     public class MainPlugin : Plugin<Config>
     {
         public override string Author => "Patrique";
-        public override string Name => "KEMisc";
+        public override string Name => "KE.Misc";
+        public override string Prefix => "KE.Misc";
         public override Version Version => new Version(1, 1, 0);
         internal static MainPlugin Instance { get; private set; }
         private ServerHandler ServerHandler;
