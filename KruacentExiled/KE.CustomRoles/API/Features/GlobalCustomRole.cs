@@ -27,33 +27,6 @@ namespace KE.CustomRoles.API.Features
         public override bool KeepInventoryOnSpawn { get; set; } = true;
         public override bool RemovalKillsPlayer => false;
 
-        protected override void SubscribeEvents()
-        {
-            Exiled.Events.Handlers.Player.SpawningRagdoll += InternalSpawningRagdoll;
-
-            base.SubscribeEvents();
-        }
-
-        protected override void UnsubscribeEvents()
-        {
-            Exiled.Events.Handlers.Player.SpawningRagdoll -= InternalSpawningRagdoll;
-
-            base.UnsubscribeEvents();
-        }
-
-        private void InternalSpawningRagdoll(SpawningRagdollEventArgs ev)
-        {
-
-            //letting this event go disconnect everyone idk why
-            if (Check(ev.Player))
-            {
-                ev.IsAllowed = false;
-                Ragdoll.CreateAndSpawn(ev.Role, ev.Player.Nickname, ev.DamageHandlerBase, ev.Position, ev.Rotation);
-            }
-        }
-
-
-
         public override void AddRole(Player player)
         {
             SideEnum side = SideClass.Get(player.Role.Side);
@@ -121,7 +94,7 @@ namespace KE.CustomRoles.API.Features
 
 
             ShowMessage(player);
-
+            RoleAdded(player);
             player.UniqueRole = Name;
         }
         public override void RemoveRole(Player player)
