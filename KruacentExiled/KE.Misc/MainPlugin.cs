@@ -34,6 +34,7 @@ namespace KE.Misc
         internal Spawn Spawn { get; private set; }
         internal FriendlyFire FriendlyFire { get; private set; }
         internal AutoNukeAnnoucement AutoNukeAnnoucement { get; private set; }
+        internal AutoTesla AutoTesla { get; private set; }
         
 
         public override void OnEnabled()
@@ -48,6 +49,7 @@ namespace KE.Misc
             SCPBuff = new SCPBuff();
             FriendlyFire = new();
             AutoNukeAnnoucement = new();
+            AutoTesla = new();
             Candy = new Candy();
             Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
             Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
@@ -69,17 +71,18 @@ namespace KE.Misc
             ServerHandle.RoundStarted -= ServerHandler.OnRoundStarted;
             Exiled.Events.Handlers.Player.Dying -= ScpNoeDeathMessage;
             Exiled.Events.Handlers.Server.RoundStarted -= AutoNukeAnnoucement.OnRoundStarted;
+            AutoTesla.StopLoop();
             MiscFeature.UnsubscribeAllEvents();
 
 
             CustomRole.UnregisterRoles([typeof(Scp035)]);
-
 
             _914 = null;
             Candy = null;
             ClassDDoor = null;
             ServerHandler = null;
             SCPBuff = null;
+            AutoTesla = null;
             Spawn = null;
             AutoElevator = null;
             AutoNukeAnnoucement = null;

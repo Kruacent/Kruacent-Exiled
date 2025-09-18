@@ -22,6 +22,8 @@ namespace KE.Misc.Handlers
 
             if (MainPlugin.Instance.Config.AutoElevator)
                 MainPlugin.Instance.AutoElevator.StartLoop();
+
+            MainPlugin.Instance.AutoTesla.StartLoop();
             MainPlugin.Instance.SCPBuff.StartBuff();
 
 

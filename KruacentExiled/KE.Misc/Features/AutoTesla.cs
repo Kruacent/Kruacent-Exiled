@@ -1,25 +1,26 @@
 ﻿using Exiled.API.Features;
+using LabApi.Features.Wrappers;
 using MEC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Round = Exiled.API.Features.Round;
 
 namespace KE.Misc.Features
 {
     /// <summary>
     /// The elevator will random activate in the round
     /// </summary>
-    internal class AutoElevator
+    internal class AutoTesla
     {
         private CoroutineHandle handle;
-        ~AutoElevator()
+
+        public void StopLoop()
         {
             Timing.KillCoroutines(handle);
         }
-
-
         public void StartLoop()
         {
             handle = Timing.RunCoroutine(StartElevator());
@@ -29,22 +30,20 @@ namespace KE.Misc.Features
         /// </summary>
         private IEnumerator<float> StartElevator()
         {
-            //Log.Debug("elevator");
             while (!Round.IsEnded)
             {
-                foreach (Lift l in Lift.List)
+                foreach (Tesla tesla in Tesla.List)
                 {
-                    yield return Timing.WaitForSeconds(UnityEngine.Random.Range(30, 45));
-                    SendElevator(l);
+                    yield return Timing.WaitForSeconds(UnityEngine.Random.Range(120f,200f));
+                    tesla.Trigger();
+                    if(UnityEngine.Random.Range(0f,100f) <= 70f)
+                    {
+                        yield return Timing.WaitForSeconds(tesla.Base.windupTime);
+                        tesla.Trigger();
+                    }
+                    
                 }
             }
-        }
-
-
-        private void SendElevator(Lift e)
-        {
-            //Log.Debug($"{e.Name}");
-            e.TryStart(0, true);
         }
     }
 }
