@@ -21,7 +21,6 @@ namespace KE.CustomRoles.CR.Scientist
         public override bool KeepRoleOnChangingRole { get; set; } = false;
 
         public override float SpawnChance { get; set; } = 100;
-        public override Vector3 Scale { get; set; } = new Vector3(1, 1, 1);
 
         public override List<string> Inventory { get; set; } = new List<string>()
         {
