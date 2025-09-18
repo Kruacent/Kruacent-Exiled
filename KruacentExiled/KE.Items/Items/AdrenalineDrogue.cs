@@ -10,22 +10,29 @@ using Exiled.API.Features;
 using Exiled.API.Extensions;
 using UnityEngine;
 using CustomPlayerEffects;
+using KE.Items.Interface;
+using System.Linq;
+using KE.Items.Extensions;
+using KE.Items.Features;
 
 /// <inheritdoc />
 [CustomItem(ItemType.Adrenaline)]
-public class AdrenalineDrogue : CustomItem
+public class AdrenalineDrogue : KECustomItem, ILumosItem
 {
+    //seringue
     /// <inheritdoc/>
-    public override uint Id { get; set; } = 1402;
+    public override uint Id { get; set; } = 1042;
 
     /// <inheritdoc/>
     public override string Name { get; set; } = "DA-020";
 
     /// <inheritdoc/>
-    public override string Description { get; set; } = "La bonne drogue là, si vous le prenez vous êtes ienb pendant 20 secondes puis vous vous sentez pas bien !";
+    public override string Description { get; set; } = "you need to test it !";
 
     /// <inheritdoc/>
     public override float Weight { get; set; } = 0.65f;
+    public UnityEngine.Color Color { get; set; } = UnityEngine.Color.yellow;
+
 
     public List<Exiled.API.Features.Player> joueursSCP = new List<Exiled.API.Features.Player>();
 
@@ -44,6 +51,24 @@ public class AdrenalineDrogue : CustomItem
             {
                 Chance = 2,
                 Location = SpawnLocationType.Inside173Gate,
+            },
+        },
+
+        LockerSpawnPoints = new List<LockerSpawnPoint>
+        {
+            new LockerSpawnPoint()
+            {
+                Chance = 20,
+                UseChamber = true,
+                Type = LockerType.Misc,
+                Zone = ZoneType.Entrance,
+            },
+            new LockerSpawnPoint()
+            {
+                Chance = 25,
+                UseChamber = true,
+                Type = LockerType.Medkit,
+                Zone = ZoneType.HeavyContainment,
             },
         },
     };
@@ -66,7 +91,7 @@ public class AdrenalineDrogue : CustomItem
     {
         if (TryGet(ev.Item, out var result))
         {
-            if (result.Id == 19)
+            if (result.Id == Id)
             {
                 Timing.CallDelayed(0.5f, () =>
                 {
@@ -79,17 +104,33 @@ public class AdrenalineDrogue : CustomItem
 
     private IEnumerator<float> EffectAttribution(Exiled.API.Features.Player joueur)
     {
+        bool gasgas = false;
+
         /* EFFET DE LA DROGUE */
-        joueur.ShowHint("Vous êtes actuellement sous effet de la cocaïne liquide !");
-        joueur.EnableEffect<MovementBoost>(40, true);
+        joueur.ItemEffectHint("Vous êtes actuellement sous effet de la cocaïne liquide !");
+
+        var movementBoostEffect = joueur.ActiveEffects.FirstOrDefault(e => e is MovementBoost) as MovementBoost;
+
+        if (movementBoostEffect != null)
+        {
+            float currentIntensity = movementBoostEffect.Intensity;
+            joueur.EnableEffect<MovementBoost>(currentIntensity+50, true);
+            gasgas = true;
+        }
+        else
+        {
+            joueur.EnableEffect<MovementBoost>(50, true);
+        }
+
+
         joueur.EnableEffect<InsufficientLighting>(30, true);
-        joueur.EnableEffect<BodyshotReduction>(30, true);
+        joueur.EnableEffect<BodyshotReduction>(40, true);
         joueur.EnableEffect<Ghostly>(30, true);
         joueur.Health = 169;
 
         yield return Timing.WaitForSeconds(30);
 
-        joueur.ShowHint("Mince vous êtes perdu chez le papi Rian !");
+        joueur.ItemEffectHint("Mince vous êtes perdu chez le papi Rian !");
         joueur.Health = 9420;
 
         joueur.IsGodModeEnabled = true;
@@ -140,10 +181,16 @@ public class AdrenalineDrogue : CustomItem
 
         joueur.DisableAllEffects();
         joueur.EnableEffect<SilentWalk>(10);
-        joueur.EnableEffect<MovementBoost>(35);
+        if (gasgas)
+        {
+            joueur.EnableEffect<MovementBoost>(130, true);
+        } else
+        {
+            joueur.EnableEffect<MovementBoost>(30, true);
+        }
 
 
-        yield return Timing.WaitForSeconds(UnityEngine.Random.Range(180, 300));
+        yield return Timing.WaitForSeconds(UnityEngine.Random.Range(60, 120));
 
         if (joueur.IsAlive)
         {
@@ -151,7 +198,7 @@ public class AdrenalineDrogue : CustomItem
             switch (randomNumber)
             {
                 case 1:
-                    Log.Debug(joueur.Nickname + " a changé d'apparence !");
+                    Log.Debug(joueur.Nickname + " changed his skin !");
                     joueur.PlayShieldBreakSound();
 
                     joueur.ChangeAppearance(joueursSCP[0].Role);
@@ -165,14 +212,14 @@ public class AdrenalineDrogue : CustomItem
                     break;
                 case 2:
                     Log.Debug("Muet");
-                    joueur.ShowHint("Vous avez perdu votre langue ! (esperons que celle-ci repousse)");
+                    joueur.ItemEffectHint("You lost your ability to talk, (git good)");
                     joueur.Mute();
                     yield return Timing.WaitForSeconds(UnityEngine.Random.Range(30, 100));
-                    joueur.ShowHint("Je crois que c'est bon, ça a repoussé !");
+                    joueur.ShowHint("I think you found your ability");
                     joueur.UnMute();
                     break;
                 case 3:
-                    joueur.ShowHint("Vous êtes devenu du caoutchouc !");
+                    joueur.ItemEffectHint("You are caoutchouc man");
                     Exiled.API.Features.TeslaGate.IgnoredPlayers.Add(joueur);
                     joueur.SetScale(new Vector3(1.5f, 0.5f, 1.7f), Exiled.API.Features.Player.List);
                     break;
@@ -180,7 +227,7 @@ public class AdrenalineDrogue : CustomItem
                     Log.Debug("Let's go party");
                     foreach (var player in Exiled.API.Features.Player.List)
                     {
-                        player.ShowHint(joueur.Nickname + " à commencer une fête d'anniversaire !");
+                        player.ShowHint("It's " + joueur.Nickname + " birthday !");
                     }
 
                     float duration2 = 30f;
@@ -205,10 +252,11 @@ public class AdrenalineDrogue : CustomItem
                     break;
                 case 5:
                     Log.Debug("Paper");
-                    joueur.ShowHint("Bienvenue dans le monde des papiers. Évite les ciseaux !");
+                    joueur.ItemEffectHint("You are a paper ! Yippee !");
                     joueur.SetScale(new Vector3(1f, 0.5f, 1f), Exiled.API.Features.Player.List);
                     break;
             }
         }
+    
     }
 }

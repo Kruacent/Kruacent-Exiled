@@ -13,23 +13,38 @@ using CustomPlayerEffects;
 using System.Linq;
 using PlayerRoles;
 using KE.Items.Interface;
+using Exiled.CustomItems.API.EventArgs;
+using Exiled.Events.EventArgs.Scp914;
+using Exiled.API.Features.Items;
+using System.Data;
+using Exiled.API.Features.Pickups;
+using KE.Items.ItemEffects;
+using Scp914;
+using System.Collections.ObjectModel;
+using KE.Items.Features;
+using KE.Items.Core.Upgrade;
 
 /// <inheritdoc />
 [CustomItem(ItemType.Painkillers)]
-public class DivinePills : CustomItem, ILumosItem
+public class DivinePills : KECustomItem, ILumosItem, ISwichableEffect, IUpgradableCustomItem
 {
     /// <inheritdoc/>
-    public override uint Id { get; set; } = 1406;
+    public override uint Id { get; set; } = 1047;
 
     /// <inheritdoc/>
     public override string Name { get; set; } = "Divine Pills";
 
     /// <inheritdoc/>
-    public override string Description { get; set; } = "25% chance you die\n 75% you respawn someone";
+    public override string Description { get; set; } = "25% chance you die\n 75% you respawn someone\n";
 
     /// <inheritdoc/>
     public override float Weight { get; set; } = 0.65f;
     public UnityEngine.Color Color { get; set; } = UnityEngine.Color.yellow;
+    public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade { get; private set; } = new Dictionary<Scp914KnobSetting, UpgradeProperties>()
+        {
+            //very fine -> true divine pills 10%
+            { Scp914KnobSetting.VeryFine,new UpgradeProperties(10, 1050)}
+        };
 
     /// <inheritdoc/>
     public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
@@ -62,49 +77,30 @@ public class DivinePills : CustomItem, ILumosItem
 
     };
 
+    public CustomItemEffect Effect { get;set; }
+    public DivinePills()
+    {
+        Effect = new DivinePillsEffect();
+    }
+
     /// <inheritdoc/>
     protected override void SubscribeEvents()
     {
-        PlayerHandle.UsedItem += OnUsingItem;
+        PlayerHandle.UsedItem += OnUsedItem;
         base.SubscribeEvents();
     }
 
     /// <inheritdoc/>
     protected override void UnsubscribeEvents()
     {
-        PlayerHandle.UsedItem -= OnUsingItem;
+        PlayerHandle.UsedItem -= OnUsedItem;
         base.UnsubscribeEvents();
     }
 
-    private void OnUsingItem(UsedItemEventArgs ev)
+    private void OnUsedItem(UsedItemEventArgs ev)
     {
-        if (!Check(ev.Item))
-        {
-            return;
-        }
-        if (TryGet(ev.Item, out var result) && result.Id == Id)
-        {
-            Player player = ev.Player;
-            var random = Random.Range(0, 100);
-
-            if(Player.List.Where(x => x.Role == RoleTypeId.Spectator).Count() == 0)
-            {
-                player.ShowHint("No spectators to respawn");
-                return;
-            }
-
-            if (random <= 25)
-            {
-                player.Kill("unlucky bro");
-                return;
-            }
-            Player respawning = Player.List.Where(x => x.Role == RoleTypeId.Spectator).GetRandomValue();
-            respawning.Role.Set(player.Role);
-            if (random > 75)
-            {
-                respawning.Position = player.Position;
-            }
-        }
+        if (!Check(ev.Item)) return;
+        Effect.Effect(ev);
     }
 
 }
