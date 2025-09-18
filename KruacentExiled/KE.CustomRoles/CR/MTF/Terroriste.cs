@@ -37,5 +37,10 @@ namespace KE.CustomRoles.CR.MTF
         {
           { AmmoType.Nato556, 100}
         };
+
+        public override HashSet<int> Abilities { get; } = new()
+        {
+            2007
+        };
     }
 }
