@@ -1,22 +1,14 @@
-﻿using Exiled.CustomItems.API.Features;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Exiled.Events.EventArgs.Player;
 using KE.Items.ItemEffects;
-using KE.Utils.Quality.Models;
-using KE.Utils.Quality.Models.Examples;
-using MEC;
 using KE.Items.Features;
-using Exiled.API.Features.Toys;
-using KE.Utils.API.Models.Blueprints;
-using UnityEngine.Experimental.GlobalIllumination;
-using Exiled.API.Interfaces;
 using KE.Items.Items.PickupModels;
+using KE.Items.Interface;
+using Exiled.API.Features.Spawn;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.KeycardJanitor)]
+    [Exiled.API.Features.Attributes.CustomItem(ItemType.KeycardJanitor)]
     public class Mine : KECustomItem, ILumosItem, ISwichableEffect, ICustomPickupModel
     {
         public override uint Id { get; set; } = 1053;

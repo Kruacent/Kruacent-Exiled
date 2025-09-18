@@ -27,10 +27,10 @@ using VoiceChat.Networking;
 namespace KE.Items.Items
 {
     //[CustomItem(ItemType.SCP1576)]
-    [Obsolete("Scrapped - Can't make a good sound quality without external file")]
+    /*[Obsolete("Scrapped - Can't make a good sound quality without external file")]
     public class Scp7045 : KECustomItem
     {
-
+        /*
         private static readonly OpusDecoder _decoder = new();
         private static readonly OpusEncoder _encoder = new(OpusApplicationType.Voip);
         private static readonly Dictionary<Player, Speaker> _speakers = new();
@@ -226,4 +226,5 @@ namespace KE.Items.Items
             return rooms.Count > 0 ? rooms.GetRandomValue() : Room.Random();
         }
     }
+        */
 }

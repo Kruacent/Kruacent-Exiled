@@ -24,7 +24,7 @@ namespace KE.Items.Items
         public override float Weight { get; set; } = 1.5f;
         public override float FuseTime { get; set; } = 6f;
         public override bool ExplodeOnCollision { get; set; } = false;
-        public float DamageModifier { get; set; } = 3f;
+        public override float DamageModifier { get; set; } = 3f;
         public Color Color { get; set; } = Color.red;
 
 

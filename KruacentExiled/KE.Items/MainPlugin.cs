@@ -76,66 +76,6 @@ namespace KE.Items
             Instance = null;
         }
 
-        public void Pick(PickingUpItemEventArgs ev)
-        {
-            Pickup pickup = ev.Pickup;
-            {
-                Light val = pl[pickup];
-                if (val != null)
-                {
-                    val.UnSpawn();
-                    val.Destroy();
-                }
-                pl.Remove(pickup);
-            }
-        }
-        public void Drop(DroppedItemEventArgs ev)
-        {
-            Pickup pickup = ev.Pickup;
-            if (CustomItem.TryGet(pickup, out CustomItem item) && item is ILumosItem ci)
-            {
-                pl.Add(pickup, null);
-            }
-
-
-
-                foreach (var x in pl.ToList())
-                {
-                    if(CustomItem.TryGet(x.Key, out CustomItem cui) && cui is ILumosItem ci)
-                    {
-                        Light light = Light.Create(x.Key.Position, null, null, true, ci.Color);
-                        light.Intensity = 0.5f;
-                        Log.Debug("preif");
-                        if (x.Value != null)
-                        {
-                            Log.Debug("pre val");
-                            Light val = x.Value;
-                            Log.Debug($"destroy light {val.Position}");
-                            val.UnSpawn();
-                            Log.Debug("pre destroy");
-                            val.Destroy();
-                        }
-                        else
-                            Log.Debug("first cretate");
-                        Log.Debug("reasigne");
-                        pl[x.Key] = light;
-                        Log.Debug("post reasigne");
-                        //Log.Debug(x.Key.Position+";"+x.Value.Position);
-                    }
-                    else
-                    {
-                        Light val = x.Value;
-                        val.UnSpawn();
-                        val.Destroy();
-                        pl.Remove(x.Key);
-                    }
-                }
-                Log.Debug("waiting");
-                yield return Timing.WaitForSeconds(0.1f);
-            }
-            Log.Debug("end while");
-
-        }
-
+        
     }
 }

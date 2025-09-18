@@ -18,6 +18,7 @@ namespace KE.Items.PickupModels
     [Obsolete("scrapped",true)]
     internal class PickupQuality
     {
+        /*
         public const float RefreshRate = .1f;
         private readonly Dictionary<Pickup, Model> pl = new ();
         public void SubscribeEvents()
@@ -129,5 +130,6 @@ namespace KE.Items.PickupModels
         {
             return CustomItem.TryGet(Exiled.API.Features.Pickups.Pickup.Get(pickup), out CustomItem item) && item is ICustomPickupModel;
         }
+        */
     }
 }

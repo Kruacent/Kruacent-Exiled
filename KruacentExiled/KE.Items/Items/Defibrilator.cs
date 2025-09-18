@@ -30,8 +30,6 @@ public class Defibrilator : KECustomItem, ILumosItem
         DynamicSpawnPoints = new List<DynamicSpawnPoint>
         {
             new DynamicSpawnPoint() { Chance = 50, Location = SpawnLocationType.Inside079Secondary },
-            new DynamicSpawnPoint() { Chance = 20, Location = SpawnLocationType.InsideHidLower },
-            new DynamicSpawnPoint() { Chance = 20, Location = SpawnLocationType.InsideHidUpper },
         },
 
         LockerSpawnPoints = new List<LockerSpawnPoint>
