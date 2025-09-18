@@ -40,6 +40,7 @@ namespace KE.Items.ItemEffects
             wall.Collidable = true;
             wall.Visible = true;
             Timing.CallDelayed(10, () => {
+                wall.UnSpawn();
                 wall.Destroy();
             });
             Timing.CallDelayed(5, () =>

@@ -39,6 +39,7 @@ namespace KE.Items.Items
         public override string Description { get; set; } = "A weird looking radio";
         public override float Weight { get; set; } = 0.65f;
 
+        private AudioMessage _message;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 1,
@@ -58,6 +59,7 @@ namespace KE.Items.Items
             Exiled.Events.Handlers.Player.UsedItem += OnUsedItem;
             Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
             base.SubscribeEvents();
+
 
         }
         protected override void UnsubscribeEvents()
@@ -95,6 +97,7 @@ namespace KE.Items.Items
                 Log.Info("buffer : " + _recordingBuffer.ToArray().Count());
                 if (_recordingBuffer.Count > 0)
                 {
+                    Speaker speaker;
                     byte speakerid = (byte)ev.Player.Id;
 
 
@@ -106,6 +109,7 @@ namespace KE.Items.Items
                     Timing.RunCoroutine(PlayVoice([.. _recordingBuffer], (byte)ev.Player.Id, ev.Player));
                 }
 
+                item.StopTransmitting();
 
             }
         }
@@ -145,13 +149,19 @@ namespace KE.Items.Items
         {
             while (_isRecording)
             {
+                // Wait a short time before checking again
                 yield return Timing.WaitForSeconds(0.2f);
 
+                // If no voice data has been received for 0.5s, stop recording
                 if (Time.time - _lastVoiceTime >= 0.5f)
                 {
                     _isRecording = false;
                     Log.Info($"Final recorded voice message length: {_recordingBuffer.Count} samples.");
 
+                    float[] finalRecording = _recordingBuffer.ToArray();
+                    Log.Info($"Final recorded voice message length: {finalRecording.Length} samples.");
+
+                    //Timing.RunCoroutine(PlayVoice(finalRecording, speaker.Base.NetworkControllerId));
                 }
             }
 

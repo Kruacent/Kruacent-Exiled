@@ -4,6 +4,9 @@ using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Interfaces;
 using Exiled.Events.EventArgs.Item;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp173;
+using Exiled.Events.EventArgs.Scp939;
+using Exiled.Events.Handlers;
 using KE.Items.Features;
 using KE.Items.Items.Models;
 using MEC;
@@ -120,7 +123,7 @@ namespace KE.Items.Items
                     {
                         if (_affectedPlayers.Add(p))
                         {
-                            p.IsGodModeEnabled = true;
+                        p.IsGodModeEnabled = true;
                             Log.Debug("adding " + p.Id);
                         }
                         
@@ -130,13 +133,13 @@ namespace KE.Items.Items
                     {
                         if (_affectedPlayers.Remove(p))
                         {
-                            p.IsGodModeEnabled = false;
+                        p.IsGodModeEnabled = false;
                             Log.Debug("removing" + p.Id);
                         }
                     }
-                }
+                    }
                 yield return Timing.WaitForOneFrame;
-            }
+                }
             Log.Debug("ending effects");
             time.Stop();
 

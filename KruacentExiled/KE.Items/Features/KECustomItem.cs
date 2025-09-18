@@ -16,11 +16,13 @@ namespace KE.Items.Features
 
         protected override void ShowPickedUpMessage(Player player)
         {
+            Log.Debug("pickup");
             Message(this, player, true);
         }
 
         protected override void ShowSelectedMessage(Player player)
         {
+            Log.Debug("select");
             Message(this, player);
         }
 
