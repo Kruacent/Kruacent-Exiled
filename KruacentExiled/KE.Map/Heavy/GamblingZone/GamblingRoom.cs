@@ -4,6 +4,7 @@ using Exiled.API.Features.Items;
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Server;
 using KE.Map.Utils;
+using InteractableToy = LabApi.Features.Wrappers.InteractableToy;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,8 +18,27 @@ namespace KE.Map.Heavy.GamblingZone
 
 
         private HashSet<Primitive> _model;
-        public float PickupTime { get; } = 30;
-        private InteractiblePickup _pickup;
+        public const float BasePickupTime = 10;
+        public float PickupTime
+        {
+            get
+            {
+                return _interact?.InteractionDuration ?? BasePickupTime;
+            }
+            set
+            {
+                if(value < 1)
+                {
+                    _interact.InteractionDuration = 1;
+                }
+                else
+                {
+                    _interact.InteractionDuration = value;
+                }
+
+            }
+        }
+        private InteractableToy _interact;
         private Vector3 _position;
         private LootTable _lootTable;
 
@@ -48,11 +68,13 @@ namespace KE.Map.Heavy.GamblingZone
             _position = position + (offset ?? new Vector3());
             _list.Add(this);
 
-            _pickup = new InteractiblePickup(ItemType.Medkit, _position, new Vector3(4, 4, 4), PickupTime, new());
 
-            _pickup.AddAction(OnPickup);
-
+            _interact = InteractableToy.Create(_position, networkSpawn: false);
+            _interact.InteractionDuration = BasePickupTime;
+            
+            _interact.OnSearchAborted += OnPickup;
             CreateModel(_position);
+            _interact.Spawn();
             _lootTable = lootTable;
 
         }
@@ -89,20 +111,21 @@ namespace KE.Map.Heavy.GamblingZone
             {
                 p.Destroy();
             }
-            _pickup.Destroy();
+            _interact.OnSearchAborted -= OnPickup;
             _list.Remove(this);
         }
 
 
-        public void OnPickup(Player player)
+        public void OnPickup(LabApi.Features.Wrappers.Player player)
         {
-            if (player == null) return;
-            if (player.CurrentItem == null) return;
+            Player player2 = Player.Get(player);
+            if (player2 == null) return;
+            if (player2.CurrentItem == null) return;
             Item item = _lootTable.GetRandomItem();
-            player.CurrentItem.Destroy();
-            player.AddItem(item);
+            player2.CurrentItem.Destroy();
+            player2.AddItem(item);
 
-            player.DropItem(item, false);
+            player2.DropItem(item, false);
         }
         public static void DestroyAll()
         {
