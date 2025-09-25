@@ -30,8 +30,6 @@ namespace KE.Items.Features
         internal static void Message(CustomItem c, Player player, bool pickedUp = false)
         {
 
-
-
             StringBuilder builder = new();
 
             if (MainPlugin.Instance.SettingsHandler.GetPrefixes(player))
@@ -63,13 +61,19 @@ namespace KE.Items.Features
                 builder.AppendLine(c.Description);
                 if (c is IUpgradableCustomItem ci)
                 {
+                    builder.Append("<b>");
                     foreach (var a in ci.Upgrade)
                     {
-                        builder.AppendLine($"<b>{c.Name}</b>");
+                        builder.Append(a.Key);
+                        builder.Append(" (");
+                        builder.Append(a.Value.Chance);
+                        builder.Append("%) -> ???");
                     }
+                    builder.AppendLine("</b>");
                 }
 
             }
+
 
 
             float delay = MainPlugin.Instance.SettingsHandler.GetTime(player);

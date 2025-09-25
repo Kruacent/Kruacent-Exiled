@@ -1,5 +1,5 @@
 ﻿using Exiled.API.Features.Toys;
-using KE.Items.Items.PickupModels;
+using KE.Items.Features;
 using KE.Utils.API.Models.Blueprints;
 using KE.Utils.Quality.Models;
 using System;

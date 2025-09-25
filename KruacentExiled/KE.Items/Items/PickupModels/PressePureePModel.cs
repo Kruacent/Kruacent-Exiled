@@ -17,18 +17,20 @@ namespace KE.Items.Items.PickupModels
 
         public PressePureePModel(CustomItem customItem) : base(customItem) { }
 
-        protected override Vector3 PickupSize { get; set; } = new Vector3(.5f, 1.5f, .5f);
+        protected override bool HidePickup => true;
 
-
-        private static Vector3 manche = new Vector3(.05f, .06f, .1f);
+        private static Vector3 manche = new Vector3(.05f, .1f, .05f);
         private static Vector3 explosifCharge = new Vector3(.1f, .04f, .1f);
+
+        public static readonly Color32 colorManche = new Color32(84, 43, 11, 255);
+        public static readonly Color32 colorExplosif = new Color32(31, 31, 31, 255);
 
         protected override HashSet<AdminToyBlueprint> CreateModel()
         {
             HashSet<AdminToyBlueprint> model = new()
             {
-                AdminToyBlueprint.Create(Primitive.Create(PrimitiveType.Cylinder, Vector3.zero, null, manche,false,Color.red)),
-                AdminToyBlueprint.Create(Primitive.Create(PrimitiveType.Cylinder, new Vector3(0, .1f), null, explosifCharge,false,Color.black)),
+                AdminToyBlueprint.Create(Primitive.Create(PrimitiveType.Cylinder, Vector3.zero, null, manche,false,colorManche)),
+                AdminToyBlueprint.Create(Primitive.Create(PrimitiveType.Cylinder, new Vector3(0, 6f), null, explosifCharge,false,colorExplosif)),
             };
             return model;
             

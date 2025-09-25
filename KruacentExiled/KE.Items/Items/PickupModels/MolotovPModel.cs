@@ -17,13 +17,14 @@ namespace KE.Items.Items.PickupModels
 
         public MolotovPModel(CustomItem customItem) : base(customItem) { }
 
-        private Color bottleColor = Color.red;
+        protected override bool HidePickup => true;
+        private Color32 bottleColor = new Color32(110, 58, 13,230);
         protected override HashSet<AdminToyBlueprint> CreateModel()
         {
             HashSet<AdminToyBlueprint> model = new()
             {
-                AdminToyBlueprint.Create(Primitive.Create(PrimitiveType.Cylinder, Vector3.zero, null, new Vector3(.1f, 0.1f, .1f),false,bottleColor)),
-                AdminToyBlueprint.Create(Primitive.Create(PrimitiveType.Cylinder, new Vector3(0, 0.1f), null, new Vector3(.05f, .04f, .05f),false,bottleColor)),
+                AdminToyBlueprint.Create(Primitive.Create(PrimitiveType.Cylinder, Vector3.zero, null, new Vector3(.1f, 0.1f, .1f),false,bottleColor)), //big
+                AdminToyBlueprint.Create(Primitive.Create(PrimitiveType.Cylinder, new Vector3(0, 10f), null, new Vector3(.05f, .035f, .05f),false,bottleColor)),
             };
             return model;
             

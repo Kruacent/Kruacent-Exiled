@@ -9,7 +9,7 @@ using Exiled.API.Features.Spawn;
 namespace KE.Items.Items
 {
     [Exiled.API.Features.Attributes.CustomItem(ItemType.KeycardJanitor)]
-    public class Mine : KECustomItem, ILumosItem, ISwichableEffect, ICustomPickupModel
+    public class Mine : KECustomItem, ISwichableEffect, ICustomPickupModel
     {
         public override uint Id { get; set; } = 1053;
         public override string Name { get; set; } = "Mine";

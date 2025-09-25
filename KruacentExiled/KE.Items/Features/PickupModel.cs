@@ -4,10 +4,12 @@ using Exiled.API.Features.Toys;
 using Exiled.CustomItems.API.Features;
 using InventorySystem.Items.Pickups;
 using KE.Utils.API.Models.Blueprints;
+using InteractableToy = LabApi.Features.Wrappers.InteractableToy;
 using System.Collections.Generic;
 using UnityEngine;
+using LabPlayer = LabApi.Features.Wrappers.Player;
 
-namespace KE.Items.Items.PickupModels
+namespace KE.Items.Features
 {
     public abstract class PickupModel
     {
@@ -17,19 +19,22 @@ namespace KE.Items.Items.PickupModels
 
         private HashSet<AdminToyBlueprint> modelBlueprint = null;
         private Dictionary<ItemPickupBase, HashSet<AdminToy>> models;
+        private Dictionary<ItemPickupBase, HashSet<InteractableToy>> pickableItem;
 
 
         public PickupModel(CustomItem customItem)
         {
             KECI = customItem;
             models = new();
+            pickableItem = new();
             allModels.Add(this);
         }
 
 
         protected abstract HashSet<AdminToyBlueprint> CreateModel();
 
-        protected virtual Vector3 PickupSize { get; set; } = Vector3.one;
+        protected virtual bool HidePickup { get; } = false;
+
 
         public void SubscribeEvents()
         {
@@ -51,6 +56,14 @@ namespace KE.Items.Items.PickupModels
                     toy.Destroy();
                 }
             }
+
+            foreach (HashSet<InteractableToy> toys in pickableItem.Values)
+            {
+                foreach (InteractableToy toy in toys)
+                {
+                    toy.Destroy();
+                }
+            }
         }
 
         public bool Check(Pickup pickup)
@@ -65,9 +78,9 @@ namespace KE.Items.Items.PickupModels
 
         public static bool AnyCheck(Pickup pickup)
         {
-            foreach(PickupModel model in allModels)
+            foreach (PickupModel model in allModels)
             {
-                
+
                 if (model.Check(pickup))
                 {
                     return true;
@@ -81,18 +94,19 @@ namespace KE.Items.Items.PickupModels
 
             Pickup pickup = Pickup.Get(obj);
             if (!Check(pickup)) return;
-            if(modelBlueprint is null)
+            if (modelBlueprint is null)
             {
                 modelBlueprint = CreateModel();
             }
 
-            if(PickupSize != Vector3.one)
+            if (HidePickup)
             {
-                Log.Debug("set size to "+PickupSize);
-                pickup.Scale = PickupSize;
+                pickup.Scale = new Vector3(.01f, .01f, .01f);
             }
+            
+            Vector3 scale = pickup.Scale;
 
-
+            pickableItem.Add(obj, new());
 
             models.Add(obj, new());
 
@@ -103,27 +117,50 @@ namespace KE.Items.Items.PickupModels
 
                 if (prim is Primitive p)
                     p.Collidable = false;
-                Vector3 offset = prim.Position;
 
 
                 prim.Transform.parent = obj.transform;
-                prim.Transform.localPosition = offset;
+                prim.Transform.localScale = new(blueprint.Scale.x/ scale.x, blueprint.Scale.y / scale.y, blueprint.Scale.z / scale.z);
+                prim.Transform.localPosition = prim.Position + Vector3.Scale(blueprint.Position,scale);
                 prim.Transform.rotation *= pickup.Rotation;
                 prim.MovementSmoothing = 60;
                 prim.AdminToyBase.syncInterval = 0f;
 
-                /*
-                Log.Debug($"prim trans = ({prim?.Transform.parent?.gameObject.name})");
-                Log.Debug($"prim localpos = ({prim?.Transform.localPosition})");
-                Log.Debug("+ offset =" + offset);
-                Log.Debug($"prim globalpos = ({prim?.Position})");
-                */
-                prim.Spawn();
+                Log.Debug("posP=" + prim.Transform.position);
+
+                var interact = InteractableToy.Create(prim.Transform, false);
+
+                interact.Transform.parent = obj.transform;
+                interact.Transform.localPosition = Vector3.zero;
+                interact.Transform.localRotation = Quaternion.identity;
+                interact.Scale = new(blueprint.Scale.x / scale.x, blueprint.Scale.y / scale.y, blueprint.Scale.z / scale.z);
+                interact.InteractionDuration = 0.245f + 0.175f * obj.Info.WeightKg;
+                interact.Shape = AdminToys.InvisibleInteractableToy.ColliderShape.Box;
+
+
+
+
+                Log.Debug("scale intec : " + interact.Scale);
+                Log.Debug("scale prim : " + prim.Transform.localScale);
+
+                Log.Debug("posI=" + interact.Transform.position);
+
+                //interact.OnSearched += (player) => GiveCI(obj, player);
+                pickableItem[obj].Add(interact);
+                interact.Spawn();
                 models[obj].Add(prim);
+                prim.Spawn();
 
+                
+                
             }
+        }
 
-
+        private void GiveCI(ItemPickupBase pickup, LabPlayer player)
+        {
+            Log.Debug("give");
+            KECI.Give(player,true);
+            pickup.DestroySelf();
         }
 
         private void OnPickupDestroyed(ItemPickupBase obj)
@@ -138,6 +175,17 @@ namespace KE.Items.Items.PickupModels
                     toy.Destroy();
                 }
             }
+
+            if (pickableItem.TryGetValue(obj, out HashSet<InteractableToy> interact))
+            {
+                foreach (InteractableToy toy in interact)
+                {
+
+                    //toy.OnSearchAborted -= (player) => GiveCI(obj, player);
+                    toy.Destroy();
+                }
+            }
+
         }
     }
 }

@@ -13,19 +13,24 @@ namespace KE.Items.Features
         protected override void SubscribeEvents()
         {
 
-            Exiled.Events.Handlers.Player.Hurting += InternalOnHurting;
             base.SubscribeEvents();
         }
 
         protected override void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.Hurting -= InternalOnHurting;
             base.UnsubscribeEvents();
         }
 
 
+
         protected void InternalOnHurting(HurtingEventArgs ev)
         {
+            
+            //can't get the custom grenade
+            /*if(ev.DamageHandler.Type == Exiled.API.Enums.DamageType.Explosion)
+            {
+                ev.Amount *= DamageModifier;
+            }*/
             
         }
 

@@ -1,18 +1,15 @@
 ﻿
 using Exiled.API.Enums;
-using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Toys;
 using Exiled.CustomItems.API.Features;
 using KE.Items.Core.Lights;
 using KE.Items.Core.Settings;
 using KE.Items.Core.Upgrade;
-using KE.Items.Items.PickupModels;
 using KE.Utils.API.Displays.DisplayMeow;
-using KE.Utils.API.Sounds;
-using KE.Utils.Quality.Tests;
 using System;
-using Light = Exiled.API.Features.Toys.Light;
+using System.Linq;
+using InteractableToy = LabApi.Features.Wrappers.InteractableToy;
 
 namespace KE.Items
 {
@@ -47,6 +44,7 @@ namespace KE.Items
             SettingsHandler = new();
 
             Utils.API.Sounds.SoundPlayer.Load();
+            
 
             //Exiled.Events.Handlers.Server.RoundStarted += Test;
 
@@ -76,6 +74,34 @@ namespace KE.Items
             Instance = null;
         }
 
+
+
+
+
+
+        private void Test()
+        {
+            Player player = Player.List.First();
+
+
+
+            var prim = Primitive.Create(player.Position,spawn:false);
+            prim.Collidable = false;
+            prim.Spawn();
+            var itoy = InteractableToy.Create(prim.Transform, true);
+            itoy.InteractionDuration = 3f;
+
+
+            itoy.OnSearchAborted += GiveDestroy;
+
+        }
+
+        private void GiveDestroy(LabApi.Features.Wrappers.Player player)
+        {
+
+            CustomItem.Get(1046)?.Give(player);
+
+        }
         
     }
 }

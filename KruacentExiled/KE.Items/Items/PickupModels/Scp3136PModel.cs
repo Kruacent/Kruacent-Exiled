@@ -17,7 +17,7 @@ namespace KE.Items.Items.PickupModels
 
         public Scp3136PModel(CustomItem customItem) : base(customItem) { }
 
-        protected override Vector3 PickupSize { get; set; } = new Vector3(1f, .1f, 1f);
+        protected override bool HidePickup => true;
 
 
         private static Vector3 paper = new Vector3(.5f, .1f, .5f);

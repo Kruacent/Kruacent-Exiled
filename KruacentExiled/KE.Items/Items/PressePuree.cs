@@ -21,7 +21,7 @@ namespace KE.Items.Items
         //presse puree
         public override uint Id { get; set; } = 1046;
         public override string Name { get; set; } = "Presse Purée";
-        public override string Description { get; set; } = "The grenade explode at impact but does less damage\n 5% to upgrade in 914 on very fine";
+        public override string Description { get; set; } = "The grenade explode at impact but does less damage";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime { get; set; } = 1.5f;
         public override bool ExplodeOnCollision { get; set; } = true;
