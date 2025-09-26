@@ -13,5 +13,6 @@ namespace KE.CustomRoles
         public bool Debug { get; set; } = true;
 
         public int HeaderId { get; set; } = 1000;
+        public int ScpPreferenceHeaderId { get; set; } = 10000;
     }
 }

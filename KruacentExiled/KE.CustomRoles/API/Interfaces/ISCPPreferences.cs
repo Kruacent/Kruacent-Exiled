@@ -13,6 +13,6 @@ namespace KE.CustomRoles.API.Interfaces
     public interface ISCPPreferences
     {
 
-        public abstract bool IsSupport { get; }
+        
     }
 }

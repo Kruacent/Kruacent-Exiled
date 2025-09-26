@@ -1,23 +1,11 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
-using Exiled.API.Features.Pools;
-using Exiled.CustomRoles.API;
-using Exiled.CustomRoles.API.Features;
-using Exiled.CustomRoles.API.Features.Enums;
 using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.API.Features;
-using KE.CustomRoles.API.Interfaces;
 using KE.Utils.API.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using UnityEngine;
 using UserSettings.ServerSpecific;
-using UserSettings.UserInterfaceSettings;
 
 namespace KE.CustomRoles.Settings
 {
@@ -211,6 +199,7 @@ namespace KE.CustomRoles.Settings
             
             return setting.IsFirst;
         }
+
 
         internal string GetArrow(Player p)
         {
