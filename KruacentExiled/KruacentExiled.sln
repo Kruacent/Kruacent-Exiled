@@ -5,13 +5,9 @@ VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.Utils", "KE.Utils\KE.Utils.csproj", "{DFEF41B3-5BD3-428A-A7BA-7A490E65C71F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.Misc", "KE.Misc\KE.Misc.csproj", "{CD822DB2-756E-4887-93AB-2D2F16BF542C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.CustomRoles", "KE.CustomRoles\KE.CustomRoles.csproj", "{33CC074C-06DD-4545-91F2-F668F3C4779D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.BlackoutNDoor", "KE.BlackoutNDoor\KE.BlackoutNDoor.csproj", "{C9867742-72DB-4ECA-81BF-104A27A04DB7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.GlobalEventFramework", "KE.GlobalEventFramework\KE.GlobalEventFramework.csproj", "{73D6C740-96DE-4965-898F-DDD5BCBF7366}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.GlobalEventFramework.Examples", "KE.GlobalEventFramework.Examples\KE.GlobalEventFramework.Examples.csproj", "{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.Misc", "KE.Misc\KE.Misc.csproj", "{378DD640-986B-4DA9-8C65-8D318E99E98C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,22 +19,14 @@ Global
 		{DFEF41B3-5BD3-428A-A7BA-7A490E65C71F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFEF41B3-5BD3-428A-A7BA-7A490E65C71F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFEF41B3-5BD3-428A-A7BA-7A490E65C71F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD822DB2-756E-4887-93AB-2D2F16BF542C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD822DB2-756E-4887-93AB-2D2F16BF542C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD822DB2-756E-4887-93AB-2D2F16BF542C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD822DB2-756E-4887-93AB-2D2F16BF542C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C9867742-72DB-4ECA-81BF-104A27A04DB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C9867742-72DB-4ECA-81BF-104A27A04DB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C9867742-72DB-4ECA-81BF-104A27A04DB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C9867742-72DB-4ECA-81BF-104A27A04DB7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73D6C740-96DE-4965-898F-DDD5BCBF7366}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73D6C740-96DE-4965-898F-DDD5BCBF7366}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73D6C740-96DE-4965-898F-DDD5BCBF7366}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73D6C740-96DE-4965-898F-DDD5BCBF7366}.Release|Any CPU.Build.0 = Release|Any CPU
-		{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33CC074C-06DD-4545-91F2-F668F3C4779D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33CC074C-06DD-4545-91F2-F668F3C4779D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33CC074C-06DD-4545-91F2-F668F3C4779D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33CC074C-06DD-4545-91F2-F668F3C4779D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{378DD640-986B-4DA9-8C65-8D318E99E98C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{378DD640-986B-4DA9-8C65-8D318E99E98C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{378DD640-986B-4DA9-8C65-8D318E99E98C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{378DD640-986B-4DA9-8C65-8D318E99E98C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
