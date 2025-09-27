@@ -10,10 +10,18 @@ namespace KE.Utils.API.Models.Blueprints
         public PrimitiveType Type { get; }
 
 
-        public PrimitiveBlueprint(Primitive p)
+        public PrimitiveBlueprint(PrimitiveType type, Vector3 position,Quaternion rotation,Color color,Vector3 scale,Vector3? center = null) : base(position,rotation, center)
         {
             AdminToyType = AdminToyType.PrimitiveObject;
+            Scale = scale;
+            Color = color;
+            Type = type;
+        }
 
+        public PrimitiveBlueprint(Primitive p) : base(p.Position,p.Rotation)
+        {
+            AdminToyType = AdminToyType.PrimitiveObject;
+            
             Scale = p.Scale;
             Color = p.Color;
             Type = p.Type;
