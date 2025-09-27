@@ -115,8 +115,7 @@ namespace KE.Items.Features
                 //Log.Debug($"adding {obj.name} at ({obj.Position})");
                 AdminToy prim = blueprint.Spawn(Vector3.zero);
 
-                if (prim is Primitive p)
-                    p.Collidable = false;
+
 
 
                 prim.Transform.parent = obj.transform;
@@ -127,27 +126,37 @@ namespace KE.Items.Features
                 prim.AdminToyBase.syncInterval = 0f;
 
                 Log.Debug("posP=" + prim.Transform.position);
+                if (prim is Primitive p)
+                {
+                    p.Collidable = false;
+                    var interact = InteractableToy.Create(prim.Transform, false);
 
-                var interact = InteractableToy.Create(prim.Transform, false);
-
-                interact.Transform.parent = obj.transform;
-                interact.Transform.localPosition = Vector3.zero;
-                interact.Transform.localRotation = Quaternion.identity;
-                interact.Scale = new(blueprint.Scale.x / scale.x, blueprint.Scale.y / scale.y, blueprint.Scale.z / scale.z);
-                interact.InteractionDuration = 0.245f + 0.175f * obj.Info.WeightKg;
-                interact.Shape = AdminToys.InvisibleInteractableToy.ColliderShape.Box;
+                    interact.Transform.parent = obj.transform;
+                    interact.Transform.localPosition = Vector3.zero;
+                    interact.Transform.localRotation = Quaternion.identity;
+                    interact.Scale = new(blueprint.Scale.x / scale.x, blueprint.Scale.y / scale.y, blueprint.Scale.z / scale.z);
+                    interact.InteractionDuration = 0.245f + 0.175f * obj.Info.WeightKg;
+                    interact.Shape = AdminToys.InvisibleInteractableToy.ColliderShape.Box;
 
 
+                    Log.Debug("scale intec : " + interact.Scale);
+                    Log.Debug("posI=" + interact.Transform.position);
+                    pickableItem[obj].Add(interact);
+                    interact.Spawn();
+                }
+                    
+                
 
 
-                Log.Debug("scale intec : " + interact.Scale);
+
+
+                
                 Log.Debug("scale prim : " + prim.Transform.localScale);
 
-                Log.Debug("posI=" + interact.Transform.position);
+                
 
                 //interact.OnSearched += (player) => GiveCI(obj, player);
-                pickableItem[obj].Add(interact);
-                interact.Spawn();
+                
                 models[obj].Add(prim);
                 prim.Spawn();
 
