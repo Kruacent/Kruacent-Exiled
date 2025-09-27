@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features.Toys;
+using System;
 using UnityEngine;
 using Light = Exiled.API.Features.Toys.Light;
 
@@ -10,7 +11,17 @@ namespace KE.Utils.API.Models.Blueprints
         public Color Color { get; }
         public float Intensity { get; }
 
-        public LightBlueprint(Light l)
+
+        public LightBlueprint(Vector3 position, Quaternion rotation, Color color, Vector3 scale,float intensity, Vector3? center = null) : base(position, rotation, center)
+        {
+            
+            AdminToyType = AdminToyType.LightSource;
+            Scale = scale;
+            Color = color;
+            Intensity = intensity;
+        }
+
+        public LightBlueprint(Light l) : base(l.Position,l.Rotation)
         {
             AdminToyType = AdminToyType.PrimitiveObject;
             Scale = l.Scale;

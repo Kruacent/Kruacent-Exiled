@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using Discord;
+using Exiled.API.Enums;
 using Exiled.API.Features.Toys;
 using Exiled.API.Interfaces;
 using KE.Utils.API.Interfaces;
@@ -21,6 +22,12 @@ namespace KE.Utils.API.Models.Blueprints
         public Vector3 Scale { get; protected set; }
 
 
+        public AdminToyBlueprint(Vector3 position, Quaternion rotation, Vector3? center = null)
+        {
+            Position = position - center ?? position;
+            Rotation = rotation.eulerAngles;
+        }
+
         public static AdminToyBlueprint Create(AdminToy adminToy, Vector3? center = null)
         {
             AdminToyBlueprint result;
@@ -40,8 +47,7 @@ namespace KE.Utils.API.Models.Blueprints
                 throw new NotImplementedException("only primitive and light");
             }
             
-            result.Position = adminToy.Position - center ?? adminToy.Position;
-            result.Rotation = adminToy.Rotation.eulerAngles;
+            
 
             return result;
         }

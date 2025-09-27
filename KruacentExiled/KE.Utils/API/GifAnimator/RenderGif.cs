@@ -10,12 +10,12 @@ using UnityEngine.Rendering;
 using Color = UnityEngine.Color;
 namespace KE.Utils.API.GifAnimator
 {
-    internal class RenderGif
+    public static class RenderGif
     {
 
-        public static void Spawn()
+        public static void Spawn(string path)
         {
-            
+
         }
 
 
@@ -26,12 +26,12 @@ namespace KE.Utils.API.GifAnimator
             {
                 Log.Debug($"No image was found under: {filePath}");
                 yield break;
-            }
+        }
 
             byte[] imageData = File.ReadAllBytes(filePath);
 
 
-             
+
 
 
 
