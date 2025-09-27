@@ -56,11 +56,7 @@ public class Defibrilator : KECustomItem, ILumosItem
 
     private void OnDeathEvent(DyingEventArgs ev)
     {
-        Log.Debug(positionMort.Count());
-        Log.Debug(ev.Player.Nickname);
         positionMort.TryAdd(ev.Player, ev.Player.Position);
-        Log.Debug(positionMort.Count());
-        Log.Debug("Role : " + ev.Player.Role);
     }
 
     private void OnSpawningEvent(SpawnedEventArgs ev)
