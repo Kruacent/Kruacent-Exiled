@@ -1,8 +1,10 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.CustomItems.API.Features;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Server;
+using KE.CustomRoles.API.Features;
 using KE.Misc.Features.CR;
 using KE.Utils.API.Interfaces;
 using MEC;
@@ -15,10 +17,27 @@ namespace KE.Misc.Features
 {
     internal class Spawn : MiscFeature
     {
+        private RoleTypeId[] baseRole =
+        [
+            RoleTypeId.Scp173,
+            RoleTypeId.Scp106,
+            RoleTypeId.Scp049,
+            RoleTypeId.Scp079,
+            RoleTypeId.Scp096,
+            RoleTypeId.Scp939,
+        ];
+
+        private Dictionary<int,CustomSCP> SelectableCustomSCPs => CustomSCP.All.Where(cs => cs.Id >= baseRole.Length).ToDictionary(cs => (int)cs.Id, cs => cs);
+
         private bool _set035 = true;
+
+
         public void OnRoundStarted()
         {
             if (!MainPlugin.Instance.Config.ScpPreferences) return;
+
+            
+
 
             foreach (Player player in Player.List.Where(p => p.IsScp && !p.IsNPC))
             {
@@ -34,13 +53,19 @@ namespace KE.Misc.Features
                 Log.Warn("no config, no custom preferences this round");
                 return;
             }
-            Dictionary<RoleTypeId, int> chancescp = (Dictionary<RoleTypeId, int>) GetPreferences(player);
+            Dictionary<int, int> chancescp = GetPreferences(player);
+
+            if(chancescp == null)
+            {
+                Log.Error("no setting found");
+            }
 
 
-            RoleTypeId roleScp = ChooseRandomRole(chancescp);
+            int roleScp = ChooseRandomRole(chancescp);
             Log.Debug($"Scp ({player.Nickname}) is {roleScp} previous : {player.Role.Type}");
 
-            player.Role.Set(roleScp);
+            SetRoleWithId(player, roleScp);
+            /*
             if (config.Scp035Enabled && roleScp == RoleTypeId.Scp079)
             {
                 Player pl = Player.List.GetRandomValue(p => p.Role == RoleTypeId.ClassD || p.Role == RoleTypeId.Scientist);
@@ -65,29 +90,43 @@ namespace KE.Misc.Features
                     pl.Role.Set(otherScp);
                     Timing.CallDelayed(1f, () =>
                     {
-                        pl.MaxHealth /= 2;
+                        pl.MaxHealth /= 4;
                         pl.Health = pl.MaxHealth;
                     });
                 }
 
-            }
+            }*/
         }
 
 
-        private IDictionary<RoleTypeId, int> GetPreferences(Player player)
+        private Dictionary<int, int> GetPreferences(Player player)
         {
-            if (player.ScpPreferences.Preferences == null) return new Dictionary<RoleTypeId, int>();
-            return player.ScpPreferences.Preferences.ToDictionary(p => p.Key, p => p.Value + 5);
+            if (player.ScpPreferences.Preferences == null) return null;
+            Dictionary<int, int> idChance = new();
+
+            for (int i = 0; i < baseRole.Length; i++)
+            {
+                idChance.Add(i, player.ScpPreferences.Preferences[baseRole[i]]+5);
+            }
+
+            foreach(CustomSCP customSCP in SelectableCustomSCPs.Values)
+            {
+                idChance.Add((int)customSCP.Id, customSCP.GetPreferences(player)+5);
+            }
+
+
+
+            return idChance;
         }
 
 
 
 
-        private RoleTypeId ChooseRandomRole(IDictionary<RoleTypeId, int> chancescp)
+        private int ChooseRandomRole(IDictionary<int, int> chancescp)
         {
             if (chancescp == null) throw new ArgumentException("Dictionary null");
-            List<RoleTypeId> weightedPool = new List<RoleTypeId>();
-            foreach (RoleTypeId ge in chancescp.Keys)
+            List<int> weightedPool = new();
+            foreach (int ge in chancescp.Keys)
             {
                 for (int i = 0; i < chancescp[ge]; i++)
                 {
@@ -95,11 +134,23 @@ namespace KE.Misc.Features
                     weightedPool.Add(ge);
                 }
             }
-            Log.Debug("end");
 
             int randomIndex = UnityEngine.Random.Range(0, weightedPool.Count);
 
             return weightedPool[randomIndex];
+        }
+
+        private void SetRoleWithId(Player player, int id)
+        {
+
+            if(id < baseRole.Length)
+            {
+                player.Role.Set(baseRole[id],SpawnReason.RoundStart);
+            }
+            else
+            {
+                SelectableCustomSCPs[id].AddRole(player);
+            }
         }
 
 
