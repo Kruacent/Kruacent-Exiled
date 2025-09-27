@@ -14,10 +14,10 @@ namespace KE.Utils.Quality.Settings
         private SettingBase[] _settings;
         public QualitySettings(Action<Player,SettingBase> onChanged)
         {
-            HeaderSetting header = new("Quality Settings");
+            //HeaderSetting header = new("Quality Settings");
             _settings =
             [
-                header,
+                //header,
                 new DropdownSetting(_idQuality,"ModelQuality",["Low","Medium", "High"],onChanged:onChanged),
                 new TwoButtonsSetting(_idModels,"Pickup models","Disabled","Enabled", onChanged:onChanged)
             ];
