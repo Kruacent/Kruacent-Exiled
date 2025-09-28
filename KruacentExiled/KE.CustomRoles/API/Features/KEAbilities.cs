@@ -103,7 +103,6 @@ namespace KE.CustomRoles.API.Features
             else
             {
                 Log.Error($"setting of {this} have the same id as {old.Label}");
-                
             }
             StartLoop();
             IdToAbility.Add(Id, this);

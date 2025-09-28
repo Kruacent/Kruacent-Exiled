@@ -6,7 +6,6 @@ using Exiled.API.Features.Toys;
 using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs.Scp106;
 using KE.CustomRoles.API.Features;
-using KE.CustomRoles.API.Interfaces;
 using KE.Utils.API;
 using MEC;
 using PlayerRoles;
@@ -19,7 +18,7 @@ using Light = Exiled.API.Features.Toys.Light;
 namespace KE.CustomRoles.CR.SCP
 {
     [CustomRole(RoleTypeId.Scp106)]
-    public class SCP457 : KECustomRole, ISCPPreferences
+    public class SCP457 : CustomSCP
     {
 
 
@@ -30,7 +29,7 @@ namespace KE.CustomRoles.CR.SCP
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scp106;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
-        public bool IsSupport { get; } = false;
+        public override bool IsSupport { get; } = false;
 
         public override float SpawnChance { get; set; } = 100;
 

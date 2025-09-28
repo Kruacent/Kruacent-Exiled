@@ -1,23 +1,14 @@
-﻿using Discord;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.API.Features.Pools;
 using Exiled.CustomRoles.API;
 using Exiled.CustomRoles.API.Features;
-using Exiled.Events.Commands.PluginManager;
-using Exiled.Events.EventArgs.Player;
 using InventorySystem.Configs;
 using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
 using PlayerRoles;
-using PlayerRoles.FirstPersonControl.Thirdperson;
-using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using UnityEngine;
 
 namespace KE.CustomRoles.API.Features
@@ -52,7 +43,7 @@ namespace KE.CustomRoles.API.Features
             //string msg = MainPlugin.Translations.GettingNewRole;
             //msg = msg.Replace("%Name%", PublicName).Replace("%Desc%",Description);
 
-            string msg = $"<b>{Name}</b>";
+            string msg = $"<b>{PublicName}</b>";
 
             if (MainPlugin.SettingHandler.GetDescriptionsSettings(player))
             {

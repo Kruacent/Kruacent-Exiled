@@ -1,13 +1,6 @@
 ﻿using Exiled.API.Features;
-using Exiled.API.Features.Attributes;
-using Exiled.CustomRoles.API.Features;
 using KE.CustomRoles.API.Features;
-using KE.CustomRoles.API.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace KE.CustomRoles.Abilities
