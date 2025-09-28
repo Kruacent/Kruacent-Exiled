@@ -1,7 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Map;
-using KE.Items.Interface;
 using MEC;
 using PlayerRoles;
 using Exiled.API.Enums;
@@ -9,8 +8,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Exiled.Events.EventArgs.Player;
 using Light = Exiled.API.Features.Toys.Light;
+using KE.Items.API.Interface;
 
-namespace KE.Items.ItemEffects
+namespace KE.Items.Items.ItemEffects
 {
     public class MolotovEffect : CustomItemEffect
     {
@@ -34,7 +34,7 @@ namespace KE.Items.ItemEffects
         }
 
 
-        private void SetZone(Player player,Vector3 position)
+        private void SetZone(Player player, Vector3 position)
         {
             float cylinderSize = CylinderSize;
 
@@ -43,7 +43,7 @@ namespace KE.Items.ItemEffects
             Vector3 molotovPosition = position;
             Primitive wall = Primitive.Create(PrimitiveType.Cylinder, molotovPosition, null, new Vector3(cylinderSize, 0.01f, cylinderSize), true);
             var l = Light.Create(position, null, null, false);
-            l.Color = new Color(255,128,0);
+            l.Color = new Color(255, 128, 0);
             l.Intensity = .05f;
             l.Spawn();
             wall.Collidable = false;
@@ -53,7 +53,8 @@ namespace KE.Items.ItemEffects
 
             var coroutineHandler = Timing.RunCoroutine(DamageInMolotovZone(wall.Position, cylinderSize, playerThrowingGrenade));
 
-            Timing.CallDelayed(Duration, () => {
+            Timing.CallDelayed(Duration, () =>
+            {
                 Timing.KillCoroutines(coroutineHandler);
                 wall.Destroy();
                 l.Destroy();
@@ -73,7 +74,7 @@ namespace KE.Items.ItemEffects
                 {
                     if (IsPlayerInZone(player, wallPosition, cylinderSize))
                     {
-                        if (Exiled.API.Features.Server.FriendlyFire || playerThrowingGrenade.Role.Team != player.Role.Team || playerThrowingGrenade == player)
+                        if (Server.FriendlyFire || playerThrowingGrenade.Role.Team != player.Role.Team || playerThrowingGrenade == player)
                         {
                             if (player.IsHuman || player.Role == RoleTypeId.Scp0492)
                             {
@@ -120,7 +121,7 @@ namespace KE.Items.ItemEffects
         {
             float distance = Vector3.Distance(new Vector3(player.Position.x, 0, player.Position.z),
                                                new Vector3(zonePosition.x, 0, zonePosition.z));
-            return distance <= (radius / 2);
+            return distance <= radius / 2;
         }
     }
 }

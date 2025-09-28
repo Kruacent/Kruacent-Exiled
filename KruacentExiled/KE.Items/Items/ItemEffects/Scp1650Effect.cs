@@ -1,7 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
-using KE.Items.Interface;
+using KE.Items.API.Interface;
 using MEC;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using static KE.Items.Items.Scp1650;
 
-namespace KE.Items.ItemEffects
+namespace KE.Items.Items.ItemEffects
 {
     public class Scp1650Effect : CustomItemEffect
     {
@@ -43,7 +43,7 @@ namespace KE.Items.ItemEffects
 
         private void OnUsedItem(Player player)
         {
-            
+
             CardinalPoints rotation = Rotation(player.Rotation);
 
             Log.Debug(rotation);

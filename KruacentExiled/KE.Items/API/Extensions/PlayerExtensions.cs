@@ -1,12 +1,12 @@
 ﻿using Exiled.API.Features;
-using KE.Items.Features;
+using KE.Items.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Items.Extensions
+namespace KE.Items.API.Extensions
 {
     public static class PlayerExtensions
     {
@@ -15,5 +15,5 @@ namespace KE.Items.Extensions
         {
             KECustomItem.ItemEffectHint(player, text);
         }
-    } 
+    }
 }

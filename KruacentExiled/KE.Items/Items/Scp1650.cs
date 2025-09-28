@@ -1,18 +1,11 @@
-﻿using Exiled.API.Features;
-using Exiled.API.Features.Attributes;
+﻿using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
-using KE.Items.Features;
-using KE.Items.Interface;
-using KE.Items.ItemEffects;
-using MEC;
-using System;
+using KE.Items.API.Features;
+using KE.Items.API.Interface;
+using KE.Items.Items.ItemEffects;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 using PlayerHandle = Exiled.Events.Handlers.Player;
 
 

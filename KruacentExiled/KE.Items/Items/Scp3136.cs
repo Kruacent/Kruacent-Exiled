@@ -6,7 +6,7 @@ using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
-using KE.Items.Features;
+using KE.Items.API.Features;
 using MEC;
 using PlayerRoles;
 using System;

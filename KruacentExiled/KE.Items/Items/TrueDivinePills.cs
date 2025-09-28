@@ -1,21 +1,15 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
-using MEC;
 using Exiled.Events.EventArgs.Player;
 using PlayerHandle = Exiled.Events.Handlers.Player;
 using Exiled.API.Features;
-using Exiled.API.Extensions;
 using UnityEngine;
-using CustomPlayerEffects;
 using System.Linq;
 using PlayerRoles;
-using KE.Items.Interface;
-using Exiled.CustomItems.API.EventArgs;
-using Exiled.Events.EventArgs.Scp914;
-using KE.Items.Features;
+using KE.Items.API.Interface;
+using KE.Items.API.Features;
 
 /// <inheritdoc />
 [CustomItem(ItemType.SCP500)]

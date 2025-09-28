@@ -2,7 +2,7 @@
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
-using KE.Items.Interface;
+using KE.Items.API.Interface;
 using MEC;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace KE.Items.ItemEffects
+namespace KE.Items.Items.ItemEffects
 {
     public class HealZoneEffect : CustomItemEffect
     {
@@ -44,7 +44,8 @@ namespace KE.Items.ItemEffects
 
             var coroutineHandler = Timing.RunCoroutine(HealZoneHeal(wall.Position, cylinderSize, playerThrowingGrenade));
 
-            Timing.CallDelayed(20, () => {
+            Timing.CallDelayed(20, () =>
+            {
                 wall.UnSpawn();
                 Timing.KillCoroutines(coroutineHandler);
                 wall.Destroy();
@@ -55,7 +56,7 @@ namespace KE.Items.ItemEffects
         {
             while (true)
             {
-                foreach (Player player in Exiled.API.Features.Player.List)
+                foreach (Player player in Player.List)
                 {
                     // Check if a player is in the zone.
                     if (IsPlayerInZone(player, wallPosition, cylinderSize))
@@ -76,7 +77,7 @@ namespace KE.Items.ItemEffects
         {
             float distance = Vector3.Distance(new Vector3(player.Position.x, 0, player.Position.z),
                                                new Vector3(zonePosition.x, 0, zonePosition.z));
-            return distance <= (radius / 2);
+            return distance <= radius / 2;
         }
     }
 }

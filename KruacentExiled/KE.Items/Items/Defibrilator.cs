@@ -9,9 +9,9 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.API.Features;
 using UnityEngine;
 using System.Linq;
-using KE.Items.Interface;
-using KE.Items.Extensions;
-using KE.Items.Features;
+using KE.Items.API.Extensions;
+using KE.Items.API.Interface;
+using KE.Items.API.Features;
 
 [CustomItem(ItemType.SCP1853)]
 public class Defibrilator : KECustomItem, ILumosItem

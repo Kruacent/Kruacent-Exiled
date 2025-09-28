@@ -7,7 +7,7 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp173;
 using Exiled.Events.EventArgs.Scp939;
 using Exiled.Events.Handlers;
-using KE.Items.Features;
+using KE.Items.API.Features;
 using KE.Items.Items.Models;
 using MEC;
 using System.Collections.Generic;

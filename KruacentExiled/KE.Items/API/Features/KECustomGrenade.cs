@@ -3,7 +3,7 @@ using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 
-namespace KE.Items.Features
+namespace KE.Items.API.Features
 {
     public abstract class KECustomGrenade : CustomGrenade
     {
@@ -25,13 +25,13 @@ namespace KE.Items.Features
 
         protected void InternalOnHurting(HurtingEventArgs ev)
         {
-            
+
             //can't get the custom grenade
             /*if(ev.DamageHandler.Type == Exiled.API.Enums.DamageType.Explosion)
             {
                 ev.Amount *= DamageModifier;
             }*/
-            
+
         }
 
         protected override void ShowPickedUpMessage(Player player)

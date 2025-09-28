@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Items.Interface
+namespace KE.Items.API.Interface
 {
     internal interface ILumosItem
     {

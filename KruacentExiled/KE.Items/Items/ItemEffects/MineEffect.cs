@@ -5,8 +5,8 @@ using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
-using KE.Items.Extensions;
-using KE.Items.Interface;
+using KE.Items.API.Extensions;
+using KE.Items.API.Interface;
 using KE.Items.Items.Models;
 using KE.Utils.API.Interfaces;
 using MEC;
@@ -17,7 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace KE.Items.ItemEffects
+namespace KE.Items.Items.ItemEffects
 {
     public class MineEffect : CustomItemEffect, IUsingEvents
     {
@@ -35,7 +35,7 @@ namespace KE.Items.ItemEffects
 
         public override void Effect(ExplodingGrenadeEventArgs ev)
         {
-            PlaceMine(ev.Player,ev.Position);
+            PlaceMine(ev.Player, ev.Position);
         }
 
         public void SubscribeEvents()
@@ -49,7 +49,7 @@ namespace KE.Items.ItemEffects
 
         private void OnExplodingGrenade(ExplodingGrenadeEventArgs ev)
         {
-            
+
         }
 
         /// <summary>
@@ -65,13 +65,13 @@ namespace KE.Items.ItemEffects
         /// </summary>
         /// <param name="p"></param>
         /// <param name="pos"></param>
-        private void PlaceMine(Player p,Vector3 pos)
+        private void PlaceMine(Player p, Vector3 pos)
         {
 
             SpawnMine(p, pos);
         }
 
-        private void SpawnMine(Player p,Vector3 pos)
+        private void SpawnMine(Player p, Vector3 pos)
         {
 
             MineModel m = new MineModel();
@@ -123,7 +123,7 @@ namespace KE.Items.ItemEffects
 
                 foreach (IWorldSpace p in Pickup.List)
                 {
-                    if (IsPositionInZone(p.Position,mine.Position, cylinderSize, 3))
+                    if (IsPositionInZone(p.Position, mine.Position, cylinderSize, 3))
                     {
                         Grenade.SpawnActive(mine.Position);
                         DestroyMine(mine);
@@ -173,7 +173,7 @@ namespace KE.Items.ItemEffects
             float verticalDifference = Mathf.Abs(position.y - zonePosition.y);
 
             // Check if the player is in the 3d zone.
-            return horizontalDistance <= (radius / 2) && verticalDifference <= (height / 2);
+            return horizontalDistance <= radius / 2 && verticalDifference <= height / 2;
         }
 
     }

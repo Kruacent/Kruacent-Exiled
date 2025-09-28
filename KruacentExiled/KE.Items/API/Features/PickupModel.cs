@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using LabPlayer = LabApi.Features.Wrappers.Player;
 
-namespace KE.Items.Features
+namespace KE.Items.API.Features
 {
     public abstract class PickupModel
     {
@@ -103,7 +103,7 @@ namespace KE.Items.Features
             {
                 pickup.Scale = new Vector3(.01f, .01f, .01f);
             }
-            
+
             Vector3 scale = pickup.Scale;
 
             pickableItem.Add(obj, new());
@@ -119,8 +119,8 @@ namespace KE.Items.Features
 
 
                 prim.Transform.parent = obj.transform;
-                prim.Transform.localScale = new(blueprint.Scale.x/ scale.x, blueprint.Scale.y / scale.y, blueprint.Scale.z / scale.z);
-                prim.Transform.localPosition = prim.Position + Vector3.Scale(blueprint.Position,scale);
+                prim.Transform.localScale = new(blueprint.Scale.x / scale.x, blueprint.Scale.y / scale.y, blueprint.Scale.z / scale.z);
+                prim.Transform.localPosition = prim.Position + Vector3.Scale(blueprint.Position, scale);
                 prim.Transform.rotation *= pickup.Rotation;
                 prim.MovementSmoothing = 60;
                 prim.AdminToyBase.syncInterval = 0f;
@@ -144,31 +144,31 @@ namespace KE.Items.Features
                     pickableItem[obj].Add(interact);
                     interact.Spawn();
                 }
-                    
-                
 
 
 
 
-                
+
+
+
                 Log.Debug("scale prim : " + prim.Transform.localScale);
 
-                
+
 
                 //interact.OnSearched += (player) => GiveCI(obj, player);
-                
+
                 models[obj].Add(prim);
                 prim.Spawn();
 
-                
-                
+
+
             }
         }
 
         private void GiveCI(ItemPickupBase pickup, LabPlayer player)
         {
             Log.Debug("give");
-            KECI.Give(player,true);
+            KECI.Give(player, true);
             pickup.DestroySelf();
         }
 

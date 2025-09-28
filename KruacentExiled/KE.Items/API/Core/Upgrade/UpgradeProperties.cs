@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using YamlDotNet.Core.Tokens;
 
-namespace KE.Items.Core.Upgrade
+namespace KE.Items.API.Core.Upgrade
 {
     public class UpgradeProperties
     {

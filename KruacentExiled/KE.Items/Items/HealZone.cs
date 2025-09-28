@@ -2,15 +2,11 @@
 using Exiled.API.Enums;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
-using Exiled.API.Features.Toys;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Map;
-using KE.Items.Interface;
-using Player = Exiled.API.Features.Player;
-using MEC;
-using UnityEngine;
-using KE.Items.ItemEffects;
-using KE.Items.Features;
+using KE.Items.API.Interface;
+using KE.Items.Items.ItemEffects;
+using KE.Items.API.Features;
 
 namespace KE.Items.Items
 {

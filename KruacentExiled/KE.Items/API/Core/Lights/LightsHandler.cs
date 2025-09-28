@@ -1,10 +1,11 @@
-﻿using Exiled.CustomItems.API.Features;
+﻿using Exiled.API.Features;
+using Exiled.CustomItems.API.Features;
 using InventorySystem.Items.Pickups;
-using KE.Items.Interface;
+using KE.Items.API.Interface;
 using KE.Utils.API.Interfaces;
 using LabApi.Features.Wrappers;
 
-namespace KE.Items.Core.Lights
+namespace KE.Items.API.Core.Lights
 {
     internal class LightsHandler : IUsingEvents
     {

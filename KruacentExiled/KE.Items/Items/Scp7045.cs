@@ -1,30 +1,4 @@
-﻿using Exiled.API.Enums;
-using Exiled.API.Extensions;
-using Exiled.API.Features;
-using Exiled.API.Features.Attributes;
-using Exiled.API.Features.Items;
-using Exiled.API.Features.Spawn;
-using Exiled.API.Features.Toys;
-using Exiled.CustomItems.API.Features;
-using Exiled.Events.EventArgs.Player;
-using Exiled.Events.EventArgs.Server;
-using KE.Items.Features;
-using MEC;
-using PlayerRoles;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics.Tracing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using VoiceChat.Codec;
-using VoiceChat.Codec.Enums;
-using VoiceChat.Networking;
-
-namespace KE.Items.Items
+﻿namespace KE.Items.Items
 {
     //[CustomItem(ItemType.SCP1576)]
     /*[Obsolete("Scrapped - Can't make a good sound quality without external file")]

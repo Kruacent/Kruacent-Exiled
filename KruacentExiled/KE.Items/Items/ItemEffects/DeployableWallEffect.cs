@@ -1,19 +1,19 @@
 ﻿using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
-using KE.Items.Interface;
+using KE.Items.API.Interface;
 using KE.Utils.API.Sounds;
 using MEC;
 using UnityEngine;
 
 
-namespace KE.Items.ItemEffects
+namespace KE.Items.Items.ItemEffects
 {
     public class DeployableWallEffect : CustomItemEffect
     {
         public override void Effect(UsedItemEventArgs ev)
         {
-            SpawnWall(ev.Player.Position,ev.Player.Rotation);
+            SpawnWall(ev.Player.Position, ev.Player.Rotation);
         }
         public override void Effect(DroppingItemEventArgs ev)
         {
@@ -33,13 +33,14 @@ namespace KE.Items.ItemEffects
             Vector3 rotat = new Vector3(0, rotation.eulerAngles.y, 0);
 
 
-            
-            
+
+
             Primitive wall = Primitive.Create(PrimitiveType.Cube, spawnPos, rotat, new Vector3(4, 4, 0.2f), true);
             Utils.API.Sounds.SoundPlayer.Instance.Play("lego", wall.GameObject, 10f, 40);
             wall.Collidable = true;
             wall.Visible = true;
-            Timing.CallDelayed(10, () => {
+            Timing.CallDelayed(10, () =>
+            {
                 wall.UnSpawn();
                 wall.Destroy();
             });

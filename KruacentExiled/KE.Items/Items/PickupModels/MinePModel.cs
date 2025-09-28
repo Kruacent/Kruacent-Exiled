@@ -1,6 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Toys;
-using KE.Items.Features;
+using KE.Items.API.Features;
 using KE.Utils.API.Models.Blueprints;
 using System;
 using System.Collections.Generic;

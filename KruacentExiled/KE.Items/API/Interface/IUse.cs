@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Items.Interface
+namespace KE.Items.API.Interface
 {
-    public interface ISwichableEffect
+    public interface IUse
     {
-        CustomItemEffect Effect { get; set; }
+
+        string HowToUseItemDesc { get; set; }
     }
 }

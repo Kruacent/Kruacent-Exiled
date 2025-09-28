@@ -5,11 +5,11 @@ using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using PlayerHandle = Exiled.Events.Handlers.Player;
-using KE.Items.Interface;
-using KE.Items.ItemEffects;
 using Scp914;
-using KE.Items.Features;
-using KE.Items.Core.Upgrade;
+using KE.Items.API.Core.Upgrade;
+using KE.Items.API.Interface;
+using KE.Items.Items.ItemEffects;
+using KE.Items.API.Features;
 
 /// <inheritdoc />
 [CustomItem(ItemType.Painkillers)]

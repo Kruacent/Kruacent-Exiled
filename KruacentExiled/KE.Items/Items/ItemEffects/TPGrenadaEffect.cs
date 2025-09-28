@@ -5,7 +5,7 @@ using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.API.Features.Pools;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
-using KE.Items.Interface;
+using KE.Items.API.Interface;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace KE.Items.ItemEffects
+namespace KE.Items.Items.ItemEffects
 {
     public class TPGrenadaEffect : CustomItemEffect
     {
@@ -41,7 +41,7 @@ namespace KE.Items.ItemEffects
 
         public override void Effect(ExplodingGrenadeEventArgs ev)
         {
-            OnExploding(ev.TargetsToAffect,ev.Projectile);
+            OnExploding(ev.TargetsToAffect, ev.Projectile);
         }
 
 
@@ -79,7 +79,7 @@ namespace KE.Items.ItemEffects
 
         private Room RandomRoom()
         {
-            Room room = Room.List.GetRandomValue((Room r) => !BlacklistedRooms.Contains(r.Type));
+            Room room = Room.List.GetRandomValue((r) => !BlacklistedRooms.Contains(r.Type));
             if (Warhead.IsDetonated)
             {
                 return RandomRoom(ZoneType.Surface);
@@ -107,7 +107,7 @@ namespace KE.Items.ItemEffects
 
         private Room RandomRoom(ZoneType zone)
         {
-            return Room.List.GetRandomValue((Room r) => !BlacklistedRooms.Contains(r.Type) && r.Zone == zone);
+            return Room.List.GetRandomValue((r) => !BlacklistedRooms.Contains(r.Type) && r.Zone == zone);
         }
     }
 }

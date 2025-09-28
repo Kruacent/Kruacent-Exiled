@@ -10,10 +10,10 @@ using Exiled.API.Features;
 using Exiled.API.Extensions;
 using UnityEngine;
 using CustomPlayerEffects;
-using KE.Items.Interface;
 using System.Linq;
-using KE.Items.Extensions;
-using KE.Items.Features;
+using KE.Items.API.Extensions;
+using KE.Items.API.Interface;
+using KE.Items.API.Features;
 
 /// <inheritdoc />
 [CustomItem(ItemType.Adrenaline)]

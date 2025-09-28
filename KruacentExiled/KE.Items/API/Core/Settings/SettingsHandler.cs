@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UserSettings.ServerSpecific;
 
-namespace KE.Items.Core.Settings
+namespace KE.Items.API.Core.Settings
 {
     internal class SettingsHandler : IUsingEvents
     {

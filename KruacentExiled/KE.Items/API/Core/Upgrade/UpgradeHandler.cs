@@ -2,11 +2,11 @@
 using Exiled.API.Features.Items;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Scp914;
-using KE.Items.Interface;
+using KE.Items.API.Interface;
 using KE.Utils.API.Interfaces;
 using Scp914;
 
-namespace KE.Items.Core.Upgrade
+namespace KE.Items.API.Core.Upgrade
 {
     internal class UpgradeHandler : IUsingEvents
     {
