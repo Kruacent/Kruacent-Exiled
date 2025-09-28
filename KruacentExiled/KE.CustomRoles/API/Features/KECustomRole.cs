@@ -1,14 +1,17 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 using Exiled.CustomRoles.API;
 using Exiled.CustomRoles.API.Features;
 using InventorySystem.Configs;
+using KE.CustomRoles.API.Interfaces;
 using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace KE.CustomRoles.API.Features
@@ -39,21 +42,40 @@ namespace KE.CustomRoles.API.Features
         public sealed override bool IgnoreSpawnSystem { get; set; } = true;
         protected override void ShowMessage(Player player)
         {
-
             //string msg = MainPlugin.Translations.GettingNewRole;
             //msg = msg.Replace("%Name%", PublicName).Replace("%Desc%",Description);
+            StringBuilder sb =StringBuilderPool.Pool.Get();
+            sb.Append("<b>");
+            IColor color = this as IColor;
+            if (color != null)
+            {
+                sb.Append("<color=#");
+                sb.Append(ColorUtility.ToHtmlStringRGB(color.Color));
+                sb.Append(">");
+            }
+            
+            sb.Append(PublicName);
 
-            string msg = $"<b>{PublicName}</b>";
+            if (color != null)
+            {
+                sb.Append("</color>");
+            }
+
+
+
+
+            sb.AppendLine("</b>");
 
             if (MainPlugin.SettingHandler.GetDescriptionsSettings(player))
             {
-                msg += $"\n {Description}";
+                sb.AppendLine(Description);
             }
 
 
             float delay = MainPlugin.SettingHandler.GetTime(player);
 
-            DisplayHandler.Instance.AddHint(MainPlugin.CRHint, player, msg, delay);
+            DisplayHandler.Instance.AddHint(MainPlugin.CRHint, player, sb.ToString(), delay);
+            StringBuilderPool.Pool.Return(sb);
         }
 
         
@@ -64,6 +86,7 @@ namespace KE.CustomRoles.API.Features
             DisplayHandler.Instance.AddHint(MainPlugin.CREffect, player, text, delay);
         }
 
+        
         public override void AddRole(Player player)
         {
             Player player2 = player;
@@ -137,6 +160,7 @@ namespace KE.CustomRoles.API.Features
                 }
             }
 
+            KEAbilities.TryRemoveFromPlayer(player);
 
             if(Abilities != null)
             {
@@ -215,7 +239,7 @@ namespace KE.CustomRoles.API.Features
         {
             if (player == null)
                 return;
-            if (UnityEngine.Random.Range(0, 101) > Chance)
+            if (Random.Range(0, 101) > Chance)
             {
                 Log.Debug("no luck");
                 return;
@@ -234,7 +258,7 @@ namespace KE.CustomRoles.API.Features
             //error assigning cr to a player with a gcr 
             cr?.AddRole(player);
         }
-
+        
         public static void GiveRole(IEnumerable<Player> players)
         {
             foreach (Player p in players)

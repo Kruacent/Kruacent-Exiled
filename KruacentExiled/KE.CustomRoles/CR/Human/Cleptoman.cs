@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace KE.CustomRoles.CR.Human
 {
-    [CustomRole(RoleTypeId.None)]
     public class Cleptoman : GlobalCustomRole
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;

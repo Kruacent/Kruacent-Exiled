@@ -6,8 +6,7 @@ using System.Collections.Generic;
 
 namespace KE.CustomRoles.CR.Guard
 {
-    [CustomRole(RoleTypeId.FacilityGuard)]
-    internal class ChiefGuard : KECustomRole
+    public class ChiefGuard : KECustomRole
     {
         public override string Description { get; set; } = "Tu es un <color=#70C3FF>Chef des gardes du site</color> \nT'as une carte de private \net un crossvec";
         public override uint Id { get; set; } = 1046;

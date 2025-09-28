@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace KE.CustomRoles.CR.SCP
 {
-    /*[CustomRole(RoleTypeId.None)]
+    /*
     public class Tall : GlobalCustomRole
     {
         public override string Description { get; set; } = "u tall";

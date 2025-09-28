@@ -17,7 +17,6 @@ using Utils.NonAllocLINQ;
 
 namespace KE.CustomRoles.CR.Human
 {
-    [CustomRole(RoleTypeId.None)]
     internal class Curiosophile : GlobalCustomRole
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;

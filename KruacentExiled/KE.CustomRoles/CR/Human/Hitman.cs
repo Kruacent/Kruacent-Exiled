@@ -12,8 +12,7 @@ using System.Linq;
 
 namespace KE.CustomRoles.CR.Human
 {
-    [CustomRole(RoleTypeId.None)]
-    internal class Hitman : GlobalCustomRole
+    public class Hitman : GlobalCustomRole
     {
         private static CoroutineHandle _coroutines;
         public override SideEnum Side { get; set; } = SideEnum.Human;

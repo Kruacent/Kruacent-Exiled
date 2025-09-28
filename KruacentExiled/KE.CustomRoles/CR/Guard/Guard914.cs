@@ -7,8 +7,7 @@ using System.Collections.Generic;
 
 namespace KE.CustomRoles.CR.Guard
 {
-    [CustomRole(RoleTypeId.FacilityGuard)]
-    internal class Guard914 : KECustomRole
+    public class Guard914 : KECustomRole
     {
         public override string Description { get; set; } = "Tu es <b>Le</b> <color=#6B6B38>garde de SCP-914</color> \nTu commences à 914 \nmais on a volé ta carte \net ntm aussi";
         public override uint Id { get; set; } = 1045;

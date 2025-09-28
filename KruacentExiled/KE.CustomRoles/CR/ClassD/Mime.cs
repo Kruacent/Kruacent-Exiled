@@ -11,8 +11,7 @@ using UnityEngine;
 
 namespace KE.CustomRoles.CR.ClassD
 {
-    [CustomRole(RoleTypeId.ClassD)]
-    internal class Mime : KECustomRole
+    public class Mime : KECustomRole
     {
         public override string Description { get; set; } = "Tu es un <color=#FFC0CB>Mime</color> \nTu ne peux pas parler\nmais tu fais très peu de bruit quand tu marches\net t'es tout plat";
         public override uint Id { get; set; } = 1053;

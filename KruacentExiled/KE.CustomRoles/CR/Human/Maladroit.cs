@@ -15,8 +15,7 @@ using Utils.NonAllocLINQ;
 
 namespace KE.CustomRoles.CR.Human
 {
-    [CustomRole(RoleTypeId.None)]
-    internal class Maladroit : GlobalCustomRole
+    public class Maladroit : GlobalCustomRole
     {
         private static Dictionary<Player, CoroutineHandle> _coroutines = new();
 

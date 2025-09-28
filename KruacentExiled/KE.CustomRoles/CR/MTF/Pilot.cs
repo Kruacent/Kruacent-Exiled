@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace KE.CustomRoles.CR.MTF
 {
-    [CustomRole(RoleTypeId.NtfPrivate)]
     public class Pilot : KECustomRole
     {
         public override string Description { get; set; } = "So I haveth a Laser Pointere";

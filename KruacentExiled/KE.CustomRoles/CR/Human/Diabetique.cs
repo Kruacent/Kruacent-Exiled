@@ -10,8 +10,7 @@ using Utils.NonAllocLINQ;
 
 namespace KE.CustomRoles.CR.Human
 {
-    [CustomRole(RoleTypeId.None)]
-    internal class Diabetique : GlobalCustomRole
+    public class Diabetique : GlobalCustomRole
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;
         public override string Description { get; set; } = "Tu es <color=#FFFF00>diabetique</color>\nT'as mangé le crambleu au pomme de mael";

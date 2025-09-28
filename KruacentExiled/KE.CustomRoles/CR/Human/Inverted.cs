@@ -9,7 +9,6 @@ using Exiled.API.Enums;
 
 namespace KE.CustomRoles.CR.Human
 {
-    [CustomRole(RoleTypeId.None)]
     public class Inverted : GlobalCustomRole
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;

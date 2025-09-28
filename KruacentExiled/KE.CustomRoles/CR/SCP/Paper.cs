@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace KE.CustomRoles.CR.SCP
 {
-    [CustomRole(RoleTypeId.None)]
     public class Paper : GlobalCustomRole
     {
         public override string Description { get; set; } = "uh oh. paper jam";

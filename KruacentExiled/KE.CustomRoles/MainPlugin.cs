@@ -42,7 +42,7 @@ namespace KE.CustomRoles
             Harmony.PatchAll();
             SettingHandler.SubscribeEvents();
             KEAbilities.Register(Assembly);
-            CustomRole.RegisterRoles(false,null,true,Assembly);
+            CustomRole.RegisterRoles(false);
             SubscribeEvents();
 
         }
@@ -54,7 +54,6 @@ namespace KE.CustomRoles
             SettingHandler.UnsubscribeEvents();
             Harmony.UnpatchAll();
 
-            CustomAbility.UnregisterAbilities();
             KEAbilities.Unregister();
             UnsubscribeEvents();
             _settingHandler = null;
@@ -82,6 +81,12 @@ namespace KE.CustomRoles
         public void CustomRoleRespawning(RespawnedTeamEventArgs ev)
         {
             KECustomRole.GiveRole(ev.Players);
+        }
+
+        public static void ShowEffectHint(Player player, string text)
+        {
+            float delay = SettingHandler.GetTime(player); ;
+            DisplayHandler.Instance.AddHint(MainPlugin.CREffect, player, text, delay);
         }
     }
 }

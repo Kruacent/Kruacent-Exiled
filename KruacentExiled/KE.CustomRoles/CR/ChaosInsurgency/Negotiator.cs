@@ -11,8 +11,7 @@ using UnityEngine;
 
 namespace KE.CustomRoles.CR.ChaosInsurgency
 {
-    [CustomRole(RoleTypeId.ChaosConscript)]
-    internal class Negotiator : KECustomRole
+    public class Negotiator : KECustomRole
     {
         public override string Description { get; set; } = "Who knew zombie could be so great listeners";
         public override uint Id { get; set; } = 1071;

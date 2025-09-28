@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace KE.CustomRoles.CR.Human
 {
-    [CustomRole(RoleTypeId.None)]
+    /*
     public class Paper2 : GlobalCustomRole
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;
@@ -19,5 +19,5 @@ namespace KE.CustomRoles.CR.Human
 
         public override float SpawnChance { get; set; } = 100;
         public override Vector3 Scale { get; set; } = new Vector3(0.2f, 1, 1);
-    }
+    }*/
 }

@@ -12,7 +12,6 @@ using Utils.NonAllocLINQ;
 
 namespace KE.CustomRoles.CR.Human
 {
-    [CustomRole(RoleTypeId.None)]
     internal class Alzheimer : GlobalCustomRole
     {
         private static Dictionary<Player, CoroutineHandle> _coroutines = new();

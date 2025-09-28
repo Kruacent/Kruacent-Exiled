@@ -14,8 +14,7 @@ using UnityEngine;
 
 namespace KE.CustomRoles.CR.Scientist
 {
-    [CustomRole(RoleTypeId.Scientist)]
-    internal class ZoneManager : KECustomRole
+    public class ZoneManager : KECustomRole
     {
         public override string Description { get; set; } = "Incroyable tu peux avoir une promotion alors fais ton boulot et ouvre tous ces checkpoint et tu pourras sortir d'ici";
         public override uint Id { get; set; } = 1044;

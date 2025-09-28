@@ -10,7 +10,6 @@ using System.Linq;
 
 namespace KE.CustomRoles.CR.SCP
 {
-    [CustomRole(RoleTypeId.None)]
     public class Ultra : GlobalCustomRole
     {
         private static Dictionary<Player, CoroutineHandle> _handles = new();
@@ -21,7 +20,7 @@ namespace KE.CustomRoles.CR.SCP
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float MaxHealthMultiplicator { get; set; } = 1f;
-        public override float SpawnChance { get; set; } = 100;
+        public override float SpawnChance { get; set; } = 0;
         public const float RefreshRate = 20;
         public const int SizeText = 20;
         protected override void RoleAdded(Player player)

@@ -27,6 +27,8 @@ namespace KE.CustomRoles.API.Features
         public override bool KeepInventoryOnSpawn { get; set; } = true;
         public override bool RemovalKillsPlayer => false;
 
+
+        
         public override void AddRole(Player player)
         {
             SideEnum side = SideClass.Get(player.Role.Side);

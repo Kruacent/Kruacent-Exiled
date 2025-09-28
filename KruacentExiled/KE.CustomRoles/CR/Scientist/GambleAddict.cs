@@ -9,7 +9,6 @@ using UnityEngine;
 
 namespace KE.CustomRoles.CR.Scientist
 {
-    [CustomRole(RoleTypeId.Scientist)]
     public class GambleAddict : KECustomRole
     {
         public override string Description { get; set; } = "Tu es un <color=#FFFF7C>Gamble Addict</color> \nT'as trade ton kit et ta carte contre 2 pièces \nfais en bon usage";

@@ -8,20 +8,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 
 namespace KE.CustomRoles.CR.MTF
 {
-    [CustomRole(RoleTypeId.NtfCaptain)]
-    internal class Tank : KECustomRole
+    public class Tank : KECustomRole, IColor
     {
-        public override string Description { get; set; } = "Tu es un <color=#FFC0CB>TANK</color> tu es débuff mais ta force de tir est démultiplié (fait attention à tes balles)";
+        public override string Description { get; set; } = "Tu es débuff mais ta force de tir est démultiplié (fait attention à tes balles)";
         public override uint Id { get; set; } = 1051;
         public override string PublicName { get; set; } = "Tank";
         public override int MaxHealth { get; set; } = 200;
         public override RoleTypeId Role { get; set; } = RoleTypeId.NtfCaptain;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
-
+        public Color32 Color => new (255, 192, 203,0);
         public override float SpawnChance { get; set; } = 100;
         public override Vector3 Scale { get; set; } = new Vector3(1.15f, 1f, 1.15f);
 
@@ -42,6 +42,8 @@ namespace KE.CustomRoles.CR.MTF
           { AmmoType.Nato762, 200},
           { AmmoType.Nato556, 200}
         };
+
+        
 
         protected override void SubscribeEvents()
         {

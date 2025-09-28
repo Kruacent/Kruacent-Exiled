@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
+using Exiled.API.Features.Pools;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.Settings;
@@ -11,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using UserSettings.ServerSpecific;
 using UserSettings.UserInterfaceSettings;
 using static PlayerList;
@@ -196,7 +198,7 @@ namespace KE.CustomRoles.API.Features
             if (Selected.Add(player))
             {
                 Log.Debug($"player {player.Nickname} selected ability {this}");
-                foreach (KEAbilities abilities in Registered.Where(a => a != this))
+                foreach (KEAbilities abilities in Registered.Where(a => a != this && a.Players.Contains(player)))
                 {
                     abilities.UnselectAbility(player);
                 }
@@ -497,7 +499,8 @@ namespace KE.CustomRoles.API.Features
         }
         public static void UpdateGUI(Player player)
         {
-            string msg = "";
+            StringBuilder builder = StringBuilderPool.Pool.Get();
+            
 
             List<KEAbilities> allAbilities = PlayersAbility[player];
 
@@ -507,34 +510,38 @@ namespace KE.CustomRoles.API.Features
 
                 KEAbilities ability = allAbilities[i];
 
-                msg += $"{ability.Name} ";
+                builder.Append(ability.Name);
+                builder.Append(" ");
+                
                 if (ability.CanUse(player,out var output))
                 {
-                    msg += "[READY]";
+                    builder.Append("[READY]");
                 }
                 else
                 {
                     DateTime dateTime = ability.LastUsed[player] + TimeSpan.FromSeconds(ability.Cooldown);
-                    msg += $"[{Math.Round((dateTime - DateTime.Now).TotalSeconds, 0)}s]";
+                    builder.Append("[");
+                    builder.Append(Math.Round((dateTime - DateTime.Now).TotalSeconds, 0));
+                    builder.Append("s]");
                 }
 
-
-
-                //Log.Debug($"ability {ability.Name} contain {ability.Selected.Count} ");
                 
                 if (ability.Selected.Contains(player))
                 {
-                    //todo replace with the settings
-                    msg += SettingHandler.baseArrow;
+                    string arrow = SettingHandler.Instance.GetArrow(player);
+
+                    if (string.IsNullOrEmpty(arrow))
+                    {
+                        arrow = SettingHandler.baseArrow;
+                    }
+
+                    builder.Append(arrow);
                 }
-
-
-
-                msg += "\n";
+                builder.AppendLine();
             }
 
-            //Log.Debug(msg);
-
+            string msg = builder.ToString();
+            StringBuilderPool.Pool.Return(builder);
             DisplayHandler.Instance.AddHint(MainPlugin.Abilities, player, msg, 1f);
         }
 

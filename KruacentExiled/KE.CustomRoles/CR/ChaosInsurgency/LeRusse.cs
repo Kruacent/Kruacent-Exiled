@@ -7,8 +7,7 @@ using UnityEngine;
 
 namespace KE.CustomRoles.CR.ChaosInsurgency
 {
-    [CustomRole(RoleTypeId.ChaosConscript)]
-    internal class Russe : KECustomRole
+    public class Russe : KECustomRole
     {
         public override string Description { get; set; } = "Tu es un <color=#FFC0CB>maitre de jeu</color> \ntu dois faire la roulette russe avec les autres joueurs";
         public override uint Id { get; set; } = 1050;
