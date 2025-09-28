@@ -120,12 +120,12 @@ namespace KE.Items.Items.ItemEffects
             bool isActivated = true;
             while (isActivated)
             {
-
-                foreach (IWorldSpace p in Pickup.List)
+                //Log.Debug("activated");
+                foreach (Pickup p in Pickup.List)
                 {
-                    if (IsPositionInZone(p.Position, mine.Position, cylinderSize, 3))
+                    if (isActivated && IsPositionInZone(p.Position, mine.Position, cylinderSize, 3))
                     {
-                        Grenade.SpawnActive(mine.Position);
+                        Grenade.SpawnActive(mine.Position+Vector3.up);
                         DestroyMine(mine);
                         isActivated = false;
                         break;
@@ -137,7 +137,7 @@ namespace KE.Items.Items.ItemEffects
 
                     if (isActivated && IsPlayerInZone(player, mine.Position, cylinderSize, 3))
                     {
-                        Grenade.SpawnActive(mine.Position);
+                        Grenade.SpawnActive(mine.Position + Vector3.up);
                         DestroyMine(mine);
                         isActivated = false;
                         break;
@@ -146,6 +146,7 @@ namespace KE.Items.Items.ItemEffects
 
                 yield return Timing.WaitForSeconds(RefreshRate);
             }
+            DestroyMine(mine);
         }
 
         private void DestroyMine(MineModel mine)
