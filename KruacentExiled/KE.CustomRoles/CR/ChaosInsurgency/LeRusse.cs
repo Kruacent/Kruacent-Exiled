@@ -9,13 +9,14 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
 {
     public class Russe : KECustomRole
     {
-        public override string Description { get; set; } = "Tu es un <color=#FFC0CB>maitre de jeu</color> \ntu dois faire la roulette russe avec les autres joueurs";
+        public override string Description { get; set; } = "Tu dois faire la roulette russe avec les autres joueurs";
         public override uint Id { get; set; } = 1050;
         public override string PublicName { get; set; } = "Le Russe";
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.ChaosConscript;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
+        public Color32 Color => new(255, 0, 0, 0);
 
         public override float SpawnChance { get; set; } = 100;
         public override Vector3 Scale { get; set; } = new Vector3(1.1f, 1f, 1.1f);

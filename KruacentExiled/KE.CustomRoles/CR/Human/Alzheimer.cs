@@ -4,28 +4,34 @@ using Exiled.API.Features.Attributes;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
-using Utils.NonAllocLINQ;
 
 namespace KE.CustomRoles.CR.Human
 {
-    internal class Alzheimer : GlobalCustomRole
+    public class Alzheimer : GlobalCustomRole, IColor
     {
         private static Dictionary<Player, CoroutineHandle> _coroutines = new();
         public override SideEnum Side { get; set; } = SideEnum.Human;
-        public override string Description { get; set; } = "Tu es <color=#0f0f0f>Vieux</color>";
+        public override string Description { get; set; } = "POV Mishima";
         public override uint Id { get; set; } = 1056;
         public override string PublicName { get; set; } = "Vieux";
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
         public override float SpawnChance { get; set; } = 100;
+
+        public Color32 Color => new Color32(112,112,112,0);
+
         protected override void RoleAdded(Player player)
         {
             _coroutines.Add(player, Timing.RunCoroutine(Teleport(player)));
         }
+
+
+
 
         protected override void RoleRemoved(Player player)
         {

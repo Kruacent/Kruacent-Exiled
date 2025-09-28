@@ -2,6 +2,7 @@
 using Exiled.CustomRoles.API.Features;
 using KE.CustomRoles.Abilities;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -9,9 +10,9 @@ using UnityEngine;
 
 namespace KE.CustomRoles.CR.Scientist
 {
-    public class GambleAddict : KECustomRole
+    public class GambleAddict : KECustomRole, IColor
     {
-        public override string Description { get; set; } = "Tu es un <color=#FFFF7C>Gamble Addict</color> \nT'as trade ton kit et ta carte contre 2 pièces \nfais en bon usage";
+        public override string Description { get; set; } = "T'as trade ton kit et ta carte contre 2 pièces \nfais en bon usage";
         public override uint Id { get; set; } = 1043;
         public override string PublicName { get; set; } = "Gamble Addict";
         public override int MaxHealth { get; set; } = 100;
@@ -31,5 +32,7 @@ namespace KE.CustomRoles.CR.Scientist
         {
             2002
         };
+
+        public Color32 Color => new(0, 105, 59,0);
     }
 }

@@ -16,13 +16,14 @@ namespace KE.CustomRoles.CR.Scientist
 {
     public class ZoneManager : KECustomRole
     {
-        public override string Description { get; set; } = "Incroyable tu peux avoir une promotion alors fais ton boulot et ouvre tous ces checkpoint et tu pourras sortir d'ici";
+        public override string Description { get; set; } = "Incroyable tu peux avoir une promotion alors fais ton boulot et ouvre tous ces checkpoints et tu pourras sortir d'ici";
         public override uint Id { get; set; } = 1044;
         public override string PublicName { get; set; } = "Zone Manager";
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scientist;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
+        public Color32 Color => new Color32(4, 52, 50, 0);
 
 
         public override float SpawnChance { get; set; } = 100;

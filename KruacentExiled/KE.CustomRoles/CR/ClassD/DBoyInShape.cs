@@ -33,12 +33,12 @@ namespace KE.CustomRoles.CR.ClassD
 
         public override HashSet<int> Abilities => new()
         {
-            2008
+            2009
         };
 
         protected override void RoleAdded(Player player)
         {
-            player.EnableEffect(EffectType.Slowness, 5, SpeedReduction);
+            player.EnableEffect(EffectType.Slowness, SpeedReduction,999999 );
         }
 
         protected override void RoleRemoved(Player player)

@@ -4,6 +4,7 @@ using Exiled.API.Features.Attributes;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 using PlayerRoles;
 using PlayerRoles.Spectating;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ using UnityEngine;
 
 namespace KE.CustomRoles.CR.ClassD
 {
-    public class Mime : KECustomRole
+    public class Mime : KECustomRole, IColor
     {
-        public override string Description { get; set; } = "Tu es un <color=#FFC0CB>Mime</color> \nTu ne peux pas parler\nmais tu fais très peu de bruit quand tu marches\net t'es tout plat";
+        public override string Description { get; set; } = "Tu ne peux pas parler\nmais tu fais très peu de bruit quand tu marches\net t'es tout plat";
         public override uint Id { get; set; } = 1053;
         public override string PublicName { get; set; } = "Mime";
         public override int MaxHealth { get; set; } = 100;
@@ -22,19 +23,24 @@ namespace KE.CustomRoles.CR.ClassD
         public override bool KeepRoleOnChangingRole { get; set; } = true;
         public override float SpawnChance { get; set; } = 0;
         public override Vector3 Scale { get; set; } = new Vector3(0.1f, 1, 1);
+        public Color32 Color => new(255, 74, 74, 0);
 
         protected override void RoleAdded(Player player)
         {
             player.EnableEffect(EffectType.SilentWalk, -1, true); //doesn't work with 939 i think
-            player.Mute();
+            player.IsMuted = true;
         }
 
         protected override void RoleRemoved(Player player)
         {
-            player.UnMute();
+            player.IsMuted = false;
             player.DisableEffect(EffectType.SilentWalk);
         }
 
+        public override HashSet<int> Abilities { get; } = new()
+        {
+            2009
+        };
 
     }
 }

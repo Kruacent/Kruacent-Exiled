@@ -21,7 +21,7 @@ namespace KE.CustomRoles.Abilities
 
         public override string Description { get; } = "Force open a door";
 
-        public override int Id => 2008;
+        public override int Id => 2009;
 
         public override float Cooldown { get;  } = 30;
         private Dictionary<Player, DateTime> abilityActivated = new();

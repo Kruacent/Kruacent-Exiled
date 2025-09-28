@@ -1,18 +1,18 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features.Attributes;
+using Exiled.API.Features.Spawn;
 using KE.CustomRoles.API.Features;
-using KE.CustomRoles.API.Interfaces;
 using PlayerRoles;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace KE.CustomRoles.CR.Guard
 {
-    public class ChiefGuard : KECustomRole, IColor
+    [CustomRole(RoleTypeId.FacilityGuard)]
+    internal class Introvert : KECustomRole
     {
-        public override string Description { get; set; } = "Tu es un <color=#70C3FF>Chef des gardes du site</color> \nT'as une carte de private \net un crossvec";
-        public override uint Id { get; set; } = 1046;
-        public override string PublicName { get; set; } = "Chef des Gardes";
+        public override string Description { get; set; } = "Tu n'aimes pas trop les humains";
+        public override uint Id { get; set; } = 1069;
+        public override string PublicName { get; set; } = "Introvert";
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
         public override bool KeepRoleOnDeath { get; set; } = false;
@@ -21,20 +21,17 @@ namespace KE.CustomRoles.CR.Guard
         public override float SpawnChance { get; set; } = 100;
 
         public override List<string> Inventory { get; set; } = new List<string>()
-       {
+        {
           $"{ItemType.Radio}",
           $"{ItemType.ArmorLight}",
-          $"{ItemType.GunCrossvec}",
+          $"{ItemType.GunFSP9}",
           $"{ItemType.Medkit}",
-          $"{ItemType.Flashlight}",
-          $"{ItemType.KeycardMTFPrivate}"
+          $"{ItemType.Flashlight}"
         };
 
         public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new Dictionary<AmmoType, ushort>()
-       {
-          { AmmoType.Nato556, 120}
-       };
-
-        public Color32 Color => new Color32(112, 195, 255, 0);
+        {
+          { AmmoType.Nato556, 60}
+        };
     }
 }

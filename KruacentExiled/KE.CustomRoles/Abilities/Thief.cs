@@ -20,7 +20,7 @@ namespace KE.CustomRoles.Abilities
 
         protected override void AbilityUsed(Player player)
         {
-            List<Player> playerList = Player.List.Where(p => !p.IsScp).ToList();
+            List<Player> playerList = Player.List.Where(p => !p.IsScp && p.CurrentRoom == player.CurrentRoom).ToList();
             playerList.Remove(player);
 
             Log.Debug("Player list :");
@@ -30,7 +30,7 @@ namespace KE.CustomRoles.Abilities
 
             Log.Debug($"Thiefed player : {thiefed.Nickname}");
 
-            Item inv = thiefed.Items.ToList().GetRandomValue();
+            Item inv = thiefed.Items.GetRandomValue();
 
             Log.Debug($"Thiefed item : {inv}");
 

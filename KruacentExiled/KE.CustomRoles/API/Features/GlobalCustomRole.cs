@@ -6,6 +6,7 @@ using Exiled.API.Features.Pools;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Configs;
+using KE.CustomRoles.API.Interfaces;
 using KE.Utils.API.Displays.DisplayMeow;
 using LiteNetLib4Mirror.Open.Nat;
 using MEC;
@@ -86,6 +87,7 @@ namespace KE.CustomRoles.API.Features
             player.CustomInfo = $"{player.CustomName}\n{CustomInfo}";
             player.InfoArea &= ~(PlayerInfoArea.Role | PlayerInfoArea.Nickname);
 
+            KEAbilities.TryRemoveFromPlayer(player);
             if (Abilities != null)
             {
                 foreach (int abilityId in Abilities)
@@ -113,13 +115,7 @@ namespace KE.CustomRoles.API.Features
             player.CustomInfo = string.Empty;
             player.InfoArea |= PlayerInfoArea.Nickname | PlayerInfoArea.Role;
             player.Scale = Vector3.one;
-            if (CustomAbilities != null)
-            {
-                foreach (CustomAbility customAbility in CustomAbilities)
-                {
-                    customAbility.RemoveAbility(player);
-                }
-            }
+            KEAbilities.TryRemoveFromPlayer(player);
 
             RoleRemoved(player);
             player.UniqueRole = string.Empty;
@@ -140,21 +136,42 @@ namespace KE.CustomRoles.API.Features
 
         protected override void ShowMessage(Player player)
         {
-            string show;
+            StringBuilder sb = StringBuilderPool.Pool.Get();
+            sb.Append("<b>");
+            IColor color = this as IColor;
+            if (color != null)
+            {
+                sb.Append("<color=#");
+                sb.Append(ColorUtility.ToHtmlStringRGB(color.Color));
+                sb.Append(">");
+            }
+
+
+            sb.Append(PublicName);
+
+            if (color != null)
+            {
+                sb.Append("</color>");
+            }
+
             if (player.IsScp)
             {
-                show = $"<b>{Name} {player.Role.Name}</b>\n {Description}";
+                sb.Append(player.Role.Name);
             }
-            else
+
+
+            sb.AppendLine("</b>");
+
+            if (MainPlugin.SettingHandler.GetDescriptionsSettings(player))
             {
-                show = $"<b>{Name}</b>\n {Description}";
+                sb.AppendLine(Description);
             }
 
 
-            //todo settings
-            float delay = 20;
+            float delay = MainPlugin.SettingHandler.GetTime(player);
 
-            DisplayHandler.Instance.AddHint(MainPlugin.CRHint, player, show, delay);
+            DisplayHandler.Instance.AddHint(MainPlugin.CRHint, player, sb.ToString(), delay);
+            StringBuilderPool.Pool.Return(sb);
         }
     }
 

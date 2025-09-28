@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.CustomRoles.API.Features;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 using MEC;
 using PlayerRoles;
 using System;
@@ -15,7 +16,7 @@ using Utils.NonAllocLINQ;
 
 namespace KE.CustomRoles.CR.Human
 {
-    public class Maladroit : GlobalCustomRole
+    public class Maladroit : GlobalCustomRole, IColor
     {
         private static Dictionary<Player, CoroutineHandle> _coroutines = new();
 
@@ -26,6 +27,8 @@ namespace KE.CustomRoles.CR.Human
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
         public override float SpawnChance { get; set; } = 100;
+
+        public Color32 Color => new(211, 110, 112, 0);
 
         protected override void RoleAdded(Player player)
         {
