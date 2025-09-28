@@ -72,6 +72,7 @@ namespace KE.Map.Heavy.GamblingZone
             _interact = InteractableToy.Create(_position, networkSpawn: false);
             _interact.InteractionDuration = BasePickupTime;
             
+            
             _interact.OnSearchAborted += OnPickup;
             CreateModel(_position);
             _interact.Spawn();
@@ -120,6 +121,8 @@ namespace KE.Map.Heavy.GamblingZone
         {
             Player player2 = Player.Get(player);
             if (player2 == null) return;
+            if (!player2.IsScp) return;
+
             if (player2.CurrentItem == null) return;
             Item item = _lootTable.GetRandomItem();
             player2.CurrentItem.Destroy();
