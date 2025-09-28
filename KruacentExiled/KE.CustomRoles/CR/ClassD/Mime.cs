@@ -36,6 +36,9 @@ namespace KE.CustomRoles.CR.ClassD
             player.DisableEffect(EffectType.SilentWalk);
         }
 
-
+        public override HashSet<int> Abilities { get; } = new()
+        {
+            2009
+        };
     }
 }

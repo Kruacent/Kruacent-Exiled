@@ -7,8 +7,6 @@ using KE.CustomRoles.API.Features;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
-using UnityEngine;
-using Utils.NonAllocLINQ;
 
 namespace KE.CustomRoles.CR.Human
 {
