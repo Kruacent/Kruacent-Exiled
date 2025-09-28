@@ -3,16 +3,11 @@ using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.API.Interfaces;
-using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
-using KE.Map.Doors;
 using KE.Map.EasterEggs;
 using KE.Map.Heavy.GamblingZone;
-using KE.Map.Surface.BlinkingBlocks;
-using KE.Map.Surface.SupplyDrops;
 using KE.Map.Surface.Turrets;
 using KE.Utils.API.Models;
-using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,23 +17,16 @@ namespace KE.Map
 {
     public class MainPlugin : Plugin<Config>
     {
+        public override string Name => "KE.Map";
+        public override string Prefix => "KE.M";
         public static MainPlugin Instance { get; private set; }
         public Models models => Models.Instance;
         public static Config Configs => Instance?.Config;
-        private Capybaras Capybaras;
         public override void OnEnabled()
         {
-
-            //Capybaras = new();
-
-
-            //Capybaras.SubscribeEvents();
             KE.Utils.API.Sounds.SoundPlayer.Instance.TryLoad();
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
             GamblingRoom.SubscribeEvents();
-            //SupplyDrop.SubscribeEvents();
-            //Turret.SubscribeEvents();
-            //models?.SubscribeEvents();
 
             Instance = this;
         }
@@ -58,12 +46,6 @@ namespace KE.Map
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
             GamblingRoom.UnsubscribeEvents();
-            //SupplyDrop.UnsubscribeEvents();
-            //Capybaras.UnsubscribeEvents();
-            //Turret.UnsubscribeEvents();
-            //models.UnsubscribeEvents();
-            //models.DestroyInstance();
-            Capybaras = null;
             Instance = null;
         }
 
@@ -135,8 +117,7 @@ namespace KE.Map
 
         }
 
-        public override string Name => "KE.Map";
-        public override string Prefix => "KE.M";
+
 
         private void OnRoundEnded(RoundEndedEventArgs ev)
         {

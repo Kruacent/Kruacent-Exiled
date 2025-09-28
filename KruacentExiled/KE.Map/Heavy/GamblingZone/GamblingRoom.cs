@@ -3,7 +3,6 @@ using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Server;
-using KE.Map.Utils;
 using InteractableToy = LabApi.Features.Wrappers.InteractableToy;
 using System.Collections.Generic;
 using UnityEngine;
