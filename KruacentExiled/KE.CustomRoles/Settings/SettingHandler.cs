@@ -42,7 +42,7 @@ namespace KE.CustomRoles.Settings
                 new KeybindSetting(_idDown, "Select down", UnityEngine.KeyCode.None,hintDescription:"only work in Select Wheel mode"),
                 new KeybindSetting(_idSelect, "Use selected ability", UnityEngine.KeyCode.None,hintDescription:"only work in Select Wheel mode"),
                 //this crashes the player idk why
-                SettingBase.Create(new SSPlaintextSetting(_idArrow, "Personalize the arrow next to the selected ability", baseArrow, 64, TMP_InputField.ContentType.Standard, "only work in Select Wheel mode", 0))
+                SettingBase.Create(new SSPlaintextSetting(_idArrow, "Personalize the arrow next to the selected ability", baseArrow, 16, TMP_InputField.ContentType.Standard, "only work in Select Wheel mode", 0))
             };
         }
 
