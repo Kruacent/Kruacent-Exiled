@@ -58,8 +58,9 @@ namespace KE.Misc
             Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
             Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
 
+            ClassDDoor.SubscribeEvents();
 
-            
+
             MiscFeature.SubscribeAllEvents();
             Exiled.Events.Handlers.Player.FlippingCoin += _gamblingCoinHandler.OnCoinFlip;
             Exiled.Events.Handlers.Server.RoundStarted += AutoNukeAnnoucement.OnRoundStarted;
@@ -79,6 +80,7 @@ namespace KE.Misc
             Exiled.Events.Handlers.Player.FlippingCoin -= _gamblingCoinHandler.OnCoinFlip;
             AutoTesla.StopLoop();
             MiscFeature.UnsubscribeAllEvents();
+            ClassDDoor.UnsubscribeEvents();
 
 
             CustomRole.UnregisterRoles([typeof(Scp035)]);
