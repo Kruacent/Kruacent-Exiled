@@ -29,7 +29,7 @@ public class EatingStar : IDurationEffect
         while (true)
         {
             Light.Color = ColorPicker();
-            Timing.WaitForSeconds(0.5f);
+            yield return Timing.WaitForSeconds(0.5f);
         }
     }
 

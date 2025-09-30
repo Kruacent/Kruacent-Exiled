@@ -15,6 +15,5 @@ public class RedCandy : ICoinEffect
         Scp330 candy = (Scp330)Item.Create(ItemType.SCP330);
         candy.AddCandy(InventorySystem.Items.Usables.Scp330.CandyKindID.Red);
         candy.CreatePickup(player.Position);
-        return;
     }
 }

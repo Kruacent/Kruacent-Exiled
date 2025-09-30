@@ -10,7 +10,6 @@ internal class TeleportToEnemy : ICoinEffect
     public string Message { get; set; } = "You were teleported to an enemy !!";
     public int Weight { get; set; } = 30;
     public EffectType Type { get; set; } = EffectType.Negative;
-    public static float FuseTime = 3.25f;
 
     public void Execute(Player player)
     {

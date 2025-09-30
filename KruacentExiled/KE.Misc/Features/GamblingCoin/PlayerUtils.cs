@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Exiled.API.Features;
+using KE.Utils.API.Displays.DisplayMeow;
 
 namespace KE.Misc.Features.GamblingCoin
 {

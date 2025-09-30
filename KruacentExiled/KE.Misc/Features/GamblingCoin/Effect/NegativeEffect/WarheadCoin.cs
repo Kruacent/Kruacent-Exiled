@@ -11,7 +11,7 @@ internal class WarheadCoin : ICoinEffect
 
     public void Execute(Player player)
     {
-        if (Warhead.IsDetonated || !Warhead.IsInProgress)
+        if (!Warhead.IsDetonated || !Warhead.IsInProgress)
             Warhead.Start();
         else
             Warhead.Stop();
