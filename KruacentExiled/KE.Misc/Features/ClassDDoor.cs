@@ -2,6 +2,7 @@
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.API.Interfaces;
+using KE.Utils.API.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,24 +14,47 @@ namespace KE.Misc.Features
     /// <summary>
     /// Everything about classD door
     /// </summary>
-    internal class ClassDDoor
+    public class ClassDDoor : IUsingEvents
     {
-        /// <summary>
-        /// Class d door randomly explode at the start of the round
-        /// </summary>
-        internal void ClassDDoorGoesBoom()
+        public void SubscribeEvents()
         {
-            if (UnityEngine.Random.Range(0, 101) < MainPlugin.Instance.Config.ChanceClassDDoorGoesBoom)
+            Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
+        }
+
+        public void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
+            
+        }
+
+
+        private void OnRoundStarted()
+        {
+            if(UnityEngine.Random.Range(0, 101) < MainPlugin.Instance.Config.ChanceClassDDoorGoesBoom || MainPlugin.Instance.Config.Debug)
             {
-                Log.Debug("ClassD's door exploded");
-                foreach (Door door in Door.List.Where(d => d.Type == DoorType.PrisonDoor))
+                HumanDoorsGoesBoom();
+            }
+
+        }
+
+
+        private void HumanDoorsGoesBoom()
+        {
+            foreach(Player player in Player.List.Where(p => p.IsHuman))
+            {
+                if(player.CurrentRoom != null)
                 {
-                    if (door is IDamageableDoor dBoyDoor && !dBoyDoor.IsDestroyed)
+                    foreach(Door door in player.CurrentRoom.Doors.Where(d => d is IDamageableDoor && !d.IsCheckpoint))
                     {
-                        dBoyDoor.Break();
+                        IDamageableDoor damageable = door as IDamageableDoor;
+                        damageable.Break();
                     }
                 }
             }
         }
+
+
+
+
     }
 }

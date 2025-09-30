@@ -54,8 +54,9 @@ namespace KE.Misc
             Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
             Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
 
+            ClassDDoor.SubscribeEvents();
 
-            
+
             MiscFeature.SubscribeAllEvents();
             Exiled.Events.Handlers.Server.RoundStarted += AutoNukeAnnoucement.OnRoundStarted;
             Exiled.Events.Handlers.Player.ChangingRole += SCPBuff.BecomingSCP;
@@ -73,6 +74,7 @@ namespace KE.Misc
             Exiled.Events.Handlers.Server.RoundStarted -= AutoNukeAnnoucement.OnRoundStarted;
             AutoTesla.StopLoop();
             MiscFeature.UnsubscribeAllEvents();
+            ClassDDoor.UnsubscribeEvents();
 
 
             CustomRole.UnregisterRoles([typeof(Scp035)]);

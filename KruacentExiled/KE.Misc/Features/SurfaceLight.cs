@@ -37,7 +37,7 @@ namespace KE.Misc.Features
 
         private void OnRoundStarted()
         {
-            if(Random.value < .75f)
+            if(Random.value < .25f)
                 ChangeSurfaceLight();
         }
 
