@@ -13,6 +13,7 @@ using KE.Misc.Handlers;
 using Exiled.CustomRoles.API.Features;
 using KE.Misc.Features.CR;
 using LightContainmentZoneDecontamination;
+using KE.Misc.Features.GamblingCoin;
 
 namespace KE.Misc
 {
@@ -35,6 +36,7 @@ namespace KE.Misc
         internal FriendlyFire FriendlyFire { get; private set; }
         internal AutoNukeAnnoucement AutoNukeAnnoucement { get; private set; }
         internal AutoTesla AutoTesla { get; private set; }
+        internal EventHandlers _gamblingCoinHandler {  get; private set; }
         
 
         public override void OnEnabled()
@@ -51,12 +53,15 @@ namespace KE.Misc
             AutoNukeAnnoucement = new();
             AutoTesla = new();
             Candy = new Candy();
+            GamblingCoinManager.RegisterAll();
+            _gamblingCoinHandler = new EventHandlers();
             Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
             Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
 
 
             
             MiscFeature.SubscribeAllEvents();
+            Exiled.Events.Handlers.Player.FlippingCoin += _gamblingCoinHandler.OnCoinFlip;
             Exiled.Events.Handlers.Server.RoundStarted += AutoNukeAnnoucement.OnRoundStarted;
             Exiled.Events.Handlers.Player.ChangingRole += SCPBuff.BecomingSCP;
             ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;
@@ -71,6 +76,7 @@ namespace KE.Misc
             ServerHandle.RoundStarted -= ServerHandler.OnRoundStarted;
             Exiled.Events.Handlers.Player.Dying -= ScpNoeDeathMessage;
             Exiled.Events.Handlers.Server.RoundStarted -= AutoNukeAnnoucement.OnRoundStarted;
+            Exiled.Events.Handlers.Player.FlippingCoin -= _gamblingCoinHandler.OnCoinFlip;
             AutoTesla.StopLoop();
             MiscFeature.UnsubscribeAllEvents();
 
@@ -88,6 +94,8 @@ namespace KE.Misc
             AutoNukeAnnoucement = null;
             FriendlyFire = null;
             SurfaceLight = null;
+            GamblingCoinManager.DestroyAll();
+            _gamblingCoinHandler = null;
             Instance = null;
         }
 

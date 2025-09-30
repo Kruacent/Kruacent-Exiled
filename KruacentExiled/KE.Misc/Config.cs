@@ -23,5 +23,9 @@ namespace KE.Misc
 
         public bool ScpPreferences { get; set; } = true;
         public bool Scp035Enabled { get; set; } = true;
+        public bool GamblingCoin { get; set; } = true;
+        public int GamblingCoinMinUse { get; set; } = 1;
+        public int GamblingCoinMaxUse { get; set; } = 2;
+        public int GamblingCoinCooldow { get; set; } = 3;
     }
 }

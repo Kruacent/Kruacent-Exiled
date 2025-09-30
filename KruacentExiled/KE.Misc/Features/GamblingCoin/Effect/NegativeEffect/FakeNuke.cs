@@ -1,0 +1,22 @@
+﻿using Exiled.API.Features;
+using KE.Misc.Features.GamblingCoin.Interfaces;
+using KE.Misc.Features.GamblingCoin.Types;
+
+internal class FakeNuke : IDurationEffect
+{
+    public string Name { get; set; } = "FakeNuke";
+    public string Message { get; set; } = "Alright everyone will hate you";
+    public int Weight { get; set; } = 5;
+    public EffectType Type { get; set; } = EffectType.Negative;
+    public float Duration { get; set; } = 15;
+
+    public void Execute(Player player)
+    {
+        if(!Warhead.IsDetonated) Warhead.Start();
+    }
+
+    public void ExecuteAfterDuration(Player player)
+    {
+        if (!Warhead.IsDetonated) Warhead.Stop();
+    }
+}
