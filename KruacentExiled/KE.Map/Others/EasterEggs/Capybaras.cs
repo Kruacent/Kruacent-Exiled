@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Light = Exiled.API.Features.Toys.Light;
 
-namespace KE.Map.EasterEggs
+namespace KE.Map.Others.EasterEggs
 {
     internal class Capybaras : IUsingEvents
     {

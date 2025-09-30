@@ -6,6 +6,7 @@ using Exiled.Events.EventArgs.Server;
 using InteractableToy = LabApi.Features.Wrappers.InteractableToy;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace KE.Map.Heavy.GamblingZone
 {
@@ -131,7 +132,7 @@ namespace KE.Map.Heavy.GamblingZone
         }
         public static void DestroyAll()
         {
-            foreach (GamblingRoom gamblingRoom in List)
+            foreach (GamblingRoom gamblingRoom in List.ToList())
             {
                 gamblingRoom.Destroy();
             }

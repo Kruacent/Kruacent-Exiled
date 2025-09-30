@@ -4,26 +4,32 @@ using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs.Server;
-using KE.Map.EasterEggs;
 using KE.Map.Heavy.GamblingZone;
+using KE.Map.Others.BlackoutNDoor.Handlers;
 using KE.Map.Surface.Turrets;
 using KE.Utils.API.Models;
 using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace KE.Map
 {
-    public class MainPlugin : Plugin<Config>
+    public class MainPlugin : Plugin<Config,Translations>
     {
         public override string Name => "KE.Map";
         public override string Prefix => "KE.M";
         public static MainPlugin Instance { get; private set; }
         public Models models => Models.Instance;
+        private Handler handler;
+        public static Translations Translations => Instance?.Translation;
         public static Config Configs => Instance?.Config;
         public override void OnEnabled()
         {
+            handler = new();
+
+            handler.SubscribeEvents();
             KE.Utils.API.Sounds.SoundPlayer.Instance.TryLoad();
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
             GamblingRoom.SubscribeEvents();
@@ -43,9 +49,11 @@ namespace KE.Map
 
         public override void OnDisabled()
         {
+            handler.UnsubscribeEvents();
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
             GamblingRoom.UnsubscribeEvents();
+            handler = null;
             Instance = null;
         }
 

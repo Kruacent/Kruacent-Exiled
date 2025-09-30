@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Player = Exiled.API.Features.Player;
 
-namespace KE.Map.EasterEggs
+namespace KE.Map.Others.EasterEggs
 {
     internal class SpinnyBaras
     {
@@ -33,12 +33,12 @@ namespace KE.Map.EasterEggs
             while (true)
             {
                 _capybara.Transform.Rotate(Vector3.up, 1);
-                yield return Timing.WaitForSeconds(1/speed);
+                yield return Timing.WaitForSeconds(1 / speed);
             }
-            
+
         }
 
-        
+
         public void Kill()
         {
             Timing.KillCoroutines(_handle);
