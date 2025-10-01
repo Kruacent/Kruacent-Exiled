@@ -46,12 +46,18 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
         private void OnRoundStarted()
         {
             ChosenPattern = Pattern.AllPatterns.GetRandomValue();
-            ChosenPattern = new Pattern
-            ([
-                new Blackout(),new DoorStuck()
-            ]);
-            //time = GetRandomTime();
-            time = 30;
+            time = GetRandomTime();
+
+            if (MainPlugin.Instance.Config.Debug)
+            {
+                time = 30;
+                ChosenPattern = new Pattern
+                ([
+                    new Blackout(),new DoorStuck()
+                ]);
+            }
+
+            
             Timing.RunCoroutine(Timer());
         }
 
