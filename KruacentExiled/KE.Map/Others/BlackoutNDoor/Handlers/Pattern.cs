@@ -26,9 +26,28 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
             ,
             new Pattern
             ([
-                new DoorStuck(),new Blackout(),new Both(),new Blackout(),new DoorStuck()
+                new DoorStuck(),new Blackout(),new Both(),new Blackout(),new DoorStuck(),new Both()
+            ])            
+            ,
+            new Pattern
+            ([
+                new DoorStuck(),new Blackout(),new Both()
             ])
-
+            ,
+            new Pattern
+            ([
+                new DoorStuck(),new Both()
+            ])
+            ,
+            new Pattern
+            ([
+                new Blackout(),new Both()
+            ])
+            ,
+            new Pattern
+            ([
+                new Blackout(),new Both()
+            ])
         };
 
 
@@ -67,11 +86,6 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
             return true;
 
         }
-
-
-
-
-
 
 
     }
