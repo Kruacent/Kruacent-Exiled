@@ -57,7 +57,10 @@ namespace KE.Misc.Features.GamblingCoin
 
             if (effect is IDurationEffect durationEffect && durationEffect.Duration > 0)
             {
-                Timing.CallDelayed(durationEffect.Duration, () =>
+                float duration = durationEffect.Duration;
+                if (durationEffect.Duration == -1) duration = 99999;
+
+                Timing.CallDelayed(duration, () =>
                 {
                     durationEffect.ExecuteAfterDuration(ev.Player);
                 });

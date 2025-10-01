@@ -8,7 +8,7 @@ public class RedCandy : ICoinEffect
     public string Name { get; set; } = "RedCandy";
     public string Message { get; set; } = "You got a pink candy ! Wait is that pink no ?";
     public int Weight { get; set; } = 20;
-    public EffectType Type { get; set; } = EffectType.Negative;
+    public EffectType Type { get; set; } = EffectType.Positive;
 
     public void Execute(Player player)
     {
