@@ -7,6 +7,8 @@ using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using KE.Items.API.Features;
+using KE.Items.API.Interface;
+using KE.Items.Items.PickupModels;
 using MEC;
 using PlayerRoles;
 using System;
@@ -19,7 +21,7 @@ using UnityEngine;
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.SCP1576)]
-    public class Scp3136 : KECustomItem
+    public class Scp3136 : KECustomItem, ICustomPickupModel
     {
         public override uint Id { get; set; } = 1057;
         public override string Name { get; set; } = "SCP-3136";
@@ -46,14 +48,23 @@ namespace KE.Items.Items
             }
         };
 
+        public PickupModel PickupModel { get; }
+
+        public Scp3136()
+        {
+            //PickupModel = new Scp3136PModel(this);
+        }
+
         protected override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Player.UsedItem += OnDrawing;
             Exiled.Events.Handlers.Server.RespawnedTeam += OnRespawnedTeam;
+            PickupModel?.SubscribeEvents();
             base.SubscribeEvents();
         }
         protected override void UnsubscribeEvents()
         {
+            PickupModel?.UnsubscribeEvents();
             Exiled.Events.Handlers.Player.UsedItem -= OnDrawing;
             Exiled.Events.Handlers.Server.RespawnedTeam -= OnRespawnedTeam;
             base.UnsubscribeEvents();
@@ -62,6 +73,7 @@ namespace KE.Items.Items
         private void OnDrawing(UsedItemEventArgs ev)
         {
             if (!Check(ev.Item)) return;
+            Scp1576 item = ((Scp1576)ev.Item);
             switch (ev.Player.Role.Side)
             {
                 case Side.Mtf:
@@ -72,8 +84,11 @@ namespace KE.Items.Items
                     _respawnPositions[Faction.FoundationEnemy] = ev.Player.Position;
                     break;
             }
-            Timing.CallDelayed(1, () => ((Scp1576)ev.Item).StopTransmitting());
-            
+            item.StopTransmitting();
+            item.RemainingCooldown = 5*60;
+
+
+
         }
 
         private void OnRespawnedTeam(RespawnedTeamEventArgs ev)

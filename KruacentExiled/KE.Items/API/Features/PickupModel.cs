@@ -24,6 +24,7 @@ namespace KE.Items.API.Features
 
         public PickupModel(CustomItem customItem)
         {
+            Log.Debug("created Pmodel " + customItem.Name);
             KECI = customItem;
             models = new();
             pickableItem = new();
@@ -80,7 +81,6 @@ namespace KE.Items.API.Features
         {
             foreach (PickupModel model in allModels)
             {
-
                 if (model.Check(pickup))
                 {
                     return true;
@@ -93,7 +93,15 @@ namespace KE.Items.API.Features
         {
 
             Pickup pickup = Pickup.Get(obj);
+            if(pickup.Type == ItemType.SCP1576)
+            {
+                Log.Debug("pickup =" + pickup.Type);
+                Log.Debug("ci =" + KECI.Name);
+            }
+            
+
             if (!Check(pickup)) return;
+            
             if (modelBlueprint is null)
             {
                 modelBlueprint = CreateModel();

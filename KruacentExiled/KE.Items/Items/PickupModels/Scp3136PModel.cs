@@ -27,8 +27,9 @@ namespace KE.Items.Items.PickupModels
         {
             HashSet<AdminToyBlueprint> model = new()
             {
-                AdminToyBlueprint.Create(Primitive.Create(PrimitiveType.Cube, Vector3.zero, null, paper,false,Color.white)),
-                AdminToyBlueprint.Create(Primitive.Create(PrimitiveType.Cylinder, new Vector3(paper.x, paper.y+pen.x*2,-paper.z), Vector3.left, pen,false,Color.red)),
+
+                new PrimitiveBlueprint(PrimitiveType.Cube,Vector3.zero,Quaternion.identity,Color.white,paper),
+                new PrimitiveBlueprint(PrimitiveType.Cylinder,new Vector3(paper.x, paper.y+pen.x*2,-paper.z),Quaternion.Euler(Vector3.left),Color.red,pen),
             };
             return model;
             
