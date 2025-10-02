@@ -62,7 +62,7 @@ namespace KE.Misc
 
 
             MiscFeature.SubscribeAllEvents();
-            Exiled.Events.Handlers.Player.FlippingCoin += _gamblingCoinHandler.OnCoinFlip;
+            //Exiled.Events.Handlers.Player.FlippingCoin += _gamblingCoinHandler.OnCoinFlip;
             Exiled.Events.Handlers.Server.RoundStarted += AutoNukeAnnoucement.OnRoundStarted;
             Exiled.Events.Handlers.Player.ChangingRole += SCPBuff.BecomingSCP;
             ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;
@@ -77,7 +77,7 @@ namespace KE.Misc
             ServerHandle.RoundStarted -= ServerHandler.OnRoundStarted;
             Exiled.Events.Handlers.Player.Dying -= ScpNoeDeathMessage;
             Exiled.Events.Handlers.Server.RoundStarted -= AutoNukeAnnoucement.OnRoundStarted;
-            Exiled.Events.Handlers.Player.FlippingCoin -= _gamblingCoinHandler.OnCoinFlip;
+            //Exiled.Events.Handlers.Player.FlippingCoin -= _gamblingCoinHandler.OnCoinFlip;
             AutoTesla.StopLoop();
             MiscFeature.UnsubscribeAllEvents();
             ClassDDoor.UnsubscribeEvents();
