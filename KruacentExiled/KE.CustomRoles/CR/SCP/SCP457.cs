@@ -5,6 +5,7 @@ using Exiled.API.Features.Roles;
 using Exiled.API.Features.Toys;
 using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs.Scp106;
+using KE.CustomRoles.Abilities;
 using KE.CustomRoles.API.Features;
 using KE.Utils.API;
 using MEC;
@@ -23,7 +24,7 @@ namespace KE.CustomRoles.CR.SCP
         public override string Description { get; set; } = "You do passive damage around you, and can lauch fireballs by pressing the stalk button";
         public override uint Id { get; set; } = 1084;
         public override string PublicName { get; set; } = "SCP-457";
-        public override int MaxHealth { get; set; } = 3900;
+        public override int MaxHealth { get; set; } = 4500;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scp106;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
@@ -33,23 +34,21 @@ namespace KE.CustomRoles.CR.SCP
 
         private Dictionary<Player, Light> _inside = new();
         private Dictionary<Player, HashSet<CoroutineHandle>> _handles = new();
-        private Dictionary<Player, int> _activeBalls = new();
+        
 
         public static float DamageRefreshRate = 5f;
         public static readonly Color FlameColor = new(2, 1.08f, 0);
-        private static readonly Color ballColor = new(2, 1.08f, 0, .25f);
-        public static readonly float VigorCost = .1f;
 
-        private static readonly string _deathMessage = "Burned to death";
-        public static CustomReasonDamageHandler BallDamage = new(_deathMessage, 25, string.Empty);
-        public const int MAX_BALLS = 2;
+
+
+
+
 
         protected override void RoleAdded(Player player)
         {
             Log.Debug("adding role 457");
             _inside.Add(player, null);
             _handles.Add(player, new());
-            _activeBalls.Add(player, 0);
 
             _handles[player].Add(Timing.RunCoroutine(InsideLight(player)));
             _handles[player].Add(Timing.RunCoroutine(PassiveDamage(player)));
@@ -59,6 +58,7 @@ namespace KE.CustomRoles.CR.SCP
         private IEnumerator<float> InsideLight(Player player)
         {
             Light light = Light.Create();
+            light.Intensity = .5f;
             _inside[player] = light;
             light.Position = player.Position;
             light.Color = FlameColor;
@@ -77,7 +77,7 @@ namespace KE.CustomRoles.CR.SCP
         {
             while (true)
             {
-                foreach (Player allP in Player.List.Where(p => p != scp && !p.IsScp))
+                foreach (Player allP in Player.List.Where(p => p != scp && p.Role.Side != scp.Role.Side))
                 {
 
 
@@ -88,7 +88,7 @@ namespace KE.CustomRoles.CR.SCP
                         float damage = -(hitinfo.distance / 3) + 10;
                         Log.Debug($"damâge={damage} dist = {hitinfo.distance}");
                         allP.EnableEffect(Exiled.API.Enums.EffectType.Burned, DamageRefreshRate, true);
-                        allP.Hurt(damage, _deathMessage);
+                        allP.Hurt(damage, Fireball.BallDamage._deathReason);
 
 
                     }
@@ -109,11 +109,6 @@ namespace KE.CustomRoles.CR.SCP
                 _inside.Remove(player);
             }
 
-            if (_activeBalls.TryGetValue(player, out var b))
-            {
-                _activeBalls.Remove(player);
-            }
-
 
 
 
@@ -129,88 +124,11 @@ namespace KE.CustomRoles.CR.SCP
 
         }
 
-        private void Attack(Player player, Scp106Role role)
-        {
-
-            if (role.Vigor > VigorCost && _activeBalls[player] < MAX_BALLS)
-            {
-                _activeBalls[player]++;
-                Timing.RunCoroutine(LaunchingAttack(player));
-                role.Vigor -= VigorCost;
-            }
-
-        }
-
-        private IEnumerator<float> LaunchingAttack(Player player)
-        {
-            Vector3 initpos = player.Position;
-            Quaternion direction = player.ReferenceHub.PlayerCameraReference.rotation;
-
-
-            Log.Debug(direction.eulerAngles);
-            bool attackTouchedSomething = false;
-
-            Light light = Light.Create(initpos, direction.eulerAngles,null,false);
-            light.Color = ballColor;
-            light.Intensity = 1f;
-            Primitive primitive = Primitive.Create(initpos, direction.eulerAngles, null, false);
-            primitive.Collidable = false;
-            primitive.Color = ballColor;
-            primitive.Spawn();
-            light.Spawn();
-            Vector3 nextPos;
-
-            int fallback = 100;
-            while (!attackTouchedSomething && fallback > 0)
-            {
-                nextPos = primitive.Position + primitive.Rotation * new Vector3(0, 0, 1f);
-                RaycastHit hit;
-
-                if (Physics.Linecast(primitive.Position, nextPos, out hit))
-                {
-                    //spawn mtf looking at central gate
-                    if (hit.collider.gameObject.name != "VolumeOverrideTunnel")
-                    {
-                        attackTouchedSomething = true;
-                    }
-                    
-                    Player playerhit = Player.Get(hit.collider);
-                    if (playerhit != null && playerhit.Role.Side != Exiled.API.Enums.Side.Scp)
-                    {
-                        playerhit.Hurt(BallDamage);
-                        player.ShowHitMarker();
-
-                    }
-
-                    Door doorhit = Door.Get(hit.collider.gameObject);
-                    if (doorhit != null && doorhit is IDamageableDoor damageable && !damageable.IsDestroyed)
-                    {
-                        damageable.Break();
-                        player.ShowHitMarker();
-                    }
-                }
-
-
-
-
-                Log.Debug($"current pos = {primitive.Position} next pos = {nextPos}");
-                yield return Timing.WaitForSeconds(.1f);
-                primitive.Position = nextPos;
-                light.Position = nextPos;
-                fallback--;
-            }
-            _activeBalls[player]--;
-            primitive.Destroy();
-            light.Destroy();
-        }
-
 
         private void OnStalking(StalkingEventArgs ev)
         {
             if (!Check(ev.Player)) return;
             ev.IsAllowed = false;
-
-            Attack(ev.Player, ev.Scp106);
         }
 
         private void OnTP(TeleportingEventArgs ev)
@@ -220,18 +138,11 @@ namespace KE.CustomRoles.CR.SCP
 
         }
 
-        private void OnAttacking(AttackingEventArgs ev)
-        {
-            if (!Check(ev.Player)) return;
-            ev.IsAllowed = false;
-
-        }
 
         protected override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Scp106.Stalking += OnStalking;
             Exiled.Events.Handlers.Scp106.Teleporting += OnTP;
-            Exiled.Events.Handlers.Scp106.Attacking += OnAttacking;
             base.SubscribeEvents();
 
         }
@@ -240,7 +151,6 @@ namespace KE.CustomRoles.CR.SCP
         {
             Exiled.Events.Handlers.Scp106.Stalking -= OnStalking;
             Exiled.Events.Handlers.Scp106.Teleporting -= OnTP;
-            Exiled.Events.Handlers.Scp106.Attacking -= OnAttacking;
             base.UnsubscribeEvents();
         }
 
