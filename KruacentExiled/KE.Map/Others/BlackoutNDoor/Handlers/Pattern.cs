@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KE.Map.Others.BlackoutNDoor.Handlers
 {
-    public class Pattern : IEquatable<Pattern>
+    public class Pattern
     {
         public static readonly HashSet<Pattern> AllPatterns = new()
         {
@@ -46,7 +46,7 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
             ,
             new Pattern
             ([
-                new Blackout(),new Both()
+                new Both()
             ])
         };
 
@@ -71,21 +71,6 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
         }
 
 
-
-        public bool Equals(Pattern other)
-        {
-            if (other._pattern.Count != _pattern.Count) return false;
-
-            for (int i = 0; i < _pattern.Count; i++)
-            {
-                if (_pattern[i] != other._pattern[i])
-                {
-                    return false;
-                }
-            }
-            return true;
-
-        }
 
 
     }

@@ -12,7 +12,7 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
 
         public abstract string Cassie { get; }
         public abstract string CassieTranslated { get; }
-
+        public virtual float Duration { get; } = 10f;
 
         public abstract void Start(ZoneType zone);
 

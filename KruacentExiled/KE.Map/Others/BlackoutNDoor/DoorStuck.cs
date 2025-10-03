@@ -17,7 +17,7 @@ namespace KE.Map.Others.BlackoutNDoor
         public override string Cassie => MainPlugin.Translations.Doorstuck;
 
         public override string CassieTranslated => MainPlugin.Translations.DoorstuckTranslation;
-
+        public override float Duration => 15;
         public override void Start(ZoneType zone)
         {
             bool open = UnityEngine.Random.value > .5f;

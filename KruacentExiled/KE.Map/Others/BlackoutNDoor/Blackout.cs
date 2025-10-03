@@ -13,7 +13,7 @@ namespace KE.Map.Others.BlackoutNDoor
         public override string Cassie => MainPlugin.Translations.Blackout;
 
         public override string CassieTranslated => MainPlugin.Translations.BlackoutTranslation;
-
+        public override float Duration => 30;
         public override void Start(ZoneType zone)
         {
             foreach(Room room in Room.List.Where(r => r.Zone == zone))

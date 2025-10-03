@@ -9,7 +9,7 @@ using PlayerRoles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using UnityEngine;
 using EventHandle = KE.Map.Others.BlackoutNDoor.Events.Handlers.BlackoutNDoor;
 
 namespace KE.Map.Others.BlackoutNDoor.Handlers
@@ -67,6 +67,7 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
             while (Round.InProgress)
             {
                 yield return Timing.WaitForSeconds(timeRefresh);
+                if (Warhead.IsInProgress) continue;
                 Player scp = Player.List.Where(p => p.IsScp && p.Role != RoleTypeId.Scp0492).FirstOrDefault();
 
                 if(scp == null)
@@ -142,7 +143,7 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
             EventHandle.OnPreEvent(preEv);
 
 
-            if (preEv.IsAllowed)
+            if (preEv.IsAllowed && Zones.Contains(zone))
             {
 
                 string message = mapEvent.Cassie + " " + ZoneTypeToCassie(zone) + " " + MainPlugin.Translations.End;
@@ -155,9 +156,9 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
                 {
                     Log.Debug("starting");
                     mapEvent.Start(zone);
+                    float time = Mathf.Clamp(mapEvent.Duration,1, TimeBeforeNextEvent);
 
-
-                    Timing.CallDelayed(10, delegate
+                    Timing.CallDelayed(time, delegate
                     {
                         Log.Debug("stopping");
                         mapEvent.Stop(zone);

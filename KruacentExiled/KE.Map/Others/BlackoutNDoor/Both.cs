@@ -13,6 +13,7 @@ namespace KE.Map.Others.BlackoutNDoor
         private DoorStuck doorstuck = new();
         private Blackout blackout = new();
         public override string Cassie => MainPlugin.Translations.Both;
+        public override float Duration => 20;
 
         public override string CassieTranslated => MainPlugin.Translations.BothTranslation;
         public override void Start(ZoneType zone)
