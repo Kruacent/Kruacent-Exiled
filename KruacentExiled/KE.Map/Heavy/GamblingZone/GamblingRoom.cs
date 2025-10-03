@@ -121,7 +121,7 @@ namespace KE.Map.Heavy.GamblingZone
         {
             Player player2 = Player.Get(player);
             if (player2 == null) return;
-            if (!player2.IsScp) return;
+            if (player2.IsScp) return;
 
             if (player2.CurrentItem == null) return;
             Item item = _lootTable.GetRandomItem();
