@@ -1,18 +1,23 @@
 ﻿
 using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.API.Features.Doors;
 using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs.Server;
+using KE.Map.Entrance;
 using KE.Map.Heavy.GamblingZone;
 using KE.Map.Others.BlackoutNDoor.Handlers;
-using KE.Map.Surface.Turrets;
+using KE.Map.Utils;
 using KE.Utils.API.Models;
+using LabApi.Events.Arguments.ServerEvents;
+using LabApi.Features.Wrappers;
 using PlayerRoles;
+using ProjectMER.Features.Serializable.Lockers;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using UnityEngine;
+using Door = Exiled.API.Features.Doors.Door;
+using Player = Exiled.API.Features.Player;
+using Room = Exiled.API.Features.Room;
 
 namespace KE.Map
 {
@@ -29,30 +34,32 @@ namespace KE.Map
         {
             handler = new();
 
-            handler.SubscribeEvents();
+            //handler.SubscribeEvents();
             KE.Utils.API.Sounds.SoundPlayer.Instance.TryLoad();
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
+            Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
             GamblingRoom.SubscribeEvents();
-
+            //MoreRoom.CreateAll();
+            //MoreRoom.SubscribeEvents();
             Instance = this;
         }
 
         private void OnRoundStarted()
         {
+            //StructureSpawner.SpawnPedestal(ItemType.KeycardJanitor,Player.List.First().Position,Quaternion.identity,Vector3.one);
 
-            foreach(Player p in Player.List.Where(p => !p.IsNPC))
-            {
+            Player.List.First().Teleport(Room.List.Where(r => r.Type == Exiled.API.Enums.RoomType.EzVent).First());
 
-                Turret.Create(p, RoleTypeId.ChaosConscript.GetRandomSpawnLocation().Position);
-            }
         }
+
 
         public override void OnDisabled()
         {
-            handler.UnsubscribeEvents();
+            //handler.UnsubscribeEvents();
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
-            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+            Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             GamblingRoom.UnsubscribeEvents();
+            //MoreRoom.UnsubscribeEvents();
             handler = null;
             Instance = null;
         }
@@ -100,6 +107,8 @@ namespace KE.Map
 
             var g = new GamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, new(normal));
 
+
+            
             
             //var g = new GamblingRoom(lcz173, new(normal), -lcz173.Transform.forward * 5f);
             /*
@@ -127,13 +136,13 @@ namespace KE.Map
 
 
 
-        private void OnRoundEnded(RoundEndedEventArgs ev)
+       /* private void OnRoundEnded(RoundEndedEventArgs ev)
         {
             
 
             foreach (var g in OldGamblingRoom.List)
                 g.UnsubscribeEvents();
-        }
+        }*/
 
     }
 
