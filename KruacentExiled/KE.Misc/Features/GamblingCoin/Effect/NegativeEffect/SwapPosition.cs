@@ -6,7 +6,7 @@ using System.Linq;
 
 internal class SwapPosition : ICoinEffect
 {
-    public string Name { get; set; } = "InventoryReset";
+    public string Name { get; set; } = "SwapPosition";
     public string Message { get; set; } = "Congratulations ! You just unlocked the premium teleport Uber service... but with no refunds.";
     public int Weight { get; set; } = 20;
     public EffectType Type { get; set; } = EffectType.Negative;
