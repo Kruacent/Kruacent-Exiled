@@ -2,6 +2,7 @@
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using KE.Misc.Features.GamblingCoin.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,9 +15,16 @@ internal class RandomGoodEffect : ICoinEffect
 
     public void Execute(Player player)
     {
-        List<Exiled.API.Enums.EffectType> effect = new List<Exiled.API.Enums.EffectType>();
-        effect.Where(e => e.GetCategories() == EffectCategory.Positive);
+        var positiveEffects = Enum.GetValues(typeof(EffectType))
+            .Cast<EffectType>()
+            .Where(e => e.GetCategories().HasFlag(EffectCategory.Positive))
+            .ToList();
 
-        player.EnableEffect(effect.GetRandomValue(), 9999999);
+        if (positiveEffects.Count == 0)
+            return;
+
+        var randomEffect = positiveEffects[UnityEngine.Random.Range(0, positiveEffects.Count)];
+
+        player.EnableEffect(randomEffect, 45);
     }
 }
