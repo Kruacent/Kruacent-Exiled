@@ -12,7 +12,8 @@ namespace KE.CustomRoles.Abilities
 {
     public class SimulateDeath : KEAbilities
     {
-        public override string Name { get; } = "Simulate Death";
+        public override string Name { get; } = "SimulateDeath";
+        public override string PublicName { get; } = "Simulate Death";
 
         public override string Description { get; } = "T'es talent de mime te permettent de simuler la mort.";
 

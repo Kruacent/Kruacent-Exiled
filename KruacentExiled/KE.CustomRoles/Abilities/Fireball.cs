@@ -15,6 +15,7 @@ namespace KE.CustomRoles.Abilities
     public class Fireball : KEAbilities
     {
         public override string Name { get; } = "Fireball";
+        public override string PublicName { get; } = "Fireball";
 
         public override string Description { get; } = "I cast Fireball";
 

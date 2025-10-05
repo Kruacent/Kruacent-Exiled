@@ -31,6 +31,7 @@ namespace KE.CustomRoles.API.Features
 
         #region abstract stuff
         public abstract string Name { get; }
+        public abstract string PublicName { get; }
         public abstract string Description { get; }
         /// <summary>
         /// Used for the settings option
@@ -192,6 +193,15 @@ namespace KE.CustomRoles.API.Features
 
         }
 
+        public void ShowAbility(Player player)
+        {
+            float time = MainPlugin.SettingHandler.GetAbilityTime(player);
+
+            string msg = $"<b>{PublicName}</b>\n{Description}";
+
+
+            DisplayHandler.Instance.AddHint(MainPlugin.AbilitiesDesc, player, msg, time);
+        }
 
         public void SelectAbility(Player player)
         {
@@ -202,6 +212,8 @@ namespace KE.CustomRoles.API.Features
                 {
                     abilities.UnselectAbility(player);
                 }
+
+                ShowAbility(player);
             }
         }
 
@@ -472,7 +484,7 @@ namespace KE.CustomRoles.API.Features
         #region gui
 
 
-        private static readonly float UpdateTime = 1;
+        public const float UpdateTime = 1;
         private static bool flag = false;
         private static void StartLoop()
         {
@@ -510,7 +522,7 @@ namespace KE.CustomRoles.API.Features
 
                 KEAbilities ability = allAbilities[i];
 
-                builder.Append(ability.Name);
+                builder.Append(ability.PublicName);
                 builder.Append(" ");
                 
                 if (ability.CanUse(player,out var output))
@@ -542,7 +554,7 @@ namespace KE.CustomRoles.API.Features
 
             string msg = builder.ToString();
             StringBuilderPool.Pool.Return(builder);
-            DisplayHandler.Instance.AddHint(MainPlugin.Abilities, player, msg, 1f);
+            DisplayHandler.Instance.AddHint(MainPlugin.Abilities, player, msg, UpdateTime);
         }
 
 
@@ -550,7 +562,7 @@ namespace KE.CustomRoles.API.Features
 
         public override string ToString()
         {
-            return Name;
+            return  "("+Id + ") " +Name;
         }
 
     }

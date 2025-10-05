@@ -15,6 +15,7 @@ namespace KE.CustomRoles.Abilities
     public class Explode : KEAbilities
     {
         public override string Name { get; } = "Explode";
+        public override string PublicName { get; } = "Explode";
 
         public override string Description { get; } = "Tu as une ceinture d'explosif autour de toi, fait attention n'appuie pas sur le bouton";
 

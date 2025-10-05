@@ -20,6 +20,7 @@ namespace KE.CustomRoles.Settings
         private int _idUp = 150;
         private int _idSelect = 151;
         private int _idArrow = 152;
+        private int _idTimeAbilityDesc = 153;
 
 
 
@@ -37,6 +38,7 @@ namespace KE.CustomRoles.Settings
                 new HeaderSetting (_idHeader,"Custom Roles Settings"),
                 new TwoButtonsSetting(_idDesc,"Descriptions","Disabled","Enabled",true,"hide/show the description the Custom Role "),
                 new SliderSetting(_idTimeCustomRole,"Time shown",0,30,20),
+                new SliderSetting(_idTimeAbilityDesc,"Ability Description time shown",0,30,20),
                 new TwoButtonsSetting(_idMode,"Mode","Keybinds","Select wheel",true,onChanged:OnChanged),
                 new KeybindSetting(_idUp, "Select up", UnityEngine.KeyCode.None,hintDescription:"only work in Select Wheel mode"),
                 new KeybindSetting(_idDown, "Select down", UnityEngine.KeyCode.None,hintDescription:"only work in Select Wheel mode"),
@@ -210,7 +212,11 @@ namespace KE.CustomRoles.Settings
             if (!SettingBase.TryGetSetting<SliderSetting>(p, _idTimeCustomRole, out var setting)) return 20;
             return setting.SliderValue;
         }
-
+        internal float GetAbilityTime(Player p)
+        {
+            if (!SettingBase.TryGetSetting<SliderSetting>(p, _idTimeAbilityDesc, out var setting)) return 20;
+            return setting.SliderValue;
+        }
 
         /// <summary>
         /// 
