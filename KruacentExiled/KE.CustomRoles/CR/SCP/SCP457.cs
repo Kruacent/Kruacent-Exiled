@@ -24,7 +24,7 @@ namespace KE.CustomRoles.CR.SCP
         public override string Description { get; set; } = "You do passive damage around you, and can lauch fireballs by pressing the stalk button";
         public override uint Id { get; set; } = 1084;
         public override string PublicName { get; set; } = "SCP-457";
-        public override int MaxHealth { get; set; } = 4500;
+        public override int MaxHealth { get; set; } = 5000;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scp106;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
@@ -41,7 +41,10 @@ namespace KE.CustomRoles.CR.SCP
 
 
 
-
+        public override HashSet<int> Abilities => 
+        [
+            2010
+        ];
 
 
         protected override void RoleAdded(Player player)
