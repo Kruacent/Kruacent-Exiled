@@ -154,20 +154,13 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
 
                 Timing.CallDelayed(5 + yap, delegate
                 {
-                    Log.Debug("starting");
-                    mapEvent.Start(zone);
-                    float time = Mathf.Clamp(mapEvent.Duration,1, TimeBeforeNextEvent);
+                    
+                    mapEvent.StartEvent(zone,TimeBeforeNextEvent);
 
-                    Timing.CallDelayed(time, delegate
-                    {
-                        Log.Debug("stopping");
-                        mapEvent.Stop(zone);
-                        PostEventEventArgs postEv = new PostEventEventArgs(mapEvent);
-                        EventHandle.OnPostEvent(postEv);
-                    });
                 });
             }
         }
+
 
         private string ZoneTypeToCassie(ZoneType zone)
         {

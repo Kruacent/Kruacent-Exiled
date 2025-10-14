@@ -3,6 +3,7 @@ using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs.Server;
+using Interactables.Interobjects.DoorUtils;
 using KE.Map.Entrance;
 using KE.Map.Heavy.GamblingZone;
 using KE.Map.Others.BlackoutNDoor.Handlers;
@@ -46,10 +47,14 @@ namespace KE.Map
 
         private void OnRoundStarted()
         {
-            //StructureSpawner.SpawnPedestal(ItemType.KeycardJanitor,Player.List.First().Position,Quaternion.identity,Vector3.one);
+            //Player player = Player.List.First();
+            //StructureSpawner.SpawnPedestal(ItemType.KeycardJanitor,player.Position,Quaternion.identity,Vector3.one);
 
-            Player.List.First().Teleport(Room.List.Where(r => r.Type == Exiled.API.Enums.RoomType.EzVent).First());
+            //player.Teleport(Room.List.Where(r => r.Type == Exiled.API.Enums.RoomType.EzVent).First());
 
+
+
+            
         }
 
 
