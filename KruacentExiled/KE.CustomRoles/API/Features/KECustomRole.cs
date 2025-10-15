@@ -1,7 +1,9 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Items;
 using Exiled.API.Features.Pools;
+using Exiled.CustomItems.API.Features;
 using Exiled.CustomRoles.API;
 using Exiled.CustomRoles.API.Features;
 using InventorySystem.Configs;
@@ -124,9 +126,15 @@ namespace KE.CustomRoles.API.Features
                     player2.ClearInventory();
                 }
 
-                foreach (string item in Inventory)
+                for (int i = 0; i < Inventory.Count;i++)
                 {
-                    TryAddItem(player2, item);
+                    string item = Inventory[i];
+                    Log.Debug(Name + ": Adding " + item + " to inventory.");
+                    if (TryAddItem(player2, item) && CustomItem.TryGet(item, out CustomItem customItem) && customItem is CustomWeapon customWeapon && player2.CurrentItem is Firearm firearm && !customWeapon.Attachments.IsEmpty())
+                    {
+                        firearm.AddAttachment(customWeapon.Attachments);
+                        Log.Debug(Name + ": Applied attachments to " + item + ".");
+                    }
                 }
 
                 if (Ammo.Count > 0)

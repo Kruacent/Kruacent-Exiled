@@ -11,6 +11,7 @@ namespace KE.CustomRoles.Abilities
     public class Thief : KEAbilities
     {
         public override string Name { get; } = "Thief";
+        public override string PublicName { get; } = "Thief";
 
         public override string Description { get; } = "Avec 1548 heures de jeu sur Thief Simulator fallait s'y attendre un peu.";
 

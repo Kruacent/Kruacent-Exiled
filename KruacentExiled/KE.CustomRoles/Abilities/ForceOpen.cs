@@ -17,7 +17,8 @@ namespace KE.CustomRoles.Abilities
 {
     public class ForceOpen : KEAbilities
     {
-        public override string Name { get;  } = "Force open";
+        public override string Name { get;  } = "ForceOpen";
+        public override string PublicName { get; } = "Force open";
 
         public override string Description { get; } = "Force open a door";
 

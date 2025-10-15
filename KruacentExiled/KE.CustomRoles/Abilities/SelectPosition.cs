@@ -8,6 +8,7 @@ namespace KE.CustomRoles.Abilities
     public class SelectPosition : KEAbilities
     {
         public override string Name { get; } = "SetPosition";
+        public override string PublicName { get; } = "Set Position";
 
         public override string Description { get;  } = "Select the current position for another ability";
 

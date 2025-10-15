@@ -15,8 +15,9 @@ namespace KE.CustomRoles.Abilities
     public class Convert : KEAbilities
     {
         public override string Name { get;  } = "Convert";
+        public override string PublicName { get; } = "Convert";
 
-        public override string Description { get; } = "";
+        public override string Description { get; } = "Convert a zombie into your team";
 
         public override int Id => 2004;
 
