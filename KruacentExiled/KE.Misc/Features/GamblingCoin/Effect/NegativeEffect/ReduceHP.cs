@@ -10,7 +10,7 @@ internal class ReduceHP : ICoinEffect
     public EffectType Type { get; set; } = EffectType.Negative;
 
     /// <summary>
-    /// Damage dealed to the player
+    /// Damage dealt to the player
     /// </summary>
     public static float Damage = 30;
 

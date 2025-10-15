@@ -13,6 +13,6 @@ internal class NiceHat : ICoinEffect
 
     public void Execute(Player player)
     {
-        Pickup.CreateAndSpawn(ItemType.SCP268, player.Position, new Quaternion());
+        Pickup.CreateAndSpawn(ItemType.SCP268, player.Position, Quaternion.identitys);
     }
 }

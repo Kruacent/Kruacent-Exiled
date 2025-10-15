@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using KE.Misc.Features.GamblingCoin;
 using KE.Misc.Features.GamblingCoin.Interfaces;
@@ -19,8 +20,12 @@ internal class AutoDoor : ICoinEffect
         Array values = Enum.GetValues(typeof(FacilityZone));
         FacilityZone randomZone = (FacilityZone)values.GetValue(UnityEngine.Random.Range(0, values.Length));
 
-        Door.List.Where(d => d.Position.GetZone() == randomZone).ToList().ForEach(d => d.IsOpen = true);
+        
 
-        PlayerUtils.SendBroadcast(player, "Clap clap clap ! You opened door in " + randomZone);
+        foreach(Door door in Door.List.Where(d => d.Position.GetZone() == randomZone && d.DoorLockType == DoorLockType.None))
+        {
+            door.IsOpen = true;
+        }
+        
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Exiled.API.Features;
+using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using KE.Misc.Features.GamblingCoin.Interfaces;
 using KE.Misc.Features.GamblingCoin.Types;
@@ -12,14 +13,15 @@ namespace KE.Misc.Features.GamblingCoin
     {
         private static Config Config => MainPlugin.Instance.Config;
 
-        private readonly System.Random _rd = new();
         private readonly Dictionary<string, DateTime> _cooldowns = new();
         public static Dictionary<ushort, int> CoinUses = new();
 
         public void OnCoinFlip(FlippingCoinEventArgs ev)
         {
+            if (CustomItem.TryGet(ev.Item, out _)) return;
+
             if (_cooldowns.TryGetValue(ev.Player.UserId, out var lastFlip) &&
-                (DateTime.UtcNow - lastFlip).TotalSeconds < Config.GamblingCoinCooldow)
+                (DateTime.UtcNow - lastFlip).TotalSeconds < Config.GamblingCoinCooldown)
             {
                 ev.IsAllowed = false;
                 PlayerUtils.SendBroadcast(ev.Player, "You must wait before flipping again");
@@ -30,8 +32,7 @@ namespace KE.Misc.Features.GamblingCoin
 
             if (!CoinUses.ContainsKey(ev.Player.CurrentItem.Serial))
             {
-                CoinUses[ev.Player.CurrentItem.Serial] =
-                    _rd.Next(Config.GamblingCoinMinUse, Config.GamblingCoinMaxUse);
+                CoinUses[ev.Player.CurrentItem.Serial] = UnityEngine.Random.Range(Config.GamblingCoinMinUse, Config.GamblingCoinMaxUse);
 
                 Log.Debug($"Registered new coin: {CoinUses[ev.Player.CurrentItem.Serial]} uses left.");
             }
@@ -40,9 +41,9 @@ namespace KE.Misc.Features.GamblingCoin
 
             bool shouldBreak = CoinUses[ev.Player.CurrentItem.Serial] <= 0;
 
-            var type = ev.IsTails ? EffectType.Negative : EffectType.Positive;
+            EffectType type = ev.IsTails ? EffectType.Negative : EffectType.Positive;
 
-            var effect = GamblingCoinManager.GetRandomEffect(type);
+            ICoinEffect effect = GamblingCoinManager.GetRandomEffect(type);
             
             if (effect == null)
             {

@@ -9,7 +9,7 @@ using System.Linq;
 internal class RandomGoodEffect : ICoinEffect
 {
     public string Name { get; set; } = "RandomGoodEffect";
-    public string Message { get; set; } = "You're wish is accepted !";
+    public string Message { get; set; } = "You got a random effect !";
     public int Weight { get; set; } = 10;
     public KE.Misc.Features.GamblingCoin.Types.EffectType Type { get; set; } = KE.Misc.Features.GamblingCoin.Types.EffectType.Positive;
 

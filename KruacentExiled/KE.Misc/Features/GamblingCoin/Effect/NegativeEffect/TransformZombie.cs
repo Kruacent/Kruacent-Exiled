@@ -5,7 +5,7 @@ using KE.Misc.Features.GamblingCoin.Types;
 internal class TransformZombie : ICoinEffect
 {
     public string Name { get; set; } = "TransformZombie";
-    public string Message { get; set; } = "You wanna eat your friends now.";
+    public string Message { get; set; } = string.Empty;
     public int Weight { get; set; } = 30;
     public EffectType Type { get; set; } = EffectType.Negative;
 

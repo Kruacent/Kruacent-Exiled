@@ -5,7 +5,7 @@ using EffectType = KE.Misc.Features.GamblingCoin.Types.EffectType;
 internal class TurnOffLight : ICoinEffect
 {
     public string Name { get; set; } = "TurnOffLight";
-    public string Message { get; set; } = "you can't follow the light";
+    public string Message { get; set; } = string.Empty;
     public int Weight { get; set; } = 10;
     public EffectType Type { get; set; } = EffectType.Negative;
 

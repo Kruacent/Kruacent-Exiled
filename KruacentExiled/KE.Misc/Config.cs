@@ -26,6 +26,6 @@ namespace KE.Misc
         public bool GamblingCoin { get; set; } = true;
         public int GamblingCoinMinUse { get; set; } = 1;
         public int GamblingCoinMaxUse { get; set; } = 2;
-        public int GamblingCoinCooldow { get; set; } = 3;
+        public int GamblingCoinCooldown { get; set; } = 3;
     }
 }

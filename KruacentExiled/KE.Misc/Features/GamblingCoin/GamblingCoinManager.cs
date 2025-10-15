@@ -12,7 +12,6 @@ namespace KE.Misc.Features.GamblingCoin
 {
     public static class GamblingCoinManager
     {
-        private static readonly Dictionary<uint, ICoinEffect> _idLookup = new();
         private static readonly Dictionary<string, ICoinEffect> _nameLookup = new();
         private static readonly HashSet<ICoinEffect> _activeEffects = new();
 
@@ -70,7 +69,6 @@ namespace KE.Misc.Features.GamblingCoin
 
         public static void DestroyAll()
         {
-            _idLookup.Clear();
             _nameLookup.Clear();
             _activeEffects.Clear();
             EffectList.Clear();

@@ -7,7 +7,7 @@ using EffectType = KE.Misc.Features.GamblingCoin.Types.EffectType;
 internal class TeleportToEscape : ICoinEffect
 {
     public string Name { get; set; } = "TeleportToEscape";
-    public string Message { get; set; } = "You got lucky";
+    public string Message { get; set; } = string.Empty;
     public int Weight { get; set; } = 5;
     public EffectType Type { get; set; } = EffectType.Positive;
 

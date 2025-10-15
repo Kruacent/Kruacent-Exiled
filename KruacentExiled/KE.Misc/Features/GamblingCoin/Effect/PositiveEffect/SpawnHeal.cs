@@ -7,7 +7,7 @@ using UnityEngine;
 internal class SpawnHeal : ICoinEffect
 {
     public string Name { get; set; } = "SpawnHeal";
-    public string Message { get; set; } = "Yipee, you got heal !";
+    public string Message { get; set; } = string.Empty;
     public int Weight { get; set; } = 35;
     public EffectType Type { get; set; } = EffectType.Positive;
 

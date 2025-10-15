@@ -13,10 +13,6 @@ public class RandomTeleport : ICoinEffect
 
     public void Execute(Player player)
     {
-        Array values = Enum.GetValues(typeof(RoomType));
-        RoomType randomRoom = (RoomType)values.GetValue(UnityEngine.Random.Range(0, values.Length));
-
-
-        player.Teleport(randomRoom);
+        player.Teleport(Room.Random());
     }
 }

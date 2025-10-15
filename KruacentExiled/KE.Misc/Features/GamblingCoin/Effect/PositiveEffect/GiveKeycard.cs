@@ -18,7 +18,7 @@ internal class GiveKeycard : ICoinEffect
 
     public void Execute(Player player)
     {
-        int random = UnityEngine.Random.Range(1, 101);
+        float random = UnityEngine.Random.Range(1f, 100f);
         ItemType keycard = ItemType.KeycardContainmentEngineer;
 
         if(random <= FacilityManagerCard)

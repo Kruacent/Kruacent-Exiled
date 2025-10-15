@@ -6,7 +6,7 @@ using KE.Misc.Features.GamblingCoin.Types;
 internal class OneAmmoLogicer : ICoinEffect
 {
     public string Name { get; set; } = "OneAmmoLogicer";
-    public string Message { get; set; } = "Is that come from you ?!?";
+    public string Message { get; set; } = "Were you hiding that in your... ";
     public int Weight { get; set; } = 1;
     public EffectType Type { get; set; } = EffectType.Positive;
 
