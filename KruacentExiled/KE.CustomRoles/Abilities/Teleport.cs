@@ -11,7 +11,7 @@ namespace KE.CustomRoles.Abilities
     {
         public override string Name { get; } = "Teleportation";
 
-        public override string Description { get; } = "";
+        public override string Description { get; } = $"Tu perds {Damage} HP/téléportation";
 
         public override int Id => 2008;
 
@@ -31,7 +31,6 @@ namespace KE.CustomRoles.Abilities
                 Log.Info("target in LCZ while LCZ is decontaminated.");
                 return;
             }
-
 
             player.Hurt(Damage, "You are dead.");
 

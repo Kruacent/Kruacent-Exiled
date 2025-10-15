@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features.Attributes;
 using Exiled.CustomRoles.API.Features;
+using KE.CustomRoles.Abilities;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
 using PlayerRoles;
@@ -12,7 +13,7 @@ namespace KE.CustomRoles.CR.Human
     internal class Enderman : GlobalCustomRole, IColor
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;
-        public override string Description { get; set; } = "Fais attention tu n'aimes pas l'eau !";
+        public override string Description { get; set; } = $"Tu peux te téléporter ! T tro for enféte";
         public override uint Id { get; set; } = 1065;
         public override string PublicName { get; set; } = "Enderman";
         public override bool KeepRoleOnDeath { get; set; } = false;
