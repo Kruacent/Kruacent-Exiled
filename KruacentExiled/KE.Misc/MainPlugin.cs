@@ -37,7 +37,7 @@ namespace KE.Misc
         internal AutoNukeAnnoucement AutoNukeAnnoucement { get; private set; }
         internal AutoTesla AutoTesla { get; private set; }
         internal EventHandlers _gamblingCoinHandler {  get; private set; }
-        
+        internal SpawnLcz SpawnLcz { get; private set; }
 
         public override void OnEnabled()
         {
@@ -53,6 +53,7 @@ namespace KE.Misc
             AutoNukeAnnoucement = new();
             AutoTesla = new();
             Candy = new Candy();
+            SpawnLcz = new();
             Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
             Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
 
@@ -96,6 +97,7 @@ namespace KE.Misc
 
             _914 = null;
             Candy = null;
+            SpawnLcz = null;
             ClassDDoor = null;
             ServerHandler = null;
             SCPBuff = null;
