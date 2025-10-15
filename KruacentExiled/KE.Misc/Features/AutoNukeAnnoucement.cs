@@ -28,14 +28,21 @@ namespace KE.Misc.Features
         private IEnumerator<float> Timer()
         {
             Stopwatch watch = Stopwatch.StartNew();
+            bool flag = false;
 
-
-            while (watch.Elapsed.TotalMinutes < 25)
+            while (watch.Elapsed.TotalMinutes < AlphaWarheadController.Singleton._autoDetonateTime)
             {
                 yield return Timing.WaitForSeconds(60);
+                if(Warhead.IsDetonated || Warhead.IsInProgress)
+                {
+                    flag = true;
+                    break;
+                }
             }
-
-            SayAnnouncement();
+            if (!flag)
+            {
+                SayAnnouncement();
+            }
 
         }
 
