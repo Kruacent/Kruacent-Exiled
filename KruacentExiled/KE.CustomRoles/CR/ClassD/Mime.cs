@@ -21,7 +21,7 @@ namespace KE.CustomRoles.CR.ClassD
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
-        public override float SpawnChance { get; set; } = 0;
+        public override float SpawnChance { get; set; } = 100;
         public override Vector3 Scale { get; set; } = new Vector3(0.1f, 1, 1);
         public Color32 Color => new(255, 74, 74, 0);
 
@@ -39,8 +39,7 @@ namespace KE.CustomRoles.CR.ClassD
 
         public override HashSet<int> Abilities { get; } = new()
         {
-            2009
+            2011
         };
-
     }
 }

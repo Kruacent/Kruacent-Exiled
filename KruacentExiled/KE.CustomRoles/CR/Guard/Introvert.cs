@@ -22,10 +22,10 @@ namespace KE.CustomRoles.CR.Guard
 
         public override List<string> Inventory { get; set; } = new List<string>()
         {
-          $"{ItemType.Radio}",
           $"{ItemType.ArmorLight}",
           $"{ItemType.GunFSP9}",
           $"{ItemType.Medkit}",
+          $"{ItemType.Flashlight}",
           $"{ItemType.Flashlight}"
         };
 

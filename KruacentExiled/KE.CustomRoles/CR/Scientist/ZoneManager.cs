@@ -34,7 +34,7 @@ namespace KE.CustomRoles.CR.Scientist
             {
                 new DynamicSpawnPoint()
                 {
-                    Location = SpawnLocationType.InsideHidLab,
+                    Location = SpawnLocationType.Inside127Lab,
                     Chance = 100,
                 }
             }
