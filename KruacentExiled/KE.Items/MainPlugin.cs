@@ -6,9 +6,11 @@ using Exiled.CustomItems.API.Features;
 using KE.Items.API.Core.Lights;
 using KE.Items.API.Core.Settings;
 using KE.Items.API.Core.Upgrade;
+using KE.Items.API.Features.Complexes;
 using KE.Utils.API.Displays.DisplayMeow;
 using System;
 using System.Linq;
+using UnityEngine;
 using InteractableToy = LabApi.Features.Wrappers.InteractableToy;
 
 namespace KE.Items
@@ -46,7 +48,7 @@ namespace KE.Items
             Utils.API.Sounds.SoundPlayer.Load();
             
 
-            //Exiled.Events.Handlers.Server.RoundStarted += Test;
+            Exiled.Events.Handlers.Server.RoundStarted += Test;
 
 
             CustomItem.RegisterItems();
@@ -66,6 +68,8 @@ namespace KE.Items
             //QualityHandler?.Unregister();
             SettingsHandler.UnsubscribeEvents();
 
+            Exiled.Events.Handlers.Server.RoundStarted -= Test;
+
             //QualityHandler = null;
             //PickupQuality = null;
             SettingsHandler = null;
@@ -74,34 +78,16 @@ namespace KE.Items
             Instance = null;
         }
 
-
-
-
-
-
-        private void Test()
+        public void Test()
         {
+            ComplexBase complex = new ComplexGatling();
+
             Player player = Player.List.First();
+            Log.Debug(player.Position);
+            complex.Spawn(player.Position,Quaternion.identity);
 
 
-
-            var prim = Primitive.Create(player.Position,spawn:false);
-            prim.Collidable = false;
-            prim.Spawn();
-            var itoy = InteractableToy.Create(prim.Transform, true);
-            itoy.InteractionDuration = 3f;
-
-
-            itoy.OnSearchAborted += GiveDestroy;
 
         }
-
-        private void GiveDestroy(LabApi.Features.Wrappers.Player player)
-        {
-
-            CustomItem.Get(1046)?.Give(player);
-
-        }
-        
     }
 }
