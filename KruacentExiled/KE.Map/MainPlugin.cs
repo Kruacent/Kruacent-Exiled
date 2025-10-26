@@ -1,9 +1,15 @@
 ﻿
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Doors;
+using Exiled.API.Features.Toys;
 using Exiled.API.Interfaces;
+using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
+using Exiled.Events.Handlers;
 using Interactables.Interobjects.DoorUtils;
+using KE.Map.CustomZones;
+using KE.Map.CustomZones.CustomRooms.MCZ;
 using KE.Map.Entrance;
 using KE.Map.Heavy.GamblingZone;
 using KE.Map.Others.BlackoutNDoor.Handlers;
@@ -11,8 +17,12 @@ using KE.Map.Utils;
 using KE.Utils.API.Models;
 using LabApi.Events.Arguments.ServerEvents;
 using LabApi.Features.Wrappers;
+using MapGeneration;
+using Mirror;
 using PlayerRoles;
+using PlayerRoles.PlayableScps.Scp106;
 using ProjectMER.Features.Serializable.Lockers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -39,23 +49,34 @@ namespace KE.Map
             KE.Utils.API.Sounds.SoundPlayer.Instance.TryLoad();
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
+            LabApi.Events.Handlers.ServerEvents.MapGenerating += OnGenerating;
+            Exiled.Events.Handlers.Player.InteractingDoor += OpenDoor;
+
             GamblingRoom.SubscribeEvents();
             //MoreRoom.CreateAll();
             //MoreRoom.SubscribeEvents();
+
+
+             
+
+
+
             Instance = this;
+            base.OnEnabled();
         }
 
         private void OnRoundStarted()
         {
-            //Player player = Player.List.First();
+            Player player = Player.List.First();
             //StructureSpawner.SpawnPedestal(ItemType.KeycardJanitor,player.Position,Quaternion.identity,Vector3.one);
 
             //player.Teleport(Room.List.Where(r => r.Type == Exiled.API.Enums.RoomType.EzVent).First());
 
 
-
+            player.Teleport(teleport);
             
         }
+
 
 
         public override void OnDisabled()
@@ -63,18 +84,62 @@ namespace KE.Map
             //handler.UnsubscribeEvents();
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
+            LabApi.Events.Handlers.ServerEvents.MapGenerating -= OnGenerating;
+            Exiled.Events.Handlers.Player.InteractingDoor -= OpenDoor;
+
             GamblingRoom.UnsubscribeEvents();
             //MoreRoom.UnsubscribeEvents();
             handler = null;
             Instance = null;
         }
 
+        private int seed;
+        private Vector3 teleport;
+        private void OnGenerating(MapGeneratingEventArgs ev)
+        {
+            seed = ev.Seed;
 
+        }
+
+        private void CustomZone()
+        {
+            Log.Debug("read");
+            try
+            {
+
+                AltasReader.Read();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+            }
+
+
+            CustomZone zone = new MediumContainmentZone();
+            //teleport = zone.Spawnzone;
+            new SCorridor();
+            new EndRoom();
+            new TCorridor();
+
+            zone.Generate(new System.Random(seed));
+
+            teleport = CustomRoom.RegisteredRoom.First().SpawnedRoom.First(s => s.Shape == RoomShape.Straight).Position + Vector3.up*5;
+            Log.Debug("teleport " + teleport);
+        }
+
+        private void OpenDoor(InteractingDoorEventArgs ev)
+        {
+            if(ev.Door.Zone == Exiled.API.Enums.ZoneType.HeavyContainment)
+            {
+                ev.Player.Teleport(teleport);
+            }
+        }
         
 
         private void OnGenerated()
         {
-            Door lcz173 = Door.Get(Exiled.API.Enums.DoorType.Scp173Gate);
+            CustomZone();
+            /*Door lcz173 = Door.Get(Exiled.API.Enums.DoorType.Scp173Gate);
             HashSet<DroppableItem> normal = new()
             {
                 new(ItemType.KeycardO5,1,2),
@@ -111,10 +176,10 @@ namespace KE.Map
 
 
             var g = new GamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, new(normal));
-
+            */
 
             
-            
+
             //var g = new GamblingRoom(lcz173, new(normal), -lcz173.Transform.forward * 5f);
             /*
 

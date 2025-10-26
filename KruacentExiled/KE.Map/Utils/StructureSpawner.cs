@@ -1,28 +1,13 @@
-﻿
-using Exiled.API.Features;
-using Interactables;
-using Interactables.Interobjects.DoorUtils;
+﻿using Interactables.Interobjects.DoorUtils;
 using InventorySystem.Items.Firearms.Attachments;
-using LabApi.Features.Wrappers;
 using MapGeneration;
 using MapGeneration.Distributors;
-using MEC;
 using Mirror;
-using ProjectMER.Commands.Modifying.Position;
-using ProjectMER.Commands.Modifying.Rotation;
-using ProjectMER.Commands.Modifying.Scale;
 using ProjectMER.Features;
 using ProjectMER.Features.Enums;
-using ProjectMER.Features.Serializable.Lockers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using static PlayerList;
-using static PlayerRoles.FirstPersonControl.Thirdperson.Subcontrollers.FeetStabilizerSubcontroller;
 
 namespace KE.Map.Utils
 {
@@ -151,5 +136,33 @@ namespace KE.Map.Utils
             NetworkServer.Spawn(workstationController.gameObject);
             return workstationController;
         }
+
+
+
+
+
+
+
+        [Obsolete("one day it'll work",true)]
+        public static BreakableWindow CreateWindow(Vector3 position, Quaternion rotation)
+        {
+            BreakableWindow br = null;
+            foreach (GameObject gameObject in NetworkClient.prefabs.Values)
+            {
+                if (gameObject.TryGetComponent<BreakableWindow>(out var window))
+                {
+                    br = UnityEngine.Object.Instantiate(window);
+                }
+            }
+
+            br.transform.SetPositionAndRotation(position, rotation);
+            br.transform.localScale = Vector3.one;
+            br.NetworkIsBroken = false;
+
+            NetworkServer.UnSpawn(br.gameObject);
+            NetworkServer.Spawn(br.gameObject);
+            return br;
+        }
+
     }
 }
