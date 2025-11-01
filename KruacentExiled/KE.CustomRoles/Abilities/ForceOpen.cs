@@ -22,8 +22,6 @@ namespace KE.CustomRoles.Abilities
 
         public override string Description { get; } = "Force open a door";
 
-        public override int Id => 2009;
-
         public override float Cooldown { get;  } = 30;
         private Dictionary<Player, DateTime> abilityActivated = new();
         public static readonly TimeSpan MaxTime = new (0, 0, 30);
@@ -49,7 +47,7 @@ namespace KE.CustomRoles.Abilities
             if (!abilityActivated.ContainsKey(player)) return;
             if (DateTime.Now > abilityActivated[player] + MaxTime) return;
             if (ev.IsAllowed) return;
-            if (ev.Door.DoorLockType > DoorLockType.Lockdown079) return;
+            if (ev.Door.DoorLockType >= DoorLockType.Lockdown079) return;
 
 
             int successRate;

@@ -21,8 +21,7 @@ namespace KE.CustomRoles.CR.Human
         private static Dictionary<Player, CoroutineHandle> _coroutines = new();
 
         public override SideEnum Side { get; set; } = SideEnum.Human;
-        public override string Description { get; set; } = "Tu es <color=#FFFF00>maladroit</color>\nFait attention à tes items !";
-        public override uint Id { get; set; } = 1057;
+        public override string Description { get; set; } = "Fait attention à tes items !";
         public override string PublicName { get; set; } = "Maladroit";
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;

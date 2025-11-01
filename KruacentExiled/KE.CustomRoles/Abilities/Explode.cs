@@ -19,8 +19,6 @@ namespace KE.CustomRoles.Abilities
 
         public override string Description { get; } = "Tu as une ceinture d'explosif autour de toi, fait attention n'appuie pas sur le bouton";
 
-        public override int Id => 2007;
-
         public override float Cooldown { get; } = 4*60f;
 
         protected override void AbilityUsed(Player player)

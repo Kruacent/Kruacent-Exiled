@@ -19,8 +19,6 @@ namespace KE.CustomRoles.Abilities
 
         public override string Description { get; } = "I cast Fireball";
 
-        public override int Id => 2010;
-
         public override float Cooldown { get; } = 2f;
 
 

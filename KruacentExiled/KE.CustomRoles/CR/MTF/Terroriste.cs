@@ -11,7 +11,6 @@ namespace KE.CustomRoles.CR.MTF
     public class Terroriste : KECustomRole, IColor
     {
         public override string Description { get; set; } = "Ne fait pas exploser la facilité \ntu commences avec des grenades";
-        public override uint Id { get; set; } = 1052;
         public override string PublicName { get; set; } = "Terroriste";
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.NtfSergeant;
@@ -37,9 +36,9 @@ namespace KE.CustomRoles.CR.MTF
           { AmmoType.Nato556, 100}
         };
 
-        public override HashSet<int> Abilities { get; } = new()
+        public override HashSet<string> Abilities { get; } = new()
         {
-            2007
+            "Explode"
         };
     }
 }

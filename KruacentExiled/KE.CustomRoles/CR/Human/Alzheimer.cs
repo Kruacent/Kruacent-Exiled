@@ -17,8 +17,8 @@ namespace KE.CustomRoles.CR.Human
         private static Dictionary<Player, CoroutineHandle> _coroutines = new();
         public override SideEnum Side { get; set; } = SideEnum.Human;
         public override string Description { get; set; } = "POV Mishima";
-        public override uint Id { get; set; } = 1056;
         public override string PublicName { get; set; } = "Vieux";
+        public override string InternalName => GetType().Name;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
         public override float SpawnChance { get; set; } = 100;

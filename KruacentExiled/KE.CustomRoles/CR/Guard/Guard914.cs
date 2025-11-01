@@ -19,8 +19,8 @@ namespace KE.CustomRoles.CR.Guard
     public class Guard914 : KECustomRole
     {
         public override string Description { get; set; } = "Tu es <b>Le</b> <color=#6B6B38>garde de SCP-914</color> \nTu commences à 914 \nmais on a volé ta carte \net ntm aussi";
-        public override uint Id { get; set; } = 1045;
         public override string PublicName { get; set; } = "Garde de 914";
+        public override string InternalName => "Guard914";
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
         public override bool KeepRoleOnDeath { get; set; } = false;

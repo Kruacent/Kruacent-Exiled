@@ -18,13 +18,11 @@ namespace KE.CustomRoles.CR.Human
     {
         private static CoroutineHandle _coroutines;
         public override SideEnum Side { get; set; } = SideEnum.Human;
-        public override string Name { get; set; } = "Hitman";
         public override string Description { get; set; } = "pov sou hiyori de Your Turn To Die -Death Game By Majority-";
-        public override uint Id { get; set; } = 1059;
         public override string PublicName { get; set; } = string.Empty;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
-        public override float SpawnChance { get; set; } = 0;
+        public override float SpawnChance { get; set; } = 10;
 
         public Color32 Color => new Color32(54, 54, 54,0);
 

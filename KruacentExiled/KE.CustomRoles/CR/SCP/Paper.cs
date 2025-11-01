@@ -8,7 +8,6 @@ namespace KE.CustomRoles.CR.SCP
     public class Paper : GlobalCustomRole
     {
         public override string Description { get; set; } = "uh oh. paper jam";
-        public override uint Id { get; set; } = 1047;
         public override SideEnum Side { get; set; } = SideEnum.SCP;
         public override string PublicName { get; set; } = "Paper";
         public override bool KeepRoleOnDeath { get; set; } = false;

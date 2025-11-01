@@ -15,7 +15,6 @@ namespace KE.CustomRoles.CR.MTF
     public class Pilot : KECustomRole
     {
         public override string Description { get; set; } = "So I haveth a Laser Pointere";
-        public override uint Id { get; set; } = 1088;
         public override string PublicName { get; set; } = "Pilot";
         public override int MaxHealth { get; set; } = 75;
         public override RoleTypeId Role { get; set; } = RoleTypeId.NtfPrivate;
@@ -38,10 +37,10 @@ namespace KE.CustomRoles.CR.MTF
           { AmmoType.Nato9, 100}
         };
 
-        public override HashSet<int> Abilities { get; } = new()
+        public override HashSet<string> Abilities { get; } = new()
         {
-            2000,
-            2001
+            "SelectPosition",
+            "AirStrike"
         };
 
 

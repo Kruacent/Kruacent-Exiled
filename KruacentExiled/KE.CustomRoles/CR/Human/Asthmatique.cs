@@ -15,7 +15,6 @@ namespace KE.CustomRoles.CR.Human
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;
         public override string Description { get; set; } = "T'as stamina est réduit de moitié\nMais tu vises mieux";
-        public override uint Id { get; set; } = 1042;
         public override string PublicName { get; set; } = "Asthmatique";
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;

@@ -22,9 +22,7 @@ namespace KE.CustomRoles.Abilities
         public override string Name { get;  } = "Airstrike";
         public override string PublicName { get;  } = "Airstrike";
 
-        public override string Description { get;  } = "Don't overuse it or your co-op will not be happy";
-
-        public override int Id => 2001;
+        public override string Description { get;  } = "Don't overuse it or your co-op will not be happy (only works on Surface Zone)";
         public override float Cooldown { get; } = 60f;
 
         public float height = 5;
@@ -33,15 +31,14 @@ namespace KE.CustomRoles.Abilities
 
         protected override void AbilityUsed(Player player)
         {
-            if(!SelectPosition.TryGetTarget(player, out Vector3 target))
+            if(!SetPosition.TryGetTarget(player, out Vector3 target))
             {
-                //show hint
-                Log.Info("no target selected");
+                MainPlugin.ShowEffectHint(player, "no target selected");
                 return;
             }
             if(target.GetZone() != FacilityZone.Surface)
             {
-                Log.Info("set target surface");
+                MainPlugin.ShowEffectHint(player, "only works on Surface Zone");
                 return;
             }
 
@@ -60,14 +57,10 @@ namespace KE.CustomRoles.Abilities
             Timing.CallDelayed(5, () =>
             {
                 Projectile gre = grenade.SpawnActive(target + (height - .5f) * Vector3.up);
-
                 //explode on collision
                 gre.GameObject.AddComponent<Exiled.API.Features.Components.CollisionHandler>().Init(player.GameObject, gre.Base);
                 l.Destroy();
             });
-
-
-
 
         }
 

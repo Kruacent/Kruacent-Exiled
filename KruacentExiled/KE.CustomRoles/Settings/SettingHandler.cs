@@ -12,15 +12,15 @@ namespace KE.CustomRoles.Settings
 {
     internal class SettingHandler : IUsingEvents
     {
-        private int _idHeader = 148;
-        private int _idTimeCustomRole = 144;
-        private int _idDesc = 143;
-        private int _idMode = 145;
-        private int _idDown = 149;
-        private int _idUp = 150;
-        private int _idSelect = 151;
-        private int _idArrow = 152;
-        private int _idTimeAbilityDesc = 153;
+        private readonly int _idHeader = 148;
+        private readonly int _idTimeCustomRole = 144;
+        private readonly int _idDesc = 143;
+        private readonly int _idMode = 145;
+        private readonly int _idDown = 149;
+        private readonly int _idUp = 150;
+        private readonly int _idSelect = 151;
+        private readonly int _idArrow = 152;
+        private readonly int _idTimeAbilityDesc = 153;
 
 
 
@@ -39,35 +39,11 @@ namespace KE.CustomRoles.Settings
                 new TwoButtonsSetting(_idDesc,"Descriptions","Disabled","Enabled",true,"hide/show the description the Custom Role "),
                 new SliderSetting(_idTimeCustomRole,"Time shown",0,30,20),
                 new SliderSetting(_idTimeAbilityDesc,"Ability Description time shown",0,30,20),
-                new TwoButtonsSetting(_idMode,"Mode","Keybinds","Select wheel",true,onChanged:OnChanged),
-                new KeybindSetting(_idUp, "Select up", UnityEngine.KeyCode.None,hintDescription:"only work in Select Wheel mode"),
-                new KeybindSetting(_idDown, "Select down", UnityEngine.KeyCode.None,hintDescription:"only work in Select Wheel mode"),
-                new KeybindSetting(_idSelect, "Use selected ability", UnityEngine.KeyCode.None,hintDescription:"only work in Select Wheel mode"),
-                //this crashes the player idk why
-                SettingBase.Create(new SSPlaintextSetting(_idArrow, "Personalize the arrow next to the selected ability", baseArrow, 16, TMP_InputField.ContentType.Standard, "only work in Select Wheel mode", 0))
+                new KeybindSetting(_idUp, "Select up", UnityEngine.KeyCode.None),
+                new KeybindSetting(_idDown, "Select down", UnityEngine.KeyCode.None),
+                new KeybindSetting(_idSelect, "Use selected ability", UnityEngine.KeyCode.None),
+                SettingBase.Create(new SSPlaintextSetting(_idArrow, "Personalize the arrow next to the selected ability", baseArrow, 16, TMP_InputField.ContentType.Standard, string.Empty, 0))
             };
-        }
-
-        public void OnChanged(Player player, SettingBase setting)
-        {
-            
-            try
-            {
-                if (GetMode(player))
-                {
-                    KEAbilities.RemoveAllSelect(player);
-                }
-                else
-                {
-                    KEAbilities.SelectFirstAbility(player);
-                }
-            }
-            catch(Exception e)
-            {
-                Log.Error(e);
-            }
-            
-            
         }
 
 
@@ -106,17 +82,17 @@ namespace KE.CustomRoles.Settings
 
         private void OnSettingValueReceived(Player player, ServerSpecificSettingBase settingBase)
         {
-            if (KEAbilities.CheckPressed(settingBase, _idDown))
+            if (CheckPressed(settingBase, _idDown))
             {
                 DownPressed?.Invoke(player);
             }
             
-            if (KEAbilities.CheckPressed(settingBase, _idUp))
+            if (CheckPressed(settingBase, _idUp))
             {
                 UpPressed?.Invoke(player);
             }
 
-            if (KEAbilities.CheckPressed(settingBase, _idSelect))
+            if (CheckPressed(settingBase, _idSelect))
             {
                 KEAbilities.UseSelected(player);
             }
@@ -178,9 +154,12 @@ namespace KE.CustomRoles.Settings
             }
         }
 
+        public static bool CheckPressed(ServerSpecificSettingBase settingBase, int id)
+        {
+            return settingBase is SSKeybindSetting keybindSetting && keybindSetting.SettingId == id && keybindSetting.SyncIsPressed;
+        }
 
 
-        
 
         private void OnVerified(VerifiedEventArgs ev)
         {

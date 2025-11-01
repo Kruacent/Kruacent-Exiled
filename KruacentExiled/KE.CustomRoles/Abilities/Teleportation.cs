@@ -7,29 +7,38 @@ using UnityEngine;
 
 namespace KE.CustomRoles.Abilities
 {
-    public class Teleport : KEAbilities
+    public class Teleportation : KEAbilities
     {
         public override string Name { get; } = "Teleportation";
         public override string PublicName { get; } = "Teleportation";
 
-        public override string Description { get; } = $"Tu perds {Damage} HP/téléportation";
+        public override string Description { get; } = $"Tu perds {Damage} HP/téléportation, ne peux pas être utilisé dans les ascenseurs";
 
-        public override int Id => 2008;
 
         public override float Cooldown { get; } = 120f;
         public static float Damage { get; set; } = 60;
 
         protected override void AbilityUsed(Player player)
         {
-            if(!SelectPosition.TryGetTarget(player, out Vector3 target))
+            if(!SetPosition.TryGetTarget(player, out Vector3 target))
             {
                 MainPlugin.ShowEffectHint(player, "no target selected");
+                
                 return;
             }
 
+
+            
+            if(Lift.Get(target) is not null)
+            {
+                MainPlugin.ShowEffectHint(player, "can't teleport in elevator");
+                return;
+            }
+
+
             if (target.GetZone() == FacilityZone.LightContainment && Map.IsLczDecontaminated)
             {
-                Log.Info("target in LCZ while LCZ is decontaminated.");
+                MainPlugin.ShowEffectHint(player, "target in LCZ while LCZ is decontaminated.");
                 return;
             }
 
@@ -40,12 +49,6 @@ namespace KE.CustomRoles.Abilities
                 if (Player.List.Count() > 1)
                 {
                     player.Teleport(Player.List.Where(p => p != player).GetRandomValue());
-                    return;
-                } 
-                else
-                {
-                    Log.Warn("no other player to teleport to");
-                    return;
                 }
             }
             else

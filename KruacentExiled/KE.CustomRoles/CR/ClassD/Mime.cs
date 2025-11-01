@@ -15,8 +15,8 @@ namespace KE.CustomRoles.CR.ClassD
     public class Mime : KECustomRole, IColor
     {
         public override string Description { get; set; } = "Tu ne peux pas parler\nmais tu fais très peu de bruit quand tu marches\net t'es tout plat";
-        public override uint Id { get; set; } = 1053;
         public override string PublicName { get; set; } = "Mime";
+        public override string InternalName => PublicName;
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
         public override bool KeepRoleOnDeath { get; set; } = false;
@@ -37,9 +37,9 @@ namespace KE.CustomRoles.CR.ClassD
             player.DisableEffect(EffectType.SilentWalk);
         }
 
-        public override HashSet<int> Abilities { get; } = new()
+        public override HashSet<string> Abilities { get; } = new()
         {
-            2011
+            "SimulateDeath"
         };
     }
 }

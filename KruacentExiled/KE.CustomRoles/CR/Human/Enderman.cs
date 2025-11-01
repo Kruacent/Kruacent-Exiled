@@ -14,15 +14,14 @@ namespace KE.CustomRoles.CR.Human
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;
         public override string Description { get; set; } = $"Tu peux te téléporter ! T tro for enféte";
-        public override uint Id { get; set; } = 1065;
         public override string PublicName { get; set; } = "Enderman";
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
         public override float SpawnChance { get; set; } = 100;
-        public override HashSet<int> Abilities { get; } = new()
+        public override HashSet<string> Abilities { get; } = new()
         {
-            2008,
-            2000
+            "Teleportation",
+            "SetPosition"
         };
 
         public Color32 Color => new Color32(142, 37, 190, 0);

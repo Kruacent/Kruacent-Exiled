@@ -18,7 +18,6 @@ namespace KE.CustomRoles.Abilities
 
         public override string Description { get; } = "T'es lien avec le casino t'as permis d'avoir un peu plus de pièce en échange d'un item ou de pire";
 
-        public override int Id => 2002;
 
         public override float Cooldown { get; } = 1f;
 

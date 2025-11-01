@@ -9,7 +9,6 @@ namespace KE.CustomRoles.CR.SCP
     public class Small : GlobalCustomRole
     {
         public override string Description { get; set; } = "u smoll";
-        public override uint Id { get; set; } = 1047;
         public override SideEnum Side { get; set; } = SideEnum.SCP;
         public override string PublicName { get; set; } = "Small";
         public override bool KeepRoleOnDeath { get; set; } = false;

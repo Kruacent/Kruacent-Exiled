@@ -7,12 +7,11 @@ using System.Collections.Generic;
 
 namespace KE.CustomRoles.CR.Guard
 {
-    [CustomRole(RoleTypeId.FacilityGuard)]
     internal class Introvert : KECustomRole
     {
         public override string Description { get; set; } = "Tu n'aimes pas trop les humains";
-        public override uint Id { get; set; } = 1069;
         public override string PublicName { get; set; } = "Introvert";
+        public override string InternalName => PublicName;
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
         public override bool KeepRoleOnDeath { get; set; } = false;

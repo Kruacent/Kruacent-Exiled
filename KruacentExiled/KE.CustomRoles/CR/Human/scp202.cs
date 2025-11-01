@@ -10,11 +10,10 @@ using KE.CustomRoles.API.Interfaces;
 
 namespace KE.CustomRoles.CR.Human
 {
-    public class Inverted : GlobalCustomRole, IColor
+    public class Scp202 : GlobalCustomRole, IColor
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;
         public override string Description { get; set; } = "? emsizan-itna'd te emsinummoc itna'd eiv enu sèrpa\n7691 lirva 91 el trom te engoloc à 6781 reivnaj 5 el én\n,etarcoméd neitérhc itrap ud eitrap tnasiaf 5691 à 9491 ed reilecnahC\n?elaidnom erreug ednoces al sèrpa dnamella reilecnahc re1 el darnoK erid xuev uT ?drannoC";
-        public override uint Id { get; set; } = 1066;
         public override string PublicName { get; set; } = "SCP-202";
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;

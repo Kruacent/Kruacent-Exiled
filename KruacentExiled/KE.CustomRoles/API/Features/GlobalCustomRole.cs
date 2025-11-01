@@ -28,7 +28,13 @@ namespace KE.CustomRoles.API.Features
         public override bool KeepInventoryOnSpawn { get; set; } = true;
         public override bool RemovalKillsPlayer => false;
 
-
+        public override string Name
+        {
+            get
+            {
+                return Side.ToString().ToUpper() + "_" + InternalName.RemoveSpaces();
+            }
+        }
         
         public override void AddRole(Player player)
         {
@@ -39,93 +45,15 @@ namespace KE.CustomRoles.API.Features
                 Log.Error($"tried to give a global custom role to a player in the wrong side ({side} instead of {Side})");
                 return;
             }
-            Log.Debug($"{Name}: Adding role to {player.Nickname}.");
-            TrackedPlayers.Add(player);
 
 
+            base.AddRole(player);
+        }
 
-            Timing.CallDelayed(
-                0.25f,
-                () =>
-                {
-                    if (!KeepInventoryOnSpawn)
-                    {
-                        Log.Debug($"{Name}: Clearing {player.Nickname}'s inventory.");
-                        player.ClearInventory();
-                    }
-
-                    foreach (string itemName in Inventory)
-                    {
-                        Log.Debug($"{Name}: Adding {itemName} to inventory.");
-                        TryAddItem(player, itemName);
-                    }
-
-                    if (Ammo.Count > 0)
-                    {
-                        Log.Debug($"{Name}: Adding Ammo to {player.Nickname} inventory.");
-                        foreach (AmmoType type in EnumUtils<AmmoType>.Values)
-                        {
-                            if (type != AmmoType.None)
-                                player.SetAmmo(type, Ammo.ContainsKey(type) ? Ammo[type] == ushort.MaxValue ? InventoryLimits.GetAmmoLimit(type.GetItemType(), player.ReferenceHub) : Ammo[type] : (ushort)0);
-                        }
-                    }
-                });
-
-            Log.Debug($"{Name}: Setting health values.");
+        protected override void AttributeHealth(Player player)
+        {
             player.MaxHealth *= MaxHealthMultiplicator;
             player.Health = player.MaxHealth;
-            player.Scale = Scale;
-
-            Vector3 position = GetSpawnPosition();
-            if (position != Vector3.zero)
-            {
-                player.Position = position;
-            }
-
-            Log.Debug($"{Name}: Setting player info");
-
-            player.CustomInfo = $"{player.CustomName}\n{CustomInfo}";
-            player.InfoArea &= ~(PlayerInfoArea.Role | PlayerInfoArea.Nickname);
-
-            KEAbilities.TryRemoveFromPlayer(player);
-            if (Abilities != null)
-            {
-                foreach (int abilityId in Abilities)
-                {
-                    KEAbilities.TryAddToPlayer(abilityId, player);
-                }
-            }
-
-
-            ShowMessage(player);
-            RoleAdded(player);
-            player.UniqueRole = Name;
-        }
-        public override void RemoveRole(Player player)
-        {
-            
-
-            if (!TrackedPlayers.Contains(player))
-            {
-                return;
-            }
-
-            Log.Debug(Name + ": Removing role from " + player.Nickname + $"({player.Id})");
-            TrackedPlayers.Remove(player);
-            player.CustomInfo = string.Empty;
-            player.InfoArea |= PlayerInfoArea.Nickname | PlayerInfoArea.Role;
-            player.Scale = Vector3.one;
-            KEAbilities.TryRemoveFromPlayer(player);
-
-            RoleRemoved(player);
-            player.UniqueRole = string.Empty;
-            player.TryRemoveCustomeRoleFriendlyFire(Name);
-            if (RemovalKillsPlayer)
-            {
-                //player.Role.Set(RoleTypeId.Spectator);
-            }
-            Log.Debug(Name + ": finish Removing role from " + player.Nickname + $"({player.Id})");
-
         }
 
 
@@ -172,6 +100,13 @@ namespace KE.CustomRoles.API.Features
 
             DisplayHandler.Instance.AddHint(MainPlugin.CRHint, player, sb.ToString(), delay);
             StringBuilderPool.Pool.Return(sb);
+        }
+
+
+
+        public override bool IsAvailable(Player player)
+        {
+            return SideClass.Get(player.Role.Side) == Side;
         }
     }
 

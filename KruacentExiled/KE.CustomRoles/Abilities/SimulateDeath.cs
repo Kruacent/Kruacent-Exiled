@@ -17,7 +17,6 @@ namespace KE.CustomRoles.Abilities
 
         public override string Description { get; } = "T'es talent de mime te permettent de simuler la mort.";
 
-        public override int Id => 2011;
         public int Duration = 10;
 
         public override float Cooldown { get; } = 60f;

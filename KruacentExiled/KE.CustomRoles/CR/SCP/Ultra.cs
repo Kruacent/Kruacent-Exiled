@@ -15,12 +15,11 @@ namespace KE.CustomRoles.CR.SCP
         private static Dictionary<Player, CoroutineHandle> _handles = new();
         public override SideEnum Side { get; set; } = SideEnum.SCP;
         public override string Description { get; set; } = "You can sense where people are located";
-        public override uint Id { get; set; } = 1079;
         public override string PublicName { get; set; } = "Ultra";
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float MaxHealthMultiplicator { get; set; } = 1f;
-        public override float SpawnChance { get; set; } = 0;
+        public override float SpawnChance { get; set; } = 100;
         public const float RefreshRate = 20;
         public const int SizeText = 20;
         protected override void RoleAdded(Player player)
@@ -39,10 +38,10 @@ namespace KE.CustomRoles.CR.SCP
         private IEnumerator<float> DisplayInfos(Player player)
         {
 
-            while (true)
+            while (player.IsAlive)
             {
                 Log.Debug("Ultra : showing");
-                ShowEffectHint(player, PlayerInZone());
+                ShowEffectHint(player, PlayerInZone(),RefreshRate);
                 yield return Timing.WaitForSeconds(RefreshRate);
             }
         }

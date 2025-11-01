@@ -13,7 +13,6 @@ namespace KE.CustomRoles.CR.Scientist
     public class GambleAddict : KECustomRole, IColor
     {
         public override string Description { get; set; } = "T'as trade ton kit et ta carte contre 2 pièces \nfais en bon usage";
-        public override uint Id { get; set; } = 1043;
         public override string PublicName { get; set; } = "Gamble Addict";
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scientist;
@@ -28,9 +27,9 @@ namespace KE.CustomRoles.CR.Scientist
           $"{ItemType.Coin}",
         };
 
-        public override HashSet<int> Abilities { get; } = new()
+        public override HashSet<string> Abilities { get; } = new()
         {
-            2002
+            "Trade"
         };
 
         public Color32 Color => new(0, 105, 59,0);

@@ -15,7 +15,6 @@ namespace KE.CustomRoles.Abilities
 
         public override string Description { get; } = "Avec 1548 heures de jeu sur Thief Simulator fallait s'y attendre un peu.";
 
-        public override int Id => 2006;
 
         public override float Cooldown { get; } = 120f;
 
@@ -28,6 +27,11 @@ namespace KE.CustomRoles.Abilities
             playerList.ForEach(p => Log.Info(p.Nickname));
 
             Player thiefed = playerList.GetRandomValue();
+            if(thiefed is null)
+            {
+                Log.Warn("no other player");
+                return;
+            }
 
             Log.Debug($"Thiefed player : {thiefed.Nickname}");
 

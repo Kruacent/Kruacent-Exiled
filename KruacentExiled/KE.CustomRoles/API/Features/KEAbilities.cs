@@ -1,21 +1,14 @@
 ﻿using Exiled.API.Features;
-using Exiled.API.Features.Core.UserSettings;
 using Exiled.API.Features.Pools;
-using Exiled.CustomRoles.API.Features;
-using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.Settings;
 using KE.Utils.API;
 using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
-using PlayerRoles.Subroutines;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using UserSettings.ServerSpecific;
-using UserSettings.UserInterfaceSettings;
-using static PlayerList;
 
 namespace KE.CustomRoles.API.Features
 {
@@ -33,41 +26,16 @@ namespace KE.CustomRoles.API.Features
         public abstract string Name { get; }
         public abstract string PublicName { get; }
         public abstract string Description { get; }
-        /// <summary>
-        /// Used for the settings option
-        /// </summary>
-        public abstract int Id { get; }
+
         /// <summary>
         /// in seconds
         /// </summary>
         public abstract float Cooldown { get; }
         #endregion
 
-        public HashSet<KECustomRole> GetRoles
-        {
-            get
-            {
-                HashSet<KECustomRole> result = new();
-                foreach (KECustomRole cr in KECustomRole.KnownKECR)
-                {
-                    foreach(int abilityId in cr.Abilities)
-                    {
-                        KEAbilities ability = Get(abilityId);
-                        if (ability == this)
-                        {
-                            result.Add(cr);
-                        }
-                    }
-                }
-                return result;
-            }
-        }
         private Dictionary<Player, DateTime> LastUsed = new();
         private static Dictionary<System.Type, KEAbilities> TypeToAbility { get; } = new();
-        private static Dictionary<int, KEAbilities> IdToAbility { get; } = new();
-        private static HeaderSetting header;
-        private static bool flagHeader = false;
-        private SettingBase setting;
+        private static Dictionary<string, KEAbilities> NameToAbility { get; } = new();
         public HashSet<Player> Players { get; } = new HashSet<Player>();
         public HashSet<Player> Selected { get; } = new();
 
@@ -81,93 +49,38 @@ namespace KE.CustomRoles.API.Features
         }
         public void Init()
         {
-            if (IdToAbility.ContainsKey(Id))
+            if (NameToAbility.ContainsKey(Name))
             {
-                Log.Warn($"{Name} ({Id}) have the same id as {IdToAbility[Id].Name}. Skipping...");
+                KEAbilities other = NameToAbility[Name];
+                Log.Warn($"{GetType().FullName} have the same name as {other.GetType().FullName}. Skipping...");
                 return;
             }
 
-
-
-            SettingBase old = SettingBase.List.Where(s => s.Id == Id).FirstOrDefault();
-
-            if(old == null)
-            {
-                if (!flagHeader)
-                {
-                    header = new(MainPlugin.Configs.HeaderId, "Abilities");
-                    SettingBase.Register([header]);
-                    flagHeader = true;
-                }
-                Log.Debug("creating keybind");
-                setting = new KeybindSetting(Id, Name, UnityEngine.KeyCode.None,hintDescription:Description);
-                SettingBase.Register([setting]);
-            }
-            else
-            {
-                Log.Error($"setting of {this} have the same id as {old.Label}");
-            }
             StartLoop();
-            IdToAbility.Add(Id, this);
             TypeToAbility.Add(GetType(), this);
+            NameToAbility.Add(Name, this);
             InternalSubscribeEvent();
         }
 
         public void Destroy()
         {
-            Func<Player,bool> p = null;
-            SettingBase.Unregister(p, [setting]);
             InternalUnsubcribeEvent();
         }
 
         private void InternalSubscribeEvent()
         {
 
-            ServerSpecificSettingsSync.ServerOnSettingValueReceived += SafeOnSettingValueReceived;
-            Exiled.Events.Handlers.Player.Verified += OnVerified;
             SubscribeEvents();
         }
 
         private void InternalUnsubcribeEvent()
         {
-            ServerSpecificSettingsSync.ServerOnSettingValueReceived -= SafeOnSettingValueReceived;
-            Exiled.Events.Handlers.Player.Verified -= OnVerified;
             UnsubscribeEvents();
         }
 
-        private void SafeOnSettingValueReceived(ReferenceHub hub, ServerSpecificSettingBase settingBase)
-        {
-            //not catching the exception will desync & kick the player
-            try
-            {
-                OnSettingValueReceived(Player.Get(hub), settingBase);
-            }
-            catch (Exception e)
-            {
-                Log.Error(e);
-            }
-        }
-
-        private void OnSettingValueReceived(Player player, ServerSpecificSettingBase settingBase)
-        {
-            if (!CheckPressed(settingBase)) return;
-            if (!Check(player)) return;
-
-            if (!SettingHandler.Instance.GetMode(player)) return;
-
-
-            if(CanUse(player,out string _))
-            {
-                UseAbility(player);
-            }
-        }
 
 
 
-        private void OnVerified(VerifiedEventArgs ev)
-        {
-            ServerSpecificSettingsSync.SendToPlayer(ev.Player.ReferenceHub);
-        }
 
         protected virtual void SubscribeEvents()
         {
@@ -197,10 +110,17 @@ namespace KE.CustomRoles.API.Features
         {
             float time = MainPlugin.SettingHandler.GetAbilityTime(player);
 
-            string msg = $"<b>{PublicName}</b>\n{Description}";
+            StringBuilder sb = StringBuilderPool.Pool.Get();
+
+            sb.Append("<b>");
+            sb.Append(PublicName);
+            sb.Append("</b>");
+            sb.AppendLine();
+            sb.Append(Description);
 
 
-            DisplayHandler.Instance.AddHint(MainPlugin.AbilitiesDesc, player, msg, time);
+            DisplayHandler.Instance.AddHint(MainPlugin.AbilitiesDesc, player, sb.ToString(), time);
+            StringBuilderPool.Pool.Return(sb);
         }
 
         public void SelectAbility(Player player)
@@ -297,10 +217,7 @@ namespace KE.CustomRoles.API.Features
             return false;
         }
 
-        public bool CheckPressed(ServerSpecificSettingBase settingBase)
-        {
-            return CheckPressed(settingBase, setting.Id);
-        }
+
 
         public static void UseSelected(Player player)
         {
@@ -320,18 +237,14 @@ namespace KE.CustomRoles.API.Features
 
             ability.AddAbility(player);
             return true;
-
-
-        }        
-        public static bool TryAddToPlayer(int abilityId,Player player)
+        }
+        public static bool TryAddToPlayer(string name, Player player)
         {
-            if (!IdToAbility.TryGetValue(abilityId, out var ability)) return false;
-            
+            if (!TryGet(name,out var ability)) return false;
+
 
             ability.AddAbility(player);
             return true;
-
-
         }
 
         public static void RemoveAllSelect(Player player)
@@ -369,10 +282,7 @@ namespace KE.CustomRoles.API.Features
         }
 
 
-        public static bool CheckPressed(ServerSpecificSettingBase settingBase, int id)
-        {
-            return settingBase is SSKeybindSetting keybindSetting && keybindSetting.SettingId == id && keybindSetting.SyncIsPressed;
-        }
+
 
         #region register
         private bool TryRegister()
@@ -441,11 +351,11 @@ namespace KE.CustomRoles.API.Features
 
         #region getters
 
-        public static KEAbilities Get(int id)
+        public static KEAbilities Get(string name)
         {
             foreach(KEAbilities kEAbilities in Registered)
             {
-                if (id == kEAbilities.Id)
+                if (name == kEAbilities.Name)
                 {
                     return kEAbilities;
                 }
@@ -454,9 +364,9 @@ namespace KE.CustomRoles.API.Features
             return null;
         }
 
-        public static bool TryGet(int id, out KEAbilities ability)
+        public static bool TryGet(string name, out KEAbilities ability)
         {
-            ability = Get(id);
+            ability = Get(name);
             return ability != null;
         }
 
@@ -479,12 +389,15 @@ namespace KE.CustomRoles.API.Features
         }
 
 
+
+
         #endregion
 
         #region gui
 
 
         public const float UpdateTime = 1;
+        public const string ReadyText = "[READY]";
         private static bool flag = false;
         private static void StartLoop()
         {
@@ -527,7 +440,7 @@ namespace KE.CustomRoles.API.Features
                 
                 if (ability.CanUse(player,out var output))
                 {
-                    builder.Append("[READY]");
+                    builder.Append(ReadyText);
                 }
                 else
                 {
@@ -541,12 +454,10 @@ namespace KE.CustomRoles.API.Features
                 if (ability.Selected.Contains(player))
                 {
                     string arrow = SettingHandler.Instance.GetArrow(player);
-
                     if (string.IsNullOrEmpty(arrow))
                     {
                         arrow = SettingHandler.baseArrow;
                     }
-
                     builder.Append(arrow);
                 }
                 builder.AppendLine();
@@ -562,7 +473,7 @@ namespace KE.CustomRoles.API.Features
 
         public override string ToString()
         {
-            return  "("+Id + ") " +Name;
+            return Name;
         }
 
     }

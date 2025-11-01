@@ -17,9 +17,7 @@ namespace KE.CustomRoles.Abilities
         public override string Name { get;  } = "Convert";
         public override string PublicName { get; } = "Convert";
 
-        public override string Description { get; } = "Convert a zombie into your team";
-
-        public override int Id => 2004;
+        public override string Description { get; } = "Convert a zombie to your team";
 
         public override float Cooldown { get;  } = 10*60f;
 
@@ -27,7 +25,7 @@ namespace KE.CustomRoles.Abilities
 
         protected override void AbilityUsed(Player player)
         {
-            Physics.Linecast(player.Position, player.Position + player.Rotation.eulerAngles * MaxDistance,out RaycastHit hit);
+            if (!Physics.Linecast(player.Position, player.Position + player.Rotation.eulerAngles * MaxDistance, out RaycastHit hit)) return;
 
             Player playerHit = Player.Get(hit.collider);
 

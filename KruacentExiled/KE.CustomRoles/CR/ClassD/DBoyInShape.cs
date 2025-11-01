@@ -21,8 +21,8 @@ namespace KE.CustomRoles.CR.ClassD
     public class DBoyInShape : KECustomRole
     {
         public override string Description { get; set; } = "Dammmmnnnnnnn les gates";
-        public override uint Id { get; set; } = 1058;
         public override string PublicName { get; set; } = "DBoyInShape";
+        public override string InternalName => "DBoyInShape";
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
@@ -31,9 +31,9 @@ namespace KE.CustomRoles.CR.ClassD
 
         public const byte SpeedReduction = 15;
 
-        public override HashSet<int> Abilities => new()
+        public override HashSet<string> Abilities => new()
         {
-            2009
+            "ForceOpen"
         };
 
         protected override void RoleAdded(Player player)

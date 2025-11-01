@@ -5,14 +5,12 @@ using UnityEngine;
 
 namespace KE.CustomRoles.Abilities
 {
-    public class SelectPosition : KEAbilities
+    public class SetPosition : KEAbilities
     {
         public override string Name { get; } = "SetPosition";
         public override string PublicName { get; } = "Set Position";
 
         public override string Description { get;  } = "Select the current position for another ability";
-
-        public override int Id => 2000;
         public override float Cooldown { get; } = 5f;
 
         private static Dictionary<Player, Vector3> SelectedTarget = new();

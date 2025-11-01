@@ -14,19 +14,21 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
     public class Negotiator : KECustomRole
     {
         public override string Description { get; set; } = "Who knew zombie could be so great listeners";
-        public override uint Id { get; set; } = 1071;
+        public override string InternalName => PublicName;
         public override string PublicName { get; set; } = "Negotiator";
         public override int MaxHealth { get; set; } = 100;
-        public override RoleTypeId Role { get; set; } = RoleTypeId.ChaosConscript;
+        public override RoleTypeId Role { get; set; } = RoleTypeId.ChaosRifleman;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
 
         public override float SpawnChance { get; set; } = 100;
 
-        public override HashSet<int> Abilities { get; } = new()
+        public override HashSet<string> Abilities { get; } = new()
         {
-            2004
+            "Convert"
         };
+
+        
 
         protected override void RoleAdded(Player player)
         {

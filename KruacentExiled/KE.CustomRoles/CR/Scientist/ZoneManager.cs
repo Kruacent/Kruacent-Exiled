@@ -17,7 +17,6 @@ namespace KE.CustomRoles.CR.Scientist
     public class ZoneManager : KECustomRole
     {
         public override string Description { get; set; } = "Incroyable tu peux avoir une promotion alors fais ton boulot et ouvre tous ces checkpoints et tu pourras sortir d'ici";
-        public override uint Id { get; set; } = 1044;
         public override string PublicName { get; set; } = "Zone Manager";
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scientist;
@@ -42,16 +41,16 @@ namespace KE.CustomRoles.CR.Scientist
 
         public override List<string> Inventory { get; set; } = new List<string>()
         {
-          $"{ItemType.Medkit}",
-          $"{ItemType.Adrenaline}",
-          $"{ItemType.KeycardZoneManager}"
+            $"{ItemType.Medkit}",
+            $"{ItemType.Adrenaline}",
+            $"{ItemType.KeycardZoneManager}"
         };
         public static readonly List<DoorType> DoorToOpen = new()
         {
-                DoorType.CheckpointLczA,
-                DoorType.CheckpointLczB,
-                DoorType.CheckpointEzHczA,
-                DoorType.CheckpointEzHczB
+            DoorType.CheckpointLczA,
+            DoorType.CheckpointLczB,
+            DoorType.CheckpointEzHczA,
+            DoorType.CheckpointEzHczB
         };
 
 

@@ -15,8 +15,7 @@ namespace KE.CustomRoles.API.Features
         public const int DefaultValue = 0;
 
         public static int ScpPreferenceHeaderId => MainPlugin.Instance.Config.ScpPreferenceHeaderId;
-        private static HeaderSetting header;
-        private static bool headerflag = false;
+        private static HeaderSetting header = null;
         private SliderSetting sliderSetting;
         public abstract bool IsSupport { get; }
         public int SettingId => (int)Id;
@@ -24,10 +23,9 @@ namespace KE.CustomRoles.API.Features
         public static IEnumerable<CustomSCP> All => Registered.Where(c => c is CustomSCP).Cast<CustomSCP>();
         public override void Init()
         {
-            if (!headerflag)
+            if (header is null)
             {
                 header = new HeaderSetting(ScpPreferenceHeaderId, "SCP Spawn Preferences");
-                headerflag = true;
             }
 
 

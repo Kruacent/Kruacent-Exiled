@@ -14,8 +14,7 @@ namespace KE.CustomRoles.CR.MTF
 {
     public class Tank : KECustomRole, IColor
     {
-        public override string Description { get; set; } = "Tu es débuff mais ta force de tir est démultiplié (fait attention à tes balles)";
-        public override uint Id { get; set; } = 1051;
+        public override string Description { get; set; } = "Tu es débuff mais ta force de tir est démultiplié (fais attention à tes balles)";
         public override string PublicName { get; set; } = "Tank";
         public override int MaxHealth { get; set; } = 200;
         public override RoleTypeId Role { get; set; } = RoleTypeId.NtfCaptain;

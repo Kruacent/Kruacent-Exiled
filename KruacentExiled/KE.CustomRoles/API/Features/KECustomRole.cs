@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Pools;
 using Exiled.CustomItems.API.Features;
+using Exiled.CustomRoles;
 using Exiled.CustomRoles.API;
 using Exiled.CustomRoles.API.Features;
 using InventorySystem.Configs;
@@ -11,8 +12,11 @@ using KE.CustomRoles.API.Interfaces;
 using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
 using PlayerRoles;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
+using System.Reflection;
 using System.Text;
 using UnityEngine;
 
@@ -20,28 +24,38 @@ namespace KE.CustomRoles.API.Features
 {
     public abstract class KECustomRole : CustomRole
     {
-
+        public const float TimeAttributingInventory = .25f;
+        public sealed override uint Id { get; set; } = 0;
         public override string Name
         {
             get
             {
-                return GetType().Name;
+                return Role.ToString().ToUpper() + "_" + InternalName.RemoveSpaces();
             }
             set
             {
-                
+
             }
         }
 
+        public virtual string InternalName => GetType().Name;
 
-        public static IEnumerable<KECustomRole> KnownKECR => Registered.Where(c => c is KECustomRole).Cast<KECustomRole>();
+        public static new HashSet<KECustomRole> Registered { get; } = new();
 
         public sealed override string CustomInfo { get; set; }
+        /// <summary>
+        /// Get or set the public name shown to other players
+        /// </summary>
         public abstract string PublicName { get; set; }
 
-        public virtual HashSet<int> Abilities { get; }
+
+        /// <summary>
+        /// <see cref="KEAbilities.Name"/>
+        /// </summary>
+        public virtual HashSet<string> Abilities { get; }
 
         public sealed override bool IgnoreSpawnSystem { get; set; } = true;
+        public sealed override List<CustomAbility> CustomAbilities { get; set; } = null;
         protected override void ShowMessage(Player player)
         {
             //string msg = MainPlugin.Translations.GettingNewRole;
@@ -62,10 +76,6 @@ namespace KE.CustomRoles.API.Features
             {
                 sb.Append("</color>");
             }
-
-
-
-
             sb.AppendLine("</b>");
 
             if (MainPlugin.SettingHandler.GetDescriptionsSettings(player))
@@ -80,15 +90,37 @@ namespace KE.CustomRoles.API.Features
             StringBuilderPool.Pool.Return(sb);
         }
 
-        
+
+        private static Dictionary<Type, KECustomRole> typeLookupTable = new();
+        private static Dictionary<string, KECustomRole> stringLookupTable = new();
+
+        public override void Init()
+        {
+            typeLookupTable.Add(GetType(), this);
+            stringLookupTable.Add(Name, this);
+            SubscribeEvents();
+        }
+
+        public override void Destroy()
+        {
+            typeLookupTable.Remove(GetType());
+            stringLookupTable.Remove(Name);
+            UnsubscribeEvents();
+        }
+
+
 
         protected void ShowEffectHint(Player player, string text)
         {
             float delay = MainPlugin.SettingHandler.GetTime(player); ;
             DisplayHandler.Instance.AddHint(MainPlugin.CREffect, player, text, delay);
         }
+        protected void ShowEffectHint(Player player, string text, float delay)
+        {
+            DisplayHandler.Instance.AddHint(MainPlugin.CREffect, player, text, delay);
+        }
 
-        
+        #region addrole     
         public override void AddRole(Player player)
         {
             Player player2 = player;
@@ -110,74 +142,35 @@ namespace KE.CustomRoles.API.Features
                 }
                 else if (KeepInventoryOnSpawn && player2.IsAlive)
                 {
-                    player2.Role.Set(Role, SpawnReason.ForceClass, RoleSpawnFlags.None);
+                    player2.Role.Set(Role, SpawnReason.ForceClass, RoleSpawnFlags.UseSpawnpoint);
                 }
                 else
                 {
                     player2.Role.Set(Role, SpawnReason.ForceClass, RoleSpawnFlags.AssignInventory);
                 }
             }
-            TrackedPlayers.Add(player2);
+            
 
-            Timing.CallDelayed(0.25f, delegate
+
+            TrackedPlayers.Add(player2);
+            
+            Timing.CallDelayed(TimeAttributingInventory, delegate
             {
                 if (!KeepInventoryOnSpawn)
                 {
                     player2.ClearInventory();
                 }
-
-                for (int i = 0; i < Inventory.Count;i++)
-                {
-                    string item = Inventory[i];
-                    Log.Debug(Name + ": Adding " + item + " to inventory.");
-                    if (TryAddItem(player2, item) && CustomItem.TryGet(item, out CustomItem customItem) && customItem is CustomWeapon customWeapon && player2.CurrentItem is Firearm firearm && !customWeapon.Attachments.IsEmpty())
-                    {
-                        firearm.AddAttachment(customWeapon.Attachments);
-                        Log.Debug(Name + ": Applied attachments to " + item + ".");
-                    }
-                }
-
-                if (Ammo.Count > 0)
-                {
-                    AmmoType[] values = EnumUtils<AmmoType>.Values;
-                    foreach (AmmoType ammoType in values)
-                    {
-                        if (ammoType != 0)
-                        {
-                            player2.SetAmmo(ammoType, (ushort)(Ammo.ContainsKey(ammoType) ? Ammo[ammoType] == ushort.MaxValue ? InventoryLimits.GetAmmoLimit(ammoType.GetItemType(), player2.ReferenceHub) : Ammo[ammoType] : 0));
-                        }
-                    }
-                }
+                GiveInventory(player2);
+                GiveAmmo(player2);
             });
-            player2.Health = MaxHealth;
-            player2.MaxHealth = MaxHealth;
-            player2.Scale = Scale;
-            Vector3 spawnPosition = GetSpawnPosition();
-            if (spawnPosition != Vector3.zero)
-            {
-                player2.Position = spawnPosition;
-            }
 
-            player2.CustomInfo = player2.CustomName + "\n" + PublicName;
-            player2.InfoArea &= ~(PlayerInfoArea.Nickname | PlayerInfoArea.Role);
-            if (CustomAbilities != null)
-            {
-                foreach (CustomAbility customAbility in CustomAbilities)
-                {
-                    customAbility.AddAbility(player2);
-                }
-            }
 
-            KEAbilities.TryRemoveFromPlayer(player);
+            AttributeHealth(player2);
+            AttributeScale(player2);
 
-            if(Abilities != null)
-            {
-                foreach(int abilityId in Abilities)
-                {
-                    KEAbilities.TryAddToPlayer(abilityId, player2);
-                }
-                KEAbilities.SelectFirstAbility(player2);
-            }
+            SetCustomInfo(player2);
+
+            SetAbilities(player2);
 
 
             ShowMessage(player2);
@@ -186,23 +179,144 @@ namespace KE.CustomRoles.API.Features
             player2.TryAddCustomRoleFriendlyFire(Name, CustomRoleFFMultiplier);
         }
 
+
+        protected virtual void GiveInventory(Player player)
+        {
+
+            for (int i = 0; i < Inventory.Count; i++)
+            {
+                string item = Inventory[i];
+                Log.Debug(Name + ": Adding " + item + " to inventory.");
+                if (TryAddItem(player, item) && CustomItem.TryGet(item, out CustomItem customItem) && customItem is CustomWeapon customWeapon && player.CurrentItem is Firearm firearm && !customWeapon.Attachments.IsEmpty())
+                {
+                    firearm.AddAttachment(customWeapon.Attachments);
+                    Log.Debug(Name + ": Applied attachments to " + item + ".");
+                }
+            }
+        }
+
+        protected virtual void GiveAmmo(Player player)
+        {
+            if (Ammo.Count > 0)
+            {
+                AmmoType[] values = EnumUtils<AmmoType>.Values;
+                foreach (AmmoType ammoType in values)
+                {
+                    if (ammoType != 0)
+                    {
+                        player.SetAmmo(ammoType, (ushort)(Ammo.ContainsKey(ammoType) ? Ammo[ammoType] == ushort.MaxValue ? InventoryLimits.GetAmmoLimit(ammoType.GetItemType(), player.ReferenceHub) : Ammo[ammoType] : 0));
+                    }
+                }
+            }
+        }
+
+        protected virtual void AttributeHealth(Player player)
+        {
+            player.Health = MaxHealth;
+            player.MaxHealth = MaxHealth;
+        }
+
+        protected virtual void AttributeScale(Player player)
+        {
+            player.Scale = Scale;
+        }
+
+        protected virtual void SetSpawn(Player player)
+        {
+            Vector3 spawnPosition = GetSpawnPosition();
+            if (spawnPosition != Vector3.zero)
+            {
+                player.Position = spawnPosition;
+            }
+        }
+
+        protected virtual void SetCustomInfo(Player player)
+        {
+            player.CustomInfo = player.CustomName + "\n" + PublicName;
+            player.InfoArea &= ~(PlayerInfoArea.Nickname | PlayerInfoArea.Role);
+        }
+
+        protected virtual void SetAbilities(Player player)
+        {
+            KEAbilities.TryRemoveFromPlayer(player);
+
+            if (Abilities != null)
+            {
+                foreach (string name in Abilities)
+                {
+                    if(!KEAbilities.TryAddToPlayer(name, player))
+                    {
+                        Log.Error("couldn't find ability :" + name);
+                    }
+                   
+                }
+                KEAbilities.SelectFirstAbility(player);
+            }
+        }
+
+
+#endregion
+
+
         public override void RemoveRole(Player player)
         {
+            base.RemoveRole(player);
             if (Abilities != null)
             {
                 KEAbilities.TryRemoveFromPlayer(player);
             }
-            base.RemoveRole(player);
+        }
+
+
+        public virtual bool IsAvailable(Player player)
+        {
+            return player.Role == Role;
         }
 
 
         /// <summary>
-        /// The chance of having this role NOT the chance to have a role
+        /// The chance of having this role, NOT the chance to have a role
         /// </summary>
-        public override abstract float SpawnChance { get; set; }
+        public new virtual float SpawnChance { get; set; } = 100;
+
+        public static new KECustomRole Get(string fullinternalname)
+        {
+            return stringLookupTable[fullinternalname];
+        }
 
 
+        public static bool TryGet(string fullinternalname,out KECustomRole customrole)
+        {
+            customrole = Get(fullinternalname);
+            return customrole != null;
+        }
 
+        public static KECustomRole Get(RoleTypeId roleid,string name)
+        {
+            return Get(roleid.ToString().ToUpper() + "_" + name);
+        }
+        public static bool Get(RoleTypeId roleid, string name, out KECustomRole customrole)
+        {
+            customrole = Get(roleid, name);
+            return customrole != null;
+        }
+
+
+        public static bool HasCustomRole(Player player)
+        {
+            if (player is null) return false;
+
+
+            foreach(KECustomRole customRole in Registered)
+            {
+                if (customRole.Check(player))
+                {
+                    return true;
+                }
+            }
+            return false;
+
+        }
 
         #region Spawn
 
@@ -223,7 +337,7 @@ namespace KE.CustomRoles.API.Features
 
         private static int chance = 40;
 
-        private static CustomRole AssignRole(Dictionary<CustomRole, float> roleChances)
+        private static KECustomRole AssignRole(Dictionary<KECustomRole, float> roleChances)
         {
             float totalWeight = roleChances.Values.Sum();
             float randomValue = UnityEngine.Random.Range(0f, totalWeight);
@@ -238,36 +352,35 @@ namespace KE.CustomRoles.API.Features
             return roleChances.Keys.First();
         }
 
-        public static Dictionary<CustomRole, float> GetAvailableCustomRole(Player player)
+        public static Dictionary<KECustomRole, float> GetAvailableCustomRole(Player player)
         {
-            return Registered.Where(c => c.Role == player.Role || c is GlobalCustomRole cgr && cgr.Side == SideClass.Get(player.Role.Side)).ToDictionary(c => c, c => c.SpawnChance);
+            return Registered.Where(cr => cr.IsAvailable(player)).ToDictionary(c => c, c => c.SpawnChance);
         }
 
         public static void GiveRandomRole(Player player)
         {
             if (player == null)
                 return;
-            if (Random.Range(0, 101) > Chance)
+            if (UnityEngine.Random.Range(0f, 100f) > Chance)
             {
                 Log.Debug("no luck");
                 return;
             }
 
-            if(player.GetCustomRoles().Count != 0)
+            if(HasCustomRole(player))
             {
                 Log.Debug("already got a cr");
                 return;
             }
 
 
-            CustomRole cr = AssignRole(GetAvailableCustomRole(player));
+            KECustomRole cr = AssignRole(GetAvailableCustomRole(player));
             Log.Debug($"{player.Id} : {cr.Name}");
 
-            //error assigning cr to a player with a gcr 
             cr?.AddRole(player);
         }
         
-        public static void GiveRole(IEnumerable<Player> players)
+        public static void GiveRandomRole(IEnumerable<Player> players)
         {
             foreach (Player p in players)
             {
@@ -277,5 +390,73 @@ namespace KE.CustomRoles.API.Features
         #endregion
 
 
+
+
+
+        #region Register
+
+        public bool TryRegister()
+        {
+
+            if (!Registered.Contains(this))
+            {
+                if (Registered.Any((KECustomRole r) => r.Name == Name))
+                {
+                    Log.Warn($"{Name} has tried to register with the same Name as another role: {Name}. It will not be registered!");
+                    return false;
+                }
+
+                Registered.Add(this);
+                Init();
+                return true;
+            }
+
+
+            return false;
+        }
+        public bool TryUnregister()
+        {
+            Destroy();
+            if (!Registered.Remove(this))
+            {
+                Log.Warn($"Cannot unregister {Name} [{Role}], it hasn't been registered yet.");
+                return false;
+            }
+
+            return true;
+        }
+
+        public static IEnumerable<KECustomRole> Register()
+        {
+            List<KECustomRole> list = new ();
+            Type[] types = Assembly.GetCallingAssembly().GetTypes();
+            foreach (Type type in types)
+            {
+                if (!type.IsAbstract && type.IsSubclassOf(typeof(KECustomRole)))
+                {
+                    KECustomRole customRole = (KECustomRole)Activator.CreateInstance(type);
+                    if (customRole.TryRegister())
+                    {
+                        list.Add(customRole);
+                    }
+                }
+            }
+            return list;
+        }
+
+
+        public static IEnumerable<KECustomRole> Unregister()
+        {
+            List<KECustomRole> list = new ();
+            foreach (KECustomRole item in Registered)
+            {
+                item.TryUnregister();
+                list.Add(item);
+            }
+
+            return list;
+        }
+
+        #endregion
     }
 }

@@ -34,7 +34,6 @@ namespace KE.CustomRoles.CR.Human
         private static CoroutineHandle _crazyingCoroutine;
         public override SideEnum Side { get; set; } = SideEnum.Human;
         public override string Description { get; set; } = "Je pense que le traitement que t'as eu à la fondation t'as pas aidé";
-        public override uint Id { get; set; } = 1068;
         public override string PublicName { get; set; } = "Fou de la facilité";
         public override bool KeepRoleOnDeath { get; set; } = true;
         public override bool KeepRoleOnChangingRole { get; set; } = true;

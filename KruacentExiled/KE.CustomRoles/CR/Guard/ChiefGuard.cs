@@ -11,8 +11,8 @@ namespace KE.CustomRoles.CR.Guard
     public class ChiefGuard : KECustomRole, IColor
     {
         public override string Description { get; set; } = "T'as une carte de private \net un crossvec";
-        public override uint Id { get; set; } = 1046;
         public override string PublicName { get; set; } = "Chef des Gardes";
+        public override string InternalName => "ChiefGuard";
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
         public override bool KeepRoleOnDeath { get; set; } = false;

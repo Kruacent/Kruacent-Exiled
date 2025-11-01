@@ -1,19 +1,20 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features.Attributes;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace KE.CustomRoles.CR.ChaosInsurgency
 {
-    public class Russe : KECustomRole
+    public class Russe : KECustomRole, IColor
     {
         public override string Description { get; set; } = "Tu dois faire la roulette russe avec les autres joueurs";
-        public override uint Id { get; set; } = 1050;
+        public override string InternalName => "Russe";
         public override string PublicName { get; set; } = "Le Russe";
         public override int MaxHealth { get; set; } = 100;
-        public override RoleTypeId Role { get; set; } = RoleTypeId.ChaosConscript;
+        public override RoleTypeId Role { get; set; } = RoleTypeId.ChaosRifleman;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public Color32 Color => new(255, 0, 0, 0);
