@@ -133,7 +133,7 @@ namespace KE.Map
 
         private void OpenDoor(InteractingDoorEventArgs ev)
         {
-            if(ev.Door.Zone == Exiled.API.Enums.ZoneType.HeavyContainment)
+            if(Config.Debug && ev.Door.Zone == Exiled.API.Enums.ZoneType.HeavyContainment)
             {
                 ev.Player.Teleport(teleport);
             }
@@ -183,11 +183,10 @@ namespace KE.Map
 
 
             var g = new GamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, new(normal));
-            
 
-            
 
-            //var g = new GamblingRoom(lcz173, new(normal), -lcz173.Transform.forward * 5f);
+
+
             /*
 
             if (Config.Debug)
