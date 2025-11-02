@@ -67,13 +67,17 @@ namespace KE.Map
 
         private void OnRoundStarted()
         {
-            Player player = Player.List.First();
-            //StructureSpawner.SpawnPedestal(ItemType.KeycardJanitor,player.Position,Quaternion.identity,Vector3.one);
+            if (Config.Debug)
+            {
+                Player player = Player.List.First();
+                //StructureSpawner.SpawnPedestal(ItemType.KeycardJanitor,player.Position,Quaternion.identity,Vector3.one);
 
-            //player.Teleport(Room.List.Where(r => r.Type == Exiled.API.Enums.RoomType.EzVent).First());
+                //player.Teleport(Room.List.Where(r => r.Type == Exiled.API.Enums.RoomType.EzVent).First());
 
 
-            player.Teleport(teleport);
+                player.Teleport(teleport);
+            }
+
             
         }
 
@@ -138,8 +142,11 @@ namespace KE.Map
 
         private void OnGenerated()
         {
-            CustomZone();
-            /*Door lcz173 = Door.Get(Exiled.API.Enums.DoorType.Scp173Gate);
+            if (Config.Debug)
+            {
+                CustomZone();
+            }
+            Door lcz173 = Door.Get(Exiled.API.Enums.DoorType.Scp173Gate);
             HashSet<DroppableItem> normal = new()
             {
                 new(ItemType.KeycardO5,1,2),
@@ -176,7 +183,7 @@ namespace KE.Map
 
 
             var g = new GamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, new(normal));
-            */
+            
 
             
 
