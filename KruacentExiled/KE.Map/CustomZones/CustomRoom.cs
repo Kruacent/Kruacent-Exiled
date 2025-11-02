@@ -43,7 +43,7 @@ namespace KE.Map.CustomZones
             }
 
 
-            SpawnedCustomRoom room = new(this, Shape, position,rotation, coord, prims);
+            SpawnedCustomRoom room = new(this, Shape, position,rotation, coord, prims.ToHashSet());
             room.Spawn();
             SpawnedRoom.Add(room);
             return room;
