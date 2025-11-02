@@ -53,7 +53,7 @@ namespace KE.Misc
             AutoNukeAnnoucement = new();
             AutoTesla = new();
             Candy = new Candy();
-            SpawnLcz = new();
+            //SpawnLcz = new();
             Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
             Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
 
@@ -97,7 +97,7 @@ namespace KE.Misc
 
             _914 = null;
             Candy = null;
-            SpawnLcz = null;
+            //SpawnLcz = null;
             ClassDDoor = null;
             ServerHandler = null;
             SCPBuff = null;
