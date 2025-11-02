@@ -1,17 +1,19 @@
 ﻿
-using System;
-using System.Collections.Generic;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
+using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Scp914;
 using KE.Items.API.Core.Upgrade;
+using KE.Items.API.Events;
 using KE.Items.API.Features;
 using KE.Items.API.Interface;
 using KE.Items.Items.PickupModels;
 using Scp914;
+using System;
+using System.Collections.Generic;
 
 namespace KE.Items.Items
 {
@@ -63,13 +65,33 @@ namespace KE.Items.Items
         protected override void SubscribeEvents()
         {
             PickupModel.SubscribeEvents();
+            ExplodeEvent.ExplodeDestructible += OnExplodeDestructible;
             base.SubscribeEvents();
         }
 
         protected override void UnsubscribeEvents()
         {
             PickupModel.UnsubscribeEvents();
+            ExplodeEvent.ExplodeDestructible -= OnExplodeDestructible;
             base.UnsubscribeEvents();
+        }
+
+        private void OnExplodeDestructible(OnExplodeDestructibleEventsArgs ev)
+        {
+            Log.Info(ev.Damage);
+            Player player = Player.Get(ev.Destructible.NetworkId);
+            if (!Check(Projectile.Get(ev.ExplosionGrenade))) return;
+            if (ev.Damage < 0f) return;
+            ev.Damage /= 2;
+
+            
+
+            if(player is not null && player.IsScp)
+            {
+                ev.Damage /= 3;
+            }
+
+
         }
 
         public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade { get; private set; } = new Dictionary<Scp914KnobSetting, UpgradeProperties>()

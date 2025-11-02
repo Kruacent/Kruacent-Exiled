@@ -71,11 +71,11 @@ namespace KE.Items.API.Core.Upgrade
             if (!upgradable.Upgrade.TryGetValue(knob, out UpgradeProperties item)) return false;
             if (MainPlugin.Instance.Config.Debug)
             {
+                Log.Warn("debug activated!");
                 return true;
             }
             float random = UnityEngine.Random.Range(0f, 100f);
-            if (random < item.Chance) return true;
-            return false;
+            return random < item.Chance;
         }
 
     }

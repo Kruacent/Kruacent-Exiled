@@ -82,8 +82,16 @@ namespace KE.Items.API.Core.Settings
         /// <returns> true if the player wants description ; false otherwise</returns>
         internal bool GetDescriptionsSettings(Player p)
         {
-            if (!SettingBase.TryGetSetting<TwoButtonsSetting>(p, _idDesc, out var setting)) return true;
-            return setting.IsSecond;
+            try
+            {
+                if (!SettingBase.TryGetSetting<TwoButtonsSetting>(p, _idDesc, out var setting)) return true;
+                return setting.IsSecond;
+            }
+            catch(InvalidCastException e)
+            {
+                Log.Error(e);
+            }
+            return true;
         }
 
         /// <summary>

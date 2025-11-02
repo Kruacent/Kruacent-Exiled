@@ -3,9 +3,12 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Toys;
 using Exiled.CustomItems.API.Features;
+using HarmonyLib;
+using InventorySystem.Items.ThrowableProjectiles;
 using KE.Items.API.Core.Lights;
 using KE.Items.API.Core.Settings;
 using KE.Items.API.Core.Upgrade;
+using KE.Items.API.Events;
 using KE.Items.API.Features.Complexes;
 using KE.Utils.API.Displays.DisplayMeow;
 using System;
@@ -34,16 +37,20 @@ namespace KE.Items
 
         public override PluginPriority Priority => PluginPriority.Low;
         public override Version Version => new (1, 0, 0);
+        internal Harmony harmony;
         
         public override void OnEnabled()
         {
             Instance = this;
+            harmony = new(Name);
+            harmony.PatchAll(Assembly);
             //QualityHandler = QualityHandler.Instance;
             //QualityHandler.Register();
             UpgradeHandler = new UpgradeHandler();
             LightsHandler = new LightsHandler();
             //PickupQuality = new PickupQuality();
             SettingsHandler = new();
+
 
             Utils.API.Sounds.SoundPlayer.Load();
             
@@ -72,6 +79,7 @@ namespace KE.Items
 
             //QualityHandler = null;
             //PickupQuality = null;
+            harmony.UnpatchAll(harmony.Id);
             SettingsHandler = null;
             LightsHandler = null;
             UpgradeHandler = null;

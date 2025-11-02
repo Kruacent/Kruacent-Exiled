@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using YamlDotNet.Core.Tokens;
 
 namespace KE.Items.API.Core.Upgrade
@@ -26,9 +27,7 @@ namespace KE.Items.API.Core.Upgrade
         public UpgradeProperties(float chance, uint newItem)
         {
             _newItem = newItem;
-            if (chance > 100) _chance = 100;
-            else if (chance < 0) _chance = 0;
-            else _chance = chance;
+            _chance = Mathf.Clamp(chance, 0,100);
         }
 
     }
