@@ -6,7 +6,8 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ExMod.Exiled" Version="9.10.0" />
+		<PackageReference Include="ExMod.Exiled" Version="9.10.1" />
+		<PackageReference Include="Lib.Harmony" Version="2.4.1" />
 	</ItemGroup>
 
 	<ItemGroup>

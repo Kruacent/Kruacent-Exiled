@@ -7,6 +7,7 @@ using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using Exiled.Events.Handlers;
+using HarmonyLib;
 using Interactables.Interobjects.DoorUtils;
 using KE.Map.CustomZones;
 using KE.Map.CustomZones.CustomRooms.MCZ;
@@ -41,9 +42,11 @@ namespace KE.Map
         private Handler handler;
         public static Translations Translations => Instance?.Translation;
         public static Config Configs => Instance?.Config;
+        private Harmony harmony;
         public override void OnEnabled()
         {
             handler = new();
+            harmony = new(Prefix);
 
             //handler.SubscribeEvents();
             KE.Utils.API.Sounds.SoundPlayer.Instance.TryLoad();
@@ -55,7 +58,7 @@ namespace KE.Map
             GamblingRoom.SubscribeEvents();
             //MoreRoom.CreateAll();
             //MoreRoom.SubscribeEvents();
-
+            harmony.PatchAll(Assembly);
 
              
 
@@ -75,7 +78,7 @@ namespace KE.Map
                 //player.Teleport(Room.List.Where(r => r.Type == Exiled.API.Enums.RoomType.EzVent).First());
 
 
-                player.Teleport(teleport);
+                //player.Teleport(teleport);
             }
 
             
@@ -90,7 +93,7 @@ namespace KE.Map
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             LabApi.Events.Handlers.ServerEvents.MapGenerating -= OnGenerating;
             Exiled.Events.Handlers.Player.InteractingDoor -= OpenDoor;
-
+            harmony.UnpatchAll(harmony.Id);
             GamblingRoom.UnsubscribeEvents();
             //MoreRoom.UnsubscribeEvents();
             handler = null;
@@ -142,6 +145,7 @@ namespace KE.Map
 
         private void OnGenerated()
         {
+
             if (Config.Debug)
             {
                 CustomZone();
