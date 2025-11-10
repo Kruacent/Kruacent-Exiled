@@ -2,6 +2,8 @@
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Permissions.Commands.Permissions;
+using KE.Utils.API.Interfaces;
+using KE.Utils.Extensions;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
@@ -10,11 +12,21 @@ using UnityEngine;
 
 namespace KE.Misc.Features
 {
-    internal class SCPBuff
+    internal class SCPBuff : IUsingEvents
     {
         internal const float RefreshRate = 1f;
-        internal float IncreaseSCPHealth { get; } = 1.5f;
+        internal float IncreaseSCPHealth { get; } = 1.25f;
         internal SCPBuff() { }
+
+        public void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.Died += OnDied;
+        }
+
+        public void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+        }
 
 
         internal void StartBuff()
@@ -23,11 +35,24 @@ namespace KE.Misc.Features
             
         }
 
-
-        internal void BuffXp()
+        private Npc npc = null;
+        private void OnDied(DiedEventArgs ev)
         {
-            
+            if (Player.Enumerable.Count(p => !p.IsScp && p.IsAlive) > 1) return;
+
+            if(npc is null)
+            {
+                SpawnFakePlayer();
+            }
         }
+
+        private void SpawnFakePlayer()
+        {
+            npc = Npc.Spawn("hide", RoleTypeId.ClassD, true, Vector3.zero);
+            npc.Hide();
+
+        }
+
 
         internal void BecomingSCP(ChangingRoleEventArgs ev)
         {
@@ -102,7 +127,7 @@ namespace KE.Misc.Features
         /// <returns>true if it's not over the max HumeShield of the player; false otherwise</returns>
         private bool AddHumeShield(Player p, float hum)
         {
-            float max = p.HumeShieldStat.MaxValue;
+            float max = p.MaxHumeShield;
             if (max < hum + p.HumeShield)
             {
                 p.HumeShield = max;
@@ -111,5 +136,7 @@ namespace KE.Misc.Features
             p.HumeShield += hum;
             return true;
         }
+
+
     }
 }
