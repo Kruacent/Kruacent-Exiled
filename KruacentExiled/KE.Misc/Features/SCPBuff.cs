@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.Events;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Permissions.Commands.Permissions;
 using KE.Utils.API.Interfaces;
@@ -12,20 +13,22 @@ using UnityEngine;
 
 namespace KE.Misc.Features
 {
-    internal class SCPBuff : IUsingEvents
+    public class SCPBuff : IUsingEvents
     {
-        internal const float RefreshRate = 1f;
-        internal float IncreaseSCPHealth { get; } = 1.25f;
+        public const float RefreshRate = 1f;
+        public float IncreaseSCPHealth { get; } = 1.25f;
         internal SCPBuff() { }
 
         public void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.Died += OnDied;
+            Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
+            Exiled.Events.Handlers.Player.ChangingRole += BecomingSCP;
         }
 
         public void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.Died -= OnDied;
+            Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
+            Exiled.Events.Handlers.Player.ChangingRole -= BecomingSCP;
         }
 
 
@@ -36,25 +39,49 @@ namespace KE.Misc.Features
         }
 
         private Npc npc = null;
-        private void OnDied(DiedEventArgs ev)
+        private string npcName = "Bonjour je suis la pour pas que le SCP wall-hack";
+        private void OnChangingRole(ChangingRoleEventArgs ev)
         {
-            if (Player.Enumerable.Count(p => !p.IsScp && p.IsAlive) > 1) return;
+            if (IsHidingNpc(ev.Player)) return;
 
-            if(npc is null)
+            Timing.CallDelayed(1f, delegate
             {
-                SpawnFakePlayer();
-            }
+                int nbplayer = Player.Enumerable.Count(p => !p.IsScp && p.IsAlive && (!IsHidingNpc(p)));
+                Log.Debug("there's " + nbplayer);
+                if (nbplayer != 1)
+                {
+                    Log.Debug("destroying npc");
+                    if(npc?.GameObject is not null)
+                    {
+                        npc?.Destroy();
+                    }
+                    
+                }
+                
+
+                if(nbplayer == 1)
+                {
+                    if (npc is not null)
+                    {
+                        npc.Destroy();
+                    }
+                    Log.Debug("spawning npc");
+                    npc = Npc.Spawn(npcName, RoleTypeId.ClassD, true, new Vector3(36, 314, -33));
+                    npc.IsSpectatable = false;
+                }
+            });
+
+
+            
         }
 
-        private void SpawnFakePlayer()
+        private bool IsHidingNpc(Player player)
         {
-            npc = Npc.Spawn("hide", RoleTypeId.ClassD, true, Vector3.zero);
-            npc.Hide();
-
+            return player is Npc hide && hide.Nickname == npcName;
         }
 
 
-        internal void BecomingSCP(ChangingRoleEventArgs ev)
+        private void BecomingSCP(ChangingRoleEventArgs ev)
         {
             
             if (!ev.NewRole.IsScp() || ev.NewRole == RoleTypeId.Scp0492) return;

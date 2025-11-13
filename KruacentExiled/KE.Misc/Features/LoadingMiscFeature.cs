@@ -35,7 +35,7 @@ namespace KE.Misc.Features
             {
                 Log.Debug("Unsubscribing " + loaded.GetType().Name);
                 if (loaded is IUsingEvents iue)
-                    iue.SubscribeEvents();
+                    iue.UnsubscribeEvents();
             }
         }
     }

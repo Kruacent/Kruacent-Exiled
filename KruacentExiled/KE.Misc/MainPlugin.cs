@@ -69,8 +69,8 @@ namespace KE.Misc
                 Exiled.Events.Handlers.Player.FlippingCoin += _gamblingCoinHandler.OnCoinFlip;
             }
 
+            SCPBuff.SubscribeEvents();
             Exiled.Events.Handlers.Server.RoundStarted += AutoNukeAnnoucement.OnRoundStarted;
-            Exiled.Events.Handlers.Player.ChangingRole += SCPBuff.BecomingSCP;
             ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;
             Exiled.Events.Handlers.Player.Dying += ScpNoeDeathMessage;
             CustomRole.RegisterRoles(false, null, true, this.Assembly);
@@ -83,7 +83,7 @@ namespace KE.Misc
             ServerHandle.RoundStarted -= ServerHandler.OnRoundStarted;
             Exiled.Events.Handlers.Player.Dying -= ScpNoeDeathMessage;
             Exiled.Events.Handlers.Server.RoundStarted -= AutoNukeAnnoucement.OnRoundStarted;
-
+            SCPBuff.UnsubscribeEvents();
             if (Config.GamblingCoin)
             {
                 Exiled.Events.Handlers.Player.FlippingCoin -= _gamblingCoinHandler.OnCoinFlip;
