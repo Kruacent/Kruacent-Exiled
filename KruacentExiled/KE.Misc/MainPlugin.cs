@@ -45,7 +45,7 @@ namespace KE.Misc
             _914 = new _914();
             AutoElevator = new AutoElevator();
             ClassDDoor = new ClassDDoor();
-            SurfaceLight = new SurfaceLight();
+            //SurfaceLight = new SurfaceLight(); messes with the nuke light
             ServerHandler = new ServerHandler();
             Spawn = new Spawn();
             SCPBuff = new SCPBuff();
@@ -106,63 +106,11 @@ namespace KE.Misc
             AutoElevator = null;
             AutoNukeAnnoucement = null;
             FriendlyFire = null;
-            SurfaceLight = null;
+            //SurfaceLight = null;
             GamblingCoinManager.DestroyAll();
             _gamblingCoinHandler = null;
             Instance = null;
-        }
-
-
-
-        /// <summary>
-        /// Lock SCP-173 in its cell for an amount of time determine by the number of player
-        /// Formula : timeLock = 135-nbPlayer*15
-        /// </summary>
-        internal IEnumerator<float> PeanutLockdown()
-        {
-            
-            Log.Debug("peanut lockdown");
-            Door peanutDoor = Door.List.First(x => x.Type == DoorType.Scp173NewGate); // broken 049 gate is considered as 173 new gate for some reason
-            peanutDoor.IsOpen = false;
-            peanutDoor.ChangeLock(DoorLockType.Isolation);
-            CoroutineHandle a;
-            if (Instance.Config.Debug)
-                a = Timing.RunCoroutine(Timer(120, "u r free :3"));
-            else
-                a = Timing.RunCoroutine(Timer(135 - Player.List.Count * 15, "u r free :3"));
-             
-            yield return Timing.WaitUntilDone(a);
-            peanutDoor.IsOpen = true;
-            peanutDoor.Unlock();
-            Log.Debug("peanut free");
-        }
-        private IEnumerator<float> Timer(int secondsWaiting, string msg = "done")
-        {
-            List<Player> playerToShow = [.. Player.List];
-            while (secondsWaiting >= 0)
-            {
-                playerToShow.RemoveAll(p => p.CurrentRoom.Type != RoomType.Hcz049);
-                playerToShow.AddRange(Player.List.Where(p => p.CurrentRoom.Type == RoomType.Hcz049));
-
-                //RueIHint hint = new(HPosition.Center, VPosition.CustomRole, $"{secondsWaiting} seconds left for SCP-173's spawn");
-                playerToShow.ForEach(p => 
-                {
-                    //DisplayPlayer.Get(p).Hint(new Position(HPosition.Center, 600), hub => $"{secondsWaiting} seconds left for SCP-173's spawn");
-                    //DisplayCore c = DisplayCore.Get(p.ReferenceHub);
-                    //c.SetElemTemp($"<align={HPosition.Center.ToString().ToLower()}>"+hint.RawContent+"</align>", (int)hint.Position.VPosition, TimeSpan.FromSeconds(hint.Duration), new RueI.Displays.Scheduling.TimedElemRef<RueI.Elements.SetElement>());
-                    //DisplayPlayer.Get(p).Hint(new Position(HPosition.Center,600), $"{secondsWaiting} seconds left for SCP-173's spawn",1);
-                });
-                yield return Timing.WaitForSeconds(1);
-                secondsWaiting--;
-            }
-            //playerToShow.ForEach(p => DisplayPlayer.Get(p).Hint(new Position(HPosition.Center,VPosition.CustomRole),msg));
-        }
-
-
-
-        
-
-        
+        }       
         
         /// <summary>
         /// Special death message when Delecons dies as a SCP
