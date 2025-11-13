@@ -21,10 +21,13 @@ internal class RandomGoodEffect : ICoinEffect
             .ToList();
 
         if (positiveEffects.Count == 0)
+        {
+            Log.Warn("no negative effect found");
             return;
+        }
 
         var randomEffect = positiveEffects[UnityEngine.Random.Range(0, positiveEffects.Count)];
 
-        player.EnableEffect(randomEffect, 45);
+        player.EnableEffect(randomEffect, 5,true);
     }
 }

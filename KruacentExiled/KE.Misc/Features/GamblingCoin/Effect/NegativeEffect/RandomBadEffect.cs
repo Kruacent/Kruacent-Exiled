@@ -15,16 +15,20 @@ internal class RandomBadEffect : ICoinEffect
 
     public void Execute(Player player)
     {
-        var positiveEffects = Enum.GetValues(typeof(EffectType))
+        var negativeEffects = Enum.GetValues(typeof(EffectType))
             .Cast<EffectType>()
             .Where(e => e.GetCategories().HasFlag(EffectCategory.Negative))
             .ToList();
 
-        if (positiveEffects.Count == 0)
+        if (negativeEffects.Count == 0)
+        {
+            Log.Warn("no negative effect found");
             return;
+        }
+            
 
-        var randomEffect = positiveEffects[UnityEngine.Random.Range(0, positiveEffects.Count)];
+        var randomEffect = negativeEffects[UnityEngine.Random.Range(0, negativeEffects.Count)];
 
-        player.EnableEffect(randomEffect, 45);
+        player.EnableEffect(randomEffect, 5, true);
     }
 }
