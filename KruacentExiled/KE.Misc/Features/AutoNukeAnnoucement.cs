@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using GameCore;
 using MEC;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,13 @@ namespace KE.Misc.Features
     {
 
 
-
+        private float autodetonatetime;
         private bool flagSaid = false;
         private CoroutineHandle handle;
 
         public void OnRoundStarted()
         {
+            autodetonatetime = ConfigFile.ServerConfig.GetFloat("auto_warhead_start_minutes") * 60f;
             if (!handle.IsRunning)
             {
                 handle = Timing.RunCoroutine(Timer());
@@ -30,7 +32,7 @@ namespace KE.Misc.Features
             Stopwatch watch = Stopwatch.StartNew();
             bool flag = false;
 
-            while (watch.Elapsed.TotalMinutes < AlphaWarheadController.Singleton._autoDetonateTime)
+            while (watch.Elapsed.TotalMinutes < autodetonatetime)
             {
                 yield return Timing.WaitForSeconds(60);
                 if(Warhead.IsDetonated || Warhead.IsInProgress)
@@ -52,8 +54,6 @@ namespace KE.Misc.Features
         public void SayAnnouncement()
         {
             if (flagSaid) return;
-
-            
             Cassie.MessageTranslated("Warning automatic warhead will detonate in 5 minutes",
                 "Warning automatic warhead will detonate in <color=#FF0000>5</color> minutes");
             flagSaid = true;
