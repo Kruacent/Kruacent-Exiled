@@ -38,7 +38,7 @@ namespace KE.Misc.Features
                     tesla.Trigger();
                     if(UnityEngine.Random.Range(0f,100f) <= 70f)
                     {
-                        yield return Timing.WaitForSeconds(tesla.Base.windupTime);
+                        yield return Timing.WaitForSeconds(tesla.Base.windupTime+2f);
                         tesla.Trigger();
                     }
                     
