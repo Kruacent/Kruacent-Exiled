@@ -14,13 +14,13 @@ namespace KE.Misc.Features
     {
 
 
-        private float autodetonatetime;
+        private float autodetonatetime = 20*60f;
         private bool flagSaid = false;
         private CoroutineHandle handle;
 
         public void OnRoundStarted()
         {
-            autodetonatetime = ConfigFile.ServerConfig.GetFloat("auto_warhead_start_minutes") * 60f;
+            //autodetonatetime = ConfigFile.ServerConfig.GetFloat("auto_warhead_start_minutes") * 60f;
             if (!handle.IsRunning)
             {
                 handle = Timing.RunCoroutine(Timer());
