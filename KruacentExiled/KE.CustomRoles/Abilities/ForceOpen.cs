@@ -26,7 +26,7 @@ namespace KE.CustomRoles.Abilities
         private Dictionary<Player, DateTime> abilityActivated = new();
         public static readonly TimeSpan MaxTime = new (0, 0, 30);
 
-        protected override void AbilityUsed(Player player)
+        protected override bool AbilityUsed(Player player)
         {
             if (abilityActivated.ContainsKey(player))
             {
@@ -37,6 +37,7 @@ namespace KE.CustomRoles.Abilities
                 abilityActivated.Add(player, DateTime.Now);
             }
 
+            return base.AbilityUsed(player);
             
             
         }

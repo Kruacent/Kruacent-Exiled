@@ -3,6 +3,7 @@ using Exiled.API.Features.Doors;
 using Exiled.API.Features.Roles;
 using Exiled.API.Features.Toys;
 using Exiled.API.Interfaces;
+using Exiled.Events.Patches.Events.Player;
 using KE.CustomRoles.API.Features;
 using MEC;
 using PlayerStatsSystem;
@@ -28,7 +29,7 @@ namespace KE.CustomRoles.Abilities
         private static readonly Color ballColor = new(2, 1.08f, 0, .75f);
         private Dictionary<Player, int> _activeBalls = new();
 
-        protected override void AbilityUsed(Player player)
+        protected override bool AbilityUsed(Player player)
         {
             if (!_activeBalls.ContainsKey(player))
             {
@@ -36,20 +37,32 @@ namespace KE.CustomRoles.Abilities
             }
 
 
-            if (_activeBalls[player] >= MAX_BALLS) return;
+            if (_activeBalls[player] >= MAX_BALLS) return true;
 
 
 
             if (player.Role is Scp106Role role106)
             {
-                if (role106.Vigor <= VIGOR_COST) return;
+                if (role106.Vigor <= VIGOR_COST) return true;
                 role106.Vigor -= VIGOR_COST;
             }
 
             _activeBalls[player]++;
             Timing.RunCoroutine(LaunchingAttack(player));
+            return base.AbilityUsed(player);
 
         }
+
+        protected override void AbilityRemoved(Player player)
+        {
+
+
+
+            base.AbilityRemoved(player);
+        }
+
+        private float smooth = .001f;
+
         private IEnumerator<float> LaunchingAttack(Player player)
         {
             Vector3 initpos = player.Position;
@@ -70,40 +83,34 @@ namespace KE.CustomRoles.Abilities
             Vector3 nextPos;
 
             int fallback = 100;
+            Log.Debug("fallback=" + fallback);
             while (!attackTouchedSomething && fallback > 0)
             {
-                nextPos = primitive.Position + primitive.Rotation * new Vector3(0, 0, 1f);
+                nextPos = primitive.Position + primitive.Rotation * new Vector3(0, 0, smooth);
                 RaycastHit hit;
 
                 if (Physics.Linecast(primitive.Position, nextPos, out hit))
                 {
-                    //spawn mtf looking at central gate
-                    if (hit.collider.gameObject.name != "VolumeOverrideTunnel")
+                    ProcessHit(player,hit.collider);
+
+                }
+                else
+                {
+
+                    Collider[] colliders = Physics.OverlapSphere(primitive.Position, 1);
+
+                    foreach(Collider collider in colliders)
                     {
-                        attackTouchedSomething = true;
+                        ProcessHit(player, collider);
                     }
 
-                    Player playerhit = Player.Get(hit.collider);
-                    if (playerhit != null && playerhit.Role.Side != player.Role.Side)
-                    {
-                        playerhit.Hurt(BallDamage);
-                        player.ShowHitMarker();
-
-                    }
-
-                    Door doorhit = Door.Get(hit.collider.gameObject);
-                    if (doorhit != null && doorhit is IDamageableDoor damageable && !damageable.IsDestroyed)
-                    {
-                        damageable.Break();
-                        player.ShowHitMarker();
-                    }
                 }
 
 
 
 
                 Log.Debug($"current pos = {primitive.Position} next pos = {nextPos}");
-                yield return Timing.WaitForSeconds(.1f);
+                yield return Timing.WaitForSeconds(1f/smooth);
                 primitive.Position = nextPos;
                 light.Position = nextPos;
                 fallback--;
@@ -111,6 +118,26 @@ namespace KE.CustomRoles.Abilities
             _activeBalls[player]--;
             primitive.Destroy();
             light.Destroy();
+        }
+
+
+        private void ProcessHit(Player attacker,Collider collider)
+        {
+
+            Player playerhit = Player.Get(collider);
+            if (playerhit != null && playerhit.Role.Side != attacker.Role.Side)
+            {
+                playerhit.Hurt(BallDamage);
+                attacker.ShowHitMarker();
+
+            }
+
+            Door doorhit = Door.Get(collider.gameObject);
+            if (doorhit != null && doorhit is IDamageableDoor damageable && !damageable.IsDestroyed)
+            {
+                damageable.Break();
+                attacker.ShowHitMarker();
+            }
         }
 
 

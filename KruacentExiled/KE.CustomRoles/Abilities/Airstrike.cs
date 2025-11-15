@@ -29,24 +29,24 @@ namespace KE.CustomRoles.Abilities
 
         
 
-        protected override void AbilityUsed(Player player)
+        protected override bool AbilityUsed(Player player)
         {
             if(!SetPosition.TryGetTarget(player, out Vector3 target))
             {
                 MainPlugin.ShowEffectHint(player, "no target selected");
-                return;
+                return false;
             }
             if(target.GetZone() != FacilityZone.Surface)
             {
                 MainPlugin.ShowEffectHint(player, "only works on Surface Zone");
-                return;
+                return false;
             }
 
             Physics.Linecast(target, target + height * Vector3.up, out RaycastHit hit);
             if (hit.collider != null)
             {
                 Log.Info($"hit something [{hit.collider}]");
-                return;
+                return false;
             }
             
             var l = Light.Create(target,null,null,true,Color.red);
@@ -62,6 +62,7 @@ namespace KE.CustomRoles.Abilities
                 l.Destroy();
             });
 
+            return base.AbilityUsed(player);
         }
 
 

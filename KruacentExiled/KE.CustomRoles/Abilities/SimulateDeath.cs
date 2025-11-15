@@ -21,7 +21,7 @@ namespace KE.CustomRoles.Abilities
 
         public override float Cooldown { get; } = 60f;
 
-        protected override void AbilityUsed(Player player)
+        protected override bool AbilityUsed(Player player)
         {
             Dictionary<byte, DeathTranslation> deathTranslation = DeathTranslations.TranslationsById;
 
@@ -40,6 +40,7 @@ namespace KE.CustomRoles.Abilities
                 player.Scale = pScale;
                 player.Position = pPos;
             });
+            return base.AbilityUsed(player);
         }
     }
 }

@@ -18,13 +18,13 @@ namespace KE.CustomRoles.Abilities
         public override float Cooldown { get; } = 120f;
         public static float Damage { get; set; } = 60;
 
-        protected override void AbilityUsed(Player player)
+        protected override bool AbilityUsed(Player player)
         {
             if(!SetPosition.TryGetTarget(player, out Vector3 target))
             {
                 MainPlugin.ShowEffectHint(player, "no target selected");
                 
-                return;
+                return false;
             }
 
 
@@ -32,14 +32,14 @@ namespace KE.CustomRoles.Abilities
             if(Lift.Get(target) is not null)
             {
                 MainPlugin.ShowEffectHint(player, "can't teleport in elevator");
-                return;
+                return false;
             }
 
 
             if (target.GetZone() == FacilityZone.LightContainment && Map.IsLczDecontaminated)
             {
                 MainPlugin.ShowEffectHint(player, "target in LCZ while LCZ is decontaminated.");
-                return;
+                return false;
             }
 
             player.Hurt(Damage, "You are dead.");
@@ -55,8 +55,8 @@ namespace KE.CustomRoles.Abilities
             {
                 player.Position = target;
             }
-            
-            
+            return base.AbilityUsed(player);
+
         }
     }
 }

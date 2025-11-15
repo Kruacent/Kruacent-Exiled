@@ -3,6 +3,7 @@ using Exiled.API.Features.Core.UserSettings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,21 +15,24 @@ namespace KE.CustomRoles.API.Features
         public const int MaxValue = 5;
         public const int DefaultValue = 0;
 
-        public static int ScpPreferenceHeaderId => MainPlugin.Instance.Config.ScpPreferenceHeaderId;
+        public static int ScpPreferenceHeaderId => HeaderId.Value;
+        private static RecyclableSettingId HeaderId;
         private static HeaderSetting header = null;
         private SliderSetting sliderSetting;
         public abstract bool IsSupport { get; }
-        public int SettingId => (int)Id;
+
+        private new RecyclableSettingId Id;
+        public int SettingId => Id.Value;
 
         public static IEnumerable<CustomSCP> All => Registered.Where(c => c is CustomSCP).Cast<CustomSCP>();
         public override void Init()
         {
             if (header is null)
             {
+                HeaderId = new RecyclableSettingId();
                 header = new HeaderSetting(ScpPreferenceHeaderId, "SCP Spawn Preferences");
             }
-
-
+            Id = new RecyclableSettingId();
             sliderSetting = new SliderSetting(SettingId, PublicName, MinValue, MaxValue, DefaultValue, true, header: header);
             SettingBase.Register([sliderSetting]);
 
@@ -40,6 +44,7 @@ namespace KE.CustomRoles.API.Features
         public override void Destroy()
         {
             SettingBase.Unregister();
+            Id.Destroy();
             base.Destroy();
         }
 

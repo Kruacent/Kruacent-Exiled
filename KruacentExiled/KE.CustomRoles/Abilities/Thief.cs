@@ -18,19 +18,19 @@ namespace KE.CustomRoles.Abilities
 
         public override float Cooldown { get; } = 120f;
 
-        protected override void AbilityUsed(Player player)
+        protected override bool AbilityUsed(Player player)
         {
-            List<Player> playerList = Player.List.Where(p => !p.IsScp && p.CurrentRoom == player.CurrentRoom).ToList();
+            List<Player> playerList = Player.Enumerable.Where(p => !p.IsScp && p.CurrentRoom == player.CurrentRoom).ToList();
             playerList.Remove(player);
 
             Log.Debug("Player list :");
-            playerList.ForEach(p => Log.Info(p.Nickname));
+            playerList.ForEach(p => Log.Debug(p.Nickname));
 
             Player thiefed = playerList.GetRandomValue();
             if(thiefed is null)
             {
-                Log.Warn("no other player");
-                return;
+                MainPlugin.ShowEffectHint(player, "no player to steal from");
+                return false;
             }
 
             Log.Debug($"Thiefed player : {thiefed.Nickname}");
@@ -41,10 +41,9 @@ namespace KE.CustomRoles.Abilities
 
             if (inv == null)
             {
-                Log.Info("No item to thiefed, null, returning.");
-                HintPlacement hint = new(0, 750, HintServiceMeow.Core.Enum.HintAlignment.Center);
-                float delay = MainPlugin.SettingHandler.GetTime(player);
-                DisplayHandler.Instance.AddHint(hint, player, "I think this is a skill issue ! Congrats !", delay);
+                Log.Debug("No item to thiefed, null, returning.");
+                MainPlugin.ShowEffectHint(player, "I think this is a skill issue ! Congrats !");
+                return true;
             }
 
             var thiefBool = thiefed.RemoveItem(inv);
@@ -52,6 +51,7 @@ namespace KE.CustomRoles.Abilities
 
             inv.Give(player);
             Log.Debug($"Item given to {player.Nickname}.");
+            return base.AbilityUsed(player);
         }
     }
 }

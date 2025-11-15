@@ -15,7 +15,7 @@ namespace KE.CustomRoles.Abilities
 
         private static Dictionary<Player, Vector3> SelectedTarget = new();
 
-        protected override void AbilityUsed(Player player)
+        protected override bool AbilityUsed(Player player)
         {
             
 
@@ -30,7 +30,7 @@ namespace KE.CustomRoles.Abilities
             }
 
             Log.Info("set position at " +player.Position);
-            
+            return base.AbilityUsed(player);
 
         }
 

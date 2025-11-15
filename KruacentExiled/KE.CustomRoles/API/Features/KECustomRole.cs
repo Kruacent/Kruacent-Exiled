@@ -7,6 +7,7 @@ using Exiled.CustomItems.API.Features;
 using Exiled.CustomRoles;
 using Exiled.CustomRoles.API;
 using Exiled.CustomRoles.API.Features;
+using Exiled.Events.EventArgs.Player;
 using InventorySystem.Configs;
 using KE.CustomRoles.API.Interfaces;
 using KE.Utils.API.Displays.DisplayMeow;
@@ -98,6 +99,7 @@ namespace KE.CustomRoles.API.Features
         {
             typeLookupTable.Add(GetType(), this);
             stringLookupTable.Add(Name, this);
+            InternalSubscribeEvents();
             SubscribeEvents();
         }
 
@@ -105,9 +107,45 @@ namespace KE.CustomRoles.API.Features
         {
             typeLookupTable.Remove(GetType());
             stringLookupTable.Remove(Name);
+            InternalUnsubscribeEvents();
             UnsubscribeEvents();
         }
 
+        protected virtual void InternalSubscribeEvents()
+        {
+            if(this is IHealable)
+            {
+                Exiled.Events.Handlers.Player.UsedItem += OnUsedItem;
+            }
+            
+        }
+
+
+        protected virtual void InternalUnsubscribeEvents()
+        {
+            if (this is IHealable)
+            {
+                Exiled.Events.Handlers.Player.UsedItem += OnUsedItem;
+            }
+        }
+
+
+        private void OnUsedItem(UsedItemEventArgs ev)
+        {
+            if (!Check(ev.Player)) return;
+            IHealable healable = this as IHealable;
+            if(healable.HealItem is null || healable.HealItem.Count == 0)
+            {
+                Log.Warn("no healable item found for" + this.Name);
+                return;
+            }
+
+
+            if (healable.HealItem.Contains(ev.Item.Type))
+            {
+                RemoveRole(ev.Player);
+            }
+        }
 
 
         protected void ShowEffectHint(Player player, string text)
@@ -171,6 +209,9 @@ namespace KE.CustomRoles.API.Features
             SetCustomInfo(player2);
 
             SetAbilities(player2);
+
+            SetSpawn(player2);
+
 
 
             ShowMessage(player2);
@@ -323,7 +364,7 @@ namespace KE.CustomRoles.API.Features
         /// <summary>
         /// The chance to get a <see cref="KECustomRole"/> at the start or a respawn
         /// </summary>
-        public static int Chance
+        public static float Chance
         {
             get
             {
@@ -331,11 +372,11 @@ namespace KE.CustomRoles.API.Features
             }
             set
             {
-                chance = Mathf.Clamp(value, 0, 100);
+                chance = Mathf.Clamp(value, 0f, 100f);
             }
         }
 
-        private static int chance = 40;
+        private static float chance = 100;
 
         private static KECustomRole AssignRole(Dictionary<KECustomRole, float> roleChances)
         {
@@ -375,7 +416,7 @@ namespace KE.CustomRoles.API.Features
 
 
             KECustomRole cr = AssignRole(GetAvailableCustomRole(player));
-            Log.Debug($"{player.Id} : {cr.Name}");
+            Log.Debug($"{player.Id} : {cr?.Name}");
 
             cr?.AddRole(player);
         }

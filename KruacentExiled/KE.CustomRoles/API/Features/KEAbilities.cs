@@ -92,9 +92,14 @@ namespace KE.CustomRoles.API.Features
 
         }
 
-        protected virtual void AbilityUsed(Player player)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns>return true if the ability was used; returns false if the ability was not used and need to be refunded</returns>
+        protected virtual bool AbilityUsed(Player player)
         {
-
+            return true;
         }
 
         protected virtual void AbilityAdded(Player player)
@@ -105,6 +110,7 @@ namespace KE.CustomRoles.API.Features
         {
 
         }
+
 
         public void ShowAbility(Player player)
         {
@@ -173,10 +179,13 @@ namespace KE.CustomRoles.API.Features
         }
         public void UseAbility(Player player)
         {
-            LastUsed[player] = DateTime.Now;
-
             
-            AbilityUsed(player);
+
+            if (AbilityUsed(player))
+            {
+                LastUsed[player] = DateTime.Now;
+            }
+            
         }
 
         public bool Check(Player player)

@@ -23,7 +23,7 @@ namespace KE.CustomRoles.Abilities
 
         public static float MaxHealthPercent = .1f;
 
-        protected override void AbilityUsed(Player player)
+        protected override bool AbilityUsed(Player player)
         {
             if (player.CurrentItem != null)
             {
@@ -40,11 +40,12 @@ namespace KE.CustomRoles.Abilities
                 else
                 {
                     player.Kill("The casino always win");
-                    return;
+                    return base.AbilityUsed(player);
                 }
             }
 
             player.AddItem(ItemType.Coin);
+            return base.AbilityUsed(player);
         }
 
     }

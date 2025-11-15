@@ -21,12 +21,13 @@ namespace KE.CustomRoles.Abilities
 
         public override float Cooldown { get; } = 4*60f;
 
-        protected override void AbilityUsed(Player player)
+        protected override bool AbilityUsed(Player player)
         {
             ExplosiveGrenade grenade = ((ExplosiveGrenade)Item.Create(ItemType.GrenadeHE));
             grenade.FuseTime = 0.2f;
             grenade.SpawnActive(player.Position);
             Log.Debug("Grenade spawned");
+            return base.AbilityUsed(player);
         }
     }
 }

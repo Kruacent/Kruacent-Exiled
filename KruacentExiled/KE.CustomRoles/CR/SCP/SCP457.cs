@@ -21,7 +21,7 @@ namespace KE.CustomRoles.CR.SCP
     public class SCP457 : CustomSCP
     {
 
-        public override string Description { get; set; } = "You do passive damage around you, and can lauch fireballs by pressing the stalk button";
+        public override string Description { get; set; } = "You do passive damage around you, and can lauch fireballs";
         public override string PublicName { get; set; } = "SCP-457";
         public override int MaxHealth { get; set; } = 5000;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scp106;
@@ -42,7 +42,7 @@ namespace KE.CustomRoles.CR.SCP
 
         public override HashSet<string> Abilities => 
         [
-            "FireBall"
+            "Fireball"
         ];
 
 
@@ -77,7 +77,7 @@ namespace KE.CustomRoles.CR.SCP
 
         private IEnumerator<float> PassiveDamage(Player scp)
         {
-            while (true)
+            while (scp.IsAlive)
             {
                 foreach (Player allP in Player.List.Where(p => p != scp && p.Role.Side != scp.Role.Side))
                 {
@@ -91,6 +91,7 @@ namespace KE.CustomRoles.CR.SCP
                         Log.Debug($"damâge={damage} dist = {hitinfo.distance}");
                         allP.EnableEffect(Exiled.API.Enums.EffectType.Burned, DamageRefreshRate, true);
                         allP.Hurt(damage, Fireball.BallDamage._deathReason);
+                        scp.CustomHumeShieldStat.AddAmount(damage);
 
 
                     }
