@@ -21,13 +21,11 @@ namespace KE.Misc.Features
 
         public void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
             Exiled.Events.Handlers.Player.ChangingRole += BecomingSCP;
         }
 
         public void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
             Exiled.Events.Handlers.Player.ChangingRole -= BecomingSCP;
         }
 
@@ -35,43 +33,6 @@ namespace KE.Misc.Features
         internal void StartBuff()
         {
             Timing.RunCoroutine(PeanutShield());
-            
-        }
-
-        private Npc npc = null;
-        private string npcName = "Bonjour je suis la pour pas que le SCP wall-hack";
-        private void OnChangingRole(ChangingRoleEventArgs ev)
-        {
-            if (IsHidingNpc(ev.Player)) return;
-
-            Timing.CallDelayed(1f, delegate
-            {
-                int nbplayer = Player.Enumerable.Count(p => !p.IsScp && p.IsAlive && (!IsHidingNpc(p)));
-                Log.Debug("there's " + nbplayer);
-                if (nbplayer != 1)
-                {
-                    Log.Debug("destroying npc");
-                    if(npc?.GameObject is not null)
-                    {
-                        npc?.Destroy();
-                    }
-                    
-                }
-                
-
-                if(nbplayer == 1)
-                {
-                    if (npc is not null)
-                    {
-                        npc.Destroy();
-                    }
-                    Log.Debug("spawning npc");
-                    npc = Npc.Spawn(npcName, RoleTypeId.ClassD, true, new Vector3(36, 314, -33));
-                    npc.IsSpectatable = false;
-                }
-            });
-
-
             
         }
 

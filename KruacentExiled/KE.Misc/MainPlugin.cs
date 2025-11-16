@@ -14,6 +14,7 @@ using Exiled.CustomRoles.API.Features;
 using KE.Misc.Features.CR;
 using LightContainmentZoneDecontamination;
 using KE.Misc.Features.GamblingCoin;
+using HarmonyLib;
 
 namespace KE.Misc
 {
@@ -38,10 +39,13 @@ namespace KE.Misc
         internal AutoTesla AutoTesla { get; private set; }
         internal EventHandlers _gamblingCoinHandler {  get; private set; }
         internal SpawnLcz SpawnLcz { get; private set; }
+        private Harmony harmony;
 
         public override void OnEnabled()
         {
             Instance = this;
+            harmony = new(Prefix);
+
             _914 = new _914();
             AutoElevator = new AutoElevator();
             ClassDDoor = new ClassDDoor();
@@ -57,9 +61,9 @@ namespace KE.Misc
             Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
             Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
 
+
+            harmony.PatchAll(Assembly);
             ClassDDoor.SubscribeEvents();
-
-
             MiscFeature.SubscribeAllEvents();
 
             if (Config.GamblingCoin)
@@ -91,7 +95,7 @@ namespace KE.Misc
             AutoTesla.StopLoop();
             MiscFeature.UnsubscribeAllEvents();
             ClassDDoor.UnsubscribeEvents();
-
+            harmony.UnpatchAll(harmony.Id);
 
             CustomRole.UnregisterRoles([typeof(Scp035)]);
 
@@ -109,6 +113,7 @@ namespace KE.Misc
             //SurfaceLight = null;
             GamblingCoinManager.DestroyAll();
             _gamblingCoinHandler = null;
+            harmony = null;
             Instance = null;
         }       
         
