@@ -17,17 +17,18 @@ namespace KE.Misc.Features
 {
     internal class Spawn : MiscFeature
     {
-        private RoleTypeId[] baseRole =
-        [
-            RoleTypeId.Scp173,
-            RoleTypeId.Scp106,
-            RoleTypeId.Scp049,
-            RoleTypeId.Scp079,
-            RoleTypeId.Scp096,
-            RoleTypeId.Scp939,
-        ];
 
-        private Dictionary<int,CustomSCP> SelectableCustomSCPs => CustomSCP.All.Where(cs => cs.Id >= baseRole.Length).ToDictionary(cs => (int)cs.Id, cs => cs);
+        private Dictionary<string, RoleTypeId> baseRole = new ()
+        {
+            { "173", RoleTypeId.Scp173 },
+            { "106", RoleTypeId.Scp106 },
+            { "049", RoleTypeId.Scp049 },
+            { "079", RoleTypeId.Scp079 },
+            { "096", RoleTypeId.Scp096 },
+            { "939", RoleTypeId.Scp939 },
+        };
+
+        private Dictionary<string,CustomSCP> SelectableCustomSCPs => CustomSCP.All.ToDictionary(cs =>cs.Name, cs => cs);
 
         private bool _set035 = true;
 
@@ -53,7 +54,7 @@ namespace KE.Misc.Features
                 Log.Warn("no config, no custom preferences this round");
                 return;
             }
-            Dictionary<int, int> chancescp = GetPreferences(player);
+            Dictionary<string, int> chancescp = GetPreferences(player);
 
             if(chancescp == null)
             {
@@ -61,7 +62,7 @@ namespace KE.Misc.Features
             }
 
 
-            int roleScp = ChooseRandomRole(chancescp);
+            string roleScp = ChooseRandomRole(chancescp);
             Log.Debug($"Scp ({player.Nickname}) is {roleScp} previous : {player.Role.Type}");
 
             SetRoleWithId(player, roleScp);
@@ -99,21 +100,21 @@ namespace KE.Misc.Features
         }
 
 
-        private Dictionary<int, int> GetPreferences(Player player)
+        private Dictionary<string, int> GetPreferences(Player player)
         {
             if (player.ScpPreferences.Preferences == null) return null;
-            Dictionary<int, int> idChance = new();
+            Dictionary<string, int> idChance = new();
 
-            for (int i = 0; i < baseRole.Length; i++)
+
+            foreach(var kvp in baseRole)
             {
-                idChance.Add(i, player.ScpPreferences.Preferences[baseRole[i]]+5);
+                idChance.Add(kvp.Key, player.ScpPreferences.Preferences[kvp.Value] + 5);
             }
 
-            foreach(CustomSCP customSCP in SelectableCustomSCPs.Values)
+            foreach (CustomSCP customSCP in SelectableCustomSCPs.Values)
             {
-                idChance.Add((int)customSCP.Id, customSCP.GetPreferences(player)+5);
+                idChance.Add(customSCP.Name, customSCP.GetPreferences(player) + 5);
             }
-
 
 
             return idChance;
@@ -122,11 +123,11 @@ namespace KE.Misc.Features
 
 
 
-        private int ChooseRandomRole(IDictionary<int, int> chancescp)
+        private string ChooseRandomRole(IDictionary<string, int> chancescp)
         {
             if (chancescp == null) throw new ArgumentException("Dictionary null");
-            List<int> weightedPool = new();
-            foreach (int ge in chancescp.Keys)
+            List<string> weightedPool = new();
+            foreach (string ge in chancescp.Keys)
             {
                 for (int i = 0; i < chancescp[ge]; i++)
                 {
@@ -140,17 +141,24 @@ namespace KE.Misc.Features
             return weightedPool[randomIndex];
         }
 
-        private void SetRoleWithId(Player player, int id)
+        private void SetRoleWithId(Player player, string name)
         {
 
-            if(id < baseRole.Length)
+            if (baseRole.ContainsKey(name))
             {
-                player.Role.Set(baseRole[id],SpawnReason.RoundStart);
+                player.Role.Set(baseRole[name], SpawnReason.RoundStart);
             }
             else
             {
-                SelectableCustomSCPs[id].AddRole(player);
+                if (SelectableCustomSCPs.ContainsKey(name))
+                {
+                    SelectableCustomSCPs[name].AddRole(player);
+                }
+                
             }
+
+            Log.Error("scp not found");
+
         }
 
 
