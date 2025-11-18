@@ -1,8 +1,10 @@
-﻿using Exiled.API.Features;
+﻿using Discord;
+using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Roles;
 using Exiled.API.Features.Toys;
 using Exiled.API.Interfaces;
+using Exiled.Events.EventArgs.Player;
 using Exiled.Events.Patches.Events.Player;
 using KE.CustomRoles.API.Features;
 using MEC;
@@ -11,25 +13,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using Light = Exiled.API.Features.Toys.Light;
 
-namespace KE.CustomRoles.Abilities
+namespace KE.CustomRoles.Abilities.FireAbilities
 {
-    public class Fireball : KEAbilities
+    public class Fireball : FireAbility
     {
         public override string Name { get; } = "Fireball";
         public override string PublicName { get; } = "Fireball";
+        public override int Cost => 10;
 
         public override string Description { get; } = "I cast Fireball";
 
         public override float Cooldown { get; } = 2f;
 
 
-        public const float VIGOR_COST = .1f;
         public static readonly CustomReasonDamageHandler BallDamage = new("Burned to death", 25, string.Empty);
-        public const int MAX_BALLS = 3;
+        public const int MAX_BALLS = 5;
         private static readonly Color ballColor = new(2, 1.08f, 0, .75f);
         private Dictionary<Player, int> _activeBalls = new();
 
-        protected override bool AbilityUsed(Player player)
+        protected override bool LaunchedAbility(Player player)
         {
             if (!_activeBalls.ContainsKey(player))
             {
@@ -37,31 +39,21 @@ namespace KE.CustomRoles.Abilities
             }
 
 
-            if (_activeBalls[player] >= MAX_BALLS) return true;
-
-
-
-            if (player.Role is Scp106Role role106)
+            if (_activeBalls[player] >= MAX_BALLS)
             {
-                if (role106.Vigor <= VIGOR_COST) return true;
-                role106.Vigor -= VIGOR_COST;
+                ShowEffectHint(player, "too much balls");
+                return true;
             }
+
 
             _activeBalls[player]++;
             Timing.RunCoroutine(LaunchingAttack(player));
-            return base.AbilityUsed(player);
+            return true;
 
         }
 
-        protected override void AbilityRemoved(Player player)
-        {
 
-
-
-            base.AbilityRemoved(player);
-        }
-
-        private float smooth = .001f;
+        private float smooth = .01f;
 
         private IEnumerator<float> LaunchingAttack(Player player)
         {
@@ -82,35 +74,42 @@ namespace KE.CustomRoles.Abilities
             light.Spawn();
             Vector3 nextPos;
 
-            int fallback = 100;
+            int fallback = Mathf.CeilToInt(100/ smooth);
             Log.Debug("fallback=" + fallback);
             while (!attackTouchedSomething && fallback > 0)
             {
-                nextPos = primitive.Position + primitive.Rotation * new Vector3(0, 0, smooth);
-                RaycastHit hit;
+                nextPos = primitive.Position + primitive.Rotation * new Vector3(0, 0, 10*smooth);
 
-                if (Physics.Linecast(primitive.Position, nextPos, out hit))
+
+                if (Physics.Linecast(primitive.Position, nextPos, out RaycastHit hit))
                 {
-                    ProcessHit(player,hit.collider);
-
-                }
-                else
-                {
-
-                    Collider[] colliders = Physics.OverlapSphere(primitive.Position, 1);
-
-                    foreach(Collider collider in colliders)
+                    //spawn mtf looking at central gate
+                    if (hit.collider.gameObject.name != "VolumeOverrideTunnel")
                     {
-                        ProcessHit(player, collider);
+                        attackTouchedSomething = true;
                     }
 
                 }
+
+                Collider[] colliders = Physics.OverlapSphere(primitive.Position, .5f);
+
+
+
+                foreach(Collider collider in colliders)
+                {
+                    
+                    attackTouchedSomething = attackTouchedSomething || ProcessHit(player, collider);
+
+                }
+
+
+
 
 
 
 
                 Log.Debug($"current pos = {primitive.Position} next pos = {nextPos}");
-                yield return Timing.WaitForSeconds(1f/smooth);
+                yield return Timing.WaitForSeconds(smooth);
                 primitive.Position = nextPos;
                 light.Position = nextPos;
                 fallback--;
@@ -121,14 +120,15 @@ namespace KE.CustomRoles.Abilities
         }
 
 
-        private void ProcessHit(Player attacker,Collider collider)
+        private bool ProcessHit(Player attacker,Collider collider)
         {
-
+            bool result = false;
             Player playerhit = Player.Get(collider);
             if (playerhit != null && playerhit.Role.Side != attacker.Role.Side)
             {
                 playerhit.Hurt(BallDamage);
                 attacker.ShowHitMarker();
+                result = true;
 
             }
 
@@ -137,7 +137,10 @@ namespace KE.CustomRoles.Abilities
             {
                 damageable.Break();
                 attacker.ShowHitMarker();
+                result = true;
             }
+
+            return result;
         }
 
 

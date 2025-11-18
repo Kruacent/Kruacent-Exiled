@@ -359,6 +359,19 @@ namespace KE.CustomRoles.API.Features
 
         }
 
+        public static IEnumerable<KECustomRole> Get(Player player)
+        {
+            List<KECustomRole> cr = new();
+            foreach(KECustomRole ke in Registered)
+            {
+                if (ke.Check(player))
+                {
+                    cr.Add(ke);
+                }
+            }
+            return cr;
+        }
+
         #region Spawn
 
         /// <summary>

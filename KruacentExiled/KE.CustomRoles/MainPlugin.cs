@@ -26,7 +26,8 @@ namespace KE.CustomRoles
         public static readonly HintPlacement CRHint = new(0, 750);
         public static readonly HintPlacement CREffect = new(700, 300);
         public static readonly HintPlacement AbilitiesDesc = new(0, 900);
-        public static readonly HintPlacement Abilities = new(0, 950,HintServiceMeow.Core.Enum.HintAlignment.Left);
+        public static readonly HintPlacement Abilities = new(0, 850,HintServiceMeow.Core.Enum.HintAlignment.Left);
+        public static readonly HintPlacement RightHPbars = new(55, 1000,HintServiceMeow.Core.Enum.HintAlignment.Left);
         public static Translations Translations => Instance?.Translation;
         private SettingHandler _settingHandler;
         internal static SettingHandler SettingHandler => Instance?._settingHandler;

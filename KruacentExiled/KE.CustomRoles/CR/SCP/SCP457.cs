@@ -4,8 +4,9 @@ using Exiled.API.Features.Doors;
 using Exiled.API.Features.Roles;
 using Exiled.API.Features.Toys;
 using Exiled.API.Interfaces;
+using Exiled.Events.Commands.Reload;
 using Exiled.Events.EventArgs.Scp106;
-using KE.CustomRoles.Abilities;
+using KE.CustomRoles.Abilities.FireAbilities;
 using KE.CustomRoles.API.Features;
 using KE.Utils.API;
 using MEC;
@@ -21,7 +22,7 @@ namespace KE.CustomRoles.CR.SCP
     public class SCP457 : CustomSCP
     {
 
-        public override string Description { get; set; } = "You do passive damage around you, and can lauch fireballs";
+        public override string Description { get; set; } = "You do passive damage around you\nsi vous pouvez pas traversé les portes .rcr dans la console client";
         public override string PublicName { get; set; } = "SCP-457";
         public override int MaxHealth { get; set; } = 5000;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scp106;
@@ -38,11 +39,13 @@ namespace KE.CustomRoles.CR.SCP
         public static float DamageRefreshRate = 5f;
         public static readonly Color FlameColor = new(2, 1.08f, 0);
 
+        public Collider[] SphereNonAlloc = new Collider[8];
 
 
         public override HashSet<string> Abilities => 
         [
-            "Fireball"
+            "Fireball",
+            "BlindingFlash"
         ];
 
 
@@ -51,6 +54,9 @@ namespace KE.CustomRoles.CR.SCP
             Log.Debug("adding role 457");
             _inside.Add(player, null);
             _handles.Add(player, new());
+
+            FireStat firestat = player.ReferenceHub.gameObject.AddComponent<FireStat>();
+            firestat.Init();
 
             _handles[player].Add(Timing.RunCoroutine(InsideLight(player)));
             _handles[player].Add(Timing.RunCoroutine(PassiveDamage(player)));
@@ -79,21 +85,22 @@ namespace KE.CustomRoles.CR.SCP
         {
             while (scp.IsAlive)
             {
-                foreach (Player allP in Player.List.Where(p => p != scp && p.Role.Side != scp.Role.Side))
+
+
+                if(Physics.OverlapSphereNonAlloc(scp.Position,5, SphereNonAlloc) > 0)
                 {
-
-
-                    if (OtherUtils.IsInCircle(allP.Position, scp.Position, 5))
+                    for (int i = 0; i < SphereNonAlloc.Length; i++)
                     {
-
-                        Physics.Linecast(allP.Position, scp.Position, out var hitinfo);
-                        float damage = -(hitinfo.distance / 3) + 10;
-                        Log.Debug($"damâge={damage} dist = {hitinfo.distance}");
-                        allP.EnableEffect(Exiled.API.Enums.EffectType.Burned, DamageRefreshRate, true);
-                        allP.Hurt(damage, Fireball.BallDamage._deathReason);
-                        scp.CustomHumeShieldStat.AddAmount(damage);
-
-
+                        Player player = Player.Get(SphereNonAlloc[i]);
+                        if (player is null) continue;
+                        if(Physics.Linecast(player.Position, scp.Position, out var hitinfo))
+                        {
+                            float damage = -(hitinfo.distance / 3) + 10;
+                            player.EnableEffect(Exiled.API.Enums.EffectType.Burned, DamageRefreshRate, true);
+                            player.Hurt(damage, Fireball.BallDamage._deathReason);
+                            scp.CustomHumeShieldStat.AddAmount(damage);
+                        }
+                        
                     }
                 }
                 yield return Timing.WaitForSeconds(DamageRefreshRate);
@@ -124,7 +131,9 @@ namespace KE.CustomRoles.CR.SCP
                 }
                 _handles.Remove(player);
             }
-
+            FireStat firestat = player.ReferenceHub.gameObject.GetComponent<FireStat>();
+            firestat.Destroy();
+            
         }
 
 

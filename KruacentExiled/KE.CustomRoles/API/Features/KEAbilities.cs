@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Pools;
+using KE.CustomRoles.Abilities.FireAbilities;
 using KE.CustomRoles.Settings;
 using KE.Utils.API;
 using KE.Utils.API.Displays.DisplayMeow;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using UnityEngine;
 
 namespace KE.CustomRoles.API.Features
 {
@@ -447,6 +449,17 @@ namespace KE.CustomRoles.API.Features
                 builder.Append(ability.PublicName);
                 builder.Append(" ");
                 
+
+                if(ability is FireAbility fire)
+                {
+                    builder.Append("(");
+                    builder.Append(fire.Cost);
+                    builder.Append(")");
+                    builder.Append(" ");
+                }
+
+
+
                 if (ability.CanUse(player,out var output))
                 {
                     builder.Append(ReadyText);
@@ -475,6 +488,20 @@ namespace KE.CustomRoles.API.Features
             string msg = builder.ToString();
             StringBuilderPool.Pool.Return(builder);
             DisplayHandler.Instance.AddHint(MainPlugin.Abilities, player, msg, UpdateTime);
+        }
+
+
+        public static void ShowEffectHint(Player player, string text)
+        {
+            float delay = MainPlugin.SettingHandler.GetTime(player);
+            DisplayHandler.Instance.AddHint(MainPlugin.CREffect, player, text, delay);
+        }
+
+
+        public static void ShowAbilityHint(Player player, string text)
+        {
+            float delay = MainPlugin.SettingHandler.GetTime(player);
+            DisplayHandler.Instance.AddHint(MainPlugin.AbilitiesDesc, player, text, delay);
         }
 
 
