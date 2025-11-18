@@ -36,11 +36,6 @@ namespace KE.Misc.Features
             
         }
 
-        private bool IsHidingNpc(Player player)
-        {
-            return player is Npc hide && hide.Nickname == npcName;
-        }
-
 
         private void BecomingSCP(ChangingRoleEventArgs ev)
         {

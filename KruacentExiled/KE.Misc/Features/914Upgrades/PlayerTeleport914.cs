@@ -3,14 +3,8 @@ using Exiled.API.Features;
 using Exiled.Events.EventArgs.Scp914;
 using KE.Utils.Extensions;
 using MEC;
-using PlayerRoles;
 using Scp914;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 
 namespace KE.Misc.Features._914Upgrades
 {

@@ -11,11 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\KE.CustomRoles\KE.CustomRoles.csproj" />
-    <ProjectReference Include="..\KE.Utils\KE.Utils.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="Assembly-CSharp-firstpass" HintPath="$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll" />
     <Reference Include="0Harmony" HintPath="$(EXILED_REFERENCES)\0Harmony.dll" />
     <Reference Include="System.ComponentModel.Composition" HintPath="$(EXILED_REFERENCES)\System.ComponentModel.Composition.dll" />
@@ -23,6 +18,8 @@
     <Reference Include="UnityEngine" HintPath="$(EXILED_REFERENCES)\UnityEngine.dll" />
     <Reference Include="UnityEngine.PhysicsModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll" />
     <Reference Include="Mirror" HintPath="$(EXILED_REFERENCES)\Mirror.dll" />
+    <Reference Include="KE.CustomRoles" HintPath="$(EXILED_DEV_REFERENCES)\Plugins\KE.CustomRoles.dll" />
+    <Reference Include="KE.Utils" HintPath="$(EXILED_DEV_REFERENCES)\Plugins\KE.Utils.dll" />
   </ItemGroup>
 
 	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
