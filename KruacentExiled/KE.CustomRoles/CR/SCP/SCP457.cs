@@ -155,6 +155,7 @@ namespace KE.CustomRoles.CR.SCP
         {
             Exiled.Events.Handlers.Scp106.Stalking += OnStalking;
             Exiled.Events.Handlers.Scp106.Teleporting += OnTP;
+            Exiled.Events.Handlers.Scp106.Attacking += OnAttacking;
             base.SubscribeEvents();
 
         }
@@ -163,8 +164,19 @@ namespace KE.CustomRoles.CR.SCP
         {
             Exiled.Events.Handlers.Scp106.Stalking -= OnStalking;
             Exiled.Events.Handlers.Scp106.Teleporting -= OnTP;
+            Exiled.Events.Handlers.Scp106.Attacking -= OnAttacking;
             base.UnsubscribeEvents();
         }
 
-    }
+
+        private void OnAttacking(AttackingEventArgs ev)
+        {
+            if (!Check(ev.Player)) return;
+
+            ev.IsAllowed = false;
+        }
+            
+            
+            
+        }
 }
