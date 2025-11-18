@@ -25,7 +25,7 @@ namespace KE.Items.Items
         public override string Name { get; set; } = "Presse Purée";
         public override string Description { get; set; } = "The grenade explode at impact but does less damage";
         public override float Weight { get; set; } = 0.65f;
-        public override float FuseTime { get; set; } = 1.5f;
+        public override float FuseTime { get; set; } = 5f;
         public override bool ExplodeOnCollision { get; set; } = true;
         public PickupModel PickupModel { get; }
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
@@ -96,7 +96,6 @@ namespace KE.Items.Items
 
         public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade { get; private set; } = new Dictionary<Scp914KnobSetting, UpgradeProperties>()
         {
-            //very fine -> true divine pills 10%
             { Scp914KnobSetting.VeryFine,new UpgradeProperties(5, 1055)}
         };
     }
