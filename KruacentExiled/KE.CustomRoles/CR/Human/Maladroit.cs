@@ -52,7 +52,7 @@ namespace KE.CustomRoles.CR.Human
             };
 
 
-            while (true)
+            while (p.IsAlive)
             {
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(120f, 200f));
                 int proba = UnityEngine.Random.Range(0, 101);

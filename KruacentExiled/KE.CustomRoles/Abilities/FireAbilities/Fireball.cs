@@ -9,6 +9,7 @@ using Exiled.Events.Patches.Events.Player;
 using KE.CustomRoles.API.Features;
 using MEC;
 using PlayerStatsSystem;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Light = Exiled.API.Features.Toys.Light;
@@ -23,7 +24,7 @@ namespace KE.CustomRoles.Abilities.FireAbilities
 
         public override string Description { get; } = "I cast Fireball";
 
-        public override float Cooldown { get; } = 2f;
+        public override float Cooldown { get; } = 0f;
 
 
         public static readonly CustomReasonDamageHandler BallDamage = new("Burned to death", 25, string.Empty);
@@ -76,47 +77,59 @@ namespace KE.CustomRoles.Abilities.FireAbilities
 
             int fallback = Mathf.CeilToInt(100/ smooth);
             Log.Debug("fallback=" + fallback);
-            while (!attackTouchedSomething && fallback > 0)
+            try
             {
-                nextPos = primitive.Position + primitive.Rotation * new Vector3(0, 0, 10*smooth);
-
-
-                if (Physics.Linecast(primitive.Position, nextPos, out RaycastHit hit))
+                while (!attackTouchedSomething && fallback > 0)
                 {
-                    //spawn mtf looking at central gate
-                    if (hit.collider.gameObject.name != "VolumeOverrideTunnel")
+                    nextPos = primitive.Position + primitive.Rotation * new Vector3(0, 0, 10 * smooth);
+
+
+                    if (Physics.Linecast(primitive.Position, nextPos, out RaycastHit hit))
                     {
-                        attackTouchedSomething = true;
+                        //spawn mtf looking at central gate
+                        if (hit.collider.gameObject.name != "VolumeOverrideTunnel")
+                        {
+                            attackTouchedSomething = true;
+                        }
+
                     }
 
+                    Collider[] colliders = Physics.OverlapSphere(primitive.Position, .5f);
+
+
+
+                    foreach (Collider collider in colliders)
+                    {
+
+                        attackTouchedSomething = attackTouchedSomething || ProcessHit(player, collider);
+
+                    }
+
+
+
+
+
+
+
+                    Log.Debug($"current pos = {primitive.Position} next pos = {nextPos}");
+                    yield return Timing.WaitForSeconds(smooth);
+                    primitive.Position = nextPos;
+                    light.Position = nextPos;
+                    fallback--;
                 }
-
-                Collider[] colliders = Physics.OverlapSphere(primitive.Position, .5f);
-
-
-
-                foreach(Collider collider in colliders)
-                {
-                    
-                    attackTouchedSomething = attackTouchedSomething || ProcessHit(player, collider);
-
-                }
-
-
-
-
-
-
-
-                Log.Debug($"current pos = {primitive.Position} next pos = {nextPos}");
-                yield return Timing.WaitForSeconds(smooth);
-                primitive.Position = nextPos;
-                light.Position = nextPos;
-                fallback--;
             }
-            _activeBalls[player]--;
-            primitive.Destroy();
-            light.Destroy();
+            catch(Exception e)
+            {
+                Log.Error(e);
+            }
+            finally
+            {
+                _activeBalls[player]--;
+                primitive.Destroy();
+                light.Destroy();
+            }
+            
+            
         }
 
 

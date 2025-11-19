@@ -20,13 +20,8 @@ namespace KE.CustomRoles.Abilities
 
         protected override bool AbilityUsed(Player player)
         {
-            List<Player> playerList = Player.Enumerable.Where(p => !p.IsScp && p.CurrentRoom == player.CurrentRoom).ToList();
-            playerList.Remove(player);
 
-            Log.Debug("Player list :");
-            playerList.ForEach(p => Log.Debug(p.Nickname));
-
-            Player thiefed = playerList.GetRandomValue();
+            Player thiefed = Player.Enumerable.GetRandomValue(p => !p.IsScp && p.CurrentRoom == player.CurrentRoom && p != player);
             if(thiefed is null)
             {
                 MainPlugin.ShowEffectHint(player, "no player to steal from");
@@ -35,22 +30,22 @@ namespace KE.CustomRoles.Abilities
 
             Log.Debug($"Thiefed player : {thiefed.Nickname}");
 
-            Item inv = thiefed.Items.GetRandomValue();
+            Item item = thiefed.Items.GetRandomValue();
 
-            Log.Debug($"Thiefed item : {inv}");
 
-            if (inv == null)
+            if (item == null)
             {
-                Log.Debug("No item to thiefed, null, returning.");
                 MainPlugin.ShowEffectHint(player, "I think this is a skill issue ! Congrats !");
                 return true;
             }
 
-            var thiefBool = thiefed.RemoveItem(inv);
-            Log.Debug($"Item deleted {thiefBool}.");
 
-            inv.Give(player);
-            Log.Debug($"Item given to {player.Nickname}.");
+
+            Item newitem = item.Clone();
+            newitem.Give(player);
+            thiefed.RemoveItem(newitem);
+
+
             return base.AbilityUsed(player);
         }
     }
