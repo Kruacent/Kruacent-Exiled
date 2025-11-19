@@ -10,7 +10,7 @@ using KE.Items.ItemEffects;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.Flashlight)]
+    [CustomItem(ItemType.GrenadeFlash)] 
     public class SmokeGrenade : KECustomGrenade, ISwichableEffect
     {
         public override uint Id { get; set; } = 1071;
@@ -23,26 +23,21 @@ namespace KE.Items.Items
         public CustomItemEffect Effect { get; set; }
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
-            Limit = 3,
-            DynamicSpawnPoints = new List<DynamicSpawnPoint>
+            Limit = 2,
+            RoomSpawnPoints = new List<RoomSpawnPoint>
             {
-                new DynamicSpawnPoint()
+                new RoomSpawnPoint()
                 {
-                    Chance = 50,
-                    Location = SpawnLocationType.Inside939Cryo,
+                    Room = RoomType.HczStraightPipeRoom,
+                    Chance = 35
                 },
-                new DynamicSpawnPoint()
+
+                new RoomSpawnPoint()
                 {
-                    Chance = 5,
-                    Location = SpawnLocationType.Inside914,
-                },
-                new DynamicSpawnPoint()
-                {
-                    Chance= 50,
-                    Location = SpawnLocationType.InsideGateA,
+                    Room = RoomType.Surface,
+                    Chance = 35
                 }
             },
-
         };
 
         public SmokeGrenade()

@@ -14,7 +14,7 @@ namespace KE.Items.ItemEffects
     {
         public bool RemoveSmoke { get; set; } = true;
         [Description("If RemoveSmoke is true, how long does it take before the smoke will be removed")]
-        public float FogTime { get; set; } = 15;
+        public float FogTime { get; set; } = 30;
 
         public override void Effect(UsedItemEventArgs ev)
         {

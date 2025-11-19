@@ -13,39 +13,38 @@ namespace KE.Items.ItemEffects
     public class LowGravityGrenadeEffect : CustomItemEffect
     {
         private Dictionary<Player, Vector3> _effectedPlayers = new();
-        public Vector3 LowGravity { get; set; } = new(0, -12.60f, 0);
+        public Vector3 LowGravity { get; set; } = new(0, -12.6f, 0);
         public float Duration { get; set; } = 15f;
         public float Range { get; set; } = 10f;
 
         public override void Effect(UsedItemEventArgs ev)
         {
-            
+            OnExploding(ev.Player, ev.Player.Position);
         }
         public override void Effect(DroppingItemEventArgs ev)
         {
-            ev.Player.ItemEffectHint("No grandson don't leave me !");
+            OnExploding(ev.Player, ev.Player.Position);
         }
 
         public override void Effect(ExplodingGrenadeEventArgs ev)
         {
-            OnExploding(ev);
+            ev.IsAllowed = false;
+            OnExploding(ev.Player, ev.Position);
         }
 
-        public void OnExploding(ExplodingGrenadeEventArgs ev)
+        public void OnExploding(Player thrownPlayer, Vector3 position)
         {
-            ev.IsAllowed = false;
-
             foreach (Player player in Player.List)
             {
-                if (Vector3.Distance(ev.Position, player.Position) <= this.Range)
+                if (Vector3.Distance(position, player.Position) <= this.Range)
                 {
                     Vector3 previousGravity = PlayerLab.Get(player.NetworkIdentity)!.Gravity;
                     _effectedPlayers[player] = previousGravity;
                     PlayerLab.Get(player.NetworkIdentity)!.Gravity = LowGravity;
                     Timing.CallDelayed(this.Duration, () =>
                     {
-                        PlayerLab.Get(ev.Player.NetworkIdentity)!.Gravity = _effectedPlayers[ev.Player];
-                        _effectedPlayers.Remove(ev.Player);
+                        PlayerLab.Get(thrownPlayer.NetworkIdentity)!.Gravity = _effectedPlayers[thrownPlayer];
+                        _effectedPlayers.Remove(thrownPlayer);
                     });
                 }
             }
