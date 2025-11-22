@@ -77,57 +77,47 @@ namespace KE.CustomRoles.Abilities.FireAbilities
 
             int fallback = Mathf.CeilToInt(100/ smooth);
             Log.Debug("fallback=" + fallback);
-            try
+            while (!attackTouchedSomething && fallback > 0)
             {
-                while (!attackTouchedSomething && fallback > 0)
+                nextPos = primitive.Position + primitive.Rotation * new Vector3(0, 0, 10 * smooth);
+
+
+                if (Physics.Linecast(primitive.Position, nextPos, out RaycastHit hit))
                 {
-                    nextPos = primitive.Position + primitive.Rotation * new Vector3(0, 0, 10 * smooth);
-
-
-                    if (Physics.Linecast(primitive.Position, nextPos, out RaycastHit hit))
+                    //spawn mtf looking at central gate
+                    if (hit.collider.gameObject.name != "VolumeOverrideTunnel")
                     {
-                        //spawn mtf looking at central gate
-                        if (hit.collider.gameObject.name != "VolumeOverrideTunnel")
-                        {
-                            attackTouchedSomething = true;
-                        }
-
+                        attackTouchedSomething = true;
                     }
 
-                    Collider[] colliders = Physics.OverlapSphere(primitive.Position, .5f);
-
-
-
-                    foreach (Collider collider in colliders)
-                    {
-
-                        attackTouchedSomething = attackTouchedSomething || ProcessHit(player, collider);
-
-                    }
-
-
-
-
-
-
-
-                    Log.Debug($"current pos = {primitive.Position} next pos = {nextPos}");
-                    yield return Timing.WaitForSeconds(smooth);
-                    primitive.Position = nextPos;
-                    light.Position = nextPos;
-                    fallback--;
                 }
+
+                Collider[] colliders = Physics.OverlapSphere(primitive.Position, .5f);
+
+
+
+                foreach (Collider collider in colliders)
+                {
+
+                    attackTouchedSomething = attackTouchedSomething || ProcessHit(player, collider);
+
+                }
+
+
+
+
+
+
+
+                Log.Debug($"current pos = {primitive.Position} next pos = {nextPos}");
+                yield return Timing.WaitForSeconds(smooth);
+                primitive.Position = nextPos;
+                light.Position = nextPos;
+                fallback--;
             }
-            catch(Exception e)
-            {
-                Log.Error(e);
-            }
-            finally
-            {
-                _activeBalls[player]--;
-                primitive.Destroy();
-                light.Destroy();
-            }
+            _activeBalls[player]--;
+            primitive.Destroy();
+            light.Destroy();
             
             
         }
