@@ -31,7 +31,7 @@ namespace KE.CustomRoles.Settings
 
         public static SettingHandler Instance { get; private set; }
         private List<SettingBase> settings;
-        private SettingsPage page;
+        public readonly SettingsPage page;
         public const string baseArrow = "<--";
         public SettingHandler()
         {
@@ -54,7 +54,7 @@ namespace KE.CustomRoles.Settings
             {
                 baseSettings.Add(setting.Base);
             }
-            baseSettings.Add(new SSPlaintextSetting(_idArrow, "Personalize the arrow next to the selected ability", baseArrow, 16, TMP_InputField.ContentType.Standard, string.Empty, 0))
+            baseSettings.Add(new SSPlaintextSetting(_idArrow, "Personalize the arrow next to the selected ability", baseArrow, 16, TMP_InputField.ContentType.Standard, string.Empty, 0));
 
 
             page = new("Custom roles", baseSettings);

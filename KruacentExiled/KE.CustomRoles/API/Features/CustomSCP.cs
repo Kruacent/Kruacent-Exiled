@@ -1,11 +1,15 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
+using KE.CustomRoles.Settings;
+using KE.Utils.API.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
+using UserSettings.ServerSpecific;
+using static UnityEngine.Rendering.RayTracingAccelerationStructure;
 
 namespace KE.CustomRoles.API.Features
 {
@@ -15,35 +19,34 @@ namespace KE.CustomRoles.API.Features
         public const int MaxValue = 5;
         public const int DefaultValue = 0;
 
-        public static int ScpPreferenceHeaderId => HeaderId.Value;
-        private static RecyclableSettingId HeaderId;
-        private static HeaderSetting header = null;
         private SliderSetting sliderSetting;
         public abstract bool IsSupport { get; }
 
         private new RecyclableSettingId Id;
         public int SettingId => Id.Value;
-
+        private static SettingsPage page;
+        private static List<ServerSpecificSettingBase> settings;
         public static IEnumerable<CustomSCP> All => Registered.Where(c => c is CustomSCP).Cast<CustomSCP>();
         public override void Init()
         {
-            if (header is null)
-            {
-                HeaderId = new RecyclableSettingId();
-                header = new HeaderSetting(ScpPreferenceHeaderId, "SCP Spawn Preferences");
-            }
-            Id = new RecyclableSettingId();
-            sliderSetting = new SliderSetting(SettingId, PublicName, MinValue, MaxValue, DefaultValue, true, header: header);
-            SettingBase.Register([sliderSetting]);
 
             
+            if (page is null)
+            {
+                settings = new();
+                page = new SettingsPage("Custom SCPs Preferences", settings);
+            }
+            Id = new RecyclableSettingId();
+
+            settings.Add(new SSSliderSetting(SettingId, PublicName, MinValue, MaxValue, DefaultValue, true));
+
+            Utils.API.Settings.SettingHandler.Instance.AddPages(page);
             base.Init();
         }
 
 
         public override void Destroy()
         {
-            SettingBase.Unregister();
             Id.Destroy();
             base.Destroy();
         }
