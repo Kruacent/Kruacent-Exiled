@@ -13,14 +13,24 @@ namespace KE.Misc.Features
     internal class SurfaceLight : MiscFeature
     {
 
-        private HashSet<Color> _colors = new()
+        public static readonly HashSet<Color> _colors = new()
         {
             Color.cyan,
             Color.red,
             Color.green,
-            Color.white,
             Color.blue
         };
+
+        private float _chance = 5;
+
+        public float Chance
+        {
+            get { return _chance; }
+            set
+            {
+                _chance = Mathf.Clamp(value, 0f, 100f);
+            }
+        }
 
 
         public override void SubscribeEvents()
@@ -37,7 +47,7 @@ namespace KE.Misc.Features
 
         private void OnRoundStarted()
         {
-            if(Random.value < .25f)
+            if(Random.Range(0f,100f) < Chance)
                 ChangeSurfaceLight();
         }
 
@@ -50,8 +60,6 @@ namespace KE.Misc.Features
             {
                 room.Color = randomColor;
             }
-
-            Log.Debug($"Changed Surface light color to {randomColor}.");
         }
     }
 }
