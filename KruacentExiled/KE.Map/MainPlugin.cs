@@ -38,7 +38,6 @@ namespace KE.Map
         public override string Name => "KE.Map";
         public override string Prefix => "KE.M";
         public static MainPlugin Instance { get; private set; }
-        public Models models => Models.Instance;
         private Handler handler;
         public static Translations Translations => Instance?.Translation;
         public static Config Configs => Instance?.Config;
