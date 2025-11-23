@@ -2,6 +2,7 @@
 using Exiled.API.Features;
 using Exiled.Events;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp106;
 using Exiled.Permissions.Commands.Permissions;
 using KE.Utils.API.Interfaces;
 using KE.Utils.Extensions;
@@ -22,13 +23,23 @@ namespace KE.Misc.Features
         public void SubscribeEvents()
         {
             Exiled.Events.Handlers.Player.ChangingRole += BecomingSCP;
+            Exiled.Events.Handlers.Scp106.Attacking += OnAttacking;
         }
 
         public void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.ChangingRole -= BecomingSCP;
+            Exiled.Events.Handlers.Scp106.Attacking -= OnAttacking;
         }
 
+
+        private void OnAttacking(AttackingEventArgs ev)
+        {
+            if(ev.IsAllowed && Player.Enumerable.Count(p => !p.IsScp && p.IsAlive) == 1)
+            {
+                ev.Target.Vaporize();
+            }
+        }
 
         internal void StartBuff()
         {
@@ -88,7 +99,7 @@ namespace KE.Misc.Features
 
         private bool IsPlayerInZone(Player player, Vector3 zonePosition, float radius, float height)
         {
-            // Calculate the horizontal distance (x, z)
+            
             float horizontalDistance = Vector3.Distance(
                 new Vector3(player.Position.x, 0, player.Position.z),
                 new Vector3(zonePosition.x, 0, zonePosition.z)
