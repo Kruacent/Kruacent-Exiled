@@ -20,7 +20,7 @@ namespace KE.Misc.Features._914Upgrades
 {
     public class OmniCardUpgrade : Base914PlayerUpgrade
     {
-        protected override float Chance => 5;
+        protected override float Chance => 1;
 
         public static readonly Color32 CardColor = new(45, 44, 249,255);
         protected override void OnUpgradingPlayer(UpgradingPlayerEventArgs ev)
