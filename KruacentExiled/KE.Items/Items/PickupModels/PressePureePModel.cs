@@ -1,4 +1,4 @@
-﻿using Exiled.API.Features;
+﻿/*using Exiled.API.Features;
 using Exiled.API.Features.Toys;
 using Exiled.CustomItems.API.Features;
 using KE.Items.API.Features;
@@ -37,3 +37,4 @@ namespace KE.Items.Items.PickupModels
         }
     }
 }
+*/

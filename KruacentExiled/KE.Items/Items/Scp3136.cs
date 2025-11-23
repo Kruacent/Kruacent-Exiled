@@ -7,21 +7,14 @@ using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using KE.Items.API.Features;
-using KE.Items.API.Interface;
-using KE.Items.Items.PickupModels;
-using MEC;
 using PlayerRoles;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.SCP1576)]
-    public class Scp3136 : KECustomItem, ICustomPickupModel
+    public class Scp3136 : KECustomItem/*, ICustomPickupModel*/
     {
         public override uint Id { get; set; } = 1057;
         public override string Name { get; set; } = "SCP-3136";
@@ -48,7 +41,7 @@ namespace KE.Items.Items
             }
         };
 
-        public PickupModel PickupModel { get; }
+        //public PickupModel PickupModel { get; }
 
         public Scp3136()
         {
@@ -59,12 +52,12 @@ namespace KE.Items.Items
         {
             Exiled.Events.Handlers.Player.UsedItem += OnDrawing;
             Exiled.Events.Handlers.Server.RespawnedTeam += OnRespawnedTeam;
-            PickupModel?.SubscribeEvents();
+            //PickupModel?.SubscribeEvents();
             base.SubscribeEvents();
         }
         protected override void UnsubscribeEvents()
         {
-            PickupModel?.UnsubscribeEvents();
+            //PickupModel?.UnsubscribeEvents();
             Exiled.Events.Handlers.Player.UsedItem -= OnDrawing;
             Exiled.Events.Handlers.Server.RespawnedTeam -= OnRespawnedTeam;
             base.UnsubscribeEvents();

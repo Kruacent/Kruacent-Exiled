@@ -7,12 +7,11 @@ using Exiled.Events.EventArgs.Map;
 using KE.Items.API.Features;
 using KE.Items.API.Interface;
 using KE.Items.Items.ItemEffects;
-using KE.Items.Items.PickupModels;
 
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.GrenadeHE)]
-    public class TPGrenada : KECustomGrenade, ISwichableEffect, ICustomPickupModel
+    public class TPGrenada : KECustomGrenade, ISwichableEffect/*, ICustomPickupModel*/
     {
         
         public override uint Id { get; set; } = 1045;
@@ -52,12 +51,12 @@ namespace KE.Items.Items
 
         };
 
-        public PickupModel PickupModel { get; }
+        //public PickupModel PickupModel { get; }
 
         public TPGrenada()
         {
             Effect = new TPGrenadaEffect();
-            PickupModel = new TPGrenadaPModel(this);
+            //PickupModel = new TPGrenadaPModel(this);
         }
 
         protected override void OnExploding(ExplodingGrenadeEventArgs ev)
@@ -68,13 +67,13 @@ namespace KE.Items.Items
 
         protected override void SubscribeEvents()
         {
-            PickupModel.SubscribeEvents();
+            //PickupModel.SubscribeEvents();
             base.SubscribeEvents();
         }
 
         protected override void UnsubscribeEvents()
         {
-            PickupModel.UnsubscribeEvents();
+            //PickupModel.UnsubscribeEvents();
             base.UnsubscribeEvents();
         }
 

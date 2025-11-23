@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
 using KE.Utils.API.Interfaces;
+using KE.Utils.API.Settings;
 using KE.Utils.Quality.Enums;
 using System;
 using System.Collections.Generic;
@@ -25,38 +26,40 @@ namespace KE.Items.API.Core.Settings
         private const int _idTimeCustomItem = 2;
         private const int _idTimeCustomItemEffect = 3;
 
+        public readonly SettingsPage page;
 
 
-        private void CreateSettings()
+        public SettingsHandler()
         {
-
             _settings =
             [
-                new HeaderSetting (_idHeader,"Custom Items Settings"),
-                new TwoButtonsSetting(_idDesc,"Descriptions","Disabled","Enabled",true,"hide/show the description of the item and its upgrade chances ", onChanged:OnChanged),
-                new TwoButtonsSetting(_idPrefix,"Pickup/Select prefixes","Disabled","Enabled",false,"show/hide the whole sentence for the picking or selecting of the item, if hidden it will show a (P) if pickup or a (I) if in inventory before the name of the item ", onChanged:OnChanged),
+                new TwoButtonsSetting(_idDesc,"Descriptions","Disabled","Enabled",true,"hide/show the description of the item and its upgrade chances "),
+                new TwoButtonsSetting(_idPrefix,"Pickup/Select prefixes","Disabled","Enabled",false,"show/hide the whole sentence for the picking or selecting of the item, if hidden it will show a (P) if pickup or a (I) if in inventory before the name of the item "),
                 new SliderSetting(_idTimeCustomItem,"Time shown",0,30,10),
                 new SliderSetting(_idTimeCustomItemEffect,"Time effect shown",0,30,10),
 
             ];
-            SettingBase.Register(_settings);
+
+            List<ServerSpecificSettingBase> settings = new();
+
+
+            foreach (SettingBase setting in _settings)
+            {
+                settings.Add(setting.Base);
+            }
+
+            page = new("Custom Items", settings);
 
         }
+
 
 
         public void SubscribeEvents()
         {
-            CreateSettings();
-            SettingBase.SendToAll();
+            Utils.API.Settings.SettingHandler.Instance.AddPages(page);
         }
 
         public void UnsubscribeEvents()
-        {
-            SettingBase.Unregister();
-        }
-
-
-        private void OnChanged(Player p, SettingBase settings)
         {
 
         }

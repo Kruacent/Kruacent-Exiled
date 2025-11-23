@@ -10,7 +10,6 @@ using KE.Items.API.Core.Upgrade;
 using KE.Items.API.Events;
 using KE.Items.API.Features;
 using KE.Items.API.Interface;
-using KE.Items.Items.PickupModels;
 using Scp914;
 using System;
 using System.Collections.Generic;
@@ -18,7 +17,7 @@ using System.Collections.Generic;
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.GrenadeHE)]
-    public class PressePuree : KECustomGrenade, IUpgradableCustomItem, ICustomPickupModel
+    public class PressePuree : KECustomGrenade, IUpgradableCustomItem/*, ICustomPickupModel*/
     {
         //presse puree
         public override uint Id { get; set; } = 1046;
@@ -27,7 +26,7 @@ namespace KE.Items.Items
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime { get; set; } = 5f;
         public override bool ExplodeOnCollision { get; set; } = true;
-        public PickupModel PickupModel { get; }
+        //public PickupModel PickupModel { get; }
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 5,
@@ -58,20 +57,20 @@ namespace KE.Items.Items
 
         public PressePuree()
         {
-            PickupModel = new PressePureePModel(this);
+            //PickupModel = new PressePureePModel(this);
         }
 
 
         protected override void SubscribeEvents()
         {
-            PickupModel.SubscribeEvents();
+            //PickupModel.SubscribeEvents();
             ExplodeEvent.ExplodeDestructible += OnExplodeDestructible;
             base.SubscribeEvents();
         }
 
         protected override void UnsubscribeEvents()
         {
-            PickupModel.UnsubscribeEvents();
+            //PickupModel.UnsubscribeEvents();
             ExplodeEvent.ExplodeDestructible -= OnExplodeDestructible;
             base.UnsubscribeEvents();
         }
