@@ -39,6 +39,8 @@ namespace KE.CustomRoles
             
             Instance = this;
             _settingHandler = new();
+            Utils.API.Settings.SettingHandler.Instance.SubscribeEvents();
+
 
             Harmony = new(Name);
             Harmony.PatchAll();
@@ -57,6 +59,7 @@ namespace KE.CustomRoles
 
             KEAbilities.Unregister();
             UnsubscribeEvents();
+            Utils.API.Settings.SettingHandler.Instance.UnsubscribeEvents();
             _settingHandler = null;
             Instance = null;
         }

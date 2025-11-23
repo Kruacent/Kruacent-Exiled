@@ -3,10 +3,12 @@ using Exiled.API.Features.Core.UserSettings;
 using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.API.Features;
 using KE.Utils.API.Interfaces;
+using KE.Utils.API.Settings;
 using System;
 using System.Collections.Generic;
 using TMPro;
 using UserSettings.ServerSpecific;
+using static UnityEngine.Rendering.RayTracingAccelerationStructure;
 
 namespace KE.CustomRoles.Settings
 {
@@ -29,27 +31,40 @@ namespace KE.CustomRoles.Settings
 
         public static SettingHandler Instance { get; private set; }
         private List<SettingBase> settings;
+        private SettingsPage page;
         public const string baseArrow = "<--";
         public SettingHandler()
         {
             Instance = this;
             settings = new List<SettingBase>()
             {
-                new HeaderSetting (_idHeader,"Custom Roles Settings"),
                 new TwoButtonsSetting(_idDesc,"Descriptions","Disabled","Enabled",true,"hide/show the description the Custom Role "),
                 new SliderSetting(_idTimeCustomRole,"Time shown",0,30,20),
                 new SliderSetting(_idTimeAbilityDesc,"Ability Description time shown",0,30,20),
                 new KeybindSetting(_idUp, "Select up", UnityEngine.KeyCode.None),
                 new KeybindSetting(_idDown, "Select down", UnityEngine.KeyCode.None),
                 new KeybindSetting(_idSelect, "Use selected ability", UnityEngine.KeyCode.None),
-                SettingBase.Create(new SSPlaintextSetting(_idArrow, "Personalize the arrow next to the selected ability", baseArrow, 16, TMP_InputField.ContentType.Standard, string.Empty, 0))
             };
+
+            List<ServerSpecificSettingBase> baseSettings = new();
+
+            
+
+            foreach(SettingBase setting in settings)
+            {
+                baseSettings.Add(setting.Base);
+            }
+            baseSettings.Add(new SSPlaintextSetting(_idArrow, "Personalize the arrow next to the selected ability", baseArrow, 16, TMP_InputField.ContentType.Standard, string.Empty, 0))
+
+
+            page = new("Custom roles", baseSettings);
+            
         }
 
 
         public void SubscribeEvents()
         {
-            SettingBase.Register(settings);
+            Utils.API.Settings.SettingHandler.Instance.AddPages(page);
             ServerSpecificSettingsSync.ServerOnSettingValueReceived += SafeOnSettingValueReceived;
             Exiled.Events.Handlers.Player.Verified += OnVerified;
             DownPressed += Down;
@@ -63,7 +78,6 @@ namespace KE.CustomRoles.Settings
             ServerSpecificSettingsSync.ServerOnSettingValueReceived -= SafeOnSettingValueReceived;
             DownPressed -= Down;
             UpPressed -= Up;
-            SettingBase.Unregister(predicate:null, settings);
         }
 
 
