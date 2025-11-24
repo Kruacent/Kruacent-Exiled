@@ -15,6 +15,8 @@ using KE.Misc.Features.CR;
 using LightContainmentZoneDecontamination;
 using KE.Misc.Features.GamblingCoin;
 using HarmonyLib;
+using Exiled.Events.EventArgs.Cassie;
+using LabApi.Events.Arguments.ServerEvents;
 
 namespace KE.Misc
 {
@@ -41,6 +43,8 @@ namespace KE.Misc
         internal SpawnLcz SpawnLcz { get; private set; }
         private Harmony harmony;
 
+        internal VoteStart vote { get; private set; }
+
         public override void OnEnabled()
         {
             Instance = this;
@@ -57,6 +61,7 @@ namespace KE.Misc
             AutoNukeAnnoucement = new();
             AutoTesla = new();
             Candy = new Candy();
+            vote = new();
             //SpawnLcz = new();
             Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
             Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
@@ -76,7 +81,7 @@ namespace KE.Misc
             SCPBuff.SubscribeEvents();
             Exiled.Events.Handlers.Server.RoundStarted += AutoNukeAnnoucement.OnRoundStarted;
             ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;
-            Exiled.Events.Handlers.Player.Dying += ScpNoeDeathMessage;
+            LabApi.Events.Handlers.ServerEvents.CassieQueuingScpTermination += NoeDeath;
             CustomRole.RegisterRoles(false, null, true, this.Assembly);
             
         }
@@ -85,7 +90,7 @@ namespace KE.Misc
         public override void OnDisabled()
         {
             ServerHandle.RoundStarted -= ServerHandler.OnRoundStarted;
-            Exiled.Events.Handlers.Player.Dying -= ScpNoeDeathMessage;
+            LabApi.Events.Handlers.ServerEvents.CassieQueuingScpTermination -= NoeDeath;
             Exiled.Events.Handlers.Server.RoundStarted -= AutoNukeAnnoucement.OnRoundStarted;
             SCPBuff.UnsubscribeEvents();
             if (Config.GamblingCoin)
@@ -108,6 +113,7 @@ namespace KE.Misc
             AutoTesla = null;
             Spawn = null;
             AutoElevator = null;
+            vote = null;
             AutoNukeAnnoucement = null;
             FriendlyFire = null;
             //SurfaceLight = null;
@@ -117,22 +123,17 @@ namespace KE.Misc
             Instance = null;
         }       
         
-        /// <summary>
-        /// Special death message when Delecons dies as a SCP
-        /// </summary>
-        /// <param name="ev"></param>
-        internal void ScpNoeDeathMessage(DyingEventArgs ev)
-        {
-            
-            Player player = ev.Player;
 
-            if (!player.UserId.Equals("76561199066936074@steam"))
-                return;
-            if (!player.IsScp)
-                return;
-            if (player.Role.Type == RoleTypeId.Scp0492)
-                return;
-            Cassie.MessageTranslated("SCP 69 420 has been contained successfully", "SCP-69420-NOE has been contained successfully");
+        private void NoeDeath(CassieQueuingScpTerminationEventArgs ev)
+        {
+            Player player = Player.Get(ev.Player);
+            if(!player.UserId.Equals("76561199066936074@steam")
+                || !player.IsScp
+                || player.Role != RoleTypeId.Scp0492)
+            {
+                ev.IsAllowed = false;
+                Cassie.MessageTranslated("SCP 69 420 has been contained successfully", "SCP-69420-NOE has been contained successfully");
+            }
         }
 
         

@@ -27,5 +27,7 @@ namespace KE.Misc
         public int GamblingCoinMinUse { get; set; } = 1;
         public int GamblingCoinMaxUse { get; set; } = 2;
         public int GamblingCoinCooldown { get; set; } = 3;
+
+        public int MinPlayerVote { get; set; } = 6;
     }
 }
