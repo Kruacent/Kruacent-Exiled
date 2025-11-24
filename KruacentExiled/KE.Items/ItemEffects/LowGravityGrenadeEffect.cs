@@ -12,7 +12,7 @@ namespace KE.Items.ItemEffects
     public class LowGravityGrenadeEffect : CustomItemEffect
     {
         private Dictionary<Player, Vector3> _effectedPlayers = new();
-        public Vector3 LowGravity { get; set; } = new(0, -12.60f, 0);
+        public Vector3 LowGravity { get; set; } = new(0, -12.6f, 0);
         public float Duration { get; set; } = 15f;
         public float Range { get; set; } = 10f;
 
@@ -27,6 +27,7 @@ namespace KE.Items.ItemEffects
 
         public override void Effect(ExplodingGrenadeEventArgs ev)
         {
+            ev.IsAllowed = false;
             OnExploding(ev.Player, ev.Position);
         }
 
@@ -41,7 +42,7 @@ namespace KE.Items.ItemEffects
                     PlayerLab.Get(player.NetworkIdentity)!.Gravity = LowGravity;
                     Timing.CallDelayed(this.Duration, () =>
                     {
-                        PlayerLab.Get(thrownPlayer.NetworkIdentity)!.Gravity = _effectedPlayers[player];
+                        PlayerLab.Get(thrownPlayer.NetworkIdentity)!.Gravity = _effectedPlayers[thrownPlayer];
                         _effectedPlayers.Remove(thrownPlayer);
                     });
                 }

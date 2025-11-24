@@ -23,24 +23,29 @@ namespace KE.Items.Items
         public CustomItemEffect Effect { get; set; }
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
-            Limit = 3,
+            Limit = 2,
+            RoomSpawnPoints = new List<RoomSpawnPoint>
+            {
+                new RoomSpawnPoint()
+                {
+                    Room = RoomType.Hcz127,
+                    Chance = 25
+                },
+
+                new RoomSpawnPoint()
+                {
+                    Room = RoomType.Hcz939,
+                    Chance = 25
+                },
+            },
+
             DynamicSpawnPoints = new List<DynamicSpawnPoint>
             {
                 new DynamicSpawnPoint()
                 {
-                    Chance = 50,
-                    Location = SpawnLocationType.Inside096,
+                    Chance = 25,
+                    Location = SpawnLocationType.InsideHidLab,
                 },
-                new DynamicSpawnPoint()
-                {
-                    Chance = 5,
-                    Location = SpawnLocationType.Inside914,
-                },
-                new DynamicSpawnPoint()
-                {
-                    Chance= 50,
-                    Location = SpawnLocationType.Inside127Lab,
-                }
             },
 
         };
