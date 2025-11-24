@@ -32,7 +32,7 @@ namespace KE.Misc.Features
             //Log.Debug("elevator");
             while (!Round.IsEnded)
             {
-                foreach (Lift l in Lift.List)
+                foreach (Lift l in Lift.List.ToList())
                 {
                     yield return Timing.WaitForSeconds(UnityEngine.Random.Range(30, 45));
                     SendElevator(l);

@@ -32,7 +32,7 @@ namespace KE.Misc.Features
         {
             while (!Round.IsEnded)
             {
-                foreach (Tesla tesla in Tesla.List)
+                foreach (Tesla tesla in Tesla.List.ToList())
                 {
                     yield return Timing.WaitForSeconds(UnityEngine.Random.Range(120f,200f));
                     tesla.Trigger();
