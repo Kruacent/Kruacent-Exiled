@@ -18,22 +18,21 @@ namespace KE.Items.ItemEffects
 
         public override void Effect(UsedItemEventArgs ev)
         {
-            
+            OnExploding(ev.Player.Position);
         }
         public override void Effect(DroppingItemEventArgs ev)
         {
-            ev.Player.ItemEffectHint("No grandson don't leave me !");
+            OnExploding(ev.Player.Position);
         }
 
         public override void Effect(ExplodingGrenadeEventArgs ev)
         {
-            OnExploding(ev);
+            OnExploding(ev.Position);
         }
 
-        public void OnExploding(ExplodingGrenadeEventArgs ev)
+        public void OnExploding(Vector3 position)
         {
-            ev.IsAllowed = false;
-            Vector3 savedGrenadePosition = ev.Position;
+            Vector3 savedGrenadePosition = position;
             Scp244 scp244 = (Scp244)Item.Create(ItemType.SCP244a);
             Pickup pickup = null;
             scp244.Scale = new Vector3(0.01f, 0.01f, 0.01f);

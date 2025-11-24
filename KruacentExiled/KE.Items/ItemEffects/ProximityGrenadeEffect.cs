@@ -3,10 +3,8 @@ using Exiled.API.Enums;
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
-using KE.Items.Extensions;
 using KE.Items.Interface;
 using MEC;
-using System.Collections.Generic;
 using UnityEngine;
 using Exiled.API.Features;
 
@@ -19,31 +17,30 @@ namespace KE.Items.ItemEffects
 
         public override void Effect(UsedItemEventArgs ev)
         {
-            
+            OnExploding(ev.Player.Position);
         }
         public override void Effect(DroppingItemEventArgs ev)
         {
-            
+            OnExploding(ev.Player.Position);
         }
 
         public override void Effect(ExplodingGrenadeEventArgs ev)
         {
-            OnExploding(ev);
+            OnExploding(ev.Position);
         }
 
-        public void OnExploding(ExplodingGrenadeEventArgs ev)
+        public void OnExploding(Vector3 position)
         {
-            ev.IsAllowed = false;
             foreach (Player player in Player.List)
             {
-                if (Vector3.Distance(ev.Position, player.Position) <= Range)
+                if (Vector3.Distance(position, player.Position) <= Range)
                 {
                     var color = GetTeamColor(player);
                     var lineColor = new Color(color.red, color.green, color.blue);
-                    var direction = player.Position - ev.Position;
+                    var direction = player.Position - position;
                     var distance = direction.magnitude;
                     var scale = new Vector3(0.1f, distance * 0.5f, 0.1f);
-                    var laserPos = ev.Position + direction * 0.5f;
+                    var laserPos = position + direction * 0.5f;
                     var rotation = Quaternion.LookRotation(direction) * Quaternion.Euler(90, 0, 0);
                     var laser = Primitive.Create(PrimitiveType.Cylinder, PrimitiveFlags.Visible, laserPos, rotation.eulerAngles,
                         scale, true, lineColor);

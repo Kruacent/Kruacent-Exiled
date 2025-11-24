@@ -1,7 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
-using KE.Items.Extensions;
 using KE.Items.Interface;
 using MEC;
 using System.Collections.Generic;
@@ -19,33 +18,31 @@ namespace KE.Items.ItemEffects
 
         public override void Effect(UsedItemEventArgs ev)
         {
-            
+            OnExploding(ev.Player, ev.Player.Position);
         }
         public override void Effect(DroppingItemEventArgs ev)
         {
-            ev.Player.ItemEffectHint("No grandson don't leave me !");
+            OnExploding(ev.Player, ev.Player.Position);
         }
 
         public override void Effect(ExplodingGrenadeEventArgs ev)
         {
-            OnExploding(ev);
+            OnExploding(ev.Player, ev.Position);
         }
 
-        public void OnExploding(ExplodingGrenadeEventArgs ev)
+        public void OnExploding(Player thrownPlayer, Vector3 position)
         {
-            ev.IsAllowed = false;
-
             foreach (Player player in Player.List)
             {
-                if (Vector3.Distance(ev.Position, player.Position) <= this.Range)
+                if (Vector3.Distance(position, player.Position) <= this.Range)
                 {
                     Vector3 previousGravity = PlayerLab.Get(player.NetworkIdentity)!.Gravity;
                     _effectedPlayers[player] = previousGravity;
                     PlayerLab.Get(player.NetworkIdentity)!.Gravity = LowGravity;
                     Timing.CallDelayed(this.Duration, () =>
                     {
-                        PlayerLab.Get(ev.Player.NetworkIdentity)!.Gravity = _effectedPlayers[ev.Player];
-                        _effectedPlayers.Remove(ev.Player);
+                        PlayerLab.Get(thrownPlayer.NetworkIdentity)!.Gravity = _effectedPlayers[player];
+                        _effectedPlayers.Remove(thrownPlayer);
                     });
                 }
             }
