@@ -39,10 +39,8 @@ namespace KE.CustomRoles.CR.MTF
 
         public override HashSet<string> Abilities { get; } = new()
         {
-            "SelectPosition",
+            "SetPosition",
             "AirStrike"
         };
-
-
     }
 }

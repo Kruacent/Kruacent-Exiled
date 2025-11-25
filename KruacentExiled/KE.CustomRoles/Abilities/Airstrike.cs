@@ -19,7 +19,7 @@ namespace KE.CustomRoles.Abilities
 {
     public class Airstrike : KEAbilities
     {
-        public override string Name { get;  } = "Airstrike";
+        public override string Name { get;  } = "AirStrike";
         public override string PublicName { get;  } = "Airstrike";
 
         public override string Description { get;  } = "Don't overuse it or your co-op will not be happy (only works on Surface Zone)";
