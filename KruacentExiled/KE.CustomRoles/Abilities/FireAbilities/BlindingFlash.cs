@@ -13,7 +13,7 @@ namespace KE.CustomRoles.Abilities.FireAbilities
 
         public override float Cooldown { get; } = 30f;
 
-        public override int Cost => 50;
+        public override int Cost => 5;
 
 
 

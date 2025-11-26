@@ -20,7 +20,7 @@ namespace KE.CustomRoles.Abilities.FireAbilities
     {
         public override string Name { get; } = "Fireball";
         public override string PublicName { get; } = "Fireball";
-        public override int Cost => 10;
+        public override int Cost => 1;
 
         public override string Description { get; } = "I cast Fireball";
 
