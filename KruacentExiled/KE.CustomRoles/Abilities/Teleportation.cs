@@ -15,7 +15,7 @@ namespace KE.CustomRoles.Abilities
         public override string Description { get; } = $"Tu perds {Damage} HP/téléportation, ne peux pas être utilisé dans les ascenseurs";
 
 
-        public override float Cooldown { get; } = 120f;
+        public override float Cooldown { get; } = 130f;
         public static float Damage { get; set; } = 60;
 
         protected override bool AbilityUsed(Player player)
@@ -42,7 +42,13 @@ namespace KE.CustomRoles.Abilities
                 return false;
             }
 
-            player.Hurt(Damage, "You are dead.");
+            if (target.GetZone() != player.Zone.GetZone())
+            {
+                MainPlugin.ShowEffectHint(player, "target is not in the same zone as you.");
+                return;
+            }
+
+            player.Hurt(Damage, "You have drained your health.");
 
             if(UnityEngine.Random.Range(1, 101) < 5)
             {
