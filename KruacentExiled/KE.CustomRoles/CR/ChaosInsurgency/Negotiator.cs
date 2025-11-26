@@ -34,6 +34,11 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
         {
             Timing.CallDelayed(.1f, delegate
             {
+                player.AddItem(ItemType.KeycardChaosInsurgency);
+                player.AddItem(ItemType.GunAK);
+                player.AddItem(ItemType.Medkit);
+                player.AddItem(ItemType.Painkillers);
+                player.AddItem(ItemType.ArmorCombat);
                 player.AddItem(ItemType.Radio);
             });
         }
@@ -55,6 +60,7 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
         {
             if (!Check(ev.Player)) return;
             if (!ev.IsAllowed) return;
+            if (ev.Attacker is null) return;
 
             if(ev.Attacker.Role.Side == ev.Player.Role.Side)
             {

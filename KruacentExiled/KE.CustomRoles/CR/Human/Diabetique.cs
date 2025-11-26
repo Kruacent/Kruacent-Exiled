@@ -6,12 +6,13 @@ using Exiled.CustomRoles.API.Features;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
 using PlayerRoles;
+using System.Collections.Generic;
 using UnityEngine;
 using Utils.NonAllocLINQ;
 
 namespace KE.CustomRoles.CR.Human
 {
-    public class Diabetique : GlobalCustomRole, IColor
+    public class Diabetique : GlobalCustomRole, IColor, IHealable
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;
         public override string Description { get; set; } = "T'as mangé le crambleu au pomme de mael";
@@ -19,7 +20,7 @@ namespace KE.CustomRoles.CR.Human
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
-
+        public HashSet<ItemType> HealItem => [ItemType.SCP500];
         public Color32 Color => new(255, 255, 0,0);
 
         protected override void RoleAdded(Player player)

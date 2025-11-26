@@ -4,7 +4,7 @@ using Exiled.API.Features.Pickups.Projectiles;
 
 namespace KE.CustomRoles.Abilities.FireAbilities
 {
-    public class BlindingFlash : FireAbility
+    public class BlindingFlash : FireAbilityBase
     {
         public override string Name { get; } = "BlindingFlash";
         public override string PublicName { get; } = "Blinding Flash";

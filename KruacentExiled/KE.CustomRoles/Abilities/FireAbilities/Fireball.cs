@@ -16,7 +16,7 @@ using Light = Exiled.API.Features.Toys.Light;
 
 namespace KE.CustomRoles.Abilities.FireAbilities
 {
-    public class Fireball : FireAbility
+    public class Fireball : FireAbilityBase
     {
         public override string Name { get; } = "Fireball";
         public override string PublicName { get; } = "Fireball";

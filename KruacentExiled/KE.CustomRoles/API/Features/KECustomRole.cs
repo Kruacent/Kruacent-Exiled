@@ -11,6 +11,7 @@ using Exiled.Events.EventArgs.Player;
 using InventorySystem.Configs;
 using KE.CustomRoles.API.Interfaces;
 using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Displays.DisplayMeow.Placements;
 using MEC;
 using PlayerRoles;
 using System;
@@ -215,9 +216,37 @@ namespace KE.CustomRoles.API.Features
 
 
             ShowMessage(player2);
+            ContinuousShow(player2);
             RoleAdded(player2);
             player2.UniqueRole = Name;
             player2.TryAddCustomRoleFriendlyFire(Name, CustomRoleFFMultiplier);
+        }
+
+        private void ContinuousShow(Player player)
+        {
+            DisplayHandler.Instance.CreateAuto(player, arg => CurrentRole(player), CurrentCustomRolePosition.HintPlacement);
+        }
+
+
+        private static HintPosition CurrentCustomRolePosition = new CurrentCustomRolePosition();
+
+        public static string CurrentRole(Player player)
+        {
+            StringBuilder sb = StringBuilderPool.Pool.Get();
+            if (HasCustomRole(player))
+            {
+                sb.AppendLine("Current Role : ");
+                sb.AppendLine();
+                sb.Append("<color=#");
+                sb.Append(ColorUtility.ToHtmlStringRGB(player.Role.Color));
+                sb.Append(">");
+                sb.Append(Get(player).FirstOrDefault()?.PublicName);
+                sb.Append("</color>");
+            }
+
+
+
+            return StringBuilderPool.Pool.ToStringReturn(sb);
         }
 
 

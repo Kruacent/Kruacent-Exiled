@@ -1,14 +1,21 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Extensions;
+using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
 using Exiled.Events.EventArgs.Player;
+using HintServiceMeow.Core.Enum;
+using HintServiceMeow.Core.Extension;
+using HintServiceMeow.Core.Models.Hints;
+using HintServiceMeow.Core.Utilities;
 using KE.CustomRoles.API.Features;
 using KE.Utils.API.Interfaces;
 using KE.Utils.API.Settings;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using TMPro;
 using UserSettings.ServerSpecific;
 using static UnityEngine.Rendering.RayTracingAccelerationStructure;
+using Hint = HintServiceMeow.Core.Models.Hints.Hint;
 
 namespace KE.CustomRoles.Settings
 {
@@ -23,6 +30,12 @@ namespace KE.CustomRoles.Settings
         private readonly int _idSelect = 151;
         private readonly int _idArrow = 152;
         private readonly int _idTimeAbilityDesc = 153;
+        private int _idTestHintslidery = 154;
+        private int _idTestHintsliderx = 155;
+        private int _idTestHintslidertime = 156;
+        private int _idTestHintalign = 157;
+        private int _idTestHintspawn = 158;
+        private int _idTestHinttext = 159;
 
 
 
@@ -56,10 +69,102 @@ namespace KE.CustomRoles.Settings
             }
             baseSettings.Add(new SSPlaintextSetting(_idArrow, "Personalize the arrow next to the selected ability", baseArrow, 16, TMP_InputField.ContentType.Standard, string.Empty, 0));
 
+            string[] options = ["left", "center", "right"];
+
+            /*
+            baseSettings.AddRange
+            (
+                [
+                    new SSSliderSetting(_idTestHintsliderx,"x",-2000,2000),
+                    new SSSliderSetting(_idTestHintslidery,"y",0,2000),
+                    new SSSliderSetting(_idTestHintslidertime,"time",0,10),
+                    new SSDropdownSetting(_idTestHintalign,"alignment",options),
+                    new SSButton(_idTestHintspawn,"spawn","spawn"),
+                    new SSPlaintextSetting(_idTestHinttext,"text")
+                ]
+            );
+            */
+
+
 
             page = new("Custom roles", baseSettings);
             
         }
+
+
+        float xvalue = 0;
+        float yvalue = 0;
+        float timevalue = 5;
+        HintAlignment HintAlignment = HintAlignment.Center;
+        string text = "TEST";
+
+        public void CreateHint(Player player, ServerSpecificSettingBase setting)
+        {
+            if (SettingBase.TryGetSetting<SliderSetting>(player, _idTestHintslidery, out var slidery))
+            {
+                yvalue = slidery.SliderValue;
+            }
+
+            if (SettingBase.TryGetSetting<SliderSetting>(player, _idTestHintsliderx, out var sliderx))
+            {
+                xvalue = sliderx.SliderValue;
+            }
+
+            if (SettingBase.TryGetSetting<SliderSetting>(player, _idTestHintslidertime, out var slidertime))
+            {
+                timevalue = slidertime.SliderValue;
+            }
+
+            if (SettingBase.TryGetSetting<UserTextInputSetting>(player, _idTestHinttext, out var textsetting))
+            {
+                text = textsetting.Text;
+            }
+
+            if (SettingBase.TryGetSetting<DropdownSetting>(player, _idTestHintalign, out var dropdown))
+            {
+
+                int selected = dropdown.SelectedIndex;
+                if (selected == 0)
+                {
+                    HintAlignment = HintAlignment.Left;
+                }
+                if (selected == 1)
+                {
+                    HintAlignment = HintAlignment.Center;
+                }
+                if (selected == 2)
+                {
+                    HintAlignment = HintAlignment.Right;
+                }
+            }
+
+            if (SettingBase.TryGetSetting<ButtonSetting>(player, _idTestHintspawn, out var button))
+            {
+                if(setting == button.Base)
+                {
+                    PlayerDisplay display = PlayerDisplay.Get(player);
+                    Log.Debug($"creating hint at {xvalue},{yvalue} for {timevalue}");
+                    var hint = new Hint()
+                    {
+                        XCoordinate = xvalue,
+                        YCoordinate = yvalue,
+                        Alignment = HintAlignment,
+                        Text = text
+                    };
+                    display.ClearHint();
+                    display.AddHint(hint);
+                    hint.HideAfter(timevalue);
+
+                }
+
+
+
+            }
+
+
+        }
+
+
 
 
         public void SubscribeEvents()
@@ -110,7 +215,7 @@ namespace KE.CustomRoles.Settings
             {
                 KEAbilities.UseSelected(player);
             }
-            
+            //CreateHint(player, settingBase);
         }
 
         private Dictionary<Player, int> playerPos = new();

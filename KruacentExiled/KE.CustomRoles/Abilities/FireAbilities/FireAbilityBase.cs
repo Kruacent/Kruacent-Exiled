@@ -1,0 +1,68 @@
+﻿using Exiled.API.Extensions;
+using Exiled.API.Features;
+using KE.CustomRoles.API.Features;
+using KE.Utils.API.CustomStats;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace KE.CustomRoles.Abilities.FireAbilities
+{
+    public abstract class FireAbilityBase : KEAbilities
+    {        
+        public abstract int Cost { get; }
+        protected sealed override bool AbilityUsed(Player player)
+        {
+            bool result = CanLaunchAbility(player);
+            Log.Debug("using fire");
+            if (result)
+            {
+                result = LaunchedAbility(player);
+            }
+
+            
+
+
+            return result;
+        }
+
+        protected virtual bool LaunchedAbility(Player player)
+        {
+            return true;
+        }
+
+        public bool CanLaunchAbility(Player player)
+        {
+
+            if(player.GameObject.TryGetComponent<CustomPlayerStat>(out var stat))
+            {
+                if (stat.TryGetModule<FireStat>(out var firestat))
+                {
+                    Log.Debug($"cur = {firestat.CurValue} / {Cost}");
+                    if (firestat.CurValue > Cost)
+                    {
+                        Log.Debug("enough");
+                        firestat.AddAmount(-Cost);
+                        return true;
+                    }
+                    else
+                    {
+                        Log.Debug("not enough");
+                        return false;
+                    }
+                }
+
+            }
+
+
+            Log.Debug("no fire stat");
+            return true;
+
+        }
+
+
+
+    }
+}

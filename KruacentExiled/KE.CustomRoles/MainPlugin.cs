@@ -4,8 +4,10 @@ using Exiled.API.Interfaces;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Server;
 using HarmonyLib;
+using KE.CustomRoles.Abilities.FireAbilities;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.Settings;
+using KE.Utils.API.CustomStats;
 using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
 using Microsoft.Win32;
@@ -41,6 +43,8 @@ namespace KE.CustomRoles
             _settingHandler = new();
             Utils.API.Settings.SettingHandler.Instance.SubscribeEvents();
 
+            CustomPlayerStat.AddModule<FireStat>();
+            CustomStatsEvents.SubscribeEvents();
 
             Harmony = new(Name);
             Harmony.PatchAll();
@@ -59,6 +63,7 @@ namespace KE.CustomRoles
 
             KEAbilities.Unregister();
             UnsubscribeEvents();
+            CustomStatsEvents.UnsubscribeEvents();
             Utils.API.Settings.SettingHandler.Instance.UnsubscribeEvents();
             _settingHandler = null;
             Instance = null;

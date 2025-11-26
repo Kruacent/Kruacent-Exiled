@@ -4,7 +4,9 @@ using KE.CustomRoles.Abilities.FireAbilities;
 using KE.CustomRoles.Settings;
 using KE.Utils.API;
 using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Displays.DisplayMeow.Placements;
 using MEC;
+using PlayerRoles.FirstPersonControl.Thirdperson;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,7 +60,6 @@ namespace KE.CustomRoles.API.Features
                 return;
             }
 
-            StartLoop();
             TypeToAbility.Add(GetType(), this);
             NameToAbility.Add(Name, this);
             InternalSubscribeEvent();
@@ -175,6 +176,9 @@ namespace KE.CustomRoles.API.Features
                 }
                 PlayersAbility[player].Add(this);
 
+                DisplayHandler.Instance.CreateAuto(player, arg => UpdateGUI(player), AbilityPosition.HintPlacement);
+
+
                 AbilityAdded(player);
             }
             
@@ -267,7 +271,6 @@ namespace KE.CustomRoles.API.Features
                 ability.Selected.Remove(player);
             }
 
-            UpdateGUI(player);
         }
 
         public static void SelectFirstAbility(Player player)
@@ -276,7 +279,6 @@ namespace KE.CustomRoles.API.Features
             {
                 list[0].SelectAbility(player);
 
-                UpdateGUI(player);
             }
             
         }
@@ -407,33 +409,9 @@ namespace KE.CustomRoles.API.Features
         #region gui
 
 
-        public const float UpdateTime = 1;
         public const string ReadyText = "[READY]";
-        private static bool flag = false;
-        private static void StartLoop()
-        {
-            if (!flag)
-            {
-                Timing.RunCoroutine(Loop());
-                flag = true;
-            }
-        }
-        private static IEnumerator<float> Loop()
-        {
-            while (true)
-            {
-                UpdateAllGUI();
-                yield return Timing.WaitForSeconds(UpdateTime);
-            }
-        }
-        public static void UpdateAllGUI()
-        {
-            foreach(Player player in PlayersAbility.Keys)
-            {
-                UpdateGUI(player);
-            }
-        }
-        public static void UpdateGUI(Player player)
+        private static AbilitiesPosition AbilityPosition = new();
+        public static string UpdateGUI(Player player)
         {
             StringBuilder builder = StringBuilderPool.Pool.Get();
             
@@ -450,7 +428,7 @@ namespace KE.CustomRoles.API.Features
                 builder.Append(" ");
                 
 
-                if(ability is FireAbility fire)
+                if(ability is FireAbilityBase fire)
                 {
                     builder.Append("(");
                     builder.Append(fire.Cost);
@@ -487,7 +465,8 @@ namespace KE.CustomRoles.API.Features
 
             string msg = builder.ToString();
             StringBuilderPool.Pool.Return(builder);
-            DisplayHandler.Instance.AddHint(MainPlugin.Abilities, player, msg, UpdateTime);
+            return msg;
+            //DisplayHandler.Instance.AddHint(MainPlugin.Abilities, player, msg, UpdateTime);
         }
 
 

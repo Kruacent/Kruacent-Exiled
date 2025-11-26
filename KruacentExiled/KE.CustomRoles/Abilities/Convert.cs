@@ -1,7 +1,9 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
+using Exiled.API.Features.Toys;
 using Exiled.CustomRoles.API.Features;
 using KE.CustomRoles.API.Features;
+using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -26,7 +28,11 @@ namespace KE.CustomRoles.Abilities
 
         protected override bool AbilityUsed(Player player)
         {
+
             if (!Physics.Linecast(player.Position, player.Position + player.Rotation.eulerAngles * MaxDistance, out RaycastHit hit)) return false;
+
+
+
 
             Player playerHit = Player.Get(hit.collider);
 

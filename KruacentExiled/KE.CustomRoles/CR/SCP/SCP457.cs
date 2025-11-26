@@ -55,9 +55,6 @@ namespace KE.CustomRoles.CR.SCP
             _inside.Add(player, null);
             _handles.Add(player, new());
 
-            FireStat firestat = player.ReferenceHub.gameObject.AddComponent<FireStat>();
-            firestat.Init();
-
             _handles[player].Add(Timing.RunCoroutine(InsideLight(player)));
             _handles[player].Add(Timing.RunCoroutine(PassiveDamage(player)));
 
@@ -97,7 +94,7 @@ namespace KE.CustomRoles.CR.SCP
                         {
                             float damage = -(hitinfo.distance / 3) + 10;
                             player.EnableEffect(Exiled.API.Enums.EffectType.Burned, DamageRefreshRate, true);
-                            player.Hurt(damage, Fireball.BallDamage._deathReason);
+                            player.Hurt(damage, Fireball.BallDamage.RagdollInspectText);
                             scp.CustomHumeShieldStat.AddAmount(damage);
                         }
                         
@@ -131,8 +128,6 @@ namespace KE.CustomRoles.CR.SCP
                 }
                 _handles.Remove(player);
             }
-            FireStat firestat = player.ReferenceHub.gameObject.GetComponent<FireStat>();
-            firestat.Destroy();
             
         }
 

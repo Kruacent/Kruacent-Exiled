@@ -1,18 +1,12 @@
 ﻿using Exiled.API.Features;
 using KE.CustomRoles.API.Features;
-using MEC;
-using PlayerStatsSystem;
-using System;
-using System.Collections.Generic;
+using KE.Utils.API.CustomStats;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace KE.CustomRoles.Abilities.FireAbilities
 {
-    public class FireStat : CustomStatBase
+    public class FireStat : CustomStatBar, ICustomRoleStat
     {
 
         public float BaseCapacity => MaxValue;
@@ -21,7 +15,7 @@ namespace KE.CustomRoles.Abilities.FireAbilities
 
         public override float MinValue => 0;
 
-        private float maxvalue = 100;
+        private float maxvalue = 10;
         public override float MaxValue
         {
             get
@@ -34,45 +28,51 @@ namespace KE.CustomRoles.Abilities.FireAbilities
             }
         }
 
-        public override string Name => "Fire";
+        public float FireRegen { get; set; } = .3f;
 
-        public float FireRegen { get; set; } = 3;
+        public override Color Color => Color.red;
 
+        public string CustomRole => "SCP106_SCP457";
 
-        private float stoptime = 120;
-        private float currentstoptime = 0;
-
-
-        public override void AddAmount(float amount)
+        public override void ClassChanged()
         {
-            currentstoptime = stoptime;
-            base.AddAmount(amount);
+            maxvalue = 10f;
+            CurValue = 0f;
         }
 
-        public override void FixedUpdate()
+        public override void Init(ReferenceHub ply)
         {
+            base.Init(ply);
+            StatBarPosition = new Utils.API.Displays.DisplayMeow.Placements.SCP106StatBarPosition();
+        }
+        public override string GetRaw()
+        {
+            Player player =Player.Get(Hub);
+            
+            if(!KECustomRole.Get(player).Any(role => KECustomRole.Get(CustomRole) == role))
+            {
+                return string.Empty;
+            }
 
-            if (currentstoptime <= 0)
+
+            return base.GetRaw();
+        }
+
+        public override void Update()
+        {
+            float num = FireRegen * Time.deltaTime;
+            if (num > 0f)
             {
-                
-                float num = FireRegen * Time.deltaTime;
-                if (num > 0f)
+                if (CurValue < MaxValue)
                 {
-                    if (CurValue < MaxValue)
-                    {
-                        CurValue = Mathf.MoveTowards(CurValue, MaxValue, num);
-                    }
-                }
-                else if (CurValue > 0f)
-                {
-                    CurValue += num;
+                    CurValue = Mathf.MoveTowards(CurValue, MaxValue, num);
                 }
             }
-            else
+            else if (CurValue > 0f)
             {
-                currentstoptime--;
+                CurValue += num;
             }
-            base.FixedUpdate();
+            base.Update();
         }
         
     }
