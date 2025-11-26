@@ -53,7 +53,7 @@ namespace KE.CustomRoles.CR.Human
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(300f, 600f));
                 p.EnableEffect(EffectType.Flashed,1,5);
                 p.EnableEffect(EffectType.Invisible,1,6);
-                p.Teleport(Room.Random(p.Zone));
+                p.Teleport(Utils.Extensions.RoomExtensions.RandomSafeRoom(p.Zone));
             }
         }
 

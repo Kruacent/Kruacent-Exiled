@@ -45,7 +45,7 @@ namespace KE.CustomRoles.Abilities
             if (target.GetZone() != player.Zone.GetZone())
             {
                 MainPlugin.ShowEffectHint(player, "target is not in the same zone as you.");
-                return;
+                return false;
             }
 
             player.Hurt(Damage, "You have drained your health.");
