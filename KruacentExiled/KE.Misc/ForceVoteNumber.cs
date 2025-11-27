@@ -44,7 +44,7 @@ namespace KE.Misc
             MainPlugin.Instance.vote.minvote = result;
 
 
-            response = "vote set at " + MainPlugin.Instance.vote.minvote + "players";
+            response = "vote set at " + MainPlugin.Instance.vote.minvote + " players";
             return true;
         }
     }

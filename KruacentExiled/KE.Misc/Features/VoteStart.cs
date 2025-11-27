@@ -21,6 +21,7 @@ namespace KE.Misc.Features
         {
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
+
             minvote = MainPlugin.Instance.Config.MinPlayerVote;
 
             base.SubscribeEvents();
@@ -41,13 +42,11 @@ namespace KE.Misc.Features
             if (!Round.IsLobby) return;
             if (voteCasted) return;
 
-            if (Voted.Add(ev.Player))
+            Voted.Add(ev.Player);
+            if (Voted.Count >= minvote)
             {
-                if(Voted.Count >= minvote)
-                {
-                    Round.IsLobbyLocked = false;
-                    voteCasted = true;
-                }
+                Round.IsLobbyLocked = false;
+                voteCasted = true;
             }
         }
         private void OnWaitingForPlayers()

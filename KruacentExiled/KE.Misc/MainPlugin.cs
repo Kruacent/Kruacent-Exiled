@@ -127,13 +127,24 @@ namespace KE.Misc
         private void NoeDeath(CassieQueuingScpTerminationEventArgs ev)
         {
             Player player = Player.Get(ev.Player);
-            if(!player.UserId.Equals("76561199066936074@steam")
-                || !player.IsScp
-                || player.Role != RoleTypeId.Scp0492)
+            if (!player.UserId.Equals("76561199066936074@steam"))
             {
-                ev.IsAllowed = false;
-                Cassie.MessageTranslated("SCP 69 420 has been contained successfully", "SCP-69420-NOE has been contained successfully");
+                return;
             }
+
+
+            if (!player.IsScp)
+            {
+                return;
+            }
+
+            if(player.Role == RoleTypeId.Scp0492)
+            {
+                return;
+            }
+
+            ev.IsAllowed = false;
+            Cassie.MessageTranslated("SCP 69 420 has been contained successfully", "SCP-69420-NOE has been contained successfully");
         }
 
         
