@@ -1,21 +1,13 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
-using System.Collections.Generic;
 using ServerHandle = Exiled.Events.Handlers.Server;
-using MEC;
-using Exiled.API.Features.Doors;
-using System.Linq;
 using PlayerRoles;
-using Exiled.Events.EventArgs.Player;
 using System;
 using KE.Misc.Features;
 using KE.Misc.Handlers;
 using Exiled.CustomRoles.API.Features;
-using KE.Misc.Features.CR;
-using LightContainmentZoneDecontamination;
 using KE.Misc.Features.GamblingCoin;
 using HarmonyLib;
-using Exiled.Events.EventArgs.Cassie;
 using LabApi.Events.Arguments.ServerEvents;
 using KE.Misc.Features.VoteStart;
 
@@ -83,7 +75,6 @@ namespace KE.Misc
             Exiled.Events.Handlers.Server.RoundStarted += AutoNukeAnnoucement.OnRoundStarted;
             ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;
             LabApi.Events.Handlers.ServerEvents.CassieQueuingScpTermination += NoeDeath;
-            CustomRole.RegisterRoles(false, null, true, this.Assembly);
             
         }
 
@@ -103,7 +94,6 @@ namespace KE.Misc
             ClassDDoor.UnsubscribeEvents();
             harmony.UnpatchAll(harmony.Id);
 
-            CustomRole.UnregisterRoles([typeof(Scp035)]);
 
             _914 = null;
             Candy = null;

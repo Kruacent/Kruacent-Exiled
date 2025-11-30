@@ -1,13 +1,7 @@
 ﻿using Exiled.API.Enums;
-using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.CustomItems.API.Features;
-using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Server;
 using KE.CustomRoles.API.Features;
-using KE.Misc.Features.CR;
-using KE.Utils.API.Interfaces;
-using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -177,12 +171,12 @@ namespace KE.Misc.Features
 
         public void EndingRound(EndingRoundEventArgs ev)
         {
-            if (Scp035._trackedPlayers.Count <= 0) return;
+            //if (Scp035._trackedPlayers.Count <= 0) return;
 
-            if (ev.ClassList.mtf_and_guards != 0 || ev.ClassList.scientists != 0) ev.IsAllowed = false;
-            else if (ev.ClassList.class_ds != 0 || ev.ClassList.chaos_insurgents != 0) ev.IsAllowed = false;
-            else if (ev.ClassList.scps_except_zombies + ev.ClassList.zombies > 0) ev.IsAllowed = true;
-            else ev.IsAllowed = true;
+            //if (ev.ClassList.mtf_and_guards != 0 || ev.ClassList.scientists != 0) ev.IsAllowed = false;
+            //else if (ev.ClassList.class_ds != 0 || ev.ClassList.chaos_insurgents != 0) ev.IsAllowed = false;
+            //else if (ev.ClassList.scps_except_zombies + ev.ClassList.zombies > 0) ev.IsAllowed = true;
+            //else ev.IsAllowed = true;
         }
     }
 
