@@ -57,7 +57,7 @@ namespace KE.CustomRoles.API.Features
         /// <summary>
         /// the number of people who had this role in a round
         /// </summary>
-        public virtual int CurrentNumberOfSpawn { get; set; } = 1;
+        public int CurrentNumberOfSpawn { get; set; } = 0;
 
         /// <summary>
         /// <see cref="KEAbilities.Name"/>

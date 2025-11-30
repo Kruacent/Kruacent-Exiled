@@ -28,7 +28,7 @@ namespace KE.CustomRoles.Abilities
 
         protected override bool AbilityUsed(Player player)
         {
-            if (!Physics.Raycast(player.Position, player.Rotation.eulerAngles, out RaycastHit hit)) return false;
+            if (!Physics.Raycast(player.Position+ player.CameraTransform.rotation *Vector3.forward, player.Rotation.eulerAngles, out RaycastHit hit)) return false;
 
 
             Player playerHit = Player.Get(hit.collider);

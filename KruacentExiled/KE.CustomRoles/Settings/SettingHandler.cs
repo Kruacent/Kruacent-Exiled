@@ -59,50 +59,40 @@ namespace KE.CustomRoles.Settings
                 new KeybindSetting(_idUp, "Select up", UnityEngine.KeyCode.None),
                 new KeybindSetting(_idDown, "Select down", UnityEngine.KeyCode.None),
                 new KeybindSetting(_idSelect, "Use selected ability", UnityEngine.KeyCode.None),
+                SettingBase.Create(new SSPlaintextSetting(_idArrow, "Personalize the arrow next to the selected ability", baseArrow, 16, TMP_InputField.ContentType.Standard, string.Empty, 0))
             };
 
-            List<ServerSpecificSettingBase> baseSettings = new();
 
-
-
-            foreach (SettingBase setting in settings)
-            {
-                baseSettings.Add(setting.Base);
-            }
-            baseSettings.Add(new SSPlaintextSetting(_idArrow, "Personalize the arrow next to the selected ability", baseArrow, 16, TMP_InputField.ContentType.Standard, string.Empty, 0));
 
             string[] options = ["left", "center", "right"];
 
-
             if (MainPlugin.Instance.Config.Debug)
             {
-                List<ServerSpecificSettingBase> hintscreator = new()
+                List<SettingBase>  hintscreator = new()
                 {
-                    new SSSliderSetting(_idTestHintsliderx,"x",-2000,2000),
-                    new SSSliderSetting(_idTestHintslidery,"y",0,2000),
-                    new SSSliderSetting(_idTestHintslidertime,"time",0,10),
-                    new SSDropdownSetting(_idTestHintalign,"alignment",options),
-                    new SSButton(_idTestHintspawn,"spawn","spawn"),
-                    new SSPlaintextSetting(_idTestHinttext,"text")
+                    new SliderSetting(_idTestHintsliderx,"x",-2000,2000,0),
+                    new SliderSetting(_idTestHintslidery,"y",0,2000,0),
+                    new SliderSetting(_idTestHintslidertime,"time",0,10,5),
+                    new DropdownSetting(_idTestHintalign,"alignment",options),
+                    new ButtonSetting(_idTestHintspawn,"spawn","spawn"),
+                    SettingBase.Create(new SSPlaintextSetting(_idTestHinttext,"text")),
                 };
 
 
 
-                //hintpage = new("hint creator", hintscreator);
+                settings.AddRange(hintscreator);
+                created = true;
+
             }
 
 
 
-
-            //page = new("Custom roles", baseSettings);
-
-            ServerSpecificSettingsSync.DefinedSettings = new List<ServerSpecificSettingBase>(baseSettings).ToArray();
-            ServerSpecificSettingsSync.SendToAll();
+            SettingBase.Register(settings);
 
             
         }
 
-
+        private bool created = false;
         float xvalue = 0;
         float yvalue = 0;
         float timevalue = 5;
@@ -180,11 +170,6 @@ namespace KE.CustomRoles.Settings
 
         public void SubscribeEvents()
         {
-            //Utils.API.Settings.SettingHandler.Instance.AddPages(page);
-            if(hintpage is not null)
-            {
-                Utils.API.Settings.SettingHandler.Instance.AddPages(hintpage);
-            }
             
             ServerSpecificSettingsSync.ServerOnSettingValueReceived += SafeOnSettingValueReceived;
             LabApi.Events.Handlers.PlayerEvents.Joined += AddPlayer;
@@ -236,10 +221,11 @@ namespace KE.CustomRoles.Settings
             {
                 KEAbilities.UseSelected(player);
             }
-            if(hintpage is not null)
+            if (created)
             {
                 CreateHint(player, settingBase);
             }
+            
             
         }
 
