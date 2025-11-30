@@ -33,6 +33,7 @@ namespace KE.Items.API.Core.Settings
         {
             _settings =
             [
+                new HeaderSetting(_idHeader,"Custom Items",padding:true),
                 new TwoButtonsSetting(_idDesc,"Descriptions","Disabled","Enabled",true,"hide/show the description of the item and its upgrade chances "),
                 new TwoButtonsSetting(_idPrefix,"Pickup/Select prefixes","Disabled","Enabled",false,"show/hide the whole sentence for the picking or selecting of the item, if hidden it will show a (P) if pickup or a (I) if in inventory before the name of the item "),
                 new SliderSetting(_idTimeCustomItem,"Time shown",0,30,10),
@@ -48,7 +49,9 @@ namespace KE.Items.API.Core.Settings
                 settings.Add(setting.Base);
             }
 
-            page = new("Custom Items", settings);
+            //page = new("Custom Items", settings);
+
+            SettingBase.Register(settings: _settings);
 
         }
 
@@ -56,7 +59,7 @@ namespace KE.Items.API.Core.Settings
 
         public void SubscribeEvents()
         {
-            Utils.API.Settings.SettingHandler.Instance.AddPages(page);
+            //Utils.API.Settings.SettingHandler.Instance.AddPages(page);
         }
 
         public void UnsubscribeEvents()
