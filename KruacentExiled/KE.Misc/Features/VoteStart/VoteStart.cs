@@ -22,16 +22,14 @@ namespace KE.Misc.Features.VoteStart
 
         public HashSet<Player> Voted = new();
         private bool voteCasted = false;
-        private StringBuilder sb = null;
         public override void SubscribeEvents()
         {
-            sb = StringBuilderPool.Pool.Get();
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
             Exiled.Events.Handlers.Player.Joined += OnJoined;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
 
-            minvote = MainPlugin.Instance.Config.MinPlayerVote;
+            Init();
 
             base.SubscribeEvents();
         }
@@ -43,12 +41,6 @@ namespace KE.Misc.Features.VoteStart
             Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
             Exiled.Events.Handlers.Player.Joined -= OnJoined;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
-
-            if(sb is not null)
-            {
-                StringBuilderPool.Pool.Return(sb);
-                sb = null;
-            }
 
             base.UnsubscribeEvents();
         }
@@ -63,20 +55,29 @@ namespace KE.Misc.Features.VoteStart
             Voted.Add(ev.Player);
             if (Voted.Count >= minvote)
             {
+                Log.Info("starting the round");
                 Round.IsLobbyLocked = false;
                 voteCasted = true;
             }
         }
         private void OnWaitingForPlayers()
         {
+            Init();
             Round.IsLobbyLocked = true;
+        }
+
+        private void Init()
+        {
+            Voted.Clear();
+            voteCasted = false;
+            minvote = MainPlugin.Instance.Config.MinPlayerVote;
         }
 
         private void OnJoined(JoinedEventArgs ev)
         {
             Player player = ev.Player;
 
-            Timing.CallDelayed(.5f, () =>
+            Timing.CallDelayed(1f, () =>
             {
                 if (player is not null && Round.IsLobby)
                 {
@@ -90,6 +91,8 @@ namespace KE.Misc.Features.VoteStart
         private string GetPlayers()
         {
             if (!Round.IsLobby) return string.Empty;
+
+            StringBuilder sb = StringBuilderPool.Pool.Get();
             sb.Clear();
 
             sb.Append("Players who voted (");
@@ -105,7 +108,7 @@ namespace KE.Misc.Features.VoteStart
                 sb.Append(" ");
             }
 
-            return sb.ToString();
+            return StringBuilderPool.Pool.ToStringReturn(sb);
 
         }
         private void OnRoundStarted()
@@ -119,11 +122,6 @@ namespace KE.Misc.Features.VoteStart
                 }
             }
 
-            if (sb is not null)
-            {
-                StringBuilderPool.Pool.Return(sb);
-                sb = null;
-            }
         }
 
 
