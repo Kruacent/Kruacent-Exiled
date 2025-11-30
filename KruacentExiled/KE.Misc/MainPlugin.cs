@@ -17,6 +17,7 @@ using KE.Misc.Features.GamblingCoin;
 using HarmonyLib;
 using Exiled.Events.EventArgs.Cassie;
 using LabApi.Events.Arguments.ServerEvents;
+using KE.Misc.Features.VoteStart;
 
 namespace KE.Misc
 {

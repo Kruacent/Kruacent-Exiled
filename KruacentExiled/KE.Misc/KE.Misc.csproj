@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ExMod.Exiled" Version="9.10.1" />
+    <PackageReference Include="ExMod.Exiled" Version="9.10.2" />
     
   </ItemGroup>
 
@@ -16,6 +16,7 @@
     <Reference Include="System.ComponentModel.Composition" HintPath="$(EXILED_REFERENCES)\System.ComponentModel.Composition.dll" />
     <Reference Include="UnityEngine.CoreModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll" />
     <Reference Include="UnityEngine" HintPath="$(EXILED_REFERENCES)\UnityEngine.dll" />
+	  <Reference Include="HintServiceMeow" HintPath="$(EXILED_REFERENCES)\HintServiceMeow-Exiled.dll" />
     <Reference Include="UnityEngine.PhysicsModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll" />
     <Reference Include="Mirror" HintPath="$(EXILED_REFERENCES)\Mirror.dll" />
     <Reference Include="KE.CustomRoles" HintPath="$(EXILED_DEV_REFERENCES)\Plugins\KE.CustomRoles.dll" />
