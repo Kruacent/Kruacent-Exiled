@@ -23,6 +23,7 @@ namespace KE.CustomRoles.Settings
     internal class SettingHandler : IUsingEvents
     {
         private readonly int _idHeader = 148;
+        
         private readonly int _idTimeCustomRole = 144;
         private readonly int _idDesc = 143;
         private readonly int _idMode = 145;
@@ -37,6 +38,7 @@ namespace KE.CustomRoles.Settings
         private int _idTestHintalign = 157;
         private int _idTestHintspawn = 158;
         private int _idTestHinttext = 159;
+        private readonly int _idHeaderTestHint = 160;
 
 
 
@@ -53,6 +55,8 @@ namespace KE.CustomRoles.Settings
             Instance = this;
             settings = new List<SettingBase>()
             {
+                new HeaderSetting(_idHeader,"Custom Roles",padding:true),
+                
                 new TwoButtonsSetting(_idDesc,"Descriptions","Disabled","Enabled",true,"hide/show the description the Custom Role "),
                 new SliderSetting(_idTimeCustomRole,"Time shown",0,30,20),
                 new SliderSetting(_idTimeAbilityDesc,"Ability Description time shown",0,30,20),
@@ -70,6 +74,7 @@ namespace KE.CustomRoles.Settings
             {
                 List<SettingBase>  hintscreator = new()
                 {
+                    new HeaderSetting(_idHeaderTestHint,"Hint creator",padding:true),
                     new SliderSetting(_idTestHintsliderx,"x",-2000,2000,0),
                     new SliderSetting(_idTestHintslidery,"y",0,2000,0),
                     new SliderSetting(_idTestHintslidertime,"time",0,10,5),
