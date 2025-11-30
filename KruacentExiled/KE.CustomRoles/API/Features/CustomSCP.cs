@@ -57,5 +57,10 @@ namespace KE.CustomRoles.API.Features
             return (int) setting.SliderValue;
         }
 
+        public override bool IsAvailable(Player player)
+        {
+            return false;
+        }
+
     }
 }
