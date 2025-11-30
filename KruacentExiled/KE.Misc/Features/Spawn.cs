@@ -2,6 +2,7 @@
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Server;
 using KE.CustomRoles.API.Features;
+using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -58,8 +59,11 @@ namespace KE.Misc.Features
 
             string roleScp = ChooseRandomRole(chancescp);
             Log.Debug($"Scp ({player.Nickname}) is {roleScp} previous : {player.Role.Type}");
-
-            SetRoleWithId(player, roleScp);
+            Timing.CallDelayed(1f, delegate
+            {
+                SetRoleWithId(player, roleScp);
+            });
+            
             /*
             if (config.Scp035Enabled && roleScp == RoleTypeId.Scp079)
             {
@@ -140,18 +144,20 @@ namespace KE.Misc.Features
 
             if (baseRole.ContainsKey(name))
             {
-                player.Role.Set(baseRole[name], SpawnReason.RoundStart);
+                player.Role.Set(baseRole[name]);
+                Log.Info("vanilla scp");
             }
             else
             {
                 if (SelectableCustomSCPs.ContainsKey(name))
                 {
                     SelectableCustomSCPs[name].AddRole(player);
+                    Log.Info("custom scp");
+                    return;
                 }
                 
             }
 
-            Log.Error("scp not found");
 
         }
 
