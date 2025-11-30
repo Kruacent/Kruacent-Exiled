@@ -10,12 +10,11 @@ namespace KE.CustomRoles.Abilities.FireAbilities
     {
 
         public float BaseCapacity => MaxValue;
-
         public override float CurValue { get; set; }
 
         public override float MinValue => 0;
 
-        private float maxvalue = 10;
+        private float maxvalue = 100;
         public override float MaxValue
         {
             get
@@ -28,15 +27,23 @@ namespace KE.CustomRoles.Abilities.FireAbilities
             }
         }
 
-        public float FireRegen { get; set; } = .3f;
+        public float FireRegen { get; set; } = 3f;
 
-        public override Color Color => Color.red;
+        public override Color ColorBar => new Color32(252, 186, 3,byte.MaxValue);
+        public override Color ColorText => new Color32(255, 255, 255, byte.MaxValue);
 
         public string CustomRole => "SCP106_SCP457";
 
+        public override int Width => 80;
+
+        public override char Segment => '|';
+
+
+
+
         public override void ClassChanged()
         {
-            maxvalue = 10f;
+            maxvalue = 100f;
             CurValue = 0f;
         }
 
@@ -44,18 +51,18 @@ namespace KE.CustomRoles.Abilities.FireAbilities
         {
             base.Init(ply);
             StatBarPosition = new Utils.API.Displays.DisplayMeow.Placements.SCP106StatBarPosition();
+
         }
-        public override string GetRaw()
+
+        public override bool Check()
         {
-            Player player =Player.Get(Hub);
-            
-            if(!KECustomRole.Get(player).Any(role => KECustomRole.Get(CustomRole) == role))
+            Player player = Player.Get(Hub);
+            if (!KECustomRole.Get(player).Any(role => KECustomRole.Get(CustomRole) == role))
             {
-                return string.Empty;
+                return false;
             }
 
-
-            return base.GetRaw();
+            return base.Check();
         }
 
         public override void Update()

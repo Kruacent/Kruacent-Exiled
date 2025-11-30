@@ -13,7 +13,7 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
 {
     public class Negotiator : KECustomRole
     {
-        public override string Description { get; set; } = "Who knew zombie could be so great listeners";
+        public override string Description { get; set; } = "You're immune to friendly fire and you can convert zombie into your team, isn't that nice?";
         public override string InternalName => PublicName;
         public override string PublicName { get; set; } = "Negotiator";
         public override int MaxHealth { get; set; } = 100;
@@ -28,21 +28,18 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
             "Convert"
         };
 
-        
 
-        protected override void RoleAdded(Player player)
+        public override List<string> Inventory { get; set; } = new()
         {
-            Timing.CallDelayed(.1f, delegate
-            {
-                player.AddItem(ItemType.KeycardChaosInsurgency);
-                player.AddItem(ItemType.GunAK);
-                player.AddItem(ItemType.Medkit);
-                player.AddItem(ItemType.Painkillers);
-                player.AddItem(ItemType.ArmorCombat);
-                player.AddItem(ItemType.Radio);
-            });
-        }
+            "KeycardChaosInsurgency",
+            "GunAK",
+            "Medkit",
+            "Painkillers",
+            "ArmorCombat",
+            "Radio"
+        };
 
+        
         protected override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Hurting += OnHurting;

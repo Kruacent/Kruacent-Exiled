@@ -50,6 +50,14 @@ namespace KE.CustomRoles.API.Features
         /// </summary>
         public abstract string PublicName { get; set; }
 
+        /// <summary>
+        /// the max number of people who can have this role in a round
+        /// </summary>
+        public virtual int Limit { get; set; } = 1;
+        /// <summary>
+        /// the number of people who had this role in a round
+        /// </summary>
+        public virtual int CurrentNumberOfSpawn { get; set; } = 1;
 
         /// <summary>
         /// <see cref="KEAbilities.Name"/>
@@ -126,7 +134,7 @@ namespace KE.CustomRoles.API.Features
         {
             if (this is IHealable)
             {
-                Exiled.Events.Handlers.Player.UsedItem += OnUsedItem;
+                Exiled.Events.Handlers.Player.UsedItem -= OnUsedItem;
             }
         }
 
@@ -137,7 +145,7 @@ namespace KE.CustomRoles.API.Features
             IHealable healable = this as IHealable;
             if(healable.HealItem is null || healable.HealItem.Count == 0)
             {
-                Log.Warn("no healable item found for" + this.Name);
+                Log.Warn("no healable item found for" + Name);
                 return;
             }
 
@@ -164,7 +172,15 @@ namespace KE.CustomRoles.API.Features
         {
             Player player2 = player;
             Log.Debug(Name + ": Adding role to " + player2.Nickname + ".");
-            
+            CurrentNumberOfSpawn++;
+
+            IEnumerable<KECustomRole> oldroles = Get(player2);
+
+            foreach (KECustomRole role in oldroles)
+            {
+                role.RemoveRole(player2);
+            }
+
             if (Role != RoleTypeId.None)
             {
 
@@ -320,7 +336,7 @@ namespace KE.CustomRoles.API.Features
                     }
                    
                 }
-                KEAbilities.SelectFirstAbility(player);
+                KEAbilities.SelectFirstAbility(player,true);
             }
         }
 
@@ -340,6 +356,7 @@ namespace KE.CustomRoles.API.Features
 
         public virtual bool IsAvailable(Player player)
         {
+            if (CurrentNumberOfSpawn >= Limit) return false;
             return player.Role == Role;
         }
 
@@ -432,7 +449,7 @@ namespace KE.CustomRoles.API.Features
                     return role.Key;
             }
 
-            return roleChances.Keys.First();
+            return null;
         }
 
         public static Dictionary<KECustomRole, float> GetAvailableCustomRole(Player player)

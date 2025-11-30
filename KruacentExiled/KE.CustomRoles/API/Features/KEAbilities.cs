@@ -132,7 +132,7 @@ namespace KE.CustomRoles.API.Features
             StringBuilderPool.Pool.Return(sb);
         }
 
-        public void SelectAbility(Player player)
+        public void SelectAbility(Player player, bool hide = false)
         {
             if (Selected.Add(player))
             {
@@ -141,8 +141,11 @@ namespace KE.CustomRoles.API.Features
                 {
                     abilities.UnselectAbility(player);
                 }
-
-                ShowAbility(player);
+                if (!hide)
+                {
+                    ShowAbility(player);
+                }
+                
             }
         }
 
@@ -273,7 +276,7 @@ namespace KE.CustomRoles.API.Features
 
         }
 
-        public static void SelectFirstAbility(Player player)
+        public static void SelectFirstAbility(Player player,bool hide = false)
         {
             if(PlayersAbility.TryGetValue(player,out var list))
             {

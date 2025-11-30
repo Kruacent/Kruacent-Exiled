@@ -24,29 +24,28 @@ namespace KE.CustomRoles.API.Features
 
         private new RecyclableSettingId Id;
         public int SettingId => Id.Value;
-        private static SettingsPage page;
-        private static List<ServerSpecificSettingBase> settings;
+        private static HeaderSetting header = null;
+        private static int HeaderId => MainPlugin.Instance.Config.HeaderId;
         public static IEnumerable<CustomSCP> All => Registered.Where(c => c is CustomSCP).Cast<CustomSCP>();
         public override void Init()
         {
 
             
-            if (page is null)
+            if (header is null)
             {
-                settings = new();
-                page = new SettingsPage("Custom SCPs Preferences", settings);
+                header = new(HeaderId, "SCP Spawn Preferences",string.Empty,true);
             }
             Id = new RecyclableSettingId();
 
-            settings.Add(new SSSliderSetting(SettingId, PublicName, MinValue, MaxValue, DefaultValue, true));
-
-            Utils.API.Settings.SettingHandler.Instance.AddPages(page);
+            sliderSetting= new SliderSetting(SettingId, PublicName, MinValue, MaxValue, DefaultValue, true, header:header);
+            SettingBase.Register([sliderSetting]);
             base.Init();
         }
 
 
         public override void Destroy()
         {
+            SettingBase.Unregister();
             Id.Destroy();
             base.Destroy();
         }

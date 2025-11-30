@@ -23,24 +23,33 @@ namespace KE.CustomRoles.Abilities
 
         public override float Cooldown { get;  } = 10*60f;
 
-        public float MaxDistance { get; set; } = 5f;
+        public float MaxDistance { get; set; } = 15f;
 
 
         protected override bool AbilityUsed(Player player)
         {
-
-            if (!Physics.Linecast(player.Position, player.Position + player.Rotation.eulerAngles * MaxDistance, out RaycastHit hit)) return false;
-
-
+            if (!Physics.Raycast(player.Position, player.Rotation.eulerAngles, out RaycastHit hit)) return false;
 
 
             Player playerHit = Player.Get(hit.collider);
 
-            if (playerHit == null) return false;
+            if (playerHit == null)
+            {
+                MainPlugin.ShowEffectHint(player, "But nobody's here");
+                return false;
+            }
 
-            if (playerHit.Role.Side == player.Role.Side) return false;
+            if (playerHit.Role.Side == player.Role.Side)
+            {
+                MainPlugin.ShowEffectHint(player, "I know you don't like them but they're in your team");
+                return false;
+            }
 
-            if (playerHit.IsScp && playerHit.Role != RoleTypeId.Scp0492) return false;
+            if (playerHit.IsScp && playerHit.Role != RoleTypeId.Scp0492)
+            {
+                MainPlugin.ShowEffectHint(player, "That ain't a zombie");
+                return false;
+            }
 
 
             if (playerHit.IsScp)
@@ -52,7 +61,7 @@ namespace KE.CustomRoles.Abilities
                 playerHit.Role.Set(player.Role, RoleSpawnFlags.None);
             }
 
-
+            MainPlugin.ShowEffectHint(player, "New friend acquired!");
             return base.AbilityUsed(player);
         }
 

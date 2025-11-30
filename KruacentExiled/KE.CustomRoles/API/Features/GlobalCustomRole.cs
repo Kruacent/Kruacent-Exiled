@@ -106,6 +106,7 @@ namespace KE.CustomRoles.API.Features
 
         public override bool IsAvailable(Player player)
         {
+            if (CurrentNumberOfSpawn >= Limit) return false;
             return SideClass.Get(player.Role.Side) == Side;
         }
     }

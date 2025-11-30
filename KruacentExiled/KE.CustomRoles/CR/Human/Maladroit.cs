@@ -24,7 +24,7 @@ namespace KE.CustomRoles.CR.Human
         public override string Description { get; set; } = "Fait attention à tes items !";
         public override string PublicName { get; set; } = "Maladroit";
         public override bool KeepRoleOnDeath { get; set; } = false;
-        public override bool KeepRoleOnChangingRole { get; set; } = true;
+        public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
 
         public Color32 Color => new(211, 110, 112, 0);

@@ -18,7 +18,7 @@ namespace KE.CustomRoles.CR.Human
         public override string Description { get; set; } = "T'as stamina est réduit de moitié\nMais tu vises mieux";
         public override string PublicName { get; set; } = "Asthmatique";
         public override bool KeepRoleOnDeath { get; set; } = false;
-        public override bool KeepRoleOnChangingRole { get; set; } = true;
+        public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
         public Color32 Color => new Color32(191, 255, 0, 0);
         public HashSet<ItemType> HealItem => [ItemType.SCP500];

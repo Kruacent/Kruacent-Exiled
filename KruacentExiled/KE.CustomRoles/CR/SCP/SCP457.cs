@@ -58,6 +58,10 @@ namespace KE.CustomRoles.CR.SCP
             _handles[player].Add(Timing.RunCoroutine(InsideLight(player)));
             _handles[player].Add(Timing.RunCoroutine(PassiveDamage(player)));
 
+            if(player.Role is Scp106Role role)
+            {
+                role.Vigor = role.VigorComponent.MaxValue;
+            }
         }
 
         private IEnumerator<float> InsideLight(Player player)

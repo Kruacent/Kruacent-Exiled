@@ -17,7 +17,7 @@ namespace KE.CustomRoles.CR.ClassD
         public override string PublicName { get; set; } = "Enfant";
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
-        public override bool KeepRoleOnDeath { get; set; } = true;
+        public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
         public Color32 Color => new(255, 192, 203, 0);
 

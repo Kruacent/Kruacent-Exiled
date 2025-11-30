@@ -9,6 +9,7 @@ using HintServiceMeow.Core.Utilities;
 using KE.CustomRoles.API.Features;
 using KE.Utils.API.Interfaces;
 using KE.Utils.API.Settings;
+using LabApi.Events.Arguments.PlayerEvents;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -45,6 +46,7 @@ namespace KE.CustomRoles.Settings
         public static SettingHandler Instance { get; private set; }
         private List<SettingBase> settings;
         public readonly SettingsPage page;
+        public readonly SettingsPage hintpage = null;
         public const string baseArrow = "<--";
         public SettingHandler()
         {
@@ -61,9 +63,9 @@ namespace KE.CustomRoles.Settings
 
             List<ServerSpecificSettingBase> baseSettings = new();
 
-            
 
-            foreach(SettingBase setting in settings)
+
+            foreach (SettingBase setting in settings)
             {
                 baseSettings.Add(setting.Base);
             }
@@ -71,23 +73,32 @@ namespace KE.CustomRoles.Settings
 
             string[] options = ["left", "center", "right"];
 
-            /*
-            baseSettings.AddRange
-            (
-                [
+
+            if (MainPlugin.Instance.Config.Debug)
+            {
+                List<ServerSpecificSettingBase> hintscreator = new()
+                {
                     new SSSliderSetting(_idTestHintsliderx,"x",-2000,2000),
                     new SSSliderSetting(_idTestHintslidery,"y",0,2000),
                     new SSSliderSetting(_idTestHintslidertime,"time",0,10),
                     new SSDropdownSetting(_idTestHintalign,"alignment",options),
                     new SSButton(_idTestHintspawn,"spawn","spawn"),
                     new SSPlaintextSetting(_idTestHinttext,"text")
-                ]
-            );
-            */
+                };
 
 
 
-            page = new("Custom roles", baseSettings);
+                //hintpage = new("hint creator", hintscreator);
+            }
+
+
+
+
+            //page = new("Custom roles", baseSettings);
+
+            ServerSpecificSettingsSync.DefinedSettings = new List<ServerSpecificSettingBase>(baseSettings).ToArray();
+            ServerSpecificSettingsSync.SendToAll();
+
             
         }
 
@@ -169,9 +180,14 @@ namespace KE.CustomRoles.Settings
 
         public void SubscribeEvents()
         {
-            Utils.API.Settings.SettingHandler.Instance.AddPages(page);
+            //Utils.API.Settings.SettingHandler.Instance.AddPages(page);
+            if(hintpage is not null)
+            {
+                Utils.API.Settings.SettingHandler.Instance.AddPages(hintpage);
+            }
+            
             ServerSpecificSettingsSync.ServerOnSettingValueReceived += SafeOnSettingValueReceived;
-            Exiled.Events.Handlers.Player.Verified += OnVerified;
+            LabApi.Events.Handlers.PlayerEvents.Joined += AddPlayer;
             DownPressed += Down;
             UpPressed += Up;
 
@@ -179,12 +195,17 @@ namespace KE.CustomRoles.Settings
 
         public void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.Verified -= OnVerified;
             ServerSpecificSettingsSync.ServerOnSettingValueReceived -= SafeOnSettingValueReceived;
+            LabApi.Events.Handlers.PlayerEvents.Joined -= AddPlayer;
             DownPressed -= Down;
             UpPressed -= Up;
         }
+        
 
+        private void AddPlayer(PlayerJoinedEventArgs ev)
+        {
+            ServerSpecificSettingsSync.SendToPlayer(ev.Player.ReferenceHub);
+        }
 
         private void SafeOnSettingValueReceived(ReferenceHub hub, ServerSpecificSettingBase settingBase)
         {
@@ -215,7 +236,11 @@ namespace KE.CustomRoles.Settings
             {
                 KEAbilities.UseSelected(player);
             }
-            //CreateHint(player, settingBase);
+            if(hintpage is not null)
+            {
+                CreateHint(player, settingBase);
+            }
+            
         }
 
         private Dictionary<Player, int> playerPos = new();
@@ -279,11 +304,6 @@ namespace KE.CustomRoles.Settings
         }
 
 
-
-        private void OnVerified(VerifiedEventArgs ev)
-        {
-            ServerSpecificSettingsSync.SendToPlayer(ev.Player.ReferenceHub);
-        }
 
         /// <summary>
         /// 

@@ -36,7 +36,7 @@ namespace KE.CustomRoles.CR.Human
         public override string Description { get; set; } = "Je pense que le traitement que t'as eu à la fondation t'as pas aidé";
         public override string PublicName { get; set; } = "Fou de la facilité";
         public override bool KeepRoleOnDeath { get; set; } = false;
-        public override bool KeepRoleOnChangingRole { get; set; } = true;
+        public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
 
         private readonly Dictionary<CrazyBehaviour, int> WeightDictionnary = new()

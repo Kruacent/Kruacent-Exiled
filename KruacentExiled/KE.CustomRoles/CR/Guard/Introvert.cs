@@ -21,11 +21,12 @@ namespace KE.CustomRoles.CR.Guard
 
         public override List<string> Inventory { get; set; } = new List<string>()
         {
-          $"{ItemType.ArmorLight}",
+          $"{ItemType.KeycardGuard}",
           $"{ItemType.GunFSP9}",
           $"{ItemType.Medkit}",
-          $"{ItemType.Flashlight}",
-          $"{ItemType.Flashlight}"
+          $"{ItemType.GrenadeFlash}",
+          $"{ItemType.GrenadeFlash}",
+          $"{ItemType.ArmorLight}",
         };
 
         public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new Dictionary<AmmoType, ushort>()
