@@ -79,10 +79,8 @@ namespace KE.Map.Heavy.GamblingZone
             foreach (DroppableItem item in Items)
             {
                 builder.AppendLine(item.ToString());
-            }
-            string result = builder.ToString();
-            StringBuilderPool.Pool.Return(builder);
-            return result;
+            }       
+            return StringBuilderPool.Pool.ToStringReturn(builder); 
         }
     }
 }

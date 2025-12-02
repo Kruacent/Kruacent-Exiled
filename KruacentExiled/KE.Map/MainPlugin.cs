@@ -1,35 +1,22 @@
 ﻿
 using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.API.Features.Doors;
-using Exiled.API.Features.Toys;
 using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs.Player;
-using Exiled.Events.EventArgs.Server;
-using Exiled.Events.Handlers;
 using HarmonyLib;
-using Interactables.Interobjects.DoorUtils;
 using KE.Map.CustomZones;
 using KE.Map.CustomZones.CustomRooms.MCZ;
-using KE.Map.Entrance;
 using KE.Map.Heavy.GamblingZone;
 using KE.Map.Others.BlackoutNDoor.Handlers;
-using KE.Map.Utils;
-using KE.Utils.API.Models;
 using LabApi.Events.Arguments.ServerEvents;
-using LabApi.Features.Wrappers;
 using MapGeneration;
-using Mirror;
 using PlayerRoles;
-using PlayerRoles.PlayableScps.Scp106;
-using ProjectMER.Features.Serializable.Lockers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Door = Exiled.API.Features.Doors.Door;
 using Player = Exiled.API.Features.Player;
-using Room = Exiled.API.Features.Room;
 
 namespace KE.Map
 {
@@ -153,16 +140,18 @@ namespace KE.Map
             HashSet<DroppableItem> normal = new()
             {
                 new(ItemType.KeycardO5,1,2),
-                new(ItemType.SCP500,1),
-                new(ItemType.KeycardMTFCaptain,1),
+                new(ItemType.Jailbird,1,1),
+                new(ItemType.ParticleDisruptor,1,1),
                 new(ItemType.SCP268,1,1),
-                new(ItemType.GunCOM15,1),
-                new(ItemType.SCP207,1),
-                new(ItemType.Adrenaline,1),
-                new(ItemType.GunCOM18,1),
-                new(ItemType.KeycardFacilityManager,1),
-                new(ItemType.Medkit,1),
-                new(ItemType.KeycardMTFOperative,1),
+                ItemType.SCP500,
+                ItemType.KeycardMTFCaptain,
+                ItemType.GunCOM15,
+                ItemType.SCP207,
+                ItemType.Adrenaline,
+                ItemType.GunCOM18,
+                ItemType.KeycardFacilityManager,
+                ItemType.Medkit,
+                ItemType.KeycardMTFOperative,
                 ItemType.KeycardGuard,
                 ItemType.Radio,
                 ItemType.Ammo9x19,
@@ -174,10 +163,8 @@ namespace KE.Map
                 ItemType.KeycardScientist,
                 ItemType.KeycardJanitor,
                 ItemType.Coin,
-                new(ItemType.Jailbird,1,1),
                 ItemType.Flashlight,
                 ItemType.AntiSCP207,                            
-                new(ItemType.ParticleDisruptor,1,1),
                 ItemType.GunCom45,
                 ItemType.GunShotgun,
                 ItemType.GunRevolver,

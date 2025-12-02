@@ -42,16 +42,7 @@ namespace KE.Map.Heavy.GamblingZone
         private Vector3 _position;
         private LootTable _lootTable;
 
-        internal GamblingRoom(Room room, LootTable lootTable, Vector3? offset = null)
-        {
-            Init(room.Position, lootTable, offset);
-        }
 
-
-        internal GamblingRoom(Door door, LootTable lootTable, Vector3? offset = null)
-        {
-            Init(door.Position, lootTable, offset);
-        }
 
         internal GamblingRoom(Vector3 position, LootTable lootTable, Vector3? offset = null)
         {
