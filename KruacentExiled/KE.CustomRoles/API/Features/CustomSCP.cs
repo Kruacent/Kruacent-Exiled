@@ -22,8 +22,7 @@ namespace KE.CustomRoles.API.Features
         private SliderSetting sliderSetting;
         public abstract bool IsSupport { get; }
 
-        private new RecyclableSettingId Id;
-        public int SettingId => Id.Value;
+        protected abstract int SettingId { get; }
         private static HeaderSetting header = null;
         private static int HeaderId => MainPlugin.Instance.Config.HeaderId;
         public static IEnumerable<CustomSCP> All => Registered.Where(c => c is CustomSCP).Cast<CustomSCP>();
@@ -34,10 +33,10 @@ namespace KE.CustomRoles.API.Features
             if (header is null)
             {
                 header = new(HeaderId, "SCP Spawn Preferences",string.Empty,true);
+                SettingBase.Register([header]);
             }
-            Id = new RecyclableSettingId();
 
-            sliderSetting= new SliderSetting(SettingId, PublicName, MinValue, MaxValue, DefaultValue, true, header:header);
+            sliderSetting= new SliderSetting(SettingId, PublicName, MinValue, MaxValue, DefaultValue, true);
             SettingBase.Register([sliderSetting]);
             base.Init();
         }
@@ -46,7 +45,6 @@ namespace KE.CustomRoles.API.Features
         public override void Destroy()
         {
             SettingBase.Unregister();
-            Id.Destroy();
             base.Destroy();
         }
 

@@ -1,4 +1,4 @@
-﻿using Exiled.API.Features;
+﻿/*using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Roles;
@@ -48,6 +48,7 @@ namespace KE.CustomRoles.CR.SCP
             "BlindingFlash"
         ];
 
+        protected override int SettingId => 10001;
 
         protected override void RoleAdded(Player player)
         {
@@ -178,4 +179,4 @@ namespace KE.CustomRoles.CR.SCP
             
             
         }
-}
+}*/
