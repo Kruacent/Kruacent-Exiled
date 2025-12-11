@@ -1,4 +1,4 @@
-﻿/*using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Roles;
@@ -136,6 +136,11 @@ namespace KE.CustomRoles.CR.SCP
             
         }
 
+        public override bool IsAvailable(Player player)
+        {
+            return false;
+        }
+
 
         private void OnStalking(StalkingEventArgs ev)
         {
@@ -179,4 +184,4 @@ namespace KE.CustomRoles.CR.SCP
             
             
         }
-}*/
+}

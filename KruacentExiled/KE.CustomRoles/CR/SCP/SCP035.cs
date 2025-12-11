@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp1509;
@@ -20,7 +21,7 @@ namespace KE.CustomRoles.CR.SCP
 
         public override string PublicName { get; set; } = "SCP-035";
         public override int MaxHealth { get; set; } = 800;
-        public override string Description { get; set; } = "KILL EVERYONE";
+        public override string Description { get; set; } = "You can't pickup the Micro-HID and anything made with it, but you take 2 time less damage by these weapon";
         protected override int SettingId => 10002;
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.Tutorial;
@@ -55,7 +56,7 @@ namespace KE.CustomRoles.CR.SCP
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
             Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
             Exiled.Events.Handlers.Server.EndingRound -= OnEndingRound;
-            Exiled.Events.Handlers.Scp1509.Resurrecting += OnResurrecting;
+            Exiled.Events.Handlers.Scp1509.Resurrecting -= OnResurrecting;
             base.UnsubscribeEvents();
         }
 
@@ -63,11 +64,14 @@ namespace KE.CustomRoles.CR.SCP
         {
 
             player.VoiceChannel = VoiceChat.VoiceChatChannel.ScpChat;
+            player.Position = RoleTypeId.Scp049.GetRandomSpawnLocation().Position;
             base.RoleAdded(player);
         }
 
         private void OnSearchingPickup(SearchingPickupEventArgs ev)
         {
+            if (!Check(ev.Player)) return;
+
             if (BlacklistedPickup.Contains(ev.Pickup.Type))
             {
                 ShowEffectHint(ev.Player, "This item can't be picked up");
