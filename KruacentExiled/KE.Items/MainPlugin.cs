@@ -55,7 +55,7 @@ namespace KE.Items
             Utils.API.Sounds.SoundPlayer.Load();
             
 
-            Exiled.Events.Handlers.Server.RoundStarted += Test;
+            //Exiled.Events.Handlers.Server.RoundStarted += Test;
 
 
             CustomItem.RegisterItems();
@@ -75,7 +75,7 @@ namespace KE.Items
             //QualityHandler?.Unregister();
             SettingsHandler.UnsubscribeEvents();
 
-            Exiled.Events.Handlers.Server.RoundStarted -= Test;
+            //Exiled.Events.Handlers.Server.RoundStarted -= Test;
 
             //QualityHandler = null;
             //PickupQuality = null;
