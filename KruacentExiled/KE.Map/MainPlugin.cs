@@ -34,7 +34,7 @@ namespace KE.Map
             handler = new();
             harmony = new(Prefix);
 
-            //handler.SubscribeEvents();
+            handler.SubscribeEvents();
             KE.Utils.API.Sounds.SoundPlayer.Instance.TryLoad();
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
@@ -74,7 +74,7 @@ namespace KE.Map
 
         public override void OnDisabled()
         {
-            //handler.UnsubscribeEvents();
+            handler?.UnsubscribeEvents();
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             LabApi.Events.Handlers.ServerEvents.MapGenerating -= OnGenerating;
