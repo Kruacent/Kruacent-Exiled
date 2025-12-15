@@ -256,7 +256,7 @@ namespace KE.Map.Surface.SupplyDrops
 
             if (_scpSteal >= ScpStealLimit)
             {
-                Cassie.MessageTranslated(CassieTooMuchStealing,CassieTooMuchStealingSub);
+                //Cassie.MessageTranslated(CassieTooMuchStealing,CassieTooMuchStealingSub);
                 Warhead.Start(true, true);
                 _spawnTime.Stop();
                 Timing.KillCoroutines(_handle);

@@ -149,8 +149,8 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
 
                 string message = mapEvent.Cassie + " " + ZoneTypeToCassie(zone) + " " + MainPlugin.Translations.End;
                 string translate = mapEvent.CassieTranslated + " " + ZoneTypeToCassieTranslated(zone) + " " + MainPlugin.Translations.End;
-                float yap = Cassie.CalculateDuration(message);
-                Cassie.MessageTranslated(message, translate,false,false,true);
+                float yap = Exiled.API.Features.Cassie.CalculateDuration(message, false, 0);
+                Exiled.API.Features.Cassie.MessageTranslated(message, translate,false,false,true);
 
 
                 Timing.CallDelayed(5 + yap, delegate
