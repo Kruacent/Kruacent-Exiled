@@ -54,8 +54,8 @@ namespace KE.Misc.Features
         public void SayAnnouncement()
         {
             if (flagSaid) return;
-            Cassie.MessageTranslated("Warning automatic warhead will detonate in 5 minutes",
-                "Warning automatic warhead will detonate in <color=#FF0000>5</color> minutes");
+            //Cassie.MessageTranslated("Warning automatic warhead will detonate in 5 minutes",
+                //"Warning automatic warhead will detonate in <color=#FF0000>5</color> minutes");
             flagSaid = true;
         }
 

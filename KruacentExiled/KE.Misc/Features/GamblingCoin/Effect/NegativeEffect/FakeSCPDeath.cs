@@ -7,7 +7,7 @@ using Respawning.NamingRules;
 using System.Collections.Generic;
 using System.Linq;
 
-internal class FakeSCPDeath : ICoinEffect
+/*internal class FakeSCPDeath : ICoinEffect
 {
     public string Name { get; set; } = "FakeSCPDeath";
     public string Message { get; set; } = "DID YOU JUST KILLED AN SCP !?!?";
@@ -49,4 +49,4 @@ internal class FakeSCPDeath : ICoinEffect
         Cassie.MessageTranslated($"scp {scpName.Key} successfully terminated by automatic security system",
             $"{scpName.Value} ${deathMessage}.");
     }
-}
+}*/
