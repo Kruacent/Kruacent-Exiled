@@ -24,12 +24,27 @@ namespace KE.Misc.Features
         {
             Exiled.Events.Handlers.Player.ChangingRole += BecomingSCP;
             Exiled.Events.Handlers.Scp106.Attacking += OnAttacking;
+            Exiled.Events.Handlers.Player.Died += OnDied;
         }
 
         public void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.ChangingRole -= BecomingSCP;
             Exiled.Events.Handlers.Scp106.Attacking -= OnAttacking;
+            Exiled.Events.Handlers.Player.Died -= OnDied;
+        }
+
+        private void OnDied(DiedEventArgs ev)
+        {
+            IEnumerable<Player> players = Player.Enumerable.Where(p => p.IsHuman);
+            if (players.Count() > 1)
+            {
+                return;
+            }
+
+
+
+
         }
 
 

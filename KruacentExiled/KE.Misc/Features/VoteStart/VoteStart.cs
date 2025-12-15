@@ -77,9 +77,20 @@ namespace KE.Misc.Features.VoteStart
         {
             Player player = ev.Player;
 
+            if(ev.Player is null)
+            {
+                return;
+            }
+
+
+            if (!ev.Player.IsConnected)
+            {
+                return;
+            }
+
             Timing.CallDelayed(1f, () =>
             {
-                if (player is not null && Round.IsLobby)
+                if (Round.IsLobby)
                 {
                     PlayerDisplay dis = PlayerDisplay.Get(player);
                     DisplayHandler.Instance.CreateAuto(player, (args) => GetPlayers(), HintPosition.HintPlacement);
