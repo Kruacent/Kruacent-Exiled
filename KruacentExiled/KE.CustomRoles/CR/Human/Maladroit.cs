@@ -21,14 +21,18 @@ namespace KE.CustomRoles.CR.Human
         private static Dictionary<Player, CoroutineHandle> _coroutines = new();
 
         public override SideEnum Side { get; set; } = SideEnum.Human;
-        public override string Description { get; set; } = "Fait attention à tes items !";
-        public override string PublicName { get; set; } = "Maladroit";
+        public override string Description { get; set; } = "Fait attention à \"tes\" items !";
+        public override string PublicName { get; set; } = "Maladroit Vole";
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
 
         public Color32 Color => new(211, 110, 112, 0);
 
+        public override HashSet<string> Abilities { get; } = new()
+        {
+            "Thief"
+        };
         protected override void RoleAdded(Player player)
         {
             _coroutines.Add(player, Timing.RunCoroutine(ThrowingItem(player)));
