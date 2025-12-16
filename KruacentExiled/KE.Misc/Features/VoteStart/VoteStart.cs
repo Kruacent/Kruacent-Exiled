@@ -51,6 +51,15 @@ namespace KE.Misc.Features.VoteStart
         {
             if (!Round.IsLobby) return;
             if (voteCasted) return;
+            if (ev.Player is null)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(ev.Player.AuthenticationToken))
+            {
+                return;
+            }
 
             Voted.Add(ev.Player);
             if (Voted.Count >= minvote)
