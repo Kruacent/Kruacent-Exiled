@@ -27,7 +27,7 @@ namespace KE.CustomRoles.CR.ClassD
 
         protected override void RoleAdded(Player player)
         {
-            player.EnableEffect(EffectType.SilentWalk, -1, true); //doesn't work with 939 i think
+            player.EnableEffect(EffectType.SilentWalk, -1, true); // doesn't work with SCP-939 (tested)
             player.IsMuted = true;
         }
 
