@@ -1,28 +1,25 @@
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
+using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
-using MEC;
 using Exiled.Events.EventArgs.Player;
 using Exiled.API.Features;
 using UnityEngine;
 using System.Linq;
-using KE.Items.API.Extensions;
-using KE.Items.API.Interface;
-using KE.Items.API.Features;
+using KE.Items.Interface;
+using KE.Items.Extensions;
+using KE.Items.Features;
 
 [CustomItem(ItemType.SCP1853)]
-public class Defibrilator : KECustomItem, ILumosItem
+public class Defibrillator : KECustomItem, ILumosItem
 {
     public override uint Id { get; set; } = 1041;
-    public override string Name { get; set; } = "Defibrilator";
-    public override string Description { get; set; } = "The defibrillator is used to revive a person who has lost consciousness. It will revive the person closest to the player who uses it (the location of death, not where the body is).";
-    public override float Weight { get; set; } = 0.65f;
+    public override string Name { get; set; } = "Defibrillator";
+    public override string Description { get; set; } = "Visez un cadavre de près pour tenter une réanimation.";
+    public override float Weight { get; set; } = 1.0f;
     public UnityEngine.Color Color { get; set; } = UnityEngine.Color.magenta;
-
-    private ConcurrentDictionary<Player, Vector3> positionMort = new ConcurrentDictionary<Player, Vector3>();
 
     public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
     {
@@ -30,107 +27,156 @@ public class Defibrilator : KECustomItem, ILumosItem
         DynamicSpawnPoints = new List<DynamicSpawnPoint>
         {
             new DynamicSpawnPoint() { Chance = 50, Location = SpawnLocationType.Inside079Secondary },
+            new DynamicSpawnPoint() { Chance = 10, Location = SpawnLocationType.Inside096 },
+            new DynamicSpawnPoint() { Chance = 10, Location = SpawnLocationType.Inside330 },
+            new DynamicSpawnPoint() { Chance = 10, Location = SpawnLocationType.Inside939Cryo },
         },
-
         LockerSpawnPoints = new List<LockerSpawnPoint>
         {
              new LockerSpawnPoint(){ Chance= 50, Type = LockerType.Medkit, },
+             new LockerSpawnPoint(){ Chance= 20, Type = LockerType.Misc, },
         }
     };
+
+    private struct DeathData
+    {
+        public float Time;
+        public RoleTypeId Role;
+    }
+
+    private readonly Dictionary<Player, DeathData> _deathRecords = new Dictionary<Player, DeathData>();
+    private const float MaxReviveTime = 60f;
+    private const float RaycastDistance = 2.5f;
 
     protected override void SubscribeEvents()
     {
         Exiled.Events.Handlers.Player.UsingItem += OnUsingItem;
-        Exiled.Events.Handlers.Player.Dying += OnDeathEvent;
-        Exiled.Events.Handlers.Player.Spawned += OnSpawningEvent;
+        Exiled.Events.Handlers.Player.Dying += OnDying;
         base.SubscribeEvents();
     }
 
     protected override void UnsubscribeEvents()
     {
         Exiled.Events.Handlers.Player.UsingItem -= OnUsingItem;
-        Exiled.Events.Handlers.Player.Dying -= OnDeathEvent;
-        Exiled.Events.Handlers.Player.Spawned -= OnSpawningEvent;
+        Exiled.Events.Handlers.Player.Dying -= OnDying;
         base.UnsubscribeEvents();
     }
 
-    private void OnDeathEvent(DyingEventArgs ev)
+    private void OnDying(DyingEventArgs ev)
     {
-        positionMort.TryAdd(ev.Player, ev.Player.Position);
-    }
+        if (ev.Player == null) return;
 
-    private void OnSpawningEvent(SpawnedEventArgs ev)
-    {
-        if (ev.Player.IsAlive)
+        _deathRecords[ev.Player] = new DeathData
         {
-            
-            positionMort.TryRemove(ev.Player, out _);
-        }
+            Time = Time.time,
+            Role = ev.Player.Role.Type
+        };
     }
 
     private void OnUsingItem(UsingItemEventArgs ev)
     {
-        if (!Check(ev.Player.CurrentItem))
+        if (!Check(ev.Item)) return;
+        ev.IsAllowed = false;
+
+        Log.Debug($"[Defib] Tentative par {ev.Player.Nickname}");
+
+        if (Physics.Raycast(ev.Player.CameraTransform.position, ev.Player.CameraTransform.forward, out RaycastHit hit, RaycastDistance))
         {
-            return;
+            Log.Debug($"[Defib] Raycast a touché : {hit.collider.name}");
+
+            Collider[] colliders = Physics.OverlapSphere(hit.point, 2.5f);
+            BasicRagdoll foundRagdoll = null;
+
+            foreach (Collider col in colliders)
+            {
+                foundRagdoll = col.GetComponentInParent<BasicRagdoll>();
+                if (foundRagdoll != null) break;
+            }
+
+            if (foundRagdoll != null)
+            {
+                Player target = Player.Get(foundRagdoll.NetworkInfo.OwnerHub);
+                Log.Debug($"[Defib] Cadavre trouvé ! Owner: {(target != null ? target.Nickname : "Inconnu")}");
+
+                if (target != null && target.Role.Type == RoleTypeId.Spectator && _deathRecords.TryGetValue(target, out DeathData data))
+                {
+                    if (Time.time - data.Time <= MaxReviveTime)
+                    {
+                        Log.Debug("[Defib] RÉANIMATION LANCÉE.");
+                        ev.Player.RemoveItem(ev.Item);
+                        Timing.RunCoroutine(ReviveSequence(ev.Player, target, foundRagdoll, data.Role));
+                        return;
+                    }
+                    KECustomItem.ItemEffectHint(ev.Player, "<color=red>Mort trop ancienne.</color>");
+                    return;
+                }
+            }
         }
 
-        Timing.CallDelayed(1f, () =>
-        {
-            ev.IsAllowed = false;
-            ev.Player.RemoveItem(ev.Item);
-
-            Timing.RunCoroutine(EffectAttribution(ev.Player));
-        });
+        KECustomItem.ItemEffectHint(ev.Player, "<color=yellow>Rapprochez-vous ou visez un cadavre.</color>");
     }
 
-    private IEnumerator<float> EffectAttribution(Player joueur)
+    private IEnumerator<float> ReviveSequence(Player medic, Player patient, BasicRagdoll ragdoll, RoleTypeId previousRole)
     {
-        joueur.DisableEffect(EffectType.Scp1853);
-        Log.Debug("Utilisation item");
-        Log.Debug("Nombre de mort : " + positionMort.Count());
+        Vector3 lightPos = ragdoll.CenterPoint.position + Vector3.up * 0.75f;
+        var shockLight = LabApi.Features.Wrappers.LightSourceToy.Create(lightPos);
+        shockLight.Color = UnityEngine.Color.cyan;
+        shockLight.Intensity = 50f;
+        shockLight.Range = 7f;
+        shockLight.Spawn();
 
-        if (positionMort.Count == 0)
+        KECustomItem.ItemEffectHint(medic, "<color=yellow>Réanimation en cours...</color>");
+
+        float elapsed = 0f;
+        while (elapsed < 1.0f)
         {
-            joueur.ItemEffectHint("There is no death");
-            Exiled.CustomItems.API.Features.CustomItem.TryGive(joueur, 1041);
+            if (Vector3.Distance(medic.Position, ragdoll.transform.position) > RaycastDistance + 1f)
+            {
+                KECustomItem.ItemEffectHint(medic, "<color=red>Réanimation échouée !</color>");
+                shockLight.Destroy();
+                CustomItem.TryGive(medic, Id);
+                yield break;
+            }
+
+            shockLight.Intensity = (elapsed % 0.2f > 0.1f) ? 100f : 20f;
+
+            elapsed += 0.1f;
+            yield return Timing.WaitForSeconds(0.1f);
+        }
+
+        shockLight.Intensity = 200f;
+
+        yield return Timing.WaitForSeconds(0.2f);
+        shockLight.Destroy();
+
+        patient.Role.Set(previousRole, SpawnReason.Revived, RoleSpawnFlags.All);
+
+        yield return Timing.WaitForSeconds(0.4f);
+
+        if (patient == null) yield break;
+
+        if (patient.IsAlive)
+        {
+            patient.Position = ragdoll.transform.position + Vector3.up * 0.5f;
+
+            patient.Health = 20f;
+            patient.EnableEffect(EffectType.Flashed, 2f);
+            patient.EnableEffect(EffectType.Concussed, 20f);
+            patient.EnableEffect(EffectType.Deafened, 20f);
+
+            KECustomItem.ItemEffectHint(patient, $"<color=cyan>Réanimé par {medic.Nickname}\n<b>vous avez des traumatisme crânien</b></color>");
+            KECustomItem.ItemEffectHint(medic, $"<color=green>Réanimation réussie sur {patient.Nickname} !</color>");
+
+            _deathRecords.Remove(patient);
+
+            if (ragdoll != null)
+            {
+                Object.Destroy(ragdoll.gameObject);
+            }
         }
         else
         {
-            var playerPosition = joueur.Position;
-
-            Exiled.API.Features.Player closestDeadPlayer = null;
-            float shortestDistance = float.MaxValue;
-
-            foreach (var dead in positionMort)
-            {
-                float distance = Vector3.Distance(playerPosition, dead.Value);
-
-
-                if (distance < shortestDistance)
-                {
-                    shortestDistance = distance;
-                    closestDeadPlayer = dead.Key;
-                }
-            }
-
-            if (closestDeadPlayer != null)
-            {
-                Log.Debug($"Le joueur mort le plus proche est à une distance de {shortestDistance:F2} unités. C'est : " + closestDeadPlayer.Nickname);
-
-                closestDeadPlayer.IsGodModeEnabled = true;
-                closestDeadPlayer.Role.Set(joueur.Role);
-                closestDeadPlayer.Health = 40;
-
-                closestDeadPlayer.Teleport(joueur.Position);
-
-                closestDeadPlayer.ItemEffectHint(joueur.Nickname + " revived you!");
-                joueur.ItemEffectHint("You revived " + closestDeadPlayer.Nickname + "!");
-
-                yield return Timing.WaitForSeconds(1);
-
-                closestDeadPlayer.IsGodModeEnabled = false;
-            }
+            Log.Error($"[Defib] ÉCHEC : Le joueur {patient.Nickname} n'a pas spawn.");
         }
     }
 }
