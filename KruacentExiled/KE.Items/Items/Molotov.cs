@@ -61,7 +61,7 @@ namespace KE.Items.Items
                 },
                 new RoomSpawnPoint()
                 {
-                    Chance = 50,
+                    Chance = 100,
                     Room = RoomType.HczNuke,
                 },
             },

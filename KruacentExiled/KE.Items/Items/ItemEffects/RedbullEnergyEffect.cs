@@ -4,13 +4,13 @@ using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
-using KE.Items.Features;
-using KE.Items.Interface;
+using KE.Items.API.Features;
+using KE.Items.API.Interface;
 using MEC;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KE.Items.ItemEffects
+namespace KE.Items.Items.ItemEffects
 {
     public class RedBullEnergyEffect : CustomItemEffect
     {

@@ -1,25 +1,21 @@
 ﻿using Exiled.API.Features;
+using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
-using MHints = HintServiceMeow.Core.Models.Hints.Hint;
-using System.Text;
-using KE.Utils.API.Displays.DisplayMeow;
-using MEC;
-using HintServiceMeow.Core.Extension;
-using HintServiceMeow.Core.Utilities;
-using System.Reflection;
+using KE.Items.API.Features.SpawnPoints;
 using KE.Items.API.Interface;
+using KE.Utils.API.Displays.DisplayMeow;
 using System.Collections.Generic;
 using System.Linq;
-using Exiled.API.Features.Pickups;
+using System.Text;
 using UnityEngine;
-using Exiled.API.Features.Spawn;
+using static KE.Items.API.Features.SpawnPoints.PoseRoomSpawnPointHandler;
+using Pickup = Exiled.API.Features.Pickups.Pickup;
 
 namespace KE.Items.API.Features
 {
     public abstract class KECustomItem : CustomItem
     {
 
-        public virtual IEnumerable<ReplaceItem> RoomsToReplaceItems { get; protected set; } = null;
         protected override void ShowPickedUpMessage(Player player)
         {
             Log.Debug("pickup");
@@ -33,30 +29,48 @@ namespace KE.Items.API.Features
         }
 
 
-        public override void SpawnAll()
+        public override uint Spawn(IEnumerable<SpawnPoint> spawnPoints, uint limit)
         {
-            if(RoomsToReplaceItems != null)
+            Log.Debug($"spawning {this.Name}");
+            HashSet<SpawnPoint> spawns = spawnPoints.ToHashSet();
+            uint num = 0;
+            foreach (SpawnPoint spawnpoint in spawnPoints.Where(sp => sp is RoomSpawnPoint))
             {
-                foreach(ReplaceItem replaceItem in RoomsToReplaceItems)
+                Pickup pickup;
+                if (Exiled.Loader.Loader.Random.NextDouble() * 100.0 >= (double)spawnpoint.Chance || (limit != 0 && num >= limit))
                 {
-                    foreach(Room room in Room.List.Where(r => r.Type == replaceItem.Room))
-                    {
-                        uint limit = 0;
-                        foreach(Pickup pickup in room.Pickups.Where(p => p.Type == replaceItem.ItemToReplace))
-                        {
-                            if (limit <= replaceItem.LimitPerRoom && Exiled.Loader.Loader.Random.NextDouble() * 100.0 >= (double)replaceItem.Chance)
-                            {
-                                ReplacePickup(pickup);
-                                limit++;
-                            }
-                        }
-                    }
+                    continue;
                 }
+                spawns.Remove(spawnpoint);
+                RoomSpawnPoint room = spawnpoint as RoomSpawnPoint;
+                ItemSpawn spawn = PoseRoomSpawnPointHandler.UseRandomPose(room.Room);
+                Log.Debug(room.Room+ " : "+PoseRoomSpawnPointHandler.usablePose.Count(p => p.roomType == room.Room));
+                Log.Debug($"spawning {this.Name} in {room.Room}" );
+
+                if (spawn is not null)
+                {
+                    Log.Debug($"spawning custom pos");
+                    pickup = Spawn(spawn.Position);
+                }
+                else
+                {
+                    Log.Error($"can't spawn in custom");
+                    pickup = Spawn(spawnpoint.Position);
+                }
+
+
+
+                if (pickup is not null)
+                {
+                    num++;
+                }
+
+                    
             }
 
-
-            base.SpawnAll();
+            return base.Spawn(spawns, limit-num);
         }
+
 
 
         public void ReplacePickup(Pickup pickup)

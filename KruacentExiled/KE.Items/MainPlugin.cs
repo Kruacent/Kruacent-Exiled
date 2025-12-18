@@ -10,6 +10,7 @@ using KE.Items.API.Core.Settings;
 using KE.Items.API.Core.Upgrade;
 using KE.Items.API.Events;
 using KE.Items.API.Features.Complexes;
+using KE.Items.API.Features.SpawnPoints;
 using KE.Utils.API.Displays.DisplayMeow;
 using System;
 using System.Linq;
@@ -53,7 +54,29 @@ namespace KE.Items
 
 
             Utils.API.Sounds.SoundPlayer.Load();
-            
+            PoseRoomSpawnPointHandler.AddRoomPoses(new()
+            {
+                new(RoomType.Lcz914,new Vector3(0,0.70f,-7.14f),Quaternion.identity),
+                new(RoomType.LczGlassBox,new Vector3(7.39f,0.75f,-5.89f),Quaternion.identity),
+                new(RoomType.LczGlassBox,new Vector3(8.71f,1.2f,-5.89f),Quaternion.identity),
+                new(RoomType.Lcz173,new Vector3(7.39f,0.75f,-5.89f),Quaternion.identity),
+                new(RoomType.EzUpstairsPcs,new Vector3(-2.09f,0.75f,-7f),Quaternion.identity),
+                new(RoomType.EzUpstairsPcs,new Vector3(-4,1.1f,-0.36f),Quaternion.identity),
+                new(RoomType.EzGateB,new Vector3(-0.68f,1.33f,4f),Quaternion.identity),
+                new(RoomType.EzChef,new Vector3(2.36f,.2f,-0.16f),Quaternion.identity),
+                new(RoomType.HczStraightPipeRoom,new Vector3(6.1f,1.05f,-4.8f),Quaternion.identity),
+                new(RoomType.HczStraightPipeRoom,new Vector3(-4f,0.23f,-4.52f),Quaternion.identity),
+                new(RoomType.HczServerRoom,new Vector3(1.79f,0.78f,-0.6f),Quaternion.identity),
+                new(RoomType.HczNuke,new Vector3(12.11f,-75.11f,2.6f),Quaternion.identity),
+                new(RoomType.HczNuke,new Vector3(11.06f,-74.85f,-2.5f),Quaternion.identity),
+                new(RoomType.Surface,new Vector3(27.45f,-8.07f,24.96f),Quaternion.identity),
+                new(RoomType.Surface,new Vector3(27.45f,-8.07f,-23.62f),Quaternion.identity),
+                new(RoomType.Surface,new Vector3(27.45f,-8.07f,-23.62f),Quaternion.identity),
+                new(RoomType.HczHid,new Vector3(-3.41f,5.68f,-2.3f),Quaternion.identity),
+                new(RoomType.HczHid,new Vector3(-6.44f,5.7f,-2.5f),Quaternion.identity),
+                new(RoomType.Hcz127,new Vector3(4.77f, 1.12f, 1.83f),Quaternion.identity),
+                new(RoomType.Hcz939,new Vector3(.6f, 1.3f, -2.8f),Quaternion.identity),
+            });
 
             //Exiled.Events.Handlers.Server.RoundStarted += Test;
 
@@ -63,6 +86,7 @@ namespace KE.Items
             SettingsHandler.SubscribeEvents();
             UpgradeHandler.SubscribeEvents();
             LightsHandler.SubscribeEvents();
+            Exiled.Events.Handlers.Map.Generated += OnGenerated;
             base.OnEnabled();
         }
 
@@ -74,6 +98,7 @@ namespace KE.Items
             //PickupQuality?.UnsubscribeEvents();
             //QualityHandler?.Unregister();
             SettingsHandler.UnsubscribeEvents();
+            Exiled.Events.Handlers.Map.Generated -= OnGenerated;
 
             //Exiled.Events.Handlers.Server.RoundStarted -= Test;
 
@@ -84,6 +109,11 @@ namespace KE.Items
             LightsHandler = null;
             UpgradeHandler = null;
             Instance = null;
+        }
+
+        private void OnGenerated()
+        {
+
         }
 
         public void Test()

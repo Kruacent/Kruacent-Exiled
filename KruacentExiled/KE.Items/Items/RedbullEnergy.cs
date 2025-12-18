@@ -4,9 +4,9 @@ using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
-using KE.Items.Features;
-using KE.Items.Interface;
-using KE.Items.ItemEffects;
+using KE.Items.API.Features;
+using KE.Items.API.Interface;
+using KE.Items.Items.ItemEffects;
 
 namespace KE.Items.Items
 {

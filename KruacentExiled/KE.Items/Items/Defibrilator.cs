@@ -1,16 +1,17 @@
 using Exiled.API.Enums;
-using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
-using Exiled.API.Features;
 using UnityEngine;
 using System.Linq;
-using KE.Items.Interface;
-using KE.Items.Extensions;
-using KE.Items.Features;
+using KE.Items.API.Interface;
+using KE.Items.API.Features;
+using System.Collections.Generic;
+using PlayerRoles.Ragdolls;
+using PlayerRoles;
+using MEC;
 
 [CustomItem(ItemType.SCP1853)]
 public class Defibrillator : KECustomItem, ILumosItem

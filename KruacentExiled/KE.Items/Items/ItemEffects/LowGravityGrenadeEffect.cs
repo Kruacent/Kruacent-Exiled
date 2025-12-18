@@ -7,46 +7,52 @@ using System.Collections.Generic;
 using UnityEngine;
 using PlayerLab = LabApi.Features.Wrappers.Player;
 
-namespace KE.Items.ItemEffects
+namespace KE.Items.Items.ItemEffects
 {
     public class LowGravityGrenadeEffect : CustomItemEffect
     {
-        private Dictionary<Player, Vector3> _effectedPlayers = new();
+        private Dictionary<PlayerLab, Vector3> _effectedPlayers = new();
         public Vector3 LowGravity { get; set; } = new(0, -12.6f, 0);
         public float Duration { get; set; } = 15f;
         public float Range { get; set; } = 10f;
 
         public override void Effect(UsedItemEventArgs ev)
         {
-            OnExploding(ev.Player, ev.Player.Position);
+            OnExploding(ev.Player);
         }
         public override void Effect(DroppingItemEventArgs ev)
         {
-            OnExploding(ev.Player, ev.Player.Position);
+            OnExploding(ev.Player);
         }
 
         public override void Effect(ExplodingGrenadeEventArgs ev)
         {
             ev.IsAllowed = false;
-            OnExploding(ev.Player, ev.Position);
+
+            foreach(Player player in ev.TargetsToAffect)
+            {
+                OnExploding(ev.Player);
+            }
+
+            
         }
 
-        public void OnExploding(Player thrownPlayer, Vector3 position)
+        public void OnExploding(PlayerLab player)
         {
-            foreach (Player player in Player.List)
+            if (player is null) return;
+
+            Vector3 previousGravity = player.Gravity;
+            _effectedPlayers[player] = previousGravity;
+            player.Gravity = LowGravity;
+            Timing.CallDelayed(Duration, () =>
             {
-                if (Vector3.Distance(position, player.Position) <= this.Range)
+                if (player is not null)
                 {
-                    Vector3 previousGravity = PlayerLab.Get(player.NetworkIdentity)!.Gravity;
-                    _effectedPlayers[player] = previousGravity;
-                    PlayerLab.Get(player.NetworkIdentity)!.Gravity = LowGravity;
-                    Timing.CallDelayed(this.Duration, () =>
-                    {
-                        PlayerLab.Get(thrownPlayer.NetworkIdentity)!.Gravity = _effectedPlayers[thrownPlayer];
-                        _effectedPlayers.Remove(thrownPlayer);
-                    });
+                    player.Gravity = _effectedPlayers[player];
+                    _effectedPlayers.Remove(player);
                 }
-            }
+                
+            });
         }
     }
 }
