@@ -7,7 +7,7 @@ internal class Reversed : IDurationEffect
 {
     public string Name { get; set; } = "Reversed";
     public string Message { get; set; } = "Oops ! I connected your keyboard in the wrong way, sorryyyy";
-    public float Duration { get; set; } = 60;
+    public float Duration { get; set; } = 30;
     public int Weight { get; set; } = 5;
     public EffectType Type { get; set; } = EffectType.Negative;
 
