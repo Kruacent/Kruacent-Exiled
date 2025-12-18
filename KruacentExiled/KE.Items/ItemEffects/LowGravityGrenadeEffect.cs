@@ -1,7 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
-using KE.Items.Extensions;
 using KE.Items.Interface;
 using MEC;
 using System.Collections.Generic;

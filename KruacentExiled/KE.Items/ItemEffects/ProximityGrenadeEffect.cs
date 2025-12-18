@@ -3,10 +3,8 @@ using Exiled.API.Enums;
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
-using KE.Items.Extensions;
 using KE.Items.Interface;
 using MEC;
-using System.Collections.Generic;
 using UnityEngine;
 using Exiled.API.Features;
 
