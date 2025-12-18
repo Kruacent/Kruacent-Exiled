@@ -2,6 +2,7 @@
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Toys;
+using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp1509;
 using Exiled.Events.EventArgs.Server;
@@ -33,7 +34,17 @@ namespace KE.CustomRoles.CR.SCP
             ItemType.Jailbird,
             ItemType.ParticleDisruptor,
             ItemType.MicroHID,
+            ItemType.Painkillers,
+            ItemType.Medkit,
+            ItemType.SCP500,
         };
+        public HashSet<ItemType> BlacklistedUsing = new()
+        {
+            ItemType.Painkillers,
+            ItemType.Medkit,
+            ItemType.SCP500,
+        };
+
         // 035 can't be damaged by these
         public HashSet<DamageType> BlacklistedDamage = new()
         {
@@ -48,6 +59,7 @@ namespace KE.CustomRoles.CR.SCP
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
             Exiled.Events.Handlers.Server.EndingRound += OnEndingRound;
             Exiled.Events.Handlers.Scp1509.Resurrecting += OnResurrecting;
+            Exiled.Events.Handlers.Player.UsingItem += OnUsingItem;
 
             base.SubscribeEvents();
         }
@@ -58,6 +70,7 @@ namespace KE.CustomRoles.CR.SCP
             Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
             Exiled.Events.Handlers.Server.EndingRound -= OnEndingRound;
             Exiled.Events.Handlers.Scp1509.Resurrecting -= OnResurrecting;
+            Exiled.Events.Handlers.Player.UsingItem -= OnUsingItem;
             base.UnsubscribeEvents();
         }
 
@@ -69,13 +82,44 @@ namespace KE.CustomRoles.CR.SCP
             base.RoleAdded(player);
         }
 
+
+        public static readonly string CantPickup = "A strange force called 'game balance' prevents from picking up this item";
+        public static readonly string CantUse = "A strange force called 'game balance' prevents from using this item";
+
+        private void OnUsingItem(UsingItemEventArgs ev)
+        {
+            if (BlacklistedUsing.Contains(ev.Item.Type))
+            {
+                ShowEffectHint(ev.Player, CantUse);
+                ev.IsAllowed = false;
+                return;
+            }
+        }
+
         private void OnSearchingPickup(SearchingPickupEventArgs ev)
         {
             if (!Check(ev.Player)) return;
 
-            if (ev.Pickup.Type.IsScp())
+            CustomItem item = null;
+
+            CustomItem.TryGet(ev.Pickup, out item);
+
+
+            if(item is not null)
             {
-                ShowEffectHint(ev.Player, "A strange force called 'game balance' stops you for picking up this item");
+                if(item.Id == 1050 || item.Id == 1047)
+                {
+                    ShowEffectHint(ev.Player, CantPickup);
+                    ev.IsAllowed = false;
+                    return;
+                }
+            }
+
+
+
+            if (ev.Pickup.Type.IsScp() && item is not null)
+            {
+                ShowEffectHint(ev.Player, CantPickup);
                 ev.IsAllowed = false;
                 return;
             }
@@ -83,7 +127,7 @@ namespace KE.CustomRoles.CR.SCP
 
             if (BlacklistedPickup.Contains(ev.Pickup.Type))
             {
-                ShowEffectHint(ev.Player, "This item can't be picked up");
+                ShowEffectHint(ev.Player, CantPickup);
                 ev.IsAllowed = false;
                 return;
                 
