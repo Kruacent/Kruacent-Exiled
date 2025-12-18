@@ -4,6 +4,7 @@ using UnityEngine;
 using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.API.Interfaces;
 using PlayerRoles;
+using Exiled.API.Extensions;
 
 namespace KE.CustomRoles.CR.Scientist
 {
@@ -17,8 +18,9 @@ namespace KE.CustomRoles.CR.Scientist
         public override bool KeepRoleOnChangingRole { get; set; } = true;
 
         public override float SpawnChance { get; set; } = 100;
-        public override Vector3 Scale { get; set; } = new Vector3(1, 1, 1);
         public Color32 Color => new Color32(191, 255, 183, 0);
+
+        public static readonly Vector3 scale = new();
 
         protected override void SubscribeEvents()
         {
@@ -41,12 +43,12 @@ namespace KE.CustomRoles.CR.Scientist
         }
         protected override void RoleAdded(Player player)
         {
-            player.Scale = new Vector3(1f, 1f, -1f);
+            player.SetFakeScale(scale, Player.Enumerable);
         }
 
         protected override void RoleRemoved(Player player)
         {
-            player.Scale = new Vector3(1f, 1f, 1f);
+            player.SetFakeScale(player.Scale, Player.Enumerable);
 
         }
     }

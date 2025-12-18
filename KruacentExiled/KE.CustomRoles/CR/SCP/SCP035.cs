@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp1509;
 using Exiled.Events.EventArgs.Server;
@@ -20,7 +21,7 @@ namespace KE.CustomRoles.CR.SCP
         public override bool IsSupport => false;
 
         public override string PublicName { get; set; } = "SCP-035";
-        public override int MaxHealth { get; set; } = 800;
+        public override int MaxHealth { get; set; } = 1300;
         public override string Description { get; set; } = "You can't pickup the Micro-HID and anything made with it, but you take 2 time less damage by these weapon";
         protected override int SettingId => 10002;
 
@@ -72,11 +73,20 @@ namespace KE.CustomRoles.CR.SCP
         {
             if (!Check(ev.Player)) return;
 
+            if (ev.Pickup.Type.IsScp())
+            {
+                ShowEffectHint(ev.Player, "A strange force called 'game balance' stops you for picking up this item");
+                ev.IsAllowed = false;
+                return;
+            }
+
+
             if (BlacklistedPickup.Contains(ev.Pickup.Type))
             {
                 ShowEffectHint(ev.Player, "This item can't be picked up");
                 ev.IsAllowed = false;
                 return;
+                
             }
         }
 

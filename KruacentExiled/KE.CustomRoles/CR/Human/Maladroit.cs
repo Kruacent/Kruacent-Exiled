@@ -22,7 +22,7 @@ namespace KE.CustomRoles.CR.Human
 
         public override SideEnum Side { get; set; } = SideEnum.Human;
         public override string Description { get; set; } = "Fait attention à \"tes\" items !";
-        public override string PublicName { get; set; } = "Maladroit Vole";
+        public override string PublicName { get; set; } = "Maladroit Voleur";
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
@@ -47,36 +47,20 @@ namespace KE.CustomRoles.CR.Human
 
         private IEnumerator<float> ThrowingItem(Player p)
         {            
-            Dictionary<int, Action> ActionDictionnary = new()
-            {
-                { 50, () => p.DropHeldItem() },
-                { 80, () => { /* Nothing */  } },
-                { 95, () => DropItemFromInventory(p, 1) },
-                { 100, () => DropItemFromInventory(p, 2) },
-            };
+
 
 
             while (p.IsAlive)
             {
-                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(120f, 200f));
-                int proba = UnityEngine.Random.Range(0, 101);
-                
-                foreach (var seuil in ActionDictionnary.Keys.OrderBy(p => p))
-                {
-                    if(proba < seuil)
-                    {
-                        ActionDictionnary[seuil]();
-                        break;
-                    }
-                }
-            }
-        }
+                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(90f, 120f));
 
-        private void DropItemFromInventory(Player p, int number)
-        {
-            for(int i = 0; i <= number; i++)
-            {
-                p.DropItem(p.Items.GetRandomValue());
+                if(UnityEngine.Random.Range(0f, 100f) > .5f)
+                {
+                    p.DropHeldItem();
+                }
+                
+
+                
             }
         }
     }

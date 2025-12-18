@@ -23,18 +23,21 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
         public override Vector3 Scale { get; set; } = new Vector3(1.1f, 1f, 1.1f);
 
         public override List<string> Inventory { get; set; } = new List<string>()
-       {
-          $"{ItemType.GunRevolver}",
-          $"{ItemType.Radio}",
-          $"{ItemType.Adrenaline}",
-          $"{ItemType.KeycardChaosInsurgency}",
-          $"{ItemType.GrenadeHE}",
-          $"{ItemType.GrenadeHE}",
+        {
+            $"{ItemType.GunA7}",
+            $"{ItemType.ArmorCombat}",
+            $"{ItemType.GunRevolver}",
+            $"{ItemType.Radio}",
+            $"{ItemType.Adrenaline}",
+            $"{ItemType.KeycardChaosInsurgency}",
+            $"{ItemType.GrenadeHE}",
+            $"{ItemType.GrenadeHE}",
         };
 
         public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new Dictionary<AmmoType, ushort>()
         {
-          { AmmoType.Ammo44Cal, 18}
+            { AmmoType.Ammo44Cal, 18},
+            { AmmoType.Nato762, 120}
         };
     }
 }

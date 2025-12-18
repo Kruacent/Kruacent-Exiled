@@ -38,7 +38,7 @@ namespace KE.CustomRoles.CR.ClassD
 
         protected override void RoleAdded(Player player)
         {
-            player.EnableEffect(EffectType.Slowness, SpeedReduction,999999 );
+            player.EnableEffect(EffectType.Slowness, SpeedReduction,-1 );
         }
 
         protected override void RoleRemoved(Player player)
