@@ -88,6 +88,8 @@ namespace KE.CustomRoles.CR.SCP
 
         private void OnUsingItem(UsingItemEventArgs ev)
         {
+            if (!Check(ev.Player)) return;
+
             if (BlacklistedUsing.Contains(ev.Item.Type))
             {
                 ShowEffectHint(ev.Player, CantUse);
