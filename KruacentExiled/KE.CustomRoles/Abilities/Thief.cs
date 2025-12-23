@@ -43,8 +43,7 @@ namespace KE.CustomRoles.Abilities
 
             Item newitem = item.Clone();
             newitem.Give(player);
-            thiefed.RemoveItem(newitem);
-
+            thiefed.RemoveItem(item);
 
             return base.AbilityUsed(player);
         }
