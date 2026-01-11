@@ -83,8 +83,8 @@ namespace KE.CustomRoles.CR.SCP
         }
 
 
-        public static readonly string CantPickup = "A strange force called 'game balance' prevents from picking up this item";
-        public static readonly string CantUse = "A strange force called 'game balance' prevents from using this item";
+        public static readonly string CantPickup = "A strange force called \'game balance\' prevents you from picking up this item";
+        public static readonly string CantUse = "A strange force called \'game balance\' prevents you from using this item";
 
         private void OnUsingItem(UsingItemEventArgs ev)
         {
@@ -115,16 +115,27 @@ namespace KE.CustomRoles.CR.SCP
                     ev.IsAllowed = false;
                     return;
                 }
+
+                if (ev.Pickup.Type.IsScp())
+                {
+                    ShowEffectHint(ev.Player, CantPickup);
+                    ev.IsAllowed = false;
+                    return;
+                }
+
+                if (ev.Pickup.Type == ItemType.GunSCP127)
+                {
+                    ShowEffectHint(ev.Player, CantPickup);
+                    ev.IsAllowed = false;
+                    return;
+                }
             }
 
 
 
-            if (ev.Pickup.Type.IsScp() && item is not null)
-            {
-                ShowEffectHint(ev.Player, CantPickup);
-                ev.IsAllowed = false;
-                return;
-            }
+
+
+
 
 
             if (BlacklistedPickup.Contains(ev.Pickup.Type))
@@ -173,7 +184,6 @@ namespace KE.CustomRoles.CR.SCP
         private void OnResurrecting(ResurrectingEventArgs ev)
         {
             if (!Check(ev.Player)) return;
-
             ev.NewRole = RoleTypeId.Scp0492;
         }
 

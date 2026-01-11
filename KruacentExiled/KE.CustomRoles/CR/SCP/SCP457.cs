@@ -39,7 +39,7 @@ namespace KE.CustomRoles.CR.SCP
         public static float DamageRefreshRate = 5f;
         public static readonly Color FlameColor = new(2, 1.08f, 0);
 
-        public Collider[] SphereNonAlloc = new Collider[8];
+        public Collider[] SphereNonAlloc = new Collider[32];
 
 
         public override HashSet<string> Abilities => 
