@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace KE.Misc.Features
 {
-    internal class Spawn : MiscFeature
+    public class Spawn : MiscFeature
     {
 
         private Dictionary<string, RoleTypeId> baseRole = new ()
@@ -18,17 +18,15 @@ namespace KE.Misc.Features
             { "173", RoleTypeId.Scp173 },
             { "106", RoleTypeId.Scp106 },
             { "049", RoleTypeId.Scp049 },
-            { "079", RoleTypeId.Scp079 },
-            { "096", RoleTypeId.Scp096 },
             { "939", RoleTypeId.Scp939 },
         };
 
         private Dictionary<string,CustomSCP> SelectableCustomSCPs => CustomSCP.All.ToDictionary(cs =>cs.Name, cs => cs);
 
-        private bool _set035 = true;
 
+        public static event Action<Player> OnAssignedSCP = delegate { };
 
-        public void OnRoundStarted()
+        private void OnRoundStarted()
         {
             if (!MainPlugin.Instance.Config.ScpPreferences) return;
 
@@ -64,37 +62,6 @@ namespace KE.Misc.Features
                 SetRoleWithId(player, roleScp);
             });
             
-            /*
-            if (config.Scp035Enabled && roleScp == RoleTypeId.Scp079)
-            {
-                Player pl = Player.List.GetRandomValue(p => p.Role == RoleTypeId.ClassD || p.Role == RoleTypeId.Scientist);
-                RoleTypeId otherScp = ChooseRandomRole(GetPreferences(pl));
-
-                if (otherScp == RoleTypeId.Scp079)
-                {
-                    _set035 = !_set035;
-                    if (_set035)
-                    {
-                        CustomRole scp = CustomRole.Registered.FirstOrDefault(c => c.Id == 10);
-                        scp.AddRole(pl);
-                        pl.Teleport(SpawnLocationType.Inside096);
-                    }
-                    else
-                    {
-                        pl.Role.Set(otherScp);
-                    }
-                }
-                else
-                {
-                    pl.Role.Set(otherScp);
-                    Timing.CallDelayed(1f, () =>
-                    {
-                        pl.MaxHealth /= 4;
-                        pl.Health = pl.MaxHealth;
-                    });
-                }
-
-            }*/
         }
 
 
@@ -145,18 +112,21 @@ namespace KE.Misc.Features
             if (baseRole.ContainsKey(name))
             {
                 player.Role.Set(baseRole[name]);
+                OnAssignedSCP?.Invoke(player);
                 Log.Info("vanilla scp");
+                return;
             }
-            else
+
+            if (SelectableCustomSCPs.ContainsKey(name))
             {
-                if (SelectableCustomSCPs.ContainsKey(name))
-                {
-                    SelectableCustomSCPs[name].AddRole(player);
-                    Log.Info("custom scp");
-                    return;
-                }
-                
+                SelectableCustomSCPs[name].AddRole(player);
+                OnAssignedSCP?.Invoke(player);
+                Log.Info("custom scp");
+                return;
             }
+
+            throw new Exception($"SCP ({name}) not found");
+                
 
 
         }
@@ -166,13 +136,13 @@ namespace KE.Misc.Features
         public override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Server.EndingRound += EndingRound;
-            Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
+            Exiled.Events.Handlers.Server.AllPlayersSpawned += OnRoundStarted;
         }
 
         public override void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Server.EndingRound -= EndingRound;
-            Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
+            Exiled.Events.Handlers.Server.AllPlayersSpawned -= OnRoundStarted;
         }
 
         public void EndingRound(EndingRoundEventArgs ev)

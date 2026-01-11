@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace KE.Misc.Features
 {
-    internal abstract class MiscFeature : IUsingEvents
+    public abstract class MiscFeature : IUsingEvents
     {
         private static HashSet<MiscFeature> _list = new();
 
