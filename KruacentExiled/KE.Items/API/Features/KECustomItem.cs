@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using KE.Items.API.Features.SpawnPoints;
@@ -84,7 +85,7 @@ namespace KE.Items.API.Features
         internal static void Message(CustomItem c, Player player, bool pickedUp = false)
         {
 
-            StringBuilder builder = new();
+            StringBuilder builder = StringBuilderPool.Pool.Get();
 
             if (MainPlugin.Instance.SettingsHandler.GetPrefixes(player))
             {
@@ -110,7 +111,11 @@ namespace KE.Items.API.Features
             }
 
             builder.AppendLine($"<b>{c.Name}</b>");
-            if (MainPlugin.Instance.SettingsHandler.GetDescriptionsSettings(player))
+
+            bool desc = MainPlugin.Instance.SettingsHandler.GetDescriptionsSettings(player);
+
+            Log.Debug(desc);
+            if (desc)
             {
                 builder.AppendLine(c.Description);
                 if (c is IUpgradableCustomItem ci)
@@ -131,7 +136,8 @@ namespace KE.Items.API.Features
 
 
             float delay = MainPlugin.Instance.SettingsHandler.GetTime(player);
-            DisplayHandler.Instance.AddHint(MainPlugin.HintPlacement, player, builder.ToString(), delay);
+
+            DisplayHandler.Instance.AddHint(MainPlugin.HintPlacement, player, StringBuilderPool.Pool.ToStringReturn(builder), delay);
 
 
         }
