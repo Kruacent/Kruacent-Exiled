@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
+using KE.Utils.API.Features.SCPs;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -38,6 +39,12 @@ namespace KE.CustomRoles.API.Features
         {
             SettingBase.Unregister();
             base.Destroy();
+        }
+
+        public override void AddRole(Player player)
+        {
+            SCPTeam.Instance.AddPrimary(player);
+            base.AddRole(player);
         }
 
 
