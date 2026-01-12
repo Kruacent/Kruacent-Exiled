@@ -19,6 +19,7 @@
 		<Reference Include="0Harmony" HintPath="$(EXILED_REFERENCES)\0Harmony.dll" />
 		<Reference Include="Pooling" HintPath="$(EXILED_REFERENCES)\Pooling.dll" />
 		<Reference Include="KE.Utils" HintPath="$(EXILED_DEV_REFERENCES)\Plugins\KE.Utils.dll" />
+		<Reference Include="KE.Misc" HintPath="$(EXILED_DEV_REFERENCES)\Plugins\KE.Misc.dll" />
 		<Reference Include="Unity.TextMeshPro" HintPath="$(EXILED_REFERENCES)\Unity.TextMeshPro.dll" />
 	</ItemGroup>
 

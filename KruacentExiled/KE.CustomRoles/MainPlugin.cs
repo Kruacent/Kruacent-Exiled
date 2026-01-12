@@ -12,7 +12,9 @@ using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 
 
 namespace KE.CustomRoles
@@ -71,17 +73,17 @@ namespace KE.CustomRoles
 
         public void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Server.RoundStarted += CustomRoleImplement;
+            Misc.Features.Spawn.OnAssigned += CustomRoleImplement;
             Exiled.Events.Handlers.Server.RespawnedTeam += CustomRoleRespawning;
         }
         public void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Server.RoundStarted -= CustomRoleImplement;
+            Misc.Features.Spawn.OnAssigned -= CustomRoleImplement;
             Exiled.Events.Handlers.Server.RespawnedTeam -= CustomRoleRespawning;
 
         }
 
-        public void CustomRoleImplement()
+        public void CustomRoleImplement(IEnumerable<Player> players)
         {
             KECustomRole.GiveRandomRole(Player.List);
             
