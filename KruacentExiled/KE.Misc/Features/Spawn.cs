@@ -24,46 +24,47 @@ namespace KE.Misc.Features
         private Dictionary<string,CustomSCP> SelectableCustomSCPs => CustomSCP.All.ToDictionary(cs =>cs.Name, cs => cs);
 
 
-        public static event Action<Player> OnAssignedSCP = delegate { };
-        public static event Action OnAssigned = delegate { };
+        public static event Action<IEnumerable<Player>> OnAssigned = delegate { };
 
         private void OnRoundStarted()
         {
             if (!MainPlugin.Instance.Config.ScpPreferences) return;
 
-            
+            List<Player> players = new();
 
 
             foreach (Player player in Player.List.Where(p => p.IsScp && !p.IsNPC))
             {
-                SetScpPreferences(player);
+                if (SetScpPreferences(player))
+                {
+                    players.Add(player);
+                }
             }
 
-            OnAssigned?.Invoke();
+            OnAssigned?.Invoke(players.ToList());
         }
 
-        private void SetScpPreferences(Player player)
+        private bool SetScpPreferences(Player player)
         {
             Config config = MainPlugin.Instance.Config;
             if (config == null)
             {
                 Log.Warn("no config, no custom preferences this round");
-                return;
+                return false;
             }
             Dictionary<string, int> chancescp = GetPreferences(player);
 
             if(chancescp == null)
             {
                 Log.Error("no setting found");
+                return false;
             }
 
 
             string roleScp = ChooseRandomRole(chancescp);
             Log.Debug($"Scp ({player.Nickname}) is {roleScp} previous : {player.Role.Type}");
-            Timing.CallDelayed(1f, delegate
-            {
-                SetRoleWithId(player, roleScp);
-            });
+            SetRoleWithId(player, roleScp);
+            return true;
             
         }
 
@@ -115,7 +116,6 @@ namespace KE.Misc.Features
             if (baseRole.ContainsKey(name))
             {
                 player.Role.Set(baseRole[name]);
-                OnAssignedSCP?.Invoke(player);
                 Log.Info("vanilla scp");
                 return;
             }
@@ -123,7 +123,6 @@ namespace KE.Misc.Features
             if (SelectableCustomSCPs.ContainsKey(name))
             {
                 SelectableCustomSCPs[name].AddRole(player);
-                OnAssignedSCP?.Invoke(player);
                 Log.Info("custom scp");
                 return;
             }
