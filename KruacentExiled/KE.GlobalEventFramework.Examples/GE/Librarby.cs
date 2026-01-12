@@ -24,7 +24,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override string Description { get; set; } = "Ne parlez pas trop fort sinon vous subirez les conséquences !";
         ///<inheritdoc/>
-        public override int WeightedChance => 150;
+        public override int WeightedChance => 1;
         private float MaxVolume = 0.5f;
 
         private OpusDecoder _decoder = new OpusDecoder();
