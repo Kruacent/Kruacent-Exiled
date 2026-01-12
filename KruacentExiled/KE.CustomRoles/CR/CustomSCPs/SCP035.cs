@@ -76,7 +76,8 @@ namespace KE.CustomRoles.CR.CustomSCPs
             if (!Check(ev.Player)) return;
             Log.Debug("cassie message");
 
-            Exiled.API.Features.Cassie.CustomScpTermination("0 35", ev.DamageHandler);
+            Exiled.API.Features.Cassie.CustomScpTermination("SCP 0 3 5", ev.DamageHandler);
+            
         }
 
         protected override void RoleAdded(Player player)
