@@ -10,6 +10,7 @@ using KE.CustomRoles.Settings;
 using KE.Misc.Features.Spawn;
 using KE.Utils.API.CustomStats;
 using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Translations;
 using MEC;
 using Microsoft.Win32;
 using System;
@@ -20,7 +21,7 @@ using System.Runtime.InteropServices.ComTypes;
 
 namespace KE.CustomRoles
 {
-    public class MainPlugin : Plugin<Config,Translations>
+    public class MainPlugin : Plugin<Config>, Utils.API.Translations.ITranslation
     {
         public override string Name => "KE.CustomRoles";
         public override string Prefix => "KE.CR";
@@ -33,16 +34,18 @@ namespace KE.CustomRoles
         public static readonly HintPlacement AbilitiesDesc = new(0, 900);
         public static readonly HintPlacement Abilities = new(0, 850,HintServiceMeow.Core.Enum.HintAlignment.Left);
         public static readonly HintPlacement RightHPbars = new(55, 1000,HintServiceMeow.Core.Enum.HintAlignment.Left);
-        public static Translations Translations => Instance?.Translation;
         private SettingHandler _settingHandler;
         internal static SettingHandler SettingHandler => Instance?._settingHandler;
 
+        internal TranslationFile translation;
+        public TranslationFile Translation => translation;
         private Harmony Harmony; 
 
         public override void OnEnabled()
         {
             
             Instance = this;
+            translation = new CRTranslationFile();
             _settingHandler = new();
             //Utils.API.Settings.SettingHandler.Instance.SubscribeEvents();
 
@@ -55,6 +58,7 @@ namespace KE.CustomRoles
             KEAbilities.Register(Assembly);
             KECustomRole.Register();
             SubscribeEvents();
+            base.OnEnabled();
         }
 
         public override void OnDisabled()
@@ -70,6 +74,7 @@ namespace KE.CustomRoles
             Utils.API.Settings.SettingHandler.Instance.UnsubscribeEvents();
             _settingHandler = null;
             Instance = null;
+            base.OnDisabled();
         }
 
         public void SubscribeEvents()
@@ -86,8 +91,20 @@ namespace KE.CustomRoles
 
         public void CustomRoleImplement(SpawnedEventArgs ev)
         {
+            ShowTranslation();
             KECustomRole.GiveRandomRole(Player.List.Except(ev.CustomRoles));
             
+        }
+
+
+        public void ShowTranslation()
+        {
+            ///????????????
+            translation.Values.AddRange(KECustomRole.keys);
+            Log.Debug("nb trnalsaikey"+ KECustomRole.keys.Count);
+            Log.Debug("nb trnalsai"+ translation.Values.Count);
+
+            Log.Debug(translation.ToString());
         }
 
         public void CustomRoleRespawning(RespawnedTeamEventArgs ev)

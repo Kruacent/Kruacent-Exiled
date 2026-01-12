@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using CustomPlayerEffects;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
@@ -12,6 +13,7 @@ using InventorySystem.Configs;
 using KE.CustomRoles.API.Interfaces;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
+using KE.Utils.API.Translations;
 using MEC;
 using PlayerRoles;
 using System;
@@ -21,6 +23,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
+using YamlDotNet.Core.Tokens;
 
 namespace KE.CustomRoles.API.Features
 {
@@ -104,12 +107,28 @@ namespace KE.CustomRoles.API.Features
         private static Dictionary<Type, KECustomRole> typeLookupTable = new();
         private static Dictionary<string, KECustomRole> stringLookupTable = new();
 
+        private static TranslationFile translation => MainPlugin.Instance.translation;
+
+
+        protected virtual List<TranslationKey> CreateKeys()
+        {
+            return new List<TranslationKey>()
+            {
+                new(Name+"_PublicName",PublicName),
+                new(Name+"_Description",Description),
+            };
+        }
+
+        public static List<TranslationKey> keys = new();
         public override void Init()
         {
             typeLookupTable.Add(GetType(), this);
             stringLookupTable.Add(Name, this);
             InternalSubscribeEvents();
             SubscribeEvents();
+            Log.Debug("adding keys to "+Name);
+            keys.AddRange(CreateKeys());
+
         }
 
         public override void Destroy()
