@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace KE.Misc.Features
+namespace KE.Misc.Features.Spawn
 {
     public class Spawn : MiscFeature
     {
@@ -24,24 +24,22 @@ namespace KE.Misc.Features
         private Dictionary<string,CustomSCP> SelectableCustomSCPs => CustomSCP.All.ToDictionary(cs =>cs.Name, cs => cs);
 
 
-        public static event Action<IEnumerable<Player>> OnAssigned = delegate { };
+        public static event Action<SpawnedEventArgs> OnAssigned = delegate { };
+
+        private SpawnedEventArgs eventarg;
 
         private void OnRoundStarted()
         {
             if (!MainPlugin.Instance.Config.ScpPreferences) return;
 
-            List<Player> players = new();
-
+            eventarg = new();
 
             foreach (Player player in Player.List.Where(p => p.IsScp && !p.IsNPC))
             {
-                if (SetScpPreferences(player))
-                {
-                    players.Add(player);
-                }
+                SetScpPreferences(player);
             }
 
-            OnAssigned?.Invoke(players.ToList());
+            OnAssigned?.Invoke(eventarg);
         }
 
         private bool SetScpPreferences(Player player)
@@ -116,6 +114,8 @@ namespace KE.Misc.Features
             if (baseRole.ContainsKey(name))
             {
                 player.Role.Set(baseRole[name]);
+                eventarg.VanillaRoles.Add(player);
+                
                 Log.Info("vanilla scp");
                 return;
             }
@@ -123,6 +123,7 @@ namespace KE.Misc.Features
             if (SelectableCustomSCPs.ContainsKey(name))
             {
                 SelectableCustomSCPs[name].AddRole(player);
+                eventarg.CustomRoles.Add(player);
                 Log.Info("custom scp");
                 return;
             }
@@ -137,24 +138,12 @@ namespace KE.Misc.Features
 
         public override void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Server.EndingRound += EndingRound;
             Exiled.Events.Handlers.Server.AllPlayersSpawned += OnRoundStarted;
         }
 
         public override void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Server.EndingRound -= EndingRound;
             Exiled.Events.Handlers.Server.AllPlayersSpawned -= OnRoundStarted;
-        }
-
-        public void EndingRound(EndingRoundEventArgs ev)
-        {
-            //if (Scp035._trackedPlayers.Count <= 0) return;
-
-            //if (ev.ClassList.mtf_and_guards != 0 || ev.ClassList.scientists != 0) ev.IsAllowed = false;
-            //else if (ev.ClassList.class_ds != 0 || ev.ClassList.chaos_insurgents != 0) ev.IsAllowed = false;
-            //else if (ev.ClassList.scps_except_zombies + ev.ClassList.zombies > 0) ev.IsAllowed = true;
-            //else ev.IsAllowed = true;
         }
     }
 
