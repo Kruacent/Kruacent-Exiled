@@ -38,6 +38,7 @@ namespace KE.CustomRoles.Settings
         private int _idTestHintalign = 157;
         private int _idTestHintspawn = 158;
         private int _idTestHinttext = 159;
+        private int _idTestHintslidersize = 180;
         private readonly int _idHeaderTestHint = 160;
 
 
@@ -78,6 +79,7 @@ namespace KE.CustomRoles.Settings
                     new SliderSetting(_idTestHintsliderx,"x",-2000,2000,0),
                     new SliderSetting(_idTestHintslidery,"y",0,2000,0),
                     new SliderSetting(_idTestHintslidertime,"time",0,10,5),
+                    new SliderSetting(_idTestHintslidersize,"size",0,100,5),
                     new DropdownSetting(_idTestHintalign,"alignment",options),
                     new ButtonSetting(_idTestHintspawn,"spawn","spawn"),
                     SettingBase.Create(new SSPlaintextSetting(_idTestHinttext,"text")),
@@ -103,6 +105,7 @@ namespace KE.CustomRoles.Settings
         float timevalue = 5;
         HintAlignment HintAlignment = HintAlignment.Center;
         string text = "TEST";
+        float size = 10;
 
         public void CreateHint(Player player, ServerSpecificSettingBase setting)
         {
@@ -124,6 +127,10 @@ namespace KE.CustomRoles.Settings
             if (SettingBase.TryGetSetting<UserTextInputSetting>(player, _idTestHinttext, out var textsetting))
             {
                 text = textsetting.Text;
+            }
+            if (SettingBase.TryGetSetting<SliderSetting>(player, _idTestHintslidersize, out var slidersize))
+            {
+                size = slidersize.SliderValue;
             }
 
             if (SettingBase.TryGetSetting<DropdownSetting>(player, _idTestHintalign, out var dropdown))
@@ -150,12 +157,14 @@ namespace KE.CustomRoles.Settings
                 {
                     PlayerDisplay display = PlayerDisplay.Get(player);
                     Log.Debug($"creating hint at {xvalue},{yvalue} for {timevalue}");
+                    string fulltext = "<size=" + size + ">" + text + "</size>";
+
                     var hint = new Hint()
                     {
                         XCoordinate = xvalue,
                         YCoordinate = yvalue,
                         Alignment = HintAlignment,
-                        Text = text
+                        Text = fulltext
                     };
                     display.ClearHint();
                     display.AddHint(hint);

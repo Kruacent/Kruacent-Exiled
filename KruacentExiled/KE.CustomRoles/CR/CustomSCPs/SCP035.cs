@@ -2,13 +2,20 @@
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp1509;
 using Exiled.Events.EventArgs.Server;
+using HintServiceMeow.Core.Models.Arguments;
+using HintServiceMeow.Core.Utilities;
 using KE.CustomRoles.API.Features;
+using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Displays.DisplayMeow.Placements;
 using PlayerRoles;
+using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace KE.CustomRoles.CR.CustomSCPs
 {
@@ -17,7 +24,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
         public override bool IsSupport => false;
 
         public override string PublicName { get; set; } = "SCP-035";
-        public override int MaxHealth { get; set; } = 1300;
+        public override int MaxHealth { get; set; } = 1200;
         public override string Description { get; set; } = "You can't pickup the Micro-HID and anything made with it, but you take 2 time less damage by these weapon";
         protected override int SettingId => 10002;
 
@@ -70,7 +77,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
             Exiled.Events.Handlers.Player.UsingItem -= OnUsingItem;
             base.UnsubscribeEvents();
         }
-
+        private static HintPosition position = new RemainingPlayerPosition();
         private void OnDying(DyingEventArgs ev)
         {
             if (!Check(ev.Player)) return;
@@ -82,11 +89,24 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
         protected override void RoleAdded(Player player)
         {
+            PlayerDisplay dis = PlayerDisplay.Get(player);
+            DisplayHandler.Instance.CreateAuto(player, (args) => GetPlayers(args), position.HintPlacement);
 
             player.VoiceChannel = VoiceChat.VoiceChatChannel.ScpChat;
             player.Position = RoleTypeId.Scp049.GetRandomSpawnLocation().Position;
             base.RoleAdded(player);
         }
+
+
+        private string GetPlayers(AutoContentUpdateArg arg)
+        {
+
+            if (!Check(Player.Get(arg.PlayerDisplay.ReferenceHub))) 
+                return string.Empty;
+            return "<size=50><b>" +RoundSummary.singleton.TargetCount.ToString() + "</b></size>";
+
+        }
+
 
 
         public static readonly string CantPickup = "A strange force called \'game balance\' \nprevents you from picking up this item";
