@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using Cassie;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.CustomItems.API.Features;
@@ -50,6 +51,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
         protected override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
+            Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
             Exiled.Events.Handlers.Server.EndingRound += OnEndingRound;
             Exiled.Events.Handlers.Scp1509.Resurrecting += OnResurrecting;
@@ -61,11 +63,20 @@ namespace KE.CustomRoles.CR.CustomSCPs
         protected override void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
+            Exiled.Events.Handlers.Player.Dying -= OnDying;
             Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
             Exiled.Events.Handlers.Server.EndingRound -= OnEndingRound;
             Exiled.Events.Handlers.Scp1509.Resurrecting -= OnResurrecting;
             Exiled.Events.Handlers.Player.UsingItem -= OnUsingItem;
             base.UnsubscribeEvents();
+        }
+
+        private void OnDying(DyingEventArgs ev)
+        {
+            if (!Check(ev.Player)) return;
+            Log.Debug("cassie message");
+
+            Exiled.API.Features.Cassie.CustomScpTermination("0 35", ev.DamageHandler);
         }
 
         protected override void RoleAdded(Player player)
@@ -77,8 +88,8 @@ namespace KE.CustomRoles.CR.CustomSCPs
         }
 
 
-        public static readonly string CantPickup = "A strange force called \'game balance\' prevents you from picking up this item";
-        public static readonly string CantUse = "A strange force called \'game balance\' prevents you from using this item";
+        public static readonly string CantPickup = "A strange force called \'game balance\' \nprevents you from picking up this item";
+        public static readonly string CantUse = "A strange force called \'game balance\' \nprevents you from using this item";
 
         private void OnUsingItem(UsingItemEventArgs ev)
         {
