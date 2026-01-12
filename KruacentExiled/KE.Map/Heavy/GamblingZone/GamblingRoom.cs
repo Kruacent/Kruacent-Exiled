@@ -64,7 +64,7 @@ namespace KE.Map.Heavy.GamblingZone
             _interact.InteractionDuration = BasePickupTime;
             
             
-            _interact.OnSearchAborted += OnPickup;
+            _interact.OnSearched += OnPickup;
             CreateModel(_position);
             _interact.Spawn();
             _lootTable = lootTable;
