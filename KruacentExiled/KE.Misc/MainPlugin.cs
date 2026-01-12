@@ -11,6 +11,7 @@ using HarmonyLib;
 using LabApi.Events.Arguments.ServerEvents;
 using KE.Misc.Features.VoteStart;
 using KE.Misc.Features.Spawn;
+using KE.Misc.Features.LastHuman;
 
 namespace KE.Misc
 {
@@ -35,6 +36,7 @@ namespace KE.Misc
         internal AutoTesla AutoTesla { get; private set; }
         internal EventHandlers _gamblingCoinHandler {  get; private set; }
         internal SpawnLcz SpawnLcz { get; private set; }
+        internal LastHumanHandler LastHuman { get; private set; }
         private Harmony harmony;
 
         internal VoteStart vote { get; private set; }
@@ -54,6 +56,7 @@ namespace KE.Misc
             FriendlyFire = new();
             AutoNukeAnnoucement = new();
             AutoTesla = new();
+            LastHuman = new();
             Candy = new Candy();
             vote = new();
             //SpawnLcz = new();
@@ -71,7 +74,7 @@ namespace KE.Misc
                 _gamblingCoinHandler = new EventHandlers();
                 Exiled.Events.Handlers.Player.FlippingCoin += _gamblingCoinHandler.OnCoinFlip;
             }
-
+            LastHuman.SubscribeEvents();
             SCPBuff.SubscribeEvents();
             Exiled.Events.Handlers.Server.RoundStarted += AutoNukeAnnoucement.OnRoundStarted;
             ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;
@@ -85,6 +88,7 @@ namespace KE.Misc
             ServerHandle.RoundStarted -= ServerHandler.OnRoundStarted;
             LabApi.Events.Handlers.ServerEvents.CassieQueuingScpTermination -= NoeDeath;
             Exiled.Events.Handlers.Server.RoundStarted -= AutoNukeAnnoucement.OnRoundStarted;
+            LastHuman.UnsubscribeEvents();
             SCPBuff.UnsubscribeEvents();
             if (Config.GamblingCoin)
             {
@@ -111,6 +115,7 @@ namespace KE.Misc
             //SurfaceLight = null;
             GamblingCoinManager.DestroyAll();
             _gamblingCoinHandler = null;
+            LastHuman = null;
             harmony = null;
             Instance = null;
         }       

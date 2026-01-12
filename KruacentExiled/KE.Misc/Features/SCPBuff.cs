@@ -23,38 +23,16 @@ namespace KE.Misc.Features
         public void SubscribeEvents()
         {
             Exiled.Events.Handlers.Player.ChangingRole += BecomingSCP;
-            Exiled.Events.Handlers.Scp106.Attacking += OnAttacking;
-            Exiled.Events.Handlers.Player.Died += OnDied;
         }
 
         public void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.ChangingRole -= BecomingSCP;
-            Exiled.Events.Handlers.Scp106.Attacking -= OnAttacking;
-            Exiled.Events.Handlers.Player.Died -= OnDied;
-        }
-
-        private void OnDied(DiedEventArgs ev)
-        {
-            IEnumerable<Player> players = Player.Enumerable.Where(p => p.IsHuman);
-            if (players.Count() > 1)
-            {
-                return;
-            }
-
-
-
-
+            
         }
 
 
-        private void OnAttacking(AttackingEventArgs ev)
-        {
-            if(ev.IsAllowed && Player.Enumerable.Count(p => !p.IsScp && p.IsAlive) == 1)
-            {
-                ev.Target.Vaporize();
-            }
-        }
+
 
         internal void StartBuff()
         {

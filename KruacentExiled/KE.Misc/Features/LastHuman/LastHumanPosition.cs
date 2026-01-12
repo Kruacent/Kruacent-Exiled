@@ -12,7 +12,7 @@ namespace KE.Misc.Features.LastHuman
     {
         public override float Xposition => 0;
 
-        public override float Yposition => 400;
+        public override float Yposition => 120;
         public override string Name => "LastHuman";
 
         public override HintAlignment HintAlignment => HintAlignment.Center;
