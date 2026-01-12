@@ -7,6 +7,7 @@ using HarmonyLib;
 using KE.CustomRoles.Abilities.FireAbilities;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.Settings;
+using KE.Misc.Features.Spawn;
 using KE.Utils.API.CustomStats;
 using KE.Utils.API.Displays.DisplayMeow;
 using MEC;
@@ -73,19 +74,19 @@ namespace KE.CustomRoles
 
         public void SubscribeEvents()
         {
-            Misc.Features.Spawn.OnAssigned += CustomRoleImplement;
+            Misc.Features.Spawn.Spawn.OnAssigned += CustomRoleImplement;
             Exiled.Events.Handlers.Server.RespawnedTeam += CustomRoleRespawning;
         }
         public void UnsubscribeEvents()
         {
-            Misc.Features.Spawn.OnAssigned -= CustomRoleImplement;
+            Misc.Features.Spawn.Spawn.OnAssigned -= CustomRoleImplement;
             Exiled.Events.Handlers.Server.RespawnedTeam -= CustomRoleRespawning;
 
         }
 
-        public void CustomRoleImplement(IEnumerable<Player> players)
+        public void CustomRoleImplement(SpawnedEventArgs ev)
         {
-            KECustomRole.GiveRandomRole(Player.List);
+            KECustomRole.GiveRandomRole(Player.List.Except(ev.CustomRoles));
             
         }
 

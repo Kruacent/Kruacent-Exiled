@@ -30,7 +30,7 @@ namespace KE.CustomRoles.CR.SCP
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override bool IsSupport { get; } = false;
 
-        public override float SpawnChance { get; set; } = 100;
+        public override float SpawnChance { get; set; } = 0;
 
         private Dictionary<Player, Light> _inside = new();
         private Dictionary<Player, HashSet<CoroutineHandle>> _handles = new();
