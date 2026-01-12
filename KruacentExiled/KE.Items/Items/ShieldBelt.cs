@@ -10,6 +10,7 @@ using Exiled.Events.EventArgs.Player;
 using KE.Items.API.Features;
 using MapGeneration;
 using MEC;
+using PlayerRoles.FirstPersonControl;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -26,10 +27,14 @@ namespace KE.Items.Items
             public static readonly float RechargeRatePerS = 13;
             public static readonly float TimeBroken = 50;
             public static readonly float Base = 20;
+            public static readonly Vector3 MaxSize = Vector3.one * 2;
 
             private float currentCharge;
             private float timeRemaining;
             private bool recharging = false;
+
+            private Player player;
+            private Primitive primitive;
 
             private int i = 0;
             public void RechargeTick()
@@ -52,15 +57,23 @@ namespace KE.Items.Items
                 {
                     Break();
                 }
-                
 
+                if(primitive is not null)
+                {
+                    float percent = currentCharge / MaxCharge;
 
+                    primitive.Scale = percent * MaxSize;
 
-
+                }
 
 
                 if (!recharging)
                 {
+                    if (!primitive.Visible)
+                    {
+                        primitive.Visible = true;
+                    }
+
                     if (currentCharge != MaxCharge)
                     {
                         
@@ -75,6 +88,10 @@ namespace KE.Items.Items
                     if(timeRemaining < 0)
                     {
                         timeRemaining = 0;
+                    }
+                    if (primitive.Visible)
+                    {
+                        primitive.Visible = false;
                     }
                 }
 
@@ -113,6 +130,7 @@ namespace KE.Items.Items
                     timeRemaining = TimeBroken;
                     currentCharge = 0;
                     recharging = true;
+                    player.PlayShieldBreakSound();
                 }
                 
             }
@@ -132,10 +150,31 @@ namespace KE.Items.Items
                     return recharging;
                 }
             }
-            public ShieldBeltStat()
+            private Primitive CreatePrimitive(Player player)
             {
+                Primitive prim = Primitive.Create(null, null, null, false);
+
+                prim.Collidable = false;
+                prim.Visible = true;
+                prim.Transform.parent = player.ReferenceHub.transform;
+                prim.Transform.localPosition = Vector3.zero;
+                prim.Scale = MaxSize;
+                prim.Color = new Color32(50, 50, 50, 100);
+                prim.Spawn();
+                return prim;
+            }
+            public ShieldBeltStat(Player player)
+            {
+                this.player = player;
+                primitive = CreatePrimitive(player);
                 currentCharge = Base;
                 timeRemaining = 0;
+            }
+
+            public void Destroy()
+            {
+                primitive.Destroy();
+                primitive = null;
             }
         }
 
@@ -148,7 +187,6 @@ namespace KE.Items.Items
 
 
         private Dictionary<Player, ShieldBeltStat> stats = new();
-        private Dictionary<Player, Primitive> primitives = new();
         private CoroutineHandle handle;
 
         protected override void SubscribeEvents()
@@ -184,17 +222,17 @@ namespace KE.Items.Items
         protected override void OnAcquired(Player player, Item item, bool displayMessage)
         {
             if (!Check(item)) return;
-            stats.Add(player, new());
-            primitives.Add(player, CreatePrimitive(player));
-            Log.Info("player got shilde");
+            stats.Add(player, new(player));
+            Log.Debug("player got shield");
             base.OnAcquired(player, item, displayMessage);
         }
 
         private void OnDroppedItem(DroppedItemEventArgs ev)
         {
             if (!Check(ev.Pickup)) return;
+
+            stats[ev.Player].Destroy();
             stats.Remove(ev.Player);
-            RemovePrim(ev.Player);
             Log.Info("player lost shilde");
 
         }
@@ -221,8 +259,8 @@ namespace KE.Items.Items
         {
             if (ev.ItemsToDrop.Any(Check))
             {
+                stats[ev.Player].Destroy();
                 stats.Remove(ev.Player);
-                RemovePrim(ev.Player);
             }
         }
 
@@ -247,23 +285,7 @@ namespace KE.Items.Items
 
         }
 
-        private void RemovePrim(Player player)
-        {
-            primitives[player].Destroy();
-            primitives.Remove(player);
-        }
 
-        private Primitive CreatePrimitive(Player player)
-        {
-            Primitive prim = Primitive.Create(null, null, null, false);
-
-            prim.Collidable = false;
-            prim.Visible = true;
-            prim.Transform.parent = player.CameraTransform;
-            prim.Transform.localPosition = Vector3.forward;
-            prim.Spawn();
-            return prim;
-        }
 
         private IEnumerator<float> Tick()
         {
