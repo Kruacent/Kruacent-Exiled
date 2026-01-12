@@ -25,6 +25,7 @@ namespace KE.Misc.Features
 
 
         public static event Action<Player> OnAssignedSCP = delegate { };
+        public static event Action OnAssigned = delegate { };
 
         private void OnRoundStarted()
         {
@@ -37,6 +38,8 @@ namespace KE.Misc.Features
             {
                 SetScpPreferences(player);
             }
+
+            OnAssigned?.Invoke();
         }
 
         private void SetScpPreferences(Player player)
