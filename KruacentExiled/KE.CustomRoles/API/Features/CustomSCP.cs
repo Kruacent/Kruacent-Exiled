@@ -21,7 +21,11 @@ namespace KE.CustomRoles.API.Features
         public static IEnumerable<CustomSCP> All => Registered.Where(c => c is CustomSCP).Cast<CustomSCP>();
         public override void Init()
         {
-
+            if (SpawnChance <= 0)
+            {
+                base.Init();
+                return;
+            }
             
             if (header is null)
             {

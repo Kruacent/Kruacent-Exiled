@@ -1,21 +1,15 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.API.Features.Toys;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp1509;
 using Exiled.Events.EventArgs.Server;
 using KE.CustomRoles.API.Features;
 using PlayerRoles;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 
-namespace KE.CustomRoles.CR.SCP
+namespace KE.CustomRoles.CR.CustomSCPs
 {
     public class SCP035 : CustomSCP
     {

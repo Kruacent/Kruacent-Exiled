@@ -17,7 +17,7 @@ using System.Linq;
 using UnityEngine;
 using Light = Exiled.API.Features.Toys.Light;
 
-namespace KE.CustomRoles.CR.SCP
+namespace KE.CustomRoles.CR.CustomSCPs
 {
     public class SCP457 : CustomSCP
     {

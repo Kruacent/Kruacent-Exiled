@@ -318,7 +318,10 @@ namespace KE.CustomRoles.API.Features
 
         protected virtual void SetCustomInfo(Player player)
         {
-            player.CustomInfo = player.CustomName + "\n" + PublicName;
+            if (!string.IsNullOrEmpty(PublicName))
+            {
+                player.CustomInfo = player.CustomName + "\n" + PublicName;
+            }
             player.InfoArea &= ~(PlayerInfoArea.Nickname | PlayerInfoArea.Role);
         }
 
