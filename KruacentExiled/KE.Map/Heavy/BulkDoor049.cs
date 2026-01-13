@@ -1,5 +1,8 @@
-﻿using Exiled.API.Features;
-using KE.Utils.API;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
+using Exiled.API.Features.Doors;
+using Interactables.Interobjects.DoorUtils;
+using KE.Utils.API.Map;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +19,7 @@ namespace KE.Map.Heavy
         {
 
 
-            Room room = Room.List.Where(r => r.Type == Exiled.API.Enums.RoomType.Hcz049).First();
+            Room room = Room.List.Where(r => r.Type == RoomType.Hcz049).First();
 
 
             Vector3 pos = new(-19.7f ,89f, 9f);
@@ -26,7 +29,19 @@ namespace KE.Map.Heavy
 
 
 
-            StructureSpawner.SpawnDoor(ProjectMER.Features.Enums.DoorType.HeavyBulkDoor, worldpos, room.Rotation * rot , Vector3.one);
+            DoorVariant door = StructureSpawner.SpawnDoor(ProjectMER.Features.Enums.DoorType.HeavyBulkDoor, worldpos, room.Rotation * rot , Vector3.one,ZoneType.HeavyContainment);
+
+
+            Door doorExiled = Door.Get(door);
+            foreach(var k in StructureSpawner.AdditionalDoors)
+            {
+                Log.Debug(k.Key);
+                foreach(DoorVariant doorv in k.Value)
+                {
+                    Log.Debug(doorv);
+                }
+            }
+
 
             Log.Debug("spawn 049 bulk door at "+ worldpos);
         }

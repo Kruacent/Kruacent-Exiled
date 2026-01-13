@@ -1,12 +1,10 @@
 ﻿using Exiled.API.Enums;
-using System;
+using Exiled.API.Features.Doors;
+using Interactables.Interobjects.DoorUtils;
+using KE.Map.Others.BlackoutNDoor.Handlers;
+using KE.Utils.API.Map;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using KE.Map.Others.BlackoutNDoor.Handlers;
-using Exiled.API.Features.Doors;
-using CommandSystem;
 
 namespace KE.Map.Others.BlackoutNDoor
 {
@@ -29,10 +27,29 @@ namespace KE.Map.Others.BlackoutNDoor
                 if (door.DoorLockType == DoorLockType.None)
                 {
                     doors.Add(door);
-                    door.ChangeLock(DoorLockType.NoPower);
-                    door.IsOpen = open;
+                    LockDoor(door, open);
                 }
             }
+
+            if(StructureSpawner.AdditionalDoors.TryGetValue(zone,out var addDoors))
+            {
+                foreach(DoorVariant doorVariant in addDoors)
+                {
+                    Door door2 = Door.Get(doorVariant);
+                    if (door2.DoorLockType == DoorLockType.None)
+                    {
+                        doors.Add(door2);
+                        LockDoor(door2, open);
+                    }
+                       
+                }
+            }
+        }
+
+        private void LockDoor(Door door, bool open)
+        {
+            door.ChangeLock(DoorLockType.NoPower);
+            door.IsOpen = open;
         }
 
         public override void Stop(ZoneType zone)
