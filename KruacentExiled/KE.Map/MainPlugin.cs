@@ -16,6 +16,7 @@ using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using UnityEngine;
 using Door = Exiled.API.Features.Doors.Door;
@@ -89,13 +90,6 @@ namespace KE.Map
             //MoreRoom.UnsubscribeEvents();
             handler = null;
             Instance = null;
-        }
-
-
-        private void TestImage()
-        {
-
-            new TextImage();
         }
 
 
