@@ -141,7 +141,7 @@ namespace KE.Misc
             }
 
             ev.IsAllowed = false;
-            Exiled.API.Features.Cassie.MessageTranslated("SCP 69 420 has been contained successfully", "SCP-69420-NOE has been contained successfully");
+            Exiled.API.Features.Cassie.MessageTranslated("SCP 69 420 has been contained successfully", "SCP-69420-NOE has been contained suscessfully");
         }
 
         
