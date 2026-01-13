@@ -3,16 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.Items", "KE.Items\KE.Items.csproj", "{2FE04C4D-7FA1-4EC5-A8AF-618EDE0C037C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.Misc", "KE.Misc\KE.Misc.csproj", "{CD822DB2-756E-4887-93AB-2D2F16BF542C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.GlobalEventFramework", "KE.GlobalEventFramework\KE.GlobalEventFramework.csproj", "{73D6C740-96DE-4965-898F-DDD5BCBF7366}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.CustomRoles", "KE.CustomRoles\KE.CustomRoles.csproj", "{4AA4C3E0-E62F-49CE-AD80-0B5C6249EB48}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.GlobalEventFramework.Examples", "KE.GlobalEventFramework.Examples\KE.GlobalEventFramework.Examples.csproj", "{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.Map", "KE.Map\KE.Map.csproj", "{2BD019AC-1B86-4E00-B418-BE4C06CD8410}"
 EndProject
 Global
@@ -21,26 +11,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2FE04C4D-7FA1-4EC5-A8AF-618EDE0C037C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2FE04C4D-7FA1-4EC5-A8AF-618EDE0C037C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2FE04C4D-7FA1-4EC5-A8AF-618EDE0C037C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2FE04C4D-7FA1-4EC5-A8AF-618EDE0C037C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD822DB2-756E-4887-93AB-2D2F16BF542C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD822DB2-756E-4887-93AB-2D2F16BF542C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD822DB2-756E-4887-93AB-2D2F16BF542C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD822DB2-756E-4887-93AB-2D2F16BF542C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73D6C740-96DE-4965-898F-DDD5BCBF7366}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73D6C740-96DE-4965-898F-DDD5BCBF7366}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73D6C740-96DE-4965-898F-DDD5BCBF7366}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73D6C740-96DE-4965-898F-DDD5BCBF7366}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4AA4C3E0-E62F-49CE-AD80-0B5C6249EB48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4AA4C3E0-E62F-49CE-AD80-0B5C6249EB48}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4AA4C3E0-E62F-49CE-AD80-0B5C6249EB48}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4AA4C3E0-E62F-49CE-AD80-0B5C6249EB48}.Release|Any CPU.Build.0 = Release|Any CPU
-		{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{07B92E87-F48F-4F9F-BA0E-1BCB2AF52F53}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2BD019AC-1B86-4E00-B418-BE4C06CD8410}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2BD019AC-1B86-4E00-B418-BE4C06CD8410}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BD019AC-1B86-4E00-B418-BE4C06CD8410}.Release|Any CPU.ActiveCfg = Release|Any CPU
