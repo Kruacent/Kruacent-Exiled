@@ -32,7 +32,7 @@ namespace KE.Misc
         internal SCPBuff SCPBuff { get; private set; }
         internal Spawn Spawn { get; private set; }
         internal FriendlyFire FriendlyFire { get; private set; }
-        internal AutoNukeAnnoucement AutoNukeAnnoucement { get; private set; }
+        internal NukeKill AutoNukeAnnoucement { get; private set; }
         internal AutoTesla AutoTesla { get; private set; }
         internal EventHandlers _gamblingCoinHandler {  get; private set; }
         internal SpawnLcz SpawnLcz { get; private set; }
@@ -67,7 +67,7 @@ namespace KE.Misc
             harmony.PatchAll(Assembly);
             ClassDDoor.SubscribeEvents();
             MiscFeature.SubscribeAllEvents();
-
+            AutoNukeAnnoucement.SubscribeEvents();
             if (Config.GamblingCoin)
             {
                 GamblingCoinManager.RegisterAll();
@@ -76,7 +76,7 @@ namespace KE.Misc
             }
             LastHuman.SubscribeEvents();
             SCPBuff.SubscribeEvents();
-            Exiled.Events.Handlers.Server.RoundStarted += AutoNukeAnnoucement.OnRoundStarted;
+            
             ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;
             LabApi.Events.Handlers.ServerEvents.CassieQueuingScpTermination += NoeDeath;
             
@@ -87,7 +87,7 @@ namespace KE.Misc
         {
             ServerHandle.RoundStarted -= ServerHandler.OnRoundStarted;
             LabApi.Events.Handlers.ServerEvents.CassieQueuingScpTermination -= NoeDeath;
-            Exiled.Events.Handlers.Server.RoundStarted -= AutoNukeAnnoucement.OnRoundStarted;
+            AutoNukeAnnoucement.UnsubscribeEvents();
             LastHuman.UnsubscribeEvents();
             SCPBuff.UnsubscribeEvents();
             if (Config.GamblingCoin)

@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using GameCore;
+using KE.Utils.API.Interfaces;
 using MEC;
 using System;
 using System.Collections.Generic;
@@ -10,54 +11,40 @@ using System.Threading.Tasks;
 
 namespace KE.Misc.Features
 {
-    internal class AutoNukeAnnoucement
+    public class NukeKill : IUsingEvents
     {
-
-
-        private float autodetonatetime = 20*60f;
-        private bool flagSaid = false;
-        private CoroutineHandle handle;
-
-        public void OnRoundStarted()
+        public void SubscribeEvents()
         {
-            //autodetonatetime = ConfigFile.ServerConfig.GetFloat("auto_warhead_start_minutes") * 60f;
-            if (!handle.IsRunning)
-            {
-                handle = Timing.RunCoroutine(Timer());
-            }
+            Exiled.Events.Handlers.Warhead.Detonated += OnDetonated;
         }
 
-        private IEnumerator<float> Timer()
+        public void UnsubscribeEvents()
         {
-            Stopwatch watch = Stopwatch.StartNew();
-            bool flag = false;
+            Exiled.Events.Handlers.Warhead.Detonated -= OnDetonated;
+            
+        }
 
-            while (watch.Elapsed.TotalMinutes < autodetonatetime)
+        private void OnDetonated()
+        {
+            Timing.CallDelayed(5, () =>
             {
-                yield return Timing.WaitForSeconds(60);
-                if(Warhead.IsDetonated || Warhead.IsInProgress)
+                foreach(Player player in Player.Enumerable)
                 {
-                    flag = true;
-                    break;
+                    if(player.Zone != Exiled.API.Enums.ZoneType.Surface)
+                    {
+                        player.Kill(Exiled.API.Enums.DamageType.Warhead);
+                    }
+
+                    if (player.Lift is not null)
+                    {
+                        player.Kill(Exiled.API.Enums.DamageType.Warhead);
+                    }
+
                 }
-            }
-            if (!flag)
-            {
-                SayAnnouncement();
-            }
-
+            });
         }
 
 
-
-
-        public void SayAnnouncement()
-        {
-            if (flagSaid) return;
-            //Cassie.MessageTranslated("Warning automatic warhead will detonate in 5 minutes",
-                //"Warning automatic warhead will detonate in <color=#FF0000>5</color> minutes");
-            flagSaid = true;
-        }
 
 
     }
