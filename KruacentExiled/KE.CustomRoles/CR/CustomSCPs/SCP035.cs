@@ -1,4 +1,5 @@
 ﻿using Cassie;
+using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
@@ -94,6 +95,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
             player.VoiceChannel = VoiceChat.VoiceChatChannel.ScpChat;
             player.Position = RoleTypeId.Scp049.GetRandomSpawnLocation().Position;
+            player.EnableEffect<NightVision>(100, 0, false);
             base.RoleAdded(player);
         }
 
