@@ -1,7 +1,7 @@
 ﻿using CommandSystem;
 using Exiled.API.Features;
 using HintServiceMeow.Core.Enum;
-using KE.Map.Utils;
+using KE.Utils.API.Commands;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
 using KE.Utils.API.GifAnimator;

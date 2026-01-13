@@ -1,7 +1,7 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Interactables.Interobjects.DoorUtils;
-using KE.Map.Utils;
+using KE.Utils.API.Map;
 using LabApi.Events.Arguments.ServerEvents;
 using LabApi.Features.Wrappers;
 using System;
