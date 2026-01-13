@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace KE.Map.Heavy.GamblingZone
 {
-    public class OldGamblingRoom
+    public class OldGamblingRoom : AbstractGambling
     {
         private static readonly HashSet<OldGamblingRoom> _list = new HashSet<OldGamblingRoom>();
         public static HashSet<OldGamblingRoom> List => new(_list);
@@ -49,6 +49,7 @@ namespace KE.Map.Heavy.GamblingZone
             _scale = scale;
             _list.Add(this);
             _lootTable = lootTable;
+            Exiled.Events.Handlers.Player.DroppedItem += OnDropped;
             if (MainPlugin.Instance.Config.Debug)
             {
                 var p = Primitive.Create(PrimitiveType.Cube, _position, null, _scale);
@@ -68,15 +69,10 @@ namespace KE.Map.Heavy.GamblingZone
                    playerPosition.z <= _position.z + halfSize.z;
         }
 
-        public void SubscribeEvents()
-        {
-            Exiled.Events.Handlers.Player.DroppedItem += OnDropped;
-        }
-        public void UnsubscribeEvents()
+        public override void Destroy()
         {
             Exiled.Events.Handlers.Player.DroppedItem -= OnDropped;
         }
-
 
         public void OnDropped(DroppedItemEventArgs ev)
         {
@@ -90,8 +86,7 @@ namespace KE.Map.Heavy.GamblingZone
             }
             ev.Pickup.Destroy();
             Item item = _lootTable.GetRandomItem();
-            player.AddItem(item);
-            player.DropItem(item);
+            item.CreatePickup(player.Position);
         }
 
     }

@@ -7,10 +7,11 @@ using InteractableToy = LabApi.Features.Wrappers.InteractableToy;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using LabApi.Events.Arguments.PlayerEvents;
 
 namespace KE.Map.Heavy.GamblingZone
 {
-    public class GamblingRoom
+    public class GamblingRoom : AbstractGambling
     {
         private static readonly HashSet<GamblingRoom> _list = new HashSet<GamblingRoom>();
         public static IReadOnlyCollection<GamblingRoom> List => _list;
@@ -51,7 +52,7 @@ namespace KE.Map.Heavy.GamblingZone
 
 
 
-        private void Init(Vector3 position, LootTable lootTable, Vector3? offset = null)
+        protected void Init(Vector3 position, LootTable lootTable, Vector3? offset = null)
         {
 
 
@@ -62,12 +63,18 @@ namespace KE.Map.Heavy.GamblingZone
 
             _interact = InteractableToy.Create(_position, networkSpawn: false);
             _interact.InteractionDuration = BasePickupTime;
+
+            LabApi.Events.Handlers.PlayerEvents.SearchedToy += OnPickup;
             
-            
-            _interact.OnSearched += OnPickup;
             CreateModel(_position);
             _interact.Spawn();
             _lootTable = lootTable;
+
+
+            _interact.OnInteracted += p => Log.Info($"{p.Nickname} interatcted"); // Runs if interactionduration is set to 0
+            _interact.OnSearching += p => Log.Info($"{p.Nickname} OnSearching"); // runs when the player presses E & interactionduration != 0
+            _interact.OnSearched += p => Log.Info($"{p.Nickname} OnSearched"); // Runs after searching is completed.
+            _interact.OnSearchAborted += p => Log.Info($"{p.Nickname} OnSearchAborted"); // Runs after 
 
         }
 
@@ -97,19 +104,23 @@ namespace KE.Map.Heavy.GamblingZone
 
 
 
-        public void Destroy()
+        public override void Destroy()
         {
             foreach (Primitive p in _model)
             {
                 p.Destroy();
             }
-            _interact.OnSearchAborted -= OnPickup;
+            LabApi.Events.Handlers.PlayerEvents.SearchedToy += OnPickup;
+            _interact.Destroy();
             _list.Remove(this);
         }
 
 
-        public void OnPickup(LabApi.Features.Wrappers.Player player)
+        public void OnPickup(PlayerSearchedToyEventArgs ev)
         {
+            Player player = ev.Player;
+            if (ev.Interactable != _interact) return;
+
             Player player2 = Player.Get(player);
             if (player2 == null) return;
             if (player2.IsScp) return;

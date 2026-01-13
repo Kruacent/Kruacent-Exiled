@@ -46,6 +46,9 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
 
         private void OnRoundStarted()
         {
+            
+            if (!MainPlugin.Configs.BlackoutNDoorEnabled) return;
+
             ChosenPattern = Pattern.AllPatterns.GetRandomValue();
             time = GetRandomTime();
 
@@ -149,7 +152,7 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
 
                 string message = mapEvent.Cassie + " " + ZoneTypeToCassie(zone) + " " + MainPlugin.Translations.End;
                 string translate = mapEvent.CassieTranslated + " " + ZoneTypeToCassieTranslated(zone) + " " + MainPlugin.Translations.End;
-                float yap = Exiled.API.Features.Cassie.CalculateDuration(message, false, 0);
+                float yap = Exiled.API.Features.Cassie.CalculateDuration(message);
                 Exiled.API.Features.Cassie.MessageTranslated(message, translate,false,false,true);
 
 

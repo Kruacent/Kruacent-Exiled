@@ -6,10 +6,12 @@ using Exiled.Events.EventArgs.Player;
 using HarmonyLib;
 using KE.Map.CustomZones;
 using KE.Map.CustomZones.CustomRooms.MCZ;
+using KE.Map.Heavy;
 using KE.Map.Heavy.GamblingZone;
 using KE.Map.Others.BlackoutNDoor.Handlers;
 using LabApi.Events.Arguments.ServerEvents;
 using MapGeneration;
+using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -39,7 +41,6 @@ namespace KE.Map
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
             LabApi.Events.Handlers.ServerEvents.MapGenerating += OnGenerating;
-            Exiled.Events.Handlers.Player.InteractingDoor += OpenDoor;
 
             GamblingRoom.SubscribeEvents();
             //MoreRoom.CreateAll();
@@ -65,6 +66,11 @@ namespace KE.Map
 
 
                 //player.Teleport(teleport);
+
+                Timing.CallDelayed(2, () =>
+                {
+                    //player.Teleport(teleport);
+                });
             }
 
             
@@ -78,7 +84,6 @@ namespace KE.Map
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             LabApi.Events.Handlers.ServerEvents.MapGenerating -= OnGenerating;
-            Exiled.Events.Handlers.Player.InteractingDoor -= OpenDoor;
             harmony.UnpatchAll(harmony.Id);
             GamblingRoom.UnsubscribeEvents();
             //MoreRoom.UnsubscribeEvents();
@@ -120,21 +125,13 @@ namespace KE.Map
             Log.Debug("teleport " + teleport);
         }
 
-        private void OpenDoor(InteractingDoorEventArgs ev)
-        {
-            if(Config.Debug && ev.Door.Zone == Exiled.API.Enums.ZoneType.HeavyContainment)
-            {
-                ev.Player.Teleport(teleport);
-            }
-        }
-        
 
         private void OnGenerated()
         {
 
             if (Config.Debug)
             {
-                CustomZone();
+                //CustomZone();
             }
             Door lcz173 = Door.Get(Exiled.API.Enums.DoorType.Scp173Gate);
             HashSet<DroppableItem> normal = new()
@@ -172,9 +169,11 @@ namespace KE.Map
             };
 
 
-            var g = new GamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, new(normal));
+            //var g = new GamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, new(normal));
 
+            var g = new OldGamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, Vector3.one*10, new LootTable(normal));
 
+            BulkDoor049.Create();
 
 
             /*
@@ -220,6 +219,7 @@ namespace KE.Map
         public bool SupplyDropEnabled { get; set; } = false;
         public bool TurretEnabled { get; set; } = false;
         public bool EasterEggEnabled { get; set; } = true;
+        public bool BlackoutNDoorEnabled { get; set; } = true;
 
 
     }
