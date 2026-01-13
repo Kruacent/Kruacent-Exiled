@@ -9,6 +9,7 @@ using KE.Map.CustomZones.CustomRooms.MCZ;
 using KE.Map.Heavy;
 using KE.Map.Heavy.GamblingZone;
 using KE.Map.Others.BlackoutNDoor.Handlers;
+using KE.Utils.API.GifAnimator;
 using LabApi.Events.Arguments.ServerEvents;
 using MapGeneration;
 using MEC;
@@ -40,7 +41,6 @@ namespace KE.Map
             KE.Utils.API.Sounds.SoundPlayer.Instance.TryLoad();
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
-            LabApi.Events.Handlers.ServerEvents.MapGenerating += OnGenerating;
 
             GamblingRoom.SubscribeEvents();
             //MoreRoom.CreateAll();
@@ -83,7 +83,7 @@ namespace KE.Map
             handler?.UnsubscribeEvents();
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
-            LabApi.Events.Handlers.ServerEvents.MapGenerating -= OnGenerating;
+            
             harmony.UnpatchAll(harmony.Id);
             GamblingRoom.UnsubscribeEvents();
             //MoreRoom.UnsubscribeEvents();
@@ -91,48 +91,18 @@ namespace KE.Map
             Instance = null;
         }
 
-        private int seed;
-        private Vector3 teleport;
-        private void OnGenerating(MapGeneratingEventArgs ev)
-        {
-            seed = ev.Seed;
 
+        private void TestImage()
+        {
+
+            new TextImage();
         }
 
-        private void CustomZone()
-        {
-            Log.Debug("read");
-            try
-            {
-
-                AltasReader.Read();
-            }
-            catch (Exception e)
-            {
-                Log.Error(e);
-            }
-
-
-            CustomZone zone = new MediumContainmentZone();
-            //teleport = zone.Spawnzone;
-            new SCorridor();
-            new EndRoom();
-            new TCorridor();
-
-            zone.Generate(new System.Random(seed));
-
-            teleport = CustomRoom.RegisteredRoom.First().SpawnedRoom.First(s => s.Shape == RoomShape.Straight).Position + Vector3.up*5;
-            Log.Debug("teleport " + teleport);
-        }
 
 
         private void OnGenerated()
         {
 
-            if (Config.Debug)
-            {
-                //CustomZone();
-            }
             Door lcz173 = Door.Get(Exiled.API.Enums.DoorType.Scp173Gate);
             HashSet<DroppableItem> normal = new()
             {
@@ -198,16 +168,6 @@ namespace KE.Map
             */
 
         }
-
-
-
-       /* private void OnRoundEnded(RoundEndedEventArgs ev)
-        {
-            
-
-            foreach (var g in OldGamblingRoom.List)
-                g.UnsubscribeEvents();
-        }*/
 
     }
 

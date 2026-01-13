@@ -148,6 +148,7 @@ namespace KE.Map.Heavy.GamblingZone
         public static void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+            DestroyAll();
         }
 
 
