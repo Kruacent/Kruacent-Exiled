@@ -9,7 +9,7 @@ namespace KE.CustomRoles.API.Interfaces
     public interface ICustomIcon
     {
 
-
+        public abstract string IconName { get; }
 
 
     }

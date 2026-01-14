@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Pools;
 using KE.CustomRoles.Abilities.FireAbilities;
+using KE.CustomRoles.API.Interfaces;
 using KE.CustomRoles.Settings;
 using KE.Utils.API;
 using KE.Utils.API.Displays.DisplayMeow;
@@ -413,7 +414,16 @@ namespace KE.CustomRoles.API.Features
 
 
         public const string ReadyText = "[READY]";
-        private static AbilitiesPosition AbilityPosition = new();
+        public static readonly AbilitiesPosition AbilityPosition = new();
+
+
+        protected virtual void Gui(StringBuilder sb)
+        {
+            sb.Append(PublicName);
+            sb.Append(" ");
+        }
+
+
         public static string UpdateGUI(Player player)
         {
             StringBuilder builder = StringBuilderPool.Pool.Get();
@@ -427,18 +437,7 @@ namespace KE.CustomRoles.API.Features
 
                 KEAbilities ability = allAbilities[i];
 
-                builder.Append(ability.PublicName);
-                builder.Append(" ");
-                
-
-                if(ability is FireAbilityBase fire)
-                {
-                    builder.Append("(");
-                    builder.Append(fire.Cost);
-                    builder.Append(")");
-                    builder.Append(" ");
-                }
-
+                ability.Gui(builder);
 
 
                 if (ability.CanUse(player,out var output))
@@ -452,6 +451,9 @@ namespace KE.CustomRoles.API.Features
                     builder.Append(Math.Round((dateTime - DateTime.Now).TotalSeconds, 0));
                     builder.Append("s]");
                 }
+
+
+
 
                 
                 if (ability.Selected.Contains(player))
@@ -469,7 +471,6 @@ namespace KE.CustomRoles.API.Features
             string msg = builder.ToString();
             StringBuilderPool.Pool.Return(builder);
             return msg;
-            //DisplayHandler.Instance.AddHint(MainPlugin.Abilities, player, msg, UpdateTime);
         }
 
 

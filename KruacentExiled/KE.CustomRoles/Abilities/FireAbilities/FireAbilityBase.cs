@@ -10,30 +10,9 @@ using System.Threading.Tasks;
 
 namespace KE.CustomRoles.Abilities.FireAbilities
 {
-    public abstract class FireAbilityBase : KEAbilities
+    public abstract class FireAbilityBase : KEAbilityCost
     {        
-        public abstract int Cost { get; }
-        protected sealed override bool AbilityUsed(Player player)
-        {
-            bool result = CanLaunchAbility(player);
-            Log.Debug("using fire");
-            if (result)
-            {
-                result = LaunchedAbility(player);
-            }
-
-            
-
-
-            return result;
-        }
-
-        protected virtual bool LaunchedAbility(Player player)
-        {
-            return true;
-        }
-
-        public bool CanLaunchAbility(Player player)
+        public override bool CanLaunchAbility(Player player)
         {
 
             if(player.GameObject.TryGetComponent<CustomPlayerStat>(out var stat))
