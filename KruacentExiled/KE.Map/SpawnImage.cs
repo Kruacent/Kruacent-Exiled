@@ -39,18 +39,11 @@ namespace KE.Map
             TextImage textimg = new TextImage(img,20);
             Log.Debug(textimg.RawString.Length);
 
-            TextToy toy = textimg.Spawn(player.Position,player.Rotation);
 
-            Log.Debug(toy.TextFormat.Length);
-
-            toy.DisplaySize = new Vector2(5000, 5000);
 
             DisplayHandler.Instance.AddHint(position.HintPlacement, player, textimg.RawString, 30);
 
 
-
-
-            toy.Spawn();
             response = "ok";
             return true;
         }
