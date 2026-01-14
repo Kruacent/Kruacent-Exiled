@@ -21,6 +21,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         public override string Name { get; set; } = "SwapProtocol";
         public override string Description { get; set; } = "EEEEEEEET c'est parti la roulette tourne";
         public override int WeightedChance { get; set; } = 1;
+        public const string IsSwappingKey = "KE.GlobalEvents.SwapProtocol.IsSwapping";
 
         /// <summary>
         /// Cooldown between each change in seconds
@@ -109,26 +110,31 @@ namespace KE.GlobalEventFramework.Examples.GE
             {
                 target.ClearInventory();
 
+                target.SessionVariables[IsSwappingKey] = true;
+
                 target.Role.Set(Role, RoleSpawnFlags.None);
 
-                // Add Safe TP here !!
-                if (target.PreviousRole == RoleTypeId.Spectator) target.Position = Room.Random(ZoneType.HeavyContainment).Position + Vector3.up;
-
-                target.MaxHealth = MaxHealth;
-                target.Health = Health;
-                target.Scale = PlayerScale;
-                if (IsCuffed && !target.IsCuffed) target.Handcuff(); else target.RemoveHandcuffs();
-
-                foreach (ItemState state in SavedItems)
+                Timing.CallDelayed(.1f, () =>
                 {
-                    Item newItem = target.AddItem(state.Type);
-                    state.ApplyState(newItem);
-                }
+                    // Add Safe TP here !!
+                    if (target.PreviousRole == RoleTypeId.Spectator) target.Position = Room.Random(ZoneType.HeavyContainment).Position + Vector3.up;
 
-                foreach (var ammo in Ammo) target.SetAmmo(ammo.Key, ammo.Value);
+                    target.MaxHealth = MaxHealth;
+                    target.Health = Health;
+                    target.Scale = PlayerScale;
+                    if (IsCuffed && !target.IsCuffed) target.Handcuff(); else target.RemoveHandcuffs();
 
-                target.DisableAllEffects();
-                foreach (EffectState state in SavedEffects) target.EnableEffect(state.Type, state.Intensity, state.Duration);
+                    foreach (ItemState state in SavedItems)
+                    {
+                        Item newItem = target.AddItem(state.Type);
+                        state.ApplyState(newItem);
+                    }
+
+                    foreach (var ammo in Ammo) target.SetAmmo(ammo.Key, ammo.Value);
+
+                    target.DisableAllEffects();
+                    foreach (EffectState state in SavedEffects) target.EnableEffect(state.Type, state.Intensity, state.Duration);
+                });   
             }
         }
 
