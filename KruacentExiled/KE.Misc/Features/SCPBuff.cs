@@ -31,7 +31,12 @@ namespace KE.Misc.Features
 
         internal void BecomingSCP(ChangingRoleEventArgs ev)
         {
-            
+            if (ev.Player.SessionVariables.ContainsKey("KE.GlobalEvents.SwapProtocol.IsSwapping"))
+            {
+                ev.Player.SessionVariables.Remove("KE.GlobalEvents.SwapProtocol.IsSwapping");
+                return;
+            }
+
             if (!ev.NewRole.IsScp() || ev.NewRole == RoleTypeId.Scp0492) return;
             if(ev.Player.Role == RoleTypeId.None) return;
             Player p = ev.Player;
