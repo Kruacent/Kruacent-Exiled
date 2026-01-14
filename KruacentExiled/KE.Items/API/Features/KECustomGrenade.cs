@@ -44,7 +44,7 @@ namespace KE.Items.API.Features
                 ItemSpawn spawn = PoseRoomSpawnPointHandler.UseRandomPose(room.Room);
 
                 Log.Debug($"spawning {this.Name} in {room.Room}");
-                Log.Debug(room.Room + " : " + PoseRoomSpawnPointHandler.usablePose.Count(p => p.roomType == room.Room));
+                Log.Debug(room.Room + " : " + PoseRoomSpawnPointHandler.UsablePoses.Count(p => p.roomType == room.Room));
 
                 if (spawn is not null)
                 {
@@ -53,7 +53,7 @@ namespace KE.Items.API.Features
                 }
                 else
                 {
-                    Log.Error($"can't spawn in custom");
+                    Log.Error($"can't spawn ({Name}) in custom ({room.Room})");
                     pickup = Spawn(spawnpoint.Position);
                 }
 

@@ -10,14 +10,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static KE.Items.API.Features.SpawnPoints.PoseRoomSpawnPointHandler;
 
-namespace KE.Items.Patches
+namespace KE.Items
 {
 
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    internal class CommandPos : ICommand
+    internal class CommandPosRoom : ICommand
     {
-        public string Command => "posroom";
+        public string Command => "roompos";
 
         public string[] Aliases => [];
 
@@ -38,12 +39,48 @@ namespace KE.Items.Patches
                     return false;
                 }
 
-                PoseRoomSpawnPointHandler.ShowPoses(room.Type);
+                ShowPoses(room.Type);
                 response= "ok";
                 return true;
             }
             response = "no";
             return false;
+        }
+
+        public static void ShowPoses(RoomType roomType)
+        {
+            List<Primitive> primitives = new();
+            Room room = Room.Get(roomType);
+            foreach (ItemSpawn pose in AllPoses.Where(p => p.roomType == roomType))
+            {
+
+
+                Log.Info(pose.localposition);
+                Log.Info(pose.Position);
+                Color color = Color.red;
+
+                if (UsablePoses.Contains(pose))
+                {
+                    color = Color.green;
+                }
+
+
+                Primitive prim = Primitive.Create(pose.Position, null, Vector3.one * .1f, false, color);
+                prim.Collidable = false;
+                prim.Spawn();
+                primitives.Add(prim);
+
+
+            }
+
+
+            Timing.CallDelayed(5, delegate
+            {
+                foreach (Primitive primive in primitives)
+                {
+                    primive.Destroy();
+                }
+            });
         }
     }
 }

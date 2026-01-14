@@ -76,11 +76,18 @@ namespace KE.Items
                 new(RoomType.HczHid,new Vector3(-6.44f,5.7f,-2.5f),Quaternion.identity),
                 new(RoomType.Hcz127,new Vector3(4.77f, 1.12f, 1.83f),Quaternion.identity),
                 new(RoomType.Hcz939,new Vector3(.6f, 1.3f, -2.8f),Quaternion.identity),
+                new(RoomType.LczCafe,new Vector3(-2.27f, 0.92f, 3.28f),Quaternion.identity),
+                new(RoomType.LczCafe,new Vector3(-2.38f, 0.87f, -1.49f),Quaternion.identity),
+                //new(RoomType.HczArmory,new Vector3(1.66f, 1.06f, -2.25f),Quaternion.identity),
+                //new(RoomType.HczArmory,new Vector3(1.33f, 1.06f, -1.66f),Quaternion.identity),
+                new(RoomType.Hcz049,new Vector3(-6.31f, 89.22f, -11.38f),Quaternion.identity),
+                new(RoomType.Hcz049,new Vector3(0.64f, 89.31f, 7.22f),Quaternion.identity),
+                new(RoomType.Hcz049,new Vector3(18.46f, 93.73f, 13.13f),Quaternion.identity),
             });
 
             //Exiled.Events.Handlers.Server.RoundStarted += Test;
 
-
+            
             CustomItem.RegisterItems();
             //PickupQuality?.SubscribeEvents();
             SettingsHandler.SubscribeEvents();
@@ -113,7 +120,7 @@ namespace KE.Items
 
         private void OnGenerated()
         {
-
+            PoseRoomSpawnPointHandler.Reset();
         }
 
         public void Test()

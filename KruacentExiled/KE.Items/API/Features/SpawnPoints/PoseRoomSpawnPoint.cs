@@ -24,7 +24,6 @@ namespace KE.Items.API.Features.SpawnPoints
             public readonly Quaternion localrotation;
 
             
-            private Room room;
 
             public ItemSpawn(RoomType roomType,Vector3 position,Quaternion rotation)
             {
@@ -37,12 +36,7 @@ namespace KE.Items.API.Features.SpawnPoints
             {
                 get
                 {
-                    if(room is null)
-                    {
-                        room = Room.List.FirstOrDefault(r => r.Type == roomType);
-                        if (room is null) throw new Exception($"room ({roomType}) not found");
-                    }
-                    return room;
+                    return Room.List.FirstOrDefault(r => r.Type == roomType);
                 }
             }
 
@@ -50,7 +44,7 @@ namespace KE.Items.API.Features.SpawnPoints
             {
                 get
                 {
-                    return Room.Position + room.Rotation * localposition;
+                    return Room.Position + Room.Rotation * localposition;
                 }
             }
 
@@ -62,6 +56,7 @@ namespace KE.Items.API.Features.SpawnPoints
                 }
             }
 
+
             public bool Equals(ItemSpawn other)
             {
                 return other.roomType == roomType && other.localposition == localposition && other.localrotation == localrotation;
@@ -69,8 +64,8 @@ namespace KE.Items.API.Features.SpawnPoints
         }
 
         public static readonly HashSet<ItemSpawn> AllPoses = new();
-        private static HashSet<ItemSpawn> UsablePoses = new();
-        public static IReadOnlyCollection<ItemSpawn> usablePose => UsablePoses;
+        private static HashSet<ItemSpawn> usablePoses = new();
+        public static IReadOnlyCollection<ItemSpawn> UsablePoses => usablePoses;
 
         public static ItemSpawn UseRandomPose(RoomType roomType)
         {
@@ -81,21 +76,12 @@ namespace KE.Items.API.Features.SpawnPoints
             }
             Log.Debug("count before =" + UsablePoses.Count(r => r.roomType == roomType));
             ItemSpawn result = UsablePoses.GetRandomValue(r => r.roomType == roomType);
-            UsablePoses.Remove(result);
+            usablePoses.Remove(result);
             Log.Debug("count after =" + UsablePoses.Count(r => r.roomType == roomType));
             return result;
 
         }
 
-        public static Vector3 ConvertLocal(Pose pose, Quaternion newRot)
-        {
-
-            Vector3 originalLocal = pose.position;
-            Quaternion originalRot = pose.rotation;
-            Vector3 worldPos = originalRot * originalLocal;
-
-            return Quaternion.Inverse(newRot) * worldPos;
-        }
         /// <summary>
         ///
         /// </summary>
@@ -104,53 +90,21 @@ namespace KE.Items.API.Features.SpawnPoints
         public static void AddRoomPoses(HashSet<ItemSpawn> poses)
         {
 
-
-
             foreach(ItemSpawn item in poses)
             {
                 AllPoses.Add(item);
-                UsablePoses.Add(item);
+                usablePoses.Add(item);
             }
 
         }
 
-        public static void ShowPoses(RoomType roomType)
+        public static void Reset()
         {
-            List<Primitive> primitives = new();
-            Room room = Room.Get(roomType);
-            foreach (ItemSpawn pose in AllPoses.Where(p => p.roomType == roomType))
-            {
-
-
-                Log.Info(pose.localposition);
-                Log.Info(pose.Position);
-                Color color = Color.red;
-
-                if (UsablePoses.Contains(pose))
-                {
-                    color = Color.green;
-                }
-
-
-                Primitive prim = Primitive.Create(pose.Position, null, Vector3.one * .1f, false, color);
-
-                prim.Spawn();
-                primitives.Add(prim);
-
-                
-            }
-           
-
-            Timing.CallDelayed(5, delegate
-            {
-                foreach(Primitive primive in primitives)
-                {
-                    primive.Destroy();
-                }
-            });
+            usablePoses = AllPoses.ToHashSet();
         }
 
         
+
     }
 
 

@@ -32,6 +32,9 @@ namespace KE.Items.API.Features
 
         public override uint Spawn(IEnumerable<SpawnPoint> spawnPoints, uint limit)
         {
+            
+
+
             Log.Debug($"spawning {this.Name}");
             HashSet<SpawnPoint> spawns = spawnPoints.ToHashSet();
             uint num = 0;
@@ -45,7 +48,7 @@ namespace KE.Items.API.Features
                 spawns.Remove(spawnpoint);
                 RoomSpawnPoint room = spawnpoint as RoomSpawnPoint;
                 ItemSpawn spawn = PoseRoomSpawnPointHandler.UseRandomPose(room.Room);
-                Log.Debug(room.Room+ " : "+PoseRoomSpawnPointHandler.usablePose.Count(p => p.roomType == room.Room));
+                Log.Debug(room.Room+ " : "+PoseRoomSpawnPointHandler.UsablePoses.Count(p => p.roomType == room.Room));
                 Log.Debug($"spawning {this.Name} in {room.Room}" );
 
                 if (spawn is not null)
@@ -55,7 +58,7 @@ namespace KE.Items.API.Features
                 }
                 else
                 {
-                    Log.Error($"can't spawn in custom");
+                    Log.Error($"can't spawn ({Name}) in custom ({room.Room})");
                     pickup = Spawn(spawnpoint.Position);
                 }
 
