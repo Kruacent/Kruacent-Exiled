@@ -54,6 +54,13 @@ namespace KE.CustomRoles.API.Features
 
         public int GetPreferences(Player player)
         {
+            if(sliderSetting is null)
+            {
+                Log.Error("slider setting is null in custom scp");
+                return -6;
+            }
+
+
             if (!SettingBase.TryGetSetting<SliderSetting>(player, sliderSetting.Id, out var setting)) return -6;
             return (int) setting.SliderValue;
         }
