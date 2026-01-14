@@ -337,9 +337,10 @@ namespace KE.CustomRoles.API.Features
 
         protected virtual void SetCustomInfo(Player player)
         {
+            player.CustomInfo = player.CustomName;
             if (!string.IsNullOrEmpty(PublicName))
             {
-                player.CustomInfo = player.CustomName + "\n" + PublicName;
+                player.CustomInfo += "\n" + PublicName;
             }
             player.InfoArea &= ~(PlayerInfoArea.Nickname | PlayerInfoArea.Role);
         }
@@ -375,7 +376,11 @@ namespace KE.CustomRoles.API.Features
             }
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns>true if the player can have this CR ; false otherwise</returns>
         public virtual bool IsAvailable(Player player)
         {
             if (CurrentNumberOfSpawn >= Limit) return false;

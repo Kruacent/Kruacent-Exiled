@@ -1,5 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Pools;
+using HintServiceMeow.Core.Extension;
+using HintServiceMeow.Core.Models.Hints;
 using KE.CustomRoles.Abilities.FireAbilities;
 using KE.CustomRoles.API.Interfaces;
 using KE.CustomRoles.Settings;
@@ -128,6 +130,8 @@ namespace KE.CustomRoles.API.Features
             sb.AppendLine();
             sb.Append(Description);
 
+            
+
 
             DisplayHandler.Instance.AddHint(MainPlugin.AbilitiesDesc, player, sb.ToString(), time);
             StringBuilderPool.Pool.Return(sb);
@@ -180,8 +184,14 @@ namespace KE.CustomRoles.API.Features
                 }
                 PlayersAbility[player].Add(this);
 
-                DisplayHandler.Instance.CreateAuto(player, arg => UpdateGUI(player), AbilityPosition.HintPlacement);
+                var hint = DisplayHandler.Instance.CreateAuto(player, arg => UpdateGUI(player), AbilityPosition.HintPlacement);
 
+                
+
+                IEnumerable<AbstractHint> hints =player.GetPlayerDisplay().GetHints(hint.Id);
+
+                Log.Debug("id="+ hint.Id);
+                Log.Debug("hgints="+hints.Count());
 
                 AbilityAdded(player);
             }
@@ -421,6 +431,11 @@ namespace KE.CustomRoles.API.Features
         {
             sb.Append(PublicName);
             sb.Append(" ");
+
+            if (this is ICustomIcon)
+            {
+
+            }
         }
 
 

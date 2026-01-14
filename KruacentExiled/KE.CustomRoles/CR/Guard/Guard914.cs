@@ -55,6 +55,11 @@ namespace KE.CustomRoles.CR.Guard
             { AmmoType.Nato9, 60}
         };
 
+        public override void Init()
+        {
+            base.Init();
+            storedSerials = new();
+        }
 
         protected override void RoleAdded(Player player)
         {
@@ -117,7 +122,7 @@ namespace KE.CustomRoles.CR.Guard
 
 
 
-        private static HashSet<ushort> storedSerials = new();
+        private static HashSet<ushort> storedSerials;
         private void OnProcessedPlayer(Scp914ProcessedPlayerEventArgs ev)
         {
             if (ev.KnobSetting != Scp914.Scp914KnobSetting.Fine) return;
@@ -131,9 +136,12 @@ namespace KE.CustomRoles.CR.Guard
                 bool equipped = player.CurrentItem is not null && player.CurrentItem.Serial == item.Serial;
                 player.RemoveItem(item);
                 storedSerials.Remove(item.Serial);
-                CustomKeycardItem keycard = item as CustomKeycardItem;
 
-                
+                if (item is not CustomKeycardItem keycard)
+                {
+                    Log.Error("not a custom keycard");
+                    return;
+                }
 
 
 

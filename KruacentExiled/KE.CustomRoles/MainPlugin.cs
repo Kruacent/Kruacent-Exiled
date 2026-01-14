@@ -16,6 +16,8 @@ using MEC;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 
@@ -42,8 +44,9 @@ namespace KE.CustomRoles
         public TranslationFile Translation => translation;
         private Harmony Harmony;
 
+        internal Dictionary<string, TextImage> icons;
 
-
+        public static readonly string ImageLocation = Paths.Configs + "/Img/";
         public override void OnEnabled()
         {
             
@@ -54,16 +57,12 @@ namespace KE.CustomRoles
 
             CustomPlayerStat.AddModule<FireStat>();
             CustomStatsEvents.SubscribeEvents();
-
-
-            Image img = Image.FromFile(Paths.Configs + "/ome.png");
-            TextImage textimg = new TextImage(img, 20);
-            Log.Debug(textimg.RawString.Length);
+            icons = new();
 
 
 
-            DisplayHandler.Instance.AddHint(position.HintPlacement, player, textimg.RawString, 30);
-
+            
+            LoadImage();
 
             Harmony = new(Name);
             Harmony.PatchAll();
@@ -104,9 +103,27 @@ namespace KE.CustomRoles
 
         public void CustomRoleImplement(SpawnedEventArgs ev)
         {
-            ShowTranslation();
+            
             KECustomRole.GiveRandomRole(Player.List.Except(ev.CustomRoles));
             
+        }
+
+        private void LoadImage()
+        {
+            if (!Directory.Exists(ImageLocation))
+            {
+                Log.Warn("Directory not found. creating...");
+                Directory.CreateDirectory(ImageLocation);
+            }
+
+            string[] rawfile = Directory.GetFiles(ImageLocation, "*.png");
+
+            foreach (string file in rawfile)
+            {
+                string noExFile = Path.GetFileNameWithoutExtension(file);
+                Log.Info($"loading {file} as {noExFile}");
+                icons.Add(noExFile,new TextImage(Image.FromFile(file),2));
+            }
         }
 
 

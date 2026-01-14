@@ -2,13 +2,15 @@
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.GifAnimator;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace KE.CustomRoles.Abilities
 {
-    public class Thief : KEAbilities
+    public class Thief : KEAbilities, ICustomIcon
     {
         public override string Name { get; } = "Thief";
         public override string PublicName { get; } = "Thief";
@@ -17,6 +19,8 @@ namespace KE.CustomRoles.Abilities
 
 
         public override float Cooldown { get; } = 120f;
+
+        public TextImage IconName => MainPlugin.Instance.icons["Thief"];
 
         protected override bool AbilityUsed(Player player)
         {

@@ -47,6 +47,16 @@ namespace KE.CustomRoles.CR.Human
             this.TheHitman.EnableEffect(EffectType.MovementBoost, -1, true);
         }
 
+        protected override void SetCustomInfo(Player player)
+        {
+
+        }
+
+        public override bool IsAvailable(Player player)
+        {
+            return Player.List.Count(p=> p != player && !p.IsScp) > 0;
+        }
+
         protected override void RoleAdded(Player player)
         {
             Log.Info("Role full name : " + player.Role.Name);
