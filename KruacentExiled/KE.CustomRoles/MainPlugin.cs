@@ -10,6 +10,7 @@ using KE.CustomRoles.Settings;
 using KE.Misc.Features.Spawn;
 using KE.Utils.API.CustomStats;
 using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.GifAnimator;
 using KE.Utils.API.Translations;
 using MEC;
 using Microsoft.Win32;
@@ -39,7 +40,9 @@ namespace KE.CustomRoles
 
         internal TranslationFile translation;
         public TranslationFile Translation => translation;
-        private Harmony Harmony; 
+        private Harmony Harmony;
+
+
 
         public override void OnEnabled()
         {
@@ -51,6 +54,16 @@ namespace KE.CustomRoles
 
             CustomPlayerStat.AddModule<FireStat>();
             CustomStatsEvents.SubscribeEvents();
+
+
+            Image img = Image.FromFile(Paths.Configs + "/ome.png");
+            TextImage textimg = new TextImage(img, 20);
+            Log.Debug(textimg.RawString.Length);
+
+
+
+            DisplayHandler.Instance.AddHint(position.HintPlacement, player, textimg.RawString, 30);
+
 
             Harmony = new(Name);
             Harmony.PatchAll();
