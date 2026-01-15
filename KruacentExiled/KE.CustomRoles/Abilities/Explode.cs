@@ -3,6 +3,7 @@ using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Items;
 using Exiled.CustomRoles.API.Features;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ using UnityEngine;
 
 namespace KE.CustomRoles.Abilities
 {
-    public class Explode : KEAbilities
+    public class Explode : KEAbilities, ICustomIcon
     {
         public override string Name { get; } = "Explode";
         public override string PublicName { get; } = "Explode";
@@ -20,6 +21,8 @@ namespace KE.CustomRoles.Abilities
         public override string Description { get; } = "Tu as une ceinture d'explosif autour de toi, fait attention n'appuie pas sur le bouton";
 
         public override float Cooldown { get; } = 4*60f;
+
+        public Utils.API.GifAnimator.TextImage IconName => MainPlugin.Instance.icons["Explode"];
 
         protected override bool AbilityUsed(Player player)
         {

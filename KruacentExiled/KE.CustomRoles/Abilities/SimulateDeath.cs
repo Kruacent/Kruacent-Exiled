@@ -1,16 +1,17 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
+using Exiled.API.Features;
 using KE.CustomRoles.API.Features;
-using Exiled.API.Enums;
+using KE.CustomRoles.API.Interfaces;
+using MEC;
 using PlayerRoles.FirstPersonControl.Thirdperson.Subcontrollers;
+using PlayerStatsSystem;
 using System.Collections.Generic;
 using UnityEngine;
-using Exiled.API.Extensions;
-using MEC;
-using PlayerStatsSystem;
 
 namespace KE.CustomRoles.Abilities
 {
-    public class SimulateDeath : KEAbilities
+    public class SimulateDeath : KEAbilities, ICustomIcon
     {
         public override string Name { get; } = "SimulateDeath";
         public override string PublicName { get; } = "Simulate Death";
@@ -18,7 +19,7 @@ namespace KE.CustomRoles.Abilities
         public override string Description { get; } = "T'es talent de mime te permettent de simuler la mort.";
 
         public int Duration = 10;
-
+        public Utils.API.GifAnimator.TextImage IconName => MainPlugin.Instance.icons[Name];
         public override float Cooldown { get; } = 60f;
 
         protected override bool AbilityUsed(Player player)

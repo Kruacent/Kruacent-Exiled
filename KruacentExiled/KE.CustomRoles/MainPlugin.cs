@@ -122,7 +122,7 @@ namespace KE.CustomRoles
             {
                 string noExFile = Path.GetFileNameWithoutExtension(file);
                 Log.Info($"loading {file} as {noExFile}");
-                icons.Add(noExFile,new TextImage(Image.FromFile(file),2));
+                icons.Add(noExFile,new TextImage(Image.FromFile(file),5));
             }
         }
 

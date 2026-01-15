@@ -233,6 +233,7 @@ namespace KE.CustomRoles.Settings
 
             if (CheckPressed(settingBase, _idSelect))
             {
+                Log.Debug("select");
                 KEAbilities.UseSelected(player);
             }
             if (created)

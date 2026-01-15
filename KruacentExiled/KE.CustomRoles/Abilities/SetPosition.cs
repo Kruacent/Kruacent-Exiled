@@ -1,11 +1,12 @@
 ﻿using Exiled.API.Features;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace KE.CustomRoles.Abilities
 {
-    public class SetPosition : KEAbilities
+    public class SetPosition : KEAbilities, ICustomIcon
     {
         public override string Name { get; } = "SetPosition";
         public override string PublicName { get; } = "Set Position";
@@ -14,6 +15,8 @@ namespace KE.CustomRoles.Abilities
         public override float Cooldown { get; } = 5f;
 
         private static Dictionary<Player, Vector3> SelectedTarget = new();
+
+        public Utils.API.GifAnimator.TextImage IconName => MainPlugin.Instance.icons[Name];
 
         protected override bool AbilityUsed(Player player)
         {

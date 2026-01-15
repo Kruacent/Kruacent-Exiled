@@ -1,20 +1,21 @@
 ﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 using MapGeneration;
 using System.Linq;
 using UnityEngine;
 
 namespace KE.CustomRoles.Abilities
 {
-    public class Teleportation : KEAbilities
+    public class Teleportation : KEAbilities, ICustomIcon
     {
         public override string Name { get; } = "Teleportation";
         public override string PublicName { get; } = "Teleportation";
 
         public override string Description { get; } = $"Tu perds {Damage} HP/téléportation, ne peux pas être utilisé dans les ascenseurs";
 
-
+        public Utils.API.GifAnimator.TextImage IconName => MainPlugin.Instance.icons["Teleportation"];
         public override float Cooldown { get; } = 130f;
         public static float Damage { get; set; } = 60;
 

@@ -3,6 +3,7 @@ using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Toys;
 using Exiled.CustomRoles.API.Features;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 using MEC;
 using PlayerRoles;
 using System;
@@ -14,7 +15,7 @@ using UnityEngine;
 
 namespace KE.CustomRoles.Abilities
 {
-    public class Convert : KEAbilities
+    public class Convert : KEAbilities, ICustomIcon
     {
         public override string Name { get;  } = "Convert";
         public override string PublicName { get; } = "Convert";
@@ -25,7 +26,7 @@ namespace KE.CustomRoles.Abilities
 
         public float MaxDistance { get; set; } = 15f;
 
-
+        public Utils.API.GifAnimator.TextImage IconName => MainPlugin.Instance.icons["Convert"];
         protected override bool AbilityUsed(Player player)
         {
             if (!Physics.Raycast(player.Position+ player.CameraTransform.rotation *Vector3.forward, player.Rotation.eulerAngles, out RaycastHit hit)) return false;

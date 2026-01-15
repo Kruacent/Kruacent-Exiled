@@ -1,8 +1,11 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Pools;
+using HintServiceMeow.Core.Enum;
 using HintServiceMeow.Core.Extension;
+using HintServiceMeow.Core.Models.Arguments;
 using HintServiceMeow.Core.Models.Hints;
 using KE.CustomRoles.Abilities.FireAbilities;
+using KE.CustomRoles.API.HintPositions;
 using KE.CustomRoles.API.Interfaces;
 using KE.CustomRoles.Settings;
 using KE.Utils.API;
@@ -49,6 +52,10 @@ namespace KE.CustomRoles.API.Features
 
 
         public static Dictionary<Player, List<KEAbilities>> PlayersAbility { get;} = new();
+
+
+        
+        
 
         protected KEAbilities()
         {
@@ -183,15 +190,8 @@ namespace KE.CustomRoles.API.Features
                     PlayersAbility.Add(player, new());
                 }
                 PlayersAbility[player].Add(this);
+                InitHints(player);
 
-                var hint = DisplayHandler.Instance.CreateAuto(player, arg => UpdateGUI(player), AbilityPosition.HintPlacement);
-
-                
-
-                IEnumerable<AbstractHint> hints =player.GetPlayerDisplay().GetHints(hint.Id);
-
-                Log.Debug("id="+ hint.Id);
-                Log.Debug("hgints="+hints.Count());
 
                 AbilityAdded(player);
             }
@@ -252,8 +252,10 @@ namespace KE.CustomRoles.API.Features
         {
             if(TryGetSelected(player,out var ability))
             {
+                Log.Debug("got selected " + ability.Name);
                 if (ability.CanUse(player, out string _))
                 {
+                    Log.Debug("can use");
                     ability.UseAbility(player);
                 }
             }
@@ -299,6 +301,7 @@ namespace KE.CustomRoles.API.Features
 
         public static void TryRemoveFromPlayer(Player player)
         {
+            RemoveAllSelect(player);
             foreach(KEAbilities abilities in Registered)
             {
                 if (abilities.Players.Contains(player))
@@ -424,18 +427,121 @@ namespace KE.CustomRoles.API.Features
 
 
         public const string ReadyText = "[READY]";
-        public static readonly AbilitiesPosition AbilityPosition = new();
 
 
-        protected virtual void Gui(StringBuilder sb)
+        protected virtual void Gui(StringBuilder sb,Player player)
         {
             sb.Append(PublicName);
             sb.Append(" ");
 
-            if (this is ICustomIcon)
+
+            if (CanUse(player, out var output))
             {
+                sb.Append(ReadyText);
+            }
+            else
+            {
+                DateTime dateTime = LastUsed[player] + TimeSpan.FromSeconds(Cooldown);
+                sb.Append("[");
+                sb.Append(Math.Round((dateTime - DateTime.Now).TotalSeconds, 0));
+                sb.Append("s]");
+            }
+
+
+
+
+
+            if (Selected.Contains(player))
+            {
+                string arrow = SettingHandler.Instance.GetArrow(player);
+                if (string.IsNullOrEmpty(arrow))
+                {
+                    arrow = SettingHandler.baseArrow;
+                }
+                sb.Append(arrow);
+            }
+        }
+        public static Dictionary<Player, List<AbstractHint>> PlayersHints { get; } = new();
+        public static Dictionary<AbstractHint, AbstractHint> AddonHints { get; } = new();
+        public const int InitialAbilitySlot = 5;
+        private void InitHints(Player player)
+        {
+
+
+            if (!PlayersHints.TryGetValue(player, out var _))
+            {
+                PlayersHints.Add(player, new());
+                for (int i = 0; i < InitialAbilitySlot; i++)
+                {
+                    AbilitiesPosition position = AbilitiesPosition.GetIndex(i);
+                    AbstractHint hint = DisplayHandler.Instance.CreateAuto(player, arg => UpdateHint(arg), position.HintPlacement);
+                    PlayersHints[player].Add(hint);
+                    AddonHints.Add(hint, DisplayHandler.Instance.CreateAuto(player, arg => UpdateAddon(arg,hint), AddonAbilitiesPosition.Get(position).HintPlacement,HintSyncSpeed.Slow));
+                }
+
+
 
             }
+
+        }
+
+        private static HashSet<KEAbilities> addonAbilitiesexception = new();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <param name="hint">the other hint</param>
+        /// <returns></returns>
+        private static string UpdateAddon(AutoContentUpdateArg arg,AbstractHint hint)
+        {
+            Player player = Player.Get(arg.PlayerDisplay.ReferenceHub);
+            int index = PlayersHints[player].FindIndex(h => h == hint);
+
+            if (PlayersAbility[player].TryGet(index, out KEAbilities ability))
+            {
+                if (ability is ICustomIcon icon && !addonAbilitiesexception.Contains(ability))
+                {
+                    string msg = " "; 
+                    try
+                    {
+                        msg = icon.IconName.RawString;
+                    }
+                    catch(KeyNotFoundException)
+                    {
+                        addonAbilitiesexception.Add(ability);
+                        Log.Error("Icon for ability "+ ability.Name+ " is missing");
+                    }
+                    return msg;
+                }
+            }
+            return " ";
+        }
+
+
+
+        private static string UpdateHint(AutoContentUpdateArg arg)
+        {
+            Player player = Player.Get(arg.PlayerDisplay.ReferenceHub);
+            int index = PlayersHints[player].FindIndex(h => h == arg.Hint);
+
+
+
+
+
+            
+
+            if (PlayersAbility[player].TryGet(index,out KEAbilities ability))
+            {
+                
+                StringBuilder sb = StringBuilderPool.Pool.Get();
+                ability.Gui(sb,player);
+                return StringBuilderPool.Pool.ToStringReturn(sb);
+            }
+
+
+
+            return " ";
         }
 
 
@@ -451,36 +557,9 @@ namespace KE.CustomRoles.API.Features
 
 
                 KEAbilities ability = allAbilities[i];
-
-                ability.Gui(builder);
-
-
-                if (ability.CanUse(player,out var output))
-                {
-                    builder.Append(ReadyText);
-                }
-                else
-                {
-                    DateTime dateTime = ability.LastUsed[player] + TimeSpan.FromSeconds(ability.Cooldown);
-                    builder.Append("[");
-                    builder.Append(Math.Round((dateTime - DateTime.Now).TotalSeconds, 0));
-                    builder.Append("s]");
-                }
+                ability.Gui(builder,player);
 
 
-
-
-                
-                if (ability.Selected.Contains(player))
-                {
-                    string arrow = SettingHandler.Instance.GetArrow(player);
-                    if (string.IsNullOrEmpty(arrow))
-                    {
-                        arrow = SettingHandler.baseArrow;
-                    }
-                    builder.Append(arrow);
-                }
-                builder.AppendLine();
             }
 
             string msg = builder.ToString();

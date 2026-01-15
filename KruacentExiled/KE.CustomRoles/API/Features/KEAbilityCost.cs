@@ -31,9 +31,9 @@ namespace KE.CustomRoles.API.Features
         public abstract bool CanLaunchAbility(Player player);
 
 
-        protected override void Gui(StringBuilder sb)
+        protected override void Gui(StringBuilder sb,Player player)
         {
-            base.Gui(sb);
+            base.Gui(sb,player);
             sb.Append("(");
             sb.Append(Cost);
             sb.Append(")");

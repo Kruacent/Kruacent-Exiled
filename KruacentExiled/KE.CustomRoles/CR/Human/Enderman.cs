@@ -9,7 +9,6 @@ using UnityEngine;
 
 namespace KE.CustomRoles.CR.Human
 {
-    [CustomRole(RoleTypeId.None)]
     internal class Enderman : GlobalCustomRole, IColor
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;

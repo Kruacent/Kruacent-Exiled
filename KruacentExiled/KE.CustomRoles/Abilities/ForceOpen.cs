@@ -5,6 +5,7 @@ using Exiled.API.Features.Attributes;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -15,13 +16,13 @@ using UnityEngine;
 
 namespace KE.CustomRoles.Abilities
 {
-    public class ForceOpen : KEAbilities
+    public class ForceOpen : KEAbilities, ICustomIcon
     {
         public override string Name { get;  } = "ForceOpen";
         public override string PublicName { get; } = "Force open";
 
         public override string Description { get; } = "Force open a door";
-
+        public Utils.API.GifAnimator.TextImage IconName => MainPlugin.Instance.icons["ForceOpen"];
         public override float Cooldown { get;  } = 30;
         private Dictionary<Player, DateTime> abilityActivated = new();
         public static readonly TimeSpan MaxTime = new (0, 0, 30);

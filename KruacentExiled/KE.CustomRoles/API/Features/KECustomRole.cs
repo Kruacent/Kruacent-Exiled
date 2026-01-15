@@ -9,7 +9,9 @@ using Exiled.CustomRoles;
 using Exiled.CustomRoles.API;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
+using HintServiceMeow.Core.Models.Hints;
 using InventorySystem.Configs;
+using KE.CustomRoles.API.HintPositions;
 using KE.CustomRoles.API.Interfaces;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
@@ -191,6 +193,8 @@ namespace KE.CustomRoles.API.Features
         {
             Player player2 = player;
             Log.Debug(Name + ": Adding role to " + player2.Nickname + ".");
+            Log.Debug(Name + ": old role type " + player2.Role.Type + ".");
+            Log.Debug(Name + ": new role type " + Role + ".");
             CurrentNumberOfSpawn++;
 
             IEnumerable<KECustomRole> oldroles = Get(player2);
@@ -200,9 +204,12 @@ namespace KE.CustomRoles.API.Features
                 role.RemoveRole(player2);
             }
 
+
+            
+
             if (Role != RoleTypeId.None)
             {
-
+                Log.Debug("new role exist");
                 if (KeepPositionOnSpawn)
                 {
                     if (KeepInventoryOnSpawn)
@@ -250,8 +257,14 @@ namespace KE.CustomRoles.API.Features
 
 
 
+            if (PlayerHints.Add(player))
+            {
+                ContinuousShow(player2);
+
+            }
+
             ShowMessage(player2);
-            ContinuousShow(player2);
+            
             RoleAdded(player2);
             player2.UniqueRole = Name;
             player2.TryAddCustomRoleFriendlyFire(Name, CustomRoleFFMultiplier);
@@ -259,8 +272,11 @@ namespace KE.CustomRoles.API.Features
 
         private void ContinuousShow(Player player)
         {
+            Log.Debug("adding show hint to player " + player.Nickname);
             DisplayHandler.Instance.CreateAuto(player, arg => CurrentRole(player), CurrentCustomRolePosition.HintPlacement);
         }
+
+        private static HashSet<Player> PlayerHints = new();
 
 
         private static HintPosition CurrentCustomRolePosition = new CurrentCustomRolePosition();

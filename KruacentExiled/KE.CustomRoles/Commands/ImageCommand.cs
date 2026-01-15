@@ -1,6 +1,7 @@
 ﻿using CommandSystem;
 using Exiled.API.Features;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.HintPositions;
 using KE.Utils.API.Commands;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.GifAnimator;
@@ -51,7 +52,7 @@ namespace KE.CustomRoles.Commands
                 {
                     TextImage imaeg = new TextImage(Image.FromFile(MainPlugin.ImageLocation + "/Explode.png"), size);
 
-                    DisplayHandler.Instance.AddHint(KEAbilities.AbilityPosition.HintPlacement, Player.Get(sender), imaeg.RawString, 30);
+                    DisplayHandler.Instance.AddHint(AbilitiesPosition.GetIndex(0).HintPlacement, Player.Get(sender), imaeg.RawString, 30);
                 }
                 catch (Exception e2)
                 {

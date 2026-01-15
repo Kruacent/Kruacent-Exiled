@@ -5,6 +5,7 @@ using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.API.Features.Toys;
 using Exiled.CustomRoles.API.Features;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 using MapGeneration;
 using MEC;
 using System;
@@ -17,7 +18,7 @@ using Light = Exiled.API.Features.Toys.Light;
 
 namespace KE.CustomRoles.Abilities
 {
-    public class Airstrike : KEAbilities
+    public class Airstrike : KEAbilities, ICustomIcon
     {
         public override string Name { get;  } = "AirStrike";
         public override string PublicName { get;  } = "Airstrike";
@@ -26,8 +27,8 @@ namespace KE.CustomRoles.Abilities
         public override float Cooldown { get; } = 60f;
 
         public float height = 5;
+        public Utils.API.GifAnimator.TextImage IconName => MainPlugin.Instance.icons["Airstrike"];
 
-        
 
         protected override bool AbilityUsed(Player player)
         {
