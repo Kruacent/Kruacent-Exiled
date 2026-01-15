@@ -5,7 +5,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ExMod.Exiled" Version="9.12.2" />
+		<PackageReference Include="ExMod.Exiled" Version="9.12.4" />
+
 	</ItemGroup>
 
 
