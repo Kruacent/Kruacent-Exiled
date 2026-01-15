@@ -4,10 +4,12 @@ using Exiled.Events;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp106;
 using Exiled.Permissions.Commands.Permissions;
+using KE.Misc.Events.EventsArgs;
 using KE.Utils.API.Interfaces;
 using KE.Utils.Extensions;
 using MEC;
 using PlayerRoles;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -19,6 +21,9 @@ namespace KE.Misc.Features
         public const float RefreshRate = 1f;
         public float IncreaseSCPHealth { get; } = 1.25f;
         internal SCPBuff() { }
+
+        public static event Action<BuffingSCPEventArgs> OnBuffingSCP = delegate { };
+        public static event Action<BuffedSCPEventArgs> OnBuffedSCP = delegate { };
 
         public void SubscribeEvents()
         {
@@ -43,20 +48,31 @@ namespace KE.Misc.Features
 
         private void BecomingSCP(ChangingRoleEventArgs ev)
         {
+            Player player = ev.Player;
             if (ev.Player.SessionVariables.ContainsKey("KE.GlobalEvents.SwapProtocol.IsSwapping"))
             {
                 ev.Player.SessionVariables.Remove("KE.GlobalEvents.SwapProtocol.IsSwapping");
                 return;
             }
 
+
             if (!ev.NewRole.IsScp() || ev.NewRole == RoleTypeId.Scp0492) return;
-            if(ev.Player.Role == RoleTypeId.None) return;
-            Player p = ev.Player;
-            Timing.CallDelayed(2, () =>
+            if(player.Role == RoleTypeId.None) return;
+            BuffingSCPEventArgs ev1 = new(player, true, IncreaseSCPHealth);
+
+            OnBuffingSCP?.Invoke(ev1);
+            if (ev1.IsAllowed)
             {
-                p.MaxHealth *= IncreaseSCPHealth;
-                p.Health = p.MaxHealth;
-            });
+                Timing.CallDelayed(2, () =>
+                {
+                    player.MaxHealth *= IncreaseSCPHealth;
+                    player.Health = player.MaxHealth;
+                });
+                BuffedSCPEventArgs ev2 = new(player, IncreaseSCPHealth);
+                OnBuffedSCP?.Invoke(ev2);
+            }
+
+
         }
 
 
