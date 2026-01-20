@@ -22,18 +22,16 @@ namespace KE.CustomRoles.CR.ClassD
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
         public override float SpawnChance { get; set; } = 100;
-        public override Vector3 Scale { get; set; } = new Vector3(0.1f, 1, 1);
+        public override Vector3 Scale { get; set; } = new Vector3(0.5f, 1, 1);
         public Color32 Color => new(255, 74, 74, 0);
 
         protected override void RoleAdded(Player player)
         {
             player.EnableEffect(EffectType.SilentWalk, -1, true); 
-            player.IsMuted = true;
         }
 
         protected override void RoleRemoved(Player player)
         {
-            player.IsMuted = false;
             player.DisableEffect(EffectType.SilentWalk);
         }
 
