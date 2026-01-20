@@ -1,8 +1,11 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features.Doors;
 using Interactables.Interobjects.DoorUtils;
+using KE.Map.Others.BlackoutNDoor.Events.EventArgs;
+using KE.Map.Others.BlackoutNDoor.Events.Handlers;
 using KE.Map.Others.BlackoutNDoor.Handlers;
 using KE.Utils.API.Map;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,21 +16,21 @@ namespace KE.Map.Others.BlackoutNDoor
     {
 
         private static HashSet<Door> doors = new();
-
         public override string Cassie => MainPlugin.Translations.Doorstuck;
 
         public override string CassieTranslated => MainPlugin.Translations.DoorstuckTranslation;
         public override float Duration => 15;
+
         public override void Start(ZoneType zone)
         {
             bool open = UnityEngine.Random.value > .5f;
+            doors = new();
             foreach (Door door in Door.List.Where(d => d.Zone == zone && !d.IsElevator && d.Type != DoorType.Scp079First && d.Type != DoorType.Scp079Second))
             {
-
                 if (door.DoorLockType == DoorLockType.None)
                 {
                     doors.Add(door);
-                    LockDoor(door, open);
+                    
                 }
             }
 
@@ -39,11 +42,27 @@ namespace KE.Map.Others.BlackoutNDoor
                     if (door2.DoorLockType == DoorLockType.None)
                     {
                         doors.Add(door2);
-                        LockDoor(door2, open);
                     }
-                       
                 }
             }
+
+            DoorStuckEventArgs ev = new(doors,zone,true);
+            DoorStuckHandler.OnDoorStucking(ev);
+
+            if (ev.IsAllowed)
+            {
+                doors = ev.Doors;
+                foreach (Door door in doors)
+                {
+                    LockDoor(door, open);
+                }
+            }
+            else
+            {
+                doors.Clear();
+            }
+
+
         }
 
         private void LockDoor(Door door, bool open)
@@ -60,6 +79,8 @@ namespace KE.Map.Others.BlackoutNDoor
                 door.IsOpen = open;
                 door.ChangeLock(DoorLockType.None);
             }
+
+            
         }
     }
 }
