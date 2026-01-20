@@ -14,6 +14,6 @@ namespace KE.CustomRoles.CR.SCP
         public override bool KeepRoleOnChangingRole { get; set; } = false;
 
         public override float SpawnChance { get; set; } = 100;
-        public override Vector3 Scale { get; set; } = new Vector3(0.1f, 1, 1);
+        public override Vector3 Scale { get; set; } = new Vector3(0.3f, 1, 1);
     }
 }

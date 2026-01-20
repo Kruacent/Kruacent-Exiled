@@ -22,7 +22,7 @@ namespace KE.CustomRoles.CR.Human
         public override string PublicName { get; set; } = string.Empty;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
-        public override float SpawnChance { get; set; } = 10;
+        public override float SpawnChance { get; set; } = 0;
 
         public Color32 Color => new Color32(54, 54, 54,0);
 

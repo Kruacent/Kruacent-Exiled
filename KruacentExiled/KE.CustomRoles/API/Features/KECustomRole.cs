@@ -64,6 +64,8 @@ namespace KE.CustomRoles.API.Features
         /// </summary>
         public int CurrentNumberOfSpawn { get; set; } = 0;
 
+        public abstract override RoleTypeId Role { get; }
+
         /// <summary>
         /// <see cref="KEAbilities.Name"/>
         /// </summary>

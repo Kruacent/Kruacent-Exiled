@@ -12,18 +12,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace KE.CustomRoles.CR.SCP
+namespace KE.CustomRoles.CR.SCP.SCP939
 {
-    public class Ultra : GlobalCustomRole
+    public class Ultra : KECustomRole
     {
-        private static Dictionary<Player, CoroutineHandle> _handles = new();
-        public override SideEnum Side { get; set; } = SideEnum.SCP;
         public override string Description { get; set; } = "You can sense where people are located";
-        public override string PublicName { get; set; } = "Ultra";
+        public override string PublicName { get; set; } = "Ultra SCP-939";
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
-        public override float MaxHealthMultiplicator { get; set; } = 1f;
         public override float SpawnChance { get; set; } = 100;
+        public override int MaxHealth { get; set; } = 2700;
+
+        public override RoleTypeId Role => RoleTypeId.Scp939;
+
         public const float RefreshRate = 20;
         public const int SizeText = 20;
 
@@ -32,7 +33,7 @@ namespace KE.CustomRoles.CR.SCP
         {
             Timing.CallDelayed(1f, () =>
             {
-                DisplayHandler.Instance.CreateAuto(player, (AutoContentUpdateArg arg) => PlayerInZone(arg), UltraPosition.HintPlacement);
+                DisplayHandler.Instance.CreateAuto(player, (arg) => PlayerInZone(arg), UltraPosition.HintPlacement);
             });
         }
         private string PlayerInZone(AutoContentUpdateArg arg)
