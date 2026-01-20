@@ -101,8 +101,7 @@ namespace KE.Map
             HashSet<DroppableItem> normal = new()
             {
                 new(ItemType.KeycardO5,1,2),
-                new(ItemType.Jailbird,1,1),
-                new(ItemType.ParticleDisruptor,1,1),
+                new(ItemType.Jailbird,1,2),
                 new(ItemType.SCP268,1,1),
                 ItemType.SCP500,
                 ItemType.KeycardMTFCaptain,

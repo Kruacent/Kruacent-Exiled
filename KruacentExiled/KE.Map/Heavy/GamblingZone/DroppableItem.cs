@@ -1,6 +1,7 @@
 ﻿using Items = Exiled.API.Features.Items.Item;
 using System;
 using UnityEngine;
+using Exiled.API.Features.Items;
 
 namespace KE.Map.Heavy.GamblingZone
 {
