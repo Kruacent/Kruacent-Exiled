@@ -93,12 +93,18 @@ namespace KE.CustomRoles
         {
             Misc.Features.Spawn.Spawn.OnAssigned += CustomRoleImplement;
             Exiled.Events.Handlers.Server.RespawnedTeam += CustomRoleRespawning;
+            Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
         }
         public void UnsubscribeEvents()
         {
             Misc.Features.Spawn.Spawn.OnAssigned -= CustomRoleImplement;
             Exiled.Events.Handlers.Server.RespawnedTeam -= CustomRoleRespawning;
+            Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
+        }
 
+        private void OnWaitingForPlayers()
+        {
+            KECustomRole.ResetNumberOfSpawn();
         }
 
         public void CustomRoleImplement(SpawnedEventArgs ev)

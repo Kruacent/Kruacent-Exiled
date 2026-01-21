@@ -64,6 +64,18 @@ namespace KE.CustomRoles.API.Features
         /// </summary>
         public int CurrentNumberOfSpawn { get; set; } = 0;
 
+        public static void ResetNumberOfSpawn()
+        {
+
+            foreach(KECustomRole cr in Registered)
+            {
+                cr.CurrentNumberOfSpawn = 0;
+            }
+            
+        }
+
+
+
         public abstract override RoleTypeId Role { get; }
 
         /// <summary>
@@ -239,10 +251,7 @@ namespace KE.CustomRoles.API.Features
             
             Timing.CallDelayed(TimeAttributingInventory, delegate
             {
-                if (!KeepInventoryOnSpawn)
-                {
-                    player2.ClearInventory();
-                }
+                ClearInventory(player2);
                 GiveInventory(player2);
                 GiveAmmo(player2);
             });
@@ -302,6 +311,13 @@ namespace KE.CustomRoles.API.Features
             return StringBuilderPool.Pool.ToStringReturn(sb);
         }
 
+        protected virtual void ClearInventory(Player player)
+        {
+            if (!KeepInventoryOnSpawn)
+            {
+                player.ClearInventory();
+            }
+        }
 
         protected virtual void GiveInventory(Player player)
         {

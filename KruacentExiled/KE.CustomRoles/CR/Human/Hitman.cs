@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace KE.CustomRoles.CR.Human
 {
-    public class Hitman : GlobalCustomRole, IColor
+   /* public class Hitman : GlobalCustomRole, IColor
     {
         private static CoroutineHandle _coroutines;
         public override SideEnum Side { get; set; } = SideEnum.Human;
@@ -238,5 +238,5 @@ namespace KE.CustomRoles.CR.Human
                 proximityAlerts[i] = (distance, message, false);
             }
         }
-    }
+    }*/
 }

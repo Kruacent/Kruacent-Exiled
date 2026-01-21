@@ -33,6 +33,11 @@ namespace KE.CustomRoles.CR.Scientist
             base.UnsubscribeEvents();
         }
 
+        protected override void ClearInventory(Player player)
+        {
+            
+        }
+
         private void OnUsedItem(UsedItemEventArgs ev)
         {
             if (!Check(ev.Player)) return;
