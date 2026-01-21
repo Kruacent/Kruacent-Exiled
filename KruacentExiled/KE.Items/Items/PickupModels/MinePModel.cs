@@ -1,13 +1,14 @@
-﻿/*using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using Exiled.API.Features.Toys;
+using KE.Items.API.Core.Models;
 using KE.Items.API.Features;
-using KE.Utils.API.Models.Blueprints;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Light = Exiled.API.Features.Toys.Light;
 
 namespace KE.Items.Items.PickupModels
 {
@@ -16,16 +17,18 @@ namespace KE.Items.Items.PickupModels
 
         public MinePModel(KECustomItem customItem) : base(customItem) { }
 
-        protected override HashSet<AdminToyBlueprint> CreateModel()
+        public override float Scale => 0.25f;
+
+
+        public static Color32 lightColor = new Color32(255, 0, 0, 0);
+        protected override void CreateModel(Transform parent)
         {
-            HashSet<AdminToyBlueprint> model = new HashSet<AdminToyBlueprint>()
-            {
-                AdminToyBlueprint.Create(Primitive.Create(PrimitiveType.Cylinder, Vector3.zero, null, new Vector3(.3f, 0.05f, .3f),false,Color.black)),
-                AdminToyBlueprint.Create(Primitive.Create(PrimitiveType.Sphere, new Vector3(0, 0.05f), null, new Vector3(.05f, .05f, .05f),false,Color.red)),
-            };
-            return model;
-            
+            Primitive baseMine = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.identity, new Vector3(1, .05f, 1), new Color32(0, 0, 0, 255));
+            Primitive baseLight = CreatePrimitive(parent, PrimitiveType.Sphere, Vector3.zero, Quaternion.identity, Vector3.one*0.2f, new Color32(255, 0, 0, 100));
+            Light light = CreateLight(baseLight.Transform, Vector3.down/2f, Quaternion.identity, Vector3.one, lightColor, LightType.Point, .1f);
+
+
+
         }
     }
 }
-*/

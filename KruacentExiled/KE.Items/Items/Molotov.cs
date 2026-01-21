@@ -4,9 +4,11 @@ using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
+using KE.Items.API.Core.Models;
 using KE.Items.API.Features;
 using KE.Items.API.Interface;
 using KE.Items.Items.ItemEffects;
+using KE.Items.Items.PickupModels;
 using System.Collections.Generic;
 using UnityEngine;
 

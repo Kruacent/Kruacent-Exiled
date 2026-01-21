@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Toys;
+using KE.Utils.API.Features.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -137,7 +138,6 @@ namespace KE.Items.Items.ShieldBelt
         private Primitive CreatePrimitive(Player player)
         {
             Primitive prim = Primitive.Create(null, null, null, false);
-
             prim.Collidable = false;
             prim.Visible = true;
             prim.Transform.parent = player.ReferenceHub.transform;
@@ -145,13 +145,18 @@ namespace KE.Items.Items.ShieldBelt
             prim.Scale = MaxSize;
             prim.Color = new Color32(50, 50, 50, 50);
             prim.Spawn();
+
+
+            model.Create(prim.Transform);
+
+
             return prim;
         }
-
+        private ModelTest model;
         public void Awake()
         {
+            model = new();
             player = Player.Get(transform.root.gameObject);
-            Log.Debug(player.Nickname);
             primitive = CreatePrimitive(player);
             currentCharge = Base;
             timeRemaining = 0;

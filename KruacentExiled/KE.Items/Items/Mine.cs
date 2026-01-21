@@ -4,25 +4,28 @@ using Exiled.API.Features.Spawn;
 using KE.Items.API.Interface;
 using KE.Items.Items.ItemEffects;
 using KE.Items.API.Features;
+using System.Collections.Generic;
+using Exiled.API.Enums;
+using KE.Items.API.Core.Models;
+using KE.Items.Items.PickupModels;
 
 namespace KE.Items.Items
 {
     [Exiled.API.Features.Attributes.CustomItem(ItemType.KeycardJanitor)]
-    public class Mine : KECustomItem, ISwichableEffect/*, ICustomPickupModel*/
+    public class Mine : KECustomItem, ISwichableEffect, ICustomPickupModel
     {
         public override uint Id { get; set; } = 1053;
         public override string Name { get; set; } = "Mine";
         public override string Description { get; set; } = "Drop to deploy the mine, little advice : don't step on it";
         public override float Weight { get; set; } = 0.65f;
         public Color Color { get; set; } = Color.yellow;
-        //public PickupModel PickupModel { get; set; }
         public CustomItemEffect Effect { get; set; }
 
 
-        public override SpawnProperties SpawnProperties { get; set; } = null;
-        /*new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; }= 
+        new SpawnProperties()
         {
-            Limit = 2,
+            Limit = 1,
             DynamicSpawnPoints = new List<DynamicSpawnPoint>
             {
                 new DynamicSpawnPoint()
@@ -60,23 +63,25 @@ namespace KE.Items.Items
                 },
             }
 
-        };*/
+        };
+
+        public PickupModel PickupModel { get; }
 
         public Mine()
         {
             Effect = new MineEffect();
-            //PickupModel = new MinePModel(this);
+            PickupModel = new MinePModel(this);
         }
 
         protected override void SubscribeEvents()
         {
-            //PickupModel.SubscribeEvents();
+            PickupModel.SubscribeEvents();
             base.SubscribeEvents();
         }
 
         protected override void UnsubscribeEvents()
         {
-            //PickupModel.UnsubscribeEvents();
+            PickupModel.UnsubscribeEvents();
             base.UnsubscribeEvents();
         }
 

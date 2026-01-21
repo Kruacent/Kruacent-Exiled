@@ -1,12 +1,4 @@
-﻿/*using Exiled.API.Features.Toys;
-using KE.Items.API.Features;
-using KE.Utils.API.Models.Blueprints;
-using KE.Utils.Quality.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KE.Items.API.Core.Models;
 
 namespace KE.Items.API.Interface
 {
@@ -15,4 +7,3 @@ namespace KE.Items.API.Interface
         public PickupModel PickupModel { get; }
     }
 }
-*/
