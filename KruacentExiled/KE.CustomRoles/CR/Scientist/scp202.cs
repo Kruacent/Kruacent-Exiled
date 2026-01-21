@@ -8,7 +8,7 @@ using Exiled.API.Extensions;
 
 namespace KE.CustomRoles.CR.Scientist
 {
-    public class Scp202 : KECustomRole, IColor
+    public class SCP202 : KECustomRole, IColor
     {
         public override string PublicName { get; set; } = "SCP-202";
         public override string Description { get; set; } = "? emsizan-itna'd te emsinummoc itna'd eiv enu sèrpa\n7691 lirva 91 el trom te engoloc à 6781 reivnaj 5 el én\n,etarcoméd neitérhc itrap ud eitrap tnasiaf 5691 à 9491 ed reilecnahC\n?elaidnom erreug ednoces al sèrpa dnamella reilecnahc re1 el darnoK erid xuev uT ?drannoC";
