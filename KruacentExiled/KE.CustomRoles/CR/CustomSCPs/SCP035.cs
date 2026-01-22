@@ -13,6 +13,7 @@ using HintServiceMeow.Core.Utilities;
 using KE.CustomRoles.API.Features;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
+using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
         public override string PublicName { get; set; } = "SCP-035";
         public override int MaxHealth { get; set; } = 1200;
-        public override string Description { get; set; } = "You can't pickup the Micro-HID and anything made with it, but you take 2 time less damage by these weapon";
+        public override string Description { get; set; } = "You can't pickup the Micro-HID and anything made with it, but you take 4 time less damage by these weapon.\nKill every humans";
         protected override int SettingId => 10002;
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.Tutorial;
@@ -183,7 +184,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
                 {
                     if (ev.IsAllowed)
                     {
-                        ev.DamageHandler.Damage /= 2;
+                        ev.DamageHandler.Damage /= 4;
                     }
                     
                     return;
@@ -213,6 +214,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
         {
             if (!Check(ev.Player)) return;
             ev.NewRole = RoleTypeId.Scp0492;
+            Timing.CallDelayed(1, () => ev.Target.Health = 100);
         }
 
         public void OnEndingRound(EndingRoundEventArgs ev)
