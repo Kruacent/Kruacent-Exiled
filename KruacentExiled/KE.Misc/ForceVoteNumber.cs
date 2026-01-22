@@ -27,7 +27,7 @@ namespace KE.Misc
 
             if(arguments.Count < 1)
             {
-                response = "current min number : "+ MainPlugin.Instance.vote.minvote;
+                response = "current min number : "+ MainPlugin.Instance.Config.MinPlayerVote;
                 return true;
             }
 
@@ -41,10 +41,10 @@ namespace KE.Misc
 
 
 
-            MainPlugin.Instance.vote.minvote = result;
+            MainPlugin.Instance.Config.MinPlayerVote = result;
 
 
-            response = "vote set at " + MainPlugin.Instance.vote.minvote + " players";
+            response = "vote set at " + MainPlugin.Instance.Config.MinPlayerVote + " players";
             return true;
         }
     }

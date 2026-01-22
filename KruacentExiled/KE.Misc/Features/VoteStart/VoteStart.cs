@@ -17,7 +17,6 @@ namespace KE.Misc.Features.VoteStart
     internal class VoteStart : MiscFeature
     {
 
-        public int minvote = 9999;
         public static HintPosition HintPosition = new VotePosition();
 
         public HashSet<Player> Voted = new();
@@ -62,7 +61,7 @@ namespace KE.Misc.Features.VoteStart
             }
 
             Voted.Add(ev.Player);
-            if (Voted.Count >= minvote)
+            if (Voted.Count >= MainPlugin.Instance.Config.MinPlayerVote)
             {
                 Log.Info("starting the round");
                 Round.IsLobbyLocked = false;
@@ -79,7 +78,6 @@ namespace KE.Misc.Features.VoteStart
         {
             Voted.Clear();
             voteCasted = false;
-            minvote = MainPlugin.Instance.Config.MinPlayerVote;
         }
 
         private void OnJoined(JoinedEventArgs ev)
@@ -119,7 +117,7 @@ namespace KE.Misc.Features.VoteStart
 
             sb.Append(Voted.Count);
             sb.Append("/");
-            sb.Append(minvote);
+            sb.Append(MainPlugin.Instance.Config.MinPlayerVote);
 
             sb.AppendLine(") : ");
             foreach(Player player in Voted)
