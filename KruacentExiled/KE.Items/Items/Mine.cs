@@ -12,7 +12,7 @@ using KE.Items.Items.PickupModels;
 namespace KE.Items.Items
 {
     [Exiled.API.Features.Attributes.CustomItem(ItemType.KeycardJanitor)]
-    public class Mine : KECustomItem, ISwichableEffect, ICustomPickupModel
+    public class Mine : KECustomItem, ISwichableEffect/*, ICustomPickupModel*/
     {
         public override uint Id { get; set; } = 1053;
         public override string Name { get; set; } = "Mine";
@@ -22,8 +22,8 @@ namespace KE.Items.Items
         public CustomItemEffect Effect { get; set; }
 
 
-        public override SpawnProperties SpawnProperties { get; set; }= 
-        new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = null;
+        /*new SpawnProperties()
         {
             Limit = 1,
             DynamicSpawnPoints = new List<DynamicSpawnPoint>
@@ -63,25 +63,25 @@ namespace KE.Items.Items
                 },
             }
 
-        };
+        };*/
 
-        public PickupModel PickupModel { get; }
+        //public PickupModel PickupModel { get; }
 
         public Mine()
         {
             Effect = new MineEffect();
-            PickupModel = new MinePModel(this);
+            //PickupModel = new MinePModel(this);
         }
 
         protected override void SubscribeEvents()
         {
-            PickupModel.SubscribeEvents();
+            //PickupModel.SubscribeEvents();
             base.SubscribeEvents();
         }
 
         protected override void UnsubscribeEvents()
         {
-            PickupModel.UnsubscribeEvents();
+            //PickupModel.UnsubscribeEvents();
             base.UnsubscribeEvents();
         }
 

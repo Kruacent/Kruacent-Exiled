@@ -26,7 +26,7 @@ namespace KE.Items.Items.PickupModels
             Primitive baseMine = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.identity, new Vector3(1, .05f, 1), new Color32(0, 0, 0, 255));
             Primitive baseLight = CreatePrimitive(parent, PrimitiveType.Sphere, Vector3.zero, Quaternion.identity, Vector3.one*0.2f, new Color32(255, 0, 0, 100));
             Light light = CreateLight(baseLight.Transform, Vector3.down/2f, Quaternion.identity, Vector3.one, lightColor, LightType.Point, .1f);
-
+            
 
 
         }
