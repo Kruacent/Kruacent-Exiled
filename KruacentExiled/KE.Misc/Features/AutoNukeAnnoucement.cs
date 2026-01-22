@@ -26,7 +26,7 @@ namespace KE.Misc.Features
 
         private void OnDetonated()
         {
-            Timing.CallDelayed(5, () =>
+            Timing.CallDelayed(10, () =>
             {
                 foreach(Player player in Player.Enumerable)
                 {
