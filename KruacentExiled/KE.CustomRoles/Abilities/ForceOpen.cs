@@ -2,6 +2,7 @@
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
+using Exiled.API.Features.Doors;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.API.Features;
@@ -46,36 +47,49 @@ namespace KE.CustomRoles.Abilities
         private void InteractingDoor(InteractingDoorEventArgs ev)
         {
             Player player = ev.Player; 
+            if (ev.IsAllowed) return;
             if (!abilityActivated.ContainsKey(player)) return;
             if (DateTime.Now > abilityActivated[player] + MaxTime) return;
-            if (ev.IsAllowed) return;
+
+            if (ev.Door.IsOpen) return;
             if (ev.Door.DoorLockType >= DoorLockType.Lockdown079) return;
 
 
             int successRate;
             int damage;
 
-            if (ev.Door.Type.IsGate())
+            if (ev.Door is Gate)
             {
-                successRate = 20;
+                successRate = 50;
                 damage = 20;
             }
             else if (ev.Door.Type.IsCheckpoint())
             {
-                successRate = 30;
+                successRate = 50;
                 damage = 10;
             }
             else
             {
-                successRate = 40;
+                successRate = 75;
                 damage = 5;
             }
+
 
             int proba = UnityEngine.Random.Range(0, 101);
 
             if (proba <= successRate)
             {
-                ev.IsAllowed = true;
+                if(ev.Door is Gate gate)
+                {
+                    gate.TryPry(player);
+                }
+                else
+                {
+                    ev.IsAllowed = true;
+                }
+
+
+                
             }
             else
             {
@@ -84,7 +98,7 @@ namespace KE.CustomRoles.Abilities
             }
 
 
-
+            abilityActivated.Remove(player);
 
 
         }
