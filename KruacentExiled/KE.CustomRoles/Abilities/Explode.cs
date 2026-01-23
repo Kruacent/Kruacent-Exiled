@@ -2,6 +2,7 @@
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Items;
 using Exiled.CustomRoles.API.Features;
+using InventorySystem.Items.ThrowableProjectiles;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
 using System;
@@ -24,13 +25,41 @@ namespace KE.CustomRoles.Abilities
 
         public Utils.API.GifAnimator.TextImage IconName => MainPlugin.Instance.icons["Explode"];
 
+        private HashSet<ExplosionGrenade> Grenades = new();
+        protected override void SubscribeEvents()
+        {
+            Grenades = new();
+            Items.API.Events.ExplodeEvent.ExplodeDestructible += ExplodeEvent_ExplodeDestructible;
+
+            base.SubscribeEvents();
+        }
+
+        protected override void UnsubscribeEvents()
+        {
+
+            Items.API.Events.ExplodeEvent.ExplodeDestructible -= ExplodeEvent_ExplodeDestructible;
+            base.UnsubscribeEvents();
+        }
+
         protected override bool AbilityUsed(Player player)
         {
-            ExplosiveGrenade grenade = ((ExplosiveGrenade)Item.Create(ItemType.GrenadeHE));
+            ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
+
+            
             grenade.FuseTime = 0.2f;
             grenade.SpawnActive(player.Position);
+            Grenades.Add(grenade.Projectile.Base);
+
             Log.Debug("Grenade spawned");
             return base.AbilityUsed(player);
+        }
+
+        private void ExplodeEvent_ExplodeDestructible(Items.API.Events.OnExplodeDestructibleEventsArgs obj)
+        {
+            if (!Grenades.Contains(obj.ExplosionGrenade)) return;
+
+            obj.Damage = 100;
+
         }
     }
 }
