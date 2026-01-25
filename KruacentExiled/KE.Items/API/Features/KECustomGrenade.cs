@@ -1,9 +1,11 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
+using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
+using KE.Items.API.Events;
 using KE.Items.API.Features.SpawnPoints;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +20,13 @@ namespace KE.Items.API.Features
 
         protected override void SubscribeEvents()
         {
-
+            ExplodeEvent.ExplodeDestructible += OnExplodeDestructible;
             base.SubscribeEvents();
         }
 
         protected override void UnsubscribeEvents()
         {
+            ExplodeEvent.ExplodeDestructible -= OnExplodeDestructible;
             base.UnsubscribeEvents();
         }
 
@@ -71,15 +74,13 @@ namespace KE.Items.API.Features
         }
 
 
-        protected void InternalOnHurting(HurtingEventArgs ev)
+        private void OnExplodeDestructible(OnExplodeDestructibleEventsArgs ev)
         {
 
-            //can't get the custom grenade
-            /*if(ev.DamageHandler.Type == Exiled.API.Enums.DamageType.Explosion)
-            {
-                ev.Amount *= DamageModifier;
-            }*/
-
+            Player player = Player.Get(ev.Destructible.NetworkId);
+            if (!Check(Pickup.Get(ev.ExplosionGrenade))) return;
+            if (ev.Damage < 0f) return;
+            ev.Damage *= DamageModifier;
         }
 
         protected override void ShowPickedUpMessage(Player player)
