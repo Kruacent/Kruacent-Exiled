@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Extensions;
+using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp106;
 using HintServiceMeow.Core.Models.Hints;
@@ -48,6 +49,9 @@ namespace KE.Misc.Features.LastHuman
 
             if (Round.ElapsedTime.TotalSeconds < 10)
                 return;
+
+            if (ev.OldRole.IsScp()) return;
+
 
             if(TryGetLastTarget(out Player player))
             {
