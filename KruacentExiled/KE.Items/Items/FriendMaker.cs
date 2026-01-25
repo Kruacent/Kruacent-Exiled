@@ -20,7 +20,7 @@ namespace KE.Items.Items
     {
         public override uint Id { get; set; } = 8520;
         public override string Name { get; set; } = "Friend Maker";
-        public override string Description { get; set; } = "The number one (1) method to makes friends";
+        public override string Description { get; set; } = "The number one (1) method to make friends";
         public override float Weight { get; set; } = 1f;
         public override SpawnProperties SpawnProperties { get; set; } = null;
 
@@ -46,33 +46,33 @@ namespace KE.Items.Items
         {
             if (player == null)
             {
-                KECustomItem.ItemEffectHint(player, "But nobody's here");
+                KECustomItem.ItemEffectHint(attacker, "But nobody's here");
                 return;
             }
 
             if (attacker.Role.Side == player.Role.Side)
             {
-                KECustomItem.ItemEffectHint(player, "I know you don't like them but they're in your team");
+                KECustomItem.ItemEffectHint(attacker, "I know you don't like them but they're in your team");
                 return;
             }
 
 
             if (player.IsScp && player.Role != RoleTypeId.Scp0492)
             {
-                KECustomItem.ItemEffectHint(player, "That ain't a zombie");
+                KECustomItem.ItemEffectHint(attacker, "That ain't a zombie");
                 return;
             }
 
             if (player.IsScp)
             {
-                player.Role.Set(player.Role, RoleSpawnFlags.AssignInventory);
+                player.Role.Set(attacker.Role, RoleSpawnFlags.AssignInventory);
             }
             else
             {
-                player.Role.Set(player.Role, RoleSpawnFlags.None);
+                player.Role.Set(attacker.Role, RoleSpawnFlags.None);
             }
 
-            KECustomItem.ItemEffectHint(player, "New friend acquired!");
+            KECustomItem.ItemEffectHint(attacker, "New friend acquired!");
         }
 
 
