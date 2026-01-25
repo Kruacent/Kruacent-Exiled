@@ -14,7 +14,6 @@ namespace KE.Misc.Handlers
 {
     internal class ServerHandler
     {
-        NPC079 a;
         public void OnRoundStarted()
         {
             if (MainPlugin.Instance.Config.AutoElevator)
@@ -54,14 +53,6 @@ namespace KE.Misc.Handlers
 
             
             text.Spawn(basePos + Vector3.back);
-
-            
-            
-
-
-            new NPC079();
-
-
             foreach(Player p in Player.List.Where(p => !p.IsNPC))
             {
                 p.Teleport(RoomType.Hcz939);
