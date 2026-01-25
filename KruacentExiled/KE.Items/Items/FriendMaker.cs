@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
 using HintServiceMeow.UI.Utilities;
@@ -13,6 +14,8 @@ using UnityEngine;
 
 namespace KE.Items.Items
 {
+
+    [CustomItem(ItemType.GunCOM15)]
     public class FriendMaker : KECustomWeapon
     {
         public override uint Id { get; set; } = 8520;
