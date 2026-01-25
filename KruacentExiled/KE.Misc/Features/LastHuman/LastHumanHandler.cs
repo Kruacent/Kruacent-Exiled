@@ -52,24 +52,50 @@ namespace KE.Misc.Features.LastHuman
 
             if (ev.OldRole.IsScp()) return;
 
+            if (ev.NewRole.RoleTypeId.IsScp()) return;
 
-            if(TryGetLastTarget(out Player player))
+
+            if(TryGetLastTarget(out Player lastTarget))
             {
-                AbstractHint hint = DisplayHandler.Instance.GetHint(player, position.HintPlacement);
-
-                if (hint is null || hint.Hide)
+                foreach(Player player in Player.Enumerable)
                 {
-                    string msg = TextLast1;
-                    if (UnityEngine.Random.Range(1,3) % 2 == 0)
+                    AbstractHint hint = DisplayHandler.Instance.GetHint(lastTarget, position.HintPlacement);
+
+                    if (hint is null || hint.Hide)
                     {
-                        msg = TextLast2;
+
+                        string msg = string.Empty;
+                        if (player == lastTarget)
+                        {
+                            msg = TextLast1;
+                            if (UnityEngine.Random.Range(1, 3) % 2 == 0)
+                            {
+                                msg = TextLast2;
+                            }
+                        }
+                        else if(!player.IsDead)
+                        {
+                            msg = "The last human is at " + player.Zone;
+                        }
+
+
+
+
+
+                        if (!player.IsDead)
+                        {
+                            DisplayHandler.Instance.AddHint(position.HintPlacement, player, msg, 10);
+                        }
+                        
+
+                        Log.Debug("show message to " + lastTarget.Nickname);
                     }
-
-
-                    DisplayHandler.Instance.AddHint(position.HintPlacement, player, msg, 10);
-
-                    Log.Debug("show message to "+player.Nickname);
                 }
+
+
+
+
+
                 
             }
         }
