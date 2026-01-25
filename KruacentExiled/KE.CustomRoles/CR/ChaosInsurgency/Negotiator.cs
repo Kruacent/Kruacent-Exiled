@@ -4,6 +4,7 @@ using Exiled.API.Features.Attributes;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.API.Features;
+using KE.Items.API.Features;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
 
         public override HashSet<string> Abilities { get; } = new()
         {
-            "Convert"
+            
         };
 
 
@@ -50,6 +51,14 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
         {
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
             base.UnsubscribeEvents();
+        }
+
+        protected override void GiveInventory(Player player)
+        {
+            base.GiveInventory(player);
+
+            KECustomItem.TryGive(player, "Friend Maker", false);
+
         }
 
 
