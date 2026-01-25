@@ -1,16 +1,4 @@
-﻿using System.Drawing;
-using System.Linq;
-using Exiled.API.Enums;
-using Exiled.API.Extensions;
-using Exiled.API.Features;
-using KE.Misc.Features.Auto079;
-using KE.Misc.Utils;
-using MEC;
-using PlayerRoles;
-using UnityEngine;
-using TextToy = LabApi.Features.Wrappers.TextToy;
-
-namespace KE.Misc.Handlers
+﻿namespace KE.Misc.Handlers
 {
     internal class ServerHandler
     {

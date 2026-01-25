@@ -113,7 +113,11 @@ namespace KE.Misc.Features.Spawn
 
             if (baseRole.ContainsKey(name))
             {
-                player.Role.Set(baseRole[name]);
+                RoleTypeId chosenRole = baseRole[name];
+                if (player.Role.Type != chosenRole)
+                {
+                    player.Role.Set(baseRole[name]);
+                }
                 eventarg.VanillaRoles.Add(player);
                 
                 Log.Info("vanilla scp");
