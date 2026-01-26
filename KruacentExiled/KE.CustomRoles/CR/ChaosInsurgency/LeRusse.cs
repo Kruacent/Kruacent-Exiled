@@ -59,13 +59,13 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
 
         protected override void RoleAdded(Player player)
         {
-            Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
+            //Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
             if (DebugMode) CreateDummy(player);
         }
 
         protected override void RoleRemoved(Player player)
         {
-            Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
+            //Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
 
             if (DebugMode) RemoveDummy(player);
         }
