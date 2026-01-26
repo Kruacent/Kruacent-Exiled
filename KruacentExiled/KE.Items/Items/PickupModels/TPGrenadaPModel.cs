@@ -22,7 +22,7 @@ namespace KE.Items.Items.PickupModels
         {
         }
 
-        public override float Scale => .25f;
+        public override float Scale => .15f;
 
         protected override void CreateModel(Transform parent)
         {

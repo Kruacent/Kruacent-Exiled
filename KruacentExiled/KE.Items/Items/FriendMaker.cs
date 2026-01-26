@@ -7,6 +7,7 @@ using KE.Items.API.Features;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,21 +26,77 @@ namespace KE.Items.Items
         public override SpawnProperties SpawnProperties { get; set; } = null;
 
 
-
+        public override byte ClipSize { get; set; } = 1;
+        
         public override bool FriendlyFire { get; set; } = true;
 
+        private Dictionary<Player, DateTime> cooldowns;
 
-        protected override void OnHurting(HurtingEventArgs ev)
+        private TimeSpan Cooldown = new(0,1,0);
+
+        protected override void SubscribeEvents()
         {
+            cooldowns = new();
+            base.SubscribeEvents();
+        }
+        protected override void UnsubscribeEvents()
+        {
+            cooldowns = null;
+            base.UnsubscribeEvents();
+        }
 
-            if (!Check(ev.Attacker)) return;
-            ev.IsAllowed = false;
 
-            Convert(ev.Player,ev.Attacker);
+        protected override void OnShooting(ShootingEventArgs ev)
+        {
+            Player player = ev.Player;
+            if (!Check(player)) return;
+            if (!ev.IsAllowed) return;
+            if (!CheckCooldown(player))
+            {
+                DateTime dateTime = cooldowns[player] + Cooldown;
+                KECustomItem.ItemEffectHint(player, "You must wait " + Math.Round((dateTime - DateTime.Now).TotalSeconds) + " seconds before using it again");
+                ev.IsAllowed = false;
+            }
 
 
         }
 
+
+        protected override void OnHurting(HurtingEventArgs ev)
+        {
+            Player attacker = ev.Attacker;
+            Player player = ev.Player;
+            if (!Check(attacker)) return;
+            ev.IsAllowed = false;
+
+
+            if (!CheckCooldown(attacker))
+            {
+                return;
+            }
+
+            cooldowns[ev.Attacker] = DateTime.Now;
+
+            Convert(ev.Player, ev.Attacker);
+
+
+        }
+
+
+        private bool CheckCooldown(Player player)
+        {
+            if (cooldowns.TryGetValue(player, out DateTime time))
+            {
+                if (DateTime.Now >= time + Cooldown)
+                {
+                    return true;
+                }
+                return false;
+            }
+            cooldowns[player] = DateTime.Now;
+            return true;
+
+        }
 
 
         private void Convert(Player player,Player attacker)

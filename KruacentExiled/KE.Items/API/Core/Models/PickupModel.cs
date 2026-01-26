@@ -6,6 +6,7 @@ using InventorySystem.Items.Pickups;
 using KE.Items.API.Features;
 using KE.Utils.API.Features.Models;
 using KE.Utils.API.Interfaces;
+using MEC;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -28,6 +29,7 @@ namespace KE.Items.API.Core.Models
         public void SubscribeEvents()
         {
             PickupToParent = new();
+            
             ItemPickupBase.OnPickupAdded += OnPickupAdded;
             ItemPickupBase.OnPickupDestroyed += OnPickupDestroyed;
         }
@@ -41,6 +43,14 @@ namespace KE.Items.API.Core.Models
 
         private Dictionary<Pickup, Primitive> PickupToParent;
 
+        private static CoroutineHandle handle;
+        private static IEnumerator<float> UpdatePosition()
+        {
+            while (true)
+            {
+
+            }
+        }
 
         private Primitive CreateParent(Pickup pickup)
         {
@@ -57,6 +67,7 @@ namespace KE.Items.API.Core.Models
             prim.Transform.localRotation = Quaternion.identity;
             prim.Transform.localScale = new Vector3(1f/ parentScale.x,1f/ parentScale.y,1f/parentScale.z);
             prim.Transform.localScale *= Scale;
+            prim.MovementSmoothing = 0;
 
             prim.Spawn();
             PickupToParent.Add(pickup, prim);
@@ -68,6 +79,8 @@ namespace KE.Items.API.Core.Models
         {
             Pickup pickup = Pickup.Get(pickupBase);
             if (!Check(pickup)) return;
+
+            //handle = Timing.RunCoroutineSingleton(UpdatePosition(), handle, SingletonBehavior.Abort);
 
             Transform parent = CreateParent(pickup).Transform;
             Log.Info(parent);
