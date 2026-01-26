@@ -75,9 +75,12 @@ namespace KE.Items.Items
                 return;
             }
 
-            cooldowns[ev.Attacker] = DateTime.Now;
+            
 
-            Convert(ev.Player, ev.Attacker);
+            if(Convert(ev.Player, ev.Attacker))
+            {
+                cooldowns[ev.Attacker] = DateTime.Now;
+            }
 
 
         }
@@ -99,25 +102,25 @@ namespace KE.Items.Items
         }
 
 
-        private void Convert(Player player,Player attacker)
+        private bool Convert(Player player,Player attacker)
         {
             if (player == null)
             {
                 KECustomItem.ItemEffectHint(attacker, "But nobody's here");
-                return;
+                return false;
             }
 
             if (attacker.Role.Side == player.Role.Side)
             {
                 KECustomItem.ItemEffectHint(attacker, "I know you don't like them but they're in your team");
-                return;
+                return false;
             }
 
 
             if (player.IsScp && player.Role != RoleTypeId.Scp0492)
             {
                 KECustomItem.ItemEffectHint(attacker, "That ain't a zombie");
-                return;
+                return false;
             }
 
             if (player.IsScp)
@@ -130,6 +133,7 @@ namespace KE.Items.Items
             }
 
             KECustomItem.ItemEffectHint(attacker, "New friend acquired!");
+            return true;
         }
 
 
