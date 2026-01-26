@@ -23,10 +23,10 @@ namespace KE.CustomRoles.Abilities
         public override string Name { get;  } = "AirStrike";
         public override string PublicName { get;  } = "Airstrike";
 
-        public override string Description { get;  } = "Don't overuse it or your co-op will not be happy (only works on Surface Zone)";
+        public override string Description { get;  } = "Don't overuse it or your co-op will not be happy";
         public override float Cooldown { get; } = 60f;
 
-        public float height = 5;
+        public float height = 1;
         public Utils.API.GifAnimator.TextImage IconName => MainPlugin.Instance.icons["Airstrike"];
 
 
@@ -35,11 +35,6 @@ namespace KE.CustomRoles.Abilities
             if(!SetPosition.TryGetTarget(player, out Vector3 target))
             {
                 MainPlugin.ShowEffectHint(player, "no target selected");
-                return false;
-            }
-            if(target.GetZone() != FacilityZone.Surface)
-            {
-                MainPlugin.ShowEffectHint(player, "only works on Surface Zone");
                 return false;
             }
 
