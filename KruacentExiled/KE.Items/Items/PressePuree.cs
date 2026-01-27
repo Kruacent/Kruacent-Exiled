@@ -21,7 +21,6 @@ namespace KE.Items.Items
     [CustomItem(ItemType.GrenadeHE)]
     public class PressePuree : KECustomGrenade, IUpgradableCustomItem, ICustomPickupModel
     {
-        //presse puree
         public override uint Id { get; set; } = 1046;
         public override string Name { get; set; } = "Presse Purée";
         public override string Description { get; set; } = "The grenade explode at impact but does less damage";

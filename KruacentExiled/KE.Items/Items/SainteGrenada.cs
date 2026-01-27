@@ -22,17 +22,15 @@ namespace KE.Items.Items
         public override string Name { get; set; } = "Sainte Grenada";
         public override string Description { get; set; } = "Worms reference !?";
         public override float Weight { get; set; } = 1.5f;
-        public override float FuseTime { get; set; } = 6f;
+        public override float FuseTime { get; set; } = 5f;
         public override bool ExplodeOnCollision { get; set; } = false;
         public override float DamageModifier { get; set; } = 3f;
         public Color Color { get; set; } = Color.red;
 
 
-        //
-        public int NbGrenadeSpawned { get; set; } = 4;
+        public int NbGrenadeSpawned { get; set; } = 3;
         public float SpawnRadius { get; set; } = 5f;
         public float GrenadeSize { get; set; } = 4f;
-        //
 
 
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
@@ -50,10 +48,8 @@ namespace KE.Items.Items
 
             for (int i = 0; i < NbGrenadeSpawned; i++)
             {
-                float angle = UnityEngine.Random.Range(0f, 360f) * Mathf.Deg2Rad;
-                Vector3 offset = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * SpawnRadius;
 
-                Vector3 spawnPosition = ev.Position + offset;
+                Vector3 spawnPosition = ev.Position;
 
                 ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
                 grenade.SpawnActive(spawnPosition).FuseTime = 0f;
