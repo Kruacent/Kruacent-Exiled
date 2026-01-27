@@ -9,6 +9,7 @@ using Exiled.CustomRoles;
 using Exiled.CustomRoles.API;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Server;
 using HintServiceMeow.Core.Models.Hints;
 using InventorySystem.Configs;
 using KE.CustomRoles.API.HintPositions;
@@ -192,6 +193,90 @@ namespace KE.CustomRoles.API.Features
         }
 
 
+
+        public static void SpawnStartRound(Misc.Features.Spawn.SpawnedEventArgs ev)
+        {
+            GiveRandomRole(Player.List.Except(ev.CustomRoles));
+        }
+
+        public static void RespawnCustomRole(RespawnedTeamEventArgs ev)
+        {
+            GiveRandomRole(ev.Players);
+        }
+
+        public static void ShowCustomRole(JoinedEventArgs ev)
+        {
+            Timing.CallDelayed(1, delegate
+            {
+                Player player = ev.Player;
+                DisplayHandler.Instance.CreateAuto(player, arg => CurrentRole(player), CurrentCustomRolePosition.HintPlacement);
+            });
+
+            
+        }
+
+
+
+
+        public static string CurrentRole(Player player)
+        {
+            StringBuilder sb = StringBuilderPool.Pool.Get();
+
+
+            if (HasCustomRole(player))
+            {
+                sb.AppendLine("Current Role : ");
+                sb.AppendLine();
+                sb.Append("<color=#");
+                sb.Append(ColorUtility.ToHtmlStringRGB(player.Role.Color));
+                sb.Append(">");
+                sb.Append(Get(player).FirstOrDefault()?.PublicName);
+                sb.Append("</color>");
+            } 
+            else if (player.IsDead)
+            {
+                Player spectating = GetSpectatingPlayer(player);
+                KECustomRole customRole = null;
+                if (spectating != null)
+                {
+                    customRole = Get(spectating).FirstOrDefault();
+                }
+
+
+                if(customRole != null)
+                {
+                    sb.AppendLine("Current Role : ");
+                    sb.AppendLine();
+                    sb.Append("<color=#");
+                    sb.Append(ColorUtility.ToHtmlStringRGB(spectating.Role.Color));
+                    sb.Append(">");
+                    sb.Append(customRole.PublicName);
+                    sb.Append("</color>");
+                }
+            }
+
+
+
+            return StringBuilderPool.Pool.ToStringReturn(sb);
+        }
+
+        private static Player GetSpectatingPlayer(Player spectator)
+        {
+
+            foreach(Player player in Player.Enumerable)
+            {
+                if (player.CurrentSpectatingPlayers.Contains(spectator))
+                {
+                    return player;
+                }
+            }
+
+            return null;
+
+
+        }
+
+
         protected void ShowEffectHint(Player player, string text)
         {
             float delay = MainPlugin.SettingHandler.GetTime(player); ;
@@ -267,13 +352,6 @@ namespace KE.CustomRoles.API.Features
             SetSpawn(player2);
 
 
-
-            if (PlayerHints.Add(player))
-            {
-                ContinuousShow(player2);
-
-            }
-
             ShowMessage(player2);
             
             RoleAdded(player2);
@@ -281,35 +359,14 @@ namespace KE.CustomRoles.API.Features
             player2.TryAddCustomRoleFriendlyFire(Name, CustomRoleFFMultiplier);
         }
 
-        private void ContinuousShow(Player player)
-        {
-            Log.Debug("adding show hint to player " + player.Nickname);
-            DisplayHandler.Instance.CreateAuto(player, arg => CurrentRole(player), CurrentCustomRolePosition.HintPlacement);
-        }
+
 
         private static HashSet<Player> PlayerHints = new();
 
 
-        private static HintPosition CurrentCustomRolePosition = new CurrentCustomRolePosition();
-
-        public static string CurrentRole(Player player)
-        {
-            StringBuilder sb = StringBuilderPool.Pool.Get();
-            if (HasCustomRole(player))
-            {
-                sb.AppendLine("Current Role : ");
-                sb.AppendLine();
-                sb.Append("<color=#");
-                sb.Append(ColorUtility.ToHtmlStringRGB(player.Role.Color));
-                sb.Append(">");
-                sb.Append(Get(player).FirstOrDefault()?.PublicName);
-                sb.Append("</color>");
-            }
+        public static readonly HintPosition CurrentCustomRolePosition = new CurrentCustomRolePosition();
 
 
-
-            return StringBuilderPool.Pool.ToStringReturn(sb);
-        }
 
         protected virtual void ClearInventory(Player player)
         {

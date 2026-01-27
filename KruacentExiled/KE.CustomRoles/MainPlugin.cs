@@ -2,10 +2,12 @@
 using Exiled.API.Features.Core.UserSettings;
 using Exiled.API.Interfaces;
 using Exiled.CustomRoles.API.Features;
+using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using HarmonyLib;
 using KE.CustomRoles.Abilities.FireAbilities;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.HintPositions;
 using KE.CustomRoles.Settings;
 using KE.Misc.Features.Spawn;
 using KE.Utils.API.CustomStats;
@@ -91,28 +93,19 @@ namespace KE.CustomRoles
 
         public void SubscribeEvents()
         {
-            Misc.Features.Spawn.Spawn.OnAssigned += CustomRoleImplement;
-            Exiled.Events.Handlers.Server.RespawnedTeam += CustomRoleRespawning;
-            Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
+            Misc.Features.Spawn.Spawn.OnAssigned += KECustomRole.SpawnStartRound;
+            Exiled.Events.Handlers.Server.RespawnedTeam += KECustomRole.RespawnCustomRole;
+            Exiled.Events.Handlers.Server.WaitingForPlayers += KECustomRole.ResetNumberOfSpawn;
+            Exiled.Events.Handlers.Player.Joined += KECustomRole.ShowCustomRole;
         }
         public void UnsubscribeEvents()
         {
-            Misc.Features.Spawn.Spawn.OnAssigned -= CustomRoleImplement;
-            Exiled.Events.Handlers.Server.RespawnedTeam -= CustomRoleRespawning;
-            Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
+            Misc.Features.Spawn.Spawn.OnAssigned -= KECustomRole.SpawnStartRound;
+            Exiled.Events.Handlers.Server.RespawnedTeam -= KECustomRole.RespawnCustomRole;
+            Exiled.Events.Handlers.Server.WaitingForPlayers -= KECustomRole.ResetNumberOfSpawn;
+            Exiled.Events.Handlers.Player.Joined -= KECustomRole.ShowCustomRole;
         }
 
-        private void OnWaitingForPlayers()
-        {
-            KECustomRole.ResetNumberOfSpawn();
-        }
-
-        public void CustomRoleImplement(SpawnedEventArgs ev)
-        {
-            
-            KECustomRole.GiveRandomRole(Player.List.Except(ev.CustomRoles));
-            
-        }
 
         private void LoadImage()
         {
@@ -141,11 +134,6 @@ namespace KE.CustomRoles
             Log.Debug("nb trnalsai"+ translation.Values.Count);
 
             Log.Debug(translation.ToString());
-        }
-
-        public void CustomRoleRespawning(RespawnedTeamEventArgs ev)
-        {
-            KECustomRole.GiveRandomRole(ev.Players);
         }
 
         public static void ShowEffectHint(Player player, string text)
