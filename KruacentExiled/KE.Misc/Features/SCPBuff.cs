@@ -20,6 +20,16 @@ namespace KE.Misc.Features
     {
         public const float RefreshRate = 1f;
         public float IncreaseSCPHealth { get; } = 1.25f;
+
+        public Dictionary<RoleTypeId, float> RoleBuff = new()
+        {
+            {RoleTypeId.Scp049, 0.8f },
+            {RoleTypeId.Scp939, 1.2f },
+            {RoleTypeId.Scp106, 1.1f },
+
+        };
+
+
         internal SCPBuff() { }
 
         public static event Action<BuffingSCPEventArgs> OnBuffingSCP = delegate { };
@@ -51,17 +61,23 @@ namespace KE.Misc.Features
             Player player = ev.Player;
             if (!ev.NewRole.IsScp() || ev.NewRole == RoleTypeId.Scp0492) return;
             if(player.Role == RoleTypeId.None) return;
-            BuffingSCPEventArgs ev1 = new(player, true, IncreaseSCPHealth);
+            float healthincrease = IncreaseSCPHealth;
+            if(RoleBuff.TryGetValue(ev.NewRole,out float val))
+            {
+                healthincrease *= val;
+            }
 
+            BuffingSCPEventArgs ev1 = new(player, true, healthincrease);
+            
             OnBuffingSCP?.Invoke(ev1);
             if (ev1.IsAllowed)
             {
                 Timing.CallDelayed(2, () =>
                 {
-                    player.MaxHealth *= IncreaseSCPHealth;
+                    player.MaxHealth *= healthincrease;
                     player.Health = player.MaxHealth;
                 });
-                BuffedSCPEventArgs ev2 = new(player, IncreaseSCPHealth);
+                BuffedSCPEventArgs ev2 = new(player, healthincrease);
                 OnBuffedSCP?.Invoke(ev2);
             }
 
