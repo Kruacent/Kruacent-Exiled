@@ -15,7 +15,7 @@ namespace KE.Items.Items
     {
         public override uint Id { get; set; } = 1073;
         public override string Name { get; set; } = "Proximity Grenade";
-        public override string Description { get; set; } = "It will show line to all players arround 3 rooms";
+        public override string Description { get; set; } = "Show lines to all players around 3 rooms";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime { get; set; } = 3f;
         public override bool ExplodeOnCollision { get; set; } = false;
