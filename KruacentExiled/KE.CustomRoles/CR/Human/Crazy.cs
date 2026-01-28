@@ -27,7 +27,6 @@ namespace KE.CustomRoles.CR.Human
         Crazying
     }
 
-    [CustomRole(RoleTypeId.None)]
     internal class Crazy : GlobalCustomRole
     {
         private static CoroutineHandle _coroutines;
@@ -124,7 +123,7 @@ namespace KE.CustomRoles.CR.Human
                 float randomPitch = UnityEngine.Random.Range(-30f, 30f);
 
                 Quaternion crazyRot = Quaternion.Euler(randomPitch, randomYaw, 0f);
-                player.ReferenceHub.transform.localRotation = crazyRot;
+                player.Rotation = crazyRot;
 
                 for (int i = 0; i < 5; i++)
                 {
@@ -132,7 +131,7 @@ namespace KE.CustomRoles.CR.Human
                     float shakePitch = UnityEngine.Random.Range(-5f, 5f);
 
                     Quaternion shakeRot = Quaternion.Euler(shakePitch, shakeYaw, 0f);
-                    player.ReferenceHub.transform.localRotation *= shakeRot;
+                    player.Rotation *= shakeRot;
 
                     yield return Timing.WaitForSeconds(0.05f);
                     timer += 0.05f;
