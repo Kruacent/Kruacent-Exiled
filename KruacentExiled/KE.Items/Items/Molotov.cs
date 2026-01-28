@@ -15,7 +15,7 @@ using UnityEngine;
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.GrenadeFlash)]
-    public class Molotov : KECustomGrenade, ISwichableEffect/*, ICustomPickupModel*/
+    public class Molotov : KECustomGrenade, ISwichableEffect, ICustomPickupModel
     {
         public override uint Id { get; set; } = 1049;
         public override string Name { get; set; } = "Cocktail Molotov";
@@ -25,7 +25,7 @@ namespace KE.Items.Items
         public override bool ExplodeOnCollision { get; set; } = true;
         public Color Color { get; set; } = Color.yellow;
         public CustomItemEffect Effect { get; set; }
-        //public PickupModel PickupModel { get; }
+        public PickupModel PickupModel { get; }
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 2,
@@ -47,12 +47,12 @@ namespace KE.Items.Items
         public Molotov()
         {
             Effect = new MolotovEffect();
-            //PickupModel = new MolotovPModel(this);
+            PickupModel = new MolotovPModel(this);
         }
 
         protected override void SubscribeEvents()
         {
-            //PickupModel.SubscribeEvents();
+            PickupModel.SubscribeEvents();
             Exiled.Events.Handlers.Player.ReceivingEffect += ReceivedEffect;
             Exiled.Events.Handlers.Player.PickingUpItem += PickingItem;
             base.SubscribeEvents();
@@ -60,7 +60,7 @@ namespace KE.Items.Items
 
         protected override void UnsubscribeEvents()
         {
-            //PickupModel.UnsubscribeEvents();
+            PickupModel.UnsubscribeEvents();
             Exiled.Events.Handlers.Player.ReceivingEffect -= ReceivedEffect;
             Exiled.Events.Handlers.Player.PickingUpItem -= PickingItem;
             base.UnsubscribeEvents();

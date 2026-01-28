@@ -1,4 +1,6 @@
-﻿using KE.Items.API.Core.Models;
+﻿using Exiled.API.Features.Toys;
+using Exiled.CustomItems.API.Features;
+using KE.Items.API.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +10,35 @@ using UnityEngine;
 
 namespace KE.Items.Items.PickupModels
 {
-    public class HolyGrenade : PickupModel
+    public class HolyGrenadePModel : PickupModel
     {
-        public override float Scale => 0.1f;
+        public HolyGrenadePModel(CustomItem customItem) : base(customItem)
+        {
+        }
+
+        private static Color32 red = new(255, 0, 0, 255);
+        private static Color32 gold = new(255, 215, 0, 255);
+        private static Color32 white = new(255, 255, 255, 255);
+
+
+        public override float Scale => 0.2f;
 
         protected override void CreateModel(Transform parent)
         {
+
+
+            Primitive sphere = CreatePrimitive(parent, PrimitiveType.Sphere, Vector3.zero, Quaternion.identity, Vector3.one, white);
+
+            Primitive gem = CreatePrimitive(parent, PrimitiveType.Sphere, new(0,0.8f,0), Quaternion.identity, new(.15f,.1f,.1f), red);
+
+            Primitive crossV = CreatePrimitive(parent, PrimitiveType.Cube, new(0, 0.74f, 0), Quaternion.identity, new(.1f, .5f, .1f), white);
+            Primitive crossH = CreatePrimitive(parent, PrimitiveType.Cube, new(0, 0.8f, 0), Quaternion.identity, new(.1f, .1f, .37f), white);
+
+            Primitive ring1 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.Euler(90,0,0), new(1.05f, .05f, 1.05f), gold);
+            Primitive ring2 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.identity, new(1.05f, .05f, 1.05f), gold);
+            Primitive ring3 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.Euler(90, 90, 0), new(1.05f, .05f, 1.05f), gold);
+
+            Primitive littleBase = CreatePrimitive(parent, PrimitiveType.Cylinder, new(0, 0.5f, 0), Quaternion.identity, new(.3f, .05f, .3f), gold);
 
         }
     }

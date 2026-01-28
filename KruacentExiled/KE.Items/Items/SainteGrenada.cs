@@ -9,14 +9,16 @@ using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
+using KE.Items.API.Core.Models;
 using KE.Items.API.Features;
 using KE.Items.API.Interface;
+using KE.Items.Items.PickupModels;
 using UnityEngine;
 
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.GrenadeHE)]
-    public class SainteGrenada : KECustomGrenade, ILumosItem
+    public class SainteGrenada : KECustomGrenade, ICustomPickupModel
     {
         public override uint Id { get; set; } = 1055;
         public override string Name { get; set; } = "Sainte Grenada";
@@ -37,6 +39,28 @@ namespace KE.Items.Items
         {
 
         };
+
+        public PickupModel PickupModel { get; }
+
+
+        public SainteGrenada()
+        {
+            PickupModel = new HolyGrenadePModel(this);
+        }
+
+
+        protected override void SubscribeEvents()
+        {
+            PickupModel.SubscribeEvents();
+            base.SubscribeEvents();
+        }
+
+        protected override void UnsubscribeEvents()
+        {
+            PickupModel.UnsubscribeEvents();
+            base.UnsubscribeEvents();
+        }
+
 
         protected override void OnThrownProjectile(ThrownProjectileEventArgs ev)
         {
