@@ -144,24 +144,22 @@ namespace KE.CustomRoles.CR.CustomSCPs
                     ev.IsAllowed = false;
                     return;
                 }
-
-                if (ev.Pickup.Type.IsScp())
-                {
-                    ShowEffectHint(ev.Player, CantPickup);
-                    ev.IsAllowed = false;
-                    return;
-                }
-
-                if (ev.Pickup.Type == ItemType.GunSCP127)
-                {
-                    ShowEffectHint(ev.Player, CantPickup);
-                    ev.IsAllowed = false;
-                    return;
-                }
             }
 
 
+            if (ev.Pickup.Type.IsScp())
+            {
+                ShowEffectHint(ev.Player, CantPickup);
+                ev.IsAllowed = false;
+                return;
+            }
 
+            if (ev.Pickup.Type == ItemType.GunSCP127)
+            {
+                ShowEffectHint(ev.Player, CantPickup);
+                ev.IsAllowed = false;
+                return;
+            }
 
 
 
