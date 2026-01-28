@@ -3,6 +3,7 @@ using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Pools;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
@@ -47,6 +48,10 @@ namespace KE.CustomRoles.CR.CustomSCPs
             ItemType.Painkillers,
             ItemType.Medkit,
             ItemType.SCP500,
+        };
+        public HashSet<ItemType> WhitelistUsing = new()
+        {
+            ItemType.SCP1853,
         };
 
         // 035 can't be damaged by these
@@ -94,7 +99,6 @@ namespace KE.CustomRoles.CR.CustomSCPs
             PlayerDisplay dis = PlayerDisplay.Get(player);
             DisplayHandler.Instance.CreateAuto(player, (args) => GetPlayers(args), position.HintPlacement);
 
-            player.VoiceChannel = VoiceChat.VoiceChatChannel.ScpChat;
             player.Position = RoleTypeId.Scp049.GetRandomSpawnLocation().Position;
             player.EnableEffect<NightVision>(100, 0, false);
             base.RoleAdded(player);
@@ -129,34 +133,38 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
         private void OnSearchingPickup(SearchingPickupEventArgs ev)
         {
+            Player player = ev.Player;
+            Pickup pickup = ev.Pickup;
             if (!Check(ev.Player)) return;
+
+
 
             CustomItem item = null;
 
-            CustomItem.TryGet(ev.Pickup, out item);
+            CustomItem.TryGet(pickup, out item);
 
 
             if(item is not null)
             {
                 if(item.Id == 1050 || item.Id == 1047)
                 {
-                    ShowEffectHint(ev.Player, CantPickup);
+                    ShowEffectHint(player, CantPickup);
                     ev.IsAllowed = false;
                     return;
                 }
             }
 
 
-            if (ev.Pickup.Type.IsScp())
+            if (pickup.Type.IsScp() && !WhitelistUsing.Contains(pickup.Type))
             {
-                ShowEffectHint(ev.Player, CantPickup);
+                ShowEffectHint(player, CantPickup);
                 ev.IsAllowed = false;
                 return;
             }
 
-            if (ev.Pickup.Type == ItemType.GunSCP127)
+            if (pickup.Type == ItemType.GunSCP127)
             {
-                ShowEffectHint(ev.Player, CantPickup);
+                ShowEffectHint(player, CantPickup);
                 ev.IsAllowed = false;
                 return;
             }
@@ -165,9 +173,9 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
 
 
-            if (BlacklistedPickup.Contains(ev.Pickup.Type))
+            if (BlacklistedPickup.Contains(pickup.Type))
             {
-                ShowEffectHint(ev.Player, CantPickup);
+                ShowEffectHint(player, CantPickup);
                 ev.IsAllowed = false;
                 return;
                 
