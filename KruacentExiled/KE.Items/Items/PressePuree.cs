@@ -78,7 +78,7 @@ namespace KE.Items.Items
 
         private void OnExplodeDestructible(OnExplodeDestructibleEventsArgs ev)
         {
-            Log.Info(ev.Damage);
+            Log.Debug("old dmagea="+ev.Damage);
             Player player = Player.Get(ev.Destructible.NetworkId);
             if (!Check(Projectile.Get(ev.ExplosionGrenade))) return;
             if (ev.Damage < 0f) return;
@@ -91,6 +91,7 @@ namespace KE.Items.Items
                 ev.Damage /= 3;
             }
 
+            Log.Debug("new daamager="+ev.Damage);
 
         }
 

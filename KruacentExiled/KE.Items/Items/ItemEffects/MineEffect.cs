@@ -5,6 +5,7 @@ using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.API.Interfaces;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
+using KE.Items.API.Events;
 using KE.Items.API.Extensions;
 using KE.Items.API.Interface;
 using KE.Items.Items.Models;
@@ -40,16 +41,21 @@ namespace KE.Items.Items.ItemEffects
 
         public void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Map.ExplodingGrenade += OnExplodingGrenade;
+            ExplodeEvent.ExplodeDestructible += OnExplodeDestructible;
         }
+
+        private void OnExplodeDestructible(OnExplodeDestructibleEventsArgs obj)
+        {
+            if (obj.ExplosionGrenade == Grenade.Projectile.Base)
+            {
+                obj.Damage = 100;
+                
+            }
+        }
+
         public void UnsubscribeEvents()
         {
-
-        }
-
-        private void OnExplodingGrenade(ExplodingGrenadeEventArgs ev)
-        {
-
+            ExplodeEvent.ExplodeDestructible -= OnExplodeDestructible;
         }
 
         /// <summary>
@@ -90,9 +96,10 @@ namespace KE.Items.Items.ItemEffects
                 if (_grenade == null)
                 {
                     _grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
-                    _grenade.MaxRadius = 3;
-                    _grenade.ScpDamageMultiplier = 1f;
+                    _grenade.MaxRadius = 1;
+                    _grenade.ScpDamageMultiplier = .25f;
                     _grenade.FuseTime = 0f;
+                    
                 }
                 return _grenade;
             }
