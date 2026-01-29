@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using DrawableLine;
+using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Toys;
 using Exiled.CustomRoles.API.Features;
@@ -29,16 +30,27 @@ namespace KE.CustomRoles.Abilities
         public Utils.API.GifAnimator.TextImage IconName => MainPlugin.Instance.icons["Convert"];
         protected override bool AbilityUsed(Player player)
         {
-            if (!Physics.Raycast(player.Position+ player.CameraTransform.rotation *Vector3.forward, player.Rotation.eulerAngles, out RaycastHit hit)) return false;
+            Vector3 start = player.CameraTransform.position+ player.CameraTransform.forward*.2f;
+            Vector3 end = start + player.CameraTransform.forward * 5f;
+
+            Vector3 basePosition = player.Position + player.CameraTransform.rotation * Vector3.forward;
+            DrawableLines.IsDebugModeEnabled = MainPlugin.Instance.Config.Debug;
+            DrawableLines.ServerGenerateLine(10f,null,start, end);
+
+
+            
+
+            if (!Physics.Linecast(start, end, out RaycastHit hit)) return false;
 
 
             Player playerHit = Player.Get(hit.collider);
 
-            if (playerHit == null)
+            if (playerHit == null || playerHit == player)
             {
                 MainPlugin.ShowEffectHint(player, "But nobody's here");
                 return false;
             }
+
 
             if (playerHit.Role.Side == player.Role.Side)
             {
