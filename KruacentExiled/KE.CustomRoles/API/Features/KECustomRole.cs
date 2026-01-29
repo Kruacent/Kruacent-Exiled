@@ -255,9 +255,15 @@ namespace KE.CustomRoles.API.Features
                 }
             }
 
+            string result = StringBuilderPool.Pool.ToStringReturn(sb);
+
+            if (string.IsNullOrEmpty(result))
+            {
+                result = " ";
+            }
 
 
-            return StringBuilderPool.Pool.ToStringReturn(sb);
+            return result;
         }
 
         private static Player GetSpectatingPlayer(Player spectator)
