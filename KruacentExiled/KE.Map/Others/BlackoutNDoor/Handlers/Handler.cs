@@ -30,7 +30,7 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
         };
 
         private ZoneType currentScpZone = ZoneType.Unspecified;
-        private int weightPerSeconds = 2;
+        private int weightPerSeconds = 5;
         private int weight = defaultWeight;
         private const int defaultWeight = 330;
 

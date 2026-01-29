@@ -70,6 +70,11 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
             return _pattern[current];
         }
 
+        public MapEvent SeeNext()
+        {
+            return _pattern[(current + 1) % _pattern.Count];
+        }
+
 
 
 
