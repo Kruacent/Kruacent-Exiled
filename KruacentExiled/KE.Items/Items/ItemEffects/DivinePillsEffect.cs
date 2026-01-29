@@ -39,15 +39,12 @@ namespace KE.Items.Items.ItemEffects
             if (Player.List.Count(x => x.Role == RoleTypeId.Spectator) == 0)
             {
                 player.ItemEffectHint("No spectators to respawn");
-                /*
-                could be used for a deniable event
-                if(ev != null) 
-                    ev.IsAllowed = false;
-                */
                 return;
             }
             var random = Random.Range(0, 100);
-            if (random <= 25)
+
+ 
+            if (random < 25)
             {
                 player.Kill("unlucky bro");
                 return;
