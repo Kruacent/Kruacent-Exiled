@@ -20,12 +20,13 @@ namespace KE.Misc.Features
     {
         public const float RefreshRate = 1f;
         public float IncreaseSCPHealth { get; } = 1.25f;
+        private static Config Config => MainPlugin.Instance.Config;
 
         public Dictionary<RoleTypeId, float> RoleBuff = new()
         {
-            {RoleTypeId.Scp049, 0.8f },
-            {RoleTypeId.Scp939, 1.2f },
-            {RoleTypeId.Scp106, 1.1f },
+            {RoleTypeId.Scp049, Config.MultSCP049 },
+            {RoleTypeId.Scp939, Config.MultSCP939 },
+            {RoleTypeId.Scp106, Config.MultSCP106 },
 
         };
 

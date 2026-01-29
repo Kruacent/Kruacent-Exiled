@@ -28,6 +28,14 @@ namespace KE.Misc
         public int GamblingCoinMaxUse { get; set; } = 2;
         public int GamblingCoinCooldown { get; set; } = 3;
 
+
+        public float MultSCP049 { get; set; } = 0.8f;
+        public float MultSCP939 { get; set; } = 1.2f;
+        public float MultSCP106 { get; set; } = 1.1f;
         public int MinPlayerVote { get; set; } = 6;
+
+
+
+
     }
 }
