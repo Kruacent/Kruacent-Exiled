@@ -144,9 +144,10 @@ namespace KE.Items.Items.ShieldBelt
             prim.Transform.localPosition = Vector3.zero;
             prim.Scale = MaxSize;
             prim.Color = new Color32(50, 50, 50, 50);
+            prim.MovementSmoothing = 0;
             prim.Spawn();
 
-
+            
             model.Create(prim.Transform);
 
 
