@@ -7,6 +7,7 @@ using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using KE.Items.API.Extensions;
 using KE.Items.API.Interface;
+using MEC;
 using PlayerRoles;
 using System.Linq;
 using Random = UnityEngine.Random;
@@ -60,10 +61,11 @@ namespace KE.Items.Items.ItemEffects
                     break;
             }
 
-            if (random > 75)
+            if (random >= 75)
             {
                 Log.Debug("tp");
-                respawning.Teleport(player);
+                Timing.CallDelayed(1, () =>respawning.Teleport(player));
+                
             }
         }
     }
