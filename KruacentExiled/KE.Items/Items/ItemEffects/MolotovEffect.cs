@@ -75,18 +75,14 @@ namespace KE.Items.Items.ItemEffects
             List<Light> fireLights = new List<Light>();
             Color fireColor = new Color(255, 128, 0);
 
-            fireLights.Add(CreateLight(centerPos + Vector3.up * 0.5f, fireColor, Radius * 2f, 0.2f));
-
-            float spread = Radius * 0.5f;
-            fireLights.Add(CreateLight(centerPos + new Vector3(-spread, 0.5f, 0), fireColor, Radius, 0.2f));
-            fireLights.Add(CreateLight(centerPos + new Vector3(0, 0.5f, spread), fireColor, Radius, 0.2f));
-
+            fireLights.Add(CreateLight(centerPos + Vector3.up * 0.5f, fireColor, Radius /2f, 0.2f));
             Timing.RunCoroutine(Fire(jarPickup, dangerZone, fireLights, owner, centerPos));
         }
 
         private Light CreateLight(Vector3 pos, Color col, float range, float intensity)
         {
             Light l = Light.Create(pos,spawn:false);
+            l.LightType = LightType.Point;
             l.Color = col;
             l.Range = range;
             l.Intensity = intensity;
