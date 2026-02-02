@@ -1,22 +1,17 @@
 ﻿
+using AdminToys;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Toys;
 using Exiled.API.Interfaces;
-using Exiled.Events.EventArgs.Player;
 using HarmonyLib;
-using KE.Map.CustomZones;
-using KE.Map.CustomZones.CustomRooms.MCZ;
 using KE.Map.Heavy;
 using KE.Map.Heavy.GamblingZone;
 using KE.Map.Others.BlackoutNDoor.Handlers;
-using KE.Utils.API.GifAnimator;
-using LabApi.Events.Arguments.ServerEvents;
-using MapGeneration;
 using MEC;
 using PlayerRoles;
-using System;
+using PlayerRoles.PlayableScps.Scp106;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using UnityEngine;
 using Door = Exiled.API.Features.Doors.Door;
@@ -72,9 +67,35 @@ namespace KE.Map
                 {
                     //player.Teleport(teleport);
                 });
+
+                Vector3 pos = RoleTypeId.Scp049.GetRandomSpawnLocation().Position;
+
+
+                Primitive prim = Primitive.Create(PrimitiveType.Cube, pos, spawn: false);
+
+                prim.Base.gameObject.layer = 14;
+                prim.Spawn();
+
+
+                
+
+                Collider col = prim.Base.gameObject.GetComponent<BoxCollider>();
+
+
+                //glass or door w/glass => fake to 106s & 173s & 049-2s & 049s & 096s & ghostly
+                //door w/out glass => fake to 106s & ghostly
+
+                MirrorExtensions.SendFakeSyncVar(player, prim.Base.netIdentity,typeof(PrimitiveObjectToy), "NetworkPrimitiveFlags", PrimitiveFlags.Visible);
+
+
+                Log.Info(prim.Base.gameObject.layer);
+                Log.Info(LayerMask.LayerToName(14));
+
+                Log.Info(Scp106MovementModule.GetSlowdownFromCollider(col, out bool passable) + " passable?" + passable);
+
             }
 
-            
+
         }
 
 
