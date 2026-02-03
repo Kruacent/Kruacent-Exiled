@@ -11,6 +11,7 @@ using KE.Utils.API.Interfaces;
 using LabApi.Events.Arguments.PlayerEvents;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl.Thirdperson;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace KE.Misc.Features.LastHuman
@@ -18,8 +19,13 @@ namespace KE.Misc.Features.LastHuman
     public class LastHumanHandler : IUsingEvents
     {
 
-        public static readonly string TextLast1 = "You feel like everyone is counting on you";
-        public static readonly string TextLast2 = "You feel suddenly very lonely";
+
+        private static readonly IReadOnlyCollection<string> TextLast = new HashSet<string>()
+        {
+            "You feel like everyone is counting on you",
+            "You feel suddenly very lonely"
+        };
+
 
         public static HintPosition position = new LastHumanPosition();
 
@@ -67,11 +73,7 @@ namespace KE.Misc.Features.LastHuman
                         string msg = string.Empty;
                         if (player == lastTarget)
                         {
-                            msg = TextLast1;
-                            if (UnityEngine.Random.Range(1, 3) % 2 == 0)
-                            {
-                                msg = TextLast2;
-                            }
+                            msg = TextLast.GetRandomValue();
                         }
                         else if(!player.IsDead)
                         {
