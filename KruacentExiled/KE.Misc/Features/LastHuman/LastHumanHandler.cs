@@ -61,9 +61,10 @@ namespace KE.Misc.Features.LastHuman
             if (ev.NewRole.RoleTypeId.IsScp()) return;
 
 
-            if(TryGetLastTarget(out Player lastTarget))
+            if(TryGetLastTarget(out Player _))
             {
-                foreach(Player player in Player.Enumerable)
+                Player lastTarget = Player.Enumerable.Where(p => p.IsAlive && !p.IsScp && !p.IsTutorial).FirstOrDefault();
+                foreach (Player player in Player.Enumerable)
                 {
                     AbstractHint hint = DisplayHandler.Instance.GetHint(lastTarget, position.HintPlacement);
 
