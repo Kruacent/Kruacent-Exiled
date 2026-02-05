@@ -11,6 +11,7 @@ using KE.Utils.API.Interfaces;
 using LabApi.Events.Arguments.PlayerEvents;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl.Thirdperson;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,7 +29,9 @@ namespace KE.Misc.Features.LastHuman
 
 
         public static HintPosition position = new LastHumanPosition();
+        private DateTime _nextPossibleHint;
 
+        public static readonly TimeSpan Cooldown = TimeSpan.FromSeconds(20);
         public void SubscribeEvents()
         {
             LabApi.Events.Handlers.PlayerEvents.ChangedRole += OnChangedRole;
@@ -85,13 +88,15 @@ namespace KE.Misc.Features.LastHuman
 
 
 
-                        if (!player.IsDead)
+                        if (!player.IsDead && DateTime.Now > _nextPossibleHint)
                         {
                             DisplayHandler.Instance.AddHint(position.HintPlacement, player, msg, 10);
+                            Log.Debug("show message to " + lastTarget.Nickname);
+                            _nextPossibleHint = DateTime.Now.Add(Cooldown);
                         }
                         
 
-                        Log.Debug("show message to " + lastTarget.Nickname);
+                        
                     }
                 }
 
