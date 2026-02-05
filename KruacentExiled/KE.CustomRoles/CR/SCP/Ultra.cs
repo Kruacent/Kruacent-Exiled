@@ -1,7 +1,11 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
+using HintServiceMeow.Core.Models.Arguments;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.Core.Positions;
+using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Displays.DisplayMeow.Placements;
 using MEC;
 using PlayerRoles;
 using System;
@@ -22,33 +26,23 @@ namespace KE.CustomRoles.CR.SCP
         public override float SpawnChance { get; set; } = 100;
         public const float RefreshRate = 20;
         public const int SizeText = 20;
+
+        public static readonly HintPosition UltraPosition = new UltraPosition();
         protected override void RoleAdded(Player player)
         {
-            _handles.Add(player, Timing.RunCoroutine(DisplayInfos(player)));
-        }
-
-        protected override void RoleRemoved(Player player)
-        {
-            Timing.KillCoroutines(_handles[player]);
-            _handles.Remove(player);
-        }
-
-
-
-        private IEnumerator<float> DisplayInfos(Player player)
-        {
-
-            while (player.IsAlive)
+            Timing.CallDelayed(1f, () =>
             {
-                Log.Debug("Ultra : showing");
-                ShowEffectHint(player, PlayerInZone(),RefreshRate);
-                yield return Timing.WaitForSeconds(RefreshRate);
-            }
+                DisplayHandler.Instance.CreateAuto(player, (AutoContentUpdateArg arg) => PlayerInZone(arg), UltraPosition.HintPlacement);
+            });
         }
-
-
-        private string PlayerInZone()
+        private string PlayerInZone(AutoContentUpdateArg arg)
         {
+
+            if (!TrackedPlayers.Contains(Player.Get(arg.PlayerDisplay.ReferenceHub)))
+            {
+                return string.Empty;
+            }
+            
             string result = $"<size={SizeText}>";
             int nbPlayer;
             foreach (ZoneType zone in Enum.GetValues(typeof(ZoneType)))

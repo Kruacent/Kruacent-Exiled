@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using CustomPlayerEffects;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
@@ -7,9 +8,14 @@ using Exiled.CustomItems.API.Features;
 using Exiled.CustomRoles;
 using Exiled.CustomRoles.API;
 using Exiled.CustomRoles.API.Features;
+using Exiled.Events.EventArgs.Player;
+using HintServiceMeow.Core.Models.Hints;
 using InventorySystem.Configs;
+using KE.CustomRoles.API.HintPositions;
 using KE.CustomRoles.API.Interfaces;
 using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Displays.DisplayMeow.Placements;
+using KE.Utils.API.Translations;
 using MEC;
 using PlayerRoles;
 using System;
@@ -19,6 +25,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
+using YamlDotNet.Core.Tokens;
 
 namespace KE.CustomRoles.API.Features
 {
@@ -48,6 +55,14 @@ namespace KE.CustomRoles.API.Features
         /// </summary>
         public abstract string PublicName { get; set; }
 
+        /// <summary>
+        /// the max number of people who can have this role in a round
+        /// </summary>
+        public virtual int Limit { get; set; } = 1;
+        /// <summary>
+        /// the number of people who had this role in a round
+        /// </summary>
+        public int CurrentNumberOfSpawn { get; set; } = 0;
 
         /// <summary>
         /// <see cref="KEAbilities.Name"/>
@@ -94,20 +109,73 @@ namespace KE.CustomRoles.API.Features
         private static Dictionary<Type, KECustomRole> typeLookupTable = new();
         private static Dictionary<string, KECustomRole> stringLookupTable = new();
 
+        private static TranslationFile translation => MainPlugin.Instance.translation;
+
+
+        protected virtual List<TranslationKey> CreateKeys()
+        {
+            return new List<TranslationKey>()
+            {
+                new(Name+"_PublicName",PublicName),
+                new(Name+"_Description",Description),
+            };
+        }
+
+        public static List<TranslationKey> keys = new();
         public override void Init()
         {
             typeLookupTable.Add(GetType(), this);
             stringLookupTable.Add(Name, this);
+            InternalSubscribeEvents();
             SubscribeEvents();
+            Log.Debug("adding keys to "+Name);
+            keys.AddRange(CreateKeys());
+
         }
 
         public override void Destroy()
         {
             typeLookupTable.Remove(GetType());
             stringLookupTable.Remove(Name);
+            InternalUnsubscribeEvents();
             UnsubscribeEvents();
         }
 
+        protected virtual void InternalSubscribeEvents()
+        {
+            if(this is IHealable)
+            {
+                Exiled.Events.Handlers.Player.UsedItem += OnUsedItem;
+            }
+            
+        }
+
+
+        protected virtual void InternalUnsubscribeEvents()
+        {
+            if (this is IHealable)
+            {
+                Exiled.Events.Handlers.Player.UsedItem -= OnUsedItem;
+            }
+        }
+
+
+        private void OnUsedItem(UsedItemEventArgs ev)
+        {
+            if (!Check(ev.Player)) return;
+            IHealable healable = this as IHealable;
+            if(healable.HealItem is null || healable.HealItem.Count == 0)
+            {
+                Log.Warn("no healable item found for" + Name);
+                return;
+            }
+
+
+            if (healable.HealItem.Contains(ev.Item.Type))
+            {
+                RemoveRole(ev.Player);
+            }
+        }
 
 
         protected void ShowEffectHint(Player player, string text)
@@ -125,10 +193,23 @@ namespace KE.CustomRoles.API.Features
         {
             Player player2 = player;
             Log.Debug(Name + ": Adding role to " + player2.Nickname + ".");
+            Log.Debug(Name + ": old role type " + player2.Role.Type + ".");
+            Log.Debug(Name + ": new role type " + Role + ".");
+            CurrentNumberOfSpawn++;
+
+            IEnumerable<KECustomRole> oldroles = Get(player2);
+
+            foreach (KECustomRole role in oldroles)
+            {
+                role.RemoveRole(player2);
+            }
+
+
             
+
             if (Role != RoleTypeId.None)
             {
-
+                Log.Debug("new role exist");
                 if (KeepPositionOnSpawn)
                 {
                     if (KeepInventoryOnSpawn)
@@ -172,11 +253,51 @@ namespace KE.CustomRoles.API.Features
 
             SetAbilities(player2);
 
+            SetSpawn(player2);
+
+
+
+            if (PlayerHints.Add(player))
+            {
+                ContinuousShow(player2);
+
+            }
 
             ShowMessage(player2);
+            
             RoleAdded(player2);
             player2.UniqueRole = Name;
             player2.TryAddCustomRoleFriendlyFire(Name, CustomRoleFFMultiplier);
+        }
+
+        private void ContinuousShow(Player player)
+        {
+            Log.Debug("adding show hint to player " + player.Nickname);
+            DisplayHandler.Instance.CreateAuto(player, arg => CurrentRole(player), CurrentCustomRolePosition.HintPlacement);
+        }
+
+        private static HashSet<Player> PlayerHints = new();
+
+
+        private static HintPosition CurrentCustomRolePosition = new CurrentCustomRolePosition();
+
+        public static string CurrentRole(Player player)
+        {
+            StringBuilder sb = StringBuilderPool.Pool.Get();
+            if (HasCustomRole(player))
+            {
+                sb.AppendLine("Current Role : ");
+                sb.AppendLine();
+                sb.Append("<color=#");
+                sb.Append(ColorUtility.ToHtmlStringRGB(player.Role.Color));
+                sb.Append(">");
+                sb.Append(Get(player).FirstOrDefault()?.PublicName);
+                sb.Append("</color>");
+            }
+
+
+
+            return StringBuilderPool.Pool.ToStringReturn(sb);
         }
 
 
@@ -232,7 +353,11 @@ namespace KE.CustomRoles.API.Features
 
         protected virtual void SetCustomInfo(Player player)
         {
-            player.CustomInfo = player.CustomName + "\n" + PublicName;
+            player.CustomInfo = player.CustomName;
+            if (!string.IsNullOrEmpty(PublicName))
+            {
+                player.CustomInfo += "\n" + PublicName;
+            }
             player.InfoArea &= ~(PlayerInfoArea.Nickname | PlayerInfoArea.Role);
         }
 
@@ -250,7 +375,7 @@ namespace KE.CustomRoles.API.Features
                     }
                    
                 }
-                KEAbilities.SelectFirstAbility(player);
+                KEAbilities.SelectFirstAbility(player,true);
             }
         }
 
@@ -267,9 +392,14 @@ namespace KE.CustomRoles.API.Features
             }
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns>true if the player can have this CR ; false otherwise</returns>
         public virtual bool IsAvailable(Player player)
         {
+            if (CurrentNumberOfSpawn >= Limit) return false;
             return player.Role == Role;
         }
 
@@ -318,12 +448,25 @@ namespace KE.CustomRoles.API.Features
 
         }
 
+        public static IEnumerable<KECustomRole> Get(Player player)
+        {
+            List<KECustomRole> cr = new();
+            foreach(KECustomRole ke in Registered)
+            {
+                if (ke.Check(player))
+                {
+                    cr.Add(ke);
+                }
+            }
+            return cr;
+        }
+
         #region Spawn
 
         /// <summary>
         /// The chance to get a <see cref="KECustomRole"/> at the start or a respawn
         /// </summary>
-        public static int Chance
+        public static float Chance
         {
             get
             {
@@ -331,11 +474,11 @@ namespace KE.CustomRoles.API.Features
             }
             set
             {
-                chance = Mathf.Clamp(value, 0, 100);
+                chance = Mathf.Clamp(value, 0f, 100f);
             }
         }
 
-        private static int chance = 40;
+        private static float chance = 100;
 
         private static KECustomRole AssignRole(Dictionary<KECustomRole, float> roleChances)
         {
@@ -349,7 +492,7 @@ namespace KE.CustomRoles.API.Features
                     return role.Key;
             }
 
-            return roleChances.Keys.First();
+            return null;
         }
 
         public static Dictionary<KECustomRole, float> GetAvailableCustomRole(Player player)
@@ -375,7 +518,7 @@ namespace KE.CustomRoles.API.Features
 
 
             KECustomRole cr = AssignRole(GetAvailableCustomRole(player));
-            Log.Debug($"{player.Id} : {cr.Name}");
+            Log.Debug($"{player.Id} : {cr?.Name}");
 
             cr?.AddRole(player);
         }

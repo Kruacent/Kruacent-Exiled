@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
+using Exiled.API.Features.Items;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.API.Features;
@@ -12,7 +13,7 @@ using UnityEngine;
 
 namespace KE.CustomRoles.CR.Human
 {
-    public class Alzheimer : GlobalCustomRole, IColor
+    public class Alzheimer : GlobalCustomRole, IColor, IHealable
     {
         private static Dictionary<Player, CoroutineHandle> _coroutines = new();
         public override SideEnum Side { get; set; } = SideEnum.Human;
@@ -20,10 +21,12 @@ namespace KE.CustomRoles.CR.Human
         public override string PublicName { get; set; } = "Vieux";
         public override string InternalName => GetType().Name;
         public override bool KeepRoleOnDeath { get; set; } = false;
-        public override bool KeepRoleOnChangingRole { get; set; } = true;
+        public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
 
         public Color32 Color => new Color32(112,112,112,0);
+
+        public HashSet<ItemType> HealItem => [ItemType.SCP500];
 
         protected override void RoleAdded(Player player)
         {
@@ -42,35 +45,15 @@ namespace KE.CustomRoles.CR.Human
             Timing.KillCoroutines(_coroutines[player]);
             _coroutines.Remove(player);
         }
-        protected override void SubscribeEvents()
-        {
-            Exiled.Events.Handlers.Player.UsedItem += OnUsedItem;
-            base.SubscribeEvents();
-        }
-        protected override void UnsubscribeEvents()
-        {
-            Exiled.Events.Handlers.Player.UsedItem -= OnUsedItem;
-            base.UnsubscribeEvents();
-        }
-
-        private void OnUsedItem(UsedItemEventArgs ev)
-        {
-            if (!Check(ev.Player)) return;
-            if (ev.Item.Type == ItemType.SCP500)
-            {
-                RemoveRole(ev.Player);
-            }
-        }
-
 
         private IEnumerator<float> Teleport(Player p)
         {
-            while (true)
+            while (p.IsAlive)
             {
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(300f, 600f));
                 p.EnableEffect(EffectType.Flashed,1,5);
                 p.EnableEffect(EffectType.Invisible,1,6);
-                p.Teleport(Room.Random(p.Zone));
+                p.Teleport(Utils.Extensions.RoomExtensions.RandomSafeRoom(p.Zone));
             }
         }
 

@@ -6,40 +6,22 @@ using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
 using PlayerRoles;
+using System.Collections.Generic;
 using UnityEngine;
 using Utils.NonAllocLINQ;
 
 namespace KE.CustomRoles.CR.Human
 {
-    public class Asthmatique : GlobalCustomRole, IColor
+    public class Asthmatique : GlobalCustomRole, IColor, IHealable
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;
         public override string Description { get; set; } = "T'as stamina est réduit de moitié\nMais tu vises mieux";
         public override string PublicName { get; set; } = "Asthmatique";
         public override bool KeepRoleOnDeath { get; set; } = false;
-        public override bool KeepRoleOnChangingRole { get; set; } = true;
+        public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
         public Color32 Color => new Color32(191, 255, 0, 0);
-
-        protected override void SubscribeEvents()
-        {
-            Exiled.Events.Handlers.Player.UsedItem += OnUsedItem;
-            base.SubscribeEvents();
-        }
-        protected override void UnsubscribeEvents()
-        {
-            Exiled.Events.Handlers.Player.UsedItem -= OnUsedItem;
-            base.UnsubscribeEvents();
-        }
-
-        private void OnUsedItem(UsedItemEventArgs ev)
-        {
-            if (!Check(ev.Player)) return;
-            if(ev.Item.Type == ItemType.SCP500)
-            {
-                RemoveRole(ev.Player);
-            }
-        }
+        public HashSet<ItemType> HealItem => [ItemType.SCP500];
 
         protected override void RoleAdded(Player player)
         {

@@ -5,12 +5,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ExMod.Exiled" Version="9.9.1" />
+		<PackageReference Include="ExMod.Exiled" Version="9.12.4" />
+
 	</ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\KE.Utils\KE.Utils.csproj" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<Reference Include="HintServiceMeow-Exiled" HintPath="$(EXILED_REFERENCES)\HintServiceMeow-Exiled.dll" />
@@ -21,6 +19,8 @@
 		<Reference Include="UnityEngine.PhysicsModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll" />
 		<Reference Include="0Harmony" HintPath="$(EXILED_REFERENCES)\0Harmony.dll" />
 		<Reference Include="Pooling" HintPath="$(EXILED_REFERENCES)\Pooling.dll" />
+		<Reference Include="KE.Utils" HintPath="$(EXILED_DEV_REFERENCES)\Plugins\KE.Utils.dll" />
+		<Reference Include="KE.Misc" HintPath="$(EXILED_DEV_REFERENCES)\Plugins\KE.Misc.dll" />
 		<Reference Include="Unity.TextMeshPro" HintPath="$(EXILED_REFERENCES)\Unity.TextMeshPro.dll" />
 	</ItemGroup>
 

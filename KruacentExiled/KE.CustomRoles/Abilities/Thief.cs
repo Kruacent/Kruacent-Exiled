@@ -2,13 +2,15 @@
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.GifAnimator;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace KE.CustomRoles.Abilities
 {
-    public class Thief : KEAbilities
+    public class Thief : KEAbilities, ICustomIcon
     {
         public override string Name { get; } = "Thief";
         public override string PublicName { get; } = "Thief";
@@ -18,40 +20,36 @@ namespace KE.CustomRoles.Abilities
 
         public override float Cooldown { get; } = 120f;
 
-        protected override void AbilityUsed(Player player)
+        public TextImage IconName => MainPlugin.Instance.icons["Thief"];
+
+        protected override bool AbilityUsed(Player player)
         {
-            List<Player> playerList = Player.List.Where(p => !p.IsScp && p.CurrentRoom == player.CurrentRoom).ToList();
-            playerList.Remove(player);
 
-            Log.Debug("Player list :");
-            playerList.ForEach(p => Log.Info(p.Nickname));
-
-            Player thiefed = playerList.GetRandomValue();
+            Player thiefed = Player.Enumerable.GetRandomValue(p => !p.IsScp && p.CurrentRoom == player.CurrentRoom && p != player);
             if(thiefed is null)
             {
-                Log.Warn("no other player");
-                return;
+                MainPlugin.ShowEffectHint(player, "no player to steal from");
+                return false;
             }
 
             Log.Debug($"Thiefed player : {thiefed.Nickname}");
 
-            Item inv = thiefed.Items.GetRandomValue();
+            Item item = thiefed.Items.GetRandomValue();
 
-            Log.Debug($"Thiefed item : {inv}");
 
-            if (inv == null)
+            if (item == null)
             {
-                Log.Info("No item to thiefed, null, returning.");
-                HintPlacement hint = new(0, 750, HintServiceMeow.Core.Enum.HintAlignment.Center);
-                float delay = MainPlugin.SettingHandler.GetTime(player);
-                DisplayHandler.Instance.AddHint(hint, player, "I think this is a skill issue ! Congrats !", delay);
+                MainPlugin.ShowEffectHint(player, "I think this is a skill issue ! Congrats !");
+                return true;
             }
 
-            var thiefBool = thiefed.RemoveItem(inv);
-            Log.Debug($"Item deleted {thiefBool}.");
 
-            inv.Give(player);
-            Log.Debug($"Item given to {player.Nickname}.");
+
+            Item newitem = item.Clone();
+            newitem.Give(player);
+            thiefed.RemoveItem(item);
+
+            return base.AbilityUsed(player);
         }
     }
 }

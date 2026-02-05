@@ -3,6 +3,7 @@ using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Items;
 using Exiled.CustomRoles.API.Features;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ using UnityEngine;
 
 namespace KE.CustomRoles.Abilities
 {
-    public class Explode : KEAbilities
+    public class Explode : KEAbilities, ICustomIcon
     {
         public override string Name { get; } = "Explode";
         public override string PublicName { get; } = "Explode";
@@ -21,12 +22,15 @@ namespace KE.CustomRoles.Abilities
 
         public override float Cooldown { get; } = 4*60f;
 
-        protected override void AbilityUsed(Player player)
+        public Utils.API.GifAnimator.TextImage IconName => MainPlugin.Instance.icons["Explode"];
+
+        protected override bool AbilityUsed(Player player)
         {
             ExplosiveGrenade grenade = ((ExplosiveGrenade)Item.Create(ItemType.GrenadeHE));
             grenade.FuseTime = 0.2f;
             grenade.SpawnActive(player.Position);
             Log.Debug("Grenade spawned");
+            return base.AbilityUsed(player);
         }
     }
 }

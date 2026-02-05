@@ -1,10 +1,8 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
-using System;
+using KE.Utils.API.Features.SCPs;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KE.CustomRoles.API.Features
 {
@@ -14,25 +12,29 @@ namespace KE.CustomRoles.API.Features
         public const int MaxValue = 5;
         public const int DefaultValue = 0;
 
-        public static int ScpPreferenceHeaderId => MainPlugin.Instance.Config.ScpPreferenceHeaderId;
-        private static HeaderSetting header = null;
         private SliderSetting sliderSetting;
         public abstract bool IsSupport { get; }
-        public int SettingId => (int)Id;
 
+        protected abstract int SettingId { get; }
+        private static HeaderSetting header = null;
+        private static int HeaderId => MainPlugin.Instance.Config.HeaderId;
         public static IEnumerable<CustomSCP> All => Registered.Where(c => c is CustomSCP).Cast<CustomSCP>();
         public override void Init()
         {
+            if (SpawnChance <= 0)
+            {
+                base.Init();
+                return;
+            }
+            
             if (header is null)
             {
-                header = new HeaderSetting(ScpPreferenceHeaderId, "SCP Spawn Preferences");
+                header = new(HeaderId, "SCP Spawn Preferences",string.Empty,true);
+                SettingBase.Register([header]);
             }
 
-
-            sliderSetting = new SliderSetting(SettingId, PublicName, MinValue, MaxValue, DefaultValue, true, header: header);
+            sliderSetting= new SliderSetting(SettingId, PublicName, MinValue, MaxValue, DefaultValue, true);
             SettingBase.Register([sliderSetting]);
-
-            
             base.Init();
         }
 
@@ -43,11 +45,29 @@ namespace KE.CustomRoles.API.Features
             base.Destroy();
         }
 
+        public override void AddRole(Player player)
+        {
+            SCPTeam.Instance.AddPrimary(player);
+            base.AddRole(player);
+        }
+
 
         public int GetPreferences(Player player)
         {
+            if(sliderSetting is null)
+            {
+                Log.Error("slider setting is null in custom scp");
+                return -6;
+            }
+
+
             if (!SettingBase.TryGetSetting<SliderSetting>(player, sliderSetting.Id, out var setting)) return -6;
             return (int) setting.SliderValue;
+        }
+
+        public override bool IsAvailable(Player player)
+        {
+            return false;
         }
 
     }

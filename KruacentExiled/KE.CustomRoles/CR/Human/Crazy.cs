@@ -35,8 +35,8 @@ namespace KE.CustomRoles.CR.Human
         public override SideEnum Side { get; set; } = SideEnum.Human;
         public override string Description { get; set; } = "Je pense que le traitement que t'as eu à la fondation t'as pas aidé";
         public override string PublicName { get; set; } = "Fou de la facilité";
-        public override bool KeepRoleOnDeath { get; set; } = true;
-        public override bool KeepRoleOnChangingRole { get; set; } = true;
+        public override bool KeepRoleOnDeath { get; set; } = false;
+        public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
 
         private readonly Dictionary<CrazyBehaviour, int> WeightDictionnary = new()
@@ -72,7 +72,7 @@ namespace KE.CustomRoles.CR.Human
 
         private IEnumerator<float> ApplyEffect(Player player)
         {
-            while (true)
+            while (player.IsAlive)
             {
                 yield return Timing.WaitForSeconds(this.EFFECT_INTERVAL);
                 CrazyBehaviour behaviour = this.WeightedList.GetRandomValue();
@@ -87,7 +87,7 @@ namespace KE.CustomRoles.CR.Human
                         player.PlayShieldBreakSound();
                         break;
                     case CrazyBehaviour.Vision:
-                        Vision(player);
+                        //Vision(player);
                         break;
                     case CrazyBehaviour.Crazying:
                         _crazyingCoroutine = Timing.RunCoroutine(Crazying(player));
@@ -102,7 +102,7 @@ namespace KE.CustomRoles.CR.Human
         {
             List<RoleTypeId> scpRole = new List<RoleTypeId> { RoleTypeId.Scp3114, RoleTypeId.Scp173, RoleTypeId.Scp096, RoleTypeId.Scp106, RoleTypeId.Scp049, RoleTypeId.Scp939 };
 
-            DummyUtils.SpawnDummy(Player.List.ToList().Where(p => p.IsScp).First().ToString()); // Setting name of the dummy
+            DummyUtils.SpawnDummy(Player.List.ToList().Where(p => p.IsScp).First().DisplayNickname); // Setting name of the dummy
             Player bot = Player.List.ToList().Where(p => p.IsNPC).First(); // Getting the bot
             bot.Role.Set(RoleTypeId.Tutorial);
             bot.ChangeAppearance(scpRole.GetRandomValue());

@@ -7,12 +7,14 @@ using LabApi.Features.Wrappers;
 using PlayerRoles;
 using System.Collections.Generic;
 using Player = Exiled.API.Features.Player;
+using Item = Exiled.API.Features.Items.Item;
 using LabPlayer = LabApi.Features.Wrappers.Player;
 using Interactables.Interobjects.DoorUtils;
 using UnityEngine;
 using InventorySystem;
 using MEC;
 using InventorySystem.Items;
+using Exiled.API.Features.Items.Keycards;
 
 namespace KE.CustomRoles.CR.Guard
 {
@@ -53,6 +55,11 @@ namespace KE.CustomRoles.CR.Guard
             { AmmoType.Nato9, 60}
         };
 
+        public override void Init()
+        {
+            base.Init();
+            storedSerials = new();
+        }
 
         protected override void RoleAdded(Player player)
         {
@@ -115,12 +122,12 @@ namespace KE.CustomRoles.CR.Guard
 
 
 
-        private static HashSet<ushort> storedSerials = new();
+        private static HashSet<ushort> storedSerials;
         private void OnProcessedPlayer(Scp914ProcessedPlayerEventArgs ev)
         {
             if (ev.KnobSetting != Scp914.Scp914KnobSetting.Fine) return;
-            LabPlayer player = ev.Player;
-            Item item = player.CurrentItem;
+            Player player = ev.Player;
+            Item item = Item.Get(player.CurrentItem.Serial);
             if (item is null) return;
 
             if (storedSerials.Contains(item.Serial))
@@ -129,9 +136,16 @@ namespace KE.CustomRoles.CR.Guard
                 bool equipped = player.CurrentItem is not null && player.CurrentItem.Serial == item.Serial;
                 player.RemoveItem(item);
                 storedSerials.Remove(item.Serial);
-                KeycardItem keycard = item as KeycardItem;
 
-                switch (keycard.Levels.Admin)
+                if (item is not CustomKeycardItem keycard)
+                {
+                    Log.Error("not a custom keycard");
+                    return;
+                }
+
+
+
+                switch (keycard.KeycardLevels.Admin)
                 {
                     case 1:
                         itemBase = CreateFakeOperativeCard(player).Base;

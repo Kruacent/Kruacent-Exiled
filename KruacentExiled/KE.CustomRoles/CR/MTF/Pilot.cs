@@ -16,7 +16,7 @@ namespace KE.CustomRoles.CR.MTF
     {
         public override string Description { get; set; } = "So I haveth a Laser Pointere";
         public override string PublicName { get; set; } = "Pilot";
-        public override int MaxHealth { get; set; } = 75;
+        public override int MaxHealth { get; set; } = 90;
         public override RoleTypeId Role { get; set; } = RoleTypeId.NtfPrivate;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
