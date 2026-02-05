@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace KE.Misc.Features.VoteStart
 {
@@ -141,6 +142,13 @@ namespace KE.Misc.Features.VoteStart
             foreach (Player other in Voted)
             {
                 bool flag1 = other == player;
+
+                ColorUtility.TryParseHtmlString(player.Group.BadgeColor, out var colorBase);
+                string color = ColorUtility.ToHtmlStringRGBA(colorBase);
+                sb.Append("<color=#");
+                sb.Append(color);
+                sb.Append(">");
+
                 if (flag1)
                 {
                     sb.Append("<b>");
@@ -150,6 +158,7 @@ namespace KE.Misc.Features.VoteStart
                 {
                     sb.Append("</b>");
                 }
+                sb.Append("</color>");
                 sb.Append(" ");
             }
             if (Voted.Contains(player))
