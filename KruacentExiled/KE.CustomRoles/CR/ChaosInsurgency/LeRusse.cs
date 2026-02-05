@@ -25,7 +25,7 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.ChaosRifleman;
 
-        public bool CanHearItself { get; set; } = true;
+        public bool CanHearItself { get; set; } = false;
         public float DamageToLootbox { get; set; } = 500f;
 
         private readonly Dictionary<Player, float> _playerDamage = new();
