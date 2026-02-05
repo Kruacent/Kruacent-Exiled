@@ -17,6 +17,9 @@ internal class FakeNuke : IDurationEffect
 
     public void ExecuteAfterDuration(Player player)
     {
-        if (!Warhead.IsDetonated) Warhead.Stop();
+        if (Warhead.IsInProgress && Warhead.Controller.Info.ScenarioType != WarheadScenarioType.DeadmanSwitch)
+        {
+            Warhead.Stop();
+        }
     }
 }
