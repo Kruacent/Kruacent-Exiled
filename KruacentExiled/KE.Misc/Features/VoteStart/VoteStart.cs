@@ -19,7 +19,7 @@ namespace KE.Misc.Features.VoteStart
 
         public static HintPosition HintPosition = new VotePosition();
 
-        public HashSet<Player> Voted = new();
+        private HashSet<Player> Voted = new();
         private bool voteCasted = false;
         public override void SubscribeEvents()
         {
@@ -42,6 +42,25 @@ namespace KE.Misc.Features.VoteStart
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
 
             base.UnsubscribeEvents();
+        }
+
+
+        public bool DidVote(Player player)
+        {
+            return Voted.Contains(player);
+        }
+
+        public void CancelVote(Player player)
+        {
+            if (!Voted.Contains(player))
+            {
+                throw new ArgumentOutOfRangeException($"Player ({player}) didn't vote");
+            }
+
+
+            Voted.Remove(player);
+            Round.IsLobbyLocked = true;
+            voteCasted = false;
         }
 
 
@@ -100,31 +119,45 @@ namespace KE.Misc.Features.VoteStart
                 if (Round.IsLobby)
                 {
                     PlayerDisplay dis = PlayerDisplay.Get(player);
-                    DisplayHandler.Instance.CreateAuto(player, (args) => GetPlayers(), HintPosition.HintPlacement);
+                    DisplayHandler.Instance.CreateAuto(player, (args) => GetPlayers(player), HintPosition.HintPlacement);
                 }
             });
             
         }
 
-        private string GetPlayers()
+        private string GetPlayers(Player player)
         {
             if (!Round.IsLobby) return string.Empty;
 
             StringBuilder sb = StringBuilderPool.Pool.Get();
-            sb.Clear();
 
-            sb.Append("Players who voted (");
+            sb.Append("Votes (");
 
             sb.Append(Voted.Count);
             sb.Append("/");
             sb.Append(MainPlugin.Instance.Config.MinPlayerVote);
 
             sb.AppendLine(") : ");
-            foreach(Player player in Voted)
+            foreach (Player other in Voted)
             {
-                sb.Append(player.Nickname);
+                bool flag1 = other == player;
+                if (flag1)
+                {
+                    sb.Append("<b>");
+                }
+                sb.Append(other.Nickname);
+                if (flag1)
+                {
+                    sb.Append("</b>");
+                }
                 sb.Append(" ");
             }
+            if (Voted.Contains(player))
+            {
+                sb.AppendLine();
+                sb.Append("<size=14>.rv dans la console client pour annuler le vote</size>.");
+            }
+
 
             return StringBuilderPool.Pool.ToStringReturn(sb);
 
