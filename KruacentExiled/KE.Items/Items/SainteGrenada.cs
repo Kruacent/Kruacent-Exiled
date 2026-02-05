@@ -64,7 +64,13 @@ namespace KE.Items.Items
 
         protected override void OnThrownProjectile(ThrownProjectileEventArgs ev)
         {
-            Utils.API.Sounds.SoundPlayer.Instance.Play("worms", ev.Projectile.GameObject, 50, 75);
+            GameObject o = new();
+
+
+            o.transform.parent = ev.Projectile.GameObject.transform.parent;
+            o.transform.localPosition = Vector3.zero;
+
+            Utils.API.Sounds.SoundPlayer.Instance.Play("worms",o , 1);
         }
         protected override void OnExploding(ExplodingGrenadeEventArgs ev)
         {
