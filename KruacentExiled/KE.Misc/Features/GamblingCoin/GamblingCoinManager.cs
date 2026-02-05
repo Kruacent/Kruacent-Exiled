@@ -3,6 +3,7 @@ using Exiled.API.Features;
 using KE.Misc.Features.GamblingCoin.Interfaces;
 using KE.Misc.Features.GamblingCoin.Types;
 using KE.Utils.API;
+using MEC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,6 +87,28 @@ namespace KE.Misc.Features.GamblingCoin
             if(EffectList.Count == 0) return null;
 
             return(EffectList.Where(e => e.Type == type).GetRandomValue());
+        }
+
+
+        public static void ExecuteEffect(this ICoinEffect effect,Player player)
+        {
+            if (effect == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            effect.Execute(player);
+
+            if (effect is IDurationEffect durationEffect && durationEffect.Duration > 0)
+            {
+                float duration = durationEffect.Duration;
+                Log.Debug("effect " + duration);
+                Timing.CallDelayed(duration, () =>
+                {
+                    Log.Debug("effect " + duration);
+                    durationEffect.ExecuteAfterDuration(player);
+                });
+            }
         }
     }
 }

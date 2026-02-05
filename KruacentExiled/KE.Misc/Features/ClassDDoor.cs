@@ -30,7 +30,7 @@ namespace KE.Misc.Features
 
         private void OnRoundStarted()
         {
-            if(UnityEngine.Random.Range(0, 101) < MainPlugin.Instance.Config.ChanceClassDDoorGoesBoom || MainPlugin.Instance.Config.Debug)
+            if(UnityEngine.Random.Range(0, 101) < MainPlugin.Instance.Config.ChanceClassDDoorGoesBoom)
             {
                 HumanDoorsGoesBoom();
             }
