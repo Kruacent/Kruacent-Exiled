@@ -5,6 +5,7 @@ using Exiled.Events.EventArgs.Player;
 using KE.GlobalEventFramework.GEFE.API.Features;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using MEC;
+using PlayerRoles;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,7 +26,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         public override string Description { get; set; } = "Ne parlez pas trop fort sinon vous subirez les conséquences !";
         ///<inheritdoc/>
         public override int WeightedChance => 1;
-        private float MaxVolume = 0.5f;
+        private float MaxVolume = 0.7f;
 
         private OpusDecoder _decoder = new OpusDecoder();
         private float[] _pcmBuffer = new float[1920];
@@ -42,7 +43,7 @@ namespace KE.GlobalEventFramework.Examples.GE
 
         private void PlayerYapping(VoiceChattingEventArgs ev)
         {
-            if (ev.Player.Role.Side == Side.Scp) return;
+            if (ev.Player.Role.Side == Side.Scp || ev.Player.Role == RoleTypeId.Tutorial) return;
 
             int decodedLength = _decoder.Decode(ev.VoiceMessage.Data, ev.VoiceMessage.DataLength, _pcmBuffer);
             float maxVolume = 0f;
