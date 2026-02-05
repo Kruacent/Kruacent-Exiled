@@ -47,6 +47,11 @@ namespace KE.Misc.Features
 
         private void OnRoundStarted()
         {
+            if (!MainPlugin.Instance.Config.SurfaceLight)
+            {
+                return;
+            }
+
             if(Random.Range(0f,100f) < Chance)
                 ChangeSurfaceLight();
         }
