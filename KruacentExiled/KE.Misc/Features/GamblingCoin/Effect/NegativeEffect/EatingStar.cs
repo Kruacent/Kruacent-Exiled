@@ -5,6 +5,7 @@ using KE.Misc.Features.GamblingCoin.Types;
 using MEC;
 using System.Collections.Generic;
 using UnityEngine;
+using Light = Exiled.API.Features.Toys.Light;
 
 public class EatingStar : IDurationEffect
 {
@@ -12,14 +13,19 @@ public class EatingStar : IDurationEffect
     public string Message { get; set; } = "Eating the disco ball wasn't good idea";
     public int Weight { get; set; } = 2;
     public EffectType Type { get; set; } = EffectType.Negative;
-    public static Exiled.API.Features.Toys.Light Light { get; set; }
-    public float Duration { get; set; } = -1;
+
+
+    private Dictionary<Player, Light> _lights;
+
+    public float Duration { get; set; } = 20;
     private static CoroutineHandle _coroutines;
 
     public void Execute(Player player)
     {
-        Light = Exiled.API.Features.Toys.Light.Create(player.Position, null, null, true, UnityEngine.Color.blue);
-        Light.Transform.parent = player.Transform;
+        _lights[player] = Light.Create(player.Position, null, null, true, UnityEngine.Color.blue);
+        Light light = _lights[player];
+        light.Transform.parent = player.Transform;
+        light.MovementSmoothing = 0;
 
         _coroutines = Timing.RunCoroutine(ColorTransformer());
     }
@@ -28,7 +34,11 @@ public class EatingStar : IDurationEffect
     {
         while (true)
         {
-            Light.Color = ColorPicker();
+            foreach(var kvp in _lights)
+            {
+                kvp.Value.Color = ColorPicker();
+            }
+
             yield return Timing.WaitForSeconds(0.5f);
         }
     }
