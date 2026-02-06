@@ -8,6 +8,7 @@ using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
 using KE.Utils.API.Features.SCPs;
 using KE.Utils.API.Interfaces;
+using KE.Utils.Extensions;
 using LabApi.Events.Arguments.PlayerEvents;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl.Thirdperson;
@@ -80,7 +81,7 @@ namespace KE.Misc.Features.LastHuman
                         }
                         else if(!player.IsDead)
                         {
-                            msg = "The last human is at " + lastTarget.Zone;
+                            msg = "The last human is at " + lastTarget.Zone.GetName();
                         }
 
 
