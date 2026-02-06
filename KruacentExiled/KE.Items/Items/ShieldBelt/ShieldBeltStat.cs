@@ -148,15 +148,12 @@ namespace KE.Items.Items.ShieldBelt
             prim.Spawn();
 
             
-            model.Create(prim.Transform);
 
 
             return prim;
         }
-        private ModelTest model;
         public void Awake()
         {
-            model = new();
             player = Player.Get(transform.root.gameObject);
             primitive = CreatePrimitive(player);
             currentCharge = Base;
