@@ -6,6 +6,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Spawn;
+using Exiled.API.Features.Toys;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
@@ -13,6 +14,7 @@ using KE.Items.API.Core.Models;
 using KE.Items.API.Features;
 using KE.Items.API.Interface;
 using KE.Items.Items.PickupModels;
+using MEC;
 using UnityEngine;
 
 namespace KE.Items.Items
@@ -24,7 +26,7 @@ namespace KE.Items.Items
         public override string Name { get; set; } = "Sainte Grenada";
         public override string Description { get; set; } = "Worms reference !?";
         public override float Weight { get; set; } = 1.5f;
-        public override float FuseTime { get; set; } = 5f;
+        public override float FuseTime { get; set; } = 6f;
         public override bool ExplodeOnCollision { get; set; } = false;
         public override float DamageModifier { get; set; } = 3f;
         public Color Color { get; set; } = Color.red;
@@ -64,13 +66,7 @@ namespace KE.Items.Items
 
         protected override void OnThrownProjectile(ThrownProjectileEventArgs ev)
         {
-            GameObject o = new();
-
-
-            o.transform.parent = ev.Projectile.GameObject.transform.parent;
-            o.transform.localPosition = Vector3.zero;
-
-            Utils.API.Sounds.SoundPlayer.Instance.Play("worms",o , 1);
+            Utils.API.Sounds.SoundPlayer.Instance.Play("worms", ev.Projectile.Position, 50,20f);
         }
         protected override void OnExploding(ExplodingGrenadeEventArgs ev)
         {
