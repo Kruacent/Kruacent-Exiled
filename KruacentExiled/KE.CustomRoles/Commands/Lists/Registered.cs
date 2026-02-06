@@ -30,6 +30,7 @@ namespace KE.CustomRoles.Commands.Lists
 
             StringBuilder sb = StringBuilderPool.Pool.Get();
             string[] name;
+            sb.AppendLine();
             foreach (KECustomRole cr in KECustomRole.Registered.OrderBy(a => a.Name))
             {
                 name = cr.Name.Split('_');

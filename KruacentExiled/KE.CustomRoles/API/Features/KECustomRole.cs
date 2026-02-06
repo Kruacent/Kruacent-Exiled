@@ -162,6 +162,11 @@ namespace KE.CustomRoles.API.Features
             {
                 Exiled.Events.Handlers.Player.UsedItem += OnUsedItem;
             }
+
+            if(this is IEffectImmunity)
+            {
+                Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
+            }
             
         }
 
@@ -171,6 +176,10 @@ namespace KE.CustomRoles.API.Features
             if (this is IHealable)
             {
                 Exiled.Events.Handlers.Player.UsedItem -= OnUsedItem;
+            }
+            if (this is IEffectImmunity)
+            {
+                Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
             }
         }
 
@@ -192,6 +201,25 @@ namespace KE.CustomRoles.API.Features
             }
         }
 
+
+        private void OnReceivingEffect(ReceivingEffectEventArgs ev)
+        {
+            if (!Check(ev.Player)) return;
+            if (!ev.IsAllowed) return;
+
+            IEffectImmunity effectImmunity = this as IEffectImmunity;
+
+            if (effectImmunity.Effects is null || effectImmunity.Effects.Count == 0)
+            {
+                Log.Warn("no healable item found for" + Name);
+                return;
+            }
+            if (effectImmunity.Effects.Contains(ev.Effect.GetEffectType()))
+            {
+                ev.IsAllowed = false;
+            }
+
+        }
 
 
         public static void SpawnStartRound(Misc.Features.Spawn.SpawnedEventArgs ev)
@@ -301,16 +329,9 @@ namespace KE.CustomRoles.API.Features
             Log.Debug(Name + ": old role type " + player2.Role.Type + ".");
             Log.Debug(Name + ": new role type " + Role + ".");
             CurrentNumberOfSpawn++;
-
-            IEnumerable<KECustomRole> oldroles = Get(player2);
-
-            foreach (KECustomRole role in oldroles)
-            {
-                role.RemoveRole(player2);
-            }
-
-
             
+
+
 
             if (Role != RoleTypeId.None)
             {
