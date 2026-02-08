@@ -14,7 +14,7 @@ internal class EmptyMicro : ICoinEffect
     {
         MicroHIDPickup item = (MicroHIDPickup)Pickup.Create(ItemType.MicroHID);
         item.Position = player.Position;
-        item.Spawn();
         item.Energy = 2;
+        item.Spawn();
     }
 }

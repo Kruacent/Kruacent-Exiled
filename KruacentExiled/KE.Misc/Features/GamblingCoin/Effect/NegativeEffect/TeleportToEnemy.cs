@@ -1,6 +1,9 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Extensions;
+using Exiled.API.Features;
 using KE.Misc.Features.GamblingCoin.Interfaces;
+using KE.Utils.API.Features.SCPs;
 using PlayerRoles;
+using System.Collections.Generic;
 using System.Linq;
 using EffectType = KE.Misc.Features.GamblingCoin.Types.EffectType;
 
@@ -13,13 +16,16 @@ internal class TeleportToEnemy : ICoinEffect
 
     public void Execute(Player player)
     {
-        var scps = Player.List.Where(p => p.IsScp && p.Role != RoleTypeId.Scp079 && p != player).ToList();
+
+
+        List<ReferenceHub> scp = SCPTeam.SCPs.ToList();
+
 
         Player target = null;
 
-        if (scps.Count > 0)
+        if (scp.Count > 0)
         {
-            target = scps[UnityEngine.Random.Range(0, scps.Count)];
+            target = Player.Get(scp.GetRandomValue());
         }
         else
         {
@@ -33,7 +39,7 @@ internal class TeleportToEnemy : ICoinEffect
 
         if (target != null)
         {
-            player.Position = target.Position;
+            player.Teleport(target.Position);
         }
     }
 }
