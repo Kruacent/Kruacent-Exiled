@@ -2,8 +2,10 @@
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using KE.Map.Others.BlackoutNDoor.Events.EventArgs;
+using KE.Utils.API.Features.SCPs;
 using KE.Utils.API.Interfaces;
 using KE.Utils.Extensions;
+using MapGeneration;
 using MEC;
 using PlayerRoles;
 using System;
@@ -24,12 +26,12 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
         private float time = 0;
         public float TimeBeforeNextEvent => time;
 
-        public static readonly HashSet<ZoneType> Zones = new()
+        public static readonly HashSet<FacilityZone> Zones = new()
         {
-            ZoneType.LightContainment,ZoneType.HeavyContainment,ZoneType.Entrance
+            FacilityZone.LightContainment,FacilityZone.HeavyContainment,FacilityZone.Entrance
         };
 
-        private ZoneType currentScpZone = ZoneType.Unspecified;
+        private FacilityZone currentScpZone = FacilityZone.None;
         private int weightPerSeconds = 5;
         private int weight = defaultWeight;
         private const int defaultWeight = 330;
@@ -72,17 +74,21 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
             {
                 yield return Timing.WaitForSeconds(timeRefresh);
                 if (Warhead.IsInProgress) continue;
-                Player scp = Player.List.Where(p => p.IsScp && p.Role != RoleTypeId.Scp0492).FirstOrDefault();
+
+                ReferenceHub scp = SCPTeam.SCPs.Where(p => p.GetRoleId() != RoleTypeId.Scp0492).FirstOrDefault();
+
 
                 if(scp == null)
                 {
-                    scp = Player.List.Where(p => p.IsScp).FirstOrDefault();
+                    scp = SCPTeam.SCPs.FirstOrDefault();
                 }
 
 
                 if (scp != null)
                 {
-                    if(scp.Zone == currentScpZone)
+                    FacilityZone zone = scp.GetCurrentZone();
+
+                    if (zone == currentScpZone)
                     {
                         weight += timeRefresh* weightPerSeconds;
                     }
@@ -90,11 +96,11 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
                     {
                         weight = defaultWeight;
                     }
-                    currentScpZone = scp.Zone;
+                    currentScpZone = zone;
                 }
                 else
                 {
-                    currentScpZone = ZoneType.Unspecified;
+                    currentScpZone = FacilityZone.None;
                 }
                 
                 Log.Debug("weight=" + weight + " at " + currentScpZone);
@@ -132,7 +138,7 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
             ChoseZoneEventArgs choseZoneEv = new(zone);
             EventHandle.OnChoseZoneEvent(choseZoneEv);
 
-            if (Zones.Contains(choseZoneEv.Zone))
+            if (Zones.Contains(choseZoneEv.Zone.GetZone()))
             {
                 zone = choseZoneEv.Zone;
             }
@@ -147,7 +153,7 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
             EventHandle.OnPreEvent(preEv);
 
 
-            if (preEv.IsAllowed && Zones.Contains(zone))
+            if (preEv.IsAllowed && Zones.Contains(zone.GetZone()))
             {
 
                 string message = mapEvent.Cassie + " " + ZoneTypeToCassie(zone) + " " + MainPlugin.Translations.End;
@@ -196,23 +202,25 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
 
         private ZoneType RandomZoneByWeight()
         {
-            List<ZoneType> result = new();
-
             List<ZoneType> weightedPool = new();
-            foreach (ZoneType zone in Zones.Where(z => z.IsSafe()))
+
+
+
+
+            foreach (FacilityZone zone in Zones.Where(z => ZoneExtensions.IsSafe(z.GetZone())))
             {
                 if(zone != currentScpZone)
                 {
                     for (int i = 0; i < defaultWeight; i++)
                     {
-                        weightedPool.Add(zone);
+                        weightedPool.Add(zone.GetZone());
                     }
                 }
                 else
                 {
                     for (int i = 0; i < weight; i++)
                     {
-                        weightedPool.Add(zone);
+                        weightedPool.Add(zone.GetZone());
                     }
                 }
 
