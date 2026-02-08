@@ -143,11 +143,6 @@ namespace KE.Misc.Features.VoteStart
             {
                 bool flag1 = other == player;
 
-                ColorUtility.TryParseHtmlString(player.Group.BadgeColor, out var colorBase);
-                string color = ColorUtility.ToHtmlStringRGBA(colorBase);
-                sb.Append("<color=#");
-                sb.Append(color);
-                sb.Append(">");
 
                 if (flag1)
                 {
@@ -158,7 +153,6 @@ namespace KE.Misc.Features.VoteStart
                 {
                     sb.Append("</b>");
                 }
-                sb.Append("</color>");
                 sb.Append(" ");
             }
             if (Voted.Contains(player))
