@@ -1,15 +1,13 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.API.Features.Attributes;
 using HintServiceMeow.Core.Models.Arguments;
+using KE.CustomRoles.API.Core.Positions;
 using KE.CustomRoles.API.Features;
-using KE.CustomRoles.Core.Positions;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
 using MEC;
 using PlayerRoles;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace KE.CustomRoles.CR.SCP.SCP939

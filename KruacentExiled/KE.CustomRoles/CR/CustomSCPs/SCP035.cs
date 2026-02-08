@@ -51,6 +51,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
         };
         public HashSet<ItemType> WhitelistUsing = new()
         {
+            ItemType.SCP330,
             ItemType.SCP1853,
         };
 
@@ -97,7 +98,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
         protected override void RoleAdded(Player player)
         {
             PlayerDisplay dis = PlayerDisplay.Get(player);
-            DisplayHandler.Instance.CreateAuto(player, (args) => GetPlayers(args), position.HintPlacement);
+            DisplayHandler.Instance.CreateAuto(player, (args) => GetPlayers(args), position.HintPlacement,HintServiceMeow.Core.Enum.HintSyncSpeed.Normal);
 
             player.Position = RoleTypeId.Scp049.GetRandomSpawnLocation().Position;
             player.EnableEffect<NightVision>(100, 0, false);

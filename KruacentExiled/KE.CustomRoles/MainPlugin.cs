@@ -12,6 +12,7 @@ using KE.CustomRoles.Settings;
 using KE.Misc.Features.Spawn;
 using KE.Utils.API.CustomStats;
 using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Features.SCPs;
 using KE.Utils.API.GifAnimator;
 using KE.Utils.API.Translations;
 using MEC;
@@ -61,7 +62,7 @@ namespace KE.CustomRoles
             CustomStatsEvents.SubscribeEvents();
             icons = new();
 
-
+            CustomTeamEvents.SubscribeEvents();
 
             
             LoadImage();
@@ -84,6 +85,7 @@ namespace KE.CustomRoles
 
             KEAbilities.Unregister();
             UnsubscribeEvents();
+            CustomTeamEvents.UnsubscribeEvents();
             CustomStatsEvents.UnsubscribeEvents();
             Utils.API.Settings.SettingHandler.Instance.UnsubscribeEvents();
             _settingHandler = null;

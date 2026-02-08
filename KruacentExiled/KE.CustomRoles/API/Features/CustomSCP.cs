@@ -45,10 +45,10 @@ namespace KE.CustomRoles.API.Features
             base.Destroy();
         }
 
-        public override void AddRole(Player player)
+        protected override void RoleAdded(Player player)
         {
-            SCPTeam.Instance.AddPrimary(player);
-            base.AddRole(player);
+            SCPTeam.AddSCP(player.ReferenceHub);
+            base.RoleAdded(player);
         }
 
 

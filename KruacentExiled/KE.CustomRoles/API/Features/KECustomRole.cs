@@ -14,6 +14,7 @@ using HintServiceMeow.Core.Models.Hints;
 using InventorySystem.Configs;
 using KE.CustomRoles.API.HintPositions;
 using KE.CustomRoles.API.Interfaces;
+using KE.CustomRoles.Events.EventArgs;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
 using KE.Utils.API.Translations;
@@ -321,6 +322,9 @@ namespace KE.CustomRoles.API.Features
             DisplayHandler.Instance.AddHint(MainPlugin.CREffect, player, text, delay);
         }
 
+
+
+
         #region addrole     
         public override void AddRole(Player player)
         {
@@ -328,6 +332,19 @@ namespace KE.CustomRoles.API.Features
             Log.Debug(Name + ": Adding role to " + player2.Nickname + ".");
             Log.Debug(Name + ": old role type " + player2.Role.Type + ".");
             Log.Debug(Name + ": new role type " + Role + ".");
+
+
+            ReceivingCustomRoleEventArgs ev1 = new(player2,this);
+
+            Events.Handlers.KECustomRole.OnReceivingCustomRole(ev1);
+
+            if (!ev1.IsAllowed)
+            {
+                Log.Debug(Name + ": role cancelled by plugin");
+                return;
+            }
+
+
             CurrentNumberOfSpawn++;
             
 
@@ -384,11 +401,11 @@ namespace KE.CustomRoles.API.Features
             RoleAdded(player2);
             player2.UniqueRole = Name;
             player2.TryAddCustomRoleFriendlyFire(Name, CustomRoleFFMultiplier);
+            ReceivedCustomRoleEventArgs ev2 = new(player2, this);
+
+            Events.Handlers.KECustomRole.OnReceivedCustomRole(ev2);
+
         }
-
-
-
-        private static HashSet<Player> PlayerHints = new();
 
 
         public static readonly HintPosition CurrentCustomRolePosition = new CurrentCustomRolePosition();
@@ -624,6 +641,7 @@ namespace KE.CustomRoles.API.Features
 
             cr?.AddRole(player);
         }
+
         
         public static void GiveRandomRole(IEnumerable<Player> players)
         {

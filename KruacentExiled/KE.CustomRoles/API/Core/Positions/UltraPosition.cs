@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.CustomRoles.Core.Positions
+namespace KE.CustomRoles.API.Core.Positions
 {
     public class UltraPosition : HintPosition
     {
