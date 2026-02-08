@@ -58,7 +58,7 @@ namespace KE.CustomRoles.Abilities
         {
             if (!Grenades.Contains(obj.ExplosionGrenade)) return;
 
-            obj.Damage = 100;
+            obj.Damage = 75;
 
         }
     }

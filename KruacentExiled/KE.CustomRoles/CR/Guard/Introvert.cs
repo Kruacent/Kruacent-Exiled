@@ -1,9 +1,14 @@
-﻿using Exiled.API.Enums;
+﻿using CustomPlayerEffects;
+using Exiled.API.Enums;
+using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using KE.CustomRoles.API.Features;
+using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace KE.CustomRoles.CR.Guard
 {
@@ -33,5 +38,68 @@ namespace KE.CustomRoles.CR.Guard
         {
           { AmmoType.Nato556, 60}
         };
+
+        public override void Init()
+        {
+            _enabled = new();
+            base.Init();
+        }
+
+
+        protected override void RoleAdded(Player player)
+        {
+            _enabled[player] = false;
+            //Timing.RunCoroutine(BuffAlone(player));
+            base.RoleAdded(player);
+        }
+
+
+        protected override void RoleRemoved(Player player)
+        {
+            SyncBuff(player, false);
+            _enabled.Remove(player);
+            base.RoleRemoved(player);
+        }
+
+
+        private const byte MovementBoostIntensity = 5;
+
+        private Dictionary<Player, bool> _enabled;
+
+
+        private IEnumerator<float> BuffAlone(Player player)
+        {
+
+            while (Check(player))
+            {
+                yield return Timing.WaitForSeconds(1f);
+                SyncBuff(player, player.CurrentRoom.Players.Count(p => p != player) == 0);
+            }
+        }
+
+        private void SyncBuff(Player player,bool alone)
+        {
+            MovementBoost boost = player.GetEffect<MovementBoost>();
+
+            if (alone && !_enabled[player])
+            {
+                Log.Debug("add buff to "+player.Nickname);
+                
+                boost.Intensity += 5;
+                _enabled[player] = true;
+            }
+
+
+            if (!alone && _enabled[player])
+            {
+                Log.Debug("remove buff to " + player.Nickname);
+                boost.Intensity -= 5;
+                _enabled[player] = false;
+            }
+
+
+        }
+
+
     }
 }

@@ -17,7 +17,7 @@ namespace KE.CustomRoles.CR.MTF
         public override string Description { get; set; } = "Tu es débuff mais ta force de tir est démultiplié (fais attention à tes balles)";
         public override string PublicName { get; set; } = "Tank";
         public override int MaxHealth { get; set; } = 200;
-        public override RoleTypeId Role { get; set; } = RoleTypeId.NtfCaptain;
+        public override RoleTypeId Role { get; set; } = RoleTypeId.NtfSergeant;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public Color32 Color => new (255, 192, 203,0);
@@ -59,6 +59,8 @@ namespace KE.CustomRoles.CR.MTF
 
         private void Shooting(ShootingEventArgs ev)
         {
+            if (!Check(ev.Player)) return;
+
             Timing.CallDelayed(0.5f, () =>
             {
                 Timing.RunCoroutine(EffectAttribution(ev.Player));
