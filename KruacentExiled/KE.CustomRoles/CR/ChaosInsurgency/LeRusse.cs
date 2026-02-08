@@ -1,157 +1,229 @@
-﻿using Exiled.API.Enums;
+﻿using AdminToys;
+using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.API.Features.Attributes;
+using Exiled.API.Features.Items;
+using Exiled.API.Features.Toys;
+using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.API.Features;
-using KE.CustomRoles.API.Interfaces;
 using MEC;
 using Mirror;
 using PlayerRoles;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using VoiceChat;
 using VoiceChat.Codec;
-using VoiceChat.Codec.Enums;
 using VoiceChat.Networking;
 
 namespace KE.CustomRoles.CR.ChaosInsurgency
 {
-    public class Russe : KECustomRole, IColor
+    public class Russe : KECustomRole
     {
-        public override string Description { get; set; } = "Tu dois faire la roulette russe avec les autres joueurs";
-        public override string InternalName => "Russe";
         public override string PublicName { get; set; } = "Le Russe";
+        public override string Description { get; set; } = "RUSH B or A, i dont rember sooo good luck";
+        public override string InternalName => "Russe";
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.ChaosRifleman;
-        public override bool KeepRoleOnDeath { get; set; } = false;
-        public override bool KeepRoleOnChangingRole { get; set; } = false;
-        public Color32 Color => new(255, 0, 0, 0);
 
-        public override float SpawnChance { get; set; } = 100;
-        public override Vector3 Scale { get; set; } = new Vector3(1.1f, 1f, 1.1f);
+        public bool CanHearItself { get; set; } = false;
+        public float DamageToLootbox { get; set; } = 500f;
 
-        public override List<string> Inventory { get; set; } = new List<string>()
+        private readonly Dictionary<Player, float> _playerDamage = new();
+        private readonly Dictionary<Player, SpeakerToy> _speakers = new();
+        private readonly Dictionary<Player, float> _filterMems = new();
+
+        private readonly OpusDecoder _decoder = new();
+        private readonly OpusEncoder _encoder = new(VoiceChat.Codec.Enums.OpusApplicationType.Voip);
+
+        private static object[] _lootPool = null;
+
+        public override List<string> Inventory { get; set; } = new()
         {
-            $"{ItemType.GunA7}",
-            $"{ItemType.ArmorCombat}",
-            $"{ItemType.GunRevolver}",
-            $"{ItemType.Radio}",
-            $"{ItemType.Adrenaline}",
-            $"{ItemType.KeycardChaosInsurgency}",
-            $"{ItemType.GrenadeHE}",
-            $"{ItemType.GrenadeHE}",
+            $"{ItemType.GunRevolver}", $"{ItemType.GunAK}", $"{ItemType.ArmorHeavy}",
+            $"{ItemType.GrenadeHE}", $"{ItemType.GrenadeFlash}", $"{ItemType.Radio}"
         };
 
-        public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new Dictionary<AmmoType, ushort>()
+        public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new()
         {
-            { AmmoType.Ammo44Cal, 18},
-            { AmmoType.Nato762, 120}
+            { AmmoType.Ammo44Cal, 19 }, { AmmoType.Nato762, 60 }
         };
-
-        private OpusDecoder _decoder = new OpusDecoder();
-        private OpusEncoder _encoder = new OpusEncoder(OpusApplicationType.Voip);
-
-        private bool DebugMode = false;
-        private float _filterMem = 0f;
-
-        private Dictionary<Player, Npc> ActiveDummies = new Dictionary<Player, Npc>();
 
         protected override void RoleAdded(Player player)
         {
-            //Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
-            if (DebugMode) CreateDummy(player);
+            Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
+            Exiled.Events.Handlers.Player.Hurting += OnDealingDamage;
+
+            _playerDamage[player] = 0f;
+            _filterMems[player] = 0f;
+            SetupSpeaker(player);
         }
 
         protected override void RoleRemoved(Player player)
         {
-            //Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
+            Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
+            Exiled.Events.Handlers.Player.Hurting -= OnDealingDamage;
 
-            if (DebugMode) RemoveDummy(player);
+            DestroySpeaker(player);
+            _playerDamage.Remove(player);
+            _filterMems.Remove(player);
         }
 
-        private void OnVoiceChatting(VoiceChattingEventArgs ev)
+        private void OnDealingDamage(HurtingEventArgs ev)
         {
-            if (!Check(ev.Player)) return;
-            ev.IsAllowed = false;
+            if (ev.Attacker == null || !Check(ev.Attacker) || ev.Player == ev.Attacker) return;
 
-            if (!ActiveDummies.ContainsKey(ev.Player)) return;
+            if (!_playerDamage.ContainsKey(ev.Attacker)) _playerDamage[ev.Attacker] = 0f;
+            _playerDamage[ev.Attacker] += ev.Amount;
 
-            float[] pcmBuffer = new float[1920];
-            int decodedLen = _decoder.Decode(ev.VoiceMessage.Data, ev.VoiceMessage.DataLength, pcmBuffer);
-            ProcessRusseEffect(pcmBuffer, decodedLen);
-
-            byte[] encodedBytes = new byte[4000];
-            int encodedLen = _encoder.Encode(pcmBuffer, encodedBytes);
-
-            byte[] finalPacket = new byte[encodedLen];
-            Array.Copy(encodedBytes, finalPacket, encodedLen);
-
-            Npc dummy = ActiveDummies[ev.Player];
-            dummy.Position = ev.Player.Position;
-
-            var msg = new VoiceMessage(dummy.ReferenceHub, VoiceChatChannel.Proximity, finalPacket, encodedLen, false);
-
-            foreach (Player hub in Player.List)
+            if (_playerDamage[ev.Attacker] >= DamageToLootbox)
             {
-                if (!DebugMode && hub == ev.Player) continue;
-
-                if (Vector3.Distance(hub.Position, ev.Player.Position) < 20f)
-                {
-                    hub.Connection.Send(msg);
-                }
+                _playerDamage[ev.Attacker] = 0f;
+                SpawnLootBox(ev.Player.Position, ev.Attacker);
             }
         }
-        private void ProcessRusseEffect(float[] buffer, int length)
-        {
-            float gateThreshold = 0.02f;
 
+        private void SpawnLootBox(Vector3 pos, Player owner)
+        {
+            Primitive box = Primitive.Create(PrimitiveType.Cube, pos + Vector3.up * 0.5f, Vector3.zero, new Vector3(0.5f, 0.5f, 0.5f), true);
+            box.Color = Color.black;
+            Timing.RunCoroutine(LootBoxAnimation(box, owner));
+        }
+
+        private IEnumerator<float> LootBoxAnimation(Primitive box, Player p)
+        {
+            Exiled.API.Features.Toys.Light boxLight = Exiled.API.Features.Toys.Light.Create(box.Position + Vector3.up * 0.5f, Vector3.zero, Vector3.one, true);
+            boxLight.Intensity = 40f;
+            boxLight.Range = 8f;
+
+            Color[] csRarities = { Color.blue, Color.magenta, Color.red };
+
+            try
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    if (box == null) yield break;
+
+                    Color color = csRarities[Random.Range(0, csRarities.Length)];
+                    box.Color = color;
+                    boxLight.Color = color;
+
+                    yield return Timing.WaitForSeconds(0.2f);
+                }
+
+                object reward = GetRandomGambleReward();
+
+                if (reward is CustomItem custom)
+                {
+                    custom.Spawn(box.Position);
+                }
+                else if (reward is ItemType baseItem)
+                {
+                    Item.Create(baseItem).CreatePickup(box.Position);
+                }
+            }
+            finally
+            {
+                if (box != null) box.Destroy();
+                Timing.CallDelayed(0.5f, () => { if (boxLight != null) boxLight.Destroy(); });
+            }
+        }
+
+        private object GetRandomGambleReward()
+        {
+            if (_lootPool == null)
+            {
+                List<object> tempPool = new List<object>();
+
+                foreach (ItemType item in System.Enum.GetValues(typeof(ItemType)))
+                {
+                    if (item == ItemType.None || item == ItemType.MicroHID || item == ItemType.Jailbird ||
+                        item == ItemType.ParticleDisruptor || item == ItemType.GunSCP127) continue;
+
+                    if (item.ToString().Contains("Ammo")) continue;
+
+                    tempPool.Add(item);
+                }
+
+                if (CustomItem.Registered != null)
+                {
+                    foreach (var custom in CustomItem.Registered)
+                    {
+                        tempPool.Add(custom);
+                    }
+                }
+
+                _lootPool = tempPool.ToArray();
+            }
+
+            return _lootPool[Random.Range(0, _lootPool.Length)];
+        }
+        private void OnVoiceChatting(VoiceChattingEventArgs ev)
+        {
+            if (!Check(ev.Player) || !_speakers.TryGetValue(ev.Player, out SpeakerToy speaker)) return;
+
+            ev.IsAllowed = false;
+
+            float[] pcmBuffer = new float[1920];
+            int length = _decoder.Decode(ev.VoiceMessage.Data, ev.VoiceMessage.DataLength, pcmBuffer);
+
+            float gateThreshold = 0.02f;
             float muffle = 0.10f;
+            float mem = _filterMems[ev.Player];
 
             for (int i = 0; i < length; i++)
             {
-                float input = buffer[i];
-
+                float input = pcmBuffer[i];
                 if (Mathf.Abs(input) < gateThreshold)
                 {
-                    _filterMem *= 0.9f;
-                    buffer[i] = _filterMem;
+                    mem *= 0.9f;
+                    pcmBuffer[i] = mem;
                     continue;
                 }
+                mem += (input - mem) * muffle;
+                float output = Mathf.Clamp(mem * 6.0f, -1f, 1f);
+                pcmBuffer[i] = output;
+            }
+            _filterMems[ev.Player] = mem;
 
-                _filterMem += (input - _filterMem) * muffle;
+            byte[] encoded = new byte[4000];
+            int encodedLen = _encoder.Encode(pcmBuffer, encoded);
 
-                float output = _filterMem * 6.0f;
+            BroadcastAudio(ev.Player, speaker.NetworkControllerId, encoded, encodedLen);
+        }
 
-                if (output > 1.0f) output = 1.0f;
-                else if (output < -1.0f) output = -1.0f;
+        private void BroadcastAudio(Player source, byte speakerId, byte[] data, int length)
+        {
+            var audioMsg = new AudioMessage(speakerId, data, (short)length);
+            Vector3 sourcePos = source.Position;
 
-                buffer[i] = output;
+            foreach (Player hub in Player.List)
+            {
+                if (hub == source && !CanHearItself) continue;
+                if (Vector3.Distance(hub.Position, sourcePos) <= 20f)
+                    hub.Connection.Send(audioMsg);
             }
         }
 
-        private void CreateDummy(Player p)
+        private void SetupSpeaker(Player p)
         {
-            if (ActiveDummies.ContainsKey(p)) return;
-            Npc npc = Npc.Spawn($"Russe-{p.Nickname}", RoleTypeId.Tutorial, false, p.Position);
-            npc.Scale = Vector3.zero;
+            var prefab = NetworkClient.prefabs.Values.Select(x => x.GetComponent<SpeakerToy>()).FirstOrDefault(s => s != null);
+            if (prefab == null) return;
 
-            Timing.CallDelayed(0.5f, () =>
-            {
-                if (npc != null && npc.GameObject != null)
-                {
-                    try { npc.IsGodModeEnabled = true; } catch { }
-                }
-            });
-            ActiveDummies[p] = npc;
+            SpeakerToy speaker = Object.Instantiate(prefab, p.GameObject.transform);
+            speaker.transform.localPosition = Vector3.up * 1.5f;
+            speaker.transform.localScale = Vector3.zero;
+
+            NetworkServer.Spawn(speaker.gameObject);
+            speaker.NetworkControllerId = (byte)p.Id;
+            _speakers[p] = speaker;
         }
 
-        private void RemoveDummy(Player p)
+        private void DestroySpeaker(Player p)
         {
-            if (ActiveDummies.ContainsKey(p))
+            if (_speakers.TryGetValue(p, out SpeakerToy speaker))
             {
-                if (ActiveDummies[p] != null) NetworkServer.Destroy(ActiveDummies[p].GameObject);
-                ActiveDummies.Remove(p);
+                if (speaker != null) NetworkServer.Destroy(speaker.gameObject);
+                _speakers.Remove(p);
             }
         }
     }
