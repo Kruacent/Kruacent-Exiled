@@ -82,19 +82,16 @@ namespace KE.Map
                 Vector3 pos = RoleTypeId.Scp049.GetRandomSpawnLocation().Position;
 
 
-                Primitive prim = Primitive.Create(PrimitiveType.Cube, pos, spawn: false);
-
-                prim.Base.gameObject.layer = 14;
-                prim.Spawn();
-
-
-                
-
-                Collider col = prim.Base.gameObject.GetComponent<BoxCollider>();
 
 
                 //glass or door w/glass => fake to 106s & 173s & 049-2s & 049s & 096s & ghostly
                 //door w/out glass => fake to 106s & ghostly
+                
+                //Primitive prim = Primitive.Create(PrimitiveType.Cube, pos, spawn: false);
+
+                //prim.Base.gameObject.layer = 14;
+                //prim.Spawn();
+                //Collider col = prim.Base.gameObject.GetComponent<BoxCollider>();
 
                 //MirrorExtensions.SendFakeSyncVar(player, prim.Base.netIdentity,typeof(PrimitiveObjectToy), "NetworkPrimitiveFlags", PrimitiveFlags.Visible);
 
