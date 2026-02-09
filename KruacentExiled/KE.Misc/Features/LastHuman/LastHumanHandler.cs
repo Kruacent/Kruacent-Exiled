@@ -62,7 +62,7 @@ namespace KE.Misc.Features.LastHuman
 
             if (ev.OldRole.IsScp()) return;
 
-            if (ev.NewRole.RoleTypeId.IsScp()) return;
+            if (SCPTeam.IsSCP(ev.Player.ReferenceHub)) return;
 
 
             if(TryGetLastTarget(out Player lastTarget))
