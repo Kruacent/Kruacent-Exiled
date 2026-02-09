@@ -12,6 +12,7 @@ using Exiled.Events.EventArgs.Server;
 using HintServiceMeow.Core.Models.Arguments;
 using HintServiceMeow.Core.Utilities;
 using KE.CustomRoles.API.Features;
+using KE.Items.API.Features;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
 using MEC;
@@ -100,6 +101,13 @@ namespace KE.CustomRoles.CR.CustomSCPs
         {
             PlayerDisplay dis = PlayerDisplay.Get(player);
             DisplayHandler.Instance.CreateAuto(player, (args) => GetPlayers(args), position.HintPlacement,HintServiceMeow.Core.Enum.HintSyncSpeed.Normal);
+
+            if(CurrentNumberOfSpawn < 2)
+            {
+                KECustomItem.TrySpawn(0, player.Position, out _);
+            }
+
+
 
             player.Position = RoleTypeId.Scp049.GetRandomSpawnLocation().Position;
             player.EnableEffect<NightVision>(100, 0, false);
