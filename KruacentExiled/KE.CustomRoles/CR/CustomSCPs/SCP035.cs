@@ -104,7 +104,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
             if(CurrentNumberOfSpawn < 2)
             {
-                KECustomItem.TrySpawn(0, player.Position, out _);
+                KECustomItem.TrySpawn(5982, player.Position, out _);
             }
 
 
