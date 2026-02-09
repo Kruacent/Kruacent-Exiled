@@ -53,6 +53,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
         {
             ItemType.SCP330,
             ItemType.SCP1853,
+            ItemType.SCP1509,
         };
 
         // 035 can't be damaged by these
