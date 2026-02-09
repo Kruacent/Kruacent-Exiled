@@ -11,6 +11,7 @@ using KE.Map.Others.BlackoutNDoor.Handlers;
 using MEC;
 using PlayerRoles;
 using PlayerRoles.PlayableScps.Scp106;
+using ProjectMER.Features;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -32,11 +33,15 @@ namespace KE.Map
         {
             handler = new();
             harmony = new(Prefix);
+            
+
+
 
             handler.SubscribeEvents();
             KE.Utils.API.Sounds.SoundPlayer.Instance.TryLoad();
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
+            Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
 
             GamblingRoom.SubscribeEvents();
             //MoreRoom.CreateAll();
@@ -49,6 +54,12 @@ namespace KE.Map
 
             Instance = this;
             base.OnEnabled();
+        }
+
+        private void OnWaitingForPlayers()
+        {
+            PrefabManager.RegisterPrefabs();
+            BulkDoor049.Create();
         }
 
         private void OnRoundStarted()
@@ -105,7 +116,8 @@ namespace KE.Map
             handler?.UnsubscribeEvents();
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
-            
+            Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
+
             harmony.UnpatchAll(harmony.Id);
             GamblingRoom.UnsubscribeEvents();
             //MoreRoom.UnsubscribeEvents();
@@ -157,7 +169,7 @@ namespace KE.Map
 
             var g = new OldGamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, Vector3.one*10, new LootTable(normal));
 
-            BulkDoor049.Create();
+            
 
 
             /*
