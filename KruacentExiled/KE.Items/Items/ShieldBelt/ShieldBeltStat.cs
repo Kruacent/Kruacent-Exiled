@@ -12,11 +12,13 @@ namespace KE.Items.Items.ShieldBelt
 {
     public class ShieldBeltStat : MonoBehaviour
     {
-        public static readonly float MaxCharge = 110;
-        public static readonly float RechargeRatePerS = 13;
-        public static readonly float TimeBroken = 50;
-        public static readonly float Base = 20;
+        public const float MaxCharge = 110;
+        public const float RechargeRatePerS = 13;
+        public const float TimeBroken = 50;
+        public const float Base = 20;
         public static readonly Vector3 MaxSize = Vector3.one * 2;
+
+        public float CurrentCharge => currentCharge;
 
         private float currentCharge;
         private float timeRemaining;

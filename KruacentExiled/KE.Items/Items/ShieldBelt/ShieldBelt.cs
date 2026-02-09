@@ -3,35 +3,36 @@ using Exiled.API.Features.Attributes;
 using Exiled.API.Features.DamageHandlers;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups.Projectiles;
+using Exiled.API.Features.Pools;
 using Exiled.API.Features.Spawn;
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
+using HintServiceMeow.Core.Models.HintContent;
+using HintServiceMeow.Core.Utilities;
 using KE.Items.API.Features;
+using KE.Items.API.Interface;
+using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Displays.DisplayMeow.Placements;
 using MapGeneration;
 using MEC;
 using PlayerRoles.FirstPersonControl;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace KE.Items.Items.ShieldBelt
 {
     [CustomItem(ItemType.KeycardJanitor)]
-    public class ShieldBelt : KECustomItem
+    public class ShieldBelt : KECustomItem, ILumosItem
     {
-
-
-
         public override uint Id { get; set; } = 5982;
         public override string Name { get; set; } = "Shield belt";
         public override string Description { get; set; } = "A projectile-repulsion device.\nIt will attempt to stop incoming projectiles or shrapnel, but does nothing against melee attacks or heat.\nIt prevents the wearer from firing out.\n(works in the inventory) ";
         public override float Weight { get; set; } = 0.65f;
         public override SpawnProperties SpawnProperties { get; set; } = null;
-
-
-
-        private CoroutineHandle handle;
+        public Color Color { get; set; } = new Color32(255, 255, 0, 0);
 
         protected override void SubscribeEvents()
         {
@@ -60,13 +61,51 @@ namespace KE.Items.Items.ShieldBelt
 
             return player.Items.Any(Check);
         }
-
+        private static HintPosition HintPosition = new ShieldBeltPosition();
         protected override void OnAcquired(Player player, Item item, bool displayMessage)
         {
             if (!Check(item)) return;
             player.GameObject.AddComponent<ShieldBeltStat>();
             Log.Debug("player got shield");
+
+
+            
+            Log.Debug("no hints");
+            if(!DisplayHandler.Instance.HasHint(player, HintPosition.HintPlacement))
+            {
+                DisplayHandler.Instance.CreateAuto(player, (arg) => GetContent(player), HintPosition.HintPlacement);
+            }
             base.OnAcquired(player, item, displayMessage);
+        }
+
+
+        private string GetContent(Player player)
+        {
+            if (player.GameObject.TryGetComponent<ShieldBeltStat>(out var stat))
+            {
+                StringBuilder sb =  StringBuilderPool.Pool.Get();
+
+                if (stat.IsActive)
+                {
+                    sb.Append("<color=#00FF00>");
+                }
+                else
+                {
+                    sb.Append("<color=#FF0000>");
+                }
+
+
+                sb.Append("ShieldBelt Status : ");
+                sb.Append(stat.CurrentCharge);
+                sb.Append("/");
+                sb.Append(ShieldBeltStat.MaxCharge);
+                sb.Append("HP");
+                sb.Append("</color>");
+                return StringBuilderPool.Pool.ToStringReturn(sb);
+            }
+
+
+            return " ";
         }
 
         private void OnDroppedItem(DroppedItemEventArgs ev)
