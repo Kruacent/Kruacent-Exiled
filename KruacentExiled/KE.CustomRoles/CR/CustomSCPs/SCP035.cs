@@ -102,16 +102,14 @@ namespace KE.CustomRoles.CR.CustomSCPs
             PlayerDisplay dis = PlayerDisplay.Get(player);
             DisplayHandler.Instance.CreateAuto(player, (args) => GetPlayers(args), position.HintPlacement,HintServiceMeow.Core.Enum.HintSyncSpeed.Normal);
 
-            if(CurrentNumberOfSpawn < 2)
-            {
-                KECustomItem.TrySpawn(5982, player.Position, out _);
-            }
+
 
 
 
             player.Position = RoleTypeId.Scp049.GetRandomSpawnLocation().Position;
             player.EnableEffect<NightVision>(100, 0, false);
             base.RoleAdded(player);
+            KECustomItem.TrySpawn(5982, player.Position, out _);
         }
 
 
