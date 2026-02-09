@@ -32,18 +32,19 @@ namespace KE.Misc.Features
         {
             while (!Round.IsEnded)
             {
-                foreach (Tesla tesla in Tesla.List.ToList())
+                foreach (Tesla tesla in Tesla.List)
                 {
                     yield return Timing.WaitForSeconds(UnityEngine.Random.Range(120f,200f));
                     tesla.Trigger();
                     if(UnityEngine.Random.Range(0f,100f) <= 70f)
                     {
-                        yield return Timing.WaitForSeconds(tesla.Base.windupTime+.1f);
+                        yield return Timing.WaitForSeconds(tesla.Base.windupTime+tesla.Base.cooldownTime+.1f);
                         tesla.Trigger();
                     }
                     
                 }
             }
         }
+
     }
 }
