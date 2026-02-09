@@ -96,13 +96,13 @@ namespace KE.Map
                 //glass or door w/glass => fake to 106s & 173s & 049-2s & 049s & 096s & ghostly
                 //door w/out glass => fake to 106s & ghostly
 
-                MirrorExtensions.SendFakeSyncVar(player, prim.Base.netIdentity,typeof(PrimitiveObjectToy), "NetworkPrimitiveFlags", PrimitiveFlags.Visible);
+                //MirrorExtensions.SendFakeSyncVar(player, prim.Base.netIdentity,typeof(PrimitiveObjectToy), "NetworkPrimitiveFlags", PrimitiveFlags.Visible);
 
 
-                Log.Info(prim.Base.gameObject.layer);
-                Log.Info(LayerMask.LayerToName(14));
+                //Log.Info(prim.Base.gameObject.layer);
+                //Log.Info(LayerMask.LayerToName(14));
 
-                Log.Info(Scp106MovementModule.GetSlowdownFromCollider(col, out bool passable) + " passable?" + passable);
+                //Log.Info(Scp106MovementModule.GetSlowdownFromCollider(col, out bool passable) + " passable?" + passable);
 
             }
 
