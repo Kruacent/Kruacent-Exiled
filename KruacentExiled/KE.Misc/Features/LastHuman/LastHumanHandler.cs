@@ -2,6 +2,7 @@
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp106;
+using Exiled.Events.Patches.Generic;
 using HintServiceMeow.Core.Models.Hints;
 using HintServiceMeow.Core.Utilities;
 using KE.Utils.API.Displays.DisplayMeow;
@@ -22,11 +23,15 @@ namespace KE.Misc.Features.LastHuman
     {
 
 
-        private static readonly IReadOnlyCollection<string> TextLast = new HashSet<string>()
+        public static readonly IReadOnlyCollection<string> TextLast = new HashSet<string>()
         {
             "You feel like everyone is counting on you",
-            "You feel suddenly very lonely"
+            "You feel suddenly very lonely",
+            "On est que tous les deux vivants ?"
         };
+
+        public static readonly string TextSCP = "<color=#FF0000><b>The last human is at %Zone%</b></color>";
+
 
 
         public static HintPosition position = new LastHumanPosition();
@@ -81,7 +86,7 @@ namespace KE.Misc.Features.LastHuman
                         }
                         else if(!player.IsDead)
                         {
-                            msg = "The last human is at " + lastTarget.Zone.GetName();
+                            msg = TextSCP.Replace("%Zone%", lastTarget.Zone.GetName());
                         }
 
 
@@ -117,12 +122,12 @@ namespace KE.Misc.Features.LastHuman
             foreach (ReferenceHub allHub in ReferenceHub.AllHubs)
             {
                 Log.Debug(allHub.nicknameSync.DisplayName);
-                if (allHub.IsHuman())
+                if (allHub.IsHuman() && !SCPTeam.IsSCP(allHub))
                 {
                     num++;
                     lastTarget = Player.Get(allHub);
                 }
-                else if (allHub.IsSCP())
+                else if (SCPTeam.IsSCP(allHub))
                 {
                     num2++;
                 }
