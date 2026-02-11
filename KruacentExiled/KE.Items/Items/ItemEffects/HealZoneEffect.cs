@@ -4,11 +4,7 @@ using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using KE.Items.API.Interface;
 using MEC;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace KE.Items.Items.ItemEffects
@@ -54,22 +50,34 @@ namespace KE.Items.Items.ItemEffects
 
         private IEnumerator<float> HealZoneHeal(Vector3 wallPosition, float cylinderSize, Player playerThrowingGrenade)
         {
+            Dictionary<Player, int> playerHealedAmounts = new Dictionary<Player, int>();
+
+            foreach (Player player in Player.List)
+            {
+                playerHealedAmounts.Add(player, 0);
+            }
+
             while (true)
             {
                 foreach (Player player in Player.List)
                 {
+
                     // Check if a player is in the zone.
                     if (IsPlayerInZone(player, wallPosition, cylinderSize))
                     {
                         if (playerThrowingGrenade.Role.Team == player.Role.Team)
                         {
-                            player.Heal(1);
+                            if (playerHealedAmounts[player] <= 100)
+                            {
+                                player.Heal(1);
+                                playerHealedAmounts[player] += 1;
+                            }
                         }
                     }
                 }
 
                 // Waiting 0.5s before re-check.
-                yield return Timing.WaitForSeconds(0.5f);
+                yield return Timing.WaitForSeconds(0.1f);
             }
         }
 
