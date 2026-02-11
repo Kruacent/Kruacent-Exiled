@@ -1,18 +1,18 @@
 ﻿using Exiled.API.Features;
+using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using KE.Items.API.Interface;
 using MEC;
+using PlayerRoles.FirstPersonControl;
 using System.Collections.Generic;
 using UnityEngine;
-using PlayerLab = LabApi.Features.Wrappers.Player;
 
 namespace KE.Items.Items.ItemEffects
 {
     public class LowGravityGrenadeEffect : CustomItemEffect
     {
-        private Dictionary<PlayerLab, Vector3> _effectedPlayers = new();
-        public Vector3 LowGravity { get; set; } = new(0, -12.6f, 0);
+        private Dictionary<Player, Vector3> _effectedPlayers = new();
         public float Duration { get; set; } = 15f;
         public float Range { get; set; } = 10f;
 
@@ -37,21 +37,23 @@ namespace KE.Items.Items.ItemEffects
             
         }
 
-        public void OnExploding(PlayerLab player)
+        public void OnExploding(Player player)
         {
             if (player is null) return;
 
-            Vector3 previousGravity = player.Gravity;
-            _effectedPlayers[player] = previousGravity;
-            player.Gravity = LowGravity;
+            if (player.Role is FpcRole fpcRole) 
+            { 
+                _effectedPlayers[player] = fpcRole.Gravity;
+                fpcRole.Gravity = FpcGravityController.DefaultGravity * 0.15f;
+            }
+
             Timing.CallDelayed(Duration, () =>
             {
-                if (player is not null)
+                if (player.Role is FpcRole fpcRole)
                 {
-                    player.Gravity = _effectedPlayers[player];
+                    fpcRole.Gravity = _effectedPlayers[player];
                     _effectedPlayers.Remove(player);
                 }
-                
             });
         }
     }
