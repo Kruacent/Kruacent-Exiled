@@ -30,7 +30,7 @@ internal class EveryoneChange : ICoinEffect
     {
         foreach (Player target in Player.List.Where(p => p.IsAlive && RoleInversions.ContainsKey(p.Role.Type)))
         {
-            target.Role.Set(RoleInversions[target.Role.Type], RoleSpawnFlags.AssignInventory);
+            target.Role.Set(RoleInversions[target.Role.Type], RoleSpawnFlags.None);
         }
     }
 }
