@@ -12,6 +12,7 @@ using LabApi.Events.Arguments.ServerEvents;
 using KE.Misc.Features.VoteStart;
 using KE.Misc.Features.Spawn;
 using KE.Misc.Features.LastHuman;
+using KE.Utils.API.Translations;
 
 namespace KE.Misc
 {
@@ -62,6 +63,8 @@ namespace KE.Misc
             //SpawnLcz = new();
             Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
             Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
+
+            TranslationManager.Instance.TryLoad();
 
 
             harmony.PatchAll(Assembly);
