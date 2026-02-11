@@ -76,7 +76,7 @@ namespace KE.Items.Items
             base.UnsubscribeEvents();
         }
 
-        private void OnDropping(DroppingItemEventArgs ev)
+        private new void OnDropping(DroppingItemEventArgs ev)
         {
             if (!Check(ev.Item)) return;
 
@@ -99,7 +99,7 @@ namespace KE.Items.Items
             });
         }
 
-        private void OnPickingUp(PickingUpItemEventArgs ev)
+        private new void OnPickingUp(PickingUpItemEventArgs ev)
         {
             if (!Check(ev.Pickup)) return;
 
