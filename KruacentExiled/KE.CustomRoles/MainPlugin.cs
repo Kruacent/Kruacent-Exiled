@@ -124,20 +124,6 @@ namespace KE.CustomRoles
         }
 
 
-        public void ShowTranslation()
-        {
-            ///????????????
-            translation.Values.AddRange(KECustomRole.keys);
-            Log.Debug("nb trnalsaikey"+ KECustomRole.keys.Count);
-            Log.Debug("nb trnalsai"+ translation.Values.Count);
-
-            Log.Debug(translation.ToString());
-        }
-
-        public void CustomRoleRespawning(RespawnedTeamEventArgs ev)
-        {
-            KECustomRole.GiveRandomRole(ev.Players);
-        }
 
         public static void ShowEffectHint(Player player, string text)
         {
