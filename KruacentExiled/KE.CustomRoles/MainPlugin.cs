@@ -14,7 +14,6 @@ using KE.Utils.API.CustomStats;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Features.SCPs;
 using KE.Utils.API.GifAnimator;
-using KE.Utils.API.Translations;
 using MEC;
 using Microsoft.Win32;
 using System;
@@ -27,7 +26,7 @@ using System.Runtime.InteropServices.ComTypes;
 
 namespace KE.CustomRoles
 {
-    public class MainPlugin : Plugin<Config>, Utils.API.Translations.ITranslation
+    public class MainPlugin : Plugin<Config>
     {
         public override string Name => "KE.CustomRoles";
         public override string Prefix => "KE.CR";
@@ -43,8 +42,6 @@ namespace KE.CustomRoles
         private SettingHandler _settingHandler;
         internal static SettingHandler SettingHandler => Instance?._settingHandler;
 
-        internal TranslationFile translation;
-        public TranslationFile Translation => translation;
         private Harmony Harmony;
 
         internal Dictionary<string, TextImage> icons;
@@ -54,7 +51,6 @@ namespace KE.CustomRoles
         {
             
             Instance = this;
-            translation = new CRTranslationFile();
             _settingHandler = new();
             //Utils.API.Settings.SettingHandler.Instance.SubscribeEvents();
 
@@ -136,6 +132,11 @@ namespace KE.CustomRoles
             Log.Debug("nb trnalsai"+ translation.Values.Count);
 
             Log.Debug(translation.ToString());
+        }
+
+        public void CustomRoleRespawning(RespawnedTeamEventArgs ev)
+        {
+            KECustomRole.GiveRandomRole(ev.Players);
         }
 
         public static void ShowEffectHint(Player player, string text)

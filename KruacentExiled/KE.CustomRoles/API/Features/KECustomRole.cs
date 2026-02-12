@@ -17,7 +17,6 @@ using KE.CustomRoles.API.Interfaces;
 using KE.CustomRoles.Events.EventArgs;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
-using KE.Utils.API.Translations;
 using MEC;
 using PlayerRoles;
 using System;
@@ -125,19 +124,6 @@ namespace KE.CustomRoles.API.Features
         private static Dictionary<Type, KECustomRole> typeLookupTable = new();
         private static Dictionary<string, KECustomRole> stringLookupTable = new();
 
-        private static TranslationFile translation => MainPlugin.Instance.translation;
-
-
-        protected virtual List<TranslationKey> CreateKeys()
-        {
-            return new List<TranslationKey>()
-            {
-                new(Name+"_PublicName",PublicName),
-                new(Name+"_Description",Description),
-            };
-        }
-
-        public static List<TranslationKey> keys = new();
         public override void Init()
         {
             typeLookupTable.Add(GetType(), this);
@@ -145,8 +131,6 @@ namespace KE.CustomRoles.API.Features
             InternalSubscribeEvents();
             SubscribeEvents();
             Log.Debug("adding keys to "+Name);
-            keys.AddRange(CreateKeys());
-
         }
 
         public override void Destroy()

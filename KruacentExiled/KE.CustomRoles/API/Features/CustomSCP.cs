@@ -48,7 +48,7 @@ namespace KE.CustomRoles.API.Features
         protected override void RoleAdded(Player player)
         {
             SCPTeam.AddSCP(player.ReferenceHub);
-            base.RoleAdded(player);
+            base.AddRole(player);
         }
 
 
