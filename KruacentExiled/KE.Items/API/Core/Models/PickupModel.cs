@@ -43,15 +43,6 @@ namespace KE.Items.API.Core.Models
 
         private Dictionary<Pickup, Primitive> PickupToParent;
 
-        private static CoroutineHandle handle;
-        private static IEnumerator<float> UpdatePosition()
-        {
-            while (true)
-            {
-
-            }
-        }
-
         private Primitive CreateParent(Pickup pickup)
         {
 
@@ -79,8 +70,6 @@ namespace KE.Items.API.Core.Models
         {
             Pickup pickup = Pickup.Get(pickupBase);
             if (!Check(pickup)) return;
-
-            //handle = Timing.RunCoroutineSingleton(UpdatePosition(), handle, SingletonBehavior.Abort);
 
             Transform parent = CreateParent(pickup).Transform;
             Log.Info(parent);
