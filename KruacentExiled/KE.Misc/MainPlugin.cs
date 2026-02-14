@@ -12,12 +12,13 @@ using LabApi.Events.Arguments.ServerEvents;
 using KE.Misc.Features.VoteStart;
 using KE.Misc.Features.Spawn;
 using KE.Misc.Features.LastHuman;
+using KE.Utils.API.Settings.GlobalSettings;
 using KE.Utils.API.Translations;
 
 namespace KE.Misc
 {
 
-    public class MainPlugin : Plugin<Config>
+    public class MainPlugin : Plugin<Config>, ILocalizable
     {
         public override string Author => "Patrique";
         public override string Name => "KE.Misc";
@@ -42,6 +43,8 @@ namespace KE.Misc
 
         internal VoteStart vote { get; private set; }
 
+        public string LocalizationId => Prefix;
+
         public override void OnEnabled()
         {
             Instance = this;
@@ -63,9 +66,9 @@ namespace KE.Misc
             //SpawnLcz = new();
             Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
             Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
-
-            TranslationManager.Instance.TryLoad();
-
+            GlobalSettingsHandler.Instance.TryLoad();
+            GlobalSettingsHandler.Instance.SubscribeEvents();
+            RegisterTranslations();
 
             harmony.PatchAll(Assembly);
             ClassDDoor.SubscribeEvents();
@@ -101,7 +104,7 @@ namespace KE.Misc
             MiscFeature.UnsubscribeAllEvents();
             ClassDDoor.UnsubscribeEvents();
             harmony.UnpatchAll(harmony.Id);
-
+            GlobalSettingsHandler.Instance.UnsubscribeEvents();
 
             _914 = null;
             Candy = null;
@@ -147,9 +150,15 @@ namespace KE.Misc
             Exiled.API.Features.Cassie.MessageTranslated("SCP 69 420 has been contained successfully", "SCP-69420-NOE has been contained suscessfully");
         }
 
-        
+        public void RegisterTranslations()
+        {
+            TranslationHub.Add(LocalizationId, LastHumanTranslations.LangToKeyToTranslation);
+        }
 
 
-        
+        public static string GetTranslation(Player player,string key)
+        {
+            return TranslationHub.Get(player, Instance.LocalizationId, key);
+        }
     }
 }

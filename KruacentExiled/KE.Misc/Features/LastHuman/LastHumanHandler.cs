@@ -9,6 +9,7 @@ using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
 using KE.Utils.API.Features.SCPs;
 using KE.Utils.API.Interfaces;
+using KE.Utils.API.Translations;
 using KE.Utils.Extensions;
 using LabApi.Events.Arguments.PlayerEvents;
 using PlayerRoles;
@@ -23,14 +24,16 @@ namespace KE.Misc.Features.LastHuman
     {
 
 
+
+
+
         public static readonly IReadOnlyCollection<string> TextLast = new HashSet<string>()
         {
-            "You feel like everyone is counting on you",
-            "You feel suddenly very lonely",
-            "On est que tous les deux vivants ?"
+            "texthuman1",
+            "texthuman2",
         };
 
-        public static readonly string TextSCP = "<color=#FF0000><b>The last human is at %Zone%</b></color>";
+        public static readonly string TextSCP = "textscp";
 
 
 
@@ -82,16 +85,15 @@ namespace KE.Misc.Features.LastHuman
                         string msg = string.Empty;
                         if (player == lastTarget)
                         {
-                            msg = TextLast.GetRandomValue();
+                            msg = MainPlugin.GetTranslation(player,TextLast.GetRandomValue());
                         }
                         else if(!player.IsDead)
                         {
-                            msg = TextSCP.Replace("%Zone%", lastTarget.Zone.GetName());
+                            msg = MainPlugin.GetTranslation(player, TextSCP.Replace("%Zone%", lastTarget.Zone.GetName()));
                         }
 
 
-
-
+                        
 
                         if (!player.IsDead && DateTime.Now > _nextPossibleHint)
                         {
