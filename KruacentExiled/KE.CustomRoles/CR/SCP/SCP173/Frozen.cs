@@ -1,6 +1,8 @@
 ﻿using CustomPlayerEffects;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using Exiled.API.Features.Pickups;
+using InventorySystem.Items.Usables.Scp244;
 using InventorySystem.Items.Usables.Scp244.Hypothermia;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
@@ -10,10 +12,12 @@ using LabApi.Features.Wrappers;
 using MEC;
 using PlayerRoles;
 using PlayerStatsSystem;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Item = Exiled.API.Features.Items.Item;
 using Player = LabApi.Features.Wrappers.Player;
+using Scp244Pickup = Exiled.API.Features.Pickups.Scp244Pickup;
 
 namespace KE.CustomRoles.CR.SCP.SCP173
 {
@@ -31,7 +35,7 @@ namespace KE.CustomRoles.CR.SCP.SCP173
         public Color32 Color => new Color32(120, 205, 255, 0);
 
 
-        /*protected override void SubscribeEvents()
+        protected override void SubscribeEvents()
         {
 
             LabApi.Events.Handlers.Scp173Events.CreatedTantrum += OnCreatedTantrum;
@@ -53,32 +57,33 @@ namespace KE.CustomRoles.CR.SCP.SCP173
         {
             Player player = ev.Player;
 
+
+
             Log.Info("daryh");
-
-            ScpDamageHandler scp = ev.DamageHandler as ScpDamageHandler;
-            Log.Info(scp != null);
-            Log.Info(player.TryGetEffect<Hypothermia>(out var ef));
-            Log.Info(ef.IsEnabled);
-
-            Log.Debug(Check(Player.Get(scp?.Attacker.Hub)));
-
-            
-
-
-
-            if (ev.DamageHandler is ScpDamageHandler scpDamageHandler && player.TryGetEffect<Hypothermia>(out var playerEffect) && playerEffect.IsEnabled)
+            if (ev.DamageHandler is ScpDamageHandler scpDamageHandler)
             {
                 Log.Info("damage");
                 Player attacker = Player.Get(scpDamageHandler.Attacker.Hub);
 
                 if (Check(attacker))
                 {
-                    Log.Info("checked");
-                    attacker.HumeShield = Mathf.Min(attacker.MaxHumeShield, attacker.HumeShield + 400f);
+
+                    Vector3 oldpos = ev.OldPosition;
+
+                    bool isInAPrimed = _primed.Any(pickup => pickup.FogPercentForPoint(oldpos) > 0);
+
+                    if (isInAPrimed)
+                    {
+                        Log.Info("checked");
+                        attacker.HumeShield = Mathf.Min(attacker.MaxHumeShield, attacker.HumeShield + 400f);
+                    }
+
                 }
 
             }
         }
+
+        private HashSet<Scp244DeployablePickup> _primed = new();
 
 
         private void OnCreatedTantrum(Scp173CreatedTantrumEventArgs ev)
@@ -92,18 +97,21 @@ namespace KE.CustomRoles.CR.SCP.SCP173
             tantrum.Destroy();
 
             Scp244 scp244 = (Scp244)Item.Create(ItemType.SCP244a);
-            scp244.Scale = new Vector3(.01f, .01f, .01f);
             scp244.Primed = true;
-            scp244.MaxDiameter = 10f;
-            Exiled.API.Features.Pickups.Pickup pickup = scp244.CreatePickup(position);
+            Scp244Pickup scp244Pickup = (Scp244Pickup)scp244.CreatePickup(position);
+
+
+            _primed.Add(scp244Pickup.Base);
+
             Timing.CallDelayed(time, () =>
             {
-                pickup.Destroy();
+                scp244Pickup.Destroy();
+                _primed.Remove(scp244Pickup.Base);
             });
 
 
         }
 
-        */
+        
     }
 }
