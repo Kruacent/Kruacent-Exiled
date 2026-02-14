@@ -29,7 +29,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
         public override string PublicName { get; set; } = "SCP-035";
         public override int MaxHealth { get; set; } = 1200;
-        public override string Description { get; set; } = "You can't pickup the Micro-HID and anything made with it, but you take 4 time less damage by these weapon.\nKill every humans";
+        public override string Description { get; set; } = "You can't pickup the Micro-HID and anything made with it, but you take 3 time less damage by these weapon.\nKill every humans";
         protected override int SettingId => 10002;
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.Tutorial;
@@ -198,7 +198,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
                 {
                     if (ev.IsAllowed)
                     {
-                        ev.DamageHandler.Damage /= 4;
+                        ev.DamageHandler.Damage /= 3;
                     }
                     
                     return;
