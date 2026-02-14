@@ -8,6 +8,7 @@ using HarmonyLib;
 using KE.Map.Heavy;
 using KE.Map.Heavy.GamblingZone;
 using KE.Map.Others.BlackoutNDoor.Handlers;
+using KE.Utils.API.KETextToy;
 using MEC;
 using PlayerRoles;
 using PlayerRoles.PlayableScps.Scp106;
@@ -86,7 +87,7 @@ namespace KE.Map
 
                 //glass or door w/glass => fake to 106s & 173s & 049-2s & 049s & 096s & ghostly
                 //door w/out glass => fake to 106s & ghostly
-                
+
                 //Primitive prim = Primitive.Create(PrimitiveType.Cube, pos, spawn: false);
 
                 //prim.Base.gameObject.layer = 14;
@@ -100,6 +101,17 @@ namespace KE.Map
                 //Log.Info(LayerMask.LayerToName(14));
 
                 //Log.Info(Scp106MovementModule.GetSlowdownFromCollider(col, out bool passable) + " passable?" + passable);
+
+                FollowingTextToy f1 = new([player], player.Position, Quaternion.identity, Vector3.one);
+                f1.Toy.TextFormat = "F1 sur un bateau";
+
+                FollowingTextToy f2 = new([], player.Position, Quaternion.identity, Vector3.one);
+                f2.Toy.TextFormat = "F2 tombe à l'eau";
+
+                
+
+
+
 
             }
 
