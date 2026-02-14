@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.CustomRoles.Commands
+namespace KE.CustomRoles.Commands.KECR
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class ImageCommand : ICommand

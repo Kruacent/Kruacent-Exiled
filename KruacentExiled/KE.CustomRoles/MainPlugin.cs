@@ -2,6 +2,7 @@
 using Exiled.API.Features.Core.UserSettings;
 using Exiled.API.Interfaces;
 using Exiled.CustomRoles.API.Features;
+using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using HarmonyLib;

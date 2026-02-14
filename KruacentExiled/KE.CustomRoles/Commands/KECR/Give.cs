@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.CustomRoles.Commands
+namespace KE.CustomRoles.Commands.KECR
 {
     internal class Give : ICommand
     {

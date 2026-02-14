@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.CustomRoles.Commands.Lists
+namespace KE.CustomRoles.Commands.KECR.Lists
 {
     public class Abilities : ICommand
     {
