@@ -4,9 +4,10 @@ using PlayerRoles;
 using Utils.NonAllocLINQ;
 using System.Collections.Generic;
 using System.Linq;
-using KE.GlobalEventFramework.GEFE.API.Features;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
-
+using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Features.Hints;
+using KE.GlobalEventFramework.GEFE.API.Enums;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
@@ -20,7 +21,8 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override string Name { get; set; } = "KIWIS";
         ///<inheritdoc/>
-        public override string Description { get; set; } = "Kill It While It's Small";
+        public override string Description { get; } = "Kill It While It's Small";
+        public override ImpactLevel ImpactLevel => ImpactLevel.Medium;
         ///<inheritdoc/>
         public override int WeightedChance { get; set; } = 1;
         ///<inheritdoc/>

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace KE.GlobalEventFramework.Examples.MiddleEvents
 {
-    public class SpeedM : MiddleEvent, IStart, IReversible
+    public class SpeedM : MiddleEvent, IStart, IEvent
     {
         ///<inheritdoc/>
         public override uint Id { get; set; } = 10042;
@@ -23,7 +23,8 @@ namespace KE.GlobalEventFramework.Examples.MiddleEvents
         ///<inheritdoc/>
         public override string Description { get; set; } = "Gas! gas! gas!";
         ///<inheritdoc/>
-        public override int WeightedChance { get; set; } = 0;
+        public override int WeightedChance { get; set; } = 1;
+        public override uint[] IncompatibleEvents => [1042];
         /// <summary>
         /// intensity of the movement boost effect
         /// </summary>
@@ -37,17 +38,22 @@ namespace KE.GlobalEventFramework.Examples.MiddleEvents
         }
         ///<inheritdoc/>
 
-        protected override void SubscribeEvent()
+        public void SubscribeEvent()
         {
             Exiled.Events.Handlers.Player.ChangingRole += ReactivateEffectSpawn;
             Exiled.Events.Handlers.Scp173.Blinking += SpeedyNut;
         }
         ///<inheritdoc/>
-        protected override void UnsubscribeEvent()
+        public void UnsubscribeEvent()
         {
             Exiled.Events.Handlers.Player.ChangingRole -= ReactivateEffectSpawn;
             Exiled.Events.Handlers.Scp173.Blinking -= SpeedyNut;
-            
+        }
+
+        protected override void Disable(KEEvents ev)
+        {
+            OnDisable();
+            base.Disable(ev);
         }
 
         public void OnDisable()

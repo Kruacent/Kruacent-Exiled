@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using KE.GlobalEventFramework.GEFE.API.Enums;
 using KE.GlobalEventFramework.GEFE.API.Features;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using MEC;
@@ -17,7 +18,11 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override string Name { get; set; } = "Blitz";
         ///<inheritdoc/>
-        public override string Description { get; set; } = "éteignez les lumières la luftwaffe arrive";
+        public override string Description { get; } = "La Luftwaffe arrive!";
+        public override string[] AltDescription =>
+        [
+            "Attention aux bombardements!"
+        ];
         ///<inheritdoc/>
         public override int WeightedChance => 1;
         /// <summary>
@@ -28,6 +33,10 @@ namespace KE.GlobalEventFramework.Examples.GE
         /// The number of grenades in each spawn
         /// </summary>
         public int NbGrenadeSpawned { get; set; } = 5;
+
+        public override ImpactLevel ImpactLevel => ImpactLevel.Low;
+
+
         ///<inheritdoc/>
         public IEnumerator<float> Start()
         {

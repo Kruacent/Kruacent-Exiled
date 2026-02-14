@@ -12,7 +12,7 @@
     {
         public string Command { get; } = "forcemiddle";
         public string[] Aliases { get; } = new string[] { "fm" };
-        public string Description { get; } = "force middle event";
+        public string Description { get; } = "force a random middle event";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {

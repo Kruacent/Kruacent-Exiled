@@ -6,6 +6,8 @@ using Exiled.API.Features.Items;
 using InventorySystem.Items.Usables;
 using KE.GlobalEventFramework.GEFE.API.Features;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
+using KE.Misc.Events.EventsArgs;
+using KE.Utils.Extensions;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
@@ -15,13 +17,15 @@ using Player = Exiled.API.Features.Player;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
-    public class SwapProtocol : GlobalEvent, IStart
+    public class SwapProtocol : GlobalEvent, IStart, IEvent
     {
         public override uint Id { get; set; } = 1051;
         public override string Name { get; set; } = "SwapProtocol";
-        public override string Description { get; set; } = "EEEEEEEET c'est parti la roulette tourne";
-        public override int WeightedChance { get; set; } = 1;
-        public const string IsSwappingKey = "KE.GlobalEvents.SwapProtocol.IsSwapping";
+        public override string Description { get; } = "EEEEEEEET c'est parti la roulette tourne";
+        public override int WeightedChance { get; set; } = 0;
+
+        private int numberSwap = 0;
+        public int NumberOfSwap => numberSwap;
 
         /// <summary>
         /// Cooldown between each change in seconds
@@ -33,6 +37,7 @@ namespace KE.GlobalEventFramework.Examples.GE
             while (!Round.IsEnded)
             {
                 yield return Timing.WaitForSeconds(Cooldown);
+                numberSwap++;
                 SwapAllPlayers();
             }
         }
@@ -63,6 +68,7 @@ namespace KE.GlobalEventFramework.Examples.GE
 
                 ExecuteSwap(target, dataToApply);
             }
+            
         }
 
         /// <summary>
@@ -73,6 +79,24 @@ namespace KE.GlobalEventFramework.Examples.GE
         private void ExecuteSwap(Player target, PlayerData data)
         {
             data.ApplyTo(target);
+        }
+
+        public void SubscribeEvent()
+        {
+            Misc.Features.SCPBuff.OnBuffingSCP += OnBuffingSCP;
+        }
+
+        public void UnsubscribeEvent()
+        {
+            Misc.Features.SCPBuff.OnBuffingSCP -= OnBuffingSCP;
+        }
+
+        private void OnBuffingSCP(BuffingSCPEventArgs ev)
+        {
+            if(NumberOfSwap > 0)
+            {
+                ev.IsAllowed = false;
+            }
         }
 
         private sealed class PlayerData
@@ -110,31 +134,38 @@ namespace KE.GlobalEventFramework.Examples.GE
             {
                 target.ClearInventory();
 
-                target.SessionVariables[IsSwappingKey] = true;
-
                 target.Role.Set(Role, RoleSpawnFlags.None);
 
-                Timing.CallDelayed(.1f, () =>
+                
+                if (target.PreviousRole == RoleTypeId.Spectator)
                 {
-                    // Add Safe TP here !!
-                    if (target.PreviousRole == RoleTypeId.Spectator) target.Position = Room.Random(ZoneType.HeavyContainment).Position + Vector3.up;
-
-                    target.MaxHealth = MaxHealth;
-                    target.Health = Health;
-                    target.Scale = PlayerScale;
-                    if (IsCuffed && !target.IsCuffed) target.Handcuff(); else target.RemoveHandcuffs();
-
-                    foreach (ItemState state in SavedItems)
+                    Vector3 randomRoom;
+                    if (!Warhead.IsDetonated)
                     {
-                        Item newItem = target.AddItem(state.Type);
-                        state.ApplyState(newItem);
+                        randomRoom = Room.Random(ZoneType.HeavyContainment).GetValidPosition();
                     }
+                    else
+                    {
+                        randomRoom = Room.List.First(r => r.Type == RoomType.Surface).GetValidPosition();
+                    }
+                    target.Position = randomRoom;
+                }
 
-                    foreach (var ammo in Ammo) target.SetAmmo(ammo.Key, ammo.Value);
+                target.MaxHealth = MaxHealth;
+                target.Health = Health;
+                target.Scale = PlayerScale;
+                if (IsCuffed && !target.IsCuffed) target.Handcuff(); else target.RemoveHandcuffs();
 
-                    target.DisableAllEffects();
-                    foreach (EffectState state in SavedEffects) target.EnableEffect(state.Type, state.Intensity, state.Duration);
-                });   
+                foreach (ItemState state in SavedItems)
+                {
+                    Item newItem = target.AddItem(state.Type);
+                    state.ApplyState(newItem);
+                }
+
+                foreach (var ammo in Ammo) target.SetAmmo(ammo.Key, ammo.Value);
+
+                target.DisableAllEffects();
+                foreach (EffectState state in SavedEffects) target.EnableEffect(state.Type, state.Intensity, state.Duration);
             }
         }
 

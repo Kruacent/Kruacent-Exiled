@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace KE.GlobalEventFramework.Examples.MiddleEvents
 {
-    public class WallHackM : MiddleEvent, IStart, IReversible
+    public class WallHackM : MiddleEvent, IStart, IEvent
     {
         ///<inheritdoc/>
         public override uint Id { get; set; } = 10052;
@@ -32,15 +32,21 @@ namespace KE.GlobalEventFramework.Examples.MiddleEvents
 
         }
         ///<inheritdoc/>
-        protected override void SubscribeEvent()
+        public void SubscribeEvent()
         {
+            Log.Debug("subscribe events wh");
             Exiled.Events.Handlers.Player.ChangingRole += ReactivateEffectSpawn;
         }
         ///<inheritdoc/>
-        protected override void UnsubscribeEvent()
+        public void UnsubscribeEvent()
         {
             Exiled.Events.Handlers.Player.ChangingRole -= ReactivateEffectSpawn;
 
+        }
+
+        protected override void Disable(KEEvents ev)
+        {
+            OnDisable();
         }
 
         public void OnDisable()

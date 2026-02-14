@@ -27,7 +27,6 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
             public void SubscribeEvents()
             {
                 if (_eventsub) return;
-                Log.Debug("registering middle event");
                 Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
                 Exiled.Events.Handlers.Server.RoundEnded += OnEndingRound;
                 Exiled.Events.Handlers.Server.RestartingRound += OnRestartingRound;
@@ -50,21 +49,22 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
             private void OnEndingRound(RoundEndedEventArgs _)
             {
                 Log.Debug("ending round");
-                Deactivate();
+                DisableEvents(_activeEv);
             }
             private void OnRestartingRound()
             {
                 Log.Debug("restarting");
-                Deactivate();
+                DisableEvents(_activeEv);
             }
             private void OnRoundStarted()
             {
-                Timing.RunCoroutine(Timer());
+                TimeToActivate = new(0,UnityEngine.Random.Range(MinTimeToActivate.Minutes,MaxTimeToActivate.Minutes),0);
+                _handle = Timing.RunCoroutine(Timer());
             }
 
             private IEnumerator<float> Timer()
             {
-                if (UnityEngine.Random.Range(0f, 100f) < 37)
+                if (UnityEngine.Random.Range(0f, 100f) < Chance)
                 {
                     while (Round.InProgress)
                     {
@@ -81,34 +81,41 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         public abstract string Description { get; set; }
 
         public static float Chance = 37;
-        public static TimeSpan TimeToActivate = new(0, 15, 0);
+        public static TimeSpan MinTimeToActivate = new(0, 10, 0);
+        public static TimeSpan MaxTimeToActivate = new(0, 16, 0);
+        private static TimeSpan TimeToActivate;
 
         private static HashSet<MiddleEvent> _activeEv = new();
         private static MiddleEventHandler _handler = new();
 
 
+        public static IReadOnlyCollection<MiddleEvent> ActiveMiddleEvent => _activeEv;
 
+        public bool IsActive
+        {
+            get
+            {
+                return _activeEv.Contains(this);
+            }
+        }
+
+
+        /// <summary>
+        /// A list of all registered <see cref="MiddleEvent"/>
+        /// </summary>
+        public static IEnumerable<MiddleEvent> MiddleEventsList => List.Where(ev => ev is MiddleEvent).Cast<MiddleEvent>();
 
         protected sealed override void SubscribeEvents()
         {
             _handler.SubscribeEvents();
+            base.SubscribeEvents();
         }
         protected sealed override void UnsubscribeEvents()
         {
             _handler.UnsubscribeEvents();
-            Deactivate();
+            DisableEvents(_activeEv);
+            base.UnsubscribeEvents();
         }
-
-        protected virtual void SubscribeEvent()
-        {
-
-        }
-
-        protected virtual void UnsubscribeEvent()
-        {
-
-        }
-
 
 
 
@@ -121,41 +128,16 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
             if (_activeEv.Count > 0) return false;
 
             _activeEv = GetRandomEvent<MiddleEvent>().ToHashSet();
-            foreach(MiddleEvent ev in _activeEv)
-            {
-                if (ev is IStart start)
-                    ev.coroutineHandles.Add(Timing.RunCoroutine(start.Start()));
-                ev.SubscribeEvent();
-                _activeEvents.Add(ev);
-            }
+            EnableEvents(_activeEv);
             Show();
 
             return true;
         }
 
-        public static void Deactivate(MiddleEvent m)
+        protected override void Disable(KEEvents ev)
         {
-            if (!_activeEv.Contains(m)) throw new ArgumentException("middleevent cannot be deactivate : not activated");
-            m.UnsubscribeEvent();
-            if (m is IReversible r)
-                r.OnDisable();
-            _activeEv.Remove(m);
-            _activeEvents.Remove(m);
-        }
-
-        public static void Deactivate()
-        {
-            foreach (MiddleEvent ev in _activeEv)
-            {
-                ev.UnsubscribeEvent();
-                foreach(CoroutineHandle handle in ev.coroutineHandles)
-                {
-                    Timing.KillCoroutines(handle);
-                    if (ev is IReversible revert)
-                        revert.OnDisable();
-                }
-            }
-            _activeEv.Clear();
+            _activeEv.Remove(ev as MiddleEvent);
+            base.Disable(ev);
         }
 
         #region Show

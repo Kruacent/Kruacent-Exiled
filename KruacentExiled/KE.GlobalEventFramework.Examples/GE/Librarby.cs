@@ -23,7 +23,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override string Name { get; set; } = "Librarby";
         ///<inheritdoc/>
-        public override string Description { get; set; } = "Ne parlez pas trop fort sinon vous subirez les conséquences !";
+        public override string Description { get; } = "Ne parlez pas trop fort sinon vous subirez les conséquences !";
         ///<inheritdoc/>
         public override int WeightedChance => 1;
         private float MaxVolume = 0.7f;

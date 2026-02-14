@@ -1,7 +1,11 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Interfaces;
 using Exiled.CustomItems.API.Features;
+using Exiled.Events.EventArgs.Server;
+using Exiled.Events.Features;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
+using KE.GlobalEventFramework.GEFE.Events.EventArgs;
+using KE.GlobalEventFramework.GEFE.Events.Handlers;
 using KE.GlobalEventFramework.GEFE.Exceptions;
 using KE.Utils.API;
 using KE.Utils.API.Interfaces;
@@ -23,8 +27,8 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         public abstract string Name { get; set; }
         public virtual int WeightedChance { get; set; } = 1;
         public virtual uint[] IncompatibleEvents { get; set; } = new uint[0];
-        protected HashSet<CoroutineHandle> coroutineHandles { get; } = new();
-        protected static HashSet<KEEvents> _activeEvents = new();
+        protected HashSet<CoroutineHandle> CoroutineHandles { get; } = new();
+        protected static readonly HashSet<KEEvents> s_activeEvents = new();
 
         #endregion
 
@@ -34,6 +38,12 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
 
         public static HashSet<KEEvents> List => [.._idLookup.Values];
         #endregion
+        #region Events
+
+        //public static Event<EnablingEventArgs> Enabling = new();
+        //public static Event<EnabledEventArgs> Enabled = new();
+        //public static Event<EnabledEventArgs> Disabled = new();
+        #endregion
 
         #region Register
 
@@ -42,7 +52,11 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
             List<Assembly> assemblies = new();
             foreach(var plugin in Exiled.Loader.Loader.Plugins)
             {
-                assemblies.Add(plugin.Assembly);
+                if (!assemblies.Contains(plugin.Assembly) && plugin.Config.IsEnabled)
+                {
+                    assemblies.Add(plugin.Assembly);
+                }
+                    
             }
 
 
@@ -52,8 +66,6 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
                 try
                 {
                     ev.Register();
-                    
-
                 }
                 catch (FailedRegisterException e)
                 {
@@ -67,10 +79,9 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         }
         public virtual void Register()
         {
-
             if (_idLookup.ContainsKey(Id))
             {
-                throw new FailedRegisterException("already registered");
+                throw new FailedRegisterException($"id already used by {Get(Id).Name} ");
             }
             LogRegister();
             Init();
@@ -88,12 +99,17 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         {
             _idLookup.Remove(Id);
             _nameLookup.Remove(Name);
+            foreach(CoroutineHandle handle in CoroutineHandles)
+            {
+                Timing.KillCoroutines(handle);
+            }
             UnsubscribeEvents();
         }
 
 
         public static void DestroyAll()
         {
+
             foreach (KEEvents ev in List)
             {
                 ev.Destroy();
@@ -119,7 +135,6 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
 
         protected virtual void SubscribeEvents()
         {
-            
         }
 
 
@@ -128,6 +143,56 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
 
         }
 
+
+
+        protected static void EnableEvents(IEnumerable<KEEvents> events)
+        {
+            foreach (KEEvents ev in events)
+            {
+                Log.Info("enabling " + ev.Name);
+                EnablingEventArgs args = new(ev, true);
+                KEEventsHandler.OnEnabling(args);
+
+                if (!args.IsAllowed) continue;
+
+                if (ev is IEvent @event)
+                {
+                    @event.SubscribeEvent();
+                }
+
+
+                if (ev is IStart start)
+                    ev.CoroutineHandles.Add(Timing.RunCoroutine(start.Start()));
+
+                s_activeEvents.Add(ev);
+
+                KEEventsHandler.OnEnabled(new(ev));
+            }
+        }
+
+
+        protected static void DisableEvents(IEnumerable<KEEvents> events)
+        {
+            foreach (KEEvents ev in events.ToList())
+            {
+                Log.Info("disabling " + ev.Name);
+                if (ev is IEvent @event)
+                {
+                    @event.UnsubscribeEvent();
+                }
+                foreach (CoroutineHandle handle in ev.CoroutineHandles)
+                {
+                    Timing.KillCoroutines(handle);
+                }
+                ev.Disable(ev);
+                KEEventsHandler.OnDisabled(new(ev));
+            }
+        }
+
+        protected virtual void Disable(KEEvents ev)
+        {
+
+        }
 
 
         protected static IEnumerable<T> GetRandomEvent<T>(int numberEvent = 1) where T : KEEvents
@@ -179,7 +244,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         {
             if (string.IsNullOrEmpty(name))
             {
-                throw new System.Exception("name can't be null or empty");
+                throw new ArgumentException("name can't be null or empty");
             }
             globalEvent = uint.TryParse(name, out uint id) ? Get(id) : Get(name);
 
@@ -188,7 +253,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
 
         public static KEEvents Get(string name)
         {
-            return List.FirstOrDefault(ge => ge.Name == name);
+            return _nameLookup[name];
         }
 
         public static KEEvents Get(uint id)
@@ -196,9 +261,21 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
             return _idLookup.TryGetValue(id, out KEEvents globalEvent) ? globalEvent : null;
         }
 
+
+        public static T Get<T>(uint id) where T : KEEvents
+        {
+            return _idLookup.TryGetValue(id, out KEEvents globalEvent) && globalEvent is T ? globalEvent as T : null;
+        }
+
+        public static bool TryGet<T>(uint id, out T events) where T : KEEvents
+        {
+            events = Get<T>(id);
+            return events != null;
+        }
+
         public bool IsCompatible()
         {
-            foreach(KEEvents ev in _activeEvents)
+            foreach(KEEvents ev in s_activeEvents)
             {
                 foreach(int i in ev.IncompatibleEvents)
                 {

@@ -1,13 +1,14 @@
 ﻿using Exiled.API.Features;
 using MEC;
-using KE.GlobalEventFramework.GEFE.API.Features;
 using PlayerHandler = Exiled.Events.Handlers.Player;
 using Exiled.Events.EventArgs.Player;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
-
+using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Features.Hints;
+using KE.GlobalEventFramework.GEFE.API.Enums;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
@@ -21,9 +22,10 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override string Name { get; set; } = "Shuffle";
         ///<inheritdoc/>
-        public override string Description { get; set; } = "et ça fait roomba café dans le scp";
+        public override string Description { get; } = "et ça fait roomba café dans le scp";
         ///<inheritdoc/>
         public override int WeightedChance { get; set; } = 0;
+        public override ImpactLevel ImpactLevel => ImpactLevel.VeryHigh;
         private List<Player> players;
         private List<Vector3> pos;
         ///<inheritdoc/>

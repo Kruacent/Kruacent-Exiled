@@ -18,7 +18,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override string Name { get; set; } = "ItemRain";
         ///<inheritdoc/>
-        public override string Description { get; set; } = "Il pleut des items !!";
+        public override string Description { get; } = "Il pleut des items !!";
         ///<inheritdoc/>
         public override int WeightedChance => 1;
 

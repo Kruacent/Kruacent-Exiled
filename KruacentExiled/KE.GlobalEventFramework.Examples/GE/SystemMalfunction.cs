@@ -1,7 +1,5 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Doors;
-using KE.GlobalEventFramework.GEFE.API.Features;
-using KE.GlobalEventFramework.GEFE.API.Utils;
 using MEC;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +7,9 @@ using Interactables.Interobjects.DoorUtils;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
-using System;
-using Exiled.Events.EventArgs.Player;
-using System.Security.Policy;
-using PlayerRoles;
-using Utils.NonAllocLINQ;
-using KeycardPermissions = Exiled.API.Enums.KeycardPermissions;
-using Exiled.Events.EventArgs.Scp049;
-using KE.GlobalEventFramework.Examples.API.Feature;
-
+using KE.GlobalEventFramework.Examples.API.Feature.mf;
+using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Enums;
 namespace KE.GlobalEventFramework.Examples.GE
 {
     /// <summary>
@@ -31,12 +23,19 @@ namespace KE.GlobalEventFramework.Examples.GE
     /// </summary>
     public class SystemMalfunction : GlobalEvent, IStart, IEvent
     {
+
+
+        public override ImpactLevel ImpactLevel => ImpactLevel.VeryLow;
         /// <inheritdoc/>
         public override uint Id { get; set; } = 1041;
         /// <inheritdoc/>        
         public override string Name { get; set; } = "System Malfunction";
         /// <inheritdoc/>
-        public override string Description { get; set; } = "On dirait que les systèmes informatiques sont défaillants";
+        public override string Description { get; } = "System Malfunction";
+        public override string[] AltDescription => new string[]
+        {
+            "La facilité marche pas trop là"
+        };
         /// <inheritdoc/>
         public override int WeightedChance { get; set; } = 1;
         ///<inheritdoc/>
@@ -56,14 +55,14 @@ namespace KE.GlobalEventFramework.Examples.GE
             //MoreBlackOutNDoors();
             //Coroutine.LaunchCoroutine(EarlyNuke());
             
-            Coroutine.LaunchCoroutine(Malfunction.Tick());
+            Timing.RunCoroutine(Malfunction.Tick());
             CoroutineHandle handle;
 
             while(Round.InProgress){
                 Log.Debug("system malfunction");
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(200, 300));
                 List<IEnumerator<float>> l = new []{CheckpointMalfunction(),GateLockdown(),ElevatorLockdown()}.ToList();
-                handle = Coroutine.LaunchCoroutine(l[UnityEngine.Random.Range(0,3)]);
+                handle = Timing.RunCoroutine(l[UnityEngine.Random.Range(0,3)]);
                 yield return Timing.WaitUntilDone(handle);
             }
             yield return 0;

@@ -1,6 +1,6 @@
-﻿using KE.GlobalEventFramework.GEFE.API.Features;
-using System.Collections.Generic;
-
+﻿using KE.GlobalEventFramework.GEFE.API.Enums;
+using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Features.Hints;
 namespace KE.GlobalEventFramework.Examples.GE
 {
     /// <summary>
@@ -13,10 +13,11 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override string Name { get; set; } = "nothing";
         ///<inheritdoc/>
-        public override string Description { get; set; } = "y'a r";
+        public override string Description { get; } = "y'a r";
         ///<inheritdoc/>
         public override int WeightedChance => 3;
-        ///<inheritdoc/>
+        public override ImpactLevel ImpactLevel => ImpactLevel.VeryLow;
+
 
     }
 }
