@@ -41,20 +41,19 @@ namespace KE.Misc.Features.GamblingCoin
             }
 
             _cooldowns[player.UserId] = DateTime.UtcNow;
+            ushort itemSerial = player.CurrentItem.Serial;
 
 
-            if (!CoinUses.ContainsKey(player.CurrentItem.Serial))
+            if (!CoinUses.ContainsKey(itemSerial))
             {
-                CoinUses[player.CurrentItem.Serial] = UnityEngine.Random.Range(Config.GamblingCoinMinUse, Config.GamblingCoinMaxUse);
+                CoinUses[itemSerial] = UnityEngine.Random.Range(Config.GamblingCoinMinUse, Config.GamblingCoinMaxUse);
 
-                Log.Debug($"Registered new coin: {CoinUses[player.CurrentItem.Serial]} uses left.");
+                Log.Debug($"Registered new coin: {CoinUses[itemSerial]} uses left.");
             }
 
-            CoinUses[player.CurrentItem.Serial]--;
+            CoinUses[itemSerial]--;
 
-            int remainingUses = CoinUses[player.CurrentItem.Serial];
 
-            bool shouldBreak = remainingUses <= 0;
 
             EffectType type = ev.IsTails ? EffectType.Negative : EffectType.Positive;
 
@@ -75,18 +74,21 @@ namespace KE.Misc.Features.GamblingCoin
                 PlayerUtils.SendBroadcast(player, effect.Message);
             }
 
+            int remainingUses = CoinUses[itemSerial];
+            bool shouldBreak = remainingUses <= 0;
             if (shouldBreak)
             {
-                CoinUses.Remove(ev.Player.CurrentItem.Serial);
-                ev.Player.RemoveHeldItem();
-                ev.Player.Broadcast(5, "no more coin");
+                CoinUses.Remove(itemSerial);
+                player.RemoveHeldItem();
+                player.Broadcast(5, "no more coin");
                 item = null;
             }
-            GambledEventArgs ev2 = new(ev.Player, item, effect, remainingUses, shouldBreak);
+            GambledEventArgs ev2 = new(player, item, effect, remainingUses, shouldBreak);
 
             Events.Handlers.GamblingCoins.OnGambled(ev2);
 
-            CoinUses[ev.Player.CurrentItem.Serial] = ev2.RemainingUses;
+            CoinUses[itemSerial] = ev2.RemainingUses;
         }
+
     }
 }
