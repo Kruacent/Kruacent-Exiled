@@ -10,9 +10,23 @@ namespace KE.CustomRoles.Abilities
     public class SetPosition : KEAbilities, ICustomIcon
     {
         public override string Name { get; } = "SetPosition";
-        public override string PublicName { get; } = "Set Position";
-
-        public override string Description { get;  } = "Select the current position for another ability";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Set Position",
+                    [TranslationKeyDesc] = "Select the current position for another ability",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Selection de position",
+                    [TranslationKeyDesc] = "Selectionne la position pour une autre abilité",
+                }
+            };
+        }
+        
         public override float Cooldown { get; } = 5f;
 
         private static Dictionary<Player, Vector3> SelectedTarget = new();

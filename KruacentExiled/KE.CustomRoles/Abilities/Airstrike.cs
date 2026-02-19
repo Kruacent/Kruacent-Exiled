@@ -21,9 +21,23 @@ namespace KE.CustomRoles.Abilities
     public class Airstrike : KEAbilities, ICustomIcon
     {
         public override string Name { get;  } = "AirStrike";
-        public override string PublicName { get;  } = "Airstrike";
 
-        public override string Description { get;  } = "Don't overuse it or your co-op will not be happy";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Airstrike",
+                    [TranslationKeyDesc] = "Don't overuse it or your co-op will not be happy",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Bombardement",
+                    [TranslationKeyDesc] = "Ne l'utilise pas trop sinon ton coop sera pas content",
+                }
+            };
+        }
         public override float Cooldown { get; } = 60f;
 
         public float height = 1;
@@ -32,16 +46,16 @@ namespace KE.CustomRoles.Abilities
 
         protected override bool AbilityUsed(Player player)
         {
-            if(!SetPosition.TryGetTarget(player, out Vector3 target))
+            if (!SetPosition.TryGetTarget(player, out Vector3 target))
             {
-                MainPlugin.ShowEffectHint(player, "no target selected");
+                ShowEffectHint(player, "TeleportationNoTarget");
                 return false;
             }
 
             Physics.Linecast(target, target + height * Vector3.up, out RaycastHit hit);
             if (hit.collider != null)
             {
-                Log.Info($"hit something [{hit.collider}]");
+                Log.Debug($"hit something [{hit.collider}]");
                 return false;
             }
             

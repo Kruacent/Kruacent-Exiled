@@ -20,9 +20,24 @@ namespace KE.CustomRoles.Abilities
     public class ForceOpen : KEAbilities, ICustomIcon
     {
         public override string Name { get;  } = "ForceOpen";
-        public override string PublicName { get; } = "Force open";
-
-        public override string Description { get; } = "Force open a door";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Force open",
+                    [TranslationKeyDesc] = "Force open a door",
+                    ["ForceOpenFail"] = "You failed opening the door and lost %HP% HP!",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Forcer une porte",
+                    [TranslationKeyDesc] = "Force une porte (grosse description)",
+                    ["ForceOpenFail"] = "Tu as raté d'ouvrir la porte et a perdu %HP% HP!",
+                }
+            };
+        }
         public Utils.API.GifAnimator.TextImage IconName => MainPlugin.Instance.icons["ForceOpen"];
         public override float Cooldown { get;  } = 30;
         private Dictionary<Player, DateTime> abilityActivated = new();
@@ -87,13 +102,12 @@ namespace KE.CustomRoles.Abilities
                 {
                     ev.IsAllowed = true;
                 }
-
-
-                
             }
             else
             {
-                MainPlugin.ShowEffectHint(player, $"T'as échoué d'ouvrir la porte et t'as perdu {damage} HP !");
+
+                string text = GetTranslation(player, "ForceOpenFail").Replace("%HP%",damage.ToString());
+                ShowEffectHint(player, text,0f);
                 player.Hurt(damage, "Door too stronk");
             }
 

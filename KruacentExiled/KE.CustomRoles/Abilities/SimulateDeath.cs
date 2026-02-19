@@ -14,9 +14,23 @@ namespace KE.CustomRoles.Abilities
     public class SimulateDeath : KEAbilities, ICustomIcon
     {
         public override string Name { get; } = "SimulateDeath";
-        public override string PublicName { get; } = "Simulate Death";
 
-        public override string Description { get; } = "T'es talent de mime te permettent de simuler la mort.";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Play dead",
+                    [TranslationKeyDesc] = "Simulate your own death",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Faire le mort",
+                    [TranslationKeyDesc] = "T'es talent de mime te permettent de simuler la mort",
+                }
+            };
+        }
 
         public int Duration = 10;
         public Utils.API.GifAnimator.TextImage IconName => MainPlugin.Instance.icons[Name];

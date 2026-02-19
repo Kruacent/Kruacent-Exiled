@@ -36,7 +36,7 @@ namespace KE.CustomRoles.Abilities.RedMist
         {
             if (Hub is null || !Hub.IsAlive())
             {
-                Log.Info(Hub?.nicknameSync.DisplayName +" is dead");
+                Log.Debug(Hub?.nicknameSync.DisplayName +" is dead");
                 Destroy(gameObject);
             }
 

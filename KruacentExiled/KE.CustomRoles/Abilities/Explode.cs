@@ -17,9 +17,24 @@ namespace KE.CustomRoles.Abilities
     public class Explode : KEAbilities, ICustomIcon
     {
         public override string Name { get; } = "Explode";
-        public override string PublicName { get; } = "Explode";
 
-        public override string Description { get; } = "Tu as une ceinture d'explosif autour de toi, fait attention n'appuie pas sur le bouton";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Explode",
+                    [TranslationKeyDesc] = "You got an explosive belt",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Explosion",
+                    [TranslationKeyDesc] = "Tu as une ceinture d'explosif autour de toi",
+                }
+            };
+        }
+
 
         public override float Cooldown { get; } = 4*60f;
 
@@ -59,6 +74,8 @@ namespace KE.CustomRoles.Abilities
             if (!Grenades.Contains(obj.ExplosionGrenade)) return;
 
             obj.Damage = 75;
+
+            Log.Debug("explode with "+ obj.Damage);
 
         }
     }

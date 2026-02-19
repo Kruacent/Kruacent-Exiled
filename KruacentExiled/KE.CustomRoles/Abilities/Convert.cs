@@ -19,9 +19,31 @@ namespace KE.CustomRoles.Abilities
     public class Convert : KEAbilities, ICustomIcon
     {
         public override string Name { get;  } = "Convert";
-        public override string PublicName { get; } = "Convert";
 
-        public override string Description { get; } = "Convert a zombie to your team";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Convert",
+                    [TranslationKeyDesc] = "Convert a zombie to your team",
+                    ["ConvertNobody"] = "But nobody's here",
+                    ["ConvertSameTeam"] = "I know you don't like them, but they're in your team",
+                    ["ConvertNonZombie"] = "That ain't a zombie",
+                    ["ConvertSuccess"] = "New friend acquired!",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Convert",
+                    [TranslationKeyDesc] = "Converti un zombie à la bonne foi",
+                    ["ConvertNobody"] = "Mais personne n'est venu",
+                    ["ConvertSameTeam"] = "Je sais que tu l'aimes pas mais il est bien avec toi",
+                    ["ConvertNonZombie"] = "C'est pas un zombie ça",
+                    ["ConvertSuccess"] = "Ami obtenu!",
+                }
+            };
+        }
 
         public override float Cooldown { get;  } = 10*60f;
 

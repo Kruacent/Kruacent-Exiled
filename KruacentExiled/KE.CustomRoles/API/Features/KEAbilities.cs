@@ -11,6 +11,7 @@ using KE.CustomRoles.Settings;
 using KE.Utils.API;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
+using KE.Utils.API.Translations;
 using MEC;
 using PlayerRoles.FirstPersonControl.Thirdperson;
 using System;
@@ -34,8 +35,9 @@ namespace KE.CustomRoles.API.Features
 
         #region abstract stuff
         public abstract string Name { get; }
-        public abstract string PublicName { get; }
-        public abstract string Description { get; }
+
+        public string TranslationKeyName => Name+"_"+ AbilityNameKey;
+        public string TranslationKeyDesc => Name+"_"+ AbilityDescriptionKey;
 
         /// <summary>
         /// in seconds
@@ -47,20 +49,37 @@ namespace KE.CustomRoles.API.Features
         private static Dictionary<System.Type, KEAbilities> TypeToAbility { get; } = new();
         private static Dictionary<string, KEAbilities> NameToAbility { get; } = new();
         public HashSet<Player> Players { get; } = new HashSet<Player>();
-        public HashSet<Player> Selected { get; } = new();
+        public IReadOnlyCollection<Player> Selected => selected;
+        private HashSet<Player> selected = new();
 
 
 
         public static Dictionary<Player, List<KEAbilities>> PlayersAbility { get;} = new();
 
 
-        
-        
 
+
+        protected const string AbilityNameKey = "Name";
+        protected const string AbilityDescriptionKey = "Desc";
+
+        public const string AbilityTranslationId = "Ability";
         protected KEAbilities()
         {
             
         }
+
+
+        private bool activated = false;
+        private void OneTimeInit()
+        {
+            if (activated) return;
+            TranslationHub.Add(AbilityTranslationId, "en", "AbilityReady", "READY");
+            TranslationHub.Add(AbilityTranslationId, "fr", "AbilityReady", "PRÊT");
+
+
+            activated = true;
+        }
+
         public void Init()
         {
             if (NameToAbility.ContainsKey(Name))
@@ -70,11 +89,42 @@ namespace KE.CustomRoles.API.Features
                 return;
             }
 
+
             TypeToAbility.Add(GetType(), this);
             NameToAbility.Add(Name, this);
+
+            OneTimeInit();
             InternalSubscribeEvent();
+
+            var translate = SetTranslation();
+
+
+            TranslationHub.Add(AbilityTranslationId, translate);
         }
 
+
+        protected abstract Dictionary<string, Dictionary<string, string>> SetTranslation();
+
+        public static string GetTranslation(Player player, string key)
+        {
+            return TranslationHub.Get(player, AbilityTranslationId, key);
+        }
+
+
+        public static void ShowEffectHint(Player player,string translationKey)
+        {
+
+            string text = GetTranslation(player, translationKey);
+
+            float delay = MainPlugin.SettingHandler.GetTime(player);
+            DisplayHandler.Instance.AddHint(MainPlugin.CREffect, player, text, delay);
+        }
+
+        public static void ShowEffectHint(Player player, string text, float delay)
+        {
+            delay = MainPlugin.SettingHandler.GetTime(player);
+            DisplayHandler.Instance.AddHint(MainPlugin.CREffect, player, text, delay);
+        }
         public void Destroy()
         {
             InternalUnsubcribeEvent();
@@ -132,10 +182,10 @@ namespace KE.CustomRoles.API.Features
             StringBuilder sb = StringBuilderPool.Pool.Get();
 
             sb.Append("<b>");
-            sb.Append(PublicName);
+            sb.Append(GetTranslation(player, TranslationKeyName));
             sb.Append("</b>");
             sb.AppendLine();
-            sb.Append(Description);
+            sb.Append(GetTranslation(player, TranslationKeyDesc));
 
             
 
@@ -146,7 +196,7 @@ namespace KE.CustomRoles.API.Features
 
         public void SelectAbility(Player player, bool hide = false)
         {
-            if (Selected.Add(player))
+            if (selected.Add(player))
             {
                 Log.Debug($"player {player.Nickname} selected ability {this}");
                 foreach (KEAbilities abilities in Registered.Where(a => a != this && a.Players.Contains(player)))
@@ -164,7 +214,7 @@ namespace KE.CustomRoles.API.Features
         public void UnselectAbility(Player player)
         {
             Log.Debug($"player {player.Nickname} unselected ability {this}");
-            Selected.Remove(player);
+            selected.Remove(player);
         }
         
         public void RemoveAbility(Player player)
@@ -284,7 +334,7 @@ namespace KE.CustomRoles.API.Features
 
             foreach(KEAbilities ability in PlayersAbility[player])
             {
-                ability.Selected.Remove(player);
+                ability.selected.Remove(player);
             }
 
         }
@@ -426,18 +476,22 @@ namespace KE.CustomRoles.API.Features
         #region gui
 
 
-        public const string ReadyText = "[READY]";
 
 
         protected virtual void Gui(StringBuilder sb,Player player)
         {
-            sb.Append(PublicName);
+            sb.Append(GetTranslation(player,TranslationKeyName));
             sb.Append(" ");
 
 
             if (CanUse(player, out var output))
             {
-                sb.Append(ReadyText);
+
+
+
+                sb.Append("[");
+                sb.Append(GetTranslation(player, "AbilityReady"));
+                sb.Append("]");
             }
             else
             {
@@ -568,11 +622,7 @@ namespace KE.CustomRoles.API.Features
         }
 
 
-        public static void ShowEffectHint(Player player, string text)
-        {
-            float delay = MainPlugin.SettingHandler.GetTime(player);
-            DisplayHandler.Instance.AddHint(MainPlugin.CREffect, player, text, delay);
-        }
+
 
 
         public static void ShowAbilityHint(Player player, string text)

@@ -11,20 +11,28 @@ namespace KE.CustomRoles.Abilities.RedMist
     public class ToggleEGO : KEAbilities
     {
         public override string Name { get; } = "ToggleEGO";
-        public override string PublicName { get; } = "Toggle E.G.O.";
-
-        public override string Description { get; } = "Manifest your E.G.O, gain powerful buff but rapid health drain.\nCan be deactivated anytime";
-
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Toggle E.G.O.",
+                    [TranslationKeyDesc] = "Manifest your E.G.O, gain powerful buff but rapid health drain.\nCan be deactivated anytime",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "todo",
+                    [TranslationKeyDesc] = "todo",
+                }
+            };
+        }
         public override float Cooldown { get; } = 0f;
 
 
 
         protected override bool AbilityUsed(Player player)
         {
-
-
-
-
             if(!player.GameObject.TryGetComponent<EGO>(out var ego))
             {
                 player.GameObject.AddComponent<EGO>();

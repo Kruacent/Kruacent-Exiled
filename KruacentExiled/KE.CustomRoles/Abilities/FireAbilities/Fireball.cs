@@ -19,10 +19,23 @@ namespace KE.CustomRoles.Abilities.FireAbilities
     public class Fireball : FireAbilityBase
     {
         public override string Name { get; } = "Fireball";
-        public override string PublicName { get; } = "Fireball";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Fireball",
+                    [TranslationKeyDesc] = "I cast Fireball",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Boule de feur",
+                    [TranslationKeyDesc] = "Attends j'ai fait une faute là non?",
+                }
+            };
+        }
         public override int Cost => 10;
-
-        public override string Description { get; } = "I cast Fireball";
 
         public override float Cooldown { get; } = 0f;
 

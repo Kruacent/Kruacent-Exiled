@@ -13,14 +13,28 @@ namespace KE.CustomRoles.Abilities
     public class Thief : KEAbilities, ICustomIcon
     {
         public override string Name { get; } = "Thief";
-        public override string PublicName { get; } = "Thief";
 
-        public override string Description { get; } = "Avec 1548 heures de jeu sur Thief Simulator fallait s'y attendre un peu.";
 
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Thief",
+                    [TranslationKeyDesc] = "Steal a random item from a player in the same room",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Voler",
+                    [TranslationKeyDesc] = "Vole un object aléatoire à un joueur dans la même pièce",
+                }
+            };
+        }
 
         public override float Cooldown { get; } = 120f;
 
-        public TextImage IconName => MainPlugin.Instance.icons["Thief"];
+        public TextImage IconName => MainPlugin.Instance.icons[Name];
 
         protected override bool AbilityUsed(Player player)
         {

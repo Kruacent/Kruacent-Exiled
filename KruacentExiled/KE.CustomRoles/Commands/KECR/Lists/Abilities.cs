@@ -1,4 +1,5 @@
 ﻿using CommandSystem;
+using Exiled.API.Features;
 using Exiled.API.Features.Pools;
 using KE.CustomRoles.API.Features;
 using System;
@@ -24,15 +25,11 @@ namespace KE.CustomRoles.Commands.KECR.Lists
                 response = "no ability found";
                 return false;
             }
-
             StringBuilder sb = StringBuilderPool.Pool.Get();
             foreach(KEAbilities ability in KEAbilities.Registered.OrderBy(a => a.Name))
             {
                 sb.Append('[')
                     .Append(ability.Name)
-                    .Append(" (")
-                    .Append(ability.Description)
-                    .Append(')')
                     .AppendLine("]");
             }
 
