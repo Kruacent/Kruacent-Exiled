@@ -82,6 +82,8 @@ namespace KE.Misc.Features.LastHuman
                     if (hint is null || hint.Hide)
                     {
 
+                        string translatedZone = lastTarget.Zone.GetTranslatedName(TranslationHub.GetLang(player));
+
                         string msg = string.Empty;
                         if (player == lastTarget)
                         {
@@ -89,7 +91,8 @@ namespace KE.Misc.Features.LastHuman
                         }
                         else if(!player.IsDead)
                         {
-                            msg = MainPlugin.GetTranslation(player, TextSCP.Replace("%Zone%", lastTarget.Zone.GetName()));
+                            
+                            msg = MainPlugin.GetTranslation(player, TextSCP).Replace("%Zone%", translatedZone);
                         }
 
 
