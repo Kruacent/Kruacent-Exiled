@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
+using KE.Utils.API.KETextToy;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,24 +16,37 @@ namespace KE.CustomRoles.Abilities
         public override float Cooldown { get; } = 5f;
 
         private static Dictionary<Player, Vector3> SelectedTarget = new();
+        private static Dictionary<Player, FollowingTextToy> SelectedTextToys = new();
 
         public Utils.API.GifAnimator.TextImage IconName => MainPlugin.Instance.icons[Name];
 
         protected override bool AbilityUsed(Player player)
         {
-            
+
+            Vector3 position = player.Position;
 
 
-            if (SelectedTarget.ContainsKey(player))
+            SelectedTarget[player] = position;
+
+
+            if (SelectedTextToys.ContainsKey(player))
             {
-                SelectedTarget[player] = player.Position;
-            }
-            else
-            {
-                SelectedTarget.Add(player, player.Position);
+                SelectedTextToys[player].Destroy();
             }
 
-            Log.Info("set position at " +player.Position);
+
+
+            SelectedTextToys[player] = new FollowingTextToy([player], position, Quaternion.identity, Vector3.one);
+
+            FollowingTextToy followingTextToy = SelectedTextToys[player];
+
+
+
+            followingTextToy.OnlyMoveY = true;
+            followingTextToy.Toy.TextFormat = "↓";
+
+
+            Log.Debug("set position at " + position);
             return base.AbilityUsed(player);
 
         }
@@ -40,7 +54,6 @@ namespace KE.CustomRoles.Abilities
         public static bool TryGetTarget(Player p, out Vector3 target)
         {
             return SelectedTarget.TryGetValue(p, out target);
-
         }
 
 

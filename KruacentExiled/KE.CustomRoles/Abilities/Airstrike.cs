@@ -50,7 +50,7 @@ namespace KE.CustomRoles.Abilities
             ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE,player);
             grenade.ScpDamageMultiplier = 1;
             grenade.FuseTime = 10;
-            Timing.CallDelayed(5, () =>
+            Timing.CallDelayed(1.5f, () =>
             {
                 Projectile gre = grenade.SpawnActive(target + (height - .5f) * Vector3.up);
                 //explode on collision

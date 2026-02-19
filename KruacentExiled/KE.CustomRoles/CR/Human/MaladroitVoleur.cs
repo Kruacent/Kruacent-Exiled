@@ -16,9 +16,8 @@ using Utils.NonAllocLINQ;
 
 namespace KE.CustomRoles.CR.Human
 {
-    public class Maladroit : GlobalCustomRole, IColor
+    public class MaladroitVoleur : GlobalCustomRole, IColor
     {
-        private static Dictionary<Player, CoroutineHandle> _coroutines = new();
 
         public override SideEnum Side { get; set; } = SideEnum.Human;
         public override string Description { get; set; } = "Fait attention à \"tes\" items !";
@@ -33,34 +32,30 @@ namespace KE.CustomRoles.CR.Human
         {
             "Thief"
         };
+
+        private CoroutineHandle coroutine;
         protected override void RoleAdded(Player player)
         {
-            _coroutines.Add(player, Timing.RunCoroutine(ThrowingItem(player)));
+            Timing.RunCoroutineSingleton(ThrowingItem(), coroutine, SingletonBehavior.Abort);
         }
 
-        protected override void RoleRemoved(Player player)
+
+        private IEnumerator<float> ThrowingItem()
         {
-            if (!_coroutines.ContainsKey(player)) return;
-            Timing.KillCoroutines(_coroutines[player]);
-            _coroutines.Remove(player);
-        }
 
-        private IEnumerator<float> ThrowingItem(Player p)
-        {            
-
-
-
-            while (p.IsAlive)
+            while (true)
             {
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(90f, 120f));
 
-                if(UnityEngine.Random.Range(0f, 100f) > .5f)
+                foreach(Player player in TrackedPlayers)
                 {
-                    p.DropHeldItem();
+                    if (UnityEngine.Random.Range(0f, 100f) > .5f)
+                    {
+                        player.DropHeldItem();
+                    }
                 }
-                
 
-                
+
             }
         }
     }
