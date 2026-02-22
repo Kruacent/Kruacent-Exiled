@@ -8,6 +8,7 @@ using HarmonyLib;
 using KE.Map.Heavy;
 using KE.Map.Heavy.GamblingZone;
 using KE.Map.Others.BlackoutNDoor.Handlers;
+using KE.Map.Surface.ElevatorGateA;
 using KE.Utils.API.KETextToy;
 using MEC;
 using PlayerRoles;
@@ -61,6 +62,7 @@ namespace KE.Map
         {
             PrefabManager.RegisterPrefabs();
             BulkDoor049.Create();
+            CustomElevatorGateA.Create();
         }
 
         private void OnRoundStarted()
