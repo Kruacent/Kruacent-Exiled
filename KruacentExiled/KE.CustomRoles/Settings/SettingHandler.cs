@@ -36,24 +36,27 @@ namespace KE.CustomRoles.Settings
 
         public static SettingHandler Instance { get; private set; }
         private List<SettingBase> settings;
-        public readonly SettingsPage page;
-        public readonly SettingsPage hintpage = null;
+        //public readonly SettingsPage page;
+        //public readonly SettingsPage hintpage = null;
         public const string baseArrow = "<--";
         public SettingHandler()
         {
             Instance = this;
+            HeaderSetting header = new HeaderSetting(_idHeader, "Custom Roles", padding: true);
+            SettingBase arrow = SettingBase.Create(new SSPlaintextSetting(_idArrow, "Personalize the arrow next to the selected ability", baseArrow, 16, TMP_InputField.ContentType.Standard, string.Empty, 0));
+            arrow.Header = header;
             settings = new List<SettingBase>()
             {
-                new HeaderSetting(_idHeader,"Custom Roles",padding:true),
-                
-                new TwoButtonsSetting(_idDesc,"Descriptions","Disabled","Enabled",true,"hide/show the description the Custom Role "),
-                new SliderSetting(_idTimeCustomRole,"Time shown",0,30,20),
-                new SliderSetting(_idTimeAbilityDesc,"Ability Description time shown",0,30,20),
-                new KeybindSetting(_idUp, "Select up", UnityEngine.KeyCode.None),
-                new KeybindSetting(_idDown, "Select down", UnityEngine.KeyCode.None),
-                new KeybindSetting(_idSelect, "Use selected ability", UnityEngine.KeyCode.None),
-                SettingBase.Create(new SSPlaintextSetting(_idArrow, "Personalize the arrow next to the selected ability", baseArrow, 16, TMP_InputField.ContentType.Standard, string.Empty, 0)),
-                new ButtonSetting(_idReshowCustomRole, "Reshow Custom role description","click")
+                header,
+
+                new TwoButtonsSetting(_idDesc,"Descriptions","Disabled","Enabled",true,"hide/show the description the Custom Role ",header:header),
+                new SliderSetting(_idTimeCustomRole,"Time shown",0,30,20,header:header),
+                new SliderSetting(_idTimeAbilityDesc,"Ability Description time shown",0,30,20,header:header),
+                new KeybindSetting(_idUp, "Select up", UnityEngine.KeyCode.None,header:header),
+                new KeybindSetting(_idDown, "Select down", UnityEngine.KeyCode.None,header:header),
+                new KeybindSetting(_idSelect, "Use selected ability", UnityEngine.KeyCode.None,header:header),
+                arrow,
+                new ButtonSetting(_idReshowCustomRole, "Reshow Custom role description","click",header:header)
             };
             
 
@@ -76,9 +79,6 @@ namespace KE.CustomRoles.Settings
                 
 
             }
-
-
-
             SettingBase.Register(settings);
 
             

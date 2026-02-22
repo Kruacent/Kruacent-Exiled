@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
 using KE.Utils.API.Features.SCPs;
+using KE.Utils.API.Settings;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,14 +28,17 @@ namespace KE.CustomRoles.API.Features
                 return;
             }
             base.Init();
+            var list = new List<SettingBase>();
+
             if (header is null)
             {
                 header = new(HeaderId, "SCP Spawn Preferences",string.Empty,true);
-                SettingBase.Register([header]);
+                list.Add(header);
             }
 
             sliderSetting= new SliderSetting(SettingId, GetTranslation("en", TranslationKeyName), MinValue, MaxValue, DefaultValue, true);
-            SettingBase.Register([sliderSetting]);
+            list.Add(sliderSetting);
+            SettingBase.Register(list);
             
         }
 
