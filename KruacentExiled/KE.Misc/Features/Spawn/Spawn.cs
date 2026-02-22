@@ -5,6 +5,7 @@ using KE.CustomRoles.API.Features;
 using MEC;
 using PlayerRoles;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,6 +21,9 @@ namespace KE.Misc.Features.Spawn
             { "049", RoleTypeId.Scp049 },
             { "939", RoleTypeId.Scp939 },
         };
+
+
+        public const int baseValue = 1;
 
         private Dictionary<string,CustomSCP> SelectableCustomSCPs => CustomSCP.All.ToDictionary(cs =>cs.Name, cs => cs);
 
@@ -75,12 +79,32 @@ namespace KE.Misc.Features.Spawn
 
             foreach(var kvp in baseRole)
             {
-                idChance.Add(kvp.Key, player.ScpPreferences.Preferences[kvp.Value] + 5);
+                idChance.Add(kvp.Key, player.ScpPreferences.Preferences[kvp.Value] + 5 + baseValue);
             }
 
             foreach (CustomSCP customSCP in SelectableCustomSCPs.Values)
             {
-                idChance.Add(customSCP.Name, customSCP.GetPreferences(player) + 5);
+                if(customSCP.SpawnChance > 0)
+                {
+                    idChance.Add(customSCP.Name, customSCP.GetPreferences(player) + 5 + baseValue);
+                }
+            }
+
+            int nbNotZero = 0;
+            string scpNotZero = string.Empty;
+
+            foreach(var kvp in idChance)
+            {
+                if(kvp.Value != 0 + baseValue)
+                {
+                    nbNotZero++;
+                    scpNotZero = kvp.Key;
+                }
+            }
+
+            if(nbNotZero == 1)
+            {
+                idChance[scpNotZero] = 0;
             }
 
 
