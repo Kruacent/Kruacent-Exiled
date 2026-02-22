@@ -12,11 +12,12 @@ namespace KE.Items.Items.ShieldBelt
 {
     public class ShieldBeltStat : MonoBehaviour
     {
-        public const float MaxCharge = 110;
+        public const float MaxCharge = 220;
         public const float RechargeRatePerS = 13;
         public const float TimeBroken = 50;
         public const float Base = 20;
-        public static readonly Vector3 MaxSize = Vector3.one * 2;
+        public static readonly float MaxSize = 2;
+        public static readonly float MinSize = 1.5f;
 
         public float CurrentCharge => currentCharge;
 
@@ -28,7 +29,6 @@ namespace KE.Items.Items.ShieldBelt
         private Primitive primitive;
         public void RechargeTick()
         {
-
 
             if (timeRemaining <= 0 && recharging)
             {
@@ -44,9 +44,8 @@ namespace KE.Items.Items.ShieldBelt
 
             if (primitive is not null)
             {
-                float percent = currentCharge / MaxCharge;
-
-                primitive.Scale = percent * MaxSize;
+                float percent = Mathf.Clamp01(currentCharge / MaxCharge);
+                primitive.Scale = Mathf.Lerp(MinSize, MaxSize, percent)*Vector3.one;
 
             }
 
@@ -144,7 +143,7 @@ namespace KE.Items.Items.ShieldBelt
             prim.Visible = true;
             prim.Transform.parent = player.ReferenceHub.transform;
             prim.Transform.localPosition = Vector3.zero;
-            prim.Scale = MaxSize;
+            prim.Scale = MaxSize*Vector3.one;
             prim.Color = new Color32(50, 50, 50, 50);
             prim.MovementSmoothing = 0;
             prim.Spawn();
@@ -161,6 +160,7 @@ namespace KE.Items.Items.ShieldBelt
             currentCharge = Base;
             timeRemaining = 0;
         }
+
 
         public void Destroy()
         {

@@ -20,10 +20,10 @@ namespace KE.Items.Items.PickupModels
 
         protected override void CreateModel(Transform parent)
         {
-            Primitive manche = CreatePrimitive(parent,PrimitiveType.Cylinder,new(0,.006f,0),Quaternion.identity, mancheScale, colorManche);
-            Primitive manche2 = CreatePrimitive(parent,PrimitiveType.Cylinder,new(0,.9463f,0),Quaternion.identity, new(0.45f,0.05f,0.45f), colorExplosif);
-            Primitive explosif1 = CreatePrimitive(parent,PrimitiveType.Cylinder,new(0,1.2113f,0),Quaternion.identity, new(0.7f,0.2274f,0.7f), colorExplosif);
-            Primitive explosif2 = CreatePrimitive(parent,PrimitiveType.Cylinder,new(0,1,0),Quaternion.identity, new(0.8f,0.02f,0.8f), colorExplosif);
+            var manche = CreatePrimitive(parent,PrimitiveType.Cylinder,new(0,.006f,0),Quaternion.identity, mancheScale, colorManche);
+            var manche2 = CreatePrimitive(parent,PrimitiveType.Cylinder,new(0,.9463f,0),Quaternion.identity, new(0.45f,0.05f,0.45f), colorExplosif);
+            var explosif1 = CreatePrimitive(parent,PrimitiveType.Cylinder,new(0,1.2113f,0),Quaternion.identity, new(0.7f,0.2274f,0.7f), colorExplosif);
+            var explosif2 = CreatePrimitive(parent,PrimitiveType.Cylinder,new(0,1,0),Quaternion.identity, new(0.8f,0.02f,0.8f), colorExplosif);
         }
     }
 }

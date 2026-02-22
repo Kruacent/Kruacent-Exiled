@@ -72,7 +72,6 @@ namespace KE.Items.API.Core.Models
             if (!Check(pickup)) return;
 
             Transform parent = CreateParent(pickup).Transform;
-            Log.Info(parent);
             CreateModel(parent);
 
         }

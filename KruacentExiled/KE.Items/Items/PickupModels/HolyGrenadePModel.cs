@@ -27,18 +27,18 @@ namespace KE.Items.Items.PickupModels
         {
 
 
-            Primitive sphere = CreatePrimitive(parent, PrimitiveType.Sphere, Vector3.zero, Quaternion.identity, Vector3.one, white);
+            var sphere = CreatePrimitive(parent, PrimitiveType.Sphere, Vector3.zero, Quaternion.identity, Vector3.one, white);
 
-            Primitive gem = CreatePrimitive(parent, PrimitiveType.Sphere, new(0,0.8f,0), Quaternion.identity, new(.15f,.1f,.1f), red);
+            var gem = CreatePrimitive(parent, PrimitiveType.Sphere, new(0,0.8f,0), Quaternion.identity, new(.15f,.1f,.1f), red);
 
-            Primitive crossV = CreatePrimitive(parent, PrimitiveType.Cube, new(0, 0.74f, 0), Quaternion.identity, new(.1f, .5f, .1f), white);
-            Primitive crossH = CreatePrimitive(parent, PrimitiveType.Cube, new(0, 0.8f, 0), Quaternion.identity, new(.1f, .1f, .37f), white);
+            var crossV = CreatePrimitive(parent, PrimitiveType.Cube, new(0, 0.74f, 0), Quaternion.identity, new(.1f, .5f, .1f), white);
+            var crossH = CreatePrimitive(parent, PrimitiveType.Cube, new(0, 0.8f, 0), Quaternion.identity, new(.1f, .1f, .37f), white);
 
-            Primitive ring1 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.Euler(90,0,0), new(1.05f, .05f, 1.05f), gold);
-            Primitive ring2 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.identity, new(1.05f, .05f, 1.05f), gold);
-            Primitive ring3 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.Euler(90, 90, 0), new(1.05f, .05f, 1.05f), gold);
+            var ring1 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.Euler(90,0,0), new(1.05f, .05f, 1.05f), gold);
+            var ring2 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.identity, new(1.05f, .05f, 1.05f), gold);
+            var ring3 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.Euler(90, 90, 0), new(1.05f, .05f, 1.05f), gold);
 
-            Primitive littleBase = CreatePrimitive(parent, PrimitiveType.Cylinder, new(0, 0.5f, 0), Quaternion.identity, new(.3f, .05f, .3f), gold);
+            var littleBase = CreatePrimitive(parent, PrimitiveType.Cylinder, new(0, 0.5f, 0), Quaternion.identity, new(.3f, .05f, .3f), gold);
 
         }
     }

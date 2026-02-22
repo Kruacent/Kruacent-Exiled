@@ -20,7 +20,7 @@ namespace KE.Items.Items.PickupModels
 
 
 
-            Primitive land = CreatePrimitive(parent, PrimitiveType.Cube, Vector3.up * -0.035f,Quaternion.identity,Vector3.one,new Color32());
+            Primitive land = Primitive.Get(CreatePrimitive(parent, PrimitiveType.Cube, Vector3.up * -0.035f,Quaternion.identity,Vector3.one,new Color32()));
             land.Flags = AdminToys.PrimitiveFlags.None;
 
 

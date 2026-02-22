@@ -27,19 +27,19 @@ namespace KE.Items.Items.PickupModels
         protected override void CreateModel(Transform parent)
         {
 
-            Primitive glassPrim = CreatePrimitive(parent, PrimitiveType.Cube, Vector3.zero, Quaternion.identity, glass, glassColor);
+            var glassPrim = CreatePrimitive(parent, PrimitiveType.Cube, Vector3.zero, Quaternion.identity, glass, glassColor);
             //new PrimitiveBlueprint(PrimitiveType.Cube, Vector3.zero, Quaternion.identity, glassColor, glass),
 
-            Primitive topSupport = CreatePrimitive(parent, PrimitiveType.Cube, Vector3.up, Quaternion.identity, support, colorSupport);
-            Primitive bottomSupport = CreatePrimitive(parent, PrimitiveType.Cube, Vector3.down, Quaternion.identity, support, colorSupport);
+            var topSupport = CreatePrimitive(parent, PrimitiveType.Cube, Vector3.up, Quaternion.identity, support, colorSupport);
+            var bottomSupport = CreatePrimitive(parent, PrimitiveType.Cube, Vector3.down, Quaternion.identity, support, colorSupport);
             //new PrimitiveBlueprint(PrimitiveType.Cube, Vector3.up * 12.5f, Quaternion.identity, colorSupport, support),
             //new PrimitiveBlueprint(PrimitiveType.Cube, Vector3.down * 12.5f, Quaternion.identity, colorSupport, support),
 
-            Primitive centralPillar = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.identity, pillar, centralColor);
-            Primitive pillar1 = CreatePrimitive(centralPillar.Transform, PrimitiveType.Cylinder, positionPillars* new Vector3(1, 0, 1), Quaternion.identity, Vector3.one, colorSupport);
-            Primitive pillar2 = CreatePrimitive(centralPillar.Transform, PrimitiveType.Cylinder, positionPillars * new Vector3(-1, 0, 1), Quaternion.identity, Vector3.one, colorSupport);
-            Primitive pillar3 = CreatePrimitive(centralPillar.Transform, PrimitiveType.Cylinder, positionPillars * new Vector3(-1, 0, -1), Quaternion.identity, Vector3.one, colorSupport);
-            Primitive pillar4 = CreatePrimitive(centralPillar.Transform, PrimitiveType.Cylinder, positionPillars * new Vector3(1, 0, -1), Quaternion.identity, Vector3.one, colorSupport);
+            var centralPillar = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.identity, pillar, centralColor);
+            var pillar1 = CreatePrimitive(centralPillar.transform, PrimitiveType.Cylinder, positionPillars* new Vector3(1, 0, 1), Quaternion.identity, Vector3.one, colorSupport);
+            var pillar2 = CreatePrimitive(centralPillar.transform, PrimitiveType.Cylinder, positionPillars * new Vector3(-1, 0, 1), Quaternion.identity, Vector3.one, colorSupport);
+            var pillar3 = CreatePrimitive(centralPillar.transform, PrimitiveType.Cylinder, positionPillars * new Vector3(-1, 0, -1), Quaternion.identity, Vector3.one, colorSupport);
+            var pillar4 = CreatePrimitive(centralPillar.transform, PrimitiveType.Cylinder, positionPillars * new Vector3(1, 0, -1), Quaternion.identity, Vector3.one, colorSupport);
             //new PrimitiveBlueprint(PrimitiveType.Cylinder, Vector3.up + Vector3.back * 6 + Vector3.right * 6, Quaternion.identity, colorSupport, pillar),
             //new PrimitiveBlueprint(PrimitiveType.Cylinder, Vector3.up + Vector3.forward * 6 + Vector3.right * 6, Quaternion.identity, colorSupport, pillar),
             //new PrimitiveBlueprint(PrimitiveType.Cylinder, Vector3.up + Vector3.back * 6 + Vector3.left * 6, Quaternion.identity, colorSupport, pillar),

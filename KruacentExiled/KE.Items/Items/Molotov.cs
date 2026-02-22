@@ -5,17 +5,19 @@ using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using KE.Items.API.Core.Models;
+using KE.Items.API.Core.Upgrade;
 using KE.Items.API.Features;
 using KE.Items.API.Interface;
 using KE.Items.Items.ItemEffects;
 using KE.Items.Items.PickupModels;
+using Scp914;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.GrenadeFlash)]
-    public class Molotov : KECustomGrenade, ISwichableEffect, ICustomPickupModel
+    public class Molotov : KECustomGrenade, ISwichableEffect, ICustomPickupModel, IUpgradableCustomItem
     {
         public override uint Id { get; set; } = 1049;
         public override string Name { get; set; } = "Cocktail Molotov";
@@ -26,6 +28,11 @@ namespace KE.Items.Items
         public Color Color { get; set; } = Color.yellow;
         public CustomItemEffect Effect { get; set; }
         public PickupModel PickupModel { get; }
+
+        public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade => new Dictionary<Scp914KnobSetting, UpgradeProperties>()
+        {
+            [Scp914KnobSetting.OneToOne] = new UpgradeProperties(100, 1051)
+        };
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 2,

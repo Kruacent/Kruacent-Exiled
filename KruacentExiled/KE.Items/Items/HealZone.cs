@@ -7,11 +7,13 @@ using Exiled.Events.EventArgs.Map;
 using KE.Items.API.Interface;
 using KE.Items.Items.ItemEffects;
 using KE.Items.API.Features;
+using Scp914;
+using KE.Items.API.Core.Upgrade;
 
 namespace KE.Items.Items
 {
     [CustomItem(ItemType.GrenadeFlash)]
-    public class HealZone : KECustomGrenade, ILumosItem, ISwichableEffect
+    public class HealZone : KECustomGrenade, ILumosItem, ISwichableEffect, IUpgradableCustomItem
     {
         public override uint Id { get; set; } = 1051;
         public override string Name { get; set; } = "Heal Zone";
@@ -62,6 +64,11 @@ namespace KE.Items.Items
                     Room = RoomType.HczNuke,
                 },
             },
+        };
+
+        public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade => new Dictionary<Scp914KnobSetting, UpgradeProperties>()
+        {
+            [Scp914KnobSetting.OneToOne] = new UpgradeProperties(100, 1049)
         };
 
         public HealZone()

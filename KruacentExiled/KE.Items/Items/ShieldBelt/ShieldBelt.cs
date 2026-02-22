@@ -24,15 +24,14 @@ using UnityEngine;
 
 namespace KE.Items.Items.ShieldBelt
 {
-    [CustomItem(ItemType.KeycardJanitor)]
-    public class ShieldBelt : KECustomItem, ILumosItem
+    [CustomItem(ItemType.KeycardCustomSite02)]
+    public class ShieldBelt : KECustomKeycard
     {
         public override uint Id { get; set; } = 5982;
         public override string Name { get; set; } = "Shield belt";
         public override string Description { get; set; } = "A projectile-repulsion device.\nIt will attempt to stop incoming projectiles or shrapnel, but does nothing against melee attacks or heat.\nIt prevents the wearer from firing out.\n(works in the inventory) ";
         public override float Weight { get; set; } = 0.65f;
         public override SpawnProperties SpawnProperties { get; set; } = null;
-        public Color Color { get; set; } = new Color32(255, 255, 0, 0);
 
         protected override void SubscribeEvents()
         {
@@ -65,7 +64,7 @@ namespace KE.Items.Items.ShieldBelt
         protected override void OnAcquired(Player player, Item item, bool displayMessage)
         {
             if (!Check(item)) return;
-            player.GameObject.AddComponent<ShieldBeltStat>();
+            var comp = player.GameObject.AddComponent<ShieldBeltStat>();
             Log.Debug("player got shield");
 
 
