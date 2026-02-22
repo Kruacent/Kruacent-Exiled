@@ -26,7 +26,7 @@ namespace KE.CustomRoles.API.Features
                 base.Init();
                 return;
             }
-            
+            base.Init();
             if (header is null)
             {
                 header = new(HeaderId, "SCP Spawn Preferences",string.Empty,true);
@@ -35,7 +35,7 @@ namespace KE.CustomRoles.API.Features
 
             sliderSetting= new SliderSetting(SettingId, GetTranslation("en", TranslationKeyName), MinValue, MaxValue, DefaultValue, true);
             SettingBase.Register([sliderSetting]);
-            base.Init();
+            
         }
 
 

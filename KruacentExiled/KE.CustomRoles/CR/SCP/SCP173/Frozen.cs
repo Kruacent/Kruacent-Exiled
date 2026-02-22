@@ -73,10 +73,8 @@ namespace KE.CustomRoles.CR.SCP.SCP173
 
 
 
-            Log.Info("daryh");
             if (ev.DamageHandler is ScpDamageHandler scpDamageHandler)
             {
-                Log.Info("damage");
                 Player attacker = Player.Get(scpDamageHandler.Attacker.Hub);
 
                 if (Check(attacker))
@@ -88,7 +86,6 @@ namespace KE.CustomRoles.CR.SCP.SCP173
 
                     if (isInAPrimed)
                     {
-                        Log.Info("checked");
                         attacker.HumeShield = Mathf.Min(attacker.MaxHumeShield, attacker.HumeShield + 400f);
                     }
 
