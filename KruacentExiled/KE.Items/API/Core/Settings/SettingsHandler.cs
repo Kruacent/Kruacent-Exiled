@@ -26,7 +26,7 @@ namespace KE.Items.API.Core.Settings
         private const int _idTimeCustomItem = 2;
         private const int _idTimeCustomItemEffect = 3;
 
-        public readonly SettingsPage page;
+        //public readonly SettingsPage page;
 
 
         public SettingsHandler()
