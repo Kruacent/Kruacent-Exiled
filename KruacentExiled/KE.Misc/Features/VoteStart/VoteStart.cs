@@ -119,7 +119,6 @@ namespace KE.Misc.Features.VoteStart
             {
                 if (Round.IsLobby)
                 {
-                    PlayerDisplay dis = PlayerDisplay.Get(player);
                     DisplayHandler.Instance.CreateAuto(player, (args) => GetPlayers(player), HintPosition.HintPlacement);
                 }
             });
@@ -169,11 +168,7 @@ namespace KE.Misc.Features.VoteStart
         {
             foreach(Player player in Player.List)
             {
-                AbstractHint hint = DisplayHandler.Instance.GetHint(player, HintPosition.HintPlacement);
-                if (hint is not null)
-                {
-                    hint.Hide = true;
-                }
+                DisplayHandler.Instance.RemoveHint(player, HintPosition.HintPlacement);
             }
 
         }

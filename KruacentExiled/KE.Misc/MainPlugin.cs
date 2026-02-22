@@ -14,13 +14,14 @@ using KE.Misc.Features.Spawn;
 using KE.Misc.Features.LastHuman;
 using KE.Utils.API.Settings.GlobalSettings;
 using KE.Utils.API.Translations;
+using KE.Misc.Features.PatchNotes;
 
 namespace KE.Misc
 {
 
     public class MainPlugin : Plugin<Config>, ILocalizable
     {
-        public override string Author => "Patrique";
+        public override string Author => "Patrique & OmerGS";
         public override string Name => "KE.Misc";
         public override string Prefix => "KE.Misc";
         public override Version Version => new Version(1, 1, 0);
@@ -39,6 +40,7 @@ namespace KE.Misc
         internal EventHandlers _gamblingCoinHandler {  get; private set; }
         internal SpawnLcz SpawnLcz { get; private set; }
         internal LastHumanHandler LastHuman { get; private set; }
+        internal PatchNote PatchNote { get; private set; }
         private Harmony harmony;
 
         internal VoteStart vote { get; private set; }
@@ -63,6 +65,7 @@ namespace KE.Misc
             LastHuman = new();
             Candy = new Candy();
             vote = new();
+            PatchNote = new();
             //SpawnLcz = new();
             Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
             Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
@@ -117,6 +120,7 @@ namespace KE.Misc
             AutoElevator = null;
             vote = null;
             AutoNukeAnnoucement = null;
+            PatchNote = null;
             FriendlyFire = null;
             //SurfaceLight = null;
             GamblingCoinManager.DestroyAll();
