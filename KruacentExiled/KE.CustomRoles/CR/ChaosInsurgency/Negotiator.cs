@@ -14,20 +14,28 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
 {
     public class Negotiator : KECustomRole
     {
-        public override string Description { get; set; } = "You're immune to friendly fire and you can convert zombie into your team, isn't that nice?";
-        public override string InternalName => PublicName;
-        public override string PublicName { get; set; } = "Negotiator";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Negotiator",
+                    [TranslationKeyDesc] = "You're immune to friendly fire and you can convert zombie into your team, isn't that nice?",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Negociateur",
+                    [TranslationKeyDesc] = "RUSH B or A, i dont rember sooo good luck",
+                }
+            };
+        }
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.ChaosRifleman;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
 
         public override float SpawnChance { get; set; } = 100;
-
-        public override HashSet<string> Abilities { get; } = new()
-        {
-            
-        };
 
 
         public override List<string> Inventory { get; set; } = new()

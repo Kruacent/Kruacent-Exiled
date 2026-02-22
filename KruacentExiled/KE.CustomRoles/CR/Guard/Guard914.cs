@@ -20,9 +20,23 @@ namespace KE.CustomRoles.CR.Guard
 {
     public class Guard914 : KECustomRole
     {
-        public override string Description { get; set; } = "Tu es <b>Le</b> <color=#6B6B38>garde de SCP-914</color> \nTu commences à 914 \nmais on a volé ta carte \net ntm aussi";
-        public override string PublicName { get; set; } = "Garde de 914";
-        public override string InternalName => "Guard914";
+
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Guard of SCP-914",
+                    [TranslationKeyDesc] = "You are <b>The</b> <color=#6B6B38>guard of SCP-914</color> \nYou start at SCP-914 \nbut someone tampered with your card\nand also fuck you",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Garde de SCP-914",
+                    [TranslationKeyDesc] = "Tu es <b>Le</b> <color=#6B6B38>garde de SCP-914</color> \nTu commences à 914 \nmais on a traffiqué ta carte \net ntm aussi",
+                }
+            };
+        }
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
         public override bool KeepRoleOnDeath { get; set; } = false;

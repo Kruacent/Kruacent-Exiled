@@ -21,9 +21,22 @@ namespace KE.CustomRoles.CR.CustomSCPs
 {
     public class SCP457 : CustomSCP
     {
-
-        public override string Description { get; set; } = "You do passive damage around you\nsi vous pouvez pas traversé les portes .rcr dans la console client";
-        public override string PublicName { get; set; } = "SCP-457";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "SCP-457",
+                    [TranslationKeyDesc] = "You do passive damage around you",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "SCP-457",
+                    [TranslationKeyDesc] = "j'ai dit pas trop cuite",
+                }
+            };
+        }
         public override int MaxHealth { get; set; } = 5000;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scp106;
         public override bool KeepRoleOnDeath { get; set; } = false;

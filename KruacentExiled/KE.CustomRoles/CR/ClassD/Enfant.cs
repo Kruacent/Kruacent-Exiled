@@ -13,8 +13,24 @@ namespace KE.CustomRoles.CR.ClassD
 {
     public class Enfant : KECustomRole, IColor
     {
-        public override string Description { get; set; } = "do not the kid \ntu commences avec un bonbon arc-en-ciel (pour de vrai cette fois) \n t'es un peu plus petit que la normal";
-        public override string PublicName { get; set; } = "Enfant";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Kid",
+                    [TranslationKeyDesc] = "do not the kid \nyou start with a rainbow candy (for real this time) \nyou're a bit smaller",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Enfant",
+                    [TranslationKeyDesc] = "do not the kid \ntu commences avec un bonbon arc-en-ciel (pour de vrai cette fois) \n t'es un peu plus petit que la normal",
+                }
+            };
+        }
+
+
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
         public override bool KeepRoleOnDeath { get; set; } = false;
@@ -30,8 +46,6 @@ namespace KE.CustomRoles.CR.ClassD
             player.ReferenceHub.GrantCandy(CandyKindID.Rainbow, InventorySystem.Items.ItemAddReason.StartingItem);
             base.GiveInventory(player);
         }
-
-        public override string InternalName => PublicName;
     }
     
 }

@@ -10,6 +10,6 @@ namespace KE.CustomRoles.API.Interfaces
     public interface IEffectImmunity
     {
 
-        public abstract HashSet<EffectType> Effects { get; }
+        public abstract HashSet<EffectType> ImmuneEffects { get; }
     }
 }

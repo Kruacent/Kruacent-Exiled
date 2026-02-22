@@ -1,15 +1,30 @@
 ﻿using Exiled.API.Features.Attributes;
 using KE.CustomRoles.API.Features;
 using PlayerRoles;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace KE.CustomRoles.CR.SCP
 {
     public class Paper : GlobalCustomRole
     {
-        public override string Description { get; set; } = "uh oh. paper jam";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Paper",
+                    [TranslationKeyDesc] = "uh oh. paper jam",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Paper",
+                    [TranslationKeyDesc] = "uh oh. paper jam",
+                }
+            };
+        }
         public override SideEnum Side { get; set; } = SideEnum.SCP;
-        public override string PublicName { get; set; } = "Paper";
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
 

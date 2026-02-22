@@ -17,6 +17,7 @@ using KE.CustomRoles.API.Interfaces;
 using KE.CustomRoles.Events.EventArgs;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
+using KE.Utils.API.Translations;
 using MEC;
 using PlayerRoles;
 using System;
@@ -48,13 +49,11 @@ namespace KE.CustomRoles.API.Features
 
         public virtual string InternalName => GetType().Name;
 
+        public sealed override string Description { get; set; } = string.Empty;
+
         public static new HashSet<KECustomRole> Registered { get; } = new();
 
         public sealed override string CustomInfo { get; set; }
-        /// <summary>
-        /// Get or set the public name shown to other players
-        /// </summary>
-        public abstract string PublicName { get; set; }
 
         /// <summary>
         /// the max number of people who can have this role in a round
@@ -74,6 +73,9 @@ namespace KE.CustomRoles.API.Features
             }
             
         }
+
+
+        protected abstract Dictionary<string, Dictionary<string, string>> SetTranslation();
 
 
 
@@ -100,7 +102,7 @@ namespace KE.CustomRoles.API.Features
                 sb.Append(">");
             }
             
-            sb.Append(PublicName);
+            sb.Append(GetTranslation(player,TranslationKeyName));
 
             if (color != null)
             {
@@ -110,7 +112,7 @@ namespace KE.CustomRoles.API.Features
 
             if (MainPlugin.SettingHandler.GetDescriptionsSettings(player))
             {
-                sb.AppendLine(Description);
+                sb.AppendLine(GetTranslation(player, TranslationKeyDesc));
             }
 
 
@@ -120,17 +122,54 @@ namespace KE.CustomRoles.API.Features
             StringBuilderPool.Pool.Return(sb);
         }
 
+        public void Show(Player player)
+        {
+            ShowMessage(player);
+        }
+
 
         private static Dictionary<Type, KECustomRole> typeLookupTable = new();
         private static Dictionary<string, KECustomRole> stringLookupTable = new();
 
+        protected const string CustomRoleNameKey = "Name";
+        protected const string CustomRoleDescriptionKey = "Desc";
+        public string TranslationKeyName => Name + "_" + CustomRoleNameKey;
+        public string TranslationKeyDesc => Name + "_" + CustomRoleDescriptionKey;
+
+        public const string CustomRoleTranslationId = "CustomRole";
         public override void Init()
         {
             typeLookupTable.Add(GetType(), this);
             stringLookupTable.Add(Name, this);
+            OneTimeInit();
             InternalSubscribeEvents();
             SubscribeEvents();
+
+            var translate = SetTranslation();
+
+
+            TranslationHub.Add(CustomRoleTranslationId, translate);
+
             Log.Debug("adding keys to "+Name);
+        }
+
+        private bool activated = false;
+        private void OneTimeInit()
+        {
+            if (activated) return;
+            TranslationHub.Add(CustomRoleTranslationId, "en", "CustomRoleGUI", "Current Role");
+            TranslationHub.Add(CustomRoleTranslationId, "fr", "CustomRoleGUI", "Role");
+
+
+            activated = true;
+        }
+        public static string GetTranslation(Player player, string key)
+        {
+            return TranslationHub.Get(player, CustomRoleTranslationId, key);
+        }
+        public static string GetTranslation(string lang, string key)
+        {
+            return TranslationHub.Get(lang, CustomRoleTranslationId, key);
         }
 
         public override void Destroy()
@@ -194,12 +233,12 @@ namespace KE.CustomRoles.API.Features
 
             IEffectImmunity effectImmunity = this as IEffectImmunity;
 
-            if (effectImmunity.Effects is null || effectImmunity.Effects.Count == 0)
+            if (effectImmunity.ImmuneEffects is null || effectImmunity.ImmuneEffects.Count == 0)
             {
                 Log.Warn("no healable item found for" + Name);
                 return;
             }
-            if (effectImmunity.Effects.Contains(ev.Effect.GetEffectType()))
+            if (effectImmunity.ImmuneEffects.Contains(ev.Effect.GetEffectType()))
             {
                 ev.IsAllowed = false;
             }
@@ -235,15 +274,17 @@ namespace KE.CustomRoles.API.Features
         {
             StringBuilder sb = StringBuilderPool.Pool.Get();
 
-
             if (HasCustomRole(player))
             {
-                sb.AppendLine("Current Role : ");
+                KECustomRole kECustomRole = Get(player).First();
+
+                sb.Append(GetTranslation(player, "CustomRoleGUI"));
+                sb.AppendLine(" : ");
                 sb.AppendLine();
                 sb.Append("<color=#");
                 sb.Append(ColorUtility.ToHtmlStringRGB(player.Role.Color));
                 sb.Append(">");
-                sb.Append(Get(player).FirstOrDefault()?.PublicName);
+                sb.Append(GetTranslation(player,kECustomRole.TranslationKeyName));
                 sb.Append("</color>");
             } 
             else if (player.IsDead)
@@ -258,12 +299,13 @@ namespace KE.CustomRoles.API.Features
 
                 if(customRole != null)
                 {
-                    sb.AppendLine("Current Role : ");
+                    sb.Append(GetTranslation(player, "CustomRoleGUI"));
+                    sb.AppendLine(" : ");
                     sb.AppendLine();
                     sb.Append("<color=#");
                     sb.Append(ColorUtility.ToHtmlStringRGB(spectating.Role.Color));
                     sb.Append(">");
-                    sb.Append(customRole.PublicName);
+                    sb.Append(GetTranslation(player,customRole.TranslationKeyName));
                     sb.Append("</color>");
                 }
             }
@@ -309,6 +351,7 @@ namespace KE.CustomRoles.API.Features
 
 
 
+
         #region addrole     
         public override void AddRole(Player player)
         {
@@ -328,7 +371,13 @@ namespace KE.CustomRoles.API.Features
                 return;
             }
 
+            foreach(KECustomRole cr in Get(player))
+            {
+                cr.RemoveRole(player);
+            }
 
+
+            
             CurrentNumberOfSpawn++;
             
 
@@ -456,10 +505,14 @@ namespace KE.CustomRoles.API.Features
 
         protected virtual void SetCustomInfo(Player player)
         {
+            //MirrorExtensions.SetPlayerInfoForTargetOnly()
+
+            string name = GetTranslation("en", TranslationKeyName);
+
             player.CustomInfo = player.CustomName;
-            if (!string.IsNullOrEmpty(PublicName))
+            if (!string.IsNullOrEmpty(name))
             {
-                player.CustomInfo += "\n" + PublicName;
+                player.CustomInfo += "\n" + name;
             }
             player.InfoArea &= ~(PlayerInfoArea.Nickname | PlayerInfoArea.Role);
         }

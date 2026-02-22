@@ -26,6 +26,7 @@ namespace KE.CustomRoles.Settings
         private readonly int _idSelect = 151;
         private readonly int _idArrow = 152;
         private readonly int _idTimeAbilityDesc = 153;
+        private readonly int _idReshowCustomRole = 154;
 
 
 
@@ -51,7 +52,8 @@ namespace KE.CustomRoles.Settings
                 new KeybindSetting(_idUp, "Select up", UnityEngine.KeyCode.None),
                 new KeybindSetting(_idDown, "Select down", UnityEngine.KeyCode.None),
                 new KeybindSetting(_idSelect, "Use selected ability", UnityEngine.KeyCode.None),
-                SettingBase.Create(new SSPlaintextSetting(_idArrow, "Personalize the arrow next to the selected ability", baseArrow, 16, TMP_InputField.ContentType.Standard, string.Empty, 0))
+                SettingBase.Create(new SSPlaintextSetting(_idArrow, "Personalize the arrow next to the selected ability", baseArrow, 16, TMP_InputField.ContentType.Standard, string.Empty, 0)),
+                new ButtonSetting(_idReshowCustomRole, "Reshow Custom role description","click")
             };
             
 
@@ -137,6 +139,20 @@ namespace KE.CustomRoles.Settings
                 Log.Debug("select");
                 KEAbilities.UseSelected(player);
             }
+
+            if (settingBase is SSButton buttonSetting)
+            {
+                KECustomRole cr = KECustomRole.Get(player).FirstOrDefault();
+
+                if(cr != null)
+                {
+                    cr.Show(player);
+                }
+
+
+            }
+
+
             foreach (DebugSetting debug in DebugSetting.settings)
             {
                 debug.OnSettingValueReceived(player, settingBase);
@@ -203,7 +219,8 @@ namespace KE.CustomRoles.Settings
 
         public static bool CheckPressed(ServerSpecificSettingBase settingBase, int id)
         {
-            return settingBase is SSKeybindSetting keybindSetting && keybindSetting.SettingId == id && keybindSetting.SyncIsPressed;
+            return settingBase.SettingId == id &&
+                (settingBase is SSKeybindSetting keybindSetting && keybindSetting.SyncIsPressed);
         }
 
 

@@ -14,14 +14,28 @@ namespace KE.CustomRoles.CR.MTF
 {
     public class Pilot : KECustomRole
     {
-        public override string Description { get; set; } = "So I haveth a Laser Pointere";
-        public override string PublicName { get; set; } = "Pilot";
         public override int MaxHealth { get; set; } = 90;
         public override RoleTypeId Role { get; set; } = RoleTypeId.NtfPrivate;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
 
         public override float SpawnChance { get; set; } = 100;
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Pilot",
+                    [TranslationKeyDesc] = "So I haveth a Laser Pointere",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Pilote",
+                    [TranslationKeyDesc] = "Je suis pilote!",
+                }
+            };
+        }
 
         public override List<string> Inventory { get; set; } = new List<string>()
        {

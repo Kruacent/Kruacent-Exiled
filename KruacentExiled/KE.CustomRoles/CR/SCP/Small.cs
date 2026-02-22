@@ -2,15 +2,30 @@
 using Exiled.CustomRoles.API.Features;
 using KE.CustomRoles.API.Features;
 using PlayerRoles;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace KE.CustomRoles.CR.SCP
 {
     public class Small : GlobalCustomRole
     {
-        public override string Description { get; set; } = "u smoll";
         public override SideEnum Side { get; set; } = SideEnum.SCP;
-        public override string PublicName { get; set; } = "Small";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Small",
+                    [TranslationKeyDesc] = "u smoll",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Petit",
+                    [TranslationKeyDesc] = "t poti",
+                }
+            };
+        }
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
 

@@ -20,9 +20,23 @@ namespace KE.CustomRoles.CR.ClassD
 {
     public class DBoyInShape : KECustomRole
     {
-        public override string Description { get; set; } = "Dammmmnnnnnnn les gates";
-        public override string PublicName { get; set; } = "DBoyInShape";
-        public override string InternalName => "DBoyInShape";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "DBoyInShape",
+                    [TranslationKeyDesc] = "You're strong enough to open any door",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "DBoyInShape",
+                    [TranslationKeyDesc] = "Dammmmnnnnnnn les gates",
+                }
+            };
+        }
+
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;

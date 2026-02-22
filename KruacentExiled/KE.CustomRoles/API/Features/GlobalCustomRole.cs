@@ -75,7 +75,7 @@ namespace KE.CustomRoles.API.Features
             }
 
 
-            sb.Append(PublicName);
+            sb.Append(GetTranslation(player,TranslationKeyName));
 
             if (color != null)
             {
@@ -92,7 +92,7 @@ namespace KE.CustomRoles.API.Features
 
             if (MainPlugin.SettingHandler.GetDescriptionsSettings(player))
             {
-                sb.AppendLine(Description);
+                sb.AppendLine(GetTranslation(player, TranslationKeyDesc));
             }
 
 

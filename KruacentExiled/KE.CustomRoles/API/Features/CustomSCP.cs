@@ -33,7 +33,7 @@ namespace KE.CustomRoles.API.Features
                 SettingBase.Register([header]);
             }
 
-            sliderSetting= new SliderSetting(SettingId, PublicName, MinValue, MaxValue, DefaultValue, true);
+            sliderSetting= new SliderSetting(SettingId, GetTranslation("en", TranslationKeyName), MinValue, MaxValue, DefaultValue, true);
             SettingBase.Register([sliderSetting]);
             base.Init();
         }

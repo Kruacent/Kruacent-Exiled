@@ -15,15 +15,29 @@ namespace KE.CustomRoles.CR.Human
     public class Asthmatique : GlobalCustomRole, IColor, IHealable, IEffectImmunity
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;
-        public override string Description { get; set; } = "T'as stamina est réduit de moitié\nMais tu vises mieux";
-        public override string PublicName { get; set; } = "Asthmatique";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Asthmatic",
+                    [TranslationKeyDesc] = "Stamina halfed\nbut better accuracy",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Asthmatique",
+                    [TranslationKeyDesc] = "T'as stamina est réduit de moitié\nMais tu vises mieux",
+                }
+            };
+        }
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
         public Color32 Color => new Color32(191, 255, 0, 0);
         public HashSet<ItemType> HealItem => [ItemType.SCP500];
 
-        public HashSet<EffectType> Effects => [EffectType.Poisoned];
+        public HashSet<EffectType> ImmuneEffects => [EffectType.Poisoned];
 
         protected override void RoleAdded(Player player)
         {

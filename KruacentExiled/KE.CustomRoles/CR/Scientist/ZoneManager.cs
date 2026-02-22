@@ -16,8 +16,22 @@ namespace KE.CustomRoles.CR.Scientist
 {
     public class ZoneManager : KECustomRole
     {
-        public override string Description { get; set; } = "Incroyable tu peux avoir une promotion alors fais ton boulot et ouvre tous ces checkpoints et tu pourras sortir d'ici";
-        public override string PublicName { get; set; } = "Zone Manager";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Zone Manager",
+                    [TranslationKeyDesc] = "Open all of the checkpoint to get a better card!",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Zone Manager",
+                    [TranslationKeyDesc] = "Incroyable tu peux avoir une promotion alors fais ton boulot et ouvre tous ces checkpoints et tu pourras sortir d'ici!",
+                }
+            };
+        }
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scientist;
         public override bool KeepRoleOnDeath { get; set; } = false;

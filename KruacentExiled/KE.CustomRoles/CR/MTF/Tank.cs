@@ -1,6 +1,5 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features.Attributes;
-using Player = Exiled.Events.Handlers.Player;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using PlayerRoles;
@@ -9,13 +8,29 @@ using UnityEngine;
 using System;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
+using Exiled.API.Features;
 
 namespace KE.CustomRoles.CR.MTF
 {
     public class Tank : KECustomRole, IColor
     {
-        public override string Description { get; set; } = "Tu es débuff mais ta force de tir est démultiplié (fais attention à tes balles)";
-        public override string PublicName { get; set; } = "Tank";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Tank",
+                    [TranslationKeyDesc] = "The more bullet you got, the slower you are",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Tank",
+                    [TranslationKeyDesc] = "Tu es ralenti selon ton nombre de balle",
+                }
+            };
+        }
+
         public override int MaxHealth { get; set; } = 200;
         public override RoleTypeId Role { get; set; } = RoleTypeId.NtfSergeant;
         public override bool KeepRoleOnDeath { get; set; } = false;
@@ -46,14 +61,14 @@ namespace KE.CustomRoles.CR.MTF
 
         protected override void SubscribeEvents()
         {
-            Player.Shooting += Shooting;
+            Exiled.Events.Handlers.Player.Shooting += Shooting;
             base.SubscribeEvents();
         }
 
         /// <inheritdoc/>
         protected override void UnsubscribeEvents()
         {
-            Player.Shooting -= Shooting;
+            Exiled.Events.Handlers.Player.Shooting -= Shooting;
             base.UnsubscribeEvents();
         }
 
@@ -63,14 +78,14 @@ namespace KE.CustomRoles.CR.MTF
 
             Timing.CallDelayed(0.5f, () =>
             {
-                Timing.RunCoroutine(EffectAttribution(ev.Player));
+                EffectAttribution(ev.Player);
             });
         }
 
-        private IEnumerator<float> EffectAttribution(Exiled.API.Features.Player player)
+        private void EffectAttribution(Player player)
         {
             int nbMunition = player.GetAmmo(AmmoType.Nato762) / 100;
-            byte nbMunitionByte = (byte)nbMunition;
+            byte nbMunitionByte = (byte)Mathf.Clamp(nbMunition,byte.MinValue,byte.MaxValue);
 
             if (UnityEngine.Random.Range(0, 1) > 0.5f)
             {
@@ -78,7 +93,6 @@ namespace KE.CustomRoles.CR.MTF
                 player.EnableEffect(EffectType.Slowness, nbMunitionByte, 99999, false);
             }
 
-            yield return 0;
         }
     }
 }

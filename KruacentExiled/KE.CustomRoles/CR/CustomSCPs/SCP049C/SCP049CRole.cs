@@ -17,13 +17,26 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
     public class SCP049CRole : CustomSCP
     {
         public override bool IsSupport => false;
-
-        public override string PublicName { get; set; } = "SCP049-C";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "SCP049-C",
+                    [TranslationKeyDesc] = "WIP",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "SCP049-C",
+                    [TranslationKeyDesc] = "WIP",
+                }
+            };
+        }
 
         public override RoleTypeId Role => RoleTypeId.Scp049;
 
         public override int MaxHealth { get; set; } = 2500;
-        public override string Description { get; set; }
         public override float SpawnChance { get; set; } = 0;
         protected override int SettingId => 10003;
 

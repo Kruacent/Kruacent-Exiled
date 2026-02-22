@@ -32,8 +32,23 @@ namespace KE.CustomRoles.CR.Human
         private static CoroutineHandle _coroutines;
         private static CoroutineHandle _crazyingCoroutine;
         public override SideEnum Side { get; set; } = SideEnum.Human;
-        public override string Description { get; set; } = "Je pense que le traitement que t'as eu à la fondation t'as pas aidé";
-        public override string PublicName { get; set; } = "Fou de la facilité";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Crazy",
+                    [TranslationKeyDesc] = "Crazy? I Was Crazy Once. They Locked Me In A Room. A Rubber Room. A Rubber Room With Rats. And Rats Make Me Crazy",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Fou de la facilité",
+                    [TranslationKeyDesc] = "Je pense que le traitement que t'as eu à la fondation t'as pas aidé",
+                }
+            };
+        }
+
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
@@ -71,7 +86,7 @@ namespace KE.CustomRoles.CR.Human
 
         private IEnumerator<float> ApplyEffect(Player player)
         {
-            while (player.IsAlive)
+            while (Check(player))
             {
                 yield return Timing.WaitForSeconds(this.EFFECT_INTERVAL);
                 CrazyBehaviour behaviour = this.WeightedList.GetRandomValue();

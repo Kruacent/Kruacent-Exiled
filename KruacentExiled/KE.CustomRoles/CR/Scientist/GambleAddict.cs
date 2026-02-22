@@ -12,8 +12,22 @@ namespace KE.CustomRoles.CR.Scientist
 {
     public class GambleAddict : KECustomRole, IColor
     {
-        public override string Description { get; set; } = "T'as trade ton kit et ta carte contre 2 pièces \nfais en bon usage";
-        public override string PublicName { get; set; } = "Gamble Addict";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Gamble Addict",
+                    [TranslationKeyDesc] = "you got 2 coins\ngood luck",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Accro du casino",
+                    [TranslationKeyDesc] = "T'as trade ton kit et ta carte contre 2 pièces \nfais en bon usage",
+                }
+            };
+        }
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scientist;
         public override bool KeepRoleOnDeath { get; set; } = false;

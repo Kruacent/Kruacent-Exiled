@@ -14,9 +14,23 @@ namespace KE.CustomRoles.CR.ClassD
 {
     public class Mime : KECustomRole, IColor
     {
-        public override string Description { get; set; } = "Tu ne peux pas parler\nmais tu fais très peu de bruit quand tu marches\net t'es tout plat";
-        public override string PublicName { get; set; } = "Mime";
-        public override string InternalName => PublicName;
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Mime",
+                    [TranslationKeyDesc] = "you make almost no sound while walking \nand you're flat",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Mime",
+                    [TranslationKeyDesc] = "tu fais très peu de bruit quand tu marches\net t'es tout plat",
+                }
+            };
+        }
+
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
         public override bool KeepRoleOnDeath { get; set; } = false;

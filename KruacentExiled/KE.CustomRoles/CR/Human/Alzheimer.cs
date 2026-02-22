@@ -6,6 +6,8 @@ using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
+using KE.Utils.API.Translations.Events;
+using KE.Utils.Extensions;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
@@ -15,11 +17,23 @@ namespace KE.CustomRoles.CR.Human
 {
     public class Alzheimer : GlobalCustomRole, IColor, IHealable
     {
-        private static Dictionary<Player, CoroutineHandle> _coroutines = new();
         public override SideEnum Side { get; set; } = SideEnum.Human;
-        public override string Description { get; set; } = "POV Mishima";
-        public override string PublicName { get; set; } = "Vieux";
-        public override string InternalName => GetType().Name;
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Old man",
+                    [TranslationKeyDesc] = "I'm old",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Vieux",
+                    [TranslationKeyDesc] = "Je suis vieux",
+                }
+            };
+        }
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
@@ -28,34 +42,30 @@ namespace KE.CustomRoles.CR.Human
 
         public HashSet<ItemType> HealItem => [ItemType.SCP500];
 
+        private static CoroutineHandle coroutine;
         protected override void RoleAdded(Player player)
         {
-            _coroutines.Add(player, Timing.RunCoroutine(Teleport(player)));
+            Timing.RunCoroutineSingleton(Teleport(), coroutine, SingletonBehavior.Abort);
         }
-
-
-
-
-        protected override void RoleRemoved(Player player)
+        private IEnumerator<float> Teleport()
         {
-            if (!_coroutines.ContainsKey(player)) return;
-
-
-
-            Timing.KillCoroutines(_coroutines[player]);
-            _coroutines.Remove(player);
-        }
-
-        private IEnumerator<float> Teleport(Player p)
-        {
-            while (p.IsAlive)
+            while (true)
             {
+
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(300f, 600f));
-                p.EnableEffect(EffectType.Flashed,1,5);
-                p.EnableEffect(EffectType.Invisible,1,6);
-                p.Teleport(Utils.Extensions.RoomExtensions.RandomSafeRoom(p.Zone));
+
+                foreach(Player player in TrackedPlayers)
+                {
+                    player.EnableEffect(EffectType.Flashed, 1, 5);
+                    player.EnableEffect(EffectType.Invisible, 1, 6);
+                    player.Teleport(player.Zone.RandomSafeRoom());
+                }
+
             }
         }
+
+
+
 
 
     }

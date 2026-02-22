@@ -17,15 +17,29 @@ namespace KE.CustomRoles.CR.Human
     public class Diabetique : GlobalCustomRole, IColor, IHealable, IEffectImmunity
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;
-        public override string Description { get; set; } = "T'as mangé le crambleu au pomme de mael";
-        public override string PublicName { get; set; } = "Diabetique";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Diabetic",
+                    [TranslationKeyDesc] = "Fucking type 1. 1",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Diabetique",
+                    [TranslationKeyDesc] = "T'as mangé le crambleu au pomme de mael",
+                }
+            };
+        }
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
         public HashSet<ItemType> HealItem => [ItemType.SCP500];
         public Color32 Color => new(255, 255, 0,0);
 
-        public HashSet<EffectType> Effects => [EffectType.Poisoned];
+        public HashSet<EffectType> ImmuneEffects => [EffectType.Poisoned];
 
         protected override void RoleAdded(Player player)
         {

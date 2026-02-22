@@ -19,9 +19,23 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
 {
     public class Russe : KECustomRole
     {
-        public override string PublicName { get; set; } = "Le Russe";
-        public override string Description { get; set; } = "RUSH B or A, i dont rember sooo good luck";
-        public override string InternalName => "Russe";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Russian",
+                    [TranslationKeyDesc] = "RUSH B or A, i dont rember sooo good luck",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Russe",
+                    [TranslationKeyDesc] = "RUSH B or A, i dont rember sooo good luck",
+                }
+            };
+        }
+
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.ChaosRifleman;
 
@@ -226,5 +240,6 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
                 _speakers.Remove(p);
             }
         }
+
     }
 }

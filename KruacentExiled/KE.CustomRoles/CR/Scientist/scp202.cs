@@ -4,15 +4,34 @@ using UnityEngine;
 using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.API.Interfaces;
 using PlayerRoles;
+using System.Collections.Generic;
+
 using Exiled.API.Extensions;
 
 namespace KE.CustomRoles.CR.Scientist
 {
     public class SCP202 : KECustomRole, IColor
     {
-        public override string PublicName { get; set; } = "SCP-202";
-        public override string Description { get; set; } = "? emsizan-itna'd te emsinummoc itna'd eiv enu sèrpa\n7691 lirva 91 el trom te engoloc à 6781 reivnaj 5 el én\n,etarcoméd neitérhc itrap ud eitrap tnasiaf 5691 à 9491 ed reilecnahC\n?elaidnom erreug ednoces al sèrpa dnamella reilecnahc re1 el darnoK erid xuev uT ?drannoC";
+
         public override int MaxHealth { get; set; } = 100;
+
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "SCP-202",
+                    [TranslationKeyDesc] = "? emsizan-itna'd te emsinummoc itna'd eiv enu sèrpa\n7691 lirva 91 el trom te engoloc à 6781 reivnaj 5 el én\n,etarcoméd neitérhc itrap ud eitrap tnasiaf 5691 à 9491 ed reilecnahC\n?elaidnom erreug ednoces al sèrpa dnamella reilecnahc re1 el darnoK erid xuev uT ?drannoC",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "SCP-202",
+                    [TranslationKeyDesc] = "? emsizan-itna'd te emsinummoc itna'd eiv enu sèrpa\n7691 lirva 91 el trom te engoloc à 6781 reivnaj 5 el én\n,etarcoméd neitérhc itrap ud eitrap tnasiaf 5691 à 9491 ed reilecnahC\n?elaidnom erreug ednoces al sèrpa dnamella reilecnahc re1 el darnoK erid xuev uT ?drannoC",
+                }
+            };
+        }
+
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scientist;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
@@ -35,7 +54,7 @@ namespace KE.CustomRoles.CR.Scientist
 
         protected override void ClearInventory(Player player)
         {
-            
+            //empty to keep the inventory
         }
 
         private void OnUsedItem(UsedItemEventArgs ev)

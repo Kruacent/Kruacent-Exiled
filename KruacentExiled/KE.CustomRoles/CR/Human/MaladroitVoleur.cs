@@ -20,8 +20,22 @@ namespace KE.CustomRoles.CR.Human
     {
 
         public override SideEnum Side { get; set; } = SideEnum.Human;
-        public override string Description { get; set; } = "Fait attention à \"tes\" items !";
-        public override string PublicName { get; set; } = "Maladroit Voleur";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Butter Finger Thief",
+                    [TranslationKeyDesc] = "Be careful of \"your\" items!",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Maladroit Voleur",
+                    [TranslationKeyDesc] = "Fais attention à \"tes\" objets !",
+                }
+            };
+        }
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;

@@ -8,14 +8,29 @@ using KE.Utils.API.Displays.DisplayMeow.Placements;
 using MEC;
 using PlayerRoles;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace KE.CustomRoles.CR.SCP.SCP939
 {
     public class Ultra : KECustomRole
     {
-        public override string Description { get; set; } = "You can sense where people are located";
-        public override string PublicName { get; set; } = "Ultra SCP-939";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Ultra SCP-939",
+                    [TranslationKeyDesc] = "You can sense where people are located",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Ultra SCP-939",
+                    [TranslationKeyDesc] = "Tu sais où est tout le monde",
+                }
+            };
+        }
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;

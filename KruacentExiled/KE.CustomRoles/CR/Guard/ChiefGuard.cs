@@ -10,9 +10,22 @@ namespace KE.CustomRoles.CR.Guard
 {
     public class ChiefGuard : KECustomRole, IColor
     {
-        public override string Description { get; set; } = "T'as une carte de private \net un crossvec";
-        public override string PublicName { get; set; } = "Chef des Gardes";
-        public override string InternalName => "ChiefGuard";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Chief Guard",
+                    [TranslationKeyDesc] = "you got a private card and a crossvec",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Chef des gardes",
+                    [TranslationKeyDesc] = "T'as une carte de private \net un crossvec",
+                }
+            };
+        }
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
         public override bool KeepRoleOnDeath { get; set; } = false;

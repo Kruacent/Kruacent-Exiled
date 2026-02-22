@@ -23,8 +23,22 @@ namespace KE.CustomRoles.CR.SCP.SCP173
 {
     public class Frozen : KECustomRole, IColor
     {
-        public override string Description { get; set; } = "Instead of Tantrum you drop a SCP-244.\nKilling anyone with hypothermia gives Hume Shield";
-        public override string PublicName { get; set; } = "Frozen SCP-173";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Frozen SCP-173",
+                    [TranslationKeyDesc] = "Instead of Tantrum you drop a SCP-244.\nKilling anyone with hypothermia gives Hume Shield",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "SCP-173 Glacé",
+                    [TranslationKeyDesc] = "Instead of Tantrum you drop a SCP-244.\nTué quelqu'un qui est en hypothermie donne du shield (dans le jeu hein)",
+                }
+            };
+        }
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 0;

@@ -26,10 +26,28 @@ namespace KE.CustomRoles.CR.CustomSCPs
     public class SCP035 : CustomSCP
     {
         public override bool IsSupport => false;
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "SCP-035",
+                    [TranslationKeyDesc] = "Kill every humans!\nYou can't pick up the Micro-HID and anything made with it, but you take 3 time less damage by these weapon.",
+                    ["SCP035CantPickup"] = "A strange force called 'game balance' \nprevents you from picking up this item.",
+                    ["SCP035CantUse"] = "A strange force called 'game balance' \nprevents you from using this item.",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "SCP-035",
+                    [TranslationKeyDesc] = "Tue tous les humains!\nTu peux pas prendre d'arme spécial mais tu prends 3 fois moins de dégât de ces armes",
+                    ["SCP035CantPickup"] = "Une force étrange qui s'appelle 'équilibre' \nt'empêches de prendre cet objet.",
+                    ["SCP035CantUse"] = "Une force étrange qui s'appelle 'équilibre' \nt'empêches d'utiliser cet objet.",
+                }
+            };
+        }
 
-        public override string PublicName { get; set; } = "SCP-035";
         public override int MaxHealth { get; set; } = 1200;
-        public override string Description { get; set; } = "You can't pickup the Micro-HID and anything made with it, but you take 3 time less damage by these weapon.\nKill every humans";
         protected override int SettingId => 10002;
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.Tutorial;
@@ -124,16 +142,18 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
 
 
-        public static readonly string CantPickup = "A strange force called \'game balance\' \nprevents you from picking up this item";
-        public static readonly string CantUse = "A strange force called \'game balance\' \nprevents you from using this item";
+
 
         private void OnUsingItem(UsingItemEventArgs ev)
         {
-            if (!Check(ev.Player)) return;
+            Player player = ev.Player;
+            if (!Check(player)) return;
 
             if (BlacklistedUsing.Contains(ev.Item.Type))
             {
-                ShowEffectHint(ev.Player, CantUse);
+
+
+                ShowEffectHint(player, GetTranslation(player, "SCP035CantUse"));
                 ev.IsAllowed = false;
                 return;
             }
@@ -156,7 +176,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
             {
                 if(item.Id == 1050 || item.Id == 1047)
                 {
-                    ShowEffectHint(player, CantPickup);
+                    ShowEffectHint(player, GetTranslation(player, "SCP035CantPickup"));
                     ev.IsAllowed = false;
                     return;
                 }
@@ -165,14 +185,14 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
             if (pickup.Type.IsScp() && !WhitelistUsing.Contains(pickup.Type))
             {
-                ShowEffectHint(player, CantPickup);
+                ShowEffectHint(player, GetTranslation(player, "SCP035CantPickup"));
                 ev.IsAllowed = false;
                 return;
             }
 
             if (pickup.Type == ItemType.GunSCP127)
             {
-                ShowEffectHint(player, CantPickup);
+                ShowEffectHint(player, GetTranslation(player, "SCP035CantPickup"));
                 ev.IsAllowed = false;
                 return;
             }
@@ -183,7 +203,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
             if (BlacklistedPickup.Contains(pickup.Type))
             {
-                ShowEffectHint(player, CantPickup);
+                ShowEffectHint(player, GetTranslation(player, "SCP035CantPickup"));
                 ev.IsAllowed = false;
                 return;
                 

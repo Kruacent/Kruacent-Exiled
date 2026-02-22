@@ -15,8 +15,22 @@ namespace KE.CustomRoles.CR.Human
 {
     public class Pacifist : KECustomRoleMultipleRole
     {
-        public override string Description { get; set; } = "T'es idées empêche quelconque violence. S'enlève quand tu t'échappes et ramène plus de renfort";
-        public override string PublicName { get; set; } = "Pacifiste";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Pacifist",
+                    [TranslationKeyDesc] = "You're incapable of violence.\nRemove when escaping and bring more people",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Pacifiste",
+                    [TranslationKeyDesc] = "T'es idées empêche quelconque violence.\nS'enlève quand tu t'échappes et ramène plus de renfort",
+                }
+            };
+        }
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;

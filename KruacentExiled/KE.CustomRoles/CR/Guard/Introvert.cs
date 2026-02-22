@@ -14,9 +14,22 @@ namespace KE.CustomRoles.CR.Guard
 {
     internal class Introvert : KECustomRole
     {
-        public override string Description { get; set; } = "Tu n'aimes pas trop les humains";
-        public override string PublicName { get; set; } = "Introvert";
-        public override string InternalName => PublicName;
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Introvert",
+                    [TranslationKeyDesc] = "your better by yourself",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Introverti",
+                    [TranslationKeyDesc] = "Tu n'aimes pas trop les humains",
+                }
+            };
+        }
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
         public override bool KeepRoleOnDeath { get; set; } = false;
