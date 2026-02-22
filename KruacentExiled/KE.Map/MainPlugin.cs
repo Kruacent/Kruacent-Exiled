@@ -102,11 +102,11 @@ namespace KE.Map
 
                 //Log.Info(Scp106MovementModule.GetSlowdownFromCollider(col, out bool passable) + " passable?" + passable);
 
-                FollowingTextToy f1 = new([player], player.Position, Quaternion.identity, Vector3.one);
-                f1.Toy.TextFormat = "F1 sur un bateau";
+                //FollowingTextToy f1 = new([player], player.Position, Quaternion.identity, Vector3.one);
+                //f1.Toy.TextFormat = "F1 sur un bateau";
 
-                FollowingTextToy f2 = new([], player.Position, Quaternion.identity, Vector3.one);
-                f2.Toy.TextFormat = "F2 tombe à l'eau";
+                //FollowingTextToy f2 = new([], player.Position, Quaternion.identity, Vector3.one);
+                //f2.Toy.TextFormat = "F2 tombe à l'eau";
 
                 
 
@@ -174,9 +174,9 @@ namespace KE.Map
             };
 
 
-            //var g = new GamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, new(normal));
+            var g = new GamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, new(normal));
 
-            var g = new OldGamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, Vector3.one*10, new LootTable(normal));
+            //var g = new OldGamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, Vector3.one*10, new LootTable(normal));
 
             
 

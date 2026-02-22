@@ -19,7 +19,7 @@ namespace KE.Map.Heavy.GamblingZone
 
 
         private HashSet<Primitive> _model;
-        public const float BasePickupTime = 10;
+        public const float BasePickupTime = 5;
         public float PickupTime
         {
             get
@@ -71,10 +71,15 @@ namespace KE.Map.Heavy.GamblingZone
             _lootTable = lootTable;
 
 
-            _interact.OnInteracted += p => Log.Info($"{p.Nickname} interatcted"); // Runs if interactionduration is set to 0
-            _interact.OnSearching += p => Log.Info($"{p.Nickname} OnSearching"); // runs when the player presses E & interactionduration != 0
-            _interact.OnSearched += p => Log.Info($"{p.Nickname} OnSearched"); // Runs after searching is completed.
-            _interact.OnSearchAborted += p => Log.Info($"{p.Nickname} OnSearchAborted"); // Runs after 
+            if (MainPlugin.Configs.Debug)
+            {
+
+                _interact.OnInteracted += p => Log.Info($"{p.Nickname} interatcted"); // Runs if interactionduration is set to 0
+                _interact.OnSearching += p => Log.Info($"{p.Nickname} OnSearching"); // runs when the player presses E & interactionduration != 0
+                _interact.OnSearched += p => Log.Info($"{p.Nickname} OnSearched"); // Runs after searching is completed.
+                _interact.OnSearchAborted += p => Log.Info($"{p.Nickname} OnSearchAborted"); // Runs after 
+            }
+
 
         }
 
@@ -118,20 +123,42 @@ namespace KE.Map.Heavy.GamblingZone
 
         public void OnPickup(PlayerSearchedToyEventArgs ev)
         {
-            Player player = ev.Player;
+            Player player2 = ev.Player;
             if (ev.Interactable != _interact) return;
-
-            Player player2 = Player.Get(player);
             if (player2 == null) return;
             if (player2.IsScp) return;
 
             if (player2.CurrentItem == null) return;
             Item item = _lootTable.GetRandomItem();
             player2.CurrentItem.Destroy();
-            player2.AddItem(item);
 
-            player2.DropItem(item, false);
+            player2.AddItem(item);
+            if (!CanPickupOther(player2, item.Category))
+            {
+                player2.DropItem(item, false);
+            }
+
+
+            
+
+            
         }
+
+        private static bool CanPickupOther(Player player,ItemCategory category)
+        {
+            sbyte nbitem = 0;
+            foreach(Item item in player.Items)
+            {
+                if(item.Category == category)
+                {
+                    nbitem++;
+                }
+            }
+
+            return nbitem <= player.GetCategoryLimit(category);
+
+        }
+
         public static void DestroyAll()
         {
             foreach (GamblingRoom gamblingRoom in List.ToList())
