@@ -15,6 +15,7 @@ using KE.Misc.Features.LastHuman;
 using KE.Utils.API.Settings.GlobalSettings;
 using KE.Utils.API.Translations;
 using KE.Misc.Features.PatchNotes;
+using KE.Misc.Features.PostNuke;
 
 namespace KE.Misc
 {
@@ -44,6 +45,7 @@ namespace KE.Misc
         private Harmony harmony;
 
         internal VoteStart vote { get; private set; }
+        internal PostNukeHandler postnuke { get; private set; }
 
         public string LocalizationId => Prefix;
 
@@ -66,6 +68,9 @@ namespace KE.Misc
             Candy = new Candy();
             vote = new();
             PatchNote = new();
+            postnuke = new();
+
+
             //SpawnLcz = new();
             Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
             Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
@@ -125,6 +130,7 @@ namespace KE.Misc
             //SurfaceLight = null;
             GamblingCoinManager.DestroyAll();
             _gamblingCoinHandler = null;
+            postnuke = null;
             LastHuman = null;
             harmony = null;
             Instance = null;
