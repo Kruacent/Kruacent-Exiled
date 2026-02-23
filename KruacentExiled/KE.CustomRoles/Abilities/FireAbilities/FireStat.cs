@@ -57,6 +57,7 @@ namespace KE.CustomRoles.Abilities.FireAbilities
 
         public override bool Check()
         {
+            return false;
             Player player = Player.Get(Hub);
             if (!KECustomRole.Get(player).Any(role => KECustomRole.Get(CustomRole) == role))
             {

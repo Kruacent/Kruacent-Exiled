@@ -3,8 +3,9 @@ using Exiled.API.Features;
 using Exiled.Events.EventArgs.Scp049;
 using Exiled.Events.Patches.Events.Scp0492;
 using JetBrains.Annotations;
-using KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockAbleAbilities;
+using KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities;
 using KE.Utils.API;
+using KE.Utils.API.Features;
 using NorthwoodLib.Pools;
 using PlayerRoles.FirstPersonControl;
 using PlayerRoles.Ragdolls;
@@ -38,7 +39,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
 
         private ReferenceHub _hub;
 
-        private List<UnlockableAbility> CurrentAbilities;
+        public List<UnlockableAbility> CurrentAbilities { get; private set; }
 
         private static HashSet<UnlockableAbility> abilities;
 
@@ -61,17 +62,14 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
         }
         public void OnDestroy()
         {
-            foreach(UnlockableAbility ability in CurrentAbilities)
-            {
-                ability.Remove(_hub);
-            }
+
         }
 
 
 
         public void AddKill()
         {
-            Log.Debug("add kill");
+            KELog.Debug("add kill");
             currentkill++;
 
             if(currentkill >= killperlevel)
@@ -80,6 +78,15 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
                 AddLevel();
             }
 
+        }
+
+
+        public void DisableAll()
+        {
+            foreach (UnlockableAbility ability in CurrentAbilities)
+            {
+                ability.Remove(_hub);
+            }
         }
 
         public void AddLevel()
@@ -102,10 +109,14 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
             //todo choose ability
             UnlockableAbility choosen = ability.RandomItem();
 
+            KELog.Debug(choosen.GetType().Name);
+
+
             ListPool<UnlockableAbility>.Shared.Return(ability);
 
             choosen.Grant(_hub);
-
+            CurrentAbilities.Add(choosen);
+            KELog.Debug(CurrentAbilities.Count);
         }
 
  
@@ -128,36 +139,57 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
 
         }
 
+        public const float MaxDistance = 2;
 
         private void UpdateTime()
         {
+            if (Vector3.Distance(ragdoll.Position,_hub.transform.position) > MaxDistance)
+            {
+                Reset();
+            }
+
+
             cooldown += Time.deltaTime;
+            RagdollArrowComp comp = ragdoll.GameObject.GetComponent<RagdollArrowComp>();
+
+            comp.SetColor(Color.red);
+            
+
             if (cooldown > objective)
             {
                 ragdoll.Destroy();
                 AddKill();
-                ragdoll = null;
-                cooldown = 0;
+                Reset();
+
+                
             }
             
         }
 
 
+        private void Reset()
+        {
+            ragdoll.GameObject.GetComponent<RagdollArrowComp>().SetColor(Color.white);
+            ragdoll = null;
+            cooldown = 0;
+        }
+
+
         private void GetNearRagdoll()
         {
-            int num = Physics.OverlapSphereNonAlloc(_hub.GetPosition(), 5, NonAlloc, (int)LayerMasks.Ragdoll);
+            int num = Physics.OverlapSphereNonAlloc(_hub.GetPosition(), MaxDistance, NonAlloc, (int)LayerMasks.Ragdoll);
 
             for (int i = 0; i < num; i++)
             {
                 if (NonAlloc[i].TryGetComponent<BasicRagdoll>(out var r))
                 {
                     Ragdoll ragdoll = Ragdoll.Get(r);
+                    
 
                     if (ragdoll.IsExpired)
                     {
                         this.ragdoll = ragdoll;
                     }
-
 
                 }
             }

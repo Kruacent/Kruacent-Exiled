@@ -1,10 +1,13 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Roles;
+using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp049;
 using KE.CustomRoles.API.Features;
+using KE.Utils.API.Features;
 using LabApi.Events.Arguments.Scp049Events;
 using MapGeneration.Rooms;
 using PlayerRoles;
+using PlayerStatsSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,10 +39,18 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
 
         public override RoleTypeId Role => RoleTypeId.Scp049;
 
+        public override string InternalName => "C";
         public override int MaxHealth { get; set; } = 2500;
         public override float SpawnChance { get; set; } = 0;
         protected override int SettingId => 10003;
 
+        internal static SCP049CRole instance = null;
+
+        public override void Init()
+        {
+            instance = this;
+            base.Init();
+        }
 
 
         protected override void RoleAdded(Player player)
@@ -63,15 +74,15 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
         protected override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Scp049.FinishingRecall += OnFinishingRecall;
-            LabApi.Events.Handlers.Scp049Events.UsingDoctorsCall += OnUsingDoctorsCall;
             LabApi.Events.Handlers.Scp049Events.UsedDoctorsCall += OnUsedDoctorsCall;
+            Exiled.Events.Handlers.Player.SpawnedRagdoll += OnSpawnedRagdoll;
             base.SubscribeEvents();
         }
         protected override void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Scp049.FinishingRecall -= OnFinishingRecall;
-            LabApi.Events.Handlers.Scp049Events.UsingDoctorsCall -= OnUsingDoctorsCall;
             LabApi.Events.Handlers.Scp049Events.UsedDoctorsCall -= OnUsedDoctorsCall;
+            Exiled.Events.Handlers.Player.SpawnedRagdoll -= OnSpawnedRagdoll;
             base.UnsubscribeEvents();
         }
         private void OnFinishingRecall(FinishingRecallEventArgs ev)
@@ -81,27 +92,32 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
             ev.IsAllowed = false;
             ev.Ragdoll.Destroy();
 
-            lvl.AddKill();
-        }
 
-        private void OnUsingDoctorsCall(Scp049UsingDoctorsCallEventArgs ev)
-        {
-            if (!Check(ev.Player)) return;
+            if (true)
+            {
+                lvl.AddLevel();
+            }
+            else
+            {
+                lvl.AddKill();
+            }
 
-            ev.Player.HumeShieldRegenRate = 15*2;
-            ev.Player.HumeShieldRegenCooldown = 10/2;
-
+                
         }
 
         private void OnUsedDoctorsCall(Scp049UsedDoctorsCallEventArgs ev)
         {
             if (!Check(ev.Player)) return;
-
-            ev.Player.HumeShieldRegenRate = 15;
-            ev.Player.HumeShieldRegenCooldown = 10;
-
+            ev.Player.GetStatModule<HumeShieldStat>().AddAmount(300f);
 
         }
+        private void OnSpawnedRagdoll(SpawnedRagdollEventArgs ev)
+        {
+            RagdollArrowComp comp = ev.Ragdoll.GameObject.AddComponent<RagdollArrowComp>();
+            comp.Init(ev.Ragdoll);
+        }
+
+
 
     }
 }
