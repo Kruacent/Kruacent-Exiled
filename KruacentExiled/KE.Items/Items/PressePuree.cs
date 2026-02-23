@@ -24,7 +24,7 @@ namespace KE.Items.Items
     {
         public override uint Id { get; set; } = 1046;
         public override string Name { get; set; } = "Presse Purée";
-        public override string Description { get; set; } = "The grenade explode at impact but does less damage";
+        public override string Description { get; set; } = "THIS ITEM DOESNT CURRENTLY DO DAMAGE !!!!!!\nThe grenade explode at impact but does less damage";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime { get; set; } = 5f;
         public override bool ExplodeOnCollision { get; set; } = true;
