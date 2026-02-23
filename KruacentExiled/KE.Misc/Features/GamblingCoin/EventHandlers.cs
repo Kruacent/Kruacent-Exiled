@@ -7,6 +7,7 @@ using Exiled.Events.EventArgs.Player;
 using KE.Misc.Events.EventsArgs.GamblingCoinsEventArgs;
 using KE.Misc.Features.GamblingCoin.Interfaces;
 using KE.Misc.Features.GamblingCoin.Types;
+using KE.Utils.API.Features;
 using MEC;
 
 namespace KE.Misc.Features.GamblingCoin
@@ -48,7 +49,7 @@ namespace KE.Misc.Features.GamblingCoin
             {
                 CoinUses[itemSerial] = UnityEngine.Random.Range(Config.GamblingCoinMinUse, Config.GamblingCoinMaxUse);
 
-                Log.Debug($"Registered new coin: {CoinUses[itemSerial]} uses left.");
+                KELog.Debug($"Registered new coin: {CoinUses[itemSerial]} uses left.");
             }
 
             CoinUses[itemSerial]--;

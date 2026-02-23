@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Scp914;
+using KE.Utils.API.Features;
 using KE.Utils.API.Interfaces;
 using UnityEngine;
 
@@ -51,7 +52,7 @@ namespace KE.Misc.Features._914Upgrades
             float wanted = Mathf.Clamp(chance, 0f, 100f);
             float random = UnityEngine.Random.Range(0f, 100f);
 
-            Log.Debug($"{random} < {wanted} : {random < wanted} ");
+            KELog.Debug($"{random} < {wanted} : {random < wanted} ");
 
             return random < wanted ;
         }

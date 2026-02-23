@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using KE.Utils.API.Features;
 using KE.Utils.API.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace KE.Misc.Features
         {
             foreach (MiscFeature f in _list)
             {
-                Log.Debug($"subscribing events in {f.GetType()}");
+                KELog.Debug($"subscribing events in {f.GetType()}");
                 f.SubscribeEvents();
             }
                 

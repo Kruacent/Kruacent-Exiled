@@ -3,6 +3,7 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Warhead;
 using KE.Misc.Features.FriendlyFireConditions;
 using KE.Utils.API;
+using KE.Utils.API.Features;
 using KE.Utils.API.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace KE.Misc.Features
         {
             foreach(T loaded in _allLoadedFeatures)
             {
-                Log.Debug("subscribing "+ loaded.GetType().Name);
+                KELog.Debug("subscribing "+ loaded.GetType().Name);
                 if(loaded is IUsingEvents iue)
                     iue.SubscribeEvents();
             }
@@ -33,7 +34,7 @@ namespace KE.Misc.Features
         {
             foreach (T loaded in _allLoadedFeatures)
             {
-                Log.Debug("Unsubscribing " + loaded.GetType().Name);
+                KELog.Debug("Unsubscribing " + loaded.GetType().Name);
                 if (loaded is IUsingEvents iue)
                     iue.UnsubscribeEvents();
             }

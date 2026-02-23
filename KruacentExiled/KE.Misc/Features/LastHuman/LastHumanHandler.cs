@@ -7,6 +7,7 @@ using HintServiceMeow.Core.Models.Hints;
 using HintServiceMeow.Core.Utilities;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
+using KE.Utils.API.Features;
 using KE.Utils.API.Features.SCPs;
 using KE.Utils.API.Interfaces;
 using KE.Utils.API.Translations;
@@ -101,7 +102,7 @@ namespace KE.Misc.Features.LastHuman
                         if (!player.IsDead && DateTime.Now > _nextPossibleHint)
                         {
                             DisplayHandler.Instance.AddHint(position.HintPlacement, player, msg, 10);
-                            Log.Debug("show message to " + lastTarget.Nickname);
+                            KELog.Debug("show message to " + lastTarget.Nickname);
                             _nextPossibleHint = DateTime.Now.Add(Cooldown);
                         }
                         
@@ -126,7 +127,7 @@ namespace KE.Misc.Features.LastHuman
             int num2 = 0;
             foreach (ReferenceHub allHub in ReferenceHub.AllHubs)
             {
-                Log.Debug(allHub.nicknameSync.DisplayName);
+                KELog.Debug(allHub.nicknameSync.DisplayName);
                 if (allHub.IsHuman() && !SCPTeam.IsSCP(allHub))
                 {
                     num++;

@@ -2,6 +2,7 @@
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Server;
 using KE.CustomRoles.API.Features;
+using KE.Utils.API.Features;
 using MEC;
 using PlayerRoles;
 using System;
@@ -64,7 +65,7 @@ namespace KE.Misc.Features.Spawn
 
 
             string roleScp = ChooseRandomRole(chancescp);
-            Log.Debug($"Scp ({player.Nickname}) is {roleScp} previous : {player.Role.Type}");
+            KELog.Debug($"Scp ({player.Nickname}) is {roleScp} previous : {player.Role.Type}");
             SetRoleWithId(player, roleScp);
             return true;
             
@@ -122,7 +123,7 @@ namespace KE.Misc.Features.Spawn
             {
                 for (int i = 0; i < chancescp[ge]; i++)
                 {
-                    Log.Debug(ge);
+                    KELog.Debug(ge);
                     weightedPool.Add(ge);
                 }
             }

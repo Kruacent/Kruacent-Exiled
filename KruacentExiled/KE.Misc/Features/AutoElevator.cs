@@ -29,7 +29,7 @@ namespace KE.Misc.Features
         /// </summary>
         private IEnumerator<float> StartElevator()
         {
-            //Log.Debug("elevator");
+            //KELog.Debug("elevator");
             while (!Round.IsEnded)
             {
                 foreach (Lift l in Lift.List.ToList())
@@ -43,7 +43,7 @@ namespace KE.Misc.Features
 
         private void SendElevator(Lift e)
         {
-            //Log.Debug($"{e.Name}");
+            //KELog.Debug($"{e.Name}");
             e.TryStart(0, true);
         }
     }

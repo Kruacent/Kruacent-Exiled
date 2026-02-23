@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Scp914;
+using KE.Utils.API.Features;
 using KE.Utils.API.Interfaces;
 using MEC;
 using PlayerRoles;
@@ -29,7 +30,7 @@ namespace KE.Misc.Features._914Upgrades
             if (!LuckCheck(newRole.chance)) return;
             if (_upgradingPlayer.Contains(player)) return;
             
-            Log.Debug($"upgrading {player.Role.Type}->{newRole.role}");
+            KELog.Debug($"upgrading {player.Role.Type}->{newRole.role}");
 
 
             SetRole(player, newRole.role);

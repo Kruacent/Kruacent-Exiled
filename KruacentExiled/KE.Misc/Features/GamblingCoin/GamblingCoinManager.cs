@@ -3,6 +3,7 @@ using Exiled.API.Features;
 using KE.Misc.Features.GamblingCoin.Interfaces;
 using KE.Misc.Features.GamblingCoin.Types;
 using KE.Utils.API;
+using KE.Utils.API.Features;
 using MEC;
 using System;
 using System.Collections.Generic;
@@ -54,7 +55,7 @@ namespace KE.Misc.Features.GamblingCoin
             if (effect.Weight > 0)
                 _activeEffects.Add(effect);
                 
-            Log.Debug($"[GamblingCoin] Registered: {effect.Name}");
+            KELog.Register($"[GamblingCoin] {effect.Name}");
 
         }
 
@@ -102,10 +103,10 @@ namespace KE.Misc.Features.GamblingCoin
             if (effect is IDurationEffect durationEffect && durationEffect.Duration > 0)
             {
                 float duration = durationEffect.Duration;
-                Log.Debug("effect " + duration);
+                KELog.Debug("effect " + duration);
                 Timing.CallDelayed(duration, () =>
                 {
-                    Log.Debug("effect " + duration);
+                    KELog.Debug("effect " + duration);
                     durationEffect.ExecuteAfterDuration(player);
                 });
             }

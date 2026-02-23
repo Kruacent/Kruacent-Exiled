@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Scp914;
+using KE.Utils.API.Features;
 using KE.Utils.Extensions;
 using MEC;
 using Scp914;
@@ -14,7 +15,7 @@ namespace KE.Misc.Features._914Upgrades
         protected override float Chance => 100;
         protected override void OnUpgradingPlayer(UpgradingPlayerEventArgs ev)
         {
-            Log.Debug("Upgrade");
+            KELog.Debug("Upgrade");
             Player player = ev.Player;
             Room room = null;
             if (ev.KnobSetting == Scp914KnobSetting.Fine && LuckCheck(1))
@@ -45,9 +46,9 @@ namespace KE.Misc.Features._914Upgrades
             if (room != null)
             {
                 //idk why but need a delay
-                Timing.CallDelayed(1f, delegate
+                Timing.CallDelayed(.1f, delegate
                 {
-                    Log.Debug($"teleporting {player.Nickname} to {room.Name}");
+                    KELog.Debug($"teleporting {player.Nickname} to {room.Name}");
                     player.Teleport(room);
                 });
                 
