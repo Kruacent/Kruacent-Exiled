@@ -82,13 +82,13 @@ namespace KE.Items.Items
             Player player = Player.Get(ev.Destructible.NetworkId);
             if (!Check(Projectile.Get(ev.ExplosionGrenade))) return;
             if (ev.Damage < 0f) return;
-            ev.Damage /= 2;
+            ev.Damage /= 2f;
 
             
 
             if(player is not null && player.IsScp)
             {
-                ev.Damage /= 3;
+                ev.Damage /= 3f;
             }
 
             Log.Debug("new daamager="+ev.Damage);

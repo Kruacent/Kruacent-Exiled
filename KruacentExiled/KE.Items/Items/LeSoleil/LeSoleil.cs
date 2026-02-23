@@ -26,7 +26,7 @@ namespace KE.Items.Items.LeSoleil
     {
         public override uint Id { get; set; } = 9999;
         public override string Name { get; set; } = "Le Soleil";
-        public override string Description { get; set; } = "How can you even carry that?";
+        public override string Description { get; set; } = "Probably not the best idea to use it";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime { get; set; } = 5f;
         public override bool ExplodeOnCollision { get; set; } = true;
@@ -39,27 +39,16 @@ namespace KE.Items.Items.LeSoleil
         {
 
         };
-        protected override void SubscribeEvents()
-        {
-
-            base.SubscribeEvents();
-        }
-
-        protected override void UnsubscribeEvents()
-        {
-
-            base.UnsubscribeEvents();
-        }
-
 
 
         protected override void OnExploding(ExplodingGrenadeEventArgs ev)
         {
-            CastTheSun(ev.Position);
+            CastTheSun();
         }
 
-        private void CastTheSun(Vector3 position)
+        private void CastTheSun()
         {
+            Vector3 position = new(58.72f, 300, 20f);
             Primitive prim = Primitive.Create(position, null, null, false);
             prim.Flags = AdminToys.PrimitiveFlags.None;
 
