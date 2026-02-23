@@ -12,6 +12,7 @@ using KE.Items.API.Events;
 using KE.Items.API.Features;
 using KE.Items.API.Interface;
 using KE.Items.Items.PickupModels;
+using KE.Utils.API.Features;
 using Scp914;
 using System;
 using System.Collections.Generic;
@@ -78,20 +79,20 @@ namespace KE.Items.Items
 
         private void OnExplodeDestructible(OnExplodeDestructibleEventsArgs ev)
         {
-            Log.Debug("old dmagea="+ev.Damage);
+            KELog.Debug("old dmagea="+ev.Damage);
             Player player = Player.Get(ev.Destructible.NetworkId);
             if (!Check(Projectile.Get(ev.ExplosionGrenade))) return;
+
+            
             if (ev.Damage < 0f) return;
             ev.Damage /= 2f;
 
-            
-
-            if(player is not null && player.IsScp)
+            if (player is not null && player.IsScp)
             {
                 ev.Damage /= 3f;
             }
 
-            Log.Debug("new daamager="+ev.Damage);
+            KELog.Debug("new daamager="+ev.Damage);
 
         }
 

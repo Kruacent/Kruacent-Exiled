@@ -7,6 +7,7 @@ using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using KE.Items.API.Events;
 using KE.Items.API.Features.SpawnPoints;
+using KE.Utils.API.Features;
 using System.Collections.Generic;
 using System.Linq;
 using static KE.Items.API.Features.SpawnPoints.PoseRoomSpawnPointHandler;
@@ -78,6 +79,7 @@ namespace KE.Items.API.Features
         {
 
             Player player = Player.Get(ev.Destructible.NetworkId);
+            KELog.Debug("damage =" + ev.Damage);
             if (!Check(Pickup.Get(ev.ExplosionGrenade))) return;
             if (ev.Damage < 0f) return;
             ev.Damage *= DamageModifier;
