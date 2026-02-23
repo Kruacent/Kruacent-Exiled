@@ -154,14 +154,12 @@ namespace KE.Map.Surface.ElevatorGateA
                 yield return Timing.WaitForOneFrame;
             }
 
-            // Snap exactly to target (avoids tiny float mismatch)
             prim.Position = new Vector3(
                 prim.Position.x,
                 objective,
                 prim.Position.z
             );
 
-            // Swap target
             objective = Mathf.Approximately(objective, baseheight)
                 ? increase
                 : baseheight;

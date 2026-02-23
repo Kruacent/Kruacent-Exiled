@@ -29,6 +29,57 @@ namespace KE.Map.Surface.ElevatorGateA
             );
             ElevatorCabin.PrimitiveFlags = AdminToys.PrimitiveFlags.None;
 
+            var panel = CreatePrimitive(
+                ElevatorCabin.transform,
+                PrimitiveType.Sphere,
+                new Vector3(0f, 0f, 1.663f),
+                new Quaternion(0f, 0f, 0f, 1f),
+                new Vector3(1f, 1f, 1f),
+                new Color32(0, 0, 0, 0)
+            );
+            panel.PrimitiveFlags = AdminToys.PrimitiveFlags.None;
+
+            var poteau = CreatePrimitive(
+            panel.transform,
+            PrimitiveType.Cube,
+            new Vector3(0f, 0.757f, 0f),
+            new Quaternion(0f, 0f, 0f, 1f),
+            new Vector3(0.15f, 1.3f, 0.15f),
+            new Color32(255, 255, 255, 255),
+            60
+
+        );
+
+            var panneau = CreatePrimitive(
+            panel.transform,
+            PrimitiveType.Cube,
+            new Vector3(0f, 1.397f, 0f),
+            new Quaternion(0.3775984f, 0f, 0f, 0.9259695f),
+            new Vector3(1f, 1f, 0.15f),
+            new Color32(255, 255, 255, 255),
+            60
+
+        );
+
+            button = CreatePrimitive(
+            panel.transform,
+            PrimitiveType.Cube,
+            new Vector3(0f, 1.419f, 0f),
+            new Quaternion(0.3775984f, 0f, 0f, 0.9259695f),
+            new Vector3(0.8f, 0.8f, 0.15f),
+            new Color32(255, 255, 255, 255),
+            60
+
+        );
+
+            I_button = CreateInteractable(
+            panel.transform,
+            new Vector3(0f, 1.46f, -0.042f),
+            new Quaternion(0.3775984f, 0f, 0f, 0.9259695f),
+            new Vector3(0.8f, 0.8f, 0.15f),
+            InvisibleInteractableToy.ColliderShape.Box
+        );
+
             var top = CreatePrimitive(
                 ElevatorCabin.transform,
                 PrimitiveType.Sphere,
@@ -45,7 +96,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(1.666667f, 0f, 0f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(1.666667f, 0.2f, 5f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var left = CreatePrimitive(
@@ -54,7 +107,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(-1.666667f, 0f, 0f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(1.666667f, 0.2f, 5f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var up = CreatePrimitive(
@@ -63,7 +118,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(0f, 0f, 1.666667f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(1.666667f, 0.2f, 1.666667f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var down = CreatePrimitive(
@@ -72,53 +129,20 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(0f, 0f, -1.666667f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(1.666667f, 0.2f, 1.666667f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
-            var panel = CreatePrimitive(
-                ElevatorCabin.transform,
+            var Spot_Light = CreatePrimitive(
+                top.transform,
                 PrimitiveType.Sphere,
-                new Vector3(0f, 0f, 0f),
-                new Quaternion(0f, 0f, 0f, 1f),
+                new Vector3(0f, -0.18f, 1.57f),
+                new Quaternion(0.7071068f, 0f, 0f, 0.7071068f),
                 new Vector3(1f, 1f, 1f),
                 new Color32(0, 0, 0, 0)
             );
-            panel.PrimitiveFlags = AdminToys.PrimitiveFlags.None;
-
-            var poteau = CreatePrimitive(
-            panel.transform,
-            PrimitiveType.Cube,
-            new Vector3(0f, 0.757f, 1.667f),
-            new Quaternion(0f, 0f, 0f, 1f),
-            new Vector3(0.15f, 1.3f, 0.15f),
-            new Color32(255, 255, 255, 255)
-        );
-
-            var panneau = CreatePrimitive(
-            panel.transform,
-            PrimitiveType.Cube,
-            new Vector3(0f, 1.397f, 1.667f),
-            new Quaternion(0.3775984f, 0f, 0f, 0.9259695f),
-            new Vector3(1f, 1f, 0.15f),
-            new Color32(255, 255, 255, 255)
-        );
-
-            button = CreatePrimitive(
-            panel.transform,
-            PrimitiveType.Cube,
-            new Vector3(0f, 1.419f, 1.644f),
-            new Quaternion(0.3775984f, 0f, 0f, 0.9259695f),
-            new Vector3(0.8f, 0.8f, 0.15f),
-            new Color32(255, 255, 255, 255)
-        );
-
-            I_button = CreateInteractable(
-            panel.transform,
-            new Vector3(0f, 1.434f, 1.629f),
-            new Quaternion(0.3775984f, 0f, 0f, 0.9259695f),
-            new Vector3(0.8f, 0.8f, 0.15f),
-            InvisibleInteractableToy.ColliderShape.Box
-        );
+            Spot_Light.PrimitiveFlags = AdminToys.PrimitiveFlags.None;
 
             var bottom = CreatePrimitive(
                 ElevatorCabin.transform,
@@ -136,7 +160,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(0f, 0f, 0f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(5f, 0.2f, 5f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var fence = CreatePrimitive(
@@ -155,7 +181,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(-2.3f, 2.5f, -2.3f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 4.9f, 0.1f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var pillar2 = CreatePrimitive(
@@ -164,7 +192,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(-2.3f, 0.79f, -0.9f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 1.4798f, 0.1f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var pillar3 = CreatePrimitive(
@@ -173,7 +203,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(-2.3f, 0.79f, 0.9f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 1.4798f, 0.1f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var pillar4 = CreatePrimitive(
@@ -182,7 +214,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(-2.3f, 2.5f, 2.3f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 4.9f, 0.1f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var pillar5 = CreatePrimitive(
@@ -191,7 +225,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(2.3f, 2.5f, -2.3f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 4.9f, 0.1f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var pillar6 = CreatePrimitive(
@@ -200,7 +236,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(2.3f, 0.79f, 0f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 1.4798f, 0.1f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var pillar8 = CreatePrimitive(
@@ -209,7 +247,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(2.3f, 2.5f, 2.3f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 4.9f, 0.1f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var pillar9 = CreatePrimitive(
@@ -218,7 +258,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(0f, 0.79f, 2.3f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 1.4798f, 0.1f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var pillar10 = CreatePrimitive(
@@ -227,7 +269,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(-0.9f, 0.79f, -2.3f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 1.4798f, 0.1f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var pillar11 = CreatePrimitive(
@@ -236,7 +280,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(0.9f, 0.79f, -2.3f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 1.4798f, 0.1f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var fenceback = CreatePrimitive(
@@ -245,7 +291,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(0f, 1.439f, 2.3f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(5f, 0.2f, 0.2f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var fenceright = CreatePrimitive(
@@ -254,7 +302,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(2.3f, 1.439f, 0f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.2f, 0.2f, 5f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var fenceleft1 = CreatePrimitive(
@@ -263,7 +313,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(-2.3f, 1.439f, 1.6f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.2f, 0.2f, 1.7f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var fenceleft2 = CreatePrimitive(
@@ -272,7 +324,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(-2.3f, 1.439f, -1.6f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.2f, 0.2f, 1.7f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var fencefront1 = CreatePrimitive(
@@ -281,7 +335,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(1.6f, 1.439f, -2.35f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(1.7f, 0.2f, 0.2f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var fencefront2 = CreatePrimitive(
@@ -290,7 +346,9 @@ namespace KE.Map.Surface.ElevatorGateA
             new Vector3(-1.6f, 1.439f, -2.3f),
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(1.7f, 0.2f, 0.2f),
-            new Color32(255, 255, 255, 255)
+            new Color32(255, 255, 255, 255),
+            60
+
         );
 
             var waypoint = CreateWaypoint(
