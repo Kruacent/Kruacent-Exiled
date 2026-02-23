@@ -72,9 +72,13 @@ namespace KE.CustomRoles.Abilities
 
         private void ExplodeEvent_ExplodeDestructible(Items.API.Events.OnExplodeDestructibleEventsArgs obj)
         {
+
+
             if (!Grenades.Contains(obj.ExplosionGrenade)) return;
 
             obj.Damage = 75;
+
+            Grenades.Remove(obj.ExplosionGrenade);
 
             KELog.Debug("explode with "+ obj.Damage);
 
