@@ -5,6 +5,7 @@ using Exiled.CustomRoles.API.Features;
 using InventorySystem.Items.ThrowableProjectiles;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
+using KE.Utils.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,7 +66,7 @@ namespace KE.CustomRoles.Abilities
             grenade.SpawnActive(player.Position);
             Grenades.Add(grenade.Projectile.Base);
 
-            Log.Debug("Grenade spawned");
+            KELog.Debug("Grenade spawned");
             return base.AbilityUsed(player);
         }
 
@@ -75,7 +76,7 @@ namespace KE.CustomRoles.Abilities
 
             obj.Damage = 75;
 
-            Log.Debug("explode with "+ obj.Damage);
+            KELog.Debug("explode with "+ obj.Damage);
 
         }
     }
