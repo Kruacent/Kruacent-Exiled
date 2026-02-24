@@ -32,12 +32,22 @@ namespace KE.Items
 
                 Timing.CallDelayed(3f,prim.Destroy);
 
-                response = p.CurrentRoom.Type +
-                "\n" + p.CurrentRoom.LocalPosition(p.Position) +
-                "\n" + p.CurrentRoom.Rotation.eulerAngles +
-                "\n" + p.Position.ToString() +
-                "\n" + p.CurrentRoom.LocalPosition(p.Position);
-                return true;
+                if(p.CurrentRoom == null)
+                {
+                    response = p.Position.ToString();
+                }
+                else
+                {
+                    response = p.CurrentRoom.Type +
+                    "\n" + p.CurrentRoom.LocalPosition(p.Position) +
+                    "\n" + p.CurrentRoom.Rotation.eulerAngles +
+                    "\n" + p.Position.ToString() +
+                    "\n" + p.CurrentRoom.LocalPosition(p.Position);
+                }
+
+
+
+                    return true;
             }
             response = "no";
             return false;
