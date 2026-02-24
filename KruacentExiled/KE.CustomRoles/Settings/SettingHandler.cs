@@ -27,12 +27,16 @@ namespace KE.CustomRoles.Settings
         private readonly int _idArrow = 152;
         private readonly int _idTimeAbilityDesc = 153;
         private readonly int _idReshowCustomRole = 154;
+        private readonly int _idLeft = 7000;
+        private readonly int _idRight = 7001;
 
 
 
 
         public static event Action<Player> DownPressed = delegate { };
         public static event Action<Player> UpPressed = delegate { };
+        public static event Action<Player> LeftPressed = delegate { };
+        public static event Action<Player> RightPressed = delegate { };
 
         public static SettingHandler Instance { get; private set; }
         private List<SettingBase> settings;
@@ -56,7 +60,9 @@ namespace KE.CustomRoles.Settings
                 new KeybindSetting(_idDown, "Select down", UnityEngine.KeyCode.None,header:header),
                 new KeybindSetting(_idSelect, "Use selected ability", UnityEngine.KeyCode.None,header:header),
                 arrow,
-                new ButtonSetting(_idReshowCustomRole, "Reshow Custom role description","click",header:header)
+                new ButtonSetting(_idReshowCustomRole, "Reshow Custom role description","click",header:header),
+                new KeybindSetting(_idLeft, "Left", UnityEngine.KeyCode.LeftArrow,header:header),
+                new KeybindSetting(_idRight, "Right", UnityEngine.KeyCode.RightArrow,header:header),
             };
             
 
@@ -140,7 +146,17 @@ namespace KE.CustomRoles.Settings
                 KEAbilities.UseSelected(player);
             }
 
-            if (settingBase is SSButton buttonSetting)
+            if (CheckPressed(settingBase, _idLeft))
+            {
+                LeftPressed?.Invoke(player);
+            }
+
+            if (CheckPressed(settingBase, _idRight))
+            {
+                RightPressed?.Invoke(player);
+            }
+
+            if (settingBase is SSButton buttonSetting && buttonSetting.SettingId == _idReshowCustomRole)
             {
                 KECustomRole cr = KECustomRole.Get(player).FirstOrDefault();
 
@@ -148,8 +164,6 @@ namespace KE.CustomRoles.Settings
                 {
                     cr.Show(player);
                 }
-
-
             }
 
 

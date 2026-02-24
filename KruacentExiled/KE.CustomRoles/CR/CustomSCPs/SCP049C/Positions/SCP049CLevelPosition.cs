@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
+namespace KE.CustomRoles.CR.CustomSCPs.SCP049C.Positions
 {
     public class SCP049CLevelPosition : HintPosition
     {

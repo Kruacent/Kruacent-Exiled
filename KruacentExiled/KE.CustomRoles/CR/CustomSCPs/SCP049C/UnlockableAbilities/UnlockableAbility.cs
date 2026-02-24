@@ -8,16 +8,29 @@ using System.Threading.Tasks;
 
 namespace KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities
 {
-    public abstract class UnlockableAbility
+    public abstract class UnlockableAbility : Unlockable
     {
 
-        public abstract byte Tier { get; }
 
 
-        public abstract void Grant(ReferenceHub hub);
+        public abstract KEAbilities Ability { get; }
 
+        public override void Grant(ReferenceHub hub)
+        {
+            Player player = Player.Get(hub);
+            Ability.AddAbility(player);
 
-        public abstract void Remove(ReferenceHub hub);
+            if(!KEAbilities.TryGetSelected(player, out _))
+            {
+                KEAbilities.SelectFirstAbility(player);
+            }
+
+        }
+
+        public override void Remove(ReferenceHub hub)
+        {
+            Ability.RemoveAbility(Player.Get(hub));
+        }
 
     }
 }

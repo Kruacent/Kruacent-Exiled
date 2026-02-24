@@ -3,12 +3,19 @@ using Exiled.API.Features;
 using InventorySystem.Items.Usables.Scp1344;
 using System;
 using LabPlayer = LabApi.Features.Wrappers.Player;
-namespace KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities
+namespace KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.Tier3
 {
-    internal class GogglesNoWarningUnlockable : UnlockableAbility
+    internal class GogglesNoWarningUnlockable : Unlockable
     {
-        public override byte Tier => 99; //3
-
+        public override byte Tier => 3; //3
+        public override string GetName(ReferenceHub hub)
+        {
+            return "SCP-1344";
+        }
+        public override string GetDescription(ReferenceHub hub)
+        {
+            return "See through walls like when using SCP-1344";
+        }
         public override void Grant(ReferenceHub hub)
         {
             LabPlayer lab = LabPlayer.Get(hub);

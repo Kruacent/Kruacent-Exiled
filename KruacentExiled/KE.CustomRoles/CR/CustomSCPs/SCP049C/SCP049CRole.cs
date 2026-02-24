@@ -1,19 +1,15 @@
 ﻿using Exiled.API.Features;
-using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp049;
 using KE.CustomRoles.API.Features;
-using KE.Utils.API.Features;
+using KE.CustomRoles.CR.CustomSCPs.SCP049C.Positions;
+using KE.Utils.API.Displays.DisplayMeow;
 using LabApi.Events.Arguments.Scp049Events;
-using MapGeneration.Rooms;
+using NorthwoodLib.Pools;
 using PlayerRoles;
 using PlayerStatsSystem;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 
 namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
 {
@@ -51,22 +47,64 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
             instance = this;
             base.Init();
         }
-
+        
+        public static readonly SCP049CLevelPosition HintPosition = new();
 
         protected override void RoleAdded(Player player)
         {
             player.ReferenceHub.gameObject.AddComponent<SCP049CLevelSystem>();
+            if (!DisplayHandler.Instance.HasHint(player, HintPosition.HintPlacement))
+            {
+                DisplayHandler.Instance.CreateAuto(player, (arg) => GetContent(player), HintPosition.HintPlacement);
+            }
+
+
 
             base.RoleAdded(player);
         }
 
+        
+
+        public string GetContent(Player player)
+        {
+            if(!player.GameObject.TryGetComponent<SCP049CLevelSystem>(out var comp))
+            {
+                return " ";
+            }
+
+            StringBuilder sb = StringBuilderPool.Shared.Rent();
+            bool flag = comp.MaxLevelReached;
+
+            if (flag)
+            {
+                sb.Append("Tier : ");
+                sb.AppendLine(comp.Level.ToString());
+            }
+            else
+            {
+                sb.AppendLine("Max Tier");
+            }
+                
+            sb.Append("Kill : ");
+            sb.Append(comp.CurrentKill);
+            if (flag)
+            {
+                sb.Append("/");
+                sb.Append(comp.KillObjective);
+            }
+            return StringBuilderPool.Shared.ToStringReturn(sb);
+        }
+
         protected override void RoleRemoved(Player player)
         {
+            DisplayHandler.Instance.RemoveHint(player, HintPosition.HintPlacement);
+
 
             if(player.ReferenceHub.gameObject.TryGetComponent<SCP049CLevelSystem>(out var lvl))
             {
                 UnityEngine.Object.Destroy(lvl);
             }
+
 
             base.RoleRemoved(player);
         }
