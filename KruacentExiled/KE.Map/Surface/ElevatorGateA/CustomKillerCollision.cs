@@ -24,10 +24,7 @@ namespace KE.Map.Surface.ElevatorGateA
                     if (InBound(player))
                     {
                         PitDeath pit = player.GetEffect<PitDeath>();
-                        if (!pit.IsEnabled)
-                        {
-                            pit.IsEnabled = true;
-                        }
+                        pit.KillPlayer();
                         
                     }
                 }
