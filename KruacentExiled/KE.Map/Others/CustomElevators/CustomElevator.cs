@@ -1,4 +1,5 @@
-﻿using KE.Map.Surface.ElevatorGateA;
+﻿using Exiled.API.Interfaces;
+using KE.Map.Surface.ElevatorGateA;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace KE.Map.Others.CustomElevator
+namespace KE.Map.Others.CustomElevators
 {
     public class CustomElevator : KEElevator
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Light = Exiled.API.Features.Toys.Light;
 
-namespace KE.Map.CustomZones.CustomRooms.MCZ
+namespace KE.Map.Others.CustomZones.CustomRooms.MCZ
 {
     public class TCorridor : CustomRoom
     {
@@ -28,7 +28,7 @@ namespace KE.Map.CustomZones.CustomRooms.MCZ
 
             Quaternion otherBranch = rot * Quaternion.Euler(0, -90f, 0);
 
-            float lengthbranch = (15f / 2f) - (6f / 2f);
+            float lengthbranch = 15f / 2f - 6f / 2f;
 
 
             return new HashSet<AdminToy>()

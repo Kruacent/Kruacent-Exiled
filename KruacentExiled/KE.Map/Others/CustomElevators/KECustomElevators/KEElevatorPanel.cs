@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Map.Others.CustomZones
+namespace KE.Map.Others.CustomElevators.KECustomElevators
 {
-    public enum CustomFacilityZone
+    public class KEElevatorPanel
     {
-        None,
-        MediumContainment
     }
 }

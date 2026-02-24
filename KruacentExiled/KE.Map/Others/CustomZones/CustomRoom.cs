@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace KE.Map.CustomZones
+namespace KE.Map.Others.CustomZones
 {
     public abstract class CustomRoom
     {

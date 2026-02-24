@@ -32,6 +32,11 @@ namespace KE.Map.Surface.ElevatorGateA
 
         }
 
+        private void OnTriggerEnter()
+        {
+
+        }
+
         private bool InBound(Player player)
         {
             Vector3 position = transform.position;

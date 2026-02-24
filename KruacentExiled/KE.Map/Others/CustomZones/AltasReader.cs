@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Color = System.Drawing.Color;
 
-namespace KE.Map.CustomZones
+namespace KE.Map.Others.CustomZones
 {
     public static class AltasReader
     {

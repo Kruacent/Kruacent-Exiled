@@ -2,6 +2,7 @@
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Firearms.Modules.Scp127;
+using KE.Map.Others.CustomElevators.KECustomElevators;
 using MEC;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,14 @@ namespace KE.Map.Surface.ElevatorGateA
         private const float Scale = 0.8f;
         public static void Create()
         {
+            //Vector3 pos = new(18.24f, 290.65f, -46.07f);
+            //prim = Primitive.Create(pos, null, Vector3.one * Scale);
+            //prim.Flags = AdminToys.PrimitiveFlags.None;
+
+
+            //prim.GameObject.AddComponent<KECustomElevator>();
+
+            
             Destroy();
             model = new();
 

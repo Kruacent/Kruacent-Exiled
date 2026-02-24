@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Map.Others.CustomElevator
+namespace KE.Map.Others.CustomElevators
 {
     public abstract class KEElevator
     {
@@ -24,6 +24,7 @@ namespace KE.Map.Others.CustomElevator
         {
             elevators.Add(this);
         }
+
 
     }
 }

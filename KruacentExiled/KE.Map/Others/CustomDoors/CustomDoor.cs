@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Map.Others.CustomZones
+namespace KE.Map.Others.CustomDoors
 {
-    public enum CustomFacilityZone
+    internal class CustomDoor
     {
-        None,
-        MediumContainment
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Light = Exiled.API.Features.Toys.Light;
 
-namespace KE.Map.CustomZones.CustomRooms.MCZ
+namespace KE.Map.Others.CustomZones.CustomRooms.MCZ
 {
     public class SCorridor : CustomRoom
     {

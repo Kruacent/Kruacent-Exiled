@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Random = System.Random;
 
-namespace KE.Map.CustomZones
+namespace KE.Map.Others.CustomZones
 {
     public class MediumContainmentZone : CustomZone
     {

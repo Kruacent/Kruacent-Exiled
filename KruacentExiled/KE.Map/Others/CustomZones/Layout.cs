@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static KE.Map.CustomZones.AltasReader;
+using static KE.Map.Others.CustomZones.AltasReader;
 
-namespace KE.Map.CustomZones
+namespace KE.Map.Others.CustomZones
 {
     public struct Layout
     {
