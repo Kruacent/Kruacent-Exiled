@@ -31,6 +31,11 @@ namespace KE.CustomRoles.CR.Human
                 {
                     [TranslationKeyName] = "Vieux",
                     [TranslationKeyDesc] = "Je suis vieux",
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Vieux",
+                    [TranslationKeyDesc] = "POV Mishima",
                 }
             };
         }

@@ -27,10 +27,15 @@ namespace KE.CustomRoles.CR.ClassD
                 {
                     [TranslationKeyName] = "Mime",
                     [TranslationKeyDesc] = "tu fais très peu de bruit quand tu marches\net t'es tout plat",
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Mime",
+                    [TranslationKeyDesc] = "Tu ne peux pas parler\nmais tu fais très peu de bruit quand tu marches\net t'es tout plat",
                 }
             };
         }
-
+        
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
         public override bool KeepRoleOnDeath { get; set; } = false;

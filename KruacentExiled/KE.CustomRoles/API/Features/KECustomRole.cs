@@ -507,7 +507,7 @@ namespace KE.CustomRoles.API.Features
         {
             //MirrorExtensions.SetPlayerInfoForTargetOnly()
 
-            string name = GetTranslation("en", TranslationKeyName);
+            string name = GetTranslation("legacy", TranslationKeyName);
 
             player.CustomInfo = player.CustomName;
             if (!string.IsNullOrEmpty(name))

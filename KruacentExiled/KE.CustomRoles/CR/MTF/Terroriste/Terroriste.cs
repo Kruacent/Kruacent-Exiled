@@ -24,7 +24,12 @@ namespace KE.CustomRoles.CR.MTF.Terroriste
                 {
                     [TranslationKeyName] = "Terroriste",
                     [TranslationKeyDesc] = "Ne fait pas exploser la facilité \ntu commences avec des grenades",
-                }
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Terroriste",
+                    [TranslationKeyDesc] = "Ne fait pas exploser la facilité \ntu commences avec des grenades",
+                },
             };
         }
         public override int MaxHealth { get; set; } = 100;

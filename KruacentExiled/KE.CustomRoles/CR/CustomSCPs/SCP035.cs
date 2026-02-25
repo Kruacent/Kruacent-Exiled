@@ -43,6 +43,13 @@ namespace KE.CustomRoles.CR.CustomSCPs
                     [TranslationKeyDesc] = "Tue tous les humains!\nTu peux pas prendre d'arme spécial mais tu prends 3 fois moins de dégât de ces armes",
                     ["SCP035CantPickup"] = "Une force étrange qui s'appelle 'équilibre' \nt'empêches de prendre cet objet.",
                     ["SCP035CantUse"] = "Une force étrange qui s'appelle 'équilibre' \nt'empêches d'utiliser cet objet.",
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "SCP-035",
+                    [TranslationKeyDesc] = "You can't pickup the Micro-HID and anything made with it, but you take 3 time less damage by these weapon.\nKill every humans",
+                    ["SCP035CantPickup"] = "A strange force called \'game balance\' \nprevents you from picking up this item",
+                    ["SCP035CantUse"] = "A strange force called 'game balance' \nprevents you from using this item.",
                 }
             };
         }

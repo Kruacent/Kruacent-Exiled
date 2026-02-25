@@ -28,6 +28,11 @@ namespace KE.CustomRoles.CR.Human
                 {
                     [TranslationKeyName] = "Asthmatique",
                     [TranslationKeyDesc] = "T'as stamina est réduit de moitié\nMais tu vises mieux",
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Asthmatique",
+                    [TranslationKeyDesc] = "T'as stamina est réduit de moitié\nMais tu vises mieux",
                 }
             };
         }

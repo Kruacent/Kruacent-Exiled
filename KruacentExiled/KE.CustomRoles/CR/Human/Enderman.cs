@@ -25,7 +25,13 @@ namespace KE.CustomRoles.CR.Human
                 {
                     [TranslationKeyName] = "Enderman",
                     [TranslationKeyDesc] = "Tu peux te téléporter ! T tro for enféte",
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Enderman",
+                    [TranslationKeyDesc] = "Tu peux te téléporter ! T tro for enféte",
                 }
+
             };
         }
         public override bool KeepRoleOnDeath { get; set; } = false;

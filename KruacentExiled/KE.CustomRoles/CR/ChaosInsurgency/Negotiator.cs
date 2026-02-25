@@ -26,8 +26,13 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
                 ["fr"] = new()
                 {
                     [TranslationKeyName] = "Negociateur",
-                    [TranslationKeyDesc] = "RUSH B or A, i dont rember sooo good luck",
-                }
+                    [TranslationKeyDesc] = "T'es immunisé au tire allié et tu peux convertir des zombies",
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Negotiator",
+                    [TranslationKeyDesc] = "You're immune to friendly fire and you can convert zombie into your team, isn't that nice?",
+                },
             };
         }
         public override int MaxHealth { get; set; } = 100;

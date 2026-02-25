@@ -23,12 +23,12 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
                 ["en"] = new()
                 {
                     [TranslationKeyName] = "SCP049-C",
-                    [TranslationKeyDesc] = "WIP",
+                    [TranslationKeyDesc] = "A modified SCP049 instance which does not create any SCP049-2\ninstead consuming the body to gain powerful abilities\nDoctor's call gives 300 Hume Shield\nExpired body can still be consumed but need more time to do so",
                 },
                 ["fr"] = new()
                 {
                     [TranslationKeyName] = "SCP049-C",
-                    [TranslationKeyDesc] = "WIP",
+                    [TranslationKeyDesc] = "A modified SCP049 instance which does not create any SCP049-2\ninstead consuming the body to gain powerful abilities\nDoctor's call gives 300 Hume Shield\nExpired body can still be consumed but need more time to do so",
                 }
             };
         }
@@ -130,15 +130,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
             ev.IsAllowed = false;
             ev.Ragdoll.Destroy();
 
-
-            if (true)
-            {
-                lvl.AddLevel();
-            }
-            else
-            {
-                lvl.AddKill();
-            }
+            lvl.AddKill();
 
                 
         }

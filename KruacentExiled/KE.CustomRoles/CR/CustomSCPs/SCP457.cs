@@ -34,6 +34,11 @@ namespace KE.CustomRoles.CR.CustomSCPs
                 {
                     [TranslationKeyName] = "SCP-457",
                     [TranslationKeyDesc] = "j'ai dit pas trop cuite",
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "SCP-457",
+                    [TranslationKeyDesc] = "You do passive damage around you",
                 }
             };
         }

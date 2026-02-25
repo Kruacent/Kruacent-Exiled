@@ -33,7 +33,12 @@ namespace KE.CustomRoles.CR.MTF
                 {
                     [TranslationKeyName] = "Pilote",
                     [TranslationKeyDesc] = "Je suis pilote!",
-                }
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Pilot",
+                    [TranslationKeyDesc] = "So I haveth a Laser Pointere",
+                },
             };
         }
 

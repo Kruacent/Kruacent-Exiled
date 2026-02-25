@@ -29,6 +29,11 @@ namespace KE.CustomRoles.CR.Scientist
                 {
                     [TranslationKeyName] = "Zone Manager",
                     [TranslationKeyDesc] = "Incroyable tu peux avoir une promotion alors fais ton boulot et ouvre tous ces checkpoints et tu pourras sortir d'ici!",
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Zone Manager",
+                    [TranslationKeyDesc] = "Incroyable tu peux avoir une promotion alors fais ton boulot et ouvre tous ces checkpoints et tu pourras sortir d'ici!",
                 }
             };
         }

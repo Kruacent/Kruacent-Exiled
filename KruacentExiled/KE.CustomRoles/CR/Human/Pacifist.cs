@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Item;
 using Exiled.Events.EventArgs.Player;
+using InventorySystem.Items.ThrowableProjectiles;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
 using PlayerRoles;
@@ -44,21 +45,26 @@ namespace KE.CustomRoles.CR.Human
             Exiled.Events.Handlers.Item.Swinging += OnSwinging;
             Exiled.Events.Handlers.Item.ChargingJailbird += OnChargingJailbird;
             Exiled.Events.Handlers.Player.Shooting += OnShooting;
-            Exiled.Events.Handlers.Player.ThrowingRequest += OnThrowingRequest;
+            Exiled.Events.Handlers.Player.ThrownProjectile += OnThrownProjectile;
             Exiled.Events.Handlers.Player.Escaped += OnEscaped;
             base.SubscribeEvents();
         }
 
         protected override void UnsubscribeEvents()
         {
-
+            Exiled.Events.Handlers.Item.DisruptorFiring -= OnDisruptorFiring;
+            Exiled.Events.Handlers.Item.Swinging -= OnSwinging;
+            Exiled.Events.Handlers.Item.ChargingJailbird -= OnChargingJailbird;
+            Exiled.Events.Handlers.Player.Shooting -= OnShooting;
+            Exiled.Events.Handlers.Player.ThrownProjectile -= OnThrownProjectile;
+            Exiled.Events.Handlers.Player.Escaped -= OnEscaped;
             base.UnsubscribeEvents();
         }
-        private void OnThrowingRequest(ThrowingRequestEventArgs ev)
+        private void OnThrownProjectile(ThrownProjectileEventArgs ev)
         {
             if (Check(ev.Player))
             {
-                ev.RequestType = Exiled.API.Enums.ThrowRequest.CancelThrow;
+                ev.Throwable.Destroy();
             }
 
         }

@@ -1,4 +1,4 @@
-﻿using KE.CustomRoles.API.Features;
+﻿/*using KE.CustomRoles.API.Features;
 using Exiled.API.Features;
 using UnityEngine;
 using Exiled.Events.EventArgs.Player;
@@ -76,4 +76,4 @@ namespace KE.CustomRoles.CR.Scientist
 
         }
     }
-}
+}*/

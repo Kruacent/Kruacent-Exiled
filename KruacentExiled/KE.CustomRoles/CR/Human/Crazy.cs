@@ -45,7 +45,12 @@ namespace KE.CustomRoles.CR.Human
                 {
                     [TranslationKeyName] = "Fou de la facilité",
                     [TranslationKeyDesc] = "Je pense que le traitement que t'as eu à la fondation t'as pas aidé",
-                }
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Fou de la facilité",
+                    [TranslationKeyDesc] = "Je pense que le traitement que t'as eu à la fondation t'as pas aidé",
+                },
             };
         }
 

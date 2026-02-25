@@ -27,6 +27,11 @@ namespace KE.CustomRoles.CR.MTF
                 {
                     [TranslationKeyName] = "Tank",
                     [TranslationKeyDesc] = "Tu es ralenti selon ton nombre de balle",
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Tank",
+                    [TranslationKeyDesc] = "Tu es débuff mais ta force de tir est démultiplié (fais attention à tes balles)",
                 }
             };
         }

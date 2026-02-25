@@ -35,6 +35,12 @@ namespace KE.CustomRoles.CR.Guard
                     [TranslationKeyName] = "Garde de SCP-914",
                     [TranslationKeyDesc] = "Tu es <b>Le</b> <color=#6B6B38>garde de SCP-914</color> \nTu commences à 914 \nmais on a traffiqué ta carte \net ntm aussi",
                 }
+                ,
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Garde de SCP-914",
+                    [TranslationKeyDesc] = "Tu es <b>Le</b> <color=#6B6B38>garde de SCP-914</color> \nTu commences à 914 \nmais on a traffiqué ta carte \net ntm aussi",
+                }
             };
         }
         public override int MaxHealth { get; set; } = 100;

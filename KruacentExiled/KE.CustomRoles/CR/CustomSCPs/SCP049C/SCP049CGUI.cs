@@ -58,7 +58,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
         }
 
 
-        private const string TitleMessage = "Choose an ability! (%seconds%s)";
+        private const string TitleMessage = "Choose an ability! (%seconds%s)\n use Right and Left (Server settings)";
 
 
         private string Title(Player player)

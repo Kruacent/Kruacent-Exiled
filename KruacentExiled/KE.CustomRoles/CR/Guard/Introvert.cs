@@ -27,6 +27,11 @@ namespace KE.CustomRoles.CR.Guard
                 {
                     [TranslationKeyName] = "Introverti",
                     [TranslationKeyDesc] = "Tu n'aimes pas trop les humains",
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Introvert",
+                    [TranslationKeyDesc] = "Tu n'aimes pas trop les humains",
                 }
             };
         }

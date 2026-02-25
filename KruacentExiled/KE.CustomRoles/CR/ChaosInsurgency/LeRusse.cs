@@ -32,6 +32,11 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
                 {
                     [TranslationKeyName] = "Russe",
                     [TranslationKeyDesc] = "RUSH B or A, i dont rember sooo good luck",
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Russe",
+                    [TranslationKeyDesc] = "RUSH B or A, i dont rember sooo good luck",
                 }
             };
         }

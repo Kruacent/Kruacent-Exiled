@@ -28,9 +28,15 @@ namespace KE.CustomRoles.CR.Human
                 },
                 ["fr"] = new()
                 {
+                    [TranslationKeyName] = "Diabétique",
+                    [TranslationKeyDesc] = "T'as mangé le crambleu au pomme de mael",
+                },
+                ["legacy"] = new()
+                {
                     [TranslationKeyName] = "Diabetique",
                     [TranslationKeyDesc] = "T'as mangé le crambleu au pomme de mael",
                 }
+
             };
         }
         public override bool KeepRoleOnDeath { get; set; } = false;

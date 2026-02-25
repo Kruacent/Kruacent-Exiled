@@ -33,6 +33,11 @@ namespace KE.CustomRoles.CR.Human
                 {
                     [TranslationKeyName] = "Maladroit Voleur",
                     [TranslationKeyDesc] = "Fais attention à \"tes\" objets !",
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Maladroit Voleur",
+                    [TranslationKeyDesc] = "Fais attention à \"tes\" objets !",
                 }
             };
         }

@@ -24,6 +24,11 @@ namespace KE.CustomRoles.CR.Guard
                     [TranslationKeyName] = "Chef des gardes",
                     [TranslationKeyDesc] = "T'as une carte de private \net un crossvec",
                 }
+                ,["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Chef des gardes",
+                    [TranslationKeyDesc] = "T'as une carte de private \net un crossvec",
+                }
             };
         }
         public override int MaxHealth { get; set; } = 100;

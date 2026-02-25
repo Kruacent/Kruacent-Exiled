@@ -33,6 +33,11 @@ namespace KE.CustomRoles.CR.ClassD
                 {
                     [TranslationKeyName] = "DBoyInShape",
                     [TranslationKeyDesc] = "Dammmmnnnnnnn les gates",
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "DBoyInShape",
+                    [TranslationKeyDesc] = "Dammmmnnnnnnn les gates",
                 }
             };
         }

@@ -26,6 +26,11 @@ namespace KE.CustomRoles.CR.ClassD
                 {
                     [TranslationKeyName] = "Enfant",
                     [TranslationKeyDesc] = "do not the kid \ntu commences avec un bonbon arc-en-ciel (pour de vrai cette fois) \n t'es un peu plus petit que la normal",
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Enfant",
+                    [TranslationKeyDesc] = "do not the kid \ntu commences avec un bonbon arc-en-ciel (pour de vrai cette fois) \n t'es un peu plus petit que la normal",
                 }
             };
         }
