@@ -10,9 +10,9 @@ namespace KE.Misc.Features.PatchNotes
 {
     public class PatchNotesPosition : HintPosition
     {
-        public override float Xposition => -240;
+        public override float Xposition => -340;
 
-        public override float Yposition => 300;
+        public override float Yposition => 500;
         public override string Name => "PatchNotes";
 
         public override HintAlignment HintAlignment => HintAlignment.Left;

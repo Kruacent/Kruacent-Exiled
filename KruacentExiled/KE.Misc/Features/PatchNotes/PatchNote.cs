@@ -48,7 +48,7 @@ namespace KE.Misc.Features.PatchNotes
                 if (Round.IsLobby)
                 {
                     var hint = DisplayHandler.Instance.CreateAuto(player, (args) => GetPatchNotes(), HintPosition.HintPlacement);
-                    hint.FontSize = 25;
+                    hint.FontSize = 20;
                 }
             });
 
