@@ -3,6 +3,7 @@ using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Firearms.Modules.Scp127;
 using KE.Map.Others.CustomElevators.KECustomElevators;
+using KE.Utils.API.Features;
 using MEC;
 using System;
 using System.Collections.Generic;
@@ -61,8 +62,11 @@ namespace KE.Map.Surface.ElevatorGateA
 
         private static void CreateModels()
         {
+            KELog.Debug("creating elevator");
             model.Create(prim.Transform);
+            KELog.Debug("creating top panel");
             toppanel.Create(primtop.Transform);
+            KELog.Debug("creating bototm panel");
             bottompanel.Create(primbottom.Transform);
             
 

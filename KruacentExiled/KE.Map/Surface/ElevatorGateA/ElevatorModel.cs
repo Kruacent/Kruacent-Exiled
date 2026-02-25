@@ -357,6 +357,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(4.9f, 7.870179f, 4.9f)
         );
+            waypoint.VisualizeBounds = false;
             I_button.Base.OnInteracted += Base_OnInteracted;
         }
 

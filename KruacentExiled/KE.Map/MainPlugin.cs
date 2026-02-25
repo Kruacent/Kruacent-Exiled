@@ -121,7 +121,7 @@ namespace KE.Map
                 //[█      ]
 
                 //[█                                                            ]\n[██████████]
-                try
+                /*try
                 {
                     Primitive parent = Primitive.Create(PrimitiveType.Cube, pos, spawn: false);
                     parent.Flags = PrimitiveFlags.None;
@@ -169,7 +169,7 @@ namespace KE.Map
                     Log.Error(e);
                 }
 
-
+                */
 
 
             }
