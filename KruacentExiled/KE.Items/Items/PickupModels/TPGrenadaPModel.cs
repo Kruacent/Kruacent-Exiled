@@ -121,16 +121,16 @@ namespace KE.Items.Items.PickupModels
                 new Vector3(1f, 1f, 1f)
             );
 
-            var top = CreateLight(
-            lights.transform,
-            new Vector3(0f, 0.5f, 0f),
-            new Quaternion(0f, 0f, 0f, 1f),
-            new Vector3(1f, 1f, 1f),
-            new Color32(0, 255, 255, 255),
-            LightType.Point,
-            1f,
-            1.25f
-        );
+        //    var top = CreateLight(
+        //    lights.transform,
+        //    new Vector3(0f, 0.5f, 0f),
+        //    new Quaternion(0f, 0f, 0f, 1f),
+        //    new Vector3(1f, 1f, 1f),
+        //    new Color32(0, 255, 255, 255),
+        //    LightType.Point,
+        //    1f,
+        //    1.25f
+        //);
             
 
             var center = CreateLight(
@@ -140,20 +140,20 @@ namespace KE.Items.Items.PickupModels
             new Vector3(1f, 1f, 1f),
             new Color32(0, 255, 255, 255),
             LightType.Point,
-            1f,
+            .1f,
             1.25f
         );
 
-            var bottom = CreateLight(
-            lights.transform,
-            new Vector3(0f, -0.5f, 0f),
-            new Quaternion(0f, 0f, 0f, 1f),
-            new Vector3(1f, 1f, 1f),
-            new Color32(0, 255, 255, 255),
-            LightType.Point,
-            1f,
-            1.25f
-        );
+        //    var bottom = CreateLight(
+        //    lights.transform,
+        //    new Vector3(0f, -0.5f, 0f),
+        //    new Quaternion(0f, 0f, 0f, 1f),
+        //    new Vector3(1f, 1f, 1f),
+        //    new Color32(0, 255, 255, 255),
+        //    LightType.Point,
+        //    1f,
+        //    1.25f
+        //);
 
             var topbase = CreatePrimitive(
             Tpgrenada.transform,
