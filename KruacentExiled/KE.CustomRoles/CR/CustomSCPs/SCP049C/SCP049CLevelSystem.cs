@@ -47,7 +47,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
         {
             get
             {
-                return Level < MaxLevel;
+                return Level >= MaxLevel;
             }
         }
 
@@ -125,7 +125,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
             KELog.Debug("add kill");
             currentkill++;
 
-            if(!MaxLevelReached &&currentkill >= KillObjective)
+            if(!MaxLevelReached && currentkill >= KillObjective)
             {
                 currentkill = 0;
 

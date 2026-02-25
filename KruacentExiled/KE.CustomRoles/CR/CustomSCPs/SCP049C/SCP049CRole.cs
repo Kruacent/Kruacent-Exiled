@@ -29,6 +29,11 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
                 {
                     [TranslationKeyName] = "SCP049-C",
                     [TranslationKeyDesc] = "A modified SCP049 instance which does not create any SCP049-2\ninstead consuming the body to gain powerful abilities\nDoctor's call gives 300 Hume Shield\nExpired body can still be consumed but need more time to do so",
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "SCP049-C",
+                    [TranslationKeyDesc] = "A modified SCP049 instance which does not create any SCP049-2\ninstead consuming the body to gain powerful abilities\nDoctor's call gives 300 Hume Shield\nExpired body can still be consumed but need more time to do so",
                 }
             };
         }
@@ -37,7 +42,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
 
         public override string InternalName => "C";
         public override int MaxHealth { get; set; } = 2500;
-        public override float SpawnChance { get; set; } = 0;
+        public override float SpawnChance { get; set; } = 100;
         protected override int SettingId => 10003;
 
         internal static SCP049CRole instance = null;
