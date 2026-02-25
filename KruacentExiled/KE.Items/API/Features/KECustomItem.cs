@@ -117,7 +117,6 @@ namespace KE.Items.API.Features
 
             bool desc = MainPlugin.Instance.SettingsHandler.GetDescriptionsSettings(player);
 
-            Log.Debug(desc);
             if (desc)
             {
                 builder.AppendLine(c.Description);

@@ -9,15 +9,6 @@ namespace KE.Items.Items.PickupModels
 {
     public class TPGrenadaPModel : PickupModel
     {
-        private static Vector3 pillar = new Vector3(.15f, 1f, 0.15f);
-        private static Vector3 support = new Vector3(1, .25f, 1);
-        private static Vector3 glass = new Vector3(1, 1.75f, 1);
-        private static float positionPillars = 2.6f;
-
-        private static Color32 centralColor = new Color32(60, 255, 255, 255);
-        private static Color32 colorSupport = new Color32(80, 80, 80, 255);
-        private static Color32 glassColor = new Color32(74, 232, 255, 50);
-
         public TPGrenadaPModel(CustomItem customItem) : base(customItem)
         {
         }
@@ -26,29 +17,161 @@ namespace KE.Items.Items.PickupModels
 
         protected override void CreateModel(Transform parent)
         {
+            // This code was auto-generated
 
-            var glassPrim = CreatePrimitive(parent, PrimitiveType.Cube, Vector3.zero, Quaternion.identity, glass, glassColor);
-            //new PrimitiveBlueprint(PrimitiveType.Cube, Vector3.zero, Quaternion.identity, glassColor, glass),
+            var Tpgrenada = CreateEmptyPrimitive(
+                parent,
+                new Vector3(0f, 0f, 0f),
+                new Quaternion(0f, 0f, 0f, 1f),
+                new Vector3(1.21f, 1.21f, 1.21f)
+            );
 
-            var topSupport = CreatePrimitive(parent, PrimitiveType.Cube, Vector3.up, Quaternion.identity, support, colorSupport);
-            var bottomSupport = CreatePrimitive(parent, PrimitiveType.Cube, Vector3.down, Quaternion.identity, support, colorSupport);
-            //new PrimitiveBlueprint(PrimitiveType.Cube, Vector3.up * 12.5f, Quaternion.identity, colorSupport, support),
-            //new PrimitiveBlueprint(PrimitiveType.Cube, Vector3.down * 12.5f, Quaternion.identity, colorSupport, support),
+            var bottomSupport = CreatePrimitive(
+            Tpgrenada.transform,
+            PrimitiveType.Cube,
+            new Vector3(0f, -1f, 0f),
+            new Quaternion(0f, 0f, 0f, 1f),
+            new Vector3(1f, 0.25f, 1f),
+            new Color32(217, 217, 217, 255)
+        );
 
-            var centralPillar = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.identity, pillar, centralColor);
-            var pillar1 = CreatePrimitive(centralPillar.transform, PrimitiveType.Cylinder, positionPillars* new Vector3(1, 0, 1), Quaternion.identity, Vector3.one, colorSupport);
-            var pillar2 = CreatePrimitive(centralPillar.transform, PrimitiveType.Cylinder, positionPillars * new Vector3(-1, 0, 1), Quaternion.identity, Vector3.one, colorSupport);
-            var pillar3 = CreatePrimitive(centralPillar.transform, PrimitiveType.Cylinder, positionPillars * new Vector3(-1, 0, -1), Quaternion.identity, Vector3.one, colorSupport);
-            var pillar4 = CreatePrimitive(centralPillar.transform, PrimitiveType.Cylinder, positionPillars * new Vector3(1, 0, -1), Quaternion.identity, Vector3.one, colorSupport);
-            //new PrimitiveBlueprint(PrimitiveType.Cylinder, Vector3.up + Vector3.back * 6 + Vector3.right * 6, Quaternion.identity, colorSupport, pillar),
-            //new PrimitiveBlueprint(PrimitiveType.Cylinder, Vector3.up + Vector3.forward * 6 + Vector3.right * 6, Quaternion.identity, colorSupport, pillar),
-            //new PrimitiveBlueprint(PrimitiveType.Cylinder, Vector3.up + Vector3.back * 6 + Vector3.left * 6, Quaternion.identity, colorSupport, pillar),
-            //new PrimitiveBlueprint(PrimitiveType.Cylinder, Vector3.up + Vector3.forward * 6 + Vector3.left * 6, Quaternion.identity, colorSupport, pillar),
-            //new PrimitiveBlueprint(PrimitiveType.Cylinder, Vector3.up, Quaternion.identity, centralColor, pillar),
+            var topSupport = CreatePrimitive(
+            Tpgrenada.transform,
+            PrimitiveType.Cube,
+            new Vector3(0f, 1f, 0f),
+            new Quaternion(0f, 0f, 0f, 1f),
+            new Vector3(1f, 0.25f, 1f),
+            new Color32(217, 217, 217, 255)
+        );
 
-            Light light = CreateLight(parent, Vector3.zero, Quaternion.identity, Vector3.one, centralColor, LightType.Point, .1f);
-            //new LightBlueprint(Vector3.zero, Quaternion.identity, centralColor, Vector3.one,),
+            var pillars = CreateEmptyPrimitive(
+                Tpgrenada.transform,
+                new Vector3(0f, 0f, 0f),
+                new Quaternion(0f, 0f, 0f, 1f),
+                new Vector3(1f, 1f, 1f)
+            );
 
+            var pillar1 = CreatePrimitive(
+            pillars.transform,
+            PrimitiveType.Cylinder,
+            new Vector3(-0.4f, 0f, 0.4f),
+            new Quaternion(0f, 0f, 0f, 1f),
+            new Vector3(0.1f, 1f, 0.1f),
+            new Color32(217, 217, 217, 255)
+        );
+
+            var pillar2 = CreatePrimitive(
+            pillars.transform,
+            PrimitiveType.Cylinder,
+            new Vector3(0.4f, 0f, 0.4f),
+            new Quaternion(0f, 0f, 0f, 1f),
+            new Vector3(0.1f, 1f, 0.1f),
+            new Color32(217, 217, 217, 255)
+        );
+
+            var pillar3 = CreatePrimitive(
+            pillars.transform,
+            PrimitiveType.Cylinder,
+            new Vector3(0.4f, 0f, -0.4f),
+            new Quaternion(0f, 0f, 0f, 1f),
+            new Vector3(0.1f, 1f, 0.1f),
+            new Color32(217, 217, 217, 255)
+        );
+
+            var pillar4 = CreatePrimitive(
+            pillars.transform,
+            PrimitiveType.Cylinder,
+            new Vector3(-0.4f, 0f, -0.4f),
+            new Quaternion(0f, 0f, 0f, 1f),
+            new Vector3(0.1f, 1f, 0.1f),
+            new Color32(217, 217, 217, 255)
+        );
+
+            var centralPillar = CreatePrimitive(
+            pillars.transform,
+            PrimitiveType.Cylinder,
+            new Vector3(0f, 0f, 0f),
+            new Quaternion(0f, 0f, 0f, 1f),
+            new Vector3(0.3f, 0.8f, 0.3f),
+            new Color32(0, 255, 255, 255)
+        );
+
+            var glass = CreatePrimitive(
+            Tpgrenada.transform,
+            PrimitiveType.Cube,
+            new Vector3(0f, 0f, 0f),
+            new Quaternion(0f, 0f, 0f, 1f),
+            new Vector3(1f, 1.75f, 1f),
+            new Color32(54, 219, 243, 69)
+        );
+
+            var innerglass = CreatePrimitive(
+            Tpgrenada.transform,
+            PrimitiveType.Cylinder,
+            new Vector3(0f, 0f, 0f),
+            new Quaternion(0f, 0f, 0f, 1f),
+            new Vector3(0.7f, 1f, 0.7f),
+            new Color32(54, 219, 243, 69)
+        );
+
+            var lights = CreateEmptyPrimitive(
+                Tpgrenada.transform,
+                new Vector3(0f, 0f, 0f),
+                new Quaternion(0f, 0f, 0f, 1f),
+                new Vector3(1f, 1f, 1f)
+            );
+
+            var top = CreateLight(
+            lights.transform,
+            new Vector3(0f, 0.5f, 0f),
+            new Quaternion(0f, 0f, 0f, 1f),
+            new Vector3(1f, 1f, 1f),
+            new Color32(0, 255, 255, 255),
+            LightType.Point,
+            1f,
+            1.25f
+        );
+
+            var center = CreateLight(
+            lights.transform,
+            new Vector3(0f, 0f, 0f),
+            new Quaternion(0f, 0f, 0f, 1f),
+            new Vector3(1f, 1f, 1f),
+            new Color32(0, 255, 255, 255),
+            LightType.Point,
+            1f,
+            1.25f
+        );
+
+            var bottom = CreateLight(
+            lights.transform,
+            new Vector3(0f, -0.5f, 0f),
+            new Quaternion(0f, 0f, 0f, 1f),
+            new Vector3(1f, 1f, 1f),
+            new Color32(0, 255, 255, 255),
+            LightType.Point,
+            1f,
+            1.25f
+        );
+
+            var topbase = CreatePrimitive(
+            Tpgrenada.transform,
+            PrimitiveType.Cylinder,
+            new Vector3(0f, 0.9f, 0f),
+            new Quaternion(0f, 0f, 0f, 1f),
+            new Vector3(0.9f, 0.1f, 0.9f),
+            new Color32(255, 255, 255, 255)
+        );
+
+            var botbase = CreatePrimitive(
+            Tpgrenada.transform,
+            PrimitiveType.Cylinder,
+            new Vector3(0f, -0.9f, 0f),
+            new Quaternion(0f, 0f, 0f, 1f),
+            new Vector3(0.9f, 0.1f, 0.9f),
+            new Color32(255, 255, 255, 255)
+        );
         }
+
     }
 }

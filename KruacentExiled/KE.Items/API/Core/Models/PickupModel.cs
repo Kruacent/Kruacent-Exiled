@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using AdminToys;
+using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Toys;
 using Exiled.CustomItems.API.Features;
@@ -42,6 +43,11 @@ namespace KE.Items.API.Core.Models
         }
 
         private Dictionary<Pickup, Primitive> PickupToParent;
+
+        protected override PrimitiveObjectToy CreatePrimitive(Transform parent, PrimitiveType type, Vector3 localPosition, Quaternion localRotation, Vector3 localScale, Color32 color, byte movementSmoothing = 0, bool collidable = false)
+        {
+            return base.CreatePrimitive(parent, type, localPosition, localRotation, localScale, color, 0, false);
+        }
 
         private Primitive CreateParent(Pickup pickup)
         {
