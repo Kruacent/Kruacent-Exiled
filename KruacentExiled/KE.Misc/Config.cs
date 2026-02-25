@@ -29,7 +29,7 @@ namespace KE.Misc
         public int MinPlayerVote { get; set; } = 6;
 
 
-        public string PatchNote { get; set; } = "Patch note:";
+        public string PatchNote { get; set; } = "";
 
 
 
