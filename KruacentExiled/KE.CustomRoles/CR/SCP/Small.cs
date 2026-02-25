@@ -23,7 +23,12 @@ namespace KE.CustomRoles.CR.SCP
                 {
                     [TranslationKeyName] = "Petit",
                     [TranslationKeyDesc] = "t poti",
-                }
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Small",
+                    [TranslationKeyDesc] = "u smoll",
+                },
             };
         }
         public override bool KeepRoleOnDeath { get; set; } = false;

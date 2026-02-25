@@ -21,7 +21,12 @@ namespace KE.CustomRoles.CR.SCP
                 {
                     [TranslationKeyName] = "Paper",
                     [TranslationKeyDesc] = "uh oh. paper jam",
-                }
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Paper",
+                    [TranslationKeyDesc] = "uh oh. paper jam",
+                },
             };
         }
         public override SideEnum Side { get; set; } = SideEnum.SCP;

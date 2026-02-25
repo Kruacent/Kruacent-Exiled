@@ -36,7 +36,12 @@ namespace KE.CustomRoles.CR.SCP.SCP173
                 {
                     [TranslationKeyName] = "SCP-173 Glacé",
                     [TranslationKeyDesc] = "Instead of Tantrum you drop a SCP-244.\nTué quelqu'un qui est en hypothermie donne du shield (dans le jeu hein)",
-                }
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Frozen SCP-173",
+                    [TranslationKeyDesc] = "Instead of Tantrum you drop a SCP-244.\nKilling anyone with hypothermia gives Hume Shield",
+                },
             };
         }
         public override bool KeepRoleOnDeath { get; set; } = false;
@@ -70,7 +75,7 @@ namespace KE.CustomRoles.CR.SCP.SCP173
         private void OnDeath(PlayerDeathEventArgs ev)
         {
             Player player = ev.Player;
-
+            if (!Check(ev.Attacker)) return;
 
 
             if (ev.DamageHandler is ScpDamageHandler scpDamageHandler)
@@ -99,6 +104,7 @@ namespace KE.CustomRoles.CR.SCP.SCP173
 
         private void OnCreatedTantrum(Scp173CreatedTantrumEventArgs ev)
         {
+            if (!Check(ev.Player)) return;
 
             TantrumHazard tantrum = ev.Tantrum;
             float time = tantrum.LiveDuration;

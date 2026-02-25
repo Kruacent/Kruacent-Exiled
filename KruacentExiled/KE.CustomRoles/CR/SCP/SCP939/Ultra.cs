@@ -28,7 +28,12 @@ namespace KE.CustomRoles.CR.SCP.SCP939
                 {
                     [TranslationKeyName] = "Ultra SCP-939",
                     [TranslationKeyDesc] = "Tu sais où est tout le monde",
-                }
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Ultra SCP-939",
+                    [TranslationKeyDesc] = "You can sense where people are located",
+                },
             };
         }
         public override bool KeepRoleOnDeath { get; set; } = false;

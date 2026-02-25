@@ -29,7 +29,12 @@ namespace KE.CustomRoles.CR.Human
                 {
                     [TranslationKeyName] = "Pacifiste",
                     [TranslationKeyDesc] = "T'es idées empêche quelconque violence.\nS'enlève quand tu t'échappes et ramène plus de renfort",
-                }
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Pacifiste",
+                    [TranslationKeyDesc] = "T'es idées empêche quelconque violence.\nS'enlève quand tu t'échappes et ramène plus de renfort",
+                },
             };
         }
         public override bool KeepRoleOnDeath { get; set; } = false;
