@@ -27,7 +27,7 @@ namespace KE.Items.Items.PickupModels
 
             var Mine = CreateEmptyPrimitive(
                 parent,
-                new Vector3(-1.171f, 1.137f, 0.773f),
+                new Vector3(0, 0, 0),
                 new Quaternion(0f, 0f, 0f, 1f),
                 new Vector3(1f, 1f, 1f)
             );

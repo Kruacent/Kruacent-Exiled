@@ -65,17 +65,17 @@ namespace KE.Items.Items
 
         };*/
 
-        //public PickupModel PickupModel { get; }
+        public PickupModel PickupModel { get; }
 
         public Mine()
         {
             Effect = new MineEffect();
-            //PickupModel = new MinePModel(this);
+            PickupModel = new MinePModel(this);
         }
 
         protected override void SubscribeEvents()
         {
-            //PickupModel.SubscribeEvents();
+            PickupModel.SubscribeEvents();
             base.SubscribeEvents();
         }
 
