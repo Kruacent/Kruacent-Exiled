@@ -131,6 +131,7 @@ namespace KE.Items.Items.PickupModels
             1f,
             1.25f
         );
+            
 
             var center = CreateLight(
             lights.transform,
