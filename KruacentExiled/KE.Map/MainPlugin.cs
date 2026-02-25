@@ -9,11 +9,14 @@ using KE.Map.Heavy;
 using KE.Map.Heavy.GamblingZone;
 using KE.Map.Others.BlackoutNDoor.Handlers;
 using KE.Map.Surface.ElevatorGateA;
+using KE.Utils.API.Features;
 using KE.Utils.API.KETextToy;
+using KE.Utils.Extensions;
 using MEC;
 using PlayerRoles;
 using PlayerRoles.PlayableScps.Scp106;
 using ProjectMER.Features;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -70,6 +73,7 @@ namespace KE.Map
             if (Config.Debug)
             {
                 Player player = Player.List.First();
+                Vector3 pos;
                 //StructureSpawner.SpawnPedestal(ItemType.KeycardJanitor,player.Position,Quaternion.identity,Vector3.one);
 
                 //player.Teleport(Room.List.Where(r => r.Type == Exiled.API.Enums.RoomType.EzVent).First());
@@ -82,7 +86,8 @@ namespace KE.Map
                     //player.Teleport(teleport);
                 });
 
-                Vector3 pos = RoleTypeId.Scp049.GetRandomSpawnLocation().Position;
+                //pos = RoleTypeId.Scp049.GetRandomSpawnLocation().Position;
+                pos = player.Position;
 
 
 
@@ -110,7 +115,59 @@ namespace KE.Map
                 //FollowingTextToy f2 = new([], player.Position, Quaternion.identity, Vector3.one);
                 //f2.Toy.TextFormat = "F2 tombe à l'eau";
 
-                
+
+                // [█ ]
+                //[█      ]
+                //[█      ]
+
+                //[█                                                            ]\n[██████████]
+                try
+                {
+                    Primitive parent = Primitive.Create(PrimitiveType.Cube, pos, spawn: false);
+                    parent.Flags = PrimitiveFlags.None;
+
+                    parent.Spawn();
+
+                    Primitive prim = Primitive.Create(PrimitiveType.Cube, null, spawn: false);
+                    prim.Transform.parent = parent.Transform;
+                    prim.Transform.localPosition = Vector3.zero;
+                    prim.Flags = PrimitiveFlags.Visible;
+                    prim.MovementSmoothing = 60;
+                    prim.Spawn();
+
+                    Log.Info(prim.Position);
+
+                    AnimationClip clip = new AnimationClip();
+                    clip.legacy = true;
+                    clip.wrapMode = WrapMode.PingPong;
+
+                    Transform t = prim.GameObject.transform;
+
+                    float startX = t.localPosition.x;
+
+                    AnimationCurve curve = AnimationCurve.Linear(
+                        0f, startX,
+                        3f, startX + 1f
+                    );
+
+                    clip.SetCurve("", typeof(Transform), "localPosition.x", curve);
+
+                    Animation animation = prim.GameObject.AddComponent<Animation>();
+                    animation.AddClip(clip, "move");
+                    animation.Play("move");
+
+
+                    Log.Debug(animation.IsPlaying("move"));
+                    Timing.CallDelayed(3, () =>
+                    {
+                        Log.Info(prim.Position);
+                        player.Position = prim.Position;
+                    });
+                }
+                catch(Exception e)
+                {
+                    Log.Error(e);
+                }
 
 
 
