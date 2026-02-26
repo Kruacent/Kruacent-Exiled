@@ -2,6 +2,7 @@
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Pickups;
+using Exiled.API.Features.Pools;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
@@ -11,7 +12,6 @@ using Exiled.Events.EventArgs.Scp106;
 using Exiled.Events.EventArgs.Scp939;
 using KE.Items.API.Features;
 using MEC;
-using NorthwoodLib.Pools;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -48,7 +48,7 @@ namespace KE.Items.Items
             },
         };
 
-        private Dictionary<Pickup, Player> ActiveSensors 
+        private Dictionary<Pickup, Player> ActiveSensors;
         private Dictionary<Pickup, float> Cooldowns = new Dictionary<Pickup, float>();
 
         private Dictionary<Pickup, float> BatteryLife = new Dictionary<Pickup, float>();
@@ -58,7 +58,8 @@ namespace KE.Items.Items
         protected override void SubscribeEvents()
         {
 
-            ActiveSensors = new Dictionary<Pickup, Player>();
+            
+            ActiveSensors = DictionaryPool<Pickup, Player>.Pool.Get();
             Exiled.Events.Handlers.Player.Shot += OnShot;
             Exiled.Events.Handlers.Player.DroppedItem += OnDroppedItem;
 
@@ -82,7 +83,7 @@ namespace KE.Items.Items
             Exiled.Events.Handlers.Scp096.Enraging -= OnSCP096Enraging;
 
             Timing.KillCoroutines(SensorRoutine);
-            ActiveSensors.Clear();
+            DictionaryPool<Pickup, Player>.Pool.Return(ActiveSensors);
             base.UnsubscribeEvents();
         }
 
@@ -144,7 +145,7 @@ namespace KE.Items.Items
 
         private void CheckDestruction(Vector3 hitPos, float radius)
         {
-            List<Pickup> toDestroy = ListPool<Pickup>.Shared.Rent();
+            List<Pickup> toDestroy = ListPool<Pickup>.Pool.Get();
 
             foreach (var kvp in ActiveSensors)
             {
@@ -166,14 +167,14 @@ namespace KE.Items.Items
                 p.Destroy();
             }
 
-            ListPool<Pickup>.Shared.Return(toDestroy);
+            ListPool<Pickup>.Pool.Return(toDestroy);
         }
 
 
 
         private void CheckBattery()
         {
-            List<Pickup> invalid = ListPool<Pickup>.Shared.Rent();
+            List<Pickup> invalid = ListPool<Pickup>.Pool.Get();
             foreach (var key in ActiveSensors.Keys)
             {
                 if (BatteryLife.ContainsKey(key) && Time.time > BatteryLife[key])
@@ -190,7 +191,7 @@ namespace KE.Items.Items
                 BatteryLife.Remove(i);
                 if (!i.IsSpawned) i.Destroy();
             }
-            ListPool<Pickup>.Shared.Return(invalid);
+            ListPool<Pickup>.Pool.Return(invalid);
         }
 
         private IEnumerator<float> MotionDetector()
