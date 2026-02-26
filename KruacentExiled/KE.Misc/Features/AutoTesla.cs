@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Extensions;
+using Exiled.API.Features;
 using LabApi.Features.Wrappers;
 using MEC;
 using System;
@@ -32,16 +33,14 @@ namespace KE.Misc.Features
         {
             while (!Round.IsEnded)
             {
-                foreach (Tesla tesla in Tesla.List)
+                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(120f, 200f));
+                Tesla tesla = Tesla.List.GetRandomValue();
+
+                tesla.Trigger();
+                if (UnityEngine.Random.Range(0f, 100f) <= 70f)
                 {
-                    yield return Timing.WaitForSeconds(UnityEngine.Random.Range(120f,200f));
+                    yield return Timing.WaitForSeconds(tesla.Base.windupTime + tesla.Base.cooldownTime + .1f);
                     tesla.Trigger();
-                    if(UnityEngine.Random.Range(0f,100f) <= 70f)
-                    {
-                        yield return Timing.WaitForSeconds(tesla.Base.windupTime+tesla.Base.cooldownTime+.1f);
-                        tesla.Trigger();
-                    }
-                    
                 }
             }
         }
