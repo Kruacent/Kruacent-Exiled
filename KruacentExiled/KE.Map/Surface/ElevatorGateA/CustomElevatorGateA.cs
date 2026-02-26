@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features.Objectives;
+﻿using Exiled.API.Features;
+using Exiled.API.Features.Objectives;
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Firearms.Modules.Scp127;
@@ -39,8 +40,15 @@ namespace KE.Map.Surface.ElevatorGateA
 
             //prim.GameObject.AddComponent<KECustomElevator>();
 
+            try
+            {
+                Destroy();
+            }
+            catch(Exception e)
+            {
+                Log.Error(e);
+            }
             
-            Destroy();
             model = new();
 
             toppanel = new();
@@ -107,20 +115,36 @@ namespace KE.Map.Surface.ElevatorGateA
             if(prim != null)
             {
                 model.SendingElevator -= SendingElevator;
-                bottompanel.SendingElevator -= SendingElevator;
-                toppanel.SendingElevator -= SendingElevator;
                 model.Destroy(prim.Transform);
-                toppanel.Destroy(primtop.Transform);
-                bottompanel.Destroy(primbottom.Transform);
+                prim = null;
+
                 step.Destroy();
                 help.Destroy();
-                prim = null;
-                primbottom = null;
-                primtop = null;
+
                 step = null;
                 help = null;
             }
-            
+
+
+
+            if(primbottom != null)
+            {
+                
+                bottompanel.SendingElevator -= SendingElevator;
+                bottompanel.Destroy(primbottom.Transform);
+                primbottom = null;
+            }
+
+            if(primtop != null)
+            {
+                toppanel.SendingElevator -= SendingElevator;
+                toppanel.Destroy(primtop.Transform);
+
+                primtop = null;
+            }
+
+
+
         }
 
         private static bool isMoving = false;
