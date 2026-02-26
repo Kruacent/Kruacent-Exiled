@@ -5,8 +5,13 @@ using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp049;
+using Exiled.Events.EventArgs.Scp096;
+using Exiled.Events.EventArgs.Scp106;
+using Exiled.Events.EventArgs.Scp939;
 using KE.Items.API.Features;
 using MEC;
+using NorthwoodLib.Pools;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -43,7 +48,7 @@ namespace KE.Items.Items
             },
         };
 
-        private Dictionary<Pickup, Player> ActiveSensors = new Dictionary<Pickup, Player>();
+        private Dictionary<Pickup, Player> ActiveSensors 
         private Dictionary<Pickup, float> Cooldowns = new Dictionary<Pickup, float>();
 
         private Dictionary<Pickup, float> BatteryLife = new Dictionary<Pickup, float>();
@@ -52,14 +57,15 @@ namespace KE.Items.Items
 
         protected override void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.DroppingItem += OnDropping;
-            Exiled.Events.Handlers.Player.PickingUpItem += OnPickingUp;
-            Exiled.Events.Handlers.Player.Shot += OnShot;
 
-            Exiled.Events.Handlers.Scp049.Attacking += (ev) => CheckDestruction(ev.Player.Position, 2f);
-            Exiled.Events.Handlers.Scp096.Enraging += (ev) => CheckDestruction(ev.Player.Position, 2f);
-            Exiled.Events.Handlers.Scp939.Clawed += (ev) => CheckDestruction(ev.Player.Position, 2f);
-            Exiled.Events.Handlers.Scp106.Teleporting += (ev) => CheckDestruction(ev.Player.Position, 2f);
+            ActiveSensors = new Dictionary<Pickup, Player>();
+            Exiled.Events.Handlers.Player.Shot += OnShot;
+            Exiled.Events.Handlers.Player.DroppedItem += OnDroppedItem;
+
+            Exiled.Events.Handlers.Scp049.Attacking += OnSCP049Attacking;
+            Exiled.Events.Handlers.Scp106.Teleporting += OnSCP106Teleporting;
+            Exiled.Events.Handlers.Scp939.Clawed += OnSCP939Attacked;
+            Exiled.Events.Handlers.Scp096.Enraging += OnSCP096Enraging;
 
             SensorRoutine = Timing.RunCoroutine(MotionDetector());
             base.SubscribeEvents();
@@ -67,61 +73,84 @@ namespace KE.Items.Items
 
         protected override void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.DroppingItem -= OnDropping;
-            Exiled.Events.Handlers.Player.PickingUpItem -= OnPickingUp;
             Exiled.Events.Handlers.Player.Shot -= OnShot;
+            Exiled.Events.Handlers.Player.DroppedItem -= OnDroppedItem;
+
+            Exiled.Events.Handlers.Scp049.Attacking -= OnSCP049Attacking;
+            Exiled.Events.Handlers.Scp106.Teleporting -= OnSCP106Teleporting;
+            Exiled.Events.Handlers.Scp939.Clawed -= OnSCP939Attacked;
+            Exiled.Events.Handlers.Scp096.Enraging -= OnSCP096Enraging;
 
             Timing.KillCoroutines(SensorRoutine);
             ActiveSensors.Clear();
             base.UnsubscribeEvents();
         }
 
-        private new void OnDropping(DroppingItemEventArgs ev)
+
+
+        private void OnSCP049Attacking(Exiled.Events.EventArgs.Scp049.AttackingEventArgs ev)
         {
-            if (!Check(ev.Item)) return;
-
-            Timing.CallDelayed(0.5f, () =>
-            {
-                foreach (Pickup p in Pickup.List)
-                {
-                    if (p.Serial == ev.Item.Serial)
-                    {
-                        if (!ActiveSensors.ContainsKey(p))
-                        {
-                            ActiveSensors.Add(p, ev.Player);
-                            BatteryLife[p] = Time.time + 300f;
-
-                            ev.Player.ShowHint("<color=#00ff00>SCANNER DÉPLOYÉ</color>\nBatterie: 5 minutes", 3f);
-                        }
-                        break;
-                    }
-                }
-            });
+            CheckDestruction(ev.Player.Position, 2f);
+        }
+        private void OnSCP106Teleporting(TeleportingEventArgs ev)
+        {
+            CheckDestruction(ev.Player.Position, 2f);
+        }
+        private void OnSCP939Attacked(ClawedEventArgs ev)
+        {
+            CheckDestruction(ev.Player.Position, 2f);
         }
 
-        private new void OnPickingUp(PickingUpItemEventArgs ev)
+        private void OnSCP096Enraging(EnragingEventArgs ev)
+        {
+            CheckDestruction(ev.Player.Position, 2f);
+        }
+
+
+
+        private void OnDroppedItem(DroppedItemEventArgs ev)
         {
             if (!Check(ev.Pickup)) return;
+
+
+            Player player = ev.Player;
+            Pickup pickup = ev.Pickup;
+
+            if (!ActiveSensors.ContainsKey(pickup))
+            {
+                ActiveSensors.Add(pickup, player);
+                BatteryLife[pickup] = Time.time + 300f;
+
+                KECustomItem.ItemEffectHint(player, "<color=#00ff00>SCANNER DÉPLOYÉ</color>\nBatterie: 5 minutes");
+            }
+        }
+
+        protected override void OnPickingUp(PickingUpItemEventArgs ev)
+        {
+            Player player = ev.Player;
 
             if (ActiveSensors.ContainsKey(ev.Pickup))
             {
                 ActiveSensors.Remove(ev.Pickup);
                 BatteryLife.Remove(ev.Pickup);
-                ev.Player.ShowHint("Scanner récupéré.", 2f);
+                KECustomItem.ItemEffectHint(player, "Scanner récupéré.");
             }
         }
 
-        private void OnShot(ShotEventArgs ev) => CheckDestruction(ev.Position, 0.5f);
+        private void OnShot(ShotEventArgs ev)
+        {
+            CheckDestruction(ev.Position, 0.5f);
+        }
 
         private void CheckDestruction(Vector3 hitPos, float radius)
         {
-            List<Pickup> toDestroy = new List<Pickup>();
+            List<Pickup> toDestroy = ListPool<Pickup>.Shared.Rent();
 
             foreach (var kvp in ActiveSensors)
             {
                 Pickup sensor = kvp.Key;
                 Player owner = kvp.Value;
-                if (sensor == null) continue;
+                if (!sensor.IsSpawned) continue;
 
                 if (Vector3.Distance(hitPos, sensor.Position) <= radius)
                 {
@@ -136,37 +165,50 @@ namespace KE.Items.Items
                 BatteryLife.Remove(p);
                 p.Destroy();
             }
+
+            ListPool<Pickup>.Shared.Return(toDestroy);
+        }
+
+
+
+        private void CheckBattery()
+        {
+            List<Pickup> invalid = ListPool<Pickup>.Shared.Rent();
+            foreach (var key in ActiveSensors.Keys)
+            {
+                if (BatteryLife.ContainsKey(key) && Time.time > BatteryLife[key])
+                {
+                    if (ActiveSensors[key] != null)
+                        KECustomItem.ItemEffectHint(ActiveSensors[key], "<color=yellow>Scanner: Batterie épuisée.</color>");
+                    invalid.Add(key);
+                }
+            }
+
+            foreach (var i in invalid)
+            {
+                ActiveSensors.Remove(i);
+                BatteryLife.Remove(i);
+                if (!i.IsSpawned) i.Destroy();
+            }
+            ListPool<Pickup>.Shared.Return(invalid);
         }
 
         private IEnumerator<float> MotionDetector()
         {
             while (true)
             {
-                List<Pickup> invalid = new List<Pickup>();
+                
                 float currentTime = Time.time;
 
-                foreach (var key in ActiveSensors.Keys)
-                {
-                    if (key == null || key.GameObject == null) invalid.Add(key);
-                    else if (BatteryLife.ContainsKey(key) && currentTime > BatteryLife[key])
-                    {
-                        if (ActiveSensors[key] != null)
-                            KECustomItem.ItemEffectHint(ActiveSensors[key], "<color=yellow>Scanner: Batterie épuisée.</color>");
-                        invalid.Add(key);
-                    }
-                }
+                CheckBattery();
 
-                foreach (var i in invalid)
-                {
-                    ActiveSensors.Remove(i);
-                    BatteryLife.Remove(i);
-                    if (i != null) i.Destroy();
-                }
 
                 foreach (var kvp in ActiveSensors)
                 {
                     Pickup sensor = kvp.Key;
                     Player owner = kvp.Value;
+
+                    if (sensor.Base == null) continue;
 
                     if (Cooldowns.ContainsKey(sensor) && currentTime < Cooldowns[sensor]) continue;
 
@@ -177,6 +219,7 @@ namespace KE.Items.Items
                         if (target == owner) continue;
                         if (!target.IsAlive || target.IsNoclipPermitted) continue;
                         if (owner != null && target.Role.Side == owner.Role.Side) continue;
+                        
 
                         if (Vector3.Distance(sensor.Position, target.Position) < 3.5f)
                         {
@@ -184,11 +227,7 @@ namespace KE.Items.Items
 
                             if (owner != null)
                             {
-                                string color = "orange";
-                                if (target.Role.Side == Side.Scp) color = "red";
-                                else if (target.Role.Side == Side.Mtf) color = "blue";
-                                else if (target.Role.Side == Side.ChaosInsurgency) color = "green";
-
+                                string color = target.Role.Color.ToHex();
                                 KECustomItem.ItemEffectHint(owner, $"<color={color}>M-SCAN: {target.Role.Name} ({target.Nickname})</color>");
                             }
 
