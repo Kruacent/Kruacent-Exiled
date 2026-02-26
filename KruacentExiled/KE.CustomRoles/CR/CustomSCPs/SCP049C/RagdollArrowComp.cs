@@ -38,7 +38,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
 
         private void OnDestroy()
         {
-            arrow.Destroy();
+            arrow?.Destroy();
         }
 
         public void SetColor(Color color)
