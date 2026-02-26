@@ -147,6 +147,9 @@ namespace KE.CustomRoles.CR.Guard
         {
             if (ev.KnobSetting != Scp914.Scp914KnobSetting.Fine) return;
             Player player = ev.Player;
+
+            if (player.CurrentItem is null) return;
+
             Item item = Item.Get(player.CurrentItem.Serial);
             if (item is null) return;
 
