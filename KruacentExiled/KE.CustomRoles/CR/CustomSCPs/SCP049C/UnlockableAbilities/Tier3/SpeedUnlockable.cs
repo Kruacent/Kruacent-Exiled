@@ -16,8 +16,11 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.Tier3
         }
         public override string GetDescription(ReferenceHub hub)
         {
-            return "Become 25% faster but lose all of the other abilities";
+            return $"Become {Intensity}% faster but lose all of the other abilities";
         }
+
+
+        public const byte Intensity = 50;
 
         public override void Grant(ReferenceHub hub)
         {
@@ -25,7 +28,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.Tier3
 
             MovementBoost move = lab.GetEffect<MovementBoost>();
 
-            lab.EnableEffect<MovementBoost>((byte)(move.Intensity + 25), 0, false);
+            lab.EnableEffect<MovementBoost>((byte)(move.Intensity + Intensity), 0, false);
             hub.GetComponent<SCP049CLevelSystem>().DisableAll();
             
 
@@ -36,7 +39,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.Tier3
             LabPlayer lab = LabPlayer.Get(hub);
             MovementBoost move = lab.GetEffect<MovementBoost>();
 
-            lab.EnableEffect<MovementBoost>((byte)(move.Intensity - 25), 0, false);
+            lab.EnableEffect<MovementBoost>((byte)(move.Intensity - Intensity), 0, false);
 
 
             

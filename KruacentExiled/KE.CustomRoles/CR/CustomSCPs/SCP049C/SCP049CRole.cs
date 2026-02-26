@@ -23,17 +23,17 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
                 ["en"] = new()
                 {
                     [TranslationKeyName] = "SCP049-C",
-                    [TranslationKeyDesc] = "A modified SCP049 instance which does not create any SCP049-2\ninstead consuming the body to gain powerful abilities\nDoctor's call gives 300 Hume Shield\nExpired body can still be consumed but need more time to do so",
+                    [TranslationKeyDesc] = "A modified SCP049 instance which does not create any SCP049-2\ninstead consuming the body to gain powerful abilities\nDoctor's call gives 300 Hume Shield\nExpired body can still be consumed but need more time to do so (stay near the arrow until it disappear (10s))",
                 },
                 ["fr"] = new()
                 {
                     [TranslationKeyName] = "SCP049-C",
-                    [TranslationKeyDesc] = "A modified SCP049 instance which does not create any SCP049-2\ninstead consuming the body to gain powerful abilities\nDoctor's call gives 300 Hume Shield\nExpired body can still be consumed but need more time to do so",
+                    [TranslationKeyDesc] = "A modified SCP049 instance which does not create any SCP049-2\ninstead consuming the body to gain powerful abilities\nDoctor's call gives 300 Hume Shield\nExpired body can still be consumed but need more time to do so (stay near the arrow until it disappear (10s))",
                 },
                 ["legacy"] = new()
                 {
                     [TranslationKeyName] = "SCP049-C",
-                    [TranslationKeyDesc] = "A modified SCP049 instance which does not create any SCP049-2\ninstead consuming the body to gain powerful abilities\nDoctor's call gives 300 Hume Shield\nExpired body can still be consumed but need more time to do so",
+                    [TranslationKeyDesc] = "A modified SCP049 instance which does not create any SCP049-2\ninstead consuming the body to gain powerful abilities\nDoctor's call gives 300 Hume Shield\nExpired body can still be consumed but need more time to do so (stay near the arrow until it disappear (10s))",
                 }
             };
         }
@@ -80,7 +80,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
             StringBuilder sb = StringBuilderPool.Shared.Rent();
             bool flag = comp.MaxLevelReached;
 
-            if (flag)
+            if (!flag)
             {
                 sb.Append("Tier : ");
                 sb.AppendLine(comp.Level.ToString());
@@ -89,10 +89,10 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
             {
                 sb.AppendLine("Max Tier");
             }
-                
-            sb.Append("Kill : ");
+
+            sb.Append("Kills : ");
             sb.Append(comp.CurrentKill);
-            if (flag)
+            if (!flag)
             {
                 sb.Append("/");
                 sb.Append(comp.KillObjective);

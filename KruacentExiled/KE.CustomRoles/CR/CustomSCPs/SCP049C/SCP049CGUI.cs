@@ -98,15 +98,23 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
                 {
                     sb.AppendLine("<b>");
                 }
+                else
+                {
+                    sb.AppendLine("<color=#8c8c8c>");
+                }
 
-                
-                sb.AppendLine(unlockable.GetName(player.ReferenceHub));
+
+                    sb.AppendLine(unlockable.GetName(player.ReferenceHub));
                 if (flag)
                 {
                     sb.AppendLine("</b>");
                 }
+                else
+                {
+                    sb.AppendLine("</color>");
+                }
 
-                sb.Append("<size=");
+                    sb.Append("<size=");
                 sb.Append(FontSize);
                 sb.Append(">");
                 sb.Append(unlockable.GetDescription(player.ReferenceHub));

@@ -14,13 +14,13 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.Tier1
         }
         public override string GetDescription(ReferenceHub hub)
         {
-            return "Set your max Shield at 700\ninstead of 300";
+            return "Set your max Shield at 1100\ninstead of 300";
         }
         public override void Grant(ReferenceHub hub)
         {
             LabPlayer lab = LabPlayer.Get(hub);
 
-            lab.MaxHumeShield = 700;
+            lab.MaxHumeShield = 1100;
         }
 
         public override void Remove(ReferenceHub hub)

@@ -256,23 +256,26 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
             if (Vector3.Distance(ragdoll.Position,_hub.transform.position) > MaxDistance)
             {
                 Reset();
+                return;
             }
 
 
             cooldown += Time.deltaTime;
-            RagdollArrowComp comp = ragdoll.GameObject.GetComponent<RagdollArrowComp>();
 
-            comp.SetColor(Color.red);
-            
 
-            if (cooldown > timeOnCorpse)
+            if(ragdoll.GameObject.TryGetComponent<RagdollArrowComp>(out var comp))
             {
-                ragdoll.Destroy();
-                AddKill();
-                Reset();
+                comp.SetColor(Color.red);
 
-                
+                if (cooldown > timeOnCorpse)
+                {
+                    ragdoll.Destroy();
+                    AddKill();
+                    Reset();
+                }
             }
+
+
             
         }
 
