@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using KE.CustomRoles.CR.MTF.RedMist;
 namespace KE.CustomRoles.Abilities.RedMist
 {
     public class ToggleEGO : KEAbilities
@@ -35,7 +35,7 @@ namespace KE.CustomRoles.Abilities.RedMist
         {
             if(!player.GameObject.TryGetComponent<EGO>(out var ego))
             {
-                player.GameObject.AddComponent<EGO>();
+                ego= player.GameObject.AddComponent<EGO>();
             }
 
             ego.ToggleActive();

@@ -9,15 +9,15 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace KE.CustomRoles.Abilities.RedMist
+namespace KE.CustomRoles.CR.MTF.RedMist
 {
     public class EGO : MonoBehaviour
     {
 
 
-        private bool active = false;
+        public bool Active { get; set; }
 
-
+        
 
 
         private ReferenceHub Hub;
@@ -25,22 +25,22 @@ namespace KE.CustomRoles.Abilities.RedMist
         private float Damage = 1;
 
 
-        public void Init()
+        public void Awake()
         {
-            active = false;
-            Hub = ReferenceHub.GetHub(base.transform.root.gameObject);
+            Active = false;
+            Hub = ReferenceHub.GetHub(base.gameObject);
         }
-
 
         public void Update()
         {
             if (Hub is null || !Hub.IsAlive())
             {
                 Log.Debug(Hub?.nicknameSync.DisplayName +" is dead");
-                Destroy(gameObject);
+                Destroy(this);
+                return;
             }
 
-            if (active)
+            if (Active)
             {
                 Hub.playerStats.DealDamage(new CustomDamageHandler(Player.Get(Hub), null, Damage));
             }
@@ -48,18 +48,9 @@ namespace KE.CustomRoles.Abilities.RedMist
         }
 
 
-        public void SetActive(bool active)
-        {
-            this.active = active;
-        }
-        public bool IsActive()
-        {
-            return active;
-        }
-
         public void ToggleActive()
         {
-            active = !active;
+            Active = !Active;
         }
     }
 }
