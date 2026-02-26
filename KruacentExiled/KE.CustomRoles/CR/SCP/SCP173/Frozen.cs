@@ -75,6 +75,8 @@ namespace KE.CustomRoles.CR.SCP.SCP173
         private void OnDeath(PlayerDeathEventArgs ev)
         {
             Player player = ev.Player;
+
+            if (player == null || player.ReferenceHub == null) return;
             if (!Check(ev.Attacker)) return;
 
 
