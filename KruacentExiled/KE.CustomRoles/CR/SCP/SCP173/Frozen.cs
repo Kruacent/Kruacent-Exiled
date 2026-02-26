@@ -1,9 +1,5 @@
-﻿using CustomPlayerEffects;
-using Exiled.API.Features;
-using Exiled.API.Features.Items;
-using Exiled.API.Features.Pickups;
+﻿using Exiled.API.Features.Items;
 using InventorySystem.Items.Usables.Scp244;
-using InventorySystem.Items.Usables.Scp244.Hypothermia;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
 using LabApi.Events.Arguments.PlayerEvents;
@@ -16,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Item = Exiled.API.Features.Items.Item;
-using Player = LabApi.Features.Wrappers.Player;
+using Player = Exiled.API.Features.Player;
 using Scp244Pickup = Exiled.API.Features.Pickups.Scp244Pickup;
 
 namespace KE.CustomRoles.CR.SCP.SCP173
@@ -74,7 +70,7 @@ namespace KE.CustomRoles.CR.SCP.SCP173
 
         private void OnDeath(PlayerDeathEventArgs ev)
         {
-            Player player = ev.Player;
+            Player player = Player.Get(ev.Player);
 
             if (player == null || player.ReferenceHub == null) return;
             if (!Check(ev.Attacker)) return;
