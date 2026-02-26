@@ -36,7 +36,7 @@ namespace KE.Items.Items.LeSoleil
             Sun.Collidable = false;
 
             Light l = Light.Create(@base.Position, null, null, false);
-            l.LightType = LightType.Directional;
+            l.LightType = LightType.Directional; // not a good idea
             l.Color = Color.yellow;
             l.Intensity = 10;
             l.Rotation = Quaternion.Euler(135, 0, 0);
