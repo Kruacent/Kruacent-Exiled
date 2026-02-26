@@ -70,16 +70,16 @@ namespace KE.CustomRoles.CR.SCP.SCP173
 
         private void OnDeath(PlayerDeathEventArgs ev)
         {
+            if (ev.Player == null || ev.Player.ReferenceHub == null) return;
+            if (ev.Attacker == null || ev.Attacker.ReferenceHub == null) return;
             Player player = Player.Get(ev.Player);
 
-            if (player == null || player.ReferenceHub == null) return;
             if (!Check(ev.Attacker)) return;
 
 
             if (ev.DamageHandler is ScpDamageHandler scpDamageHandler)
             {
                 Player attacker = Player.Get(scpDamageHandler.Attacker.Hub);
-
                 if (Check(attacker))
                 {
 
