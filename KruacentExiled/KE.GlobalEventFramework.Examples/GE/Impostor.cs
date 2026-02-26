@@ -20,7 +20,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         [
             "sussy"
         ];
-        public override int WeightedChance { get; set; } = 1;
+        public override int WeightedChance { get; set; } = 2;
 
         public override ImpactLevel ImpactLevel => ImpactLevel.High;
 

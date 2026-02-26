@@ -15,7 +15,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override string Description { get; } = "y'a r";
         ///<inheritdoc/>
-        public override int WeightedChance => 3;
+        public override int WeightedChance => 10;
         public override ImpactLevel ImpactLevel => ImpactLevel.VeryLow;
 
 

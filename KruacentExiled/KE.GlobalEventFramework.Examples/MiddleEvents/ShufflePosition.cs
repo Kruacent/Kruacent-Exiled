@@ -1,6 +1,8 @@
 ﻿using Exiled.API.Features;
 using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using MEC;
+using NorthwoodLib.Pools;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -12,7 +14,7 @@ using UnityEngine;
 
 namespace KE.GlobalEventFramework.Examples.MiddleEvents
 {
-    public class ShufflePosition : MiddleEvent
+    public class ShufflePosition : MiddleEvent, IStart
     {
         //shuffle de position une fois quand il est activé
         ///<inheritdoc/>
@@ -27,16 +29,24 @@ namespace KE.GlobalEventFramework.Examples.MiddleEvents
         public IEnumerator<float> Start()
         {
 
-            List<Vector3> position = Player.Enumerable.Select(p => p.Position).ToList();
 
-            Vector3 tmp = position[0];
-            for(int i = 0; i < position.Count-1; i++)
+
+
+            List<Player> players = Player.Enumerable.ToList();
+            List<Vector3> positions = ListPool<Vector3>.Shared.Rent(players.Count);
+
+            Vector3 tmp = positions[0];
+            for (int i = 0; i < positions.Count - 1; i++)
             {
-                position[i] = position[i + 1];
+                positions[i] = players[i+1].Position;
             }
 
-            position[position.Count - 1] = tmp;
+            positions[positions.Count - 1] = tmp;
 
+            for(int i = 0; i < players.Count - 1; i++)
+            {
+                players[i].Teleport(positions[i]);
+            }
 
             yield return Timing.WaitForOneFrame;
         }

@@ -19,7 +19,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         public override uint Id { get; set; } = 1048;
         public override string Name { get; set; } = "OpenBar";
         public override string Description { get; } = "j'espère que vous avez pas prévu de kampé";
-        public override int WeightedChance { get; set; } = 1;
+        public override int WeightedChance { get; set; } = 3;
         public override uint[] IncompatibleEvents { get; set; } = { 1 };
 
         public int NbAdditionalDoor = 3;

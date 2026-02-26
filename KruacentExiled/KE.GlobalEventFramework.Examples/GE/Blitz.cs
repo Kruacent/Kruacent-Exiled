@@ -24,7 +24,7 @@ namespace KE.GlobalEventFramework.Examples.GE
             "Attention aux bombardements!"
         ];
         ///<inheritdoc/>
-        public override int WeightedChance => 1;
+        public override int WeightedChance => 4;
         /// <summary>
         /// The cooldown between 2 spawn of grenades
         /// </summary>

@@ -34,7 +34,12 @@ namespace KE.GlobalEventFramework.Examples.GE
                 
                 for (int i = 0; i < NbItemSpawned; i++)
                 {
-                    Item.Create((ItemType)values.GetValue(UnityEngine.Random.Range(0, values.Length))).CreatePickup(Room.Random().Position);
+
+                    ItemType itemType = (ItemType)values.GetValue(UnityEngine.Random.Range(0, values.Length));
+
+                    if (itemType == ItemType.None) continue;
+
+                    Item.Create(itemType).CreatePickup(Room.Random().Position);
                 }
             }
         }

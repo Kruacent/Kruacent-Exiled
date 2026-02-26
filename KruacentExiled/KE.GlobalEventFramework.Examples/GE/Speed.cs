@@ -41,7 +41,7 @@ namespace KE.GlobalEventFramework.Examples.GE
             "Mayhem mode activated",
         };
         ///<inheritdoc/>
-        public override int WeightedChance { get; set; } = 1;
+        public override int WeightedChance { get; set; } = 5;
         /// <summary>
         /// intensity of the movement boost effect
         /// </summary>

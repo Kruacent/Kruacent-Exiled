@@ -23,7 +23,7 @@ namespace KE.GlobalEventFramework.Examples.GE
             "La guerrilla est présente"
         ];
         ///<inheritdoc/>
-        public override int WeightedChance { get; set; } = 1;
+        public override int WeightedChance { get; set; } = 2;
 
         public override ImpactLevel ImpactLevel => ImpactLevel.Medium;
 
@@ -86,6 +86,9 @@ namespace KE.GlobalEventFramework.Examples.GE
         {
             float random = UnityEngine.Random.value;
             Door door = ev.Door;
+
+            if (!door.IsOpen) return;
+
 
             Log.Debug($"i love debugging random value : {random}");
             if ((door.IsElevator && random < .05f) ||

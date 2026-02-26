@@ -10,5 +10,12 @@ namespace KE.GlobalEventFramework.Examples.MiddleEvents
     {
 
         //lumière random
+
+
+
+        private void Start()
+        {
+            
+        }
     }
 }

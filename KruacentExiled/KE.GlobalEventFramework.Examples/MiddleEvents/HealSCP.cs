@@ -33,7 +33,7 @@ namespace KE.GlobalEventFramework.Examples.MiddleEvents
 
             foreach(Player p in list)
             {
-                if(p.Health/p.MaxHealth > .1f)
+                if(p.Health/p.MaxHealth > .3f)
                 {
                     return false;
                 }
