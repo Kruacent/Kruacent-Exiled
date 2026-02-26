@@ -69,22 +69,21 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
 
         protected override void RoleAdded(Player player)
         {
-            Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
-            Exiled.Events.Handlers.Player.Hurting += OnDealingDamage;
-
-            _playerDamage[player] = 0f;
+            /*Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
             _filterMems[player] = 0f;
-            SetupSpeaker(player);
+            SetupSpeaker(player);*/
+            _playerDamage[player] = 0f;
+            Exiled.Events.Handlers.Player.Hurting += OnDealingDamage;
         }
 
         protected override void RoleRemoved(Player player)
         {
-            Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
-            Exiled.Events.Handlers.Player.Hurting -= OnDealingDamage;
-
+            /*Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
             DestroySpeaker(player);
+            _filterMems.Remove(player);*/
+
+            Exiled.Events.Handlers.Player.Hurting -= OnDealingDamage;
             _playerDamage.Remove(player);
-            _filterMems.Remove(player);
         }
 
         private void OnDealingDamage(HurtingEventArgs ev)
