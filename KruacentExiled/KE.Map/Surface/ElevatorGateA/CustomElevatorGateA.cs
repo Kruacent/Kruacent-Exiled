@@ -29,6 +29,7 @@ namespace KE.Map.Surface.ElevatorGateA
         private static Primitive primtop;
         private static Panel bottompanel;
         private static Primitive primbottom;
+        private static Primitive helpPlatform;
 
         private const float Scale = 0.8f;
         public static void Create()
@@ -103,6 +104,10 @@ namespace KE.Map.Surface.ElevatorGateA
             help.Flags = AdminToys.PrimitiveFlags.Visible;
             help.Spawn();
             help.GameObject.AddComponent<CustomKillerCollision>();
+
+            helpPlatform = Primitive.Create(PrimitiveType.Cube, helppos, null, new Vector3(50, 1, 50), false);
+            helpPlatform.Flags = AdminToys.PrimitiveFlags.Visible | AdminToys.PrimitiveFlags.Collidable;
+            helpPlatform.Spawn();
         }
 
         private static void SendingElevator()
@@ -120,9 +125,10 @@ namespace KE.Map.Surface.ElevatorGateA
 
                 step.Destroy();
                 help.Destroy();
-
+                helpPlatform.Destroy();
                 step = null;
                 help = null;
+                helpPlatform = null;
             }
 
 
@@ -142,6 +148,8 @@ namespace KE.Map.Surface.ElevatorGateA
 
                 primtop = null;
             }
+
+
 
 
 

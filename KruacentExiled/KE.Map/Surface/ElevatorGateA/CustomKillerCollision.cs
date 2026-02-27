@@ -1,4 +1,5 @@
 ﻿using CustomPlayerEffects;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using ProjectMER.Commands.Modifying.Scale;
 using System;
@@ -14,40 +15,31 @@ namespace KE.Map.Surface.ElevatorGateA
     public class CustomKillerCollision : MonoBehaviour
     {
 
+        private Collider[] NonAlloc = new Collider[8];
+
+
         private void Update()
         {
-            foreach(Player player in Player.List)
+            if(Physics.OverlapBoxNonAlloc(base.transform.localPosition, base.transform.localScale / 2f, NonAlloc, transform.localRotation, (int)LayerMasks.Hitbox) > 0)
             {
-                
-                if (PitDeath.ValidatePlayer(player.ReferenceHub))
+                for (int i = 0; i < NonAlloc.Length; i++)
                 {
-                    if (InBound(player))
+                    if(Player.TryGet(NonAlloc[i],out Player player))
                     {
-                        PitDeath pit = player.GetEffect<PitDeath>();
-                        pit.KillPlayer();
-                        
+                        if (PitDeath.ValidatePlayer(player.ReferenceHub))
+                        {
+                            PitDeath pit = player.GetEffect<PitDeath>();
+                            //DO NOT USE PitDeath.KillPlayer()
+                            if (!pit.IsEnabled)
+                            {
+                                pit.IsEnabled = true;
+                            }
+                        }
                     }
                 }
             }
 
-        }
 
-        private void OnTriggerEnter()
-        {
-
-        }
-
-        private bool InBound(Player player)
-        {
-            Vector3 position = transform.position;
-            Vector3 playerPosition = player.Position;
-            Vector3 halfSize = transform.lossyScale / 2;
-            return playerPosition.x >= position.x - halfSize.x &&
-                   playerPosition.x <= position.x + halfSize.x &&
-                   playerPosition.y >= position.y - halfSize.y &&
-                   playerPosition.y <= position.y + halfSize.y &&
-                   playerPosition.z >= position.z - halfSize.z &&
-                   playerPosition.z <= position.z + halfSize.z;
         }
 
     }
