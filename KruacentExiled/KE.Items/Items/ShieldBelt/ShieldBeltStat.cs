@@ -165,9 +165,13 @@ namespace KE.Items.Items.ShieldBelt
         public void Destroy()
         {
             Log.Debug($"destroying {this}");
+            Destroy(this);
+        }
+
+        private void OnDestroy()
+        {
             primitive.Destroy();
             primitive = null;
-            Destroy(this);
         }
 
         public void Update()
