@@ -59,7 +59,8 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
         public override List<string> Inventory { get; set; } = new()
         {
             $"{ItemType.GunRevolver}", $"{ItemType.GunA7}", $"{ItemType.ArmorHeavy}",
-            $"{ItemType.GrenadeHE}", $"{ItemType.GrenadeFlash}", $"{ItemType.Radio}"
+            $"{ItemType.GrenadeHE}", $"{ItemType.GrenadeFlash}", $"{ItemType.Radio}",
+            $"{ItemType.KeycardChaosInsurgency}"
         };
 
         public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new()
