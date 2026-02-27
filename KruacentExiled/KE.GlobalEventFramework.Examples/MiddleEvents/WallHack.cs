@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace KE.GlobalEventFramework.Examples.MiddleEvents
 {
-    public class WallHackM : MiddleEvent, IStart, IEvent
+    public class WallHackM : MiddleEvent, IAsyncStart, IEvent
     {
         ///<inheritdoc/>
         public override uint Id { get; set; } = 10052;

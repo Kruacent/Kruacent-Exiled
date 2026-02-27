@@ -15,7 +15,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     /// <summary>
     /// Every some amount of time all player take the position of another
     /// </summary>
-    public class Shuffle : GlobalEvent, IStart,IEvent
+    public class Shuffle : GlobalEvent, IAsyncStart,IEvent
     {
         ///<inheritdoc/>
         public override uint Id { get; set; } = 1045;

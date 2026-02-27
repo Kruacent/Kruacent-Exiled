@@ -14,12 +14,12 @@ namespace KE.GlobalEventFramework.GEFE.API.Extensions
         {
             return impact switch
             {
-                ImpactLevel.VeryLow => "VL",
-                ImpactLevel.Low => "L",
-                ImpactLevel.Medium => "M",
-                ImpactLevel.High => "H",
-                ImpactLevel.VeryHigh => "VH",
-                ImpactLevel.Insane => "I",
+                ImpactLevel.VeryLow => "[VL]",
+                ImpactLevel.Low => "[L]",
+                ImpactLevel.Medium => "[M]",
+                ImpactLevel.High => "[H]",
+                ImpactLevel.VeryHigh => "[VH]",
+                ImpactLevel.Insane => "[I]",
                 _ => ""
             };
         }

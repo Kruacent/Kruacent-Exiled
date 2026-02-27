@@ -161,8 +161,16 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
                 }
 
 
-                if (ev is IStart start)
-                    ev.CoroutineHandles.Add(Timing.RunCoroutine(start.Start()));
+                if (ev is IAsyncStart asyncstart)
+                {
+                    ev.CoroutineHandles.Add(Timing.RunCoroutine(asyncstart.Start()));
+                }
+                    
+                if(ev is IStart start)
+                {
+                    start.Start();
+                }
+
 
                 s_activeEvents.Add(ev);
 

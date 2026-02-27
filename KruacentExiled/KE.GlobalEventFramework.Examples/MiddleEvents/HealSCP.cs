@@ -41,14 +41,13 @@ namespace KE.GlobalEventFramework.Examples.MiddleEvents
             return true;
         }
 
-        public IEnumerator<float> Start()
+        public void Start()
         {
             foreach (Player p in Player.List.Where(p => p.IsScp && p.Role != RoleTypeId.Scp0492))
             {
                 p.Health = p.MaxHealth / 2;
             }
 
-            yield return Timing.WaitForOneFrame;
         }
 
 

@@ -16,7 +16,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     /// <summary>
     /// You cannot talk to loud
     /// </summary>
-    public class Librarby : GlobalEvent, IEvent
+    public class Librarby : GlobalEvent, IEvent, INonRedactable
     {
         ///<inheritdoc/>
         public override uint Id { get; set; } = 1091;

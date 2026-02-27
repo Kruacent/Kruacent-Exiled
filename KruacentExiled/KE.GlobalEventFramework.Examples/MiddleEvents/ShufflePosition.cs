@@ -26,7 +26,7 @@ namespace KE.GlobalEventFramework.Examples.MiddleEvents
         ///<inheritdoc/>
         public override int WeightedChance { get; set; } = 1;
 
-        public IEnumerator<float> Start()
+        public void Start()
         {
 
 
@@ -47,8 +47,6 @@ namespace KE.GlobalEventFramework.Examples.MiddleEvents
             {
                 players[i].Teleport(positions[i]);
             }
-
-            yield return Timing.WaitForOneFrame;
         }
 
 

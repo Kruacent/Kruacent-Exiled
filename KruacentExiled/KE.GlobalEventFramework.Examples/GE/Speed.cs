@@ -24,7 +24,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     /// Everyone has a movement boost effect (stackable)
     /// Maybe inspired by Dr Bright's Mayhem
     /// </summary>
-    public class Speed : GlobalEvent,IStart,IEvent
+    public class Speed : GlobalEvent, IAsyncStart, IEvent
     {
         public override ImpactLevel ImpactLevel => ImpactLevel.VeryHigh;
 

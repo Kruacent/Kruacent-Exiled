@@ -17,7 +17,7 @@ using Player = Exiled.API.Features.Player;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
-    public class SwapProtocol : GlobalEvent, IStart, IEvent
+    public class SwapProtocol : GlobalEvent, IAsyncStart, IEvent
     {
         public override uint Id { get; set; } = 1051;
         public override string Name { get; set; } = "SwapProtocol";

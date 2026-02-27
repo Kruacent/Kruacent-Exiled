@@ -32,7 +32,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         public override ImpactLevel ImpactLevel => ImpactLevel.High;
         public IEnumerable<RoomType> BlacklistedRooms { get; } = [];
         ///<inheritdoc/>
-        public IEnumerator<float> Start()
+        public void Start()
         {
             Room room;
             foreach (RoleTypeId r in Enum.GetValues(typeof(RoleTypeId)))
@@ -49,7 +49,6 @@ namespace KE.GlobalEventFramework.Examples.GE
                 }
                 
             }
-            yield return 0;
         }
 
     }

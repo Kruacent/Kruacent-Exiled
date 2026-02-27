@@ -36,7 +36,7 @@ namespace KE.GlobalEventFramework.Examples.GE
 
         private IEnumerable<Door> doorsLocked;
 
-        public IEnumerator<float> Start()
+        public void Start()
         {
             List<DoorType> door = DoorsToMaybeUnlock.ToList();
             List<DoorType> result = new();
@@ -51,8 +51,6 @@ namespace KE.GlobalEventFramework.Examples.GE
 
             UnlockAndOpen(doorsLocked);
 
-
-            yield return 0;
         }
 
         private void UnlockAndOpen(IEnumerable<Door> doors)

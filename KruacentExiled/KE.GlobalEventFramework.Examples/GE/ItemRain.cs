@@ -11,7 +11,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     /// <summary>
     /// Randomly item will fall from the sky
     /// </summary>
-    public class ItemRain : GlobalEvent, IStart
+    public class ItemRain : GlobalEvent, IAsyncStart
     {
         ///<inheritdoc/>
         public override uint Id { get; set; } = 1090;

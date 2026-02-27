@@ -14,7 +14,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     /// <summary>
     /// The scp start with 2/3 of it's life and end with 4/3 of it's vanilla life 
     /// </summary>
-    public class KIWIS : GlobalEvent,IStart
+    public class KIWIS : GlobalEvent, IAsyncStart
     {
         ///<inheritdoc/>
         public override uint Id { get; set; } = 1047;

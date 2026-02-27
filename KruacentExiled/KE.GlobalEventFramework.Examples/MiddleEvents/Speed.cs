@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace KE.GlobalEventFramework.Examples.MiddleEvents
 {
-    public class SpeedM : MiddleEvent, IStart, IEvent
+    public class SpeedM : MiddleEvent, IAsyncStart, IEvent
     {
         ///<inheritdoc/>
         public override uint Id { get; set; } = 10042;

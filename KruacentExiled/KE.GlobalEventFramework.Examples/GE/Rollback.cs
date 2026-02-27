@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
-    public class RollBack: GlobalEvent,IStart
+    public class RollBack: GlobalEvent, IAsyncStart
     {
         ///<inheritdoc/>
         public override uint Id { get; set; } = 10800;
@@ -40,7 +40,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         public IEnumerator<float> Start()
         {
             bool luck;
-            while (true)
+            while (base.IsActive)
             {
                 yield return Timing.WaitForSeconds(RefreshRate);
                 luck = Luck > Random.Range(0f,100f);

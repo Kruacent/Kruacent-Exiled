@@ -11,7 +11,7 @@ using KE.GlobalEventFramework.GEFE.API.Enums;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
-    public class Impostor : GlobalEvent, IStart
+    public class Impostor : GlobalEvent, IAsyncStart
     {
         public override uint Id { get; set; } = 1044;
         public override string Name { get; set; } = "Impostor";

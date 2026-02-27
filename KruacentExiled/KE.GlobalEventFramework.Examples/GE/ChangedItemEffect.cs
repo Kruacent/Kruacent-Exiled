@@ -37,15 +37,13 @@ namespace KE.GlobalEventFramework.Examples.GE
 
         public override ImpactLevel ImpactLevel => ImpactLevel.High;
 
-        public IEnumerator<float> Start()
+        public void Start()
         {
             
 
 
             ChangeItemsEffect();
             ChangeCandyEffect();
-
-            yield return 0;
         }
 
         private void ChangeItemsEffect()

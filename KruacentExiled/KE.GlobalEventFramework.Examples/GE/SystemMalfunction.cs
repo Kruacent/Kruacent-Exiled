@@ -21,7 +21,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     /// <item>Checkpoints can open randomly</item>
     /// </list>
     /// </summary>
-    public class SystemMalfunction : GlobalEvent, IStart, IEvent
+    public class SystemMalfunction : GlobalEvent, IAsyncStart, IEvent
     {
 
 

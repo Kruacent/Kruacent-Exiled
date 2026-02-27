@@ -2,6 +2,7 @@
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Pools;
+using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Server;
 using HintServiceMeow.Core.Models.Hints;
 using KE.GlobalEventFramework.GEFE.API.Enums;
@@ -36,7 +37,6 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
             public void UnsubscribeEvents()
             {
                 if (!_eventsub) return;
-
                 Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
                 Exiled.Events.Handlers.Server.RoundEnded -= OnEndingRound;
 
@@ -109,13 +109,13 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
 
 
 
-        protected override void SubscribeEvents()
+        protected sealed override void SubscribeEvents()
         {
             _handler.SubscribeEvents();
             base.SubscribeEvents();
         }
 
-        protected override void UnsubscribeEvents()
+        protected sealed override void UnsubscribeEvents()
         {
             _handler.UnsubscribeEvents();
             
@@ -197,11 +197,10 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
             StringBuilder builder = StringBuilderPool.Pool.Get();
 
             builder.Append("Global Events: ");
-            List<GlobalEvent> ge;
-            ge = _activeGE.ToList();
+            List<GlobalEvent> ge = ListPool<GlobalEvent>.Pool.Get(_activeGE);
 
-            
-            
+
+
 
 
 
@@ -217,11 +216,9 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
                 builder.Append(ImpactToColor[globalEvent.ImpactLevel]);
                 builder.Append(">");
 
-                builder.Append("[");
                 builder.Append(globalEvent.ImpactLevel.Shorten());
-                builder.Append("]");
 
-                
+
 
                 if (globalEvent.IsRedacted())
                 {
@@ -244,17 +241,19 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
                 {
                     builder.Append(", ");
                 }
-                
-                
-            }            
-            
+
+
+            }
+            ListPool<GlobalEvent>.Pool.Return(ge);
+
+
             return StringBuilderPool.Pool.ToStringReturn(builder);
         }
 
 
         private bool IsRedacted()
         {
-            if(this is INonRedactable redactable)
+            if(this is INonRedactable)
             {
                 return false;
             }
@@ -272,7 +271,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
 
             chanceRedacted = Mathf.Clamp(chanceRedacted, 0, 100);
 
-            return UnityEngine.Random.Range(0f, 100f) < chanceRedacted;
+            return UnityEngine.Random.Range(0f, 100f) <= chanceRedacted;
 
 
         }

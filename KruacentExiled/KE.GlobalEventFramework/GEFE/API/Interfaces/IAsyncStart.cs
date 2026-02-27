@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace KE.GlobalEventFramework.GEFE.API.Interfaces
 {
-    public interface IStart
+    public interface IAsyncStart
     {
         /// <summary>
         /// Is launched at the start of a round
         /// </summary>
-        void Start();
+        IEnumerator<float> Start();
     }
 }

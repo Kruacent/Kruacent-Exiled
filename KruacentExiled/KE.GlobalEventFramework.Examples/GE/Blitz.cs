@@ -11,7 +11,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     /// <summary>
     /// Spawn fused grenades in random rooms in the map 
     /// </summary>
-    public class Blitz : GlobalEvent, IStart
+    public class Blitz : GlobalEvent, IAsyncStart
     {
         ///<inheritdoc/>
         public override uint Id { get; set; } = 1046;
