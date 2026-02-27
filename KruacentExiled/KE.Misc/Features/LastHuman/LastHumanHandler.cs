@@ -41,7 +41,7 @@ namespace KE.Misc.Features.LastHuman
         public static HintPosition position = new LastHumanPosition();
         private DateTime _nextPossibleHint;
 
-        public static readonly TimeSpan Cooldown = TimeSpan.FromSeconds(20);
+        public static readonly TimeSpan Cooldown = TimeSpan.FromSeconds(5);
         public void SubscribeEvents()
         {
             LabApi.Events.Handlers.PlayerEvents.ChangedRole += OnChangedRole;
@@ -99,7 +99,7 @@ namespace KE.Misc.Features.LastHuman
 
                         
 
-                        if (!player.IsDead && DateTime.Now > _nextPossibleHint)
+                        if (!player.IsDead && DateTime.Now >= _nextPossibleHint)
                         {
                             DisplayHandler.Instance.AddHint(position.HintPlacement, player, msg, 10);
                             KELog.Debug("show message to " + lastTarget.Nickname);
@@ -123,27 +123,27 @@ namespace KE.Misc.Features.LastHuman
         private static bool TryGetLastTarget(out Player lastTarget)
         {
             lastTarget = null;
-            int num = 0;
-            int num2 = 0;
+            int numberHuman = 0;
+            int numberSCP = 0;
             foreach (ReferenceHub allHub in ReferenceHub.AllHubs)
             {
                 KELog.Debug(allHub.nicknameSync.DisplayName);
                 if (allHub.IsHuman() && !SCPTeam.IsSCP(allHub))
                 {
-                    num++;
+                    numberHuman++;
                     lastTarget = Player.Get(allHub);
                 }
                 else if (SCPTeam.IsSCP(allHub))
                 {
-                    num2++;
+                    numberSCP++;
                 }
             }
 
  
             
-            if (num == 1)
+            if (numberHuman == 1)
             {
-                return num2 > 0;
+                return numberSCP > 0;
             }
             return false;
         }
