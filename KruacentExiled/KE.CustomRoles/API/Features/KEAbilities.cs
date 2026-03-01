@@ -51,6 +51,7 @@ namespace KE.CustomRoles.API.Features
         public HashSet<Player> Players { get; } = new HashSet<Player>();
         public IReadOnlyCollection<Player> Selected => selected;
         private HashSet<Player> selected = new();
+        private HashSet<Player> blockedPlayer = new();
 
 
 
@@ -279,7 +280,12 @@ namespace KE.CustomRoles.API.Features
                 result = "cannot use this";
                 return false;
             }
-
+            if (this.blockedPlayer.Contains(player))
+            {
+                result = "blocked";
+                return false;
+            }
+            
             if (!LastUsed.ContainsKey(player))
             {
                 result = "never used";
@@ -358,6 +364,22 @@ namespace KE.CustomRoles.API.Features
                 {
                     abilities.RemoveAbility(player);
                 }
+            }
+        }
+
+        public static void TemporaryRemoveAbilities(Player player)
+        {
+            foreach(KEAbilities ability in PlayersAbility[player])
+            {
+                ability.blockedPlayer.Add(player);
+            }
+        }
+
+        public static void ReaffectRemovedAbilities(Player player)
+        {
+            foreach (KEAbilities ability in PlayersAbility[player])
+            {
+                ability.blockedPlayer.Remove(player);
             }
         }
 
