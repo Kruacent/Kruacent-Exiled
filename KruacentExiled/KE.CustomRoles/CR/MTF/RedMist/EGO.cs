@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.DamageHandlers;
+using KE.Utils.API.Features;
 using PlayerRoles;
 using PlayerStatsSystem;
 using System;
@@ -24,25 +25,28 @@ namespace KE.CustomRoles.CR.MTF.RedMist
 
         private float Damage = 1;
 
+        private DamageHandler damageHandler;
 
-        public void Awake()
+        private void Awake()
         {
             Active = false;
             Hub = ReferenceHub.GetHub(base.gameObject);
+            damageHandler = new CustomDamageHandler(Player.Get(Hub), null, Damage);
         }
 
-        public void Update()
+        private void Update()
         {
-            if (Hub is null || !Hub.IsAlive())
-            {
-                Log.Debug(Hub?.nicknameSync.DisplayName +" is dead");
-                Destroy(this);
-                return;
-            }
+            //if (Hub is null || !Hub.IsAlive())
+            //{
+            //    Log.Debug(Hub?.nicknameSync.DisplayName +" is dead");
+            //    Destroy(this);
+            //    return;
+            //}
 
             if (Active)
             {
-                Hub.playerStats.DealDamage(new CustomDamageHandler(Player.Get(Hub), null, Damage));
+                Hub.playerStats.DealDamage(damageHandler);
+                KELog.Debug("damage");
             }
   
         }
@@ -51,6 +55,7 @@ namespace KE.CustomRoles.CR.MTF.RedMist
         public void ToggleActive()
         {
             Active = !Active;
+            KELog.Debug("toggle now active? "+ Active);
         }
     }
 }
