@@ -1,6 +1,8 @@
-﻿using Exiled.API.Features;
+﻿using CustomPlayerEffects;
+using Exiled.API.Features;
 using Exiled.API.Features.DamageHandlers;
 using KE.Utils.API.Features;
+using KE.Utils.Extensions;
 using PlayerRoles;
 using PlayerStatsSystem;
 using System;
@@ -16,46 +18,103 @@ namespace KE.CustomRoles.CR.MTF.RedMist
     {
 
 
-        public bool Active { get; set; }
+        public bool Active => active;
 
-        
+        private bool active;
 
 
-        private ReferenceHub Hub;
+        public ReferenceHub Hub { get; private set; }
 
-        private float Damage = 1;
+        private const float Damage = 2;
 
-        private DamageHandler damageHandler;
+        private CustomReasonDamageHandler damage;
 
-        private void Awake()
+        internal void Awake()
         {
-            Active = false;
             Hub = ReferenceHub.GetHub(base.gameObject);
-            damageHandler = new CustomDamageHandler(Player.Get(Hub), null, Damage);
+            active = false;
+
+            damage = new CustomReasonDamageHandler("drained", Damage);
+            KELog.Debug(Hub);
         }
 
-        private void Update()
+
+        private float cooldown = 0;
+        private float objective = .2f;
+        private float baseObjective = .2f;
+
+        private void UpdateDamage()
         {
-            //if (Hub is null || !Hub.IsAlive())
-            //{
-            //    Log.Debug(Hub?.nicknameSync.DisplayName +" is dead");
-            //    Destroy(this);
-            //    return;
-            //}
+            if (Hub is null)
+            {
+                KELog.Debug("null");
+                return;
+            }
+
+            if (!Hub.IsAlive())
+            {
+                KELog.Debug(Hub?.nicknameSync.DisplayName + " is dead");
+                Destroy(this);
+                return;
+            }
 
             if (Active)
             {
-                Hub.playerStats.DealDamage(damageHandler);
-                KELog.Debug("damage");
+                cooldown += Time.deltaTime;
+                KELog.Debug(cooldown);
+                KELog.Debug(Time.deltaTime);
+                if (cooldown >= objective)
+                {
+                    Hub.playerStats.DealDamage(damage);
+                    cooldown = 0;
+                    objective = baseObjective;
+                }
             }
-            KELog.Debug("update");
+
+
+        }
+
+        public void IncreaseObjective()
+        {
+            objective += baseObjective*10;
+        }
+
+
+        public void Update()
+        {
+            UpdateDamage();
         }
 
 
         public void ToggleActive()
         {
-            Active = !Active;
+            active = !Active;
             KELog.Debug("toggle now active? "+ Active);
+            Effect();
+        }
+
+
+
+        private void Effect()
+        {
+            Player player = Player.Get(Hub);
+
+            if (Active)
+            {
+                player.AddLevelEffect<MovementBoost>(25);
+                player.AddLevelEffect<Scp1853>(2);
+                if (player.IsEffectActive<Poisoned>())
+                {
+                    player.DisableEffect<Poisoned>();
+                }
+            }
+            else
+            {
+                player.AddLevelEffect<MovementBoost>(-25);
+                player.DisableEffect<Scp1853>();
+            }
+
+
         }
     }
 }

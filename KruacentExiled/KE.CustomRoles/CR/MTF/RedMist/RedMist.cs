@@ -4,6 +4,8 @@ using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.Abilities.RedMist;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
+using KE.CustomRoles.CR.CustomSCPs.SCP049C;
+using KE.Items.API.Features;
 using MEC;
 using PlayerRoles;
 using System;
@@ -25,17 +27,17 @@ namespace KE.CustomRoles.CR.MTF.RedMist
                 ["en"] = new()
                 {
                     [TranslationKeyName] = "Red Mist",
-                    [TranslationKeyDesc] = " ",
+                    [TranslationKeyDesc] = "todo",
                 },
                 ["fr"] = new()
                 {
                     [TranslationKeyName] = "Red Mist",
-                    [TranslationKeyDesc] = " ",
+                    [TranslationKeyDesc] = "todo",
                 },
                 ["legacy"] = new()
                 {
                     [TranslationKeyName] = "Red Mist",
-                    [TranslationKeyDesc] = " ",
+                    [TranslationKeyDesc] = "todo",
                 }
             };
         }
@@ -53,8 +55,8 @@ namespace KE.CustomRoles.CR.MTF.RedMist
         //If you let people on your team die you get weaker, you are a protector afterall.
 
         //faster, 200hp, machete mais 200 hp de dégats (75 pour les humains)
-        //shield belt
-        //ego : quick heal drain pause when attacking, 80 damage reduction faster
+        //+shield belt
+        //+ego : quick heal drain pause when attacking, 80 damage reduction faster
         //forward slash : remove 25hp max to a min of 25hp, damage everything on its path max distance of a room
 
         public override HashSet<string> Abilities { get; } =
@@ -65,25 +67,59 @@ namespace KE.CustomRoles.CR.MTF.RedMist
 
         protected override void GiveInventory(Player player)
         {
-            
+
+
+            KECustomItem.TryGive(player, "ShieldBelt", false);
         }
 
         protected override void RoleAdded(Player player)
         {
-            player.GameObject.AddComponent<EGO>();
+            if (!player.ReferenceHub.TryGetComponent<EGO>(out _))
+            {
+                Log.Debug("adding comp");
+                player.ReferenceHub.gameObject.AddComponent<EGO>();
+            }
             base.RoleAdded(player);
+        }
+
+        protected override void RoleRemoved(Player player)
+        {
+
+
+            if (player.ReferenceHub.gameObject.TryGetComponent<EGO>(out var ego))
+            {
+                UnityEngine.Object.Destroy(ego);
+            }
+            base.RoleRemoved(player);
         }
 
         protected override void SubscribeEvents()
         {
-            
+            Exiled.Events.Handlers.Player.Hurt += OnHurt;
             base.SubscribeEvents();
         }
 
         protected override void UnsubscribeEvents()
         {
-            
+            Exiled.Events.Handlers.Player.Hurt -= OnHurt;
             base.UnsubscribeEvents();
+        }
+
+        private void OnHurt(HurtEventArgs ev)
+        {
+
+            Player player = ev.Attacker;
+            if (!Check(player)) return;
+
+            if (player.ReferenceHub.gameObject.TryGetComponent<EGO>(out var ego))
+            {
+                if (ego.Active)
+                {
+                    ego.IncreaseObjective();
+                }
+
+                
+            }
         }
 
     }

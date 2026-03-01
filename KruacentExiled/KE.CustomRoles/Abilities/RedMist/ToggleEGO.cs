@@ -33,9 +33,9 @@ namespace KE.CustomRoles.Abilities.RedMist
 
         protected override bool AbilityUsed(Player player)
         {
-            if(!player.GameObject.TryGetComponent<EGO>(out var ego))
+            if(!player.ReferenceHub.gameObject.TryGetComponent<EGO>(out var ego))
             {
-                ego= player.GameObject.AddComponent<EGO>();
+                return false;
             }
 
             ego.ToggleActive();

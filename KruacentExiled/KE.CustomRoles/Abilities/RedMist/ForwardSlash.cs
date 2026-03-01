@@ -9,6 +9,7 @@ using Exiled.CreditTags.Features;
 using InventorySystem.Items.MicroHID.Modules;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.CR.MTF.RedMist;
+using KE.Utils.API.Features;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl.Thirdperson;
 using System.Collections.Generic;
@@ -35,6 +36,8 @@ namespace KE.CustomRoles.Abilities.RedMist
                 {
                     [TranslationKeyName] = "todo",
                     [TranslationKeyDesc] = "todo",
+                    ["ForwardSlashFailEGO"] = "todo",
+                    ["ForwardSlashFailWeapon"] = "todo",
                 }
             };
         }
@@ -48,9 +51,9 @@ namespace KE.CustomRoles.Abilities.RedMist
         {
 
             
-            if (!player.GameObject.TryGetComponent<EGO>(out var ego))
+            if (!player.ReferenceHub.gameObject.TryGetComponent<EGO>(out var ego))
             {
-                ego = player.GameObject.AddComponent<EGO>();
+                return false;
             }
 
 
@@ -60,19 +63,20 @@ namespace KE.CustomRoles.Abilities.RedMist
                 //show ForwardSlashFailEGO
                 return false;
             }
+            KELog.Debug("check weapopgn");
+            
 
             
-            if(player.CurrentItem.Type != ItemType.SCP1509)
+            if(player.CurrentItem is null || player.CurrentItem.Type != ItemType.SCP1509)
             {
                 //show ForwardSlashFailWeapon
                 return false;
             }
 
-            Vector3 forward = player.Transform.forward;
 
-            float size = 2;
+            float size = 1;
 
-            Vector3 position = player.Position;
+            Vector3 position = player.Position + player.CameraTransform.forward;
 
             int detect = Physics.SphereCastNonAlloc(position, size, player.CameraTransform.forward, NonAlloc, MaxDistance, HitregUtils.DetectionMask);
 
@@ -84,15 +88,21 @@ namespace KE.CustomRoles.Abilities.RedMist
 
             for (int i = 0;i < detect;i++)
             {
+
                 Collider collider = NonAlloc[i].collider;
 
+                KELog.Debug("hit collider ="+collider);
                 if (collider.TryGetComponent<IDestructible>(out var destructible) &&
                     (!Physics.Linecast(position, destructible.CenterOfMass, out var hitInfo, PlayerRolesUtils.AttackMask)
                     || collider == hitInfo.collider))
                 {
                     Player target = Player.Get(collider);
+
+
+                    HitboxIdentity.IsDamageable(ego.Hub, target.ReferenceHub);
                     destructible.Damage(Damage, new CustomDamageHandler(target, player, Damage, DamageType.Scp1509), destructible.CenterOfMass);
                 }
+
 
             }
             
