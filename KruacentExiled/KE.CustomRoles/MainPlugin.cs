@@ -53,6 +53,7 @@ namespace KE.CustomRoles
             
             Instance = this;
             _settingHandler = new();
+            Utils.API.Settings.GlobalSettings.GlobalSettingsHandler.Instance.TryLoad();
             Utils.API.Settings.GlobalSettings.GlobalSettingsHandler.Instance.SubscribeEvents();
 
             CustomPlayerStat.AddModule<FireStat>();
