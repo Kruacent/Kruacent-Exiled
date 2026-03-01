@@ -70,7 +70,7 @@ namespace KE.CustomRoles.CR.MTF.RedMist
 
         protected override void RoleAdded(Player player)
         {
-            player.GameObject.GetComponent<EGO>();
+            player.GameObject.AddComponent<EGO>();
             base.RoleAdded(player);
         }
 

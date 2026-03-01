@@ -48,7 +48,7 @@ namespace KE.CustomRoles.CR.MTF.RedMist
                 Hub.playerStats.DealDamage(damageHandler);
                 KELog.Debug("damage");
             }
-  
+            KELog.Debug("update");
         }
 
 
