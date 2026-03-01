@@ -53,7 +53,8 @@ namespace KE.CustomRoles
             
             Instance = this;
             _settingHandler = new();
-            //Utils.API.Settings.SettingHandler.Instance.SubscribeEvents();
+            Utils.API.Settings.GlobalSettings.GlobalSettingsHandler.Instance.TryLoad();
+            Utils.API.Settings.GlobalSettings.GlobalSettingsHandler.Instance.SubscribeEvents();
 
             CustomPlayerStat.AddModule<FireStat>();
             CustomStatsEvents.SubscribeEvents();
@@ -84,6 +85,7 @@ namespace KE.CustomRoles
             UnsubscribeEvents();
             CustomTeamEvents.UnsubscribeEvents();
             CustomStatsEvents.UnsubscribeEvents();
+            Utils.API.Settings.GlobalSettings.GlobalSettingsHandler.Instance.UnsubscribeEvents();
             _settingHandler = null;
             Instance = null;
             base.OnDisabled();
