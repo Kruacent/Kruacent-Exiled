@@ -41,7 +41,6 @@ namespace KE.Misc
         internal EventHandlers _gamblingCoinHandler {  get; private set; }
         internal SpawnLcz SpawnLcz { get; private set; }
         internal LastHumanHandler LastHuman { get; private set; }
-        internal PatchNote PatchNote { get; private set; }
         private Harmony harmony;
 
         internal VoteStart vote { get; private set; }
@@ -125,7 +124,6 @@ namespace KE.Misc
             AutoElevator = null;
             vote = null;
             AutoNukeAnnoucement = null;
-            PatchNote = null;
             FriendlyFire = null;
             //SurfaceLight = null;
             GamblingCoinManager.DestroyAll();
