@@ -26,7 +26,7 @@ namespace KE.CustomRoles.CR.Scientist
                     [TranslationKeyName] = "Accro du casino",
                     [TranslationKeyDesc] = "T'as trade ton kit et ta carte contre 2 pièces \nfais en bon usage",
                 },
-                ["en"] = new()
+                ["legacy"] = new()
                 {
                     [TranslationKeyName] = "Gamble Addict",
                     [TranslationKeyDesc] = "T'as trade ton kit et ta carte contre 2 pièces \nfais en bon usage",
