@@ -253,11 +253,6 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
 
         private bool IsRedacted()
         {
-            if(this is INonRedactable)
-            {
-                return false;
-            }
-
             float chanceRedacted;
 
             if(this is IChanceRedactable force)

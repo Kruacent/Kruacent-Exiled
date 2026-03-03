@@ -16,7 +16,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     /// <summary>
     /// You cannot talk to loud
     /// </summary>
-    public class Librarby : GlobalEvent, IEvent, INonRedactable
+    public class Librarby : GlobalEvent, IEvent, IChanceRedactable
     {
         ///<inheritdoc/>
         public override uint Id { get; set; } = 1091;
@@ -26,6 +26,9 @@ namespace KE.GlobalEventFramework.Examples.GE
         public override string Description { get; } = "Ne parlez pas trop fort sinon vous subirez les conséquences !";
         ///<inheritdoc/>
         public override int WeightedChance => 1;
+
+        public float ChanceRedacted => 0;
+
         private float MaxVolume = 0.7f;
 
         private OpusDecoder _decoder = new OpusDecoder();

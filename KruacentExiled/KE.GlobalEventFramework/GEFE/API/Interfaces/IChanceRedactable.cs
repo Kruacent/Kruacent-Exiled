@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace KE.GlobalEventFramework.GEFE.API.Interfaces
 {
+    /// <summary>
+    /// Override the redactable chance
+    /// </summary>
     public interface IChanceRedactable
     {
 
