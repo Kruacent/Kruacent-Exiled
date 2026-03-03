@@ -101,8 +101,6 @@ namespace KE.Items.API.Features
         }
         private void OnInternalExplodeDestructible(OnExplodeDestructibleEventsArgs ev)
         {
-            KELog.Debug("damage =" + ev.Damage);
-            KELog.Debug("serial expldode=" + ev.ExplosionGrenade.ItemId.SerialNumber);
 
             if (Check(ev.ExplosionGrenade))
             {
@@ -125,8 +123,6 @@ namespace KE.Items.API.Features
         }
         private void OnInternalThrownProjectile(ThrownProjectileEventArgs ev)
         {
-            KELog.Debug("changings nto grandea");
-            KELog.Debug("serialpickup=" + ev.Pickup.Serial);
             if (Check(ev.Throwable))
             {
                 OnThrownProjectile(ev);
