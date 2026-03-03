@@ -12,16 +12,16 @@ using KE.Items.Items.PickupModels;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.GrenadeHE)]
     public class TPGrenada : KECustomGrenade, ISwichableEffect, ICustomPickupModel
     {
-        
-        public override uint Id { get; set; } = 1045;
+
+
+        public override ItemType ItemType => ItemType.GrenadeHE;
         public override string Name { get; set; } = "Teleportation Grenade";
         public override string Description { get; set; } = "This grenade does 0 damage but teleport nearby players in a random place (does work in other dimension ;3 )";
         public override float Weight { get; set; } = 0.65f;
-        public override float FuseTime { get; set; } = 3f;
-        public override bool ExplodeOnCollision { get; set; } = false;
+        public override float FuseTime => 3f;
+        public override bool ExplodeOnCollision => false;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.cyan;
         public CustomItemEffect Effect { get; set; }
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
@@ -61,7 +61,7 @@ namespace KE.Items.Items
             PickupModel = new TPGrenadaPModel(this);
         }
 
-        protected override void OnExploding(ExplodingGrenadeEventArgs ev)
+        protected override void OnExplodingGrenade(ExplodingGrenadeEventArgs ev)
         {
             Effect.Effect(ev);
             ev.TargetsToAffect.Clear();

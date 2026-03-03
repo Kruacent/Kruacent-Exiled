@@ -29,7 +29,7 @@ namespace KE.Items.API.Core.Lights
                 var l = LightSourceToy.Create(pickup.transform, false);
                 l.Color = li.Color;
                 l.Intensity = Intensity;
-
+                l.MovementSmoothing = 0;
                 l.Spawn();
             }
 

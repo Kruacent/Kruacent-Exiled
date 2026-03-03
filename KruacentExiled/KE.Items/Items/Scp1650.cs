@@ -11,10 +11,10 @@ using PlayerHandle = Exiled.Events.Handlers.Player;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.Painkillers)]
     public class Scp1650 : KECustomItem, ISwichableEffect
     {
-        public override uint Id { get; set; } = 1056;
+        public override ItemType ItemType => ItemType.Painkillers;
+
         public override string Name { get; set; } = "SCP-1650";
         public override string Description { get; set; } = "ויאמר ה' ל— סח השמן על בשרך ולך בינות ה— כששם אלוהים על שפתיך, וזעם ה' וחרון אפו ו— דם המכבים יטהר בית מקדשו אחריך, לנצח נצחים";
         public override float Weight { get; set; } = 0.65f;

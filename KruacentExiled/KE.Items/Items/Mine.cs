@@ -11,10 +11,10 @@ using KE.Items.Items.PickupModels;
 
 namespace KE.Items.Items
 {
-    [Exiled.API.Features.Attributes.CustomItem(ItemType.KeycardJanitor)]
-    public class Mine : KECustomItem, ISwichableEffect/*, ICustomPickupModel*/
+    public class Mine : KECustomItem, ISwichableEffect, ICustomPickupModel
     {
-        public override uint Id { get; set; } = 1053;
+
+        public override ItemType ItemType => ItemType.KeycardJanitor;
         public override string Name { get; set; } = "Mine";
         public override string Description { get; set; } = "Drop to deploy the mine, little advice : don't step on it";
         public override float Weight { get; set; } = 0.65f;
@@ -81,7 +81,7 @@ namespace KE.Items.Items
 
         protected override void UnsubscribeEvents()
         {
-            //PickupModel.UnsubscribeEvents();
+            PickupModel.UnsubscribeEvents();
             base.UnsubscribeEvents();
         }
 

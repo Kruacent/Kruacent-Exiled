@@ -1,10 +1,13 @@
 ﻿using Exiled.API.Features;
+using Exiled.API.Features.Components;
 using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.Features;
+using InventorySystem.Items.ThrowableProjectiles;
 using KE.Items.API.Events;
 using KE.Items.API.Features.SpawnPoints;
 using KE.Utils.API.Features;
@@ -14,20 +17,28 @@ using static KE.Items.API.Features.SpawnPoints.PoseRoomSpawnPointHandler;
 
 namespace KE.Items.API.Features
 {
-    public abstract class KECustomGrenade : CustomGrenade
+    public abstract class KECustomGrenade : KECustomItem
     {
-        public virtual float DamageModifier { get; set; } = 1f;
-
-
+        public virtual float DamageModifier { get; } = 1f;
+        public abstract bool ExplodeOnCollision { get; }
+        public abstract float FuseTime { get;  }
         protected override void SubscribeEvents()
         {
-            ExplodeEvent.ExplodeDestructible += OnExplodeDestructible;
+            Exiled.Events.Handlers.Player.ThrowingRequest += OnInternalThrowingRequest;
+            Exiled.Events.Handlers.Player.ThrownProjectile += OnInternalThrownProjectile;
+            Exiled.Events.Handlers.Map.ExplodingGrenade += OnInternalExplodingGrenade;
+            Exiled.Events.Handlers.Map.ChangedIntoGrenade += OnInternalChangedIntoGrenade;
+            ExplodeEvent.ExplodeDestructible += OnInternalExplodeDestructible;
             base.SubscribeEvents();
         }
 
         protected override void UnsubscribeEvents()
         {
-            ExplodeEvent.ExplodeDestructible -= OnExplodeDestructible;
+            Exiled.Events.Handlers.Player.ThrowingRequest -= OnInternalThrowingRequest;
+            Exiled.Events.Handlers.Player.ThrownProjectile -= OnInternalThrownProjectile;
+            Exiled.Events.Handlers.Map.ExplodingGrenade -= OnInternalExplodingGrenade;
+            Exiled.Events.Handlers.Map.ChangedIntoGrenade -= OnInternalChangedIntoGrenade;
+            ExplodeEvent.ExplodeDestructible -= OnInternalExplodeDestructible;
             base.UnsubscribeEvents();
         }
 
@@ -74,15 +85,109 @@ namespace KE.Items.API.Features
             return base.Spawn(spawns, limit - num);
         }
 
+        public virtual bool Check(Projectile grenade)
+        {
+            if (grenade != null)
+            {
+                return base.TrackedSerials.Contains(grenade.Serial);
+            }
 
-        private void OnExplodeDestructible(OnExplodeDestructibleEventsArgs ev)
+            return false;
+        }
+
+        public virtual bool Check(ExplosionGrenade explosionGrenade)
+        {
+            return Check(Pickup.Get(explosionGrenade));
+        }
+        private void OnInternalExplodeDestructible(OnExplodeDestructibleEventsArgs ev)
+        {
+            KELog.Debug("damage =" + ev.Damage);
+            KELog.Debug("serial expldode=" + ev.ExplosionGrenade.ItemId.SerialNumber);
+
+            if (Check(ev.ExplosionGrenade))
+            {
+                if(ev.Damage > 0f)
+                {
+                    ev.Damage *= DamageModifier;
+                }
+
+                OnExplodeDestructible(ev);
+            }
+        }
+
+
+        private void OnInternalThrowingRequest(ThrowingRequestEventArgs ev)
+        {
+            if (Check(ev.Item))
+            {
+                OnThrowingRequest(ev);
+            }
+        }
+        private void OnInternalThrownProjectile(ThrownProjectileEventArgs ev)
+        {
+            KELog.Debug("changings nto grandea");
+            KELog.Debug("serialpickup=" + ev.Pickup.Serial);
+            if (Check(ev.Throwable))
+            {
+                OnThrownProjectile(ev);
+                if (ev.Projectile is TimeGrenadeProjectile timeGrenadeProjectile)
+                {
+                    timeGrenadeProjectile.FuseTime = FuseTime;
+                }
+
+                if (ExplodeOnCollision)
+                {
+                    ev.Projectile.GameObject.AddComponent<CollisionHandler>().Init((ev.Player ?? Server.Host).GameObject, ev.Projectile.Base);
+                }
+            }
+        }
+        private void OnInternalExplodingGrenade(ExplodingGrenadeEventArgs ev)
+        {
+            if (Check(ev.Projectile))
+            {
+                OnExplodingGrenade(ev);
+            }
+        }
+        private void OnInternalChangedIntoGrenade(ChangedIntoGrenadeEventArgs ev)
         {
 
-            Player player = Player.Get(ev.Destructible.NetworkId);
-            KELog.Debug("damage =" + ev.Damage);
-            if (!Check(Pickup.Get(ev.ExplosionGrenade))) return;
-            if (ev.Damage < 0f) return;
-            ev.Damage *= DamageModifier;
+
+            if (Check(ev.Pickup))
+            {
+                if (ev.Projectile is TimeGrenadeProjectile timeGrenadeProjectile)
+                {
+                    timeGrenadeProjectile.FuseTime = FuseTime;
+                }
+
+                OnChangedIntoGrenade(ev);
+                if (ExplodeOnCollision)
+                {
+                    ev.Projectile.GameObject.AddComponent<CollisionHandler>().Init((ev.Pickup.PreviousOwner ?? Server.Host).GameObject, ev.Projectile.Base);
+                }
+            }
+
+        }
+
+
+        protected virtual void OnExplodeDestructible(OnExplodeDestructibleEventsArgs ev)
+        {
+
+        }
+        protected virtual void OnThrowingRequest(ThrowingRequestEventArgs ev)
+        {
+
+        }
+        protected virtual void OnThrownProjectile(ThrownProjectileEventArgs ev)
+        {
+
+        }
+        protected virtual void OnExplodingGrenade(ExplodingGrenadeEventArgs ev)
+        {
+
+        }
+        protected virtual void OnChangedIntoGrenade(ChangedIntoGrenadeEventArgs ev)
+        {
+
         }
 
         protected override void ShowPickedUpMessage(Player player)

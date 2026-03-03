@@ -17,10 +17,9 @@ using UnityEngine;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.Flashlight)]
     public class MScan : KECustomItem
     {
-        public override uint Id { get; set; } = 2090;
+        public override ItemType ItemType => ItemType.Flashlight;
         public override string Name { get; set; } = "M-Scan";
         public override string Description { get; set; } = "Détecte les mouvements des personnes passant devant";
         public override float Weight { get; set; } = 1.5f;

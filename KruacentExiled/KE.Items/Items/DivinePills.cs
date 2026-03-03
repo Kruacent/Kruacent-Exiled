@@ -11,12 +11,11 @@ using KE.Items.API.Interface;
 using KE.Items.Items.ItemEffects;
 using KE.Items.API.Features;
 
-/// <inheritdoc />
-[CustomItem(ItemType.Painkillers)]
 public class DivinePills : KECustomItem, ILumosItem, ISwichableEffect, IUpgradableCustomItem
 {
     /// <inheritdoc/>
-    public override uint Id { get; set; } = 1047;
+
+    public override ItemType ItemType => ItemType.Painkillers;
 
     /// <inheritdoc/>
     public override string Name { get; set; } = "Divine Pills";

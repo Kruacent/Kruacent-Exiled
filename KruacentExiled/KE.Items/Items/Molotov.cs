@@ -16,15 +16,14 @@ using UnityEngine;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.GrenadeFlash)]
     public class Molotov : KECustomGrenade, ISwichableEffect, ICustomPickupModel, IUpgradableCustomItem
     {
-        public override uint Id { get; set; } = 1049;
+        public override ItemType ItemType => ItemType.GrenadeFlash;
         public override string Name { get; set; } = "Cocktail Molotov";
         public override string Description { get; set; } = "ARSON";
         public override float Weight { get; set; } = 0.65f;
-        public override float FuseTime { get; set; } = 5f;
-        public override bool ExplodeOnCollision { get; set; } = true;
+        public override float FuseTime => 5f;
+        public override bool ExplodeOnCollision => true;
         public Color Color { get; set; } = Color.yellow;
         public CustomItemEffect Effect { get; set; }
         public PickupModel PickupModel { get; }
@@ -89,7 +88,7 @@ namespace KE.Items.Items
             }
         }
 
-        protected override void OnExploding(ExplodingGrenadeEventArgs ev)
+        protected override void OnExplodingGrenade(ExplodingGrenadeEventArgs ev)
         {
             Effect.Effect(ev);
             ev.TargetsToAffect.Clear();

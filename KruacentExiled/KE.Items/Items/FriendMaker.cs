@@ -4,6 +4,7 @@ using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
 using HintServiceMeow.UI.Utilities;
 using KE.Items.API.Features;
+using KE.Utils.API.Features;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -16,20 +17,18 @@ using UnityEngine;
 namespace KE.Items.Items
 {
 
-    [CustomItem(ItemType.GunCOM15)]
     public class FriendMaker : KECustomWeapon
     {
-        public override uint Id { get; set; } = 8520;
-        public override string Name { get; set; } = "Friend Maker";
+
+        public override ItemType ItemType => ItemType.GunCOM15;
+        public override string Name { get; set; } = "FriendMaker";
         public override string Description { get; set; } = "The number one (1) method to make friends";
         public override float Weight { get; set; } = 1f;
         public override SpawnProperties SpawnProperties { get; set; } = null;
 
 
-        public override byte ClipSize { get; set; } = 1;
+        public override byte ClipSize { get; } = 1;
         
-        public override bool FriendlyFire { get; set; } = true;
-
         private Dictionary<Player, DateTime> cooldowns;
 
         private TimeSpan Cooldown = new(0,1,0);
@@ -48,6 +47,8 @@ namespace KE.Items.Items
 
         protected override void OnShooting(ShootingEventArgs ev)
         {
+
+            KELog.Debug("firne dmaker");
             Player player = ev.Player;
             if (!Check(player)) return;
             if (!ev.IsAllowed) return;

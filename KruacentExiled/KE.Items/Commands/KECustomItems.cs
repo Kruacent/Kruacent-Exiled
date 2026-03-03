@@ -1,0 +1,23 @@
+﻿using CommandSystem;
+using KE.CustomRoles.Commands.KECR;
+using System;
+
+namespace KE.Items.Commands
+{
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    internal class KECustomItems : Utils.API.Commands.KEParentCommand
+    {
+        public override string Command => "keci";
+
+        public override string[] Aliases => [];
+
+        public override string Description => "kecustom item parent command";
+
+        public override void LoadGeneratedCommands()
+        {
+            RegisterCommand(new List());
+            RegisterCommand(new Give());
+        }
+
+    }
+}

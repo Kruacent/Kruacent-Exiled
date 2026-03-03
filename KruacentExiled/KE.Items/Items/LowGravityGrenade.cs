@@ -11,15 +11,15 @@ using KE.Items.Items.ItemEffects;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.GrenadeHE)]
     public class LowGravityGrenade : KECustomGrenade, ISwichableEffect
     {
-        public override uint Id { get; set; } = 1072;
+
+        public override ItemType ItemType => ItemType.GrenadeHE;
         public override string Name { get; set; } = "Low Gravity Grenade";
-        public override string Description { get; set; } = "You always wanna be on the moon, if the answer is yes this grenade will grant your wishes !";
+        public override string Description { get; set; } = "You always wanna be on the moon, if the answer is yes this grenade will grant your wishes!";
         public override float Weight { get; set; } = 0.65f;
-        public override float FuseTime { get; set; } = 3f;
-        public override bool ExplodeOnCollision { get; set; } = false;
+        public override float FuseTime => 3f;
+        public override bool ExplodeOnCollision => false;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.gray;
         public CustomItemEffect Effect { get; set; }
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
@@ -56,7 +56,7 @@ namespace KE.Items.Items
             Effect = new LowGravityGrenadeEffect();
         }
 
-        protected override void OnExploding(ExplodingGrenadeEventArgs ev)
+        protected override void OnExplodingGrenade(ExplodingGrenadeEventArgs ev)
         {
             Effect.Effect(ev);
             ev.TargetsToAffect.Clear();

@@ -19,16 +19,16 @@ using UnityEngine;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.GrenadeHE)]
     public class SainteGrenada : KECustomGrenade, ICustomPickupModel
     {
-        public override uint Id { get; set; } = 1055;
+
+        public override ItemType ItemType => ItemType.GrenadeHE;
         public override string Name { get; set; } = "Sainte Grenada";
         public override string Description { get; set; } = "Worms reference !?";
         public override float Weight { get; set; } = 1.5f;
-        public override float FuseTime { get; set; } = 6f;
-        public override bool ExplodeOnCollision { get; set; } = false;
-        public override float DamageModifier { get; set; } = 3f;
+        public override float FuseTime => 6f;
+        public override bool ExplodeOnCollision => false;
+        public override float DamageModifier => 3f;
         public Color Color { get; set; } = Color.red;
 
 
@@ -68,7 +68,7 @@ namespace KE.Items.Items
         {
             Utils.API.Sounds.SoundPlayer.Instance.Play("worms", ev.Projectile.Position, 50,20f);
         }
-        protected override void OnExploding(ExplodingGrenadeEventArgs ev)
+        protected override void OnExplodingGrenade(ExplodingGrenadeEventArgs ev)
         {
             ev.Projectile.Scale = new Vector3(GrenadeSize, GrenadeSize, GrenadeSize);
 

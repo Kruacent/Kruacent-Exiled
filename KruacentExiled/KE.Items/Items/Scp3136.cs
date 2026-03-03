@@ -13,10 +13,9 @@ using UnityEngine;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.SCP1576)]
     public class Scp3136 : KECustomItem/*, ICustomPickupModel*/
     {
-        public override uint Id { get; set; } = 1057;
+        public override ItemType ItemType => ItemType.SCP1576;
         public override string Name { get; set; } = "SCP-3136";
         public override string Description { get; set; } = "A map of the facility, you could draw your friends next to you";
         public override float Weight { get; set; } = 0.65f;

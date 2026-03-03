@@ -7,15 +7,15 @@ using KE.Items.API.Features;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.GrenadeFlash)]
     public class ImpactFlash : KECustomGrenade
     {
-        public override uint Id { get; set; } = 1052;
+
+        public override ItemType ItemType => ItemType.GrenadeFlash;
         public override string Name { get; set; } = "Impact Flash";
         public override string Description { get; set; } = "The grenade explode at impact";
         public override float Weight { get; set; } = 0.65f;
-        public override float FuseTime { get; set; } = 3f;
-        public override bool ExplodeOnCollision { get; set; } = true;
+        public override float FuseTime => 3f;
+        public override bool ExplodeOnCollision => true;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 5,

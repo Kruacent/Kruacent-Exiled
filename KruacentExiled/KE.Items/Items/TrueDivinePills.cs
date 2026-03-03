@@ -12,11 +12,11 @@ using KE.Items.API.Interface;
 using KE.Items.API.Features;
 
 /// <inheritdoc />
-[CustomItem(ItemType.SCP500)]
 public class TrueDivinePills : KECustomItem, ILumosItem
 {
     /// <inheritdoc/>
-    public override uint Id { get; set; } = 1050;
+
+    public override ItemType ItemType => ItemType.SCP500;
 
     /// <inheritdoc/>
     public override string Name { get; set; } = "True Divine Pills";

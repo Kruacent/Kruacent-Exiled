@@ -13,10 +13,9 @@ using PlayerRoles.Ragdolls;
 using PlayerRoles;
 using MEC;
 
-[CustomItem(ItemType.SCP1853)]
 public class Defibrillator : KECustomItem, ILumosItem
 {
-    public override uint Id { get; set; } = 1041;
+    public override ItemType ItemType => ItemType.SCP1853;
     public override string Name { get; set; } = "Defibrillator";
     public override string Description { get; set; } = "Visez un cadavre de près pour tenter une réanimation.";
     public override float Weight { get; set; } = 1.0f;

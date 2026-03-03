@@ -19,15 +19,16 @@ using System.Collections.Generic;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.GrenadeHE)]
     public class PressePuree : KECustomGrenade, IUpgradableCustomItem, ICustomPickupModel
     {
-        public override uint Id { get; set; } = 1046;
-        public override string Name { get; set; } = "Presse Purée";
-        public override string Description { get; set; } = "THIS ITEM DOESNT CURRENTLY DO DAMAGE !!!!!!\nThe grenade explode at impact but does less damage";
+        public override string Name { get; set; } = "PressePuree";
+
+        public override ItemType ItemType => ItemType.GrenadeHE;
+        public override string Description { get; set; } = "The grenade explode at impact but does less damage";
         public override float Weight { get; set; } = 0.65f;
-        public override float FuseTime { get; set; } = 5f;
-        public override bool ExplodeOnCollision { get; set; } = true;
+        public override float FuseTime => 5f;
+        public override bool ExplodeOnCollision => true;
+        public override float DamageModifier => .3f;
         public PickupModel PickupModel { get; }
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
@@ -66,26 +67,26 @@ namespace KE.Items.Items
         protected override void SubscribeEvents()
         {
             PickupModel.SubscribeEvents();
-            ExplodeEvent.ExplodeDestructible += OnExplodeDestructible;
             base.SubscribeEvents();
         }
 
         protected override void UnsubscribeEvents()
         {
             PickupModel.UnsubscribeEvents();
-            ExplodeEvent.ExplodeDestructible -= OnExplodeDestructible;
             base.UnsubscribeEvents();
         }
 
-        private void OnExplodeDestructible(OnExplodeDestructibleEventsArgs ev)
+
+
+
+        protected override void OnExplodeDestructible(OnExplodeDestructibleEventsArgs ev)
         {
             KELog.Debug("old dmagea="+ev.Damage);
             Player player = Player.Get(ev.Destructible.NetworkId);
-            if (!Check(Projectile.Get(ev.ExplosionGrenade))) return;
+            if (!Check(ev.ExplosionGrenade)) return;
 
             
-            if (ev.Damage < 0f) return;
-            ev.Damage /= 2f;
+            if (ev.Damage <= 0f) return;
 
             if (player is not null && player.IsScp)
             {

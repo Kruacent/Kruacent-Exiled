@@ -10,15 +10,15 @@ using KE.Items.ItemEffects;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.GrenadeFlash)]
     public class ProximityGrenade : KECustomGrenade, ISwichableEffect
     {
-        public override uint Id { get; set; } = 1073;
+
+        public override ItemType ItemType => ItemType.GrenadeFlash;
         public override string Name { get; set; } = "Proximity Grenade";
         public override string Description { get; set; } = "Show lines to all players around 3 rooms";
         public override float Weight { get; set; } = 0.65f;
-        public override float FuseTime { get; set; } = 3f;
-        public override bool ExplodeOnCollision { get; set; } = false;
+        public override float FuseTime => 3f;
+        public override bool ExplodeOnCollision => false;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.red;
         public CustomItemEffect Effect { get; set; }
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
@@ -41,7 +41,7 @@ namespace KE.Items.Items
             Effect = new ProximityGrenadeEffect();
         }
 
-        protected override void OnExploding(ExplodingGrenadeEventArgs ev)
+        protected override void OnExplodingGrenade(ExplodingGrenadeEventArgs ev)
         {
             Effect.Effect(ev);
             ev.TargetsToAffect.Clear();

@@ -18,10 +18,9 @@ using Player = Exiled.API.Features.Player;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.Flashlight)]
     public class Scp514 : KECustomItem
     {
-        public override uint Id { get; set; } = 1070;
+        public override ItemType ItemType => ItemType.Flashlight;
         public override string Name { get; set; } = "SCP-514";
         public override string Description { get; set; } = "birb";
         public override float Weight { get; set; } = 0.65f;

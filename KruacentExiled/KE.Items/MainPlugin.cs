@@ -4,15 +4,19 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Toys;
 using Exiled.CustomItems.API.Features;
+using Exiled.Events.EventArgs.Map;
+using Exiled.Events.EventArgs.Player;
 using HarmonyLib;
 using InventorySystem.Items.ThrowableProjectiles;
 using KE.Items.API.Core.Lights;
 using KE.Items.API.Core.Settings;
 using KE.Items.API.Core.Upgrade;
 using KE.Items.API.Events;
+using KE.Items.API.Features;
 using KE.Items.API.Features.Complexes;
 using KE.Items.API.Features.SpawnPoints;
 using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Features;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -89,8 +93,8 @@ namespace KE.Items
 
             //Exiled.Events.Handlers.Server.RoundStarted += Test;
 
-            
-            CustomItem.RegisterItems();
+
+            KECustomItem.RegisterItems();
             //PickupQuality?.SubscribeEvents();
             SettingsHandler.SubscribeEvents();
             UpgradeHandler.SubscribeEvents();
@@ -101,14 +105,13 @@ namespace KE.Items
 
         public override void OnDisabled()
         {
-            CustomItem.UnregisterItems();
+            KECustomItem.UnregisterItems();
             UpgradeHandler?.UnsubscribeEvents();
             LightsHandler?.UnsubscribeEvents();
             //PickupQuality?.UnsubscribeEvents();
             //QualityHandler?.Unregister();
             SettingsHandler.UnsubscribeEvents();
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
-
             //Exiled.Events.Handlers.Server.RoundStarted -= Test;
 
             //QualityHandler = null;
@@ -136,7 +139,6 @@ namespace KE.Items
 
 
         }
-
 
     }
 }

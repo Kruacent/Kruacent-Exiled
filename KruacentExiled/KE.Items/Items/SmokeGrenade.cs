@@ -10,15 +10,14 @@ using KE.Items.ItemEffects;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.GrenadeFlash)] 
     public class SmokeGrenade : KECustomGrenade, ISwichableEffect
     {
-        public override uint Id { get; set; } = 1071;
+        public override ItemType ItemType => ItemType.GrenadeFlash;
         public override string Name { get; set; } = "Smoke Grenade";
         public override string Description { get; set; } = "We finally put your grandma inside this thing ! Don't throw it or she will get out !";
         public override float Weight { get; set; } = 0.65f;
-        public override float FuseTime { get; set; } = 3f;
-        public override bool ExplodeOnCollision { get; set; } = false;
+        public override float FuseTime => 3f;
+        public override bool ExplodeOnCollision => false;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.black;
         public CustomItemEffect Effect { get; set; }
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
@@ -45,7 +44,7 @@ namespace KE.Items.Items
             Effect = new SmokeGrenadeEffect();
         }
 
-        protected override void OnExploding(ExplodingGrenadeEventArgs ev)
+        protected override void OnExplodingGrenade(ExplodingGrenadeEventArgs ev)
         {
             Effect.Effect(ev);
             ev.TargetsToAffect.Clear();

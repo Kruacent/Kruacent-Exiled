@@ -19,17 +19,16 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace KE.Items.Items.LeSoleil
-{
-    [CustomItem(ItemType.GrenadeFlash)]
+namespace KE.Items.Items.LeSoleil 
+{ 
     public class LeSoleil : KECustomGrenade, IUpgradableCustomItem
     {
-        public override uint Id { get; set; } = 9999;
+        public override ItemType ItemType => ItemType.GrenadeFlash;
         public override string Name { get; set; } = "Le Soleil";
         public override string Description { get; set; } = "Probably not the best idea to use it";
         public override float Weight { get; set; } = 0.65f;
-        public override float FuseTime { get; set; } = 5f;
-        public override bool ExplodeOnCollision { get; set; } = true;
+        public override float FuseTime =>5f;
+        public override bool ExplodeOnCollision =>true;
 
         public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade => new Dictionary<Scp914KnobSetting, UpgradeProperties>()
         {
@@ -41,7 +40,7 @@ namespace KE.Items.Items.LeSoleil
         };
 
 
-        protected override void OnExploding(ExplodingGrenadeEventArgs ev)
+        protected override void OnExplodingGrenade(ExplodingGrenadeEventArgs ev)
         {
             CastTheSun();
         }

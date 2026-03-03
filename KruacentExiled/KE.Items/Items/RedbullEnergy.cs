@@ -10,10 +10,9 @@ using KE.Items.Items.ItemEffects;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.SCP207)]
     public class RedbullEnergy : KECustomItem, ISwichableEffect
     {
-        public override uint Id { get; set; } = 1042;
+        public override ItemType ItemType => ItemType.SCP207;
         public override string Name { get; set; } = "RedBull Energy";
         public override string Description { get; set; } = "RedBull donne des ailes ! Attention à la chute !!!";
         public override float Weight { get; set; } = 0.65f;

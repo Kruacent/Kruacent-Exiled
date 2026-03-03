@@ -12,15 +12,15 @@ using KE.Items.API.Core.Upgrade;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.GrenadeFlash)]
     public class HealZone : KECustomGrenade, ILumosItem, ISwichableEffect, IUpgradableCustomItem
     {
-        public override uint Id { get; set; } = 1051;
+
+        public override ItemType ItemType => ItemType.GrenadeFlash;
         public override string Name { get; set; } = "Heal Zone";
         public override string Description { get; set; } = "Allow to heal you and your ally";
-        public override float Weight { get; set; } = 0.65f;
-        public override float FuseTime { get; set; } = 5f;
-        public override bool ExplodeOnCollision { get; set; } = true;
+        public override float Weight => 0.65f;
+        public override float FuseTime => 5f;
+        public override bool ExplodeOnCollision => true;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.green;
         public CustomItemEffect Effect { get; set; }
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
@@ -76,7 +76,7 @@ namespace KE.Items.Items
             Effect = new HealZoneEffect();
         }
 
-        protected override void OnExploding(ExplodingGrenadeEventArgs ev)
+        protected override void OnExplodingGrenade(ExplodingGrenadeEventArgs ev)
         {
             
             Effect.Effect(ev);

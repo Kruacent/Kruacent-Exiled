@@ -11,11 +11,10 @@ using KE.Items.API.Features;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.KeycardJanitor)]
     public class DeployableWall : KECustomItem, ILumosItem, ISwichableEffect
     {
-        
-        public override uint Id { get; set; } = 1048;
+
+        public override ItemType ItemType => ItemType.KeycardJanitor;
         public override string Name { get; set; } = "Deployable Wall";
         public override string Description { get; set; } = "Drop to deploy a wall, and throw to just throw the card";
         public override float Weight { get; set; } = 0.65f;
