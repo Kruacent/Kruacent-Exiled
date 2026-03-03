@@ -85,6 +85,7 @@ namespace KE.CustomRoles
             UnsubscribeEvents();
             CustomTeamEvents.UnsubscribeEvents();
             CustomStatsEvents.UnsubscribeEvents();
+            Utils.API.Settings.GlobalSettings.GlobalSettingsHandler.Instance.UnsubscribeEvents();
             _settingHandler = null;
             Instance = null;
             base.OnDisabled();
