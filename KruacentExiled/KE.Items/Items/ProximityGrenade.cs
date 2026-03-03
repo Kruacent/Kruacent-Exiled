@@ -13,9 +13,27 @@ namespace KE.Items.Items
     public class ProximityGrenade : KECustomGrenade, ISwichableEffect
     {
 
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Proximity Grenade",
+                    [TranslationKeyDesc] = "Show lines to all players around 3 rooms",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Grenade de proximité",
+                    [TranslationKeyDesc] = "Montre tous les joueurs dans un rayon de 3 salles",
+                },
+            };
+        }
+
+
         public override ItemType ItemType => ItemType.GrenadeFlash;
-        public override string Name { get; set; } = "Proximity Grenade";
-        public override string Description { get; set; } = "Show lines to all players around 3 rooms";
+        public override string Name { get; set; } = "ProximityGrenade";
+        public override string Description { get; set; } = "";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime => 3f;
         public override bool ExplodeOnCollision => false;

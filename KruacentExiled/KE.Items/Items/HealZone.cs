@@ -14,9 +14,24 @@ namespace KE.Items.Items
 {
     public class HealZone : KECustomGrenade, ILumosItem, ISwichableEffect, IUpgradableCustomItem
     {
-
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Heal Zone",
+                    [TranslationKeyDesc] = "Allow to heal you and your ally",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Heal Zone",
+                    [TranslationKeyDesc] = "Créer une zone pour soigner",
+                },
+            };
+        }
         public override ItemType ItemType => ItemType.GrenadeFlash;
-        public override string Name { get; set; } = "Heal Zone";
+        public override string Name { get; set; } = "HealZone";
         public override string Description { get; set; } = "Allow to heal you and your ally";
         public override float Weight => 0.65f;
         public override float FuseTime => 5f;

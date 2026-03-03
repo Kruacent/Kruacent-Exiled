@@ -13,7 +13,22 @@ namespace KE.Items.Items
 {
     public class Mine : KECustomItem, ISwichableEffect, ICustomPickupModel
     {
-
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Mine",
+                    [TranslationKeyDesc] = "Drop to deploy the mine, little advice : don't step on it",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Mine",
+                    [TranslationKeyDesc] = "Une Mine ! Lâcher pour la déployer",
+                },
+            };
+        }
         public override ItemType ItemType => ItemType.KeycardJanitor;
         public override string Name { get; set; } = "Mine";
         public override string Description { get; set; } = "Drop to deploy the mine, little advice : don't step on it";

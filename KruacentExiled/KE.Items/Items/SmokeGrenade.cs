@@ -12,6 +12,22 @@ namespace KE.Items.Items
 {
     public class SmokeGrenade : KECustomGrenade, ISwichableEffect
     {
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "SCP-514",
+                    [TranslationKeyDesc] = "birb",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "SCP-514",
+                    [TranslationKeyDesc] = "birb",
+                },
+            };
+        }
         public override ItemType ItemType => ItemType.GrenadeFlash;
         public override string Name { get; set; } = "Smoke Grenade";
         public override string Description { get; set; } = "We finally put your grandma inside this thing ! Don't throw it or she will get out !";

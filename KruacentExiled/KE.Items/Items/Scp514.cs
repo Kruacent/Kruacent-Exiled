@@ -20,6 +20,22 @@ namespace KE.Items.Items
 {
     public class Scp514 : KECustomItem
     {
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "SCP-514",
+                    [TranslationKeyDesc] = "birb",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "SCP-514",
+                    [TranslationKeyDesc] = "birb",
+                },
+            };
+        }
         public override ItemType ItemType => ItemType.Flashlight;
         public override string Name { get; set; } = "SCP-514";
         public override string Description { get; set; } = "birb";

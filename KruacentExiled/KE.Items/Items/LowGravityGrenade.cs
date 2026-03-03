@@ -13,10 +13,25 @@ namespace KE.Items.Items
 {
     public class LowGravityGrenade : KECustomGrenade, ISwichableEffect
     {
-
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Low Gravity Grenade",
+                    [TranslationKeyDesc] = "You always wanna be on the moon, if the answer is yes this grenade will grant your wishes!",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Grenade basse gravité",
+                    [TranslationKeyDesc] = "Pour aller attraper les étoiles",
+                },
+            };
+        }
         public override ItemType ItemType => ItemType.GrenadeHE;
         public override string Name { get; set; } = "Low Gravity Grenade";
-        public override string Description { get; set; } = "You always wanna be on the moon, if the answer is yes this grenade will grant your wishes!";
+        public override string Description { get; set; } = "";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime => 3f;
         public override bool ExplodeOnCollision => false;

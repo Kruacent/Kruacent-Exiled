@@ -13,6 +13,22 @@ namespace KE.Items.Items
 {
     public class Scp1650 : KECustomItem, ISwichableEffect
     {
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "SCP-1650",
+                    [TranslationKeyDesc] = "ויאמר ה' ל— סח השמן על בשרך ולך בינות ה— כששם אלוהים על שפתיך, וזעם ה' וחרון אפו ו— דם המכבים יטהר בית מקדשו אחריך, לנצח נצחים",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "SCP-1650",
+                    [TranslationKeyDesc] = "ויאמר ה' ל— סח השמן על בשרך ולך בינות ה— כששם אלוהים על שפתיך, וזעם ה' וחרון אפו ו— דם המכבים יטהר בית מקדשו אחריך, לנצח נצחים",
+                },
+            };
+        }
         public override ItemType ItemType => ItemType.Painkillers;
 
         public override string Name { get; set; } = "SCP-1650";

@@ -19,10 +19,26 @@ namespace KE.Items.Items
 
     public class FriendMaker : KECustomWeapon
     {
-
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Friend Maker™",
+                    [TranslationKeyDesc] = "The number one (1) method to make friends",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Friend Maker™",
+                    [TranslationKeyDesc] = "LA méthode pour se faire des amis ! <size=5>Produit non remboursable</size>",
+                },
+            };
+        }
+        
         public override ItemType ItemType => ItemType.GunCOM15;
         public override string Name { get; set; } = "FriendMaker";
-        public override string Description { get; set; } = "The number one (1) method to make friends";
+        public override string Description { get; set; } = "";
         public override float Weight { get; set; } = 1f;
         public override SpawnProperties SpawnProperties { get; set; } = null;
 

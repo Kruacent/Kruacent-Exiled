@@ -15,6 +15,22 @@ using MEC;
 
 public class Defibrillator : KECustomItem, ILumosItem
 {
+    protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+    {
+        return new()
+        {
+            ["en"] = new()
+            {
+                [TranslationKeyName] = "Defibrillator",
+                [TranslationKeyDesc] = "Aim for a dead body to try to re<b>sus</b>citate him",
+            },
+            ["fr"] = new()
+            {
+                [TranslationKeyName] = "Défibrillateur",
+                [TranslationKeyDesc] = "Visez un cadavre de près pour tenter une réanimation.",
+            },
+        };
+    }
     public override ItemType ItemType => ItemType.SCP1853;
     public override string Name { get; set; } = "Defibrillator";
     public override string Description { get; set; } = "Visez un cadavre de près pour tenter une réanimation.";

@@ -23,9 +23,25 @@ namespace KE.Items.Items.LeSoleil
 { 
     public class LeSoleil : KECustomGrenade, IUpgradableCustomItem
     {
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "The Sun",
+                    [TranslationKeyDesc] = "Probably not the best idea to use it",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Le Soleil",
+                    [TranslationKeyDesc] = "pas ouf",
+                },
+            };
+        }
         public override ItemType ItemType => ItemType.GrenadeFlash;
         public override string Name { get; set; } = "Le Soleil";
-        public override string Description { get; set; } = "Probably not the best idea to use it";
+        public override string Description { get; set; } = "";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime =>5f;
         public override bool ExplodeOnCollision =>true;

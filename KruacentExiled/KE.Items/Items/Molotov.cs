@@ -18,9 +18,25 @@ namespace KE.Items.Items
 {
     public class Molotov : KECustomGrenade, ISwichableEffect, ICustomPickupModel, IUpgradableCustomItem
     {
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Molotov Cocktail",
+                    [TranslationKeyDesc] = "ARSON",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Cocktail Molotov",
+                    [TranslationKeyDesc] = "La meilleur arme contre un blindé",
+                },
+            };
+        }
         public override ItemType ItemType => ItemType.GrenadeFlash;
-        public override string Name { get; set; } = "Cocktail Molotov";
-        public override string Description { get; set; } = "ARSON";
+        public override string Name { get; set; } = "CocktailMolotov";
+        public override string Description { get; set; } = "";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime => 5f;
         public override bool ExplodeOnCollision => true;

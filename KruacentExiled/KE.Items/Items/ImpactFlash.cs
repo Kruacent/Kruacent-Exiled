@@ -9,9 +9,24 @@ namespace KE.Items.Items
 {
     public class ImpactFlash : KECustomGrenade
     {
-
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Impact Flash",
+                    [TranslationKeyDesc] = "The name is self-explanatory",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Impact Flash",
+                    [TranslationKeyDesc] = "Une flashbang qui explose à l'impacte",
+                },
+            };
+        }
         public override ItemType ItemType => ItemType.GrenadeFlash;
-        public override string Name { get; set; } = "Impact Flash";
+        public override string Name { get; set; } = "ImpactFlash";
         public override string Description { get; set; } = "The grenade explode at impact";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime => 3f;

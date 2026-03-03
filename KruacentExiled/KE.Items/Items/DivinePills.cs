@@ -13,15 +13,29 @@ using KE.Items.API.Features;
 
 public class DivinePills : KECustomItem, ILumosItem, ISwichableEffect, IUpgradableCustomItem
 {
-    /// <inheritdoc/>
-
+    protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+    {
+        return new()
+        {
+            ["en"] = new()
+            {
+                [TranslationKeyName] = "Divine Pills",
+                [TranslationKeyDesc] = "25% chance you die\n 75% you respawn someone\n",
+            },
+            ["fr"] = new()
+            {
+                [TranslationKeyName] = "Divine Pills",
+                [TranslationKeyDesc] = "25% de chance de mourrir\n 75% de ramener quelqu'un à la vie",
+            },
+        };
+    }
     public override ItemType ItemType => ItemType.Painkillers;
 
     /// <inheritdoc/>
     public override string Name { get; set; } = "Divine Pills";
 
     /// <inheritdoc/>
-    public override string Description { get; set; } = "25% chance you die\n 75% you respawn someone\n";
+    public override string Description { get; set; } = "A";
 
     /// <inheritdoc/>
     public override float Weight { get; set; } = 0.65f;

@@ -21,6 +21,22 @@ namespace KE.Items.Items
 {
     public class PressePuree : KECustomGrenade, IUpgradableCustomItem, ICustomPickupModel
     {
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Presse Purée",
+                    [TranslationKeyDesc] = "explode at impact but does less damage",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Presse Purée",
+                    [TranslationKeyDesc] = "Explosion à l'impact mais moins efficace",
+                },
+            };
+        }
         public override string Name { get; set; } = "PressePuree";
 
         public override ItemType ItemType => ItemType.GrenadeHE;

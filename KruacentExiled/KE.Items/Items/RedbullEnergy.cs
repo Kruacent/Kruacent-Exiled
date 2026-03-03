@@ -12,9 +12,25 @@ namespace KE.Items.Items
 {
     public class RedbullEnergy : KECustomItem, ISwichableEffect
     {
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "RedBull™ Energy",
+                    [TranslationKeyDesc] = "RedBull™ donne des ailes ! Attention à la chute !!!",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "RedBull™ Energy",
+                    [TranslationKeyDesc] = "RedBull™ donne des ailes ! Attention à la chute !!!",
+                },
+            };
+        }
         public override ItemType ItemType => ItemType.SCP207;
-        public override string Name { get; set; } = "RedBull Energy";
-        public override string Description { get; set; } = "RedBull donne des ailes ! Attention à la chute !!!";
+        public override string Name { get; set; } = "RedBullEnergy";
+        public override string Description { get; set; } = "";
         public override float Weight { get; set; } = 0.65f;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.blue;
         public CustomItemEffect Effect { get; set; }

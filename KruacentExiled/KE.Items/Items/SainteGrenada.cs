@@ -21,10 +21,25 @@ namespace KE.Items.Items
 {
     public class SainteGrenada : KECustomGrenade, ICustomPickupModel
     {
-
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Holy Grenade",
+                    [TranslationKeyDesc] = "HOLY SHIT WORMS????",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Sainte Grenade",
+                    [TranslationKeyDesc] = "Worms reference !?",
+                },
+            };
+        }
         public override ItemType ItemType => ItemType.GrenadeHE;
-        public override string Name { get; set; } = "Sainte Grenada";
-        public override string Description { get; set; } = "Worms reference !?";
+        public override string Name { get; set; } = "SainteGrenada";
+        public override string Description { get; set; } = "";
         public override float Weight { get; set; } = 1.5f;
         public override float FuseTime => 6f;
         public override bool ExplodeOnCollision => false;

@@ -8,6 +8,7 @@ using Exiled.Events.EventArgs.Player;
 using KE.Items.API.Features.SpawnPoints;
 using KE.Items.API.Interface;
 using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Translations;
 using PlayerRoles.SpawnData;
 using System;
 using System.Collections.Generic;
@@ -47,7 +48,53 @@ namespace KE.Items.API.Features
 
             }
         }
+        public const string CustomItemNameKey = "Name";
+        public const string CustomItemDescriptionKey = "Desc";
+        public string TranslationKeyName => Name + "_" + CustomItemNameKey;
+        public string TranslationKeyDesc => Name + "_" + CustomItemDescriptionKey;
 
+        public const string CustomItemTranslationId = "CustomItem";
+        protected abstract Dictionary<string, Dictionary<string, string>> SetTranslation();
+
+
+        public const string PickupKey = "Pickup";
+        public const string InventoryKey = "Inventory";
+
+        private Dictionary<string, Dictionary<string, string>> GetBasicTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [PickupKey] = "You've picked up ",
+                    [InventoryKey] = "You've selected ",
+                },
+                ["fr"] = new()
+                {
+                    [PickupKey] = "Tu as pris ",
+                    [InventoryKey] = "Tu as selectionné ",
+                },
+            };
+        }
+
+        private void OneTimeInit()
+        {
+            if (init) return;
+
+            var trans = GetBasicTranslation();
+            TranslationHub.Add(CustomItemTranslationId, trans);
+            init = true;
+        }
+        private bool init = false;
+
+        public static string GetTranslation(Player player, string key)
+        {
+            return TranslationHub.Get(player, CustomItemTranslationId, key);
+        }
+        public static string GetTranslation(string lang, string key)
+        {
+            return TranslationHub.Get(lang, CustomItemTranslationId, key);
+        }
 
         public override void Init()
         {
@@ -56,6 +103,11 @@ namespace KE.Items.API.Features
 
             _nameLookup.Add(Name, this);
             SubscribeEvents();
+
+            OneTimeInit();
+
+            var translate = SetTranslation();
+            TranslationHub.Add(CustomItemTranslationId, translate);
         }
 
 
@@ -88,13 +140,11 @@ namespace KE.Items.API.Features
 
         protected override void ShowPickedUpMessage(Player player)
         {
-            Log.Debug("pickup");
             Message(this, player, true);
         }
 
         protected override void ShowSelectedMessage(Player player)
         {
-            Log.Debug("select");
             Message(this, player);
         }
 
@@ -156,8 +206,10 @@ namespace KE.Items.API.Features
 
         internal static void Message(CustomItem c, Player player, bool pickedUp = false)
         {
-
+            KECustomItem kECustomItem = c as KECustomItem;
             StringBuilder builder = StringBuilderPool.Pool.Get();
+
+            string lang = TranslationHub.GetLang(player);
 
             if (MainPlugin.Instance.SettingsHandler.GetPrefixes(player))
             {
@@ -174,21 +226,23 @@ namespace KE.Items.API.Features
             {
                 if (pickedUp)
                 {
-                    builder.Append("You've picked up ");
+                    builder.Append(TranslationHub.Get(lang,CustomItemTranslationId,PickupKey));
                 }
                 else
                 {
-                    builder.Append("You've selected ");
+                    builder.Append(TranslationHub.Get(lang, CustomItemTranslationId, InventoryKey));
                 }
             }
 
-            builder.AppendLine($"<b>{c.Name}</b>");
+            builder.Append("<b>");
+            builder.Append(TranslationHub.Get(lang, CustomItemTranslationId, kECustomItem.TranslationKeyName));
+            builder.AppendLine("</b>");
 
             bool desc = MainPlugin.Instance.SettingsHandler.GetDescriptionsSettings(player);
 
             if (desc)
             {
-                builder.AppendLine(c.Description);
+                builder.Append(TranslationHub.Get(lang, CustomItemTranslationId, kECustomItem.TranslationKeyDesc));
                 if (c is IUpgradableCustomItem ci)
                 {
                     builder.Append("<b>");

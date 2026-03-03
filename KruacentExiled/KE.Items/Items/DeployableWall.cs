@@ -13,7 +13,22 @@ namespace KE.Items.Items
 {
     public class DeployableWall : KECustomItem, ILumosItem, ISwichableEffect
     {
-
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Deployable Wall",
+                    [TranslationKeyDesc] = "Drop to deploy a wall",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Mur",
+                    [TranslationKeyDesc] = "Lâcher pour faire un mur",
+                },
+            };
+        }
         public override ItemType ItemType => ItemType.KeycardJanitor;
         public override string Name { get; set; } = "Deployable Wall";
         public override string Description { get; set; } = "Drop to deploy a wall, and throw to just throw the card";

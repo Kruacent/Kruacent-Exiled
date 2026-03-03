@@ -15,6 +15,22 @@ namespace KE.Items.Items
 {
     public class Scp3136 : KECustomItem/*, ICustomPickupModel*/
     {
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "SCP-3136",
+                    [TranslationKeyDesc] = "A map of the facility, you could draw your friends next to you",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "SCP-3136",
+                    [TranslationKeyDesc] = "Une carte de la facilité, tu pourrais dessiner tes amis proche de toi",
+                },
+            };
+        }
         public override ItemType ItemType => ItemType.SCP1576;
         public override string Name { get; set; } = "SCP-3136";
         public override string Description { get; set; } = "A map of the facility, you could draw your friends next to you";

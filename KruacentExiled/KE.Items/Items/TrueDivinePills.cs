@@ -1,25 +1,41 @@
 ﻿using Exiled.API.Enums;
+using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
-using PlayerHandle = Exiled.Events.Handlers.Player;
-using Exiled.API.Features;
-using UnityEngine;
-using System.Linq;
-using PlayerRoles;
-using KE.Items.API.Interface;
 using KE.Items.API.Features;
+using KE.Items.API.Interface;
+using PlayerRoles;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using PlayerHandle = Exiled.Events.Handlers.Player;
 
 /// <inheritdoc />
 public class TrueDivinePills : KECustomItem, ILumosItem
 {
-    /// <inheritdoc/>
+    protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+    {
+        return new()
+        {
+            ["en"] = new()
+            {
+                [TranslationKeyName] = "True Divine Pills",
+                [TranslationKeyDesc] = "Guaranteed to respawn everybody, drop to change the mode",
+            },
+            ["fr"] = new()
+            {
+                [TranslationKeyName] = "True Divine Pills",
+                [TranslationKeyDesc] = "Fait réappaître tout le monde, lâcher pour changer le mode",
+            },
+        };
+    }
 
     public override ItemType ItemType => ItemType.SCP500;
 
     /// <inheritdoc/>
-    public override string Name { get; set; } = "True Divine Pills";
+    public override string Name { get; set; } = "TrueDivinePills";
 
     /// <inheritdoc/>
     public override string Description { get; set; } = "Guaranteed to respawn everybody";

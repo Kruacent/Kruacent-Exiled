@@ -15,7 +15,22 @@ namespace KE.Items.Items
     public class TPGrenada : KECustomGrenade, ISwichableEffect, ICustomPickupModel
     {
 
-
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "SCP-514",
+                    [TranslationKeyDesc] = "birb",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "SCP-514",
+                    [TranslationKeyDesc] = "birb",
+                },
+            };
+        }
         public override ItemType ItemType => ItemType.GrenadeHE;
         public override string Name { get; set; } = "Teleportation Grenade";
         public override string Description { get; set; } = "This grenade does 0 damage but teleport nearby players in a random place (does work in other dimension ;3 )";

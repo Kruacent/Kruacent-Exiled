@@ -19,8 +19,24 @@ namespace KE.Items.Items
 {
     public class MScan : KECustomItem
     {
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "M-Scan",
+                    [TranslationKeyDesc] = "Detect movement",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "M-Scan",
+                    [TranslationKeyDesc] = "Détecte les mouvements des personnes passant devant",
+                },
+            };
+        }
         public override ItemType ItemType => ItemType.Flashlight;
-        public override string Name { get; set; } = "M-Scan";
+        public override string Name { get; set; } = "MScan";
         public override string Description { get; set; } = "Détecte les mouvements des personnes passant devant";
         public override float Weight { get; set; } = 1.5f;
         public Color Color { get; set; } = Color.cyan;
@@ -106,7 +122,7 @@ namespace KE.Items.Items
             CheckDestruction(ev.Player.Position, 2f);
         }
 
-
+        public const float TimeUp = 120;
 
         private void OnDroppedItem(DroppedItemEventArgs ev)
         {
@@ -119,9 +135,9 @@ namespace KE.Items.Items
             if (!ActiveSensors.ContainsKey(pickup))
             {
                 ActiveSensors.Add(pickup, player);
-                BatteryLife[pickup] = Time.time + 300f;
+                BatteryLife[pickup] = Time.time + TimeUp;
 
-                KECustomItem.ItemEffectHint(player, "<color=#00ff00>SCANNER DÉPLOYÉ</color>\nBatterie: 5 minutes");
+                KECustomItem.ItemEffectHint(player, $"<color=#00ff00>SCANNER DÉPLOYÉ</color>\nBatterie: {TimeUp} secondes");
             }
         }
 
