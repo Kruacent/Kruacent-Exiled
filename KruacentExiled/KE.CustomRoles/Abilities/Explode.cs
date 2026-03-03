@@ -86,7 +86,7 @@ namespace KE.CustomRoles.Abilities
 
             if (!GrenadesSerials.Contains(serial)) return;
 
-            obj.Damage /=3.1f;
+            obj.Damage /=3f;
 
             KELog.Debug("explode with "+ obj.Damage);
 
