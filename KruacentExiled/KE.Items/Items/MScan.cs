@@ -175,11 +175,12 @@ namespace KE.Items.Items
                 }
             }
 
-            foreach (var p in toDestroy)
+            foreach (Pickup pickup in toDestroy)
             {
-                ActiveSensors.Remove(p);
-                BatteryLife.Remove(p);
-                p.Destroy();
+                ActiveSensors.Remove(pickup);
+                BatteryLife.Remove(pickup);
+                Cooldowns.Remove(pickup);
+                pickup.Destroy();
             }
 
             ListPool<Pickup>.Pool.Return(toDestroy);
