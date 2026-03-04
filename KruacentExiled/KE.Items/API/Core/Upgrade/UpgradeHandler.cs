@@ -59,8 +59,8 @@ namespace KE.Items.API.Core.Upgrade
                 CustomItem newItem = CustomItem.Get(newItemid);
 
                 ev.Pickup.Destroy();
-                newItem.Spawn(ev.OutputPosition);
                 if (newItem == null) Log.Warn("warning id of custom item not found");
+                newItem.Spawn(ev.OutputPosition);
             }
 
             ev.IsAllowed = false;
