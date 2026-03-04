@@ -103,8 +103,11 @@ namespace KE.CustomRoles
             Misc.Features.Spawn.Spawn.OnAssigned -= KECustomRole.SpawnStartRound;
             Exiled.Events.Handlers.Server.RespawnedTeam -= KECustomRole.RespawnCustomRole;
             Exiled.Events.Handlers.Server.WaitingForPlayers -= KECustomRole.ResetNumberOfSpawn;
+            
             Exiled.Events.Handlers.Player.Joined -= KECustomRole.ShowCustomRole;
         }
+
+
 
 
         private void LoadImage()

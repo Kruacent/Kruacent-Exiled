@@ -2,6 +2,7 @@
 using Exiled.API.Features.Core.UserSettings;
 using KE.Utils.API.Features.SCPs;
 using KE.Utils.API.Settings;
+using KE.Utils.API.Settings.SettingsCategories;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,27 +20,27 @@ namespace KE.CustomRoles.API.Features
         protected abstract int SettingId { get; }
         private static HeaderSetting header = null;
         private static int HeaderId => MainPlugin.Instance.Config.HeaderId;
+
+        private static SettingsCategory category;
         public static IEnumerable<CustomSCP> All => Registered.Where(c => c is CustomSCP).Cast<CustomSCP>();
         public override void Init()
         {
+            base.Init();
             if (SpawnChance <= 0)
             {
-                base.Init();
                 return;
             }
-            base.Init();
-            var list = new List<SettingBase>();
+            
 
-            if (header is null)
+            if (category is null)
             {
                 header = new(HeaderId, "SCP Spawn Preferences",string.Empty,true);
-                list.Add(header);
+                category = new(header, 1001, []);
             }
 
             sliderSetting= new SliderSetting(SettingId, GetTranslation("en", TranslationKeyName), MinValue, MaxValue, DefaultValue, true);
-            list.Add(sliderSetting);
-            SettingBase.Register(list);
-            
+
+            category.Settings.Add(sliderSetting);            
         }
 
 

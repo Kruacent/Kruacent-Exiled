@@ -5,6 +5,7 @@ using KE.CustomRoles.Settings.DebugSettings;
 using KE.Utils.API;
 using KE.Utils.API.Interfaces;
 using KE.Utils.API.Settings;
+using KE.Utils.API.Settings.SettingsCategories;
 using LabApi.Events.Arguments.PlayerEvents;
 using System;
 using System.Collections.Generic;
@@ -49,10 +50,11 @@ namespace KE.CustomRoles.Settings
             HeaderSetting header = new HeaderSetting(_idHeader, "Custom Roles", padding: true);
             SettingBase arrow = SettingBase.Create(new SSPlaintextSetting(_idArrow, "Personalize the arrow next to the selected ability", baseArrow, 16, TMP_InputField.ContentType.Standard, string.Empty, 0));
             arrow.Header = header;
+
+
+
             settings = new List<SettingBase>()
             {
-                header,
-
                 new TwoButtonsSetting(_idDesc,"Descriptions","Disabled","Enabled",true,"hide/show the description the Custom Role ",header:header),
                 new SliderSetting(_idTimeCustomRole,"Time shown",0,30,20,header:header),
                 new SliderSetting(_idTimeAbilityDesc,"Ability Description time shown",0,30,20,header:header),
@@ -67,34 +69,33 @@ namespace KE.CustomRoles.Settings
             
 
 
+            SettingsCategory cat = new SettingsCategory(header,1000,settings);
             
 
             if (MainPlugin.Instance.Config.Debug)
             {
 
                 ReflectionHelper.GetObjects<DebugSetting>().ToList();
-
-                List<SettingBase> debugsettings = new();
                 foreach (DebugSetting debug in DebugSetting.settings)
                 {
                     debug.Create();
-                    debugsettings.AddRange(debug.Settings);
+                    debug.GetCategory();
                 }
                 
-                settings.AddRange(debugsettings);
-                
-
             }
-            SettingBase.Register(settings);
-
             
         }
 
+        private void OnWaitingForPlayers()
+        {
+            SettingsCategory.Register();
+        }
 
         public void SubscribeEvents()
         {
             
             ServerSpecificSettingsSync.ServerOnSettingValueReceived += SafeOnSettingValueReceived;
+            Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             LabApi.Events.Handlers.PlayerEvents.Joined += AddPlayer;
             DownPressed += Down;
             UpPressed += Up;
@@ -105,6 +106,7 @@ namespace KE.CustomRoles.Settings
         {
             ServerSpecificSettingsSync.ServerOnSettingValueReceived -= SafeOnSettingValueReceived;
             LabApi.Events.Handlers.PlayerEvents.Joined -= AddPlayer;
+            Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
             DownPressed -= Down;
             UpPressed -= Up;
         }

@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
 using KE.CustomRoles.API.Features;
+using KE.Utils.API.Settings.SettingsCategories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,8 @@ namespace KE.CustomRoles.Settings.DebugSettings
         internal static List<DebugSetting> settings = new();
 
         public HeaderSetting Header;
+
+        private SettingsCategory category = null;
 
         public DebugSetting()
         {
@@ -38,6 +41,15 @@ namespace KE.CustomRoles.Settings.DebugSettings
 
         }
 
+
+        public SettingsCategory GetCategory()
+        {
+            if(category == null)
+            {
+                category = new SettingsCategory(Header, 0, Settings.Where(s => s is not HeaderSetting).ToList());
+            }
+            return category;
+        }
 
 
     }
