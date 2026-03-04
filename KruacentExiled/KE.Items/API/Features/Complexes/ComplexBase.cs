@@ -112,6 +112,7 @@ namespace KE.Items.API.Features.Complexes
 
         public void Unspawn()
         {
+            LabApi.Events.Handlers.PlayerEvents.ShootingWeapon -= OnShootingWeapon;
             UnspawnInteractable();
         }
 
