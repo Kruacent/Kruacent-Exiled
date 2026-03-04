@@ -5,7 +5,6 @@ using PlayerRoles;
 using System;
 using KE.Misc.Features;
 using KE.Misc.Handlers;
-using Exiled.CustomRoles.API.Features;
 using KE.Misc.Features.GamblingCoin;
 using HarmonyLib;
 using LabApi.Events.Arguments.ServerEvents;
@@ -14,7 +13,6 @@ using KE.Misc.Features.Spawn;
 using KE.Misc.Features.LastHuman;
 using KE.Utils.API.Settings.GlobalSettings;
 using KE.Utils.API.Translations;
-using KE.Misc.Features.PatchNotes;
 using KE.Misc.Features.PostNuke;
 
 namespace KE.Misc
@@ -66,7 +64,6 @@ namespace KE.Misc
             LastHuman = new();
             Candy = new Candy();
             vote = new();
-            PatchNote = new();
             postnuke = new();
 
 
