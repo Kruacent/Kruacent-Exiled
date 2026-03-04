@@ -7,6 +7,7 @@ using HintServiceMeow.Core.Models.Hints;
 using KE.CustomRoles.Abilities.FireAbilities;
 using KE.CustomRoles.API.HintPositions;
 using KE.CustomRoles.API.Interfaces;
+using KE.CustomRoles.API.Interfaces.Ability;
 using KE.CustomRoles.Settings;
 using KE.Utils.API;
 using KE.Utils.API.Displays.DisplayMeow;
@@ -52,6 +53,7 @@ namespace KE.CustomRoles.API.Features
         public IReadOnlyCollection<Player> Selected => selected;
         private HashSet<Player> selected = new();
         private HashSet<Player> blockedPlayer = new();
+        private HashSet<Player> playerWithActiveAbility = new();
 
 
 
@@ -250,13 +252,25 @@ namespace KE.CustomRoles.API.Features
         }
         public void UseAbility(Player player)
         {
-            
-
             if (AbilityUsed(player))
             {
+                if (this is IDuration durationAbility)
+                {
+                    this.playerWithActiveAbility.Add(player);
+                    Timing.CallDelayed(durationAbility.Duration, () =>
+                    {
+                        durationAbility.ActionAfterAbility(player);
+                        this.playerWithActiveAbility.Remove(player);
+                    });
+                }
+
                 LastUsed[player] = DateTime.Now;
             }
-            
+        }
+
+        public bool IsAbilityActive(Player player)
+        {
+            return this.playerWithActiveAbility.Contains(player);
         }
 
         public bool Check(Player player)
