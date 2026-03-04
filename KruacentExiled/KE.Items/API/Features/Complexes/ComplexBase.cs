@@ -118,6 +118,7 @@ namespace KE.Items.API.Features.Complexes
 
         public void Destroy()
         {
+            UnityEngine.Object.Destroy(gameObject);
             interactableToy.OnSearched -= OnSearched;
             interactableToy.Destroy();
             debugprim.Destroy();
