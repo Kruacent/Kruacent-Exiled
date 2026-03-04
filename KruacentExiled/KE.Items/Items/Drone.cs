@@ -35,7 +35,7 @@ namespace KE.Items.Items
                 ["fr"] = new()
                 {
                     [TranslationKeyName] = "Drone",
-                    [TranslationKeyDesc] = "Drone de reconnaissance militaire (lancer pour l'utiliser)",
+                    [TranslationKeyDesc] = "Drone de reconnaissance militaire (lâcher pour l'utiliser)",
                 },
             };
         }
