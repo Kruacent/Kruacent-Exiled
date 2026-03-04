@@ -12,22 +12,14 @@ namespace KE.Items.API.Core.Upgrade
 {
     public class UpgradeProperties
     {
-        private float _chance;
-        public float Chance
-        {
-            get { return _chance; }
-        }
+        public float Chance { get; }
 
-        private uint _newItem;
-        public uint UpgradedItem
-        {
-            get { return _newItem; }
-        }
+        public uint UpgradedItem { get; }
 
         public UpgradeProperties(float chance, uint newItem)
         {
-            _newItem = newItem;
-            _chance = Mathf.Clamp(chance, 0,100);
+            UpgradedItem = newItem;
+            Chance = Mathf.Clamp(chance, 0,100);
         }
 
     }
