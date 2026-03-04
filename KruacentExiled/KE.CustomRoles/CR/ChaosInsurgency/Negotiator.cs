@@ -53,7 +53,12 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
             "Radio"
         };
 
-        
+        public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new()
+        {
+            { AmmoType.Ammo12Gauge, 7 }, { AmmoType.Nato762, 90 }
+        };
+
+
         protected override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
