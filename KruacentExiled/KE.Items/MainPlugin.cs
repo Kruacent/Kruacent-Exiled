@@ -38,10 +38,6 @@ namespace KE.Items
         internal static readonly HintPlacement ItemEffectPlacement = new(0, 200, HintServiceMeow.Core.Enum.HintAlignment.Center);
         internal static readonly HintPlacement HintPlacement = new(0, 400, HintServiceMeow.Core.Enum.HintAlignment.Center);
 
-        //scrapped
-        //internal PickupQuality PickupQuality { get; private set; }
-        //internal QualityHandler QualityHandler { get; private set; }
-
         public override PluginPriority Priority => PluginPriority.Low;
         public override Version Version => new (1, 0, 0);
         internal Harmony harmony;
@@ -51,11 +47,8 @@ namespace KE.Items
             Instance = this;
             harmony = new(Name);
             harmony.PatchAll(Assembly);
-            //QualityHandler = QualityHandler.Instance;
-            //QualityHandler.Register();
             UpgradeHandler = new UpgradeHandler();
             LightsHandler = new LightsHandler();
-            //PickupQuality = new PickupQuality();
             SettingsHandler = new();
 
 
@@ -91,12 +84,9 @@ namespace KE.Items
                 new(RoomType.Hcz049,new Vector3(18.46f, 93.73f, 13.13f),Quaternion.identity),
             });
 
-            //Exiled.Events.Handlers.Server.RoundStarted += Test;
 
 
             KECustomItem.RegisterItems();
-            //PickupQuality?.SubscribeEvents();
-            SettingsHandler.SubscribeEvents();
             UpgradeHandler.SubscribeEvents();
             LightsHandler.SubscribeEvents();
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
@@ -108,14 +98,8 @@ namespace KE.Items
             KECustomItem.UnregisterItems();
             UpgradeHandler?.UnsubscribeEvents();
             LightsHandler?.UnsubscribeEvents();
-            //PickupQuality?.UnsubscribeEvents();
-            //QualityHandler?.Unregister();
-            SettingsHandler.UnsubscribeEvents();
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
-            //Exiled.Events.Handlers.Server.RoundStarted -= Test;
 
-            //QualityHandler = null;
-            //PickupQuality = null;
             harmony.UnpatchAll(harmony.Id);
             SettingsHandler = null;
             LightsHandler = null;
@@ -126,18 +110,6 @@ namespace KE.Items
         private void OnGenerated()
         {
             PoseRoomSpawnPointHandler.Reset();
-        }
-
-        public void Test()
-        {
-            ComplexBase complex = new ComplexGatling();
-
-            Player player = Player.List.First();
-            Log.Debug(player.Position);
-            complex.Spawn(player.Position,Quaternion.identity);
-
-
-
         }
 
     }

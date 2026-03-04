@@ -2,6 +2,7 @@
 using Exiled.API.Features.Core.UserSettings;
 using KE.Utils.API.Interfaces;
 using KE.Utils.API.Settings;
+using KE.Utils.API.Settings.SettingsCategories;
 using KE.Utils.Quality.Enums;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,9 @@ using UserSettings.ServerSpecific;
 
 namespace KE.Items.API.Core.Settings
 {
-    internal class SettingsHandler : IUsingEvents
+    internal class SettingsHandler
     {
 
-        private SettingBase[] _settings;
         private const int _idHeader = 55;
         private const int _idDesc = 0;
         private const int _idPrefix = 1;
@@ -28,42 +28,29 @@ namespace KE.Items.API.Core.Settings
 
         //public readonly SettingsPage page;
 
+        public const string SettingDescription = "Description";
+        public const string SettingDescription1 = "Disabled";
+        public const string SettingDescription2 = "Enabled";
+        public const string SettingDescriptionDescription = "hide/show the description of the item and its upgrade chances";
+
 
         public SettingsHandler()
         {
-            _settings =
+            HeaderSetting header = new HeaderSetting(_idHeader, "Custom Items", padding: true);
+
+            List<SettingBase> settings =
             [
-                new HeaderSetting(_idHeader,"Custom Items",padding:true),
-                new TwoButtonsSetting(_idDesc,"Descriptions","Disabled","Enabled",true,"hide/show the description of the item and its upgrade chances "),
+                
+                new TwoButtonsSetting(_idDesc,SettingDescription,SettingDescription1,SettingDescription2,true,SettingDescriptionDescription),
                 new TwoButtonsSetting(_idPrefix,"Pickup/Select prefixes","Disabled","Enabled",false,"show/hide the whole sentence for the picking or selecting of the item, if hidden it will show a (P) if pickup or a (I) if in inventory before the name of the item "),
                 new SliderSetting(_idTimeCustomItem,"Time shown",0,30,10),
                 new SliderSetting(_idTimeCustomItemEffect,"Time effect shown",0,30,10),
 
             ];
 
-            List<ServerSpecificSettingBase> settings = new();
-
-
-            foreach (SettingBase setting in _settings)
-            {
-                settings.Add(setting.Base);
-            }
+            SettingsCategory category = new(header,999, settings);
 
             //page = new("Custom Items", settings);
-
-            SettingBase.Register(settings: _settings);
-
-        }
-
-
-
-        public void SubscribeEvents()
-        {
-            //Utils.API.Settings.SettingHandler.Instance.AddPages(page);
-        }
-
-        public void UnsubscribeEvents()
-        {
 
         }
 
