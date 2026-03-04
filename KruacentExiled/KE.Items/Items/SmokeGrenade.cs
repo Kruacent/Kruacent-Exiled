@@ -18,19 +18,19 @@ namespace KE.Items.Items
             {
                 ["en"] = new()
                 {
-                    [TranslationKeyName] = "SCP-514",
-                    [TranslationKeyDesc] = "birb",
+                    [TranslationKeyName] = "Smoke Grenade",
+                    [TranslationKeyDesc] = "We finally put your grandma inside this thing ! Don't throw it or she will get out !",
                 },
                 ["fr"] = new()
                 {
-                    [TranslationKeyName] = "SCP-514",
-                    [TranslationKeyDesc] = "birb",
+                    [TranslationKeyName] = "Fumigène",
+                    [TranslationKeyDesc] = "Fait beaucoup de fumée",
                 },
             };
         }
         public override ItemType ItemType => ItemType.GrenadeFlash;
         public override string Name { get; set; } = "Smoke Grenade";
-        public override string Description { get; set; } = "We finally put your grandma inside this thing ! Don't throw it or she will get out !";
+        public override string Description { get; set; } = "";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime => 3f;
         public override bool ExplodeOnCollision => false;

@@ -21,13 +21,13 @@ namespace KE.Items.Items
             {
                 ["en"] = new()
                 {
-                    [TranslationKeyName] = "SCP-514",
-                    [TranslationKeyDesc] = "birb",
+                    [TranslationKeyName] = "Teleportation Grenade",
+                    [TranslationKeyDesc] = "This grenade does 0 damage but teleport nearby players in a random place (does work in other dimension ;3 )",
                 },
                 ["fr"] = new()
                 {
-                    [TranslationKeyName] = "SCP-514",
-                    [TranslationKeyDesc] = "birb",
+                    [TranslationKeyName] = "Grenade de Téléportation",
+                    [TranslationKeyDesc] = "Ne fait pas de dégât mais téléporte dans une pièce aléatoire",
                 },
             };
         }
