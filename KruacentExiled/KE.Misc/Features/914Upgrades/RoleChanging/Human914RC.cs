@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using MEC;
 using PlayerRoles;
 using Scp914;
 using System;
@@ -41,7 +42,32 @@ namespace KE.Misc.Features._914Upgrades.RoleChanging
         protected override void SetRole(Player player, RoleTypeId newRole)
         {
             player.Role.Set(newRole, RoleSpawnFlags.AssignInventory);
+            Timing.CallDelayed(.5f, () =>
+            {
+                _upgradingPlayer.Remove(player);
+            });
         }
+
+    }
+    public class MTF914RC : Multiple914PlayerRoleChangeBase
+    {
+        public override HashSet<RoleTypeId> InputRole => [RoleTypeId.NtfCaptain,RoleTypeId.NtfPrivate,RoleTypeId.NtfSergeant,RoleTypeId.NtfSpecialist];
+
+        public override IReadOnlyDictionary<Scp914KnobSetting, RoleOutput> OutputRoles { get; } = new Dictionary<Scp914KnobSetting, RoleOutput>()
+        {
+            { Scp914KnobSetting.OneToOne,new(RoleTypeId.ChaosRifleman,50f)}
+        };
+
+    }
+
+    public class Chaos914RC : Multiple914PlayerRoleChangeBase
+    {
+        public override HashSet<RoleTypeId> InputRole => [RoleTypeId.ChaosRifleman, RoleTypeId.ChaosRepressor, RoleTypeId.ChaosMarauder, RoleTypeId.ChaosConscript];
+
+        public override IReadOnlyDictionary<Scp914KnobSetting, RoleOutput> OutputRoles { get; } = new Dictionary<Scp914KnobSetting, RoleOutput>()
+        {
+            { Scp914KnobSetting.OneToOne,new(RoleTypeId.ChaosRifleman,50f)}
+        };
 
     }
 }

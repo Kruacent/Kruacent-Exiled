@@ -13,11 +13,11 @@ using System.Threading.Tasks;
 
 namespace KE.Misc.Features._914Upgrades
 {
-    public abstract class Base914PlayerRoleChange : Base914PlayerUpgrade
+    public abstract class Multiple914PlayerRoleChangeBase : Base914PlayerUpgrade
     {
         protected static HashSet<Player> _upgradingPlayer = new();
 
-        public abstract RoleTypeId InputRole { get; }
+        public abstract HashSet<RoleTypeId> InputRole { get; }
 
         public abstract IReadOnlyDictionary<Scp914KnobSetting, RoleOutput> OutputRoles { get; }
         protected sealed override float Chance => 100;
@@ -25,7 +25,7 @@ namespace KE.Misc.Features._914Upgrades
         protected sealed override void OnUpgradingPlayer(UpgradingPlayerEventArgs ev)
         {
             Player player = ev.Player;
-            if (player.Role != InputRole) return;
+            if (InputRole.Contains(ev.Player.Role)) return;
             if (!OutputRoles.TryGetValue(ev.KnobSetting, out var newRole)) return;
             if (!LuckCheck(newRole.chance)) return;
             if (_upgradingPlayer.Contains(player)) return;
