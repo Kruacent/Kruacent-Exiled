@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using KE.Utils.Extensions;
 using MEC;
 using PlayerRoles;
 using Scp914;
@@ -41,11 +42,7 @@ namespace KE.Misc.Features._914Upgrades.RoleChanging
 
         protected override void SetRole(Player player, RoleTypeId newRole)
         {
-            player.Role.Set(newRole, RoleSpawnFlags.AssignInventory);
-            Timing.CallDelayed(.5f, () =>
-            {
-                _upgradingPlayer.Remove(player);
-            });
+            player.ChangeRole(newRole, Exiled.API.Enums.SpawnReason.ForceClass, RoleSpawnFlags.AssignInventory);
         }
 
     }
@@ -66,7 +63,7 @@ namespace KE.Misc.Features._914Upgrades.RoleChanging
 
         public override IReadOnlyDictionary<Scp914KnobSetting, RoleOutput> OutputRoles { get; } = new Dictionary<Scp914KnobSetting, RoleOutput>()
         {
-            { Scp914KnobSetting.OneToOne,new(RoleTypeId.ChaosRifleman,50f)}
+            { Scp914KnobSetting.OneToOne,new(RoleTypeId.NtfPrivate,50f)}
         };
 
     }

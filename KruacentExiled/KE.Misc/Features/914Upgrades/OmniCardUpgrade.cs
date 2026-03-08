@@ -23,15 +23,16 @@ namespace KE.Misc.Features._914Upgrades
         protected override float Chance => 1;
 
         public static readonly Color32 CardColor = new(45, 44, 249,255);
-        protected override void OnUpgradingPlayer(UpgradingPlayerEventArgs ev)
+        protected override bool OnUpgradingPlayer(UpgradingPlayerEventArgs ev)
         {
             LabPlayer player = ev.Player;
-            if (player.CurrentItem is null) return;
-            if (player.CurrentItem is not KeycardItem keycard) return;
+            if (player.CurrentItem is null) return false;
+            if (player.CurrentItem is not KeycardItem keycard) return false;
 
             player.RemoveItem(keycard);
 
             player.CurrentItem = CreateOmniCard(player);
+            return true;
         }
 
         public static KeycardItem CreateOmniCard(LabPlayer player)

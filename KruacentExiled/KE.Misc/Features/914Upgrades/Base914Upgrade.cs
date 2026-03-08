@@ -7,40 +7,29 @@ using UnityEngine;
 
 namespace KE.Misc.Features._914Upgrades
 {
-    public abstract class Base914Upgrade : IUsingEvents
+    public abstract class Base914Upgrade
     {
 
         protected abstract float Chance { get; }
 
-        public virtual void SubscribeEvents()
-        {
-            Exiled.Events.Handlers.Scp914.UpgradingPlayer += InternalUpgradingPlayer;
-        }
 
-        public virtual void UnsubscribeEvents()
-        {
-            Exiled.Events.Handlers.Scp914.UpgradingPlayer -= InternalUpgradingPlayer;
-        }
 
-        private void InternalUpgradingPlayer(UpgradingPlayerEventArgs ev)
+
+        internal bool InternalUpgradingPlayer(UpgradingPlayerEventArgs ev)
         {
-            if (!ev.IsAllowed) return;
-            if (!LuckCheck()) return;
-            OnUpgradingPlayer(ev);
+            if (!LuckCheck()) return false;
+            return OnUpgradingPlayer(ev);
         }
 
 
         /// <summary>
         /// Auto check the probability with the <see cref="Chance"/> and if it's allowed
         /// </summary>
-        protected virtual void OnUpgradingPlayer(UpgradingPlayerEventArgs ev)
-        {
+        protected abstract bool OnUpgradingPlayer(UpgradingPlayerEventArgs ev);
 
-        }
-
-        protected bool LuckCheck()
+        public bool LuckCheck()
         {
-            return UnityEngine.Random.Range(0f, 100f) < Mathf.Clamp(Chance, 0f, 100f);
+            return LuckCheck(Chance);
         }
 
         /// <summary>
