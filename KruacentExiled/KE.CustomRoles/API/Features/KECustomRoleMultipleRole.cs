@@ -35,11 +35,9 @@ namespace KE.CustomRoles.API.Features
         }
 
 
-
-        public override bool IsAvailable(Player player)
+        public override bool RoleCheck(RoleTypeId role)
         {
-            if (CurrentNumberOfSpawn >= Limit) return false;
-            return Roles.Contains(player.Role);
+            return Roles.Contains(role);
         }
 
     }

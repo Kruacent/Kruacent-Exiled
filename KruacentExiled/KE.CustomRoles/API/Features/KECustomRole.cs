@@ -556,7 +556,13 @@ namespace KE.CustomRoles.API.Features
         public virtual bool IsAvailable(Player player)
         {
             if (CurrentNumberOfSpawn >= Limit) return false;
-            return player.Role == Role;
+            return RoleCheck(player.Role);
+        }
+
+
+        public virtual bool RoleCheck(RoleTypeId role)
+        {
+            return Role == role;
         }
 
 
