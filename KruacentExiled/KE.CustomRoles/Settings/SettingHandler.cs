@@ -88,7 +88,6 @@ namespace KE.CustomRoles.Settings
 
         private void OnWaitingForPlayers()
         {
-            SettingsCategory.Register();
         }
 
         public void SubscribeEvents()
