@@ -4,9 +4,13 @@ using Exiled.API.Features.Items;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
 using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Features;
+using KE.Utils.API.Features.SCPs;
 using KE.Utils.API.GifAnimator;
+using LiteNetLib4Mirror.Open.Nat;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace KE.CustomRoles.Abilities
 {
@@ -21,8 +25,10 @@ namespace KE.CustomRoles.Abilities
             {
                 ["en"] = new()
                 {
-                    [TranslationKeyName] = "Thief",
+                    [TranslationKeyName] = "Steal",
                     [TranslationKeyDesc] = "Steal a random item from a player in the same room",
+                    ["ThiefNoPlayer"] = "no player to steal from",
+                    ["ThiefFail"] = "I think this is a skill issue ! Congrats !",
                 },
                 ["fr"] = new()
                 {
@@ -32,38 +38,85 @@ namespace KE.CustomRoles.Abilities
             };
         }
 
-        public override float Cooldown { get; } = 120f;
+        public override float Cooldown { get; } = 60f;
 
         public TextImage IconName => MainPlugin.Instance.icons[Name];
 
         protected override bool AbilityUsed(Player player)
         {
 
-            Player thiefed = Player.Enumerable.GetRandomValue(p => !p.IsScp && p.CurrentRoom == player.CurrentRoom && p != player);
-            if(thiefed is null)
+            IEnumerable<Player> sameRoom = Player.Enumerable.Where(p => p.CurrentRoom == player.CurrentRoom && !p.IsInventoryEmpty && p != player);
+
+
+
+            KELog.Debug("scp");
+            Player scp = GetClosest(sameRoom.Where(p => SCPTeam.IsSCP(p.ReferenceHub)), player.Position);
+
+
+            if(scp is not null)
             {
-                MainPlugin.ShowEffectHint(player, "no player to steal from");
-                return false;
-            }
-
-            Log.Debug($"Thiefed player : {thiefed.Nickname}");
-
-            Item item = thiefed.Items.GetRandomValue();
-
-
-            if (item == null)
-            {
-                MainPlugin.ShowEffectHint(player, "I think this is a skill issue ! Congrats !");
+                KELog.Debug("steal scp");
+                Steal(player, scp);
                 return true;
             }
+
+            KELog.Debug("enemy");
+            Player enemy = GetClosest(sameRoom.Where(p => HitboxIdentity.IsEnemy(player.ReferenceHub, p.ReferenceHub)),player.Position);
+
+
+            if(enemy is not null)
+            {
+                KELog.Debug("steal enemy");
+                Steal(player, enemy);
+                return true;
+            }
+
+            KELog.Debug("other");
+            Player ally = GetClosest(sameRoom, player.Position);
+
+
+            if (ally is not null)
+            {
+                KELog.Debug("steal ally");
+                Steal(player, ally);
+                return true;
+            }
+
+            MainPlugin.ShowEffectHint(player, "no player to steal from");
+            return false;
+        }
+
+        private void Steal(Player player, Player thiefed)
+        {
+
+            Item item;
+
+            if(player.CurrentItem is null || UnityEngine.Random.Range(0f,100f) < 50f)
+            {
+                item = thiefed.Items.GetRandomValue();
+            }
+            else
+            {
+                item = player.CurrentItem;
+            }
+
 
 
 
             Item newitem = item.Clone();
             newitem.Give(player);
             thiefed.RemoveItem(item);
-
-            return base.AbilityUsed(player);
         }
+
+
+
+
+        private Player GetClosest(IEnumerable<Player> players,Vector3 center)
+        {
+            return players.OrderBy(p => Vector3.Distance(center, p.Position)).FirstOrDefault();
+        }
+    
+    
+    
     }
 }
