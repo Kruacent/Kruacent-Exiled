@@ -89,7 +89,7 @@ namespace KE.Misc.Features.VoteStart
                 return;
             }
 
-            if (!DidVote(ev.Player))
+            if (DidVote(ev.Player))
             {
                 return;
             }
