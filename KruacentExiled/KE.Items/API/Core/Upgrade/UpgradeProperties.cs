@@ -14,9 +14,9 @@ namespace KE.Items.API.Core.Upgrade
     {
         public float Chance { get; }
 
-        public uint UpgradedItem { get; }
+        public string UpgradedItem { get; }
 
-        public UpgradeProperties(float chance, uint newItem)
+        public UpgradeProperties(float chance, string newItem)
         {
             UpgradedItem = newItem;
             Chance = Mathf.Clamp(chance, 0,100);

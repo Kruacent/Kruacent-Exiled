@@ -42,8 +42,7 @@ public class DivinePills : KECustomItem, ILumosItem, ISwichableEffect, IUpgradab
     public UnityEngine.Color Color { get; set; } = UnityEngine.Color.yellow;
     public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade { get; private set; } = new Dictionary<Scp914KnobSetting, UpgradeProperties>()
         {
-            //very fine -> true divine pills 10%
-            { Scp914KnobSetting.VeryFine,new UpgradeProperties(10, 1050)}
+            { Scp914KnobSetting.VeryFine,new UpgradeProperties(10, "TrueDivinePills")}
         };
 
     /// <inheritdoc/>

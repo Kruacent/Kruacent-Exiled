@@ -115,7 +115,7 @@ namespace KE.Items.Items
 
         public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade { get; private set; } = new Dictionary<Scp914KnobSetting, UpgradeProperties>()
         {
-            { Scp914KnobSetting.VeryFine,new UpgradeProperties(5, 1055)}
+            { Scp914KnobSetting.VeryFine,new UpgradeProperties(5, "SainteGrenada")}
         };
     }
 }

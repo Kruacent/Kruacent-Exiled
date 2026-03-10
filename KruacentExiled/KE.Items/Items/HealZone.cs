@@ -83,7 +83,7 @@ namespace KE.Items.Items
 
         public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade => new Dictionary<Scp914KnobSetting, UpgradeProperties>()
         {
-            [Scp914KnobSetting.OneToOne] = new UpgradeProperties(100, 1049)
+            [Scp914KnobSetting.OneToOne] = new UpgradeProperties(100, "CocktailMolotov")
         };
 
         public HealZone()

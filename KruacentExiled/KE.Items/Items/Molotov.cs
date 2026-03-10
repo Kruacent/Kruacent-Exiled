@@ -46,7 +46,7 @@ namespace KE.Items.Items
 
         public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade => new Dictionary<Scp914KnobSetting, UpgradeProperties>()
         {
-            [Scp914KnobSetting.OneToOne] = new UpgradeProperties(100, 1051)
+            [Scp914KnobSetting.OneToOne] = new UpgradeProperties(100, "HealZone")
         };
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {

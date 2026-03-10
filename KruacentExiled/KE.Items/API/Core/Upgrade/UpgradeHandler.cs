@@ -2,6 +2,7 @@
 using Exiled.API.Features.Items;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Scp914;
+using KE.Items.API.Features;
 using KE.Items.API.Interface;
 using KE.Utils.API.Interfaces;
 using Scp914;
@@ -46,20 +47,26 @@ namespace KE.Items.API.Core.Upgrade
 
         private void UpgradePickUp(UpgradingPickupEventArgs ev)
         {
-
+            
             if (!CustomItem.TryGet(ev.Pickup, out CustomItem ci)) return;
-            if (!(ci is IUpgradableCustomItem upgradable)) return;
+            if (ci is not IUpgradableCustomItem upgradable) return;
             Log.Debug("upgrading pickup");
+
+            if(upgradable.Upgrade is null || upgradable.Upgrade.Count == 0)
+            {
+                throw new System.ArgumentException("upgradable null or empty");
+            }
+
 
             if (UpgradeCheck(upgradable, ev.KnobSetting))
             {
                 Log.Debug("success");
-                var newItemid = upgradable.Upgrade[ev.KnobSetting].UpgradedItem;
+                string newItemName = upgradable.Upgrade[ev.KnobSetting].UpgradedItem;
 
-                CustomItem newItem = CustomItem.Get(newItemid);
+                KECustomItem newItem = KECustomItem.Get(newItemName);
 
-                ev.Pickup.Destroy();
                 if (newItem == null) Log.Warn("warning id of custom item not found");
+                ev.Pickup.Destroy();
                 newItem.Spawn(ev.OutputPosition);
             }
 
