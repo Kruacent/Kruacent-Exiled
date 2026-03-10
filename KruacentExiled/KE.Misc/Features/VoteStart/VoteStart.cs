@@ -89,6 +89,11 @@ namespace KE.Misc.Features.VoteStart
                 return;
             }
 
+            if (!DidVote(ev.Player))
+            {
+                return;
+            }
+
             Voted.Add(ev.Player);
             if (Voted.Count >= MainPlugin.Instance.Config.MinPlayerVote)
             {
