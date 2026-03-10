@@ -91,8 +91,6 @@ namespace KE.Items.Items.ItemEffects
                 }
                 else if (random > 0.33f && random <= 0.66f)
                 {
-
-
                     room = ZoneType.Entrance.RandomSafeRoom();
                 }
                 else

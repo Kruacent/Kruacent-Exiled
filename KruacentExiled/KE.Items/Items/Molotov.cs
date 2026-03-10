@@ -61,8 +61,8 @@ namespace KE.Items.Items
             RoomSpawnPoints = new List<RoomSpawnPoint>
             {
                 new RoomSpawnPoint() { Chance = 75, Room = RoomType.LczGlassBox, },
-                new RoomSpawnPoint() { Chance = 100, Room = RoomType.HczArmory, },
-                new RoomSpawnPoint() { Chance = 100, Room = RoomType.Hcz049, },
+                new RoomSpawnPoint() { Chance = 80, Room = RoomType.HczArmory, },
+                new RoomSpawnPoint() { Chance = 80, Room = RoomType.Hcz049, },
             },
         };
 

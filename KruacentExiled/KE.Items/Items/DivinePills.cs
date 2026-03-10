@@ -69,7 +69,7 @@ public class DivinePills : KECustomItem, ILumosItem, ISwichableEffect, IUpgradab
         {
             new RoomSpawnPoint()
             {
-                Chance = 100,
+                Chance = 80,
                 Room = RoomType.LczGlassBox,
             },
         },
