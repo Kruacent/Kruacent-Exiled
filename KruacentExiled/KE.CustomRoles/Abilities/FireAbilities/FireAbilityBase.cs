@@ -1,6 +1,6 @@
 ﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
-using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Features.Abilities;
 using KE.Utils.API.CustomStats;
 using System;
 using System.Collections.Generic;

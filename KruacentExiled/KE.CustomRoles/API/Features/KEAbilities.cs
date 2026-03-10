@@ -12,6 +12,7 @@ using KE.CustomRoles.Settings;
 using KE.Utils.API;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
+using KE.Utils.API.Features;
 using KE.Utils.API.Translations;
 using MEC;
 using PlayerRoles.FirstPersonControl.Thirdperson;
@@ -216,8 +217,11 @@ namespace KE.CustomRoles.API.Features
 
         public void UnselectAbility(Player player)
         {
-            Log.Debug($"player {player.Nickname} unselected ability {this}");
-            selected.Remove(player);
+            if (selected.Remove(player))
+            {
+                KELog.Debug($"player {player.Nickname} unselected ability {this}");
+            }
+            
         }
         
         public void RemoveAbility(Player player)
@@ -225,13 +229,14 @@ namespace KE.CustomRoles.API.Features
 
             if (Players.Contains(player))
             {
-                Log.Debug($"player {player.Nickname} lost {this}");
+                KELog.Debug($"player {player.Nickname} lost {this}");
                 PlayersAbility[player].Remove(this);
                 Players.Remove(player);
+                UnselectAbility(player);
                 AbilityRemoved(player);
             }
         }
-        public void AddAbility(Player player)
+        public virtual void AddAbility(Player player)
         {
             
             bool result = Players.Add(player);
@@ -398,6 +403,11 @@ namespace KE.CustomRoles.API.Features
         }
 
 
+        public bool IsSelected(Player player)
+        {
+            return Selected.Contains(player);
+        }
+
 
 
         #region register
@@ -490,7 +500,7 @@ namespace KE.CustomRoles.API.Features
         {
             foreach(KEAbilities ability in Registered)
             {
-                if (ability.Selected.Contains(player))
+                if (ability.IsSelected(player))
                 {
                     return ability;
                 }
@@ -512,19 +522,12 @@ namespace KE.CustomRoles.API.Features
         #region gui
 
 
-
-
-        protected virtual void Gui(StringBuilder sb,Player player)
+        
+        protected void GuiReady(StringBuilder sb, Player player)
         {
-            sb.Append(GetTranslation(player,TranslationKeyName));
-            sb.Append(" ");
-
 
             if (CanUse(player, out var output))
             {
-
-
-
                 sb.Append("[");
                 sb.Append(GetTranslation(player, "AbilityReady"));
                 sb.Append("]");
@@ -536,12 +539,11 @@ namespace KE.CustomRoles.API.Features
                 sb.Append(Math.Round((dateTime - DateTime.Now).TotalSeconds, 0));
                 sb.Append("s]");
             }
+        }
 
-
-
-
-
-            if (Selected.Contains(player))
+        protected void GuiArrow(StringBuilder sb, Player player)
+        {
+            if (IsSelected(player))
             {
                 string arrow = SettingHandler.Instance.GetArrow(player);
                 if (string.IsNullOrEmpty(arrow))
@@ -551,6 +553,21 @@ namespace KE.CustomRoles.API.Features
                 sb.Append(arrow);
             }
         }
+
+        protected void GuiAbilityName(StringBuilder sb, Player player)
+        {
+            sb.Append(GetTranslation(player, TranslationKeyName));
+            sb.Append(" ");
+        }
+
+
+        protected virtual void Gui(StringBuilder sb,Player player)
+        {
+            GuiAbilityName(sb, player);
+            GuiReady(sb, player);
+            GuiArrow(sb, player);
+        }
+
         public static Dictionary<Player, List<AbstractHint>> PlayersHints { get; } = new();
         public static Dictionary<AbstractHint, AbstractHint> AddonHints { get; } = new();
         public const int InitialAbilitySlot = 5;

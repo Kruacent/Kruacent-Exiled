@@ -6,6 +6,7 @@ using Exiled.API.Features.Doors;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Features.Abilities;
 using KE.CustomRoles.API.Interfaces;
 using PlayerRoles;
 using System;
@@ -17,7 +18,7 @@ using UnityEngine;
 
 namespace KE.CustomRoles.Abilities
 {
-    public class ForceOpen : KEAbilities, ICustomIcon
+    public class ForceOpen : KEAbilityLimited, ICustomIcon
     {
         public override string Name { get;  } = "ForceOpen";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
@@ -40,23 +41,16 @@ namespace KE.CustomRoles.Abilities
         }
         public Utils.API.GifAnimator.TextImage IconName => MainPlugin.Instance.icons["ForceOpen"];
         public override float Cooldown { get;  } = 30;
+        public override int Uses { get; } = 5;
+
         private Dictionary<Player, DateTime> abilityActivated = new();
         public static readonly TimeSpan MaxTime = new (0, 0, 30);
 
-        protected override bool AbilityUsed(Player player)
+        protected override bool LaunchedAbility(Player player)
         {
-            if (abilityActivated.ContainsKey(player))
-            {
-                abilityActivated[player] = DateTime.Now;
-            }
-            else
-            {
-                abilityActivated.Add(player, DateTime.Now);
-            }
 
-            return base.AbilityUsed(player);
-            
-            
+            abilityActivated[player] = DateTime.Now;
+            return base.LaunchedAbility(player);
         }
 
         private void InteractingDoor(InteractingDoorEventArgs ev)
@@ -75,7 +69,7 @@ namespace KE.CustomRoles.Abilities
 
             if (ev.Door is Gate)
             {
-                successRate = 50;
+                successRate = 100;
                 damage = 20;
             }
             else if (ev.Door.Type.IsCheckpoint())
@@ -85,7 +79,7 @@ namespace KE.CustomRoles.Abilities
             }
             else
             {
-                successRate = 75;
+                successRate = 50;
                 damage = 5;
             }
 

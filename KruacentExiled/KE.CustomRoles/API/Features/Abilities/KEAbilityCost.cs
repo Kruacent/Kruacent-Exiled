@@ -7,12 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.CustomRoles.API.Features
+namespace KE.CustomRoles.API.Features.Abilities
 {
     public abstract class KEAbilityCost : KEAbilities
     {
 
         public abstract int Cost { get; }
+        public virtual string CostName { get; } = string.Empty;
         protected sealed override bool AbilityUsed(Player player)
         {
             bool result = CanLaunchAbility(player);
@@ -36,6 +37,7 @@ namespace KE.CustomRoles.API.Features
             base.Gui(sb,player);
             sb.Append("(");
             sb.Append(Cost);
+            sb.Append(CostName);
             sb.Append(")");
             sb.Append(" ");
         }
