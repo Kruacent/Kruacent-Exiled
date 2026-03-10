@@ -20,17 +20,15 @@ namespace KE.Misc.Features.VoteStart
 
         public static HintPosition HintPosition = new VotePosition();
 
-        private HashSet<Player> Voted = new();
+        private List<Player> Voted = new();
         private bool voteCasted = false;
         public override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
-            Exiled.Events.Handlers.Player.Joined += OnJoined;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
-
-            Init();
-
+            Exiled.Events.Handlers.Player.Left += OnLeft;
+            Exiled.Events.Handlers.Player.Joined += OnJoined;
             base.SubscribeEvents();
         }
 
@@ -41,8 +39,19 @@ namespace KE.Misc.Features.VoteStart
             Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
             Exiled.Events.Handlers.Player.Joined -= OnJoined;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
+            Exiled.Events.Handlers.Player.Left -= OnLeft;
 
             base.UnsubscribeEvents();
+        }
+
+
+        private void OnLeft(LeftEventArgs ev)
+        {
+            Player player = ev.Player;
+            if (DidVote(player))
+            {
+                CancelVote(player);
+            }
         }
 
 
@@ -68,8 +77,8 @@ namespace KE.Misc.Features.VoteStart
 
         private void OnVoiceChatting(VoiceChattingEventArgs ev)
         {
-            if (!Round.IsLobby) return;
             if (voteCasted) return;
+            if (!Round.IsLobby) return;
             if (ev.Player is null)
             {
                 return;
