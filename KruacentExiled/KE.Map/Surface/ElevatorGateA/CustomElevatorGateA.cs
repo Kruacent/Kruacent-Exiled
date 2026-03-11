@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace KE.Map.Surface.ElevatorGateA
 {
-    public static class CustomElevatorGateA
+    public static class CustomElevatorGateA 
     {
 
         private static ElevatorModel model;
@@ -58,9 +58,6 @@ namespace KE.Map.Surface.ElevatorGateA
             CreatePrimitives();
 
             CreateModels();
-            baseheight = prim.Position.y;
-
-            objective = increase;
             step = Primitive.Create(PrimitiveType.Cube, new(18.4f, 300.35f, -49.27f),null,new Vector3(2,.5f,1f));
 
 
@@ -92,7 +89,7 @@ namespace KE.Map.Surface.ElevatorGateA
             Vector3 posbot = new(15.62f, 290.65f, -45.19f);
             prim = Primitive.Create(pos, null, Vector3.one * Scale);
             prim.Flags = AdminToys.PrimitiveFlags.None;
-
+            prim.MovementSmoothing = 240;
             primtop = Primitive.Create(postop, null, Vector3.one * Scale);
             primtop.Flags = AdminToys.PrimitiveFlags.None;
 
@@ -148,74 +145,17 @@ namespace KE.Map.Surface.ElevatorGateA
 
                 primtop = null;
             }
-
-
-
-
-
         }
-
-        private static bool isMoving = false;
 
         public static void Send()
         {
-            if (isMoving) return;
             if (prim == null) return;
-
-            Timing.RunCoroutine(Sending());
-
-        }
-
-
-        private static float baseheight;
-        private static float increase = 301f;
-        private static float objective;
-        private static float duration = 5f;
-        private static IEnumerator<float> Sending()
-        {
-
-            isMoving = true;
-            model.button.NetworkMaterialColor = Color.yellow;
-            bottompanel.button.NetworkMaterialColor = Color.yellow;
-            toppanel.button.NetworkMaterialColor = Color.yellow;
-
-            float startY = prim.Position.y;
-            float elapsed = 0f;
-
-            while (elapsed < duration)
+            if (!prim.GameObject.TryGetComponent<CustomElevatorComp>(out var comp))
             {
-                elapsed += Time.deltaTime;
-
-                float t = elapsed / duration;
-                t = t * t * (3f - 2f * t);
-
-                float newY = Mathf.Lerp(startY, objective, t);
-
-                prim.Position = new Vector3(
-                    prim.Position.x,
-                    newY,
-                    prim.Position.z
-                );
-                yield return Timing.WaitForOneFrame;
+                comp = prim.GameObject.AddComponent<CustomElevatorComp>();
+                comp.Init(prim, [model, bottompanel, toppanel]);
             }
-
-            prim.Position = new Vector3(
-                prim.Position.x,
-                objective,
-                prim.Position.z
-            );
-
-            objective = Mathf.Approximately(objective, baseheight)
-                ? increase
-                : baseheight;
-
-            model.button.NetworkMaterialColor = Color.blue;
-            bottompanel.button.NetworkMaterialColor = Color.blue;
-            toppanel.button.NetworkMaterialColor = Color.blue;
-            isMoving = false;
+            comp.Send();
         }
-
-
-
     }
 }

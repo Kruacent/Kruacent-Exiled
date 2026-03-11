@@ -11,7 +11,7 @@ using UserSettings.ServerSpecific;
 
 namespace KE.Map.Surface.ElevatorGateA
 {
-    public class Panel : ModelBase
+    public class Panel : ModelBase, IContainPanel
     {
         public InteractableToy I_button { get; private set; }
         public PrimitiveObjectToy button { get; private set; }
@@ -78,6 +78,11 @@ namespace KE.Map.Surface.ElevatorGateA
         private void Base_OnInteracted(ReferenceHub obj)
         {
             SendingElevator?.Invoke();
+        }
+
+        public void ChangeColor(Color newColor)
+        {
+            button.NetworkMaterialColor = newColor;
         }
     }
 }
