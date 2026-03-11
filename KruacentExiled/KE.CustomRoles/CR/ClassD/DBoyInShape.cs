@@ -57,12 +57,12 @@ namespace KE.CustomRoles.CR.ClassD
 
         protected override void RoleAdded(Player player)
         {
-            player.EnableEffect(EffectType.Slowness, SpeedReduction,-1 );
+            //player.EnableEffect(EffectType.Slowness, SpeedReduction,-1 );
         }
 
         protected override void RoleRemoved(Player player)
         {
-            player.DisableEffect(EffectType.Slowness);
+            //player.DisableEffect(EffectType.Slowness);
         }
     }
 }
