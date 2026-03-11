@@ -62,7 +62,6 @@ namespace KE.CustomRoles.CR.MTF.RedMist
             {
                 cooldown += Time.deltaTime;
                 KELog.Debug(cooldown);
-                KELog.Debug(Time.deltaTime);
                 if (cooldown >= objective)
                 {
                     Hub.playerStats.DealDamage(damage);
