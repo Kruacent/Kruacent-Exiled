@@ -28,11 +28,11 @@ namespace KE.Items.Items.ItemEffects
 
         public override void Effect(UsedItemEventArgs ev)
         {
-            OnExploding(new HashSet<Player>() { ev.Player });
+            OnExploding([ev.Player]);
         }
         public override void Effect(DroppingItemEventArgs ev)
         {
-            OnExploding(new HashSet<Player>() { ev.Player });
+            OnExploding([ev.Player]);
         }
 
         public override void Effect(ExplodingGrenadeEventArgs ev)
@@ -54,9 +54,14 @@ namespace KE.Items.Items.ItemEffects
                 {
                     bool line;
                     if (projectile == null)
-                        line = Physics.Linecast(projectile.Transform.position, player.Position);
-                    else
+                    {
                         line = true;
+                    }
+                    else
+                    {
+                        line = Physics.Linecast(projectile.Transform.position, player.Position);
+                    }
+                        
 
                     if (line)
                     {
