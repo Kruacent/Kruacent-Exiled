@@ -56,12 +56,10 @@ namespace KE.CustomRoles.API.Features.Abilities
 
 
 
-        protected override void Gui(StringBuilder sb,Player player)
+        protected override void AbilityGui(StringBuilder sb,Player player)
         {
-            GuiAbilityName(sb, player);
+            base.AbilityGui(sb, player);
             GuiUses(sb, player);
-            GuiReady(sb, player);
-            GuiArrow(sb, player);
         }
 
 

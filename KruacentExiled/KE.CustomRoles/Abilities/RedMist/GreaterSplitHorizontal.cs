@@ -1,9 +1,7 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.DamageHandlers;
-using Exiled.API.Interfaces;
 using InventorySystem.Items.MicroHID.Modules;
-using KE.CustomRoles.API.Features;
 using KE.CustomRoles.CR.MTF.RedMist;
 using KE.Utils.API.Features;
 using PlayerRoles;
@@ -11,16 +9,16 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace KE.CustomRoles.Abilities.RedMist
 {
-    public class OnRush : EgoAbility
+    public class GreaterSplitHorizontal : EgoAbility
     {
-        public override string Name { get; } = "OnRush";
+        public override string Name { get; } = "GreaterSplitHorizontal";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new()
             {
                 ["en"] = new()
                 {
-                    [TranslationKeyName] = "On Rush",
+                    [TranslationKeyName] = "Greater Split : Horizontal",
                     [TranslationKeyDesc] = "Manifest your E.G.O, gain powerful buff but rapid health drain.\nCan be deactivated anytime",
                     ["OnRushFailEGO"] = "You need to manifest your E.G.O. first",
                     ["OnRushFailWeapon"] = "You need your weapon",
@@ -34,11 +32,11 @@ namespace KE.CustomRoles.Abilities.RedMist
                 }
             };
         }
-        public override float Cooldown { get; } = 120f;
+        public override float Cooldown { get; } = 0f;
 
-        protected override NeedActive NeedEGOActive => NeedActive.Either;
+        protected override NeedActive NeedEGOActive => NeedActive.Either; //active
 
-        public const float Damage = 100;
+        public const float Damage = 200;
 
         public const float MaxDistance = 5;
 
@@ -46,6 +44,8 @@ namespace KE.CustomRoles.Abilities.RedMist
         private Collider[] NonAlloc = new Collider[64];
 
         public static readonly LayerMasks Mask = LayerMasks.Scp173Teleport | LayerMasks.Glass;
+
+        public const float Size = 5;
         protected override bool LaunchedAbility(Player player,EGO ego)
         {
 
@@ -61,68 +61,31 @@ namespace KE.CustomRoles.Abilities.RedMist
             }
 
 
-            float size = 1;
-
             Vector3 feetposition = player.Position- (Vector3.up*player.Scale.y)/2 + player.CameraTransform.forward*.1f;
-            Vector3 position = player.Position + player.CameraTransform.forward*.1f;
 
 
-            DrawSphere(position, size, Color.green);
-            DrawSphere(feetposition, size, Color.green);
             Vector3 direction = player.CameraTransform.forward;
 
             direction = direction.NormalizeIgnoreY();
+
+            DrawSphere(feetposition, Size, Color.yellow);
+
             
-            
-            Vector3 end = position + direction * MaxDistance;
-            Vector3 feetend = feetposition + direction * MaxDistance;
-            DrawSphere(end, size, Color.yellow);
-            DrawSphere(feetend, size, Color.yellow);
-            Vector3 teleport = end;
 
-            Vector3 wallPoint = end;
-
-
-
-
-            if (Physics.Raycast(position, direction,out RaycastHit wallHit, MaxDistance, (int)Mask)
-                | Physics.Raycast(feetposition, direction, out RaycastHit wallHitFeet, MaxDistance, (int)Mask))
-            {
-                Draw.Sphere(wallHit.point, Quaternion.identity, Vector3.one / 8f, Color.blue, 10, Player.Enumerable);
-                Draw.Sphere(wallHitFeet.point, Quaternion.identity, Vector3.one / 8f, Color.blue, 10, Player.Enumerable);
-
-                if(Vector3.Distance(wallHit.point,position) <= Vector3.Distance(wallHitFeet.point, feetposition))
-                {
-                    teleport = wallHit.point + direction * (-1f);
-                }
-                else
-                {
-                    teleport = wallHitFeet.point + direction * (-1f);
-                }
-                Vector3 directionToPoint = teleport - player.Position;
-                bool behind = Vector3.Dot(direction, directionToPoint) < 0f;
-
-
-                wallPoint = teleport;
-                if (behind)
-                {
-                    teleport = Vector3.zero;
-                }
-
-
-
-            }
-
-            int detect = Physics.OverlapCapsuleNonAlloc(position, wallPoint, size, NonAlloc, HitregUtils.DetectionMask);
-
+            int detect = Physics.OverlapSphereNonAlloc(feetposition, Size, NonAlloc, HitregUtils.DetectionMask);
+            Collider collider;
             for (int i = 0;i < detect;i++)
             {
-                Collider collider = NonAlloc[i];
+                collider = NonAlloc[i];
 
-                //KELog.Debug("hit collider ="+collider);
-                
+                if(!CheckPoint(collider.transform.position, feetposition, direction))
+                {
+                    continue;
+                }
+
+                                
                 if (collider.TryGetComponent<IDestructible>(out var destructible) &&
-                    (!Linecast(position, destructible?.CenterOfMass ?? Vector3.zero, out var hitInfo, PlayerRolesUtils.AttackMask)
+                    (!Linecast(feetposition, destructible?.CenterOfMass ?? Vector3.zero, out var hitInfo, PlayerRolesUtils.AttackMask)
                     || collider == hitInfo.collider))
                 {
                     Player target = Player.Get(collider);
@@ -140,19 +103,33 @@ namespace KE.CustomRoles.Abilities.RedMist
                     }
                 }
             }
-
-            DrawSphere(teleport,.25f, Color.magenta);
-
-            if(teleport != Vector3.zero)
-            {
-                player.Teleport(teleport);
-            }
-
             return true;
         }
+        private static bool CheckPoint(Vector3 point,Vector3 center, Vector3 direction)
+        {
 
 
-        private static bool Debug = false;
+            Vector2 position = new Vector2(point.x - center.x, point.z - center.z);
+
+            float radius = position.magnitude;
+            if (radius > Size)
+                return false;
+
+            Vector2 dir = new Vector2(direction.x, direction.z).normalized;
+            Vector2 pointDir = position.normalized;
+            float sectorAngle = 60f;
+            float halfAngle = sectorAngle * 0.5f;
+            float cosThreshold = Mathf.Cos(halfAngle * Mathf.Deg2Rad);
+
+            if (Debug)
+            {
+                DrawSphere(position, .1f, Color.cyan);
+            }
+
+            return Vector2.Dot(dir, pointDir) >= cosThreshold;
+        }
+        
+        private static bool Debug => MainPlugin.Instance.Config.Debug;
         private bool Linecast(Vector3 start,Vector3 end,out RaycastHit hit,int layerMask)
         {
             if (Debug)
@@ -166,7 +143,7 @@ namespace KE.CustomRoles.Abilities.RedMist
 
         }
 
-        private void DrawSphere(Vector3 position, float size,Color color)
+        private static void DrawSphere(Vector3 position, float size,Color color)
         {
             if (Debug)
             {

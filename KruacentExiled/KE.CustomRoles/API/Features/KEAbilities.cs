@@ -16,6 +16,7 @@ using KE.Utils.API.Features;
 using KE.Utils.API.Translations;
 using MEC;
 using PlayerRoles.FirstPersonControl.Thirdperson;
+using PlayerRoles.PlayableScps.HUDs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -560,10 +561,21 @@ namespace KE.CustomRoles.API.Features
             sb.Append(" ");
         }
 
-
-        protected virtual void Gui(StringBuilder sb,Player player)
+        /// <summary>
+        /// The ability gui without the arrow or the ready
+        /// </summary>
+        protected virtual void AbilityGui(StringBuilder sb, Player player)
         {
             GuiAbilityName(sb, player);
+            
+        }
+
+        /// <summary>
+        /// The full ability gui
+        /// </summary>
+        protected virtual void Gui(StringBuilder sb,Player player)
+        {
+            AbilityGui(sb, player);
             GuiReady(sb, player);
             GuiArrow(sb, player);
         }

@@ -26,17 +26,17 @@ namespace KE.CustomRoles.CR.MTF.RedMist
             {
                 ["en"] = new()
                 {
-                    [TranslationKeyName] = "Red Mist",
+                    [TranslationKeyName] = "The Red Mist",
                     [TranslationKeyDesc] = "todo",
                 },
                 ["fr"] = new()
                 {
-                    [TranslationKeyName] = "Red Mist",
+                    [TranslationKeyName] = "The Red Mist",
                     [TranslationKeyDesc] = "todo",
                 },
                 ["legacy"] = new()
                 {
-                    [TranslationKeyName] = "Red Mist",
+                    [TranslationKeyName] = "The Red Mist",
                     [TranslationKeyDesc] = "todo",
                 }
             };
@@ -64,6 +64,7 @@ namespace KE.CustomRoles.CR.MTF.RedMist
             "ToggleEGO",
             "Spear",
             "OnRush",
+            "GreaterSplitHorizontal",
         ];
 
         protected override void GiveInventory(Player player)

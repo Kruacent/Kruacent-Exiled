@@ -1,6 +1,7 @@
 ﻿using CustomPlayerEffects;
 using Exiled.API.Features;
 using Exiled.API.Features.DamageHandlers;
+using KE.CustomRoles.API.Features.Abilities;
 using KE.Utils.API.Features;
 using KE.Utils.Extensions;
 using PlayerRoles;
@@ -14,11 +15,17 @@ using UnityEngine;
 
 namespace KE.CustomRoles.CR.MTF.RedMist
 {
-    public class EGO : MonoBehaviour
+    public class EGO : BaseCompAbility
     {
 
 
-        public bool Active => active;
+        public override bool Active
+        {
+            get
+            {
+                return active;
+            }
+        }
 
         private bool active;
 
@@ -85,7 +92,7 @@ namespace KE.CustomRoles.CR.MTF.RedMist
         }
 
 
-        public void ToggleActive()
+        public override void ToggleActive()
         {
             active = !Active;
             KELog.Debug("toggle now active? "+ Active);

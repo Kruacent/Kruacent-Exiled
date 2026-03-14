@@ -6,10 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KE.CustomRoles.CR.MTF.RedMist;
+using KE.CustomRoles.API.Features.Abilities;
+using UnityEngine;
 namespace KE.CustomRoles.Abilities.RedMist
 {
-    public class ToggleEGO : KEAbilities
+    public class ToggleEGO : ToggleableAbility
     {
+
+        public override Color ColorOn => Color.red;
+        public override Color ColorOff => Color.white;
+
         public override string Name { get; } = "ToggleEGO";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
@@ -29,8 +35,15 @@ namespace KE.CustomRoles.Abilities.RedMist
         }
         public override float Cooldown { get; } = 0f;
 
+        public override bool GetState(Player player)
+        {
+            if (!player.ReferenceHub.gameObject.TryGetComponent<EGO>(out var ego))
+            {
+                return false;
+            }
 
-
+            return ego.Active;
+        }
         protected override bool AbilityUsed(Player player)
         {
             if(!player.ReferenceHub.gameObject.TryGetComponent<EGO>(out var ego))
