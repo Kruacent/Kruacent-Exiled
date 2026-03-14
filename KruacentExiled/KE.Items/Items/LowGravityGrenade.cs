@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Enums;
-using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
-using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Map;
 using KE.Items.API.Features;
 using KE.Items.API.Interface;
-using KE.Items.ItemEffects;
 using KE.Items.Items.ItemEffects;
 
 namespace KE.Items.Items
