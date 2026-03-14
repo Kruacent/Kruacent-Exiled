@@ -60,12 +60,13 @@ public class Defibrillator : KECustomItem, ILumosItem
         public RoleTypeId Role;
     }
 
-    private readonly Dictionary<Player, DeathData> _deathRecords = new Dictionary<Player, DeathData>();
+    private Dictionary<Player, DeathData> _deathRecords;
     private const float MaxReviveTime = 60f;
     private const float RaycastDistance = 2.5f;
 
     protected override void SubscribeEvents()
     {
+        _deathRecords = new();
         Exiled.Events.Handlers.Player.UsingItem += OnUsingItem;
         Exiled.Events.Handlers.Player.Dying += OnDying;
         base.SubscribeEvents();
@@ -75,6 +76,7 @@ public class Defibrillator : KECustomItem, ILumosItem
     {
         Exiled.Events.Handlers.Player.UsingItem -= OnUsingItem;
         Exiled.Events.Handlers.Player.Dying -= OnDying;
+        _deathRecords = null;
         base.UnsubscribeEvents();
     }
 
