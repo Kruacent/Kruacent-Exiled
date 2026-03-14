@@ -205,7 +205,7 @@ namespace KE.Items.Items
             {
                 ActiveSensors.Remove(i);
                 BatteryLife.Remove(i);
-                if (!i.IsSpawned) i.Destroy();
+                i.Destroy();
             }
             ListPool<Pickup>.Pool.Return(invalid);
         }
