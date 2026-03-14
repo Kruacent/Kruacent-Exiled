@@ -10,7 +10,7 @@ using KE.Items.Items.ItemEffects;
 
 namespace KE.Items.Items
 {
-    public class RedbullEnergy : KECustomItem, ISwichableEffect
+    public class RedbullEnergy : KECustomItem, ISwitchableEffect
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {

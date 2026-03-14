@@ -10,7 +10,7 @@ using KE.Items.Items.ItemEffects;
 
 namespace KE.Items.Items
 {
-    public class SmokeGrenade : KECustomGrenade, ISwichableEffect
+    public class SmokeGrenade : KECustomGrenade, ISwitchableEffect
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {

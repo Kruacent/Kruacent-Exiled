@@ -11,7 +11,7 @@ using KE.Items.Items.PickupModels;
 
 namespace KE.Items.Items
 {
-    public class Mine : KECustomItem, ISwichableEffect, ICustomPickupModel
+    public class Mine : KECustomItem, ISwitchableEffect, ICustomPickupModel
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {

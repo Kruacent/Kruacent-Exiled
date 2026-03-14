@@ -16,7 +16,7 @@ using UnityEngine;
 
 namespace KE.Items.Items
 {
-    public class Molotov : KECustomGrenade, ISwichableEffect, ICustomPickupModel, IUpgradableCustomItem
+    public class Molotov : KECustomGrenade, ISwitchableEffect, ICustomPickupModel, IUpgradableCustomItem
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {

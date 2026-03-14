@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KE.Items.API.Interface
 {
-    public interface ISwichableEffect
+    public interface ISwitchableEffect
     {
         CustomItemEffect Effect { get; set; }
     }

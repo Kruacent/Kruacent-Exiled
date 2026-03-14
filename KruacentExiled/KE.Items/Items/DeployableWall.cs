@@ -11,7 +11,7 @@ using KE.Items.API.Features;
 
 namespace KE.Items.Items
 {
-    public class DeployableWall : KECustomItem, ILumosItem, ISwichableEffect
+    public class DeployableWall : KECustomItem, ILumosItem, ISwitchableEffect
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {

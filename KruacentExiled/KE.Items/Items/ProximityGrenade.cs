@@ -8,7 +8,7 @@ using KE.Items.Items.ItemEffects;
 
 namespace KE.Items.Items
 {
-    public class ProximityGrenade : KECustomGrenade, ISwichableEffect
+    public class ProximityGrenade : KECustomGrenade, ISwitchableEffect
     {
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()

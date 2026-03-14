@@ -11,7 +11,7 @@ using PlayerHandle = Exiled.Events.Handlers.Player;
 
 namespace KE.Items.Items
 {
-    public class Scp1650 : KECustomItem, ISwichableEffect
+    public class Scp1650 : KECustomItem, ISwitchableEffect
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {

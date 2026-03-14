@@ -12,7 +12,7 @@ using KE.Items.API.Core.Upgrade;
 
 namespace KE.Items.Items
 {
-    public class HealZone : KECustomGrenade, ILumosItem, ISwichableEffect, IUpgradableCustomItem
+    public class HealZone : KECustomGrenade, ILumosItem, ISwitchableEffect, IUpgradableCustomItem
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {

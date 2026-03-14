@@ -12,7 +12,7 @@ using KE.Items.Items.PickupModels;
 
 namespace KE.Items.Items
 {
-    public class TPGrenada : KECustomGrenade, ISwichableEffect, ICustomPickupModel
+    public class TPGrenada : KECustomGrenade, ISwitchableEffect, ICustomPickupModel
     {
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()

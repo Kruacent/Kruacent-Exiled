@@ -11,7 +11,7 @@ using KE.Items.API.Interface;
 using KE.Items.Items.ItemEffects;
 using KE.Items.API.Features;
 
-public class DivinePills : KECustomItem, ILumosItem, ISwichableEffect, IUpgradableCustomItem
+public class DivinePills : KECustomItem, ILumosItem, ISwitchableEffect, IUpgradableCustomItem
 {
     protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
     {
