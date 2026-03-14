@@ -130,17 +130,10 @@ namespace KE.Items.Items.ItemEffects
 
                             if (target.Role == RoleTypeId.Scp0492)
                             {
-                                target.Hurt(dmg * 2.5f, DamageType.Firearm);
+                                dmg *= 2.5f;
                             }
-                            else
-                            {
-                                target.Health -= dmg;
 
-                                if (target.Health <= 0)
-                                {
-                                    target.Kill(DamageType.Firearm);
-                                }
-                            }
+                            target.Hurt(dmg, DamageType.Firearm);
                         }
                     }
                 }
