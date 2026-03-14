@@ -4,6 +4,7 @@ using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using KE.Items.API.Interface;
 using MEC;
+using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -52,6 +53,9 @@ namespace KE.Items.Items.ItemEffects
         {
             Dictionary<Player, int> playerHealedAmounts = new Dictionary<Player, int>();
 
+
+            Team team = playerThrowingGrenade.Role.Team;
+
             foreach (Player player in Player.List)
             {
                 playerHealedAmounts.Add(player, 0);
@@ -65,7 +69,7 @@ namespace KE.Items.Items.ItemEffects
                     // Check if a player is in the zone.
                     if (IsPlayerInZone(player, wallPosition, cylinderSize))
                     {
-                        if (playerThrowingGrenade.Role.Team == player.Role.Team)
+                        if (team == player.Role.Team)
                         {
                             if (playerHealedAmounts[player] <= 100)
                             {
