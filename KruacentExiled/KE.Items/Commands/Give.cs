@@ -53,8 +53,8 @@ namespace KE.Items.Commands
                         return false;
                     }
 
-                    item?.Give(player);
-                    response = $"{item?.Name} given to {player.Nickname} ({player.UserId})";
+                    item.Give(player);
+                    response = $"{item.Name} given to {player.Nickname} ({player.UserId})";
                     return true;
                 }
 
@@ -70,15 +70,16 @@ namespace KE.Items.Commands
                 case "all":
                     List<Player> eligiblePlayers = Player.List.Where(CheckEligible).ToList();
                     foreach (Player ply in eligiblePlayers)
-                        item?.Give(ply);
+                        item.Give(ply);
 
-                    response = $"Custom item {item?.Name} given to all players who can receive them ({eligiblePlayers.Count} players)";
+                    response = $"Custom item {item.Name} given to all players who can receive them ({eligiblePlayers.Count} players)";
                     return true;
                 default:
                     break;
             }
 
             IEnumerable<Player> list = Player.GetProcessedData(arguments, 1);
+            int num = 0;
 
             if (list.IsEmpty())
             {
@@ -90,11 +91,12 @@ namespace KE.Items.Commands
             {
                 if (CheckEligible(player))
                 {
-                    item?.Give(player);
+                    item.Give(player);
+                    num++;
                 }
             }
 
-            response = $"{item?.Name} given to {list.Count()} players!";
+            response = $"{item.Name} given to {num} players!";
             return true;
         }
         private bool CheckEligible(Player player) => player.IsAlive && !player.IsCuffed && (player.Items.Count < 8);
