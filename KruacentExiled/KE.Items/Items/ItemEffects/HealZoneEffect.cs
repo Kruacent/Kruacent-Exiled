@@ -56,10 +56,6 @@ namespace KE.Items.Items.ItemEffects
 
             Team team = playerThrowingGrenade.Role.Team;
 
-            foreach (Player player in Player.List)
-            {
-                playerHealedAmounts.Add(player, 0);
-            }
 
             while (true)
             {
@@ -71,6 +67,13 @@ namespace KE.Items.Items.ItemEffects
                     {
                         if (team == player.Role.Team)
                         {
+                            if (!playerHealedAmounts.ContainsKey(player))
+                            {
+                                playerHealedAmounts[player] = 0;
+                            }
+
+
+
                             if (playerHealedAmounts[player] <= 100)
                             {
                                 player.Heal(1);
