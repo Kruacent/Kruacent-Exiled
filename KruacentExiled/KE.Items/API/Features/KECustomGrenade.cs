@@ -42,48 +42,6 @@ namespace KE.Items.API.Features
             base.UnsubscribeEvents();
         }
 
-        public override uint Spawn(IEnumerable<SpawnPoint> spawnPoints, uint limit)
-        {
-            Log.Debug($"spawning {this.Name}");
-            HashSet<SpawnPoint> spawns = spawnPoints.ToHashSet();
-            uint num = 0;
-            foreach (SpawnPoint spawnpoint in spawnPoints.Where(sp => sp is RoomSpawnPoint))
-            {
-                Pickup pickup;
-                if (Exiled.Loader.Loader.Random.NextDouble() * 100.0 >= (double)spawnpoint.Chance || (limit != 0 && num >= limit))
-                {
-                    continue;
-                }
-                spawns.Remove(spawnpoint);
-                RoomSpawnPoint room = spawnpoint as RoomSpawnPoint;
-                ItemSpawn spawn = PoseRoomSpawnPointHandler.UseRandomPose(room.Room);
-
-                Log.Debug($"spawning {this.Name} in {room.Room}");
-                Log.Debug(room.Room + " : " + PoseRoomSpawnPointHandler.UsablePoses.Count(p => p.roomType == room.Room));
-
-                if (spawn is not null)
-                {
-                    Log.Debug($"spawning custom pos");
-                    pickup = Spawn(spawn.Position);
-                }
-                else
-                {
-                    Log.Error($"can't spawn ({Name}) in custom ({room.Room})");
-                    pickup = Spawn(spawnpoint.Position);
-                }
-
-
-
-                if (pickup is not null)
-                {
-                    num++;
-                }
-
-
-            }
-
-            return base.Spawn(spawns, limit - num);
-        }
 
         public virtual bool Check(Projectile grenade)
         {
