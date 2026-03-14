@@ -41,16 +41,23 @@ namespace KE.Items.Items.ItemEffects
             wall.Visible = true;
             Timing.CallDelayed(10, () =>
             {
-                wall.UnSpawn();
-                wall.Destroy();
+                wall?.Destroy();
+                wall = null;
             });
             Timing.CallDelayed(5, () =>
             {
-                wall.Color = Color.yellow;
+                if(wall is not null)
+                {
+                    wall.Color = Color.yellow;
+                }
+                
             });
             Timing.CallDelayed(8, () =>
             {
-                wall.Color = Color.red;
+                if (wall is not null)
+                {
+                    wall.Color = Color.red;
+                }
             });
 
 
