@@ -12,7 +12,6 @@ namespace KE.Items.Items.ItemEffects
 {
     public class LowGravityGrenadeEffect : CustomItemEffect
     {
-        private Dictionary<Player, Vector3> _effectedPlayers = new();
         public float Duration { get; set; } = 15f;
         public float Range { get; set; } = 10f;
 
@@ -43,7 +42,6 @@ namespace KE.Items.Items.ItemEffects
 
             if (player.Role is FpcRole fpcRole) 
             { 
-                _effectedPlayers[player] = fpcRole.Gravity;
                 fpcRole.Gravity = FpcGravityController.DefaultGravity * 0.15f;
             }
 
@@ -51,8 +49,7 @@ namespace KE.Items.Items.ItemEffects
             {
                 if (player.Role is FpcRole fpcRole)
                 {
-                    fpcRole.Gravity = _effectedPlayers[player];
-                    _effectedPlayers.Remove(player);
+                    fpcRole.Gravity = FpcGravityController.DefaultGravity;
                 }
             });
         }
