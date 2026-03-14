@@ -8,6 +8,7 @@ using UnityEngine;
 using Exiled.API.Features;
 using KE.Items.API.Interface;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace KE.Items.Items.ItemEffects
 {
@@ -57,7 +58,7 @@ namespace KE.Items.Items.ItemEffects
                 currentLayer = nextLayer;
             }
 
-            foreach (Player player in Player.List)
+            foreach (Player player in Player.Enumerable.Where(p => p.IsAlive))
             {
                 if (roomsInRange.Contains(player.CurrentRoom))
                 {
