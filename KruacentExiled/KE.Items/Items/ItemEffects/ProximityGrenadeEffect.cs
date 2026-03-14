@@ -9,7 +9,7 @@ using Exiled.API.Features;
 using KE.Items.API.Interface;
 using System.Collections.Generic;
 
-namespace KE.Items.ItemEffects
+namespace KE.Items.Items.ItemEffects
 {
     public class ProximityGrenadeEffect : CustomItemEffect
     {
@@ -40,7 +40,7 @@ namespace KE.Items.ItemEffects
             List<Room> currentLayer = new List<Room>();
             currentLayer.Add(originRoom);
 
-            for (int i = 0; i < this.RoomRadius; i++)
+            for (int i = 0; i < RoomRadius; i++)
             {
                 List<Room> nextLayer = new List<Room>();
 
@@ -75,7 +75,7 @@ namespace KE.Items.ItemEffects
 
                     var laser = Primitive.Create(PrimitiveType.Cylinder, PrimitiveFlags.Visible, laserPos, rotation.eulerAngles, scale, true, lineColor);
 
-                    Timing.CallDelayed(this.Duration, laser.Destroy);
+                    Timing.CallDelayed(Duration, laser.Destroy);
                 }
             }
         }

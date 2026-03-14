@@ -7,7 +7,7 @@ using MEC;
 using System.ComponentModel;
 using UnityEngine;
 
-namespace KE.Items.ItemEffects
+namespace KE.Items.Items.ItemEffects
 {
     public class SmokeGrenadeEffect : CustomItemEffect
     {
