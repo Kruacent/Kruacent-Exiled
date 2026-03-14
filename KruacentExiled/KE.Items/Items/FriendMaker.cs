@@ -87,11 +87,6 @@ namespace KE.Items.Items
             ev.IsAllowed = false;
 
 
-            if (!CheckCooldown(attacker))
-            {
-                return;
-            }
-
             
 
             if(Convert(ev.Player, ev.Attacker))
