@@ -82,11 +82,6 @@ namespace KE.Items.Items.ShieldBelt
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="damage"></param>
-        /// <returns>remaining damage</returns>
         public float Damage(float damage)
         {
 
