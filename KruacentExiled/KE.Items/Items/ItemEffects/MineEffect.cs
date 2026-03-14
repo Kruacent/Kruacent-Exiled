@@ -22,7 +22,7 @@ namespace KE.Items.Items.ItemEffects
 {
     public class MineEffect : CustomItemEffect, IUsingEvents
     {
-        private const float RefreshRate = .01f;
+        private const float RefreshRate = .05f;
         private const int MineActivationTime = 10;
         private const float MineRadius = 0.7f;
         public override void Effect(UsedItemEventArgs ev)
@@ -88,24 +88,18 @@ namespace KE.Items.Items.ItemEffects
             Timing.RunCoroutine(WaitAndActivateMine(p, m));
         }
 
-        private ExplosiveGrenade _grenade;
-        private ExplosiveGrenade Grenade
+
+
+
+
+        private ExplosiveGrenade GetGrenade()
         {
-            get
-            {
-                if (_grenade == null)
-                {
-                    _grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
-                    _grenade.MaxRadius = 1;
-                    _grenade.ScpDamageMultiplier = .25f;
-                    _grenade.FuseTime = 0f;
-                    
-                }
-                return _grenade;
-            }
+            ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
+            grenade.MaxRadius = 1;
+            grenade.ScpDamageMultiplier = .25f;
+            grenade.FuseTime = 0f;
+            return grenade;
         }
-
-
         private IEnumerator<float> WaitAndActivateMine(Player player, MineModel mine)
         {
             int countdown = MineActivationTime;
@@ -132,7 +126,7 @@ namespace KE.Items.Items.ItemEffects
                 {
                     if (isActivated && IsPositionInZone(p.Position, mine.Position, cylinderSize, 3))
                     {
-                        Grenade.SpawnActive(mine.Position+Vector3.up);
+                        GetGrenade().SpawnActive(mine.Position+Vector3.up);
                         DestroyMine(mine);
                         isActivated = false;
                         break;
@@ -144,7 +138,7 @@ namespace KE.Items.Items.ItemEffects
 
                     if (isActivated && IsPlayerInZone(player, mine.Position, cylinderSize, 3))
                     {
-                        Grenade.SpawnActive(mine.Position + Vector3.up);
+                        GetGrenade().SpawnActive(mine.Position + Vector3.up);
                         DestroyMine(mine);
                         isActivated = false;
                         break;
