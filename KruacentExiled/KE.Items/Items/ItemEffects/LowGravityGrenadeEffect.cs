@@ -30,7 +30,7 @@ namespace KE.Items.Items.ItemEffects
 
             foreach(Player player in ev.TargetsToAffect)
             {
-                OnExploding(ev.Player);
+                OnExploding(player);
             }
 
             
