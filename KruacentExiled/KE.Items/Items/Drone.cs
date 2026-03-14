@@ -78,8 +78,10 @@ namespace KE.Items.Items
 
         private void OnDied(DiedEventArgs ev)
         {
-            if(ev.Player.GameObject.TryGetComponent<DroneController>(out DroneController dc)) {
+            if(ev.Player.GameObject.TryGetComponent<DroneController>(out DroneController dc)) 
+            {
                 UnityEngine.Object.Destroy(dc);
+                ActiveDrones.Remove(ev.Player);
             }
         }
 
