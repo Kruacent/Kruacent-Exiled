@@ -24,7 +24,12 @@ namespace KE.Items.API.Features.SpawnPoints
             public readonly Quaternion localrotation;
 
             
-
+            /// <summary>
+            /// don't use the corridor
+            /// </summary>
+            /// <param name="roomType"></param>
+            /// <param name="position"></param>
+            /// <param name="rotation"></param>
             public ItemSpawn(RoomType roomType,Vector3 position,Quaternion rotation)
             {
                 this.roomType = roomType;
