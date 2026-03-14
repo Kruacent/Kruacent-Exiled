@@ -44,12 +44,11 @@ namespace KE.Items.API.Features
       
         private void InternalOnHurting(HurtingEventArgs ev)
         {
-            OnHurting(ev);
-            if (ev.IsAllowed && Damage >= 0)
+            if (Check(ev.Attacker.CurrentItem))
             {
-                ev.Amount = Damage;
-                
+                OnHurting(ev);
             }
+
         }
         private void InternalOnShooting(ShootingEventArgs ev)
         {
@@ -112,7 +111,11 @@ namespace KE.Items.API.Features
 
         protected virtual void OnHurting(HurtingEventArgs ev)
         {
-
+            if (ev.IsAllowed && Damage >= 0)
+            {
+                ev.Amount = Damage;
+                
+            }
         }
         protected virtual void OnReloading(ReloadingWeaponEventArgs ev)
         {
