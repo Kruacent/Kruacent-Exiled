@@ -64,9 +64,13 @@ namespace KE.Items.API.Core.Upgrade
                 string newItemName = upgradable.Upgrade[ev.KnobSetting].UpgradedItem;
 
                 KECustomItem newItem = KECustomItem.Get(newItemName);
-
-                if (newItem == null) Log.Warn("warning id of custom item not found");
                 ev.Pickup.Destroy();
+                if (newItem == null)
+                {
+                    Log.Warn("warning id of custom item not found");
+                    return;
+                }
+                
                 newItem.Spawn(ev.OutputPosition);
             }
 
