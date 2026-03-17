@@ -26,7 +26,7 @@ namespace KE.Map.Surface.ElevatorGateA
                 new Quaternion(0f, 0f, 0f, 1f),
                 new Vector3(1f, 1f, 1f),
                 new Color32(0, 0, 0, 0),
-                240
+                0
             );
             ElevatorCabin.PrimitiveFlags = AdminToys.PrimitiveFlags.None;
 
@@ -37,7 +37,7 @@ namespace KE.Map.Surface.ElevatorGateA
                 new Quaternion(0f, 0f, 0f, 1f),
                 new Vector3(1f, 1f, 1f),
                 new Color32(0, 0, 0, 0),
-                240
+                0
             );
             panel.PrimitiveFlags = AdminToys.PrimitiveFlags.None;
 
@@ -48,7 +48,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.15f, 1.3f, 0.15f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -59,7 +59,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0.3775984f, 0f, 0f, 0.9259695f),
             new Vector3(1f, 1f, 0.15f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -70,7 +70,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0.3775984f, 0f, 0f, 0.9259695f),
             new Vector3(0.8f, 0.8f, 0.15f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -99,7 +99,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(1.666667f, 0.2f, 5f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -110,7 +110,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(1.666667f, 0.2f, 5f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -121,7 +121,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(1.666667f, 0.2f, 1.666667f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -132,7 +132,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(1.666667f, 0.2f, 1.666667f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -163,7 +163,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(5f, 0.2f, 5f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -184,7 +184,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 4.9f, 0.1f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -195,7 +195,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 1.4798f, 0.1f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -206,7 +206,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 1.4798f, 0.1f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -217,7 +217,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 4.9f, 0.1f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -228,7 +228,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 4.9f, 0.1f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -239,7 +239,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 1.4798f, 0.1f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -250,7 +250,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 4.9f, 0.1f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -261,7 +261,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 1.4798f, 0.1f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -272,7 +272,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 1.4798f, 0.1f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -283,7 +283,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.1f, 1.4798f, 0.1f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -294,7 +294,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(5f, 0.2f, 0.2f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -305,7 +305,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.2f, 0.2f, 5f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -316,7 +316,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.2f, 0.2f, 1.7f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -327,7 +327,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(0.2f, 0.2f, 1.7f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -338,7 +338,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(1.7f, 0.2f, 0.2f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 
@@ -349,7 +349,7 @@ namespace KE.Map.Surface.ElevatorGateA
             new Quaternion(0f, 0f, 0f, 1f),
             new Vector3(1.7f, 0.2f, 0.2f),
             new Color32(255, 255, 255, 255),
-            240
+            0
 
         );
 

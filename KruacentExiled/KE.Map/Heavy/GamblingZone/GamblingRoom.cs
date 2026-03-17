@@ -3,11 +3,13 @@ using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Server;
-using InteractableToy = LabApi.Features.Wrappers.InteractableToy;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
+using KE.Map.Heavy.GamblingZone.Events.EventArgs;
+using KE.Utils.API.Features.SCPs;
 using LabApi.Events.Arguments.PlayerEvents;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using InteractableToy = LabApi.Features.Wrappers.InteractableToy;
 
 namespace KE.Map.Heavy.GamblingZone
 {
@@ -121,15 +123,27 @@ namespace KE.Map.Heavy.GamblingZone
         }
 
 
+
         public void OnPickup(PlayerSearchedToyEventArgs ev)
         {
             Player player2 = ev.Player;
             if (ev.Interactable != _interact) return;
             if (player2 == null) return;
-            if (player2.IsScp) return;
+            if (SCPTeam.IsSCP(player2.ReferenceHub)) return;
 
             if (player2.CurrentItem == null) return;
             Item item = _lootTable.GetRandomItem();
+
+            GamblingEventArgs ev1 = new(player2, item, true);
+
+            Events.Handlers.GamblingRoom.OnGambling(ev1);
+
+            if (!ev1.IsAllowed)
+            {
+                return;
+            }
+
+
             player2.CurrentItem.Destroy();
 
             player2.AddItem(item);
@@ -137,10 +151,6 @@ namespace KE.Map.Heavy.GamblingZone
             {
                 player2.DropItem(item, false);
             }
-
-
-            
-
             
         }
 

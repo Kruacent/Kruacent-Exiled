@@ -89,7 +89,7 @@ namespace KE.Map.Surface.ElevatorGateA
             Vector3 posbot = new(15.62f, 290.65f, -45.19f);
             prim = Primitive.Create(pos, null, Vector3.one * Scale);
             prim.Flags = AdminToys.PrimitiveFlags.None;
-            prim.MovementSmoothing = 240;
+            prim.MovementSmoothing = 0;
             primtop = Primitive.Create(postop, null, Vector3.one * Scale);
             primtop.Flags = AdminToys.PrimitiveFlags.None;
 
@@ -119,18 +119,27 @@ namespace KE.Map.Surface.ElevatorGateA
                 model.SendingElevator -= SendingElevator;
                 model.Destroy(prim.Transform);
                 prim = null;
+            }
 
+            if(step != null)
+            {
                 step.Destroy();
-                help.Destroy();
-                helpPlatform.Destroy();
                 step = null;
+            }
+            if (help != null)
+            {
+                help.Destroy();
                 help = null;
+            }
+            if (helpPlatform != null)
+            {
+                helpPlatform.Destroy();
                 helpPlatform = null;
             }
 
 
 
-            if(primbottom != null)
+            if (primbottom != null)
             {
                 
                 bottompanel.SendingElevator -= SendingElevator;
