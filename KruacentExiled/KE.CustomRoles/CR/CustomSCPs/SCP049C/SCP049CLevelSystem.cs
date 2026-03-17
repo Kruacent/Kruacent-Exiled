@@ -253,6 +253,13 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
 
         private void UpdateTime()
         {
+
+            if(ragdoll.GameObject == null)
+            {
+                Reset();
+                return;
+            }
+
             if (Vector3.Distance(ragdoll.Position,_hub.transform.position) > MaxDistance)
             {
                 Reset();
