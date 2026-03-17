@@ -575,10 +575,31 @@ namespace KE.CustomRoles.API.Features
         /// </summary>
         protected virtual void Gui(StringBuilder sb,Player player)
         {
+            IConditional conditional = this as IConditional;
+
+            if(conditional != null)
+            {
+                if (conditional.CheckCondition(player))
+                {
+                    sb.Append("<color=#FFFFFF>");
+                }
+                else
+                {
+                    sb.Append("<color=#454545>");
+                }
+            }
+            else
+            {
+                sb.Append("<color=#FFFFFF>");
+            }
+
             AbilityGui(sb, player);
             GuiReady(sb, player);
             GuiArrow(sb, player);
+
+            sb.Append("</color>");
         }
+
 
         public static Dictionary<Player, List<AbstractHint>> PlayersHints { get; } = new();
         public static Dictionary<AbstractHint, AbstractHint> AddonHints { get; } = new();
@@ -621,21 +642,24 @@ namespace KE.CustomRoles.API.Features
             {
                 if (ability is ICustomIcon icon && !addonAbilitiesexception.Contains(ability))
                 {
-                    string msg = " "; 
+                    StringBuilder sb = StringBuilderPool.Pool.Get();
                     try
                     {
-                        msg = icon.IconName.RawString;
+                        sb.Append(icon.IconName.RawString);
                     }
                     catch(KeyNotFoundException)
                     {
                         addonAbilitiesexception.Add(ability);
                         Log.Error("Icon for ability "+ ability.Name+ " is missing");
+                        return " ";
                     }
-                    return msg;
+                    return StringBuilderPool.Pool.ToStringReturn(sb);
                 }
             }
             return " ";
         }
+
+
 
 
 
@@ -645,10 +669,6 @@ namespace KE.CustomRoles.API.Features
             int index = PlayersHints[player].FindIndex(h => h == arg.Hint);
 
 
-
-
-
-            
 
             if (PlayersAbility[player].TryGet(index,out KEAbilities ability))
             {

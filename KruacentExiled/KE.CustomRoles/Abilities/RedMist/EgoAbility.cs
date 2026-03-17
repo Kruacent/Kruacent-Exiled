@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Features.Abilities;
+using KE.CustomRoles.API.Interfaces.Ability;
 using KE.CustomRoles.CR.MTF.RedMist;
 using KE.Utils.API.Features;
 using System;
@@ -13,7 +14,7 @@ using UnityEngine;
 
 namespace KE.CustomRoles.Abilities.RedMist
 {
-    public abstract class EgoAbility : NeedCompAbility<EGO>
+    public abstract class EgoAbility : NeedCompAbility<EGO>, IConditional
     {
 
         protected sealed override bool AddCompIfMissing => false;
@@ -45,29 +46,14 @@ namespace KE.CustomRoles.Abilities.RedMist
             return true;
         }
 
-
-        protected override void Gui(StringBuilder sb, Player player)
-        {
-
-
-            if(CanLaunchAbility(player, out _))
-            {
-                sb.Append("<color=#FFFFFF>");
-            }
-            else
-            {
-                sb.Append("<color=#454545>");
-            }
-
-            AbilityGui(sb, player);
-            GuiReady(sb, player);
-            GuiArrow(sb, player);
-            sb.Append("</color>");
-        }
-
         protected static bool CheckItem(Player player)
         {
             return player.CurrentItem is null || player.CurrentItem.Type != ItemType.SCP1509;
+        }
+
+        public bool CheckCondition(Player player)
+        {
+            return CanLaunchAbility(player, out _);
         }
 
         public enum NeedActive

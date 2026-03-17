@@ -136,11 +136,12 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
 
         public static int GetNbKillPerTier(int tier)
         {
-            int x = tier + 1;
+            //int x = tier + 1;
 
-            double result = ((-1) * Math.Pow(x, 2)) + (6*x)-1;
+            //double result = ((-1) * Math.Pow(x, 2)) + (6*x)-1;
 
-            return (int)Math.Ceiling(result);
+            //return (int)Math.Ceiling(result);
+            return 2;
 
         }
 

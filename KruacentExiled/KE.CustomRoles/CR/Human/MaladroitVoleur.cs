@@ -52,29 +52,30 @@ namespace KE.CustomRoles.CR.Human
             "Thief"
         };
 
-        private CoroutineHandle coroutine;
         protected override void RoleAdded(Player player)
         {
-            Timing.RunCoroutineSingleton(ThrowingItem(), coroutine, SingletonBehavior.Abort);
+            Timing.RunCoroutine(ThrowingItem(player));
         }
 
 
-        private IEnumerator<float> ThrowingItem()
+        private IEnumerator<float> ThrowingItem(Player player)
         {
 
-            while (true)
+            while (TrackedPlayers.Contains(player))
             {
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(90f, 120f));
-
-                foreach(Player player in TrackedPlayers)
-                {
-                    if (UnityEngine.Random.Range(0f, 100f) > .5f)
-                    {
-                        player.DropHeldItem();
-                    }
-                }
+                EffectPlayer(player);
 
 
+            }
+        }
+
+
+        private void EffectPlayer(Player player)
+        {
+            if (UnityEngine.Random.Range(0f, 100f) > .5f)
+            {
+                player.DropHeldItem();
             }
         }
     }

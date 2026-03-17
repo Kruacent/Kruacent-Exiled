@@ -1,8 +1,10 @@
 ﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using Exiled.CustomItems.API.Features;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
+using KE.Items.API.Features;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Features;
 using KE.Utils.API.Features.SCPs;
@@ -18,7 +20,8 @@ namespace KE.CustomRoles.Abilities
     {
         public override string Name { get; } = "Thief";
 
-
+        public const string NoPlayer = "ThiefNoPlayer";
+        public const string Fail = "ThiefFail";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new()
@@ -27,13 +30,15 @@ namespace KE.CustomRoles.Abilities
                 {
                     [TranslationKeyName] = "Steal",
                     [TranslationKeyDesc] = "Steal a random item from a player in the same room",
-                    ["ThiefNoPlayer"] = "no player to steal from",
-                    ["ThiefFail"] = "I think this is a skill issue ! Congrats !",
+                    [NoPlayer] = "No player to steal from",
+                    [Fail] = "I think this is a skill issue! Congrats!",
                 },
                 ["fr"] = new()
                 {
                     [TranslationKeyName] = "Voler",
                     [TranslationKeyDesc] = "Vole un object aléatoire à un joueur dans la même pièce",
+                    [NoPlayer] = "Personne à qui voler",
+                    [Fail] = "Wow faut get good là",
                 }
             };
         }
@@ -101,10 +106,16 @@ namespace KE.CustomRoles.Abilities
             }
 
 
-
-
-            Item newitem = item.Clone();
-            newitem.Give(player);
+            if(KECustomItem.TryGet(item,out CustomItem ci))
+            {
+                ci.Give(player);
+            }
+            else
+            {
+                Item newitem = item.Clone();
+                newitem.Give(player);
+            }
+            
             thiefed.RemoveItem(item);
         }
 

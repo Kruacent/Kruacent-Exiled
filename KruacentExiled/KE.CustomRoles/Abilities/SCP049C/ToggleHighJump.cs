@@ -1,5 +1,7 @@
 ﻿using Exiled.API.Features;
+using HintServiceMeow.UI.Utilities;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Features.Abilities;
 using KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.Tier1;
 using MEC;
 using System;
@@ -7,10 +9,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace KE.CustomRoles.Abilities.SCP049C
 {
-    public class ToggleHighJump : KEAbilities
+    public class ToggleHighJump : ToggleableAbility
     {
         public override string Name { get; } = "ToggleHighJump";
 
@@ -22,17 +25,23 @@ namespace KE.CustomRoles.Abilities.SCP049C
                 ["en"] = new()
                 {
                     [TranslationKeyName] = "Toggle Big Jump",
-                    [TranslationKeyDesc] = "WIP",
+                    [TranslationKeyDesc] = "",
                 },
                 ["fr"] = new()
                 {
                     [TranslationKeyName] = "Active/désactive grand saut",
-                    [TranslationKeyDesc] = "WIP",
+                    [TranslationKeyDesc] = "",
                 }
             };
         }
 
         public override float Cooldown { get; } = 2f;
+
+        public override Color ColorOn => Color.green;
+
+        public override Color ColorOff => Color.red;
+
+        
 
         protected override bool AbilityUsed(Player player)
         {
@@ -44,6 +53,16 @@ namespace KE.CustomRoles.Abilities.SCP049C
             comp.IsActive = !comp.IsActive;
 
             return base.AbilityUsed(player);
+        }
+
+        public override bool GetState(Player player)
+        {
+            if (!player.GameObject.TryGetComponent<HigherJumpComp>(out var comp))
+            {
+                return false;
+            }
+
+            return comp.IsActive;
         }
     }
 }

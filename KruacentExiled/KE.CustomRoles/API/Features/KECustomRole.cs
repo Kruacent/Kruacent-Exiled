@@ -113,6 +113,12 @@ namespace KE.CustomRoles.API.Features
             if (MainPlugin.SettingHandler.GetDescriptionsSettings(player))
             {
                 sb.AppendLine(GetTranslation(player, TranslationKeyDesc));
+
+                if(this is IHealable heal)
+                {
+                    sb.AppendLine(GetTranslation(player, TranslationHealable));
+                }
+
             }
 
 
@@ -154,11 +160,30 @@ namespace KE.CustomRoles.API.Features
         }
 
         private bool activated = false;
+
+        private const string TranslationGUI = "CustomRoleGUI";
+        private const string TranslationHealable = "CustomRoleHealable";
+        private static Dictionary<string, Dictionary<string, string>> SetStaticTranslation()
+        {
+            return new Dictionary<string, Dictionary<string, string>>()
+            {
+                ["en"] = new()
+                {
+                    [TranslationGUI] = "Current Role",
+                    [TranslationHealable] = "This Custom Role is healable!",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationGUI] = "Role",
+                    [TranslationHealable] = "Ce custom role peut être enlevé avec un object!",
+                },
+            };
+        }
+
         private void OneTimeInit()
         {
             if (activated) return;
-            TranslationHub.Add(CustomRoleTranslationId, "en", "CustomRoleGUI", "Current Role");
-            TranslationHub.Add(CustomRoleTranslationId, "fr", "CustomRoleGUI", "Role");
+            TranslationHub.Add(CustomRoleTranslationId, SetStaticTranslation());
 
 
             activated = true;
@@ -278,7 +303,7 @@ namespace KE.CustomRoles.API.Features
             {
                 KECustomRole kECustomRole = Get(player).First();
 
-                sb.Append(GetTranslation(player, "CustomRoleGUI"));
+                sb.Append(GetTranslation(player, TranslationGUI));
                 sb.AppendLine(" : ");
                 sb.AppendLine();
                 sb.Append("<color=#");
@@ -299,7 +324,7 @@ namespace KE.CustomRoles.API.Features
 
                 if(customRole != null)
                 {
-                    sb.Append(GetTranslation(player, "CustomRoleGUI"));
+                    sb.Append(GetTranslation(player, TranslationGUI));
                     sb.AppendLine(" : ");
                     sb.AppendLine();
                     sb.Append("<color=#");

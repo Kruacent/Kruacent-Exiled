@@ -46,31 +46,30 @@ namespace KE.CustomRoles.CR.Human
         public Color32 Color => new Color32(112,112,112,0);
 
         public HashSet<ItemType> HealItem => [ItemType.SCP500];
-
-        private static CoroutineHandle coroutine;
         protected override void RoleAdded(Player player)
         {
-            Timing.RunCoroutineSingleton(Teleport(), coroutine, SingletonBehavior.Abort);
+            Timing.RunCoroutine(Teleport(player));
         }
-        private IEnumerator<float> Teleport()
+        private IEnumerator<float> Teleport(Player player)
         {
-            while (true)
+            while (TrackedPlayers.Contains(player))
             {
 
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(300f, 600f));
-
-                foreach(Player player in TrackedPlayers)
-                {
-                    player.EnableEffect(EffectType.Flashed, 1, 5);
-                    player.EnableEffect(EffectType.Invisible, 1, 6);
-                    player.Teleport(player.Zone.RandomSafeRoom());
-                }
+                EffectPlayer(player);
 
             }
         }
 
 
 
+        private void EffectPlayer(Player player)
+        {
+            if (player is null) return;
+            player.EnableEffect(EffectType.Flashed, 1, 5);
+            player.EnableEffect(EffectType.Invisible, 1, 6);
+            player.Teleport(player.Zone.RandomSafeRoom());
+        }
 
 
     }

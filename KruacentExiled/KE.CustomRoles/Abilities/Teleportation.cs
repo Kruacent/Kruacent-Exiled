@@ -2,6 +2,7 @@
 using Exiled.API.Features;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
+using KE.CustomRoles.API.Interfaces.Ability;
 using MapGeneration;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace KE.CustomRoles.Abilities
 {
-    public class Teleportation : KEAbilities, ICustomIcon
+    public class Teleportation : KEAbilities, ICustomIcon, IConditional
     {
         public override string Name { get; } = "Teleportation";
 
@@ -44,33 +45,12 @@ namespace KE.CustomRoles.Abilities
 
         protected override bool AbilityUsed(Player player)
         {
-            if(!SetPosition.TryGetTarget(player, out Vector3 target))
+
+            if (!CheckValid(player, true))
             {
-                ShowEffectHint(player, "TeleportationNoTarget");
                 return false;
             }
-
-
-            
-            if(Lift.Get(target) is not null)
-            {
-                ShowEffectHint(player, "TeleportationLift");
-                return false;
-            }
-
-
-            if (target.GetZone() == FacilityZone.LightContainment && Map.IsLczDecontaminated)
-            {
-                ShowEffectHint(player, "TeleportationLcz");
-                return false;
-            }
-
-            if (target.GetZone() != player.Zone.GetZone())
-            {
-                ShowEffectHint(player, "TeleportationDifferentZone");
-                return false;
-            }
-
+            SetPosition.TryGetTarget(player, out Vector3 target);
             player.Hurt(Damage, Exiled.API.Enums.DamageType.Asphyxiation);
 
             if(UnityEngine.Random.Range(1f, 100f) < 5)
@@ -86,6 +66,59 @@ namespace KE.CustomRoles.Abilities
             }
             return base.AbilityUsed(player);
 
+        }
+
+
+        private bool CheckValid(Player player,bool showMessage)
+        {
+            if (!SetPosition.TryGetTarget(player, out Vector3 target))
+            {
+                if (showMessage)
+                {
+                    ShowEffectHint(player, "TeleportationNoTarget");
+                }
+                
+                return false;
+            }
+
+
+
+            if (Lift.Get(target) is not null)
+            {
+                if (showMessage)
+                {
+                    ShowEffectHint(player, "TeleportationLift");
+                }
+                
+                return false;
+            }
+
+
+            if (target.GetZone() == FacilityZone.LightContainment && Map.IsLczDecontaminated)
+            {
+                if (showMessage)
+                {
+                    ShowEffectHint(player, "TeleportationLcz");
+                }
+
+                
+                return false;
+            }
+
+            if (target.GetZone() != player.Zone.GetZone())
+            {
+                if (showMessage)
+                {
+                    ShowEffectHint(player, "TeleportationDifferentZone");
+                }
+                return false;
+            }
+            return true;
+        }
+
+        public bool CheckCondition(Player player)
+        {
+            return CheckValid(player, false);
         }
     }
 }
