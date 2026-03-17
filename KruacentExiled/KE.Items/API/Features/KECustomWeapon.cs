@@ -44,6 +44,9 @@ namespace KE.Items.API.Features
       
         private void InternalOnHurting(HurtingEventArgs ev)
         {
+
+            if (ev.Attacker is null) return;
+
             if (Check(ev.Attacker.CurrentItem))
             {
                 OnHurting(ev);
