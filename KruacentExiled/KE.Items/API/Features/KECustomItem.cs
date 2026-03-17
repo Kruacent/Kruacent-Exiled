@@ -96,6 +96,11 @@ namespace KE.Items.API.Features
             return TranslationHub.Get(lang, CustomItemTranslationId, key);
         }
 
+        public static void TranslationHint(Player player,string key)
+        {
+            ItemEffectHint(player, GetTranslation(player, key));
+        }
+
         public override void Init()
         {
             _typeLookup.Add(GetType(), this);

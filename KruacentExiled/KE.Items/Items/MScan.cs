@@ -35,12 +35,21 @@ namespace KE.Items.Items
                 {
                     [TranslationKeyName] = "M-Scan",
                     [TranslationKeyDesc] = "Detect movement",
-                    //[Deploy] = "Detect movement",
+                    [Deploy] = $"<color=#00ff00>MSCAN DEPLOYED</color>\nBattery: {TimeUp} seconds",
+                    [PickUp] = "M-Scan picked up",
+                    [TranslationDestroy] = "<color=red>M-SCAN DESTROYED</color>",
+                    [NoBattery] = "<color=yellow>M-Scan : No battery left</color>",
+                    [Detect] = "<color=%Color%>M-SCAN: %Name%</color>",
                 },
                 ["fr"] = new()
                 {
                     [TranslationKeyName] = "M-Scan",
                     [TranslationKeyDesc] = "Détecte les mouvements des personnes passant devant",
+                    [Deploy] = $"<color=#00ff00>SCANNER DÉPLOYÉ</color>\nBatterie: {TimeUp} secondes",
+                    [PickUp] = "Scanner récupéré.",
+                    [TranslationDestroy] = "<color=red>SCANNER DÉTRUIT</color>",
+                    [NoBattery] = "<color=yellow>Scanner: Batterie épuisée.</color>",
+                    [Detect] = "$<color=%Color%>M-SCAN: %Name%</color>",
                 },
             };
         }
@@ -146,7 +155,8 @@ namespace KE.Items.Items
                 ActiveSensors.Add(pickup, player);
                 BatteryLife[pickup] = Time.time + TimeUp;
 
-                KECustomItem.ItemEffectHint(player, $"<color=#00ff00>SCANNER DÉPLOYÉ</color>\nBatterie: {TimeUp} secondes");
+
+                TranslationHint(player, Deploy);
             }
         }
 
@@ -158,7 +168,7 @@ namespace KE.Items.Items
             {
                 ActiveSensors.Remove(ev.Pickup);
                 BatteryLife.Remove(ev.Pickup);
-                KECustomItem.ItemEffectHint(player, "Scanner récupéré.");
+                TranslationHint(player, PickUp);
             }
         }
 
@@ -180,7 +190,10 @@ namespace KE.Items.Items
                 if (Vector3.Distance(hitPos, sensor.Position) <= radius)
                 {
                     toDestroy.Add(sensor);
-                    if (owner != null) KECustomItem.ItemEffectHint(owner, "<color=red>SCANNER DÉTRUIT</color>");
+                    if (owner != null)
+                    {
+                        TranslationHint(owner, TranslationDestroy);
+                    }
                 }
             }
 
@@ -204,9 +217,11 @@ namespace KE.Items.Items
             {
                 if (BatteryLife.ContainsKey(key) && Time.time > BatteryLife[key])
                 {
-                    if (ActiveSensors[key] != null)
+
+                    Player player = ActiveSensors[key];
+                    if (player != null)
                     {
-                        KECustomItem.ItemEffectHint(ActiveSensors[key], "<color=yellow>Scanner: Batterie épuisée.</color>");
+                        TranslationHint(player, NoBattery);
                     }
                     invalid.Add(key);
                 }
@@ -256,7 +271,9 @@ namespace KE.Items.Items
                             if (owner != null)
                             {
                                 string color = target.Role.Color.ToHex();
-                                KECustomItem.ItemEffectHint(owner, $"<color={color}>M-SCAN: {target.Role.Name} ({target.Nickname})</color>");
+
+                                string msg = GetTranslation(owner, Detect).Replace("%Color%", color).Replace("%Name%", target.Role.Name);
+                                KECustomItem.ItemEffectHint(owner, msg);
                             }
 
                             break;
