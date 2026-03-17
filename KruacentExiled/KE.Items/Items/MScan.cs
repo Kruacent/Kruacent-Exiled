@@ -19,6 +19,14 @@ namespace KE.Items.Items
 {
     public class MScan : KECustomItem
     {
+
+
+        public const string Deploy = "MScanDeploy";
+        public const string PickUp = "MScanPickUp";
+        public const string TranslationDestroy = "MScanDestroy";
+        public const string NoBattery = "MScanNoBattery";
+        public const string Detect = "MScanDetect";
+
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new()
@@ -27,6 +35,7 @@ namespace KE.Items.Items
                 {
                     [TranslationKeyName] = "M-Scan",
                     [TranslationKeyDesc] = "Detect movement",
+                    //[Deploy] = "Detect movement",
                 },
                 ["fr"] = new()
                 {
@@ -196,7 +205,9 @@ namespace KE.Items.Items
                 if (BatteryLife.ContainsKey(key) && Time.time > BatteryLife[key])
                 {
                     if (ActiveSensors[key] != null)
+                    {
                         KECustomItem.ItemEffectHint(ActiveSensors[key], "<color=yellow>Scanner: Batterie épuisée.</color>");
+                    }
                     invalid.Add(key);
                 }
             }
