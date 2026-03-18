@@ -2,6 +2,7 @@
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
+using Hints;
 using HintServiceMeow.UI.Utilities;
 using KE.Items.API.Features;
 using KE.Utils.API.Features;
@@ -19,6 +20,12 @@ namespace KE.Items.Items
 
     public class FriendMaker : KECustomWeapon
     {
+
+        public const string TranslationCooldown = "FriendMakerCooldown";
+        public const string TranslationNobody = "FriendMakerNobody";
+        public const string TranslationSameTeam = "FriendMakerSameTeam";
+        public const string TranslationNonZombie = "FriendMakerNonZombie";
+        public const string TranslationSuccess = "FriendMakerSuccess";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new()
@@ -27,11 +34,21 @@ namespace KE.Items.Items
                 {
                     [TranslationKeyName] = "Friend Maker™",
                     [TranslationKeyDesc] = "The number one (1) method to make friends",
+                    [TranslationCooldown] = "You must wait %second% seconds before using it again",
+                    [TranslationNobody] = "But nobody came",
+                    [TranslationSameTeam] = "I know you don't like them but they're in your team",
+                    [TranslationNonZombie] = "That ain't a zombie",
+                    [TranslationSuccess] = "New friend acquired!",
                 },
                 ["fr"] = new()
                 {
                     [TranslationKeyName] = "Friend Maker™",
                     [TranslationKeyDesc] = "LA méthode pour se faire des amis ! <size=5>Produit non remboursable</size>",
+                    [TranslationCooldown] = "Tu dois attendre %second% secondes avant de pouvoir l'utiliser à nouveau",
+                    [TranslationNobody] = "Mais personne n'est venu",
+                    [TranslationSameTeam] = "Je sais que tu l'aime pas mais il est bien avec toi",
+                    [TranslationNonZombie] = "C'est pas un zombie ça",
+                    [TranslationSuccess] = "Nouvel ami obtenu!",
                 },
             };
         }
@@ -70,7 +87,10 @@ namespace KE.Items.Items
             if (!CheckCooldown(player))
             {
                 DateTime dateTime = cooldowns[player] + Cooldown;
-                KECustomItem.ItemEffectHint(player, "You must wait " + Math.Round((dateTime - DateTime.Now).TotalSeconds) + " seconds before using it again");
+
+
+                string msg = GetTranslation(player, TranslationCooldown).Replace("%second%", Math.Round((dateTime - DateTime.Now).TotalSeconds).ToString());
+                KECustomItem.ItemEffectHint(player, msg);
                 ev.IsAllowed = false;
             }
 
@@ -117,20 +137,20 @@ namespace KE.Items.Items
         {
             if (player == null)
             {
-                KECustomItem.ItemEffectHint(attacker, "But nobody's here");
+                TranslationHint(attacker, TranslationNobody);
                 return false;
             }
 
             if (attacker.Role.Side == player.Role.Side)
             {
-                KECustomItem.ItemEffectHint(attacker, "I know you don't like them but they're in your team");
+                TranslationHint(attacker, TranslationSameTeam);
                 return false;
             }
 
 
             if (player.IsScp && player.Role != RoleTypeId.Scp0492)
             {
-                KECustomItem.ItemEffectHint(attacker, "That ain't a zombie");
+                TranslationHint(attacker, TranslationNonZombie);
                 return false;
             }
 
@@ -142,8 +162,7 @@ namespace KE.Items.Items
             {
                 player.Role.Set(attacker.Role, RoleSpawnFlags.None);
             }
-
-            KECustomItem.ItemEffectHint(attacker, "New friend acquired!");
+            TranslationHint(attacker, TranslationSuccess);
             return true;
         }
 

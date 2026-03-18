@@ -19,7 +19,7 @@ namespace KE.Items.Items
                 ["en"] = new()
                 {
                     [TranslationKeyName] = "RedBull™ Energy",
-                    [TranslationKeyDesc] = "RedBull™ donne des ailes ! Attention à la chute !!!",
+                    [TranslationKeyDesc] = "RedBull™ gives you wings!",
                 },
                 ["fr"] = new()
                 {

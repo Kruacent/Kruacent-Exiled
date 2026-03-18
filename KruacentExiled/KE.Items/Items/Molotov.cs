@@ -30,7 +30,7 @@ namespace KE.Items.Items
                 ["fr"] = new()
                 {
                     [TranslationKeyName] = "Cocktail Molotov",
-                    [TranslationKeyDesc] = "La meilleur arme contre un blindé",
+                    [TranslationKeyDesc] = "La meilleure arme contre un blindé",
                 },
             };
         }
