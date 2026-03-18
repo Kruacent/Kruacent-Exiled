@@ -33,7 +33,6 @@ public class Defibrillator : KECustomItem, ILumosItem
     }
     public override ItemType ItemType => ItemType.SCP1853;
     public override string Name { get; set; } = "Defibrillator";
-    public override string Description { get; set; } = "Visez un cadavre de près pour tenter une réanimation.";
     public override float Weight { get; set; } = 1.0f;
     public UnityEngine.Color Color { get; set; } = UnityEngine.Color.magenta;
 

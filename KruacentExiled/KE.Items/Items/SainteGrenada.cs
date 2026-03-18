@@ -39,7 +39,6 @@ namespace KE.Items.Items
         }
         public override ItemType ItemType => ItemType.GrenadeHE;
         public override string Name { get; set; } = "SainteGrenada";
-        public override string Description { get; set; } = "";
         public override float Weight { get; set; } = 1.5f;
         public override float FuseTime => 6f;
         public override bool ExplodeOnCollision => false;

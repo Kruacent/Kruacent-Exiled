@@ -32,7 +32,6 @@ namespace KE.Items.Items
         public override ItemType ItemType => ItemType.Painkillers;
 
         public override string Name { get; set; } = "SCP-1650";
-        public override string Description { get; set; } = "ויאמר ה' ל— סח השמן על בשרך ולך בינות ה— כששם אלוהים על שפתיך, וזעם ה' וחרון אפו ו— דם המכבים יטהר בית מקדשו אחריך, לנצח נצחים";
         public override float Weight { get; set; } = 0.65f;
         public CustomItemEffect Effect { get; set; }
 

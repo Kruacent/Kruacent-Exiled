@@ -18,7 +18,6 @@ namespace KE.Items.Items
     public class Drone : KECustomItem
     {
         public override string Name { get; set; } = "Drone";
-        public override string Description { get; set; } = "Drone de reconnaissance militaire (lancer pour l'utiliser)";
         public override float Weight { get; set; } = 3f;
         public Color Color { get; set; } = Color.blue;
         public override ItemType ItemType => ItemType.KeycardChaosInsurgency;
@@ -44,9 +43,18 @@ namespace KE.Items.Items
             Limit = 1,
             RoomSpawnPoints = new List<RoomSpawnPoint>
             {
-                new RoomSpawnPoint() { Chance = 25, Room = RoomType.HczCornerDeep, },
-                new RoomSpawnPoint() { Chance = 25, Room = RoomType.HczIncineratorWayside, },
-                new RoomSpawnPoint() { Chance = 25, Room = RoomType.LczAirlock, },
+                new RoomSpawnPoint() 
+                { 
+                    Chance = 25, Room = RoomType.HczCornerDeep, 
+                },
+                new RoomSpawnPoint() 
+                { 
+                    Chance = 25, Room = RoomType.HczIncineratorWayside, 
+                },
+                new RoomSpawnPoint() 
+                { 
+                    Chance = 25, Room = RoomType.LczAirlock,
+                },
             },
         };
 
@@ -235,23 +243,33 @@ namespace KE.Items.Items
                     fpc.Gravity = FpcGravityController.DefaultGravity;
                 }
 
-                if (this.npc != null) this.player.Position = this.npc.Position;
+                if (this.npc != null)
+                {
+                    this.player.Position = this.npc.Position;
+                }
                 RestorePlayerInventory();
             }
 
             if (this.player != null && this.player.Role.Type.IsDead())
             {
-                if (this.npc != null) { 
+                if (this.npc != null)
+                { 
                     this.npc.ClearInventory(false); 
                     this.npc.Destroy(); 
                 }
             }
             else
             {
-                if (this.npc != null) this.npc.Destroy();
+                if (this.npc != null)
+                {
+                    this.npc.Destroy();
+                }
             }
 
-            if (this.drone != null) this.drone.Destroy();
+            if (this.drone != null)
+            {
+                this.drone.Destroy();
+            }
         }
 
         private IEnumerator<float> DroneUpdate()
@@ -326,7 +344,8 @@ namespace KE.Items.Items
                     if (this.npcIsDead)
                     {
                         this.DroneItem.StopDrone(ev.Player);
-                    } else
+                    } 
+                    else
                     {
                         ev.IsAllowed = false;
                         this.player.Position = this.npc.Position;
@@ -358,10 +377,16 @@ namespace KE.Items.Items
         private void PutPlayerOnDrone()
         {
             playerSavedItems.Clear();
-            foreach (Item item in this.player.Items) playerSavedItems.Add(item.Type);
+            foreach (Item item in this.player.Items)
+            {
+                playerSavedItems.Add(item.Type);
+            }
 
             playerSavedAmmo.Clear();
-            foreach (var ammo in this.player.Ammo) playerSavedAmmo.Add(ammo.Key, ammo.Value);
+            foreach (var ammo in this.player.Ammo)
+            {
+                playerSavedAmmo.Add(ammo.Key, ammo.Value);
+            }
 
             this.player.ClearInventory(true);
             this.player.Scale = Vector3.one * 0.1f;

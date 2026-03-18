@@ -31,7 +31,6 @@ namespace KE.Items.Items
 
         public override ItemType ItemType => ItemType.GrenadeFlash;
         public override string Name { get; set; } = "ProximityGrenade";
-        public override string Description { get; set; } = "";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime => 3f;
         public override bool ExplodeOnCollision => false;

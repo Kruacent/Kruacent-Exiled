@@ -31,7 +31,6 @@ namespace KE.Items.Items
         }
         public override ItemType ItemType => ItemType.KeycardJanitor;
         public override string Name { get; set; } = "Mine";
-        public override string Description { get; set; } = "Drop to deploy the mine, little advice : don't step on it";
         public override float Weight { get; set; } = 0.65f;
         public Color Color { get; set; } = Color.yellow;
         public CustomItemEffect Effect { get; set; }

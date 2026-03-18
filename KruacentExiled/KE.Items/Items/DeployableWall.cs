@@ -31,7 +31,6 @@ namespace KE.Items.Items
         }
         public override ItemType ItemType => ItemType.KeycardJanitor;
         public override string Name { get; set; } = "Deployable Wall";
-        public override string Description { get; set; } = "Drop to deploy a wall, and throw to just throw the card";
         public override float Weight { get; set; } = 0.65f;
         public Color Color { get; set; } = Color.green;
 

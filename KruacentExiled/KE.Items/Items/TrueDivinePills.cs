@@ -38,7 +38,6 @@ public class TrueDivinePills : KECustomItem, ILumosItem
     public override string Name { get; set; } = "TrueDivinePills";
 
     /// <inheritdoc/>
-    public override string Description { get; set; } = "Guaranteed to respawn everybody";
 
     /// <inheritdoc/>
     public override float Weight { get; set; } = 0.65f;

@@ -55,7 +55,6 @@ namespace KE.Items.Items
         }
         public override ItemType ItemType => ItemType.Flashlight;
         public override string Name { get; set; } = "MScan";
-        public override string Description { get; set; } = "Détecte les mouvements des personnes passant devant";
         public override float Weight { get; set; } = 1.5f;
         public Color Color { get; set; } = Color.cyan;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()

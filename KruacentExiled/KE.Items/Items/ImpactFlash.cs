@@ -27,7 +27,6 @@ namespace KE.Items.Items
         }
         public override ItemType ItemType => ItemType.GrenadeFlash;
         public override string Name { get; set; } = "ImpactFlash";
-        public override string Description { get; set; } = "The grenade explode at impact";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime => 3f;
         public override bool ExplodeOnCollision => true;

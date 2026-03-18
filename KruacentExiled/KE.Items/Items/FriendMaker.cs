@@ -38,7 +38,6 @@ namespace KE.Items.Items
         
         public override ItemType ItemType => ItemType.GunCOM15;
         public override string Name { get; set; } = "FriendMaker";
-        public override string Description { get; set; } = "";
         public override float Weight { get; set; } = 1f;
         public override SpawnProperties SpawnProperties { get; set; } = null;
 

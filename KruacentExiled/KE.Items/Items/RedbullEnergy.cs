@@ -30,7 +30,6 @@ namespace KE.Items.Items
         }
         public override ItemType ItemType => ItemType.SCP207;
         public override string Name { get; set; } = "RedBullEnergy";
-        public override string Description { get; set; } = "";
         public override float Weight { get; set; } = 0.65f;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.blue;
         public CustomItemEffect Effect { get; set; }

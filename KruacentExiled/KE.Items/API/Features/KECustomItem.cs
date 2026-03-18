@@ -33,6 +33,8 @@ namespace KE.Items.API.Features
         [Obsolete("Uses only the name",true)]
         public sealed override uint Id { get; set; } = 0;
 
+        public sealed override string Description { get; set; } = string.Empty;
+
         public abstract ItemType ItemType { get; }
 
         public override float Weight { get; set; } = 1;

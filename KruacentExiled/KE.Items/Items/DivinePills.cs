@@ -35,9 +35,6 @@ public class DivinePills : KECustomItem, ILumosItem, ISwitchableEffect, IUpgrada
     public override string Name { get; set; } = "Divine Pills";
 
     /// <inheritdoc/>
-    public override string Description { get; set; } = "A";
-
-    /// <inheritdoc/>
     public override float Weight { get; set; } = 0.65f;
     public UnityEngine.Color Color { get; set; } = UnityEngine.Color.yellow;
     public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade { get; private set; } = new Dictionary<Scp914KnobSetting, UpgradeProperties>()

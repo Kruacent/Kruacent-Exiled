@@ -33,7 +33,6 @@ namespace KE.Items.Items
         }
         public override ItemType ItemType => ItemType.GrenadeHE;
         public override string Name { get; set; } = "Teleportation Grenade";
-        public override string Description { get; set; } = "This grenade does 0 damage but teleport nearby players in a random place (does work in other dimension ;3 )";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime => 3f;
         public override bool ExplodeOnCollision => false;

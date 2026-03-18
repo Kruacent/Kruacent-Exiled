@@ -41,7 +41,6 @@ namespace KE.Items.Items.LeSoleil
         }
         public override ItemType ItemType => ItemType.GrenadeFlash;
         public override string Name { get; set; } = "Le Soleil";
-        public override string Description { get; set; } = "";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime =>5f;
         public override bool ExplodeOnCollision =>true;

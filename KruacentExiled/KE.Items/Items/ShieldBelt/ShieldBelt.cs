@@ -27,6 +27,7 @@ namespace KE.Items.Items.ShieldBelt
     [CustomItem(ItemType.KeycardCustomSite02)]
     public class ShieldBelt : KECustomKeycard
     {
+
         public override uint Id { get; set; } = 5982;
         public override string Name { get; set; } = "Shield belt";
         public override string Description { get; set; } = "A projectile-repulsion device.\nIt will attempt to stop incoming projectiles or shrapnel, but does nothing against melee attacks or heat.\nIt prevents the wearer from firing out.\n(works in the inventory) ";

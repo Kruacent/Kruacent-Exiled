@@ -38,7 +38,6 @@ namespace KE.Items.Items
         }
         public override ItemType ItemType => ItemType.Flashlight;
         public override string Name { get; set; } = "SCP-514";
-        public override string Description { get; set; } = "birb";
         public override float Weight { get; set; } = 0.65f;
         public float TimeActive { get; set; } = 5;
         public static float Radius { get; set; } = 5;

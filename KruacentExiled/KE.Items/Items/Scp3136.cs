@@ -33,7 +33,6 @@ namespace KE.Items.Items
         }
         public override ItemType ItemType => ItemType.SCP1576;
         public override string Name { get; set; } = "SCP-3136";
-        public override string Description { get; set; } = "A map of the facility, you could draw your friends next to you";
         public override float Weight { get; set; } = 0.65f;
 
         private Dictionary<Faction,Vector3> _respawnPositions = new Dictionary<Faction,Vector3>

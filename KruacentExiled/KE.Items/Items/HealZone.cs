@@ -32,7 +32,6 @@ namespace KE.Items.Items
         }
         public override ItemType ItemType => ItemType.GrenadeFlash;
         public override string Name { get; set; } = "HealZone";
-        public override string Description { get; set; } = "Allow to heal you and your ally";
         public override float Weight => 0.65f;
         public override float FuseTime => 5f;
         public override bool ExplodeOnCollision => true;
