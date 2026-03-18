@@ -81,7 +81,7 @@ namespace KE.CustomRoles.CR.Human
         private IEnumerator<float> ThrowingItem(Player player)
         {
 
-            while (TrackedPlayers.Contains(player))
+            while (Check(player))
             {
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(90f, 120f));
                 EffectPlayer(player);
