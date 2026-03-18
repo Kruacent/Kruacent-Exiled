@@ -12,6 +12,7 @@ using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace KE.CustomRoles.CR.Human
 {
@@ -46,13 +47,35 @@ namespace KE.CustomRoles.CR.Human
         public Color32 Color => new Color32(112,112,112,0);
 
         public HashSet<ItemType> HealItem => [ItemType.SCP500];
+        private Dictionary<Player, CoroutineHandle> handles;
+
+        protected override void SubscribeEvents()
+        {
+            handles = DictionaryPool<Player, CoroutineHandle>.Get();
+            base.SubscribeEvents();
+        }
+
+        protected override void UnsubscribeEvents()
+        {
+            base.UnsubscribeEvents();
+            DictionaryPool<Player, CoroutineHandle>.Release(handles);
+        }
+
         protected override void RoleAdded(Player player)
         {
-            Timing.RunCoroutine(Teleport(player));
+            handles[player] = Timing.RunCoroutine(Teleport(player));
+        }
+
+        protected override void RoleRemoved(Player player)
+        {
+            if(handles.TryGetValue(player, out var handle))
+            {
+                Timing.KillCoroutines(handle);
+            }
         }
         private IEnumerator<float> Teleport(Player player)
         {
-            while (TrackedPlayers.Contains(player))
+            while (Check(player))
             {
 
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(300f, 600f));
