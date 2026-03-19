@@ -43,10 +43,7 @@ namespace KE.CustomRoles.Abilities
             SelectedTarget[player] = position;
 
 
-            if (SelectedTextToys.ContainsKey(player))
-            {
-                SelectedTextToys[player].Destroy();
-            }
+            TryDestroyFollowingTextToy(player);
 
 
 
@@ -63,6 +60,20 @@ namespace KE.CustomRoles.Abilities
             Log.Debug("set position at " + position);
             return base.AbilityUsed(player);
 
+        }
+        private void TryDestroyFollowingTextToy(Player player)
+        {
+            if (SelectedTextToys.ContainsKey(player))
+            {
+                SelectedTextToys[player].Destroy();
+            }
+        }
+
+        protected override void AbilityRemoved(Player player)
+        {
+            SelectedTarget.Remove(player);
+            TryDestroyFollowingTextToy(player);
+            base.AbilityRemoved(player);
         }
 
         public static bool TryGetTarget(Player p, out Vector3 target)
