@@ -552,7 +552,7 @@ namespace KE.CustomRoles.API.Features
                 {
                     if(!KEAbilities.TryAddToPlayer(name, player))
                     {
-                        Log.Error("couldn't find ability :" + name);
+                        Log.Error("couldn't find ability : " + name);
                     }
                    
                 }

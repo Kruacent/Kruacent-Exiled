@@ -181,26 +181,7 @@ namespace KE.CustomRoles.Settings
 
         private void Up(Player player)
         {
-            if(KEAbilities.PlayersAbility.TryGetValue(player,out var list))
-            {
-                if (list.Count == 0)
-                {
-                    return;
-                }
-                if (!playerPos.ContainsKey(player))
-                {
-                    playerPos.Add(player, 0);
-                }
-
-                int index = mod((playerPos[player] - 1),list.Count);
-                Log.Debug("up "+ index);
-                KEAbilities ability = list[index];
-                playerPos[player] += -1; 
-                
-
-                ability?.SelectAbility(player);
-                KEAbilities.UpdateGUI(player);
-            }
+            Move(player, +1);
         }
 
         private int mod(int x, int m)
@@ -210,9 +191,14 @@ namespace KE.CustomRoles.Settings
 
         private void Down(Player player)
         {
+            Move(player, -1);
+        }
+
+        private void Move(Player player, int movement)
+        {
             if (KEAbilities.PlayersAbility.TryGetValue(player, out var list))
             {
-                if(list.Count == 0)
+                if (list.Count == 0)
                 {
                     return;
                 }
@@ -221,12 +207,12 @@ namespace KE.CustomRoles.Settings
                 {
                     playerPos.Add(player, 0);
                 }
-                
 
-                int index = mod((playerPos[player] + 1), list.Count);
+
+                int index = mod((playerPos[player] + movement), list.Count);
                 Log.Debug("down " + index);
                 KEAbilities ability = list[index];
-                playerPos[player] += 1;
+                playerPos[player] += movement;
                 ability?.SelectAbility(player);
                 KEAbilities.UpdateGUI(player);
             }

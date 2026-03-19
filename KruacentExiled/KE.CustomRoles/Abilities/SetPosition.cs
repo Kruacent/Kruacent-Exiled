@@ -10,6 +10,8 @@ namespace KE.CustomRoles.Abilities
     public class SetPosition : KEAbilities, ICustomIcon
     {
         public override string Name { get; } = "SetPosition";
+
+        public const string TranslationNoTarget = "SetPositionNoTarget";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new()
@@ -18,11 +20,13 @@ namespace KE.CustomRoles.Abilities
                 {
                     [TranslationKeyName] = "Set Position",
                     [TranslationKeyDesc] = "Select the current position for another ability",
+                    [TranslationNoTarget] = "No target set",
                 },
                 ["fr"] = new()
                 {
                     [TranslationKeyName] = "Selection de position",
                     [TranslationKeyDesc] = "Selectionne la position pour une autre abilité",
+                    [TranslationNoTarget] = "Pas de position mise",
                 }
             };
         }

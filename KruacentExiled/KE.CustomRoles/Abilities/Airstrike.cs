@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Extensions;
+using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups.Projectiles;
@@ -6,6 +7,7 @@ using Exiled.API.Features.Toys;
 using Exiled.CustomRoles.API.Features;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
+using KE.CustomRoles.API.Interfaces.Ability;
 using MapGeneration;
 using MEC;
 using System;
@@ -18,10 +20,11 @@ using Light = Exiled.API.Features.Toys.Light;
 
 namespace KE.CustomRoles.Abilities
 {
-    public class Airstrike : KEAbilities, ICustomIcon
+    public class Airstrike : KEAbilities, ICustomIcon, IConditional
     {
-        public override string Name { get;  } = "AirStrike";
+        public override string Name { get; } = "AirStrike";
 
+        public const string TranslationSomethingHere = "AirStrikeSomethingHere";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new()
@@ -30,11 +33,13 @@ namespace KE.CustomRoles.Abilities
                 {
                     [TranslationKeyName] = "Airstrike",
                     [TranslationKeyDesc] = "Don't overuse it or your co-op will not be happy",
+                    [TranslationSomethingHere] = "Something is in the way",
                 },
                 ["fr"] = new()
                 {
                     [TranslationKeyName] = "Bombardement",
                     [TranslationKeyDesc] = "Ne l'utilise pas trop sinon ton coop sera pas content",
+                    [TranslationSomethingHere] = "Quelque chose gêne",
                 }
             };
         }
@@ -46,22 +51,14 @@ namespace KE.CustomRoles.Abilities
 
         protected override bool AbilityUsed(Player player)
         {
-            if (!SetPosition.TryGetTarget(player, out Vector3 target))
+            if (CheckValid(player, true))
             {
-                ShowEffectHint(player, "TeleportationNoTarget");
                 return false;
             }
+            SetPosition.TryGetTarget(player, out Vector3 target);
+            var l = Light.Create(target, null, null, true, Color.red);
 
-            Physics.Linecast(target, target + height * Vector3.up, out RaycastHit hit);
-            if (hit.collider != null)
-            {
-                Log.Debug($"hit something [{hit.collider}]");
-                return false;
-            }
-            
-            var l = Light.Create(target,null,null,true,Color.red);
-
-            ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE,player);
+            ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, player);
             grenade.ScpDamageMultiplier = 1;
             grenade.FuseTime = 10;
             Timing.CallDelayed(1.5f, () =>
@@ -76,5 +73,34 @@ namespace KE.CustomRoles.Abilities
         }
 
 
+
+        private bool CheckValid(Player player, bool showMessage)
+        {
+            if (!SetPosition.TryGetTarget(player, out Vector3 target))
+            {
+                if (showMessage)
+                {
+                    ShowEffectHint(player, SetPosition.TranslationNoTarget);
+                }
+                return false;
+            }
+
+            Physics.Linecast(target, target + height * Vector3.up, out RaycastHit hit);
+            if (hit.collider != null)
+            {
+                if (showMessage)
+                {
+                    ShowEffectHint(player, TranslationSomethingHere);
+                }
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool CheckCondition(Player player)
+        {
+            return CheckValid(player, false);
+        }
     }
 }

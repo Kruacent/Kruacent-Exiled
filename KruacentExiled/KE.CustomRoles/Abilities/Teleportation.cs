@@ -22,7 +22,6 @@ namespace KE.CustomRoles.Abilities
                 {
                     [TranslationKeyName] = "Teleportation",
                     [TranslationKeyDesc] = $"You lose {Damage} HP per teleportation, can't be used in lifts",
-                    ["TeleportationNoTarget"] = "No target selected",
                     ["TeleportationLift"] = "can't teleport in lifts",
                     ["TeleportationLcz"] = "The target is inaccessible",
                     ["TeleportationDifferentZone"] = "The target is inaccessible",
@@ -31,7 +30,6 @@ namespace KE.CustomRoles.Abilities
                 {
                     [TranslationKeyName] = "Téléportation",
                     [TranslationKeyDesc] = $"Tu perds {Damage} HP/téléportation, ne peux pas être utilisé dans les ascenseurs",
-                    ["TeleportationNoTarget"] = "Pas de position mise",
                     ["TeleportationLift"] = "Impossible de se téléporter dans un ascenseur",
                     ["TeleportationLcz"] = "Position inaccessible",
                     ["TeleportationDifferentZone"] = "Position inaccessible",
@@ -75,7 +73,7 @@ namespace KE.CustomRoles.Abilities
             {
                 if (showMessage)
                 {
-                    ShowEffectHint(player, "TeleportationNoTarget");
+                    ShowEffectHint(player, SetPosition.TranslationNoTarget);
                 }
                 
                 return false;

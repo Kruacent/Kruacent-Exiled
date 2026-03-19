@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
 using HintServiceMeow.Core.Enum;
 using KE.CustomRoles.API.Features;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
@@ -14,7 +15,7 @@ namespace KE.CustomRoles.API.HintPositions
     {
 
 
-        public const float BaseYPosition = 800;
+        public const float BaseYPosition = 900;
         public const float Increments = -50;
         private float yposition = BaseYPosition;
         public override float Xposition => -300;
@@ -26,20 +27,19 @@ namespace KE.CustomRoles.API.HintPositions
 
         private static List<AbilitiesPosition> nonalloc = new(KEAbilities.InitialAbilitySlot);
 
-
+        
         public static AbilitiesPosition GetIndex(int index)
         {
             if (!nonalloc.TryGet(index, out AbilitiesPosition position))
             {
                 position = new AbilitiesPosition()
                 {
-                    yposition = BaseYPosition + index * 50,
+                    yposition = BaseYPosition - index * 50,
                     index = index
                 };
             }
             Log.Debug($"get index {index} y pos=" + position.Yposition);
             return position;
-
         }
 
         public override HintAlignment HintAlignment => HintAlignment.Left;

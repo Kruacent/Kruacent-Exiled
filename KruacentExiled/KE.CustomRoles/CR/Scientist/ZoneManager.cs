@@ -58,19 +58,25 @@ namespace KE.CustomRoles.CR.Scientist
             }
         };
 
+
+        public override HashSet<string> Abilities { get; } = 
+        [
+            "NumberCheckpoints"
+        ];
+
         public override List<string> Inventory { get; set; } = new List<string>()
         {
             $"{ItemType.Medkit}",
             $"{ItemType.Adrenaline}",
             $"{ItemType.KeycardZoneManager}"
         };
-        public static readonly List<DoorType> DoorToOpen = new()
+        public static readonly IReadOnlyCollection<DoorType> DoorToOpen = new List<DoorType>()
         {
             DoorType.CheckpointLczA,
             DoorType.CheckpointLczB,
             DoorType.CheckpointEzHczA,
             DoorType.CheckpointEzHczB
-        };
+        }.AsReadOnly();
 
 
         private static Dictionary<Player, HashSet<DoorType>> objectives = new();
@@ -101,6 +107,16 @@ namespace KE.CustomRoles.CR.Scientist
         }
 
 
+        public static int GetNumberCheckpoints(Player player)
+        {
+            if (!objectives.ContainsKey(player))
+            {
+                return -1;
+            }
+
+            return objectives[player].Count;
+        }
+
         private void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
             Player player = ev.Player;
@@ -109,14 +125,21 @@ namespace KE.CustomRoles.CR.Scientist
 
             if (CheckDoors(player))
             {
-                bool equipped = player.CurrentItem.Type == ItemType.KeycardFacilityManager;
-                Item zoneKeycard = player.Items.Where(p => p.Type == ItemType.KeycardFacilityManager).ElementAtOrDefault(0);
-                if (zoneKeycard != null)
+                KEAbilities.Remove("NumberCheckpoints", player);
+                bool equipped;
+
+                if(player.CurrentItem != null)
                 {
-                    zoneKeycard.Destroy();
+                    equipped = player.CurrentItem.Type == ItemType.KeycardZoneManager;
+                }
+                else
+                {
+                    equipped = false;
                 }
 
-                player.AddItem(ItemType.Radio);
+                Item zoneKeycard = player.Items.Where(p => p.Type == ItemType.KeycardZoneManager).ElementAtOrDefault(0);
+                zoneKeycard?.Destroy();
+
                 flag[player] = true;
                 Item engineerKeycard = player.AddItem(ItemType.KeycardFacilityManager);
                 if (equipped)

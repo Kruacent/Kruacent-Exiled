@@ -187,13 +187,27 @@ namespace KE.CustomRoles.API.Features
             StringBuilder sb = StringBuilderPool.Pool.Get();
 
             sb.Append("<b>");
-            sb.Append(GetTranslation(player, TranslationKeyName));
-            sb.Append("</b>");
-            sb.AppendLine();
-            sb.Append(GetTranslation(player, TranslationKeyDesc));
 
-            
+            if(this is IDynamicName dynamicName)
+            {
+                dynamicName.GetName(sb, player);
+            }
+            else
+            {
+                sb.Append(GetTranslation(player, TranslationKeyName));
+            }
 
+            sb.AppendLine("</b>");
+
+
+            if(this is IDynamicDescription dynamicDescription)
+            {
+                dynamicDescription.GetDescription(sb, player);
+            }
+            else
+            {
+                sb.Append(GetTranslation(player, TranslationKeyDesc));
+            }
 
             DisplayHandler.Instance.AddHint(MainPlugin.AbilitiesDesc, player, sb.ToString(), time);
             StringBuilderPool.Pool.Return(sb);
@@ -375,6 +389,17 @@ namespace KE.CustomRoles.API.Features
             
         }
 
+        public static void Remove(string name,Player player)
+        {
+            KEAbilities abilities = Get(name);
+
+            if(abilities != null)
+            {
+                abilities.RemoveAbility(player);
+            }
+
+        }
+
         public static void TryRemoveFromPlayer(Player player)
         {
             RemoveAllSelect(player);
@@ -487,8 +512,8 @@ namespace KE.CustomRoles.API.Features
                     return kEAbilities;
                 }
             }
-
-            return null;
+            
+                return null;
         }
 
         public static bool TryGet(string name, out KEAbilities ability)
@@ -524,7 +549,7 @@ namespace KE.CustomRoles.API.Features
 
 
         
-        protected void GuiReady(StringBuilder sb, Player player)
+        protected virtual void GuiReady(StringBuilder sb, Player player)
         {
 
             if (CanUse(player, out var output))
@@ -557,7 +582,16 @@ namespace KE.CustomRoles.API.Features
 
         protected void GuiAbilityName(StringBuilder sb, Player player)
         {
-            sb.Append(GetTranslation(player, TranslationKeyName));
+            if(this is IDynamicName dynamic)
+            {
+                dynamic.GetName(sb, player);
+            }
+            else
+            {
+                sb.Append(GetTranslation(player, TranslationKeyName));
+            }
+
+            
             sb.Append(" ");
         }
 
