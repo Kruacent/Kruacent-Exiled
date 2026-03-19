@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Pools;
+using Exiled.API.Features.Roles;
 using Exiled.API.Features.Spawn;
 using Exiled.API.Features.Toys;
 using Exiled.API.Structs;
@@ -286,6 +287,11 @@ namespace KE.Items.Items
                         if (!target.IsAlive || target.IsNoclipPermitted) continue;
                         if (owner != null && target.Role.Side == owner.Role.Side) continue;
                         
+                        if(target.Role is Scp106Role scp106 && !scp106.CanActivateTesla)
+                        {
+                            continue;
+                        }
+
 
                         if (Vector3.Distance(sensor.Position, target.Position) < 3.5f)
                         {
