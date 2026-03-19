@@ -114,24 +114,24 @@ namespace KE.Map.Surface.ElevatorGateA
 
         public static void Destroy()
         {
-            if(prim != null)
+            if(CheckPrimitive(prim))
             {
                 model.SendingElevator -= SendingElevator;
                 model.Destroy(prim.Transform);
                 prim = null;
             }
 
-            if(step != null)
+            if(CheckPrimitive(step))
             {
                 step.Destroy();
                 step = null;
             }
-            if (help != null)
+            if (CheckPrimitive(help))
             {
                 help.Destroy();
                 help = null;
             }
-            if (helpPlatform != null)
+            if (CheckPrimitive(helpPlatform))
             {
                 helpPlatform.Destroy();
                 helpPlatform = null;
@@ -139,7 +139,7 @@ namespace KE.Map.Surface.ElevatorGateA
 
 
 
-            if (primbottom != null)
+            if (CheckPrimitive(primbottom))
             {
                 
                 bottompanel.SendingElevator -= SendingElevator;
@@ -147,13 +147,18 @@ namespace KE.Map.Surface.ElevatorGateA
                 primbottom = null;
             }
 
-            if(primtop != null)
+            if(CheckPrimitive(primtop))
             {
                 toppanel.SendingElevator -= SendingElevator;
                 toppanel.Destroy(primtop.Transform);
-
+                
                 primtop = null;
             }
+        }
+
+        private static bool CheckPrimitive(Primitive primitive)
+        {
+            return primitive != null && primitive.Base != null && primitive.GameObject != null;
         }
 
         public static void Send()

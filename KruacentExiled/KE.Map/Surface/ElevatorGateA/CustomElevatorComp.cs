@@ -61,7 +61,7 @@ namespace KE.Map.Surface.ElevatorGateA
         }
         private Vector3 startPos;
         private Vector3 endPos;
-        private float sendInterval = 1f / 20f;
+        private float sendInterval = 1f / 240f;
         private float sendTimer = 0f;
         public void Update()
         {
