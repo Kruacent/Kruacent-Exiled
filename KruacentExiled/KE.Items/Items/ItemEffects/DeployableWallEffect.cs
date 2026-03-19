@@ -36,7 +36,7 @@ namespace KE.Items.Items.ItemEffects
 
 
             Primitive wall = Primitive.Create(PrimitiveType.Cube, spawnPos, rotat, new Vector3(4, 4, 0.2f), true);
-            Utils.API.Sounds.SoundPlayer.Instance.Play("lego", wall.GameObject, 10f, 40);
+            KE.Utils.API.Sounds.SoundPlayer.Instance.Play("lego", wall.GameObject, 10f, 40);
             wall.Collidable = true;
             wall.Visible = true;
             Timing.CallDelayed(10, () =>

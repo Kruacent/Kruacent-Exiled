@@ -80,7 +80,7 @@ namespace KE.Items.Items
 
         protected override void OnThrownProjectile(ThrownProjectileEventArgs ev)
         {
-            Utils.API.Sounds.SoundPlayer.Instance.Play("worms", ev.Projectile.Position, 50,20f);
+            KE.Utils.API.Sounds.SoundPlayer.Instance.Play("worms", ev.Projectile.Position, 50,20f);
         }
         protected override void OnExplodingGrenade(ExplodingGrenadeEventArgs ev)
         {

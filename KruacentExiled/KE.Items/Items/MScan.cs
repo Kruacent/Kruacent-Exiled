@@ -1,16 +1,21 @@
-﻿using Exiled.API.Enums;
+﻿using AdminToys;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Pools;
 using Exiled.API.Features.Spawn;
+using Exiled.API.Features.Toys;
+using Exiled.API.Structs;
 using Exiled.CustomItems.API.Features;
+using Exiled.CustomRoles.Commands;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp049;
 using Exiled.Events.EventArgs.Scp096;
 using Exiled.Events.EventArgs.Scp106;
 using Exiled.Events.EventArgs.Scp939;
 using KE.Items.API.Features;
+using KE.Items.Utils;
 using MEC;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,7 +40,7 @@ namespace KE.Items.Items
                 {
                     [TranslationKeyName] = "M-Scan",
                     [TranslationKeyDesc] = "Detect movement",
-                    [Deploy] = $"<color=#00ff00>MSCAN DEPLOYED</color>\nBattery: {TimeUp} seconds",
+                    [Deploy] = $"<color=#00ff00>MSCAN DEPLOYED</color> Battery: {TimeUp} seconds",
                     [PickUp] = "M-Scan picked up",
                     [TranslationDestroy] = "<color=red>M-SCAN DESTROYED</color>",
                     [NoBattery] = "<color=yellow>M-Scan : No battery left</color>",
@@ -45,7 +50,7 @@ namespace KE.Items.Items
                 {
                     [TranslationKeyName] = "M-Scan",
                     [TranslationKeyDesc] = "Détecte les mouvements des personnes passant devant",
-                    [Deploy] = $"<color=#00ff00>SCANNER DÉPLOYÉ</color>\nBatterie: {TimeUp} secondes",
+                    [Deploy] = $"<color=#00ff00>SCANNER DÉPLOYÉ</color> Batterie: {TimeUp} secondes",
                     [PickUp] = "Scanner récupéré.",
                     [TranslationDestroy] = "<color=red>SCANNER DÉTRUIT</color>",
                     [NoBattery] = "<color=yellow>Scanner: Batterie épuisée.</color>",
@@ -84,6 +89,7 @@ namespace KE.Items.Items
         private Dictionary<Pickup, float> Cooldowns = new Dictionary<Pickup, float>();
 
         private Dictionary<Pickup, float> BatteryLife = new Dictionary<Pickup, float>();
+        private Dictionary<Pickup, Primitive> Models = new();
 
         private CoroutineHandle SensorRoutine;
 
@@ -153,21 +159,34 @@ namespace KE.Items.Items
             {
                 ActiveSensors.Add(pickup, player);
                 BatteryLife[pickup] = Time.time + TimeUp;
+                //Models[pickup] = CreateBaseModel(pickup);
 
-
-                TranslationHint(player, Deploy);
+                HintFeed.AddFeed(player, GetTranslation(player, Deploy));
             }
+        }
+
+        private Primitive CreateBaseModel(Pickup pickup)
+        {
+            Primitive primitive = Primitive.Create(null, null, null, false);
+            primitive.Transform.localPosition = pickup.Position;
+            primitive.Transform.localRotation = Quaternion.identity;
+            primitive.Transform.localScale = Vector3.one;
+            primitive.MovementSmoothing = 0;
+            primitive.Flags = PrimitiveFlags.None;
+            primitive.Spawn();
+            return primitive;
         }
 
         protected override void OnPickingUp(PickingUpItemEventArgs ev)
         {
             Player player = ev.Player;
+            Pickup pickup = ev.Pickup;
 
-            if (ActiveSensors.ContainsKey(ev.Pickup))
+            if (ActiveSensors.ContainsKey(pickup))
             {
-                ActiveSensors.Remove(ev.Pickup);
-                BatteryLife.Remove(ev.Pickup);
-                TranslationHint(player, PickUp);
+                
+                Remove(pickup);
+                HintFeed.AddFeed(player, GetTranslation(player, PickUp));
             }
         }
 
@@ -191,15 +210,14 @@ namespace KE.Items.Items
                     toDestroy.Add(sensor);
                     if (owner != null)
                     {
-                        TranslationHint(owner, TranslationDestroy);
+                        HintFeed.AddFeed(owner, GetTranslation(owner, TranslationDestroy));
                     }
                 }
             }
 
             foreach (Pickup pickup in toDestroy)
             {
-                ActiveSensors.Remove(pickup);
-                BatteryLife.Remove(pickup);
+                Remove(pickup);
                 Cooldowns.Remove(pickup);
                 pickup.Destroy();
             }
@@ -207,6 +225,12 @@ namespace KE.Items.Items
             ListPool<Pickup>.Pool.Return(toDestroy);
         }
 
+        private void Remove(Pickup pickup)
+        {
+            ActiveSensors.Remove(pickup);
+            BatteryLife.Remove(pickup);
+            //Models[pickup].Destroy();
+        }
 
 
         private void CheckBattery()
@@ -220,7 +244,7 @@ namespace KE.Items.Items
                     Player player = ActiveSensors[key];
                     if (player != null)
                     {
-                        TranslationHint(player, NoBattery);
+                        HintFeed.AddFeed(player, GetTranslation(player, NoBattery));
                     }
                     invalid.Add(key);
                 }
@@ -272,7 +296,8 @@ namespace KE.Items.Items
                                 string color = target.Role.Color.ToHex();
 
                                 string msg = GetTranslation(owner, Detect).Replace("%Color%", color).Replace("%Name%", target.Role.Name);
-                                KECustomItem.ItemEffectHint(owner, msg);
+
+                                HintFeed.AddFeed(owner, msg);
                             }
 
                             break;

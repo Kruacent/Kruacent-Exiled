@@ -331,7 +331,7 @@ namespace KE.Items.API.Features
 #pragma warning restore CS0672
         public static void RegisterItems(Assembly assembly = null)
         {
-            IEnumerable<KECustomItem> items = Utils.API.ReflectionHelper.GetObjects<KECustomItem>(assembly);
+            IEnumerable<KECustomItem> items = KE.Utils.API.ReflectionHelper.GetObjects<KECustomItem>(assembly);
 
             foreach(KECustomItem customItem in items)
             {

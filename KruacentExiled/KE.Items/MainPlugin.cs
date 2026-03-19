@@ -52,7 +52,7 @@ namespace KE.Items
             SettingsHandler = new();
 
 
-            Utils.API.Sounds.SoundPlayer.Load();
+            KE.Utils.API.Sounds.SoundPlayer.Load();
             PoseRoomSpawnPointHandler.AddRoomPoses(new()
             {
                 new(RoomType.Lcz914,new Vector3(0,0.70f,-7.14f),Quaternion.identity),

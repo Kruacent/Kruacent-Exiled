@@ -5,7 +5,7 @@ using System;
 namespace KE.Items.Commands
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    internal class KECustomItems : Utils.API.Commands.KEParentCommand
+    internal class KECustomItems : KE.Utils.API.Commands.KEParentCommand
     {
         public override string Command => "keci";
 
