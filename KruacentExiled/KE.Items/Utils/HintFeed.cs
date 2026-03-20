@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 using Exiled.API.Interfaces;
 using HintServiceMeow.Core.Extension;
 using HintServiceMeow.Core.Models.Hints;
@@ -22,7 +23,7 @@ namespace KE.Items.Utils
 
         private readonly List<Feed> _feeds;
         private Player Player { get; }
-        public static float Duration { get; set; } = 20;
+        public static float Duration { get; set; } = 10;
 
         private HintFeed(Player player)
         {
@@ -73,16 +74,29 @@ namespace KE.Items.Utils
                     KELog.Debug(fe.RawHint);
                     KELog.Debug("at "+i);
 
-                    DisplayHandler.Instance.AddHint(placement, Player, fe.RawHint, 999);
+                    DisplayHandler.Instance.CreateAuto(Player, (args) => GetUpdate(fe), placement, HintServiceMeow.Core.Enum.HintSyncSpeed.Normal);
                 }
                 else
                 {
+                    KELog.Debug("removing feed at " + i);
                     DisplayHandler.Instance.RemoveHint(Player, placement);
                 }
                     
             }
         }
 
+        private string GetUpdate(Feed feed)
+        {
+            StringBuilder sb = StringBuilderPool.Pool.Get();
+
+            sb.Append(Math.Truncate(DateTime.Now.Subtract(feed.TimeCreated).TotalSeconds));
+
+            sb.Append("s ago - ");
+            sb.Append(feed.RawHint);
+
+
+            return StringBuilderPool.Pool.ToStringReturn(sb);
+        }
         
 
 

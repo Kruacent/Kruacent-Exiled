@@ -11,10 +11,12 @@ namespace KE.Items.Utils
 
         public string RawHint { get; }
 
+        public DateTime TimeCreated { get; }
 
         public Feed(string msg)
         {
             RawHint = msg;
+            TimeCreated = DateTime.Now;
         }
     }
 }
