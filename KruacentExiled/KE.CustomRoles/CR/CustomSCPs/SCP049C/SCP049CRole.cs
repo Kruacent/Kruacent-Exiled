@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Extensions;
+using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp049;
 using KE.CustomRoles.API.Features;
@@ -64,7 +65,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
             }
 
 
-
+            player.Position = RoleTypeId.Scp939.GetRandomSpawnLocation().Position;
             base.RoleAdded(player);
         }
 

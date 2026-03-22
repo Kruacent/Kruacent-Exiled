@@ -186,7 +186,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
             DisplayHandler.Instance.RemoveHint(player, position.HintPlacement);
             DisplayHandler.Instance.RemoveHint(player, logoposition.HintPlacement);
 
-
+            player.DisableEffect<NightVision>();
             base.RoleRemoved(player);
         }
 
