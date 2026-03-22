@@ -1,4 +1,7 @@
-﻿namespace KE.Misc.Handlers
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
+
+namespace KE.Misc.Handlers
 {
     internal class ServerHandler
     {
@@ -9,7 +12,8 @@
 
             MainPlugin.Instance.AutoTesla.StartLoop();
             MainPlugin.Instance.SCPBuff.StartBuff();
-
+            Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
+            Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
 
             /*
             string test = "test.png";

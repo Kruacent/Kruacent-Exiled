@@ -14,6 +14,7 @@ using KE.Misc.Features.LastHuman;
 using KE.Utils.API.Settings.GlobalSettings;
 using KE.Utils.API.Translations;
 using KE.Misc.Features.PostNuke;
+using Exiled.Events.EventArgs.Server;
 
 namespace KE.Misc
 {
@@ -68,14 +69,14 @@ namespace KE.Misc
 
 
             //SpawnLcz = new();
-            Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
-            Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
+            
             GlobalSettingsHandler.Instance.TryLoad();
             GlobalSettingsHandler.Instance.SubscribeEvents();
             RegisterTranslations();
 
             harmony.PatchAll(Assembly);
             ClassDDoor.SubscribeEvents();
+            ServerHandle.RoundEnded += OnRoundEnded;
             MiscFeature.SubscribeAllEvents();
             AutoNukeAnnoucement.SubscribeEvents();
             if (Config.GamblingCoin)
@@ -96,6 +97,7 @@ namespace KE.Misc
         public override void OnDisabled()
         {
             ServerHandle.RoundStarted -= ServerHandler.OnRoundStarted;
+            ServerHandle.RoundEnded -= OnRoundEnded;
             LabApi.Events.Handlers.ServerEvents.CassieQueuingScpTermination -= NoeDeath;
             AutoNukeAnnoucement.UnsubscribeEvents();
             LastHuman.UnsubscribeEvents();
@@ -131,6 +133,10 @@ namespace KE.Misc
             Instance = null;
         }       
         
+        private void OnRoundEnded(Exiled.Events.EventArgs.Server.RoundEndedEventArgs ev)
+        {
+            Server.FriendlyFire = true;
+        }
 
         private void NoeDeath(CassieQueuingScpTerminationEventArgs ev)
         {
