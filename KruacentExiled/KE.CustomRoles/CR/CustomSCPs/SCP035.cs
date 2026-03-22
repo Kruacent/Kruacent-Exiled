@@ -22,6 +22,7 @@ using PlayerRoles.FirstPersonControl.Thirdperson;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 using VoiceChat.Networking;
 
 namespace KE.CustomRoles.CR.CustomSCPs
@@ -117,6 +118,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
             base.UnsubscribeEvents();
         }
         private static HintPosition position = new RemainingPlayerPosition();
+        private static HintPosition logoposition = new LogoPosition();
         private void OnDying(DyingEventArgs ev)
         {
             if (!Check(ev.Player)) return;
@@ -168,6 +170,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
         {
             PlayerDisplay dis = PlayerDisplay.Get(player);
             DisplayHandler.Instance.CreateAuto(player, (args) => GetPlayers(args), position.HintPlacement,HintServiceMeow.Core.Enum.HintSyncSpeed.Normal);
+            DisplayHandler.Instance.CreateAuto(player, (args) => GetLogo(args), logoposition.HintPlacement,HintServiceMeow.Core.Enum.HintSyncSpeed.Normal);
 
 
 
@@ -176,6 +179,15 @@ namespace KE.CustomRoles.CR.CustomSCPs
             player.Position = RoleTypeId.Scp049.GetRandomSpawnLocation().Position;
             player.EnableEffect<NightVision>(100, 0, false);
             base.RoleAdded(player);
+        }
+
+        protected override void RoleRemoved(Player player)
+        {
+            DisplayHandler.Instance.RemoveHint(player, position.HintPlacement);
+            DisplayHandler.Instance.RemoveHint(player, logoposition.HintPlacement);
+
+
+            base.RoleRemoved(player);
         }
 
 
@@ -187,8 +199,16 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
             if (!Check(Player.Get(arg.PlayerDisplay.ReferenceHub))) 
                 return string.Empty;
-            return "<size=50><b>👤" + RoundSummary.singleton.TargetCount.ToString() + "</b></size>";
+            return "<size=50><b>" + Mathf.Clamp(RoundSummary.singleton.TargetCount,0,9).ToString() + "</b></size>";
+            //<size=50><b>👤8</b></size>
+        }
 
+        private string GetLogo(AutoContentUpdateArg arg)
+        {
+
+            if (!Check(Player.Get(arg.PlayerDisplay.ReferenceHub)))
+                return string.Empty;
+            return "<size=50><b>👤</b></size>";
         }
 
 

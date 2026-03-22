@@ -16,4 +16,13 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
         public override HintAlignment HintAlignment => HintAlignment.Center;
     }
+
+    public class LogoPosition : HintPosition
+    {
+        public override float Xposition => 1700;
+
+        public override float Yposition => 60;
+
+        public override HintAlignment HintAlignment => HintAlignment.Center;
+    }
 }
