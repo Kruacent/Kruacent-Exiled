@@ -15,11 +15,14 @@ using KE.CustomRoles.API.Features;
 using KE.Items.API.Features;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
+using KE.Utils.API.Features.SCPs;
 using MEC;
 using PlayerRoles;
+using PlayerRoles.FirstPersonControl.Thirdperson;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using VoiceChat.Networking;
 
 namespace KE.CustomRoles.CR.CustomSCPs
 {
@@ -98,6 +101,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
             Exiled.Events.Handlers.Server.EndingRound += OnEndingRound;
             Exiled.Events.Handlers.Scp1509.Resurrecting += OnResurrecting;
             Exiled.Events.Handlers.Player.UsingItem += OnUsingItem;
+            Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
 
             base.SubscribeEvents();
         }
@@ -122,6 +126,44 @@ namespace KE.CustomRoles.CR.CustomSCPs
             
         }
 
+        private void OnVoiceChatting(VoiceChattingEventArgs ev)
+        {
+            Player player = ev.Player;
+
+            
+            VoiceMessage msg = ev.VoiceMessage;
+
+            if(msg.Channel == VoiceChat.VoiceChatChannel.ScpChat)
+            {
+                msg.Channel = VoiceChat.VoiceChatChannel.RoundSummary;
+
+                foreach (Player scp035 in Player.List)
+                {
+                    if (scp035 != player && Check(scp035))
+                    {
+                        scp035.Connection.Send(msg);
+                    }
+                }
+            }
+
+
+
+            if (Check(player))
+            {
+                msg.Channel = VoiceChat.VoiceChatChannel.RoundSummary;
+
+                foreach (ReferenceHub hub in SCPTeam.SCPs)
+                {
+                    if (hub != player.ReferenceHub)
+                    {
+                        hub.connectionToClient.Send(msg);
+                    }
+                    
+                }
+                ev.IsAllowed = false;
+            }
+        }
+
         protected override void RoleAdded(Player player)
         {
             PlayerDisplay dis = PlayerDisplay.Get(player);
@@ -134,8 +176,10 @@ namespace KE.CustomRoles.CR.CustomSCPs
             player.Position = RoleTypeId.Scp049.GetRandomSpawnLocation().Position;
             player.EnableEffect<NightVision>(100, 0, false);
             base.RoleAdded(player);
-            KECustomItem.TrySpawn(5982, player.Position, out _);
         }
+
+
+        
 
 
         private string GetPlayers(AutoContentUpdateArg arg)
@@ -143,7 +187,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
             if (!Check(Player.Get(arg.PlayerDisplay.ReferenceHub))) 
                 return string.Empty;
-            return "<size=50><b>" +RoundSummary.singleton.TargetCount.ToString() + "</b></size>";
+            return "<size=50><b>👤" + RoundSummary.singleton.TargetCount.ToString() + "</b></size>";
 
         }
 
