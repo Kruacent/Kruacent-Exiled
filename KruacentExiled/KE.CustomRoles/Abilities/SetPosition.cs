@@ -73,10 +73,15 @@ namespace KE.CustomRoles.Abilities
             }
         }
 
-        protected override void AbilityRemoved(Player player)
+        private void RemovePosition(Player player)
         {
             SelectedTarget.Remove(player);
             TryDestroyFollowingTextToy(player);
+        }
+
+        protected override void AbilityRemoved(Player player)
+        {
+            RemovePosition(player);
             base.AbilityRemoved(player);
         }
 
