@@ -141,6 +141,12 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
             //double result = ((-1) * Math.Pow(x, 2)) + (6*x)-1;
 
             //return (int)Math.Ceiling(result);
+
+            if(tier == 2)
+            {
+                return 4;
+            }
+
             return 2;
 
         }
