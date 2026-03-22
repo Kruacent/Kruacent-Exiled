@@ -1,18 +1,12 @@
-﻿using Exiled.API.Enums;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
+using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
-using KE.CustomRoles.Abilities.RedMist;
+using Exiled.Events.EventArgs.Scp1509;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
-using KE.CustomRoles.CR.CustomSCPs.SCP049C;
-using KE.Items.API.Features;
-using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace KE.CustomRoles.CR.MTF.RedMist
@@ -55,9 +49,8 @@ namespace KE.CustomRoles.CR.MTF.RedMist
         //If you let people on your team die you get weaker, you are a protector afterall.
 
         //faster, 200hp, machete mais 200 hp de dégats (75 pour les humains)
-        //+shield belt
         //+ego : quick heal drain pause when attacking, 80 damage reduction faster
-        //forward slash : remove 25hp max to a min of 25hp, damage everything on its path max distance of a room
+        //forward slash :  damage everything on its path max distance of a room
 
         public override HashSet<string> Abilities { get; } =
         [
@@ -71,10 +64,10 @@ namespace KE.CustomRoles.CR.MTF.RedMist
         {
             try
             {
-                //KECustomItem shieldbelt = KECustomItem.Get("Shield belt");
-                //shieldbelt?.Give(player, false);
 
-                player.AddItem(ItemType.SCP1509);
+                //ci
+                Item i = player.AddItem(ItemType.SCP1509);
+                
             }
             catch (Exception e)
             {
@@ -108,6 +101,7 @@ namespace KE.CustomRoles.CR.MTF.RedMist
         protected override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
+            Exiled.Events.Handlers.Scp1509.Resurrecting += OnResurrecting;
             base.SubscribeEvents();
         }
 
@@ -115,6 +109,14 @@ namespace KE.CustomRoles.CR.MTF.RedMist
         {
             Exiled.Events.Handlers.Player.Hurt -= OnHurt;
             base.UnsubscribeEvents();
+        }
+
+        private void OnResurrecting(ResurrectingEventArgs ev)
+        {
+            Player player = ev.Player;
+            if (!Check(player)) return;
+
+            ev.IsAllowed = false;
         }
 
         private void OnHurt(HurtEventArgs ev)

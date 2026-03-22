@@ -293,7 +293,7 @@ namespace KE.CustomRoles.API.Features
             return this.playerWithActiveAbility.Contains(player);
         }
 
-        public bool Check(Player player)
+        public virtual bool Check(Player player)
         {
             if(player is not null)
             {

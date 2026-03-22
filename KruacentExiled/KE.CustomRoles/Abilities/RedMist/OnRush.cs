@@ -1,9 +1,7 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.DamageHandlers;
-using Exiled.API.Interfaces;
 using InventorySystem.Items.MicroHID.Modules;
-using KE.CustomRoles.API.Features;
 using KE.CustomRoles.CR.MTF.RedMist;
 using KE.Utils.API.Features;
 using PlayerRoles;
@@ -152,8 +150,8 @@ namespace KE.CustomRoles.Abilities.RedMist
         }
 
 
-        private static bool Debug = false;
-        private bool Linecast(Vector3 start,Vector3 end,out RaycastHit hit,int layerMask)
+        private static bool Debug => MainPlugin.Configs.Debug;
+        public static bool Linecast(Vector3 start,Vector3 end,out RaycastHit hit,int layerMask)
         {
             if (Debug)
             {
@@ -166,7 +164,7 @@ namespace KE.CustomRoles.Abilities.RedMist
 
         }
 
-        private void DrawSphere(Vector3 position, float size,Color color)
+        public static void DrawSphere(Vector3 position, float size,Color color)
         {
             if (Debug)
             {

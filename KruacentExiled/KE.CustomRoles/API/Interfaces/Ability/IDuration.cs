@@ -9,7 +9,7 @@ namespace KE.CustomRoles.API.Interfaces.Ability
 {
     internal interface IDuration
     {
-        float Duration { get; set; }
+        float Duration { get; }
         void ActionAfterAbility(Player player);
     }
 }

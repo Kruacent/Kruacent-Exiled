@@ -17,6 +17,7 @@ namespace KE.CustomRoles.Abilities.RedMist
     public abstract class EgoAbility : NeedCompAbility<EGO>, IConditional
     {
 
+        
         protected sealed override bool AddCompIfMissing => false;
         protected abstract NeedActive NeedEGOActive { get; }
 

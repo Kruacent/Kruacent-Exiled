@@ -34,8 +34,8 @@ namespace KE.CustomRoles.Abilities
         }
 
         public Utils.API.GifAnimator.TextImage IconName => MainPlugin.Instance.icons[Name];
-        public override float Cooldown { get; } = 60f;
-        public float Duration { get; set; } = 10f;
+        public override float Cooldown => 60f;
+        public float Duration => 10f;
 
         private Ragdoll ragdoll;
         private Vector3 pScale;
