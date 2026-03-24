@@ -1,17 +1,13 @@
 ﻿using CommandSystem;
 using Exiled.API.Features;
-using KE.Items.Utils;
+using KE.Utils.API.Displays.Feeds;
 using MEC;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KE.Items.Commands
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    internal class ForceAddFeed : KE.Utils.API.Commands.KECommand
+    internal class ForceAddFeed : Utils.API.Commands.KECommand
     {
         public override string Command => "forceaddfeed";
 
