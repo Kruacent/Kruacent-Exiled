@@ -152,10 +152,8 @@ namespace KE.CustomRoles.Abilities
 
                 if (ToDestroy)
                 {
-                    string msg = SetPosition.GetTranslation(Player, SetPosition.TranslationTooFar);
 
-                    Items.Utils.HintFeed.AddFeed(Player, msg);
-
+                    TranslationFeed(Player, SetPosition.TranslationTooFar);
                     KELog.Debug($"SetPosition ({Position}) destroyed : too far");
                     Destroy();
                 }

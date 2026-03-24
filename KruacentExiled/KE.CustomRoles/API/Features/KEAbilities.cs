@@ -12,6 +12,7 @@ using KE.CustomRoles.Settings;
 using KE.Utils.API;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
+using KE.Utils.API.Displays.Feeds;
 using KE.Utils.API.Features;
 using KE.Utils.API.Translations;
 using MEC;
@@ -129,6 +130,12 @@ namespace KE.CustomRoles.API.Features
         {
             delay = MainPlugin.SettingHandler.GetTime(player);
             DisplayHandler.Instance.AddHint(MainPlugin.CREffect, player, text, delay);
+        }
+
+
+        public static void TranslationFeed(Player player, string key)
+        {
+            HintFeed.AddFeed(player, GetTranslation(player, key));
         }
         public void Destroy()
         {
