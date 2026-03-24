@@ -85,7 +85,7 @@ namespace KE.CustomRoles.API.Features
             activated = true;
         }
 
-        public void Init()
+        public virtual void Init()
         {
             if (NameToAbility.ContainsKey(Name))
             {
