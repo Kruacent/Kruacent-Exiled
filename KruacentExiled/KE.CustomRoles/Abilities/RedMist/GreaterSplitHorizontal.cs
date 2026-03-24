@@ -156,6 +156,24 @@ namespace KE.CustomRoles.Abilities.RedMist
 
             DrawSphere(position, .1f, Color.cyan);
 
+            float rad = halfAngle * Mathf.Deg2Rad;
+
+            Vector2 leftDir = new Vector2(
+                dir.x * Mathf.Cos(rad) - dir.y * Mathf.Sin(rad),
+                dir.x * Mathf.Sin(rad) + dir.y * Mathf.Cos(rad)
+            );
+
+            Vector2 rightDir = new Vector2(
+                dir.x * Mathf.Cos(-rad) - dir.y * Mathf.Sin(-rad),
+                dir.x * Mathf.Sin(-rad) + dir.y * Mathf.Cos(-rad)
+            );
+
+            Vector3 leftPoint = center + new Vector3(leftDir.x, 0, leftDir.y) * Size;
+            Vector3 rightPoint = center + new Vector3(rightDir.x, 0, rightDir.y) * Size;
+
+            DrawSphere(leftPoint, 0.2f, Color.green);
+            DrawSphere(rightPoint, 0.2f, Color.red);
+
             return Vector2.Dot(dir, pointDir) >= cosThreshold;
         }
         
@@ -227,29 +245,31 @@ namespace KE.CustomRoles.Abilities.RedMist
 
             private void LaunchedAttack(float remainingTime)
             {
-
+                
+                if (player == null || player.GameObject == null) return;
                 KELog.Debug("remainign time=" + remainingTime);
 
-                Vector3 feetposition = player.Position - (Vector3.up * player.Scale.y) / 2 + player.CameraTransform.forward * .1f;
+                Vector3 feetposition = player.Position - (Vector3.up * player.Scale.y) / 2 + player.Transform.forward * .1f;
 
-
-                Vector3 direction = player.CameraTransform.forward;
-
+                
+                Vector3 direction = player.Transform.forward;
+                
                 direction = direction.NormalizeIgnoreY();
 
-                DrawSphere(feetposition, Size, Color.yellow);
+                //DrawSphere(feetposition, Size, Color.yellow);
 
-
+                
 
                 int detect = Physics.OverlapSphereNonAlloc(feetposition, Size, NonAlloc, HitregUtils.DetectionMask);
                 KELog.Debug("detect=" + detect);
 
+                /*
                 Collider collider;
                 for (int i = 0; i < detect; i++)
                 {
                     collider = NonAlloc[i];
 
-                    if(collider == null)
+                    if (collider == null || collider.gameObject == null)
                     {
                         continue;
                     }
@@ -273,16 +293,17 @@ namespace KE.CustomRoles.Abilities.RedMist
                                         
                     Player target = Player.Get(collider);
 
-                    if (target != player)
-                    {
-                        DrawSphere(collider.transform.position, .2f, Color.red);
-                    }
+                    
 
                     if (target == null || target == player)
                     {
                         continue;
                     }
-                        
+
+                    if (target != player)
+                    {
+                        DrawSphere(collider.transform.position, .2f, Color.red);
+                    }
 
                     if (destructible is not null)
                     {
@@ -290,7 +311,7 @@ namespace KE.CustomRoles.Abilities.RedMist
                         destructible.Damage(Damage, handler, destructible.CenterOfMass);
                     }
                 }
-
+                */
             }
         }
 
