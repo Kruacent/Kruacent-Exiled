@@ -8,6 +8,7 @@ using Exiled.Events.EventArgs.Player;
 using KE.Items.API.Features.SpawnPoints;
 using KE.Items.API.Interface;
 using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Displays.Feeds;
 using KE.Utils.API.Translations;
 using PlayerRoles.SpawnData;
 using System;
@@ -101,6 +102,11 @@ namespace KE.Items.API.Features
         public static void TranslationHint(Player player,string key)
         {
             ItemEffectHint(player, GetTranslation(player, key));
+        }
+
+        public static void TranslationFeed(Player player,string key)
+        {
+            HintFeed.AddFeed(player, GetTranslation(player, key));
         }
 
         public override void Init()

@@ -157,7 +157,7 @@ namespace KE.Items.Items
                 BatteryLife[pickup] = Time.time + TimeUp;
                 //Models[pickup] = CreateBaseModel(pickup);
 
-                HintFeed.AddFeed(player, GetTranslation(player, Deploy));
+                TranslationFeed(player, Deploy);
             }
         }
 
@@ -182,7 +182,7 @@ namespace KE.Items.Items
             {
                 
                 Remove(pickup);
-                HintFeed.AddFeed(player, GetTranslation(player, PickUp));
+                TranslationFeed(player, PickUp);
             }
         }
 
@@ -206,7 +206,7 @@ namespace KE.Items.Items
                     toDestroy.Add(sensor);
                     if (owner != null)
                     {
-                        HintFeed.AddFeed(owner, GetTranslation(owner, TranslationDestroy));
+                        TranslationFeed(owner, TranslationDestroy);
                     }
                 }
             }
@@ -240,7 +240,7 @@ namespace KE.Items.Items
                     Player player = ActiveSensors[key];
                     if (player != null)
                     {
-                        HintFeed.AddFeed(player, GetTranslation(player, NoBattery));
+                        TranslationFeed(player, NoBattery);
                     }
                     invalid.Add(key);
                 }
