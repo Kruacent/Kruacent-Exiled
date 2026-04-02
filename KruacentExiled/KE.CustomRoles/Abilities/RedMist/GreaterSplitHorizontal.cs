@@ -1,10 +1,7 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.API.Features.DamageHandlers;
-using Exiled.Events.EventArgs.Item;
 using Exiled.Events.EventArgs.Scp1509;
 using InventorySystem.Items.MicroHID.Modules;
-using KE.CustomRoles.API.Interfaces.Ability;
 using KE.CustomRoles.CR.MTF.RedMist;
 using KE.Utils.API.Features;
 using MEC;
@@ -12,7 +9,6 @@ using PlayerRoles;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 namespace KE.CustomRoles.Abilities.RedMist
 {
     public class GreaterSplitHorizontal : EgoAbility
@@ -105,6 +101,7 @@ namespace KE.CustomRoles.Abilities.RedMist
             if (!Check(player)) return;
             if (player.GameObject.TryGetComponent<AttackGreaterSplit>(out var comp))
             {
+                ev.IsAllowed = false;
                 comp.OnTriggerAttack();
             }
 
@@ -116,13 +113,7 @@ namespace KE.CustomRoles.Abilities.RedMist
 
         protected override bool LaunchedAbility(Player player,EGO ego)
         {
-
-
-
             KELog.Debug("check weapopgn");
-            
-
-            
             if(player.CurrentItem is null || player.CurrentItem.Type != ItemType.SCP1509)
             {
                 ShowEffectHint(player, FailWeapon);
@@ -138,45 +129,56 @@ namespace KE.CustomRoles.Abilities.RedMist
 
             return true;
         }
-        private static bool CheckPoint(Vector3 point,Vector3 center, Vector3 direction)
+        private static bool CheckPoint(Vector3 point, Vector3 center, Vector3 direction)
         {
-
-
             Vector2 position = new Vector2(point.x - center.x, point.z - center.z);
 
-            float radius = position.magnitude;
+            float sqrMag = position.sqrMagnitude;
+
+            if (sqrMag <= 0.0001f)
+                return false;
+
+            float radius = Mathf.Sqrt(sqrMag);
             if (radius > Size)
                 return false;
 
-            Vector2 dir = new Vector2(direction.x, direction.z).normalized;
-            Vector2 pointDir = position.normalized;
-            float sectorAngle = 60f;
-            float halfAngle = sectorAngle * 0.5f;
+            Vector2 dir = new Vector2(direction.x, direction.z);
+
+            if (dir.sqrMagnitude <= 0.0001f)
+                return false;
+
+            dir /= Mathf.Sqrt(dir.sqrMagnitude); // safe normalize
+
+            Vector2 pointDir = position / radius; // safer than normalized
+
+            float halfAngle = 30f; // 60 / 2
             float cosThreshold = Mathf.Cos(halfAngle * Mathf.Deg2Rad);
 
-            DrawSphere(position, .1f, Color.cyan);
-
+            float dot = Vector2.Dot(dir, pointDir);
             float rad = halfAngle * Mathf.Deg2Rad;
 
-            Vector2 leftDir = new Vector2(
-                dir.x * Mathf.Cos(rad) - dir.y * Mathf.Sin(rad),
-                dir.x * Mathf.Sin(rad) + dir.y * Mathf.Cos(rad)
-            );
-
-            Vector2 rightDir = new Vector2(
-                dir.x * Mathf.Cos(-rad) - dir.y * Mathf.Sin(-rad),
-                dir.x * Mathf.Sin(-rad) + dir.y * Mathf.Cos(-rad)
-            );
+            Vector2 leftDir = new Vector2(dir.x * Mathf.Cos(rad) - dir.y * Mathf.Sin(rad), dir.x * Mathf.Sin(rad) + dir.y * Mathf.Cos(rad)); 
+            Vector2 rightDir = new Vector2(dir.x * Mathf.Cos(-rad) - dir.y * Mathf.Sin(-rad), dir.x * Mathf.Sin(-rad) + dir.y * Mathf.Cos(-rad));
 
             Vector3 leftPoint = center + new Vector3(leftDir.x, 0, leftDir.y) * Size;
             Vector3 rightPoint = center + new Vector3(rightDir.x, 0, rightDir.y) * Size;
+            KELog.Debug("center =" + center);
+            KELog.Debug("left =" + leftPoint);
+            KELog.Debug("rightPoint =" + rightPoint);
 
             DrawSphere(leftPoint, 0.2f, Color.green);
             DrawSphere(rightPoint, 0.2f, Color.red);
+            if (float.IsNaN(dot))
+            {
+                Log.Error("NaN detected in CheckPoint");
+                return false;
+            }
 
-            return Vector2.Dot(dir, pointDir) >= cosThreshold;
+            DrawSphere(center + new Vector3(position.x, 0, position.y), .1f, Color.cyan);
+
+            return dot >= cosThreshold;
         }
-        
+
         private static bool Linecast(Vector3 start, Vector3 end, out RaycastHit hit, int layerMask) => OnRush.Linecast(start, end, out hit, layerMask);
 
         private static void DrawSphere(Vector3 position, float size, Color color) => OnRush.DrawSphere(position, size, color);
@@ -186,7 +188,6 @@ namespace KE.CustomRoles.Abilities.RedMist
         private class AttackGreaterSplit : MonoBehaviour
         {
             private Player player;
-            private readonly Collider[] NonAlloc = new Collider[64];
             private bool currentUsing;
             private bool attacking;
             private GreaterSplitHorizontal ability;
@@ -222,7 +223,9 @@ namespace KE.CustomRoles.Abilities.RedMist
 
                 time -= Timing.DeltaTime;
 
-                if(time <= 0 || attacking)
+
+
+                if (time <= 0 || attacking)
                 {
                     if (ability.Check(player))
                     {
@@ -242,77 +245,73 @@ namespace KE.CustomRoles.Abilities.RedMist
             }
 
 
+            private bool InSphere(Vector3 center,Vector3 position,float radius)
+            {
+                float sqrDistance = (position - center).sqrMagnitude;
+                float sqrRadius = radius * radius;
+
+                return sqrDistance <= sqrRadius;
+            }
 
             private void LaunchedAttack(float remainingTime)
             {
                 
                 if (player == null || player.GameObject == null) return;
                 KELog.Debug("remainign time=" + remainingTime);
-
-                Vector3 feetposition = player.Position - (Vector3.up * player.Scale.y) / 2 + player.Transform.forward * .1f;
-
-                
+               
                 Vector3 direction = player.Transform.forward;
                 
                 direction = direction.NormalizeIgnoreY();
 
-                //DrawSphere(feetposition, Size, Color.yellow);
+                //NorthwoodLib.Pools.HashSetPool<Player>.Shared.Rent();
+                HashSet<Player> toDamage = new();
+                Vector3 position = player.Position;
 
-                
-
-                int detect = Physics.OverlapSphereNonAlloc(feetposition, Size, NonAlloc, HitregUtils.DetectionMask);
-                KELog.Debug("detect=" + detect);
-
-                /*
-                Collider collider;
-                for (int i = 0; i < detect; i++)
+                foreach (Player target in Player.List)
                 {
-                    collider = NonAlloc[i];
 
-                    if (collider == null || collider.gameObject == null)
+                    Vector3 targetPosition = target.Position;
+                    KELog.Debug("sphere");
+
+                    if(player == target)
                     {
                         continue;
                     }
 
-                    if (!CheckPoint(collider.transform.position, feetposition, direction))
+                    if (!InSphere(position, targetPosition, 5))
                     {
                         continue;
                     }
 
-
-                    if (!collider.TryGetComponent<IDestructible>(out var destructible) || destructible == null)
+                    //KELog.Debug("fornt");
+                    if (!CheckPoint(targetPosition, position, direction))
                     {
                         continue;
                     }
 
-                    if (Linecast(feetposition, destructible.CenterOfMass, out var hitInfo, PlayerRolesUtils.AttackMask)
-                        && collider != hitInfo.collider)
-                    {
-                        continue;
-                    }
-                                        
-                    Player target = Player.Get(collider);
-
-                    
-
-                    if (target == null || target == player)
+                    KELog.Debug("linecast");
+                    if (!Linecast(position, targetPosition, out var hitInfo, PlayerRolesUtils.AttackMask))
                     {
                         continue;
                     }
 
-                    if (target != player)
-                    {
-                        DrawSphere(collider.transform.position, .2f, Color.red);
-                    }
+                    KELog.Debug("add damage");
+                    //DrawSphere(targetPosition, .2f, Color.red);
+                    toDamage.Add(target);
 
-                    if (destructible is not null)
-                    {
-                        PlayerStatsSystem.DamageHandlerBase handler = new GenericDamageHandler(target, player, Damage, DamageType.Scp1509, new DamageHandlerBase.CassieAnnouncement("")).Base;
-                        destructible.Damage(Damage, handler, destructible.CenterOfMass);
-                    }
+
                 }
-                */
+
+
+                foreach (Player target in toDamage)
+                {
+                    KELog.Debug("damaging" + target.Nickname);
+
+                    //target.Hurt(Damage, DamageType.Scp1509);
+                }
+                //NorthwoodLib.Pools.HashSetPool<Player>.Shared.Return(toDamage);
             }
+
         }
 
     }
