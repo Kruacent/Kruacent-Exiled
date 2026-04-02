@@ -15,5 +15,7 @@ namespace KE.CustomRoles.API.HintPositions
         public override float Yposition => 1030;
 
         public override HintAlignment HintAlignment => HintAlignment.Center;
+
+        public override string Name => "CurrentRole";
     }
 }

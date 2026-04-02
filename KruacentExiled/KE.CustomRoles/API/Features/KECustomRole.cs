@@ -281,7 +281,7 @@ namespace KE.CustomRoles.API.Features
             GiveRandomRole(ev.Players);
         }
 
-        public static void ShowCustomRole(JoinedEventArgs ev)
+        public static void ShowCustomRole(VerifiedEventArgs ev)
         {
             Timing.CallDelayed(1, delegate
             {
