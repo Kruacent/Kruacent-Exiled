@@ -155,7 +155,7 @@ namespace KE.CustomRoles.Abilities.RedMist
         {
             if (Debug)
             {
-                Draw.Line(start, end, Color.red, 10, Player.Enumerable);
+                //Draw.Line(start, end, Color.red, 10, Player.Enumerable);
             }
             
 
