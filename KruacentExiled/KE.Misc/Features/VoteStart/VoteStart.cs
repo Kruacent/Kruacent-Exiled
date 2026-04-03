@@ -28,7 +28,7 @@ namespace KE.Misc.Features.VoteStart
             Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
             Exiled.Events.Handlers.Player.Left += OnLeft;
-            Exiled.Events.Handlers.Player.Joined += OnJoined;
+            Exiled.Events.Handlers.Player.Verified += OnVerified;
             base.SubscribeEvents();
         }
 
@@ -37,7 +37,7 @@ namespace KE.Misc.Features.VoteStart
         {
             Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
             Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
-            Exiled.Events.Handlers.Player.Joined -= OnJoined;
+            Exiled.Events.Handlers.Player.Verified -= OnVerified;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             Exiled.Events.Handlers.Player.Left -= OnLeft;
 
@@ -114,17 +114,11 @@ namespace KE.Misc.Features.VoteStart
             voteCasted = false;
         }
 
-        private void OnJoined(JoinedEventArgs ev)
+        private void OnVerified(VerifiedEventArgs ev)
         {
             Player player = ev.Player;
 
-            if(ev.Player is null)
-            {
-                return;
-            }
-
-
-            if (!ev.Player.IsConnected)
+            if(ev.Player == null)
             {
                 return;
             }
