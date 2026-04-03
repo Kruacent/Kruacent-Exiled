@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using DrawableLine;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.DamageHandlers;
 using InventorySystem.Items.MicroHID.Modules;
@@ -53,11 +54,7 @@ namespace KE.CustomRoles.Abilities.RedMist.Spear
                 return false;
             }
 
-
-            if (player.GameObject.TryGetComponent<AttackGreaterSplit>(out var comp))
-            {
-                comp.StartAttack();
-            }
+            SpearProjectile.Create(player, player.CameraTransform.forward);
 
 
             return true;
