@@ -15,6 +15,7 @@ using KE.Utils.API.Settings.GlobalSettings;
 using KE.Utils.API.Translations;
 using KE.Misc.Features.PostNuke;
 using Exiled.Events.EventArgs.Server;
+using KE.Misc.Features.LobbyHints;
 
 namespace KE.Misc
 {
@@ -44,6 +45,7 @@ namespace KE.Misc
 
         internal VoteStart vote { get; private set; }
         internal PostNukeHandler postnuke { get; private set; }
+        internal LobbyHint LobbyHint { get; private set; }
 
         public string LocalizationId => Prefix;
 
@@ -66,6 +68,7 @@ namespace KE.Misc
             Candy = new Candy();
             vote = new();
             postnuke = new();
+            LobbyHint = new();
 
 
             //SpawnLcz = new();
@@ -128,6 +131,7 @@ namespace KE.Misc
             GamblingCoinManager.DestroyAll();
             _gamblingCoinHandler = null;
             postnuke = null;
+            LobbyHint = null;
             LastHuman = null;
             harmony = null;
             Instance = null;
@@ -164,6 +168,7 @@ namespace KE.Misc
         public void RegisterTranslations()
         {
             TranslationHub.Add(LocalizationId, LastHumanTranslations.LangToKeyToTranslation);
+            TranslationHub.Add(LocalizationId, WrongAspectRatioWarningLobbyHint.LangToKeyToTranslation);
         }
 
 
