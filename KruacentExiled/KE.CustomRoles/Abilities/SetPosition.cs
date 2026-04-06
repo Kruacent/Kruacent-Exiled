@@ -62,7 +62,7 @@ namespace KE.CustomRoles.Abilities
             
 
             followingTextToy.OnlyMoveY = true;
-            followingTextToy.Toy.TextFormat = "↓";
+            followingTextToy.Text = "↓";
 
             Log.Debug("set position at " + position);
             return base.AbilityUsed(player);

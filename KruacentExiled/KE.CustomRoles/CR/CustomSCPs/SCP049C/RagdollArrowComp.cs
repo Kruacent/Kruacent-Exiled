@@ -1,4 +1,6 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
+using Exiled.API.Features.DamageHandlers;
 using KE.Utils.API.Features;
 using KE.Utils.API.KETextToy;
 using NorthwoodLib.Pools;
@@ -30,7 +32,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
 
         private void Update()
         {
-            if (ragdoll.IsExpired && arrow == null)
+            if (ragdoll.IsExpired && arrow == null && ragdoll.DamageHandler is PlayerStatsSystem.AttackerDamageHandler)
             {
                 CreateArrow();
             }
@@ -52,7 +54,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
             sb.Append("</color>");
 
 
-            arrow.Toy.TextFormat = sb.ToString();
+            arrow.Text = sb.ToString();
 
             StringBuilderPool.Shared.Return(sb);
 

@@ -107,6 +107,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
             base.SubscribeEvents();
         }
 
+
         protected override void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
@@ -324,12 +325,12 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
         public void OnEndingRound(EndingRoundEventArgs ev)
         {
-            if (TrackedPlayers.Count <= 0) return;
+            /*if (TrackedPlayers.Count <= 0) return;
 
             if (ev.ClassList.mtf_and_guards != 0 || ev.ClassList.scientists != 0) ev.IsAllowed = false;
             else if (ev.ClassList.class_ds != 0 || ev.ClassList.chaos_insurgents != 0) ev.IsAllowed = false;
             else if (ev.ClassList.scps_except_zombies + ev.ClassList.zombies > 0) ev.IsAllowed = true;
-            else ev.IsAllowed = true;
+            else ev.IsAllowed = true;*/
         }
     }
 }
