@@ -12,7 +12,7 @@ namespace KE.Misc.Features.VoteStart
     {
         public override float Xposition => 0;
 
-        public override float Yposition => 800;
+        public override float Yposition => 860;
         public override string Name => "VoteStart";
 
         public override HintAlignment HintAlignment => HintAlignment.Center;
