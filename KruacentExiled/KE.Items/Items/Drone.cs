@@ -20,7 +20,7 @@ namespace KE.Items.Items
         public override string Name { get; set; } = "Drone";
         public override float Weight { get; set; } = 3f;
         public Color Color { get; set; } = Color.blue;
-        public override ItemType ItemType => ItemType.KeycardChaosInsurgency;
+        public override ItemType ItemType => ItemType.KeycardJanitor;// make a custom keycard
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
