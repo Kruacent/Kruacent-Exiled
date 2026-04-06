@@ -51,7 +51,6 @@ namespace KE.Misc.Features.LobbyHints
 
             string translation = MainPlugin.GetTranslation(player, WrongAspectRatioTranslation);
 
-            KELog.Debug(player.AspectRatio.ToString());
 
             return translation.Replace("%CurrAspect%",player.AspectRatio.GetTranslation());
 
