@@ -169,6 +169,7 @@ namespace KE.Misc
         {
             TranslationHub.Add(LocalizationId, LastHumanTranslations.LangToKeyToTranslation);
             TranslationHub.Add(LocalizationId, WrongAspectRatioWarningLobbyHint.LangToKeyToTranslation);
+            //TranslationHub.Add(LocalizationId, VoteStart.LangToKeyToTranslation);
         }
 
 

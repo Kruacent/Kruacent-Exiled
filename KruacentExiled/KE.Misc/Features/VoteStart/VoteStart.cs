@@ -17,6 +17,18 @@ namespace KE.Misc.Features.VoteStart
 {
     internal class VoteStart : MiscFeature
     {
+        public const string CancelVoteTranslation = "CancelVote";
+        //public static Dictionary<string, Dictionary<string, string>> LangToKeyToTranslation { get; } = new()
+        //{
+        //    ["en"] =
+        //    {
+        //        [CancelVoteTranslation] = "<size=14>.rv in the console to cancel your vote</size>."
+        //    },
+        //    ["fr"] =
+        //    {
+        //        [CancelVoteTranslation] = "<size=14>.rv dans la console client pour annuler le vote</size>."
+        //    }
+        //};
 
         public static HintPosition HintPosition = new VotePosition();
 
@@ -165,7 +177,9 @@ namespace KE.Misc.Features.VoteStart
             if (Voted.Contains(player))
             {
                 sb.AppendLine();
+
                 sb.Append("<size=14>.rv dans la console client pour annuler le vote</size>.");
+                //sb.Append(MainPlugin.GetTranslation(player,CancelVoteTranslation));
             }
 
 
