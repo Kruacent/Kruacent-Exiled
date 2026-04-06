@@ -4,17 +4,26 @@ using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
-using UnityEngine;
-using System.Linq;
-using KE.Items.API.Interface;
 using KE.Items.API.Features;
-using System.Collections.Generic;
-using PlayerRoles.Ragdolls;
-using PlayerRoles;
+using KE.Items.API.Interface;
+using KE.Utils.API.Displays.Feeds;
 using MEC;
+using PlayerRoles;
+using PlayerRoles.Ragdolls;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using YamlDotNet.Core.Tokens;
 
 public class Defibrillator : KECustomItem, ILumosItem
 {
+
+    public const string TranslationFailed = "DefibrillatorFailed";
+    public const string TranslationExpired = "DefibrillatorExpired";
+    public const string TranslationTooFar = "DefibrillatorTooFar";
+    public const string TranslationRevived = "DefibrillatorRevived";
+    public const string TranslationSucceed = "DefibrillatorSucceed";
+    public const string TranslationInProgress = "DefibrillatorInProgress";
     protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
     {
         return new()
@@ -23,11 +32,23 @@ public class Defibrillator : KECustomItem, ILumosItem
             {
                 [TranslationKeyName] = "Defibrillator",
                 [TranslationKeyDesc] = "Aim for a dead body to try to re<b>sus</b>citate him",
+                [TranslationFailed] = "<color=red>Failed!</color>",
+                [TranslationExpired] = "<color=red>Body expired.</color>",
+                [TranslationTooFar] = "<color=yellow>Aim at a body.</color>",
+                [TranslationRevived] = "<color=cyan>Revived by %MedicName%\n<b>you got brian damage</b></color>",
+                [TranslationSucceed] = "<color=green>Successfully ressucitate %PatientName%!</color>",
+                [TranslationInProgress] = "<color=yellow>In progress</color>",
             },
             ["fr"] = new()
             {
                 [TranslationKeyName] = "Défibrillateur",
                 [TranslationKeyDesc] = "Visez un cadavre de près pour tenter une réanimation.",
+                [TranslationFailed] = "<color=red>Réanimation échouée !</color>",
+                [TranslationExpired] = "<color=red>Mort trop ancienne.</color>",
+                [TranslationTooFar] = "<color=yellow>Rapprochez-vous ou visez un cadavre.</color>",
+                [TranslationRevived] = "<color=cyan>Réanimé par %MedicName%\n<b>vous avez des traumatisme crânien</b></color>",
+                [TranslationSucceed] = "<color=green>Réanimation réussie sur %PatientName% !</color>",
+                [TranslationInProgress] = "<color=yellow>Réanimation en cours...</color>",
             },
         };
     }
@@ -94,10 +115,11 @@ public class Defibrillator : KECustomItem, ILumosItem
     {
         if (!Check(ev.Item)) return;
         ev.IsAllowed = false;
+        Player player = ev.Player;
 
-        Log.Debug($"[Defib] Tentative par {ev.Player.Nickname}");
+        Log.Debug($"[Defib] Tentative par {player.Nickname}");
 
-        if (Physics.Raycast(ev.Player.CameraTransform.position, ev.Player.CameraTransform.forward, out RaycastHit hit, RaycastDistance))
+        if (Physics.Raycast(player.CameraTransform.position, player.CameraTransform.forward, out RaycastHit hit, RaycastDistance))
         {
             Log.Debug($"[Defib] Raycast a touché : {hit.collider.name}");
 
@@ -120,17 +142,16 @@ public class Defibrillator : KECustomItem, ILumosItem
                     if (Time.time - data.Time <= MaxReviveTime)
                     {
                         Log.Debug("[Defib] RÉANIMATION LANCÉE.");
-                        ev.Player.RemoveItem(ev.Item);
-                        Timing.RunCoroutine(ReviveSequence(ev.Player, target, foundRagdoll, data.Role));
+                        player.RemoveItem(ev.Item);
+                        Timing.RunCoroutine(ReviveSequence(player, target, foundRagdoll, data.Role));
                         return;
                     }
-                    KECustomItem.ItemEffectHint(ev.Player, "<color=red>Mort trop ancienne.</color>");
+                    TranslationFeed(player, TranslationExpired);
                     return;
                 }
             }
         }
-
-        KECustomItem.ItemEffectHint(ev.Player, "<color=yellow>Rapprochez-vous ou visez un cadavre.</color>");
+        TranslationFeed(player, TranslationTooFar);
     }
 
     private IEnumerator<float> ReviveSequence(Player medic, Player patient, BasicRagdoll ragdoll, RoleTypeId previousRole)
@@ -142,16 +163,16 @@ public class Defibrillator : KECustomItem, ILumosItem
         shockLight.Range = 7f;
         shockLight.Spawn();
 
-        KECustomItem.ItemEffectHint(medic, "<color=yellow>Réanimation en cours...</color>");
+        TranslationFeed(medic, TranslationInProgress);
 
         float elapsed = 0f;
         while (elapsed < 1.0f)
         {
             if (Vector3.Distance(medic.Position, ragdoll.transform.position) > RaycastDistance + 1f)
             {
-                KECustomItem.ItemEffectHint(medic, "<color=red>Réanimation échouée !</color>");
+                TranslationFeed(medic, TranslationFailed);
                 shockLight.Destroy();
-                CustomItem.TryGive(medic, Id);
+                CustomItem.TryGive(medic, "Defibrillator",false);
                 yield break;
             }
 
@@ -176,13 +197,18 @@ public class Defibrillator : KECustomItem, ILumosItem
         {
             patient.Position = ragdoll.transform.position + Vector3.up * 0.5f;
 
-            patient.Health = 20f;
+            patient.Health = patient.MaxHealth *.2f;
             patient.EnableEffect(EffectType.Flashed, 2f);
             patient.EnableEffect(EffectType.Concussed, 20f);
             patient.EnableEffect(EffectType.Deafened, 20f);
 
-            KECustomItem.ItemEffectHint(patient, $"<color=cyan>Réanimé par {medic.Nickname}\n<b>vous avez des traumatisme crânien</b></color>");
-            KECustomItem.ItemEffectHint(medic, $"<color=green>Réanimation réussie sur {patient.Nickname} !</color>");
+
+            string msgMedic = GetTranslation(medic, TranslationSucceed);
+            string msgPatient = GetTranslation(medic, TranslationRevived);
+
+
+            HintFeed.AddFeed(medic, msgMedic.Replace("%PatientName%",patient.Nickname));
+            KECustomItem.ItemEffectHint(patient, msgPatient.Replace("%MedicName%", medic.Nickname));
 
             _deathRecords.Remove(patient);
 
