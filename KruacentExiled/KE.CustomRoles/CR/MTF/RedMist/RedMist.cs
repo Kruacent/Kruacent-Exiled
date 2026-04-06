@@ -89,8 +89,6 @@ namespace KE.CustomRoles.CR.MTF.RedMist
 
         protected override void RoleRemoved(Player player)
         {
-
-
             if (player.ReferenceHub.gameObject.TryGetComponent<EGO>(out var ego))
             {
                 UnityEngine.Object.Destroy(ego);
@@ -100,14 +98,14 @@ namespace KE.CustomRoles.CR.MTF.RedMist
 
         protected override void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.Hurt += OnHurt;
             Exiled.Events.Handlers.Scp1509.Resurrecting += OnResurrecting;
+            
             base.SubscribeEvents();
         }
 
         protected override void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.Hurt -= OnHurt;
+            Exiled.Events.Handlers.Scp1509.Resurrecting -= OnResurrecting;
             base.UnsubscribeEvents();
         }
 
@@ -119,22 +117,7 @@ namespace KE.CustomRoles.CR.MTF.RedMist
             ev.IsAllowed = false;
         }
 
-        private void OnHurt(HurtEventArgs ev)
-        {
-
-            Player player = ev.Attacker;
-            if (!Check(player)) return;
-
-            if (player.ReferenceHub.gameObject.TryGetComponent<EGO>(out var ego))
-            {
-                if (ego.Active)
-                {
-                    ego.IncreaseObjective();
-                }
-
-                
-            }
-        }
+        
 
     }
 }

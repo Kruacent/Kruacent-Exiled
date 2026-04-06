@@ -1,8 +1,11 @@
 ﻿using CustomPlayerEffects;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.DamageHandlers;
+using Exiled.Events.EventArgs.Player;
 using KE.CustomRoles.API.Features.Abilities;
 using KE.Utils.API.Features;
+using KE.Utils.API.Interfaces;
 using KE.Utils.Extensions;
 using PlayerRoles;
 using PlayerStatsSystem;
@@ -15,7 +18,7 @@ using UnityEngine;
 
 namespace KE.CustomRoles.CR.MTF.RedMist
 {
-    public class EGO : BaseCompAbility
+    public class EGO : BaseCompAbility, IUsingEvents
     {
 
 
@@ -42,7 +45,48 @@ namespace KE.CustomRoles.CR.MTF.RedMist
             active = false;
 
             damage = new CustomReasonDamageHandler("drained", Damage);
-            KELog.Debug(Hub);
+
+            SubscribeEvents();
+        }
+
+
+        internal void OnDestroy()
+        {
+            UnsubscribeEvents();
+        }
+
+        public void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
+            Exiled.Events.Handlers.Player.Hurt += OnHurt;
+        }
+        private void OnHurt(HurtEventArgs ev)
+        {
+            Player player = Player.Get(Hub);
+            if (player != ev.Attacker) return;
+
+            if (Active)
+            {
+                IncreaseObjective();
+            }
+        }
+
+        public void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
+
+        }
+
+        private void OnReceivingEffect(ReceivingEffectEventArgs ev)
+        {
+            Player player = Player.Get(Hub);
+            if (ev.Player != player) return;
+            StatusEffectBase effect = ev.Effect;
+
+            if (Active && effect is Poisoned)
+            {
+                effect.DisableEffect();
+            }
         }
 
 
@@ -100,15 +144,24 @@ namespace KE.CustomRoles.CR.MTF.RedMist
         }
 
 
+        private static readonly Dictionary<EffectType,byte> effects = new()
+        {
+            { EffectType.MovementBoost,25 },
+            { EffectType.Scp1853,2 },
+        };
 
+        public const byte MovementBoostIntensity = 25;
+        public const byte SCP1853Intensity = 2;
         private void Effect()
         {
             Player player = Player.Get(Hub);
 
             if (Active)
             {
-                player.AddLevelEffect<MovementBoost>(25);
-                player.AddLevelEffect<Scp1853>(2);
+                foreach(var kvp in effects)
+                {
+                    player.AddLevelEffect(kvp.Key, kvp.Value);
+                }
                 if (player.IsEffectActive<Poisoned>())
                 {
                     player.DisableEffect<Poisoned>();
@@ -116,8 +169,10 @@ namespace KE.CustomRoles.CR.MTF.RedMist
             }
             else
             {
-                player.AddLevelEffect<MovementBoost>(-25);
-                player.DisableEffect<Scp1853>();
+                foreach (var kvp in effects)
+                {
+                    player.AddLevelEffect(kvp.Key, -kvp.Value);
+                }
             }
 
 

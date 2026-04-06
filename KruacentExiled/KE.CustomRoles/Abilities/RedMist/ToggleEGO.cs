@@ -59,5 +59,16 @@ namespace KE.CustomRoles.Abilities.RedMist
         }
 
 
+        protected override void SubscribeEvents()
+        {
+            base.SubscribeEvents();
+        }
+
+        protected override void UnsubscribeEvents()
+        {
+            base.UnsubscribeEvents();
+        }
+
+
     }
 }

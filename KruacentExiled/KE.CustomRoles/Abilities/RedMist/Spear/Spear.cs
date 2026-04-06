@@ -40,8 +40,6 @@ namespace KE.CustomRoles.Abilities.RedMist.Spear
 
         public const float Damage = 200;
 
-        public const float MaxDistance = 5;
-
 
 
 

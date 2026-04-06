@@ -13,17 +13,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 namespace KE.CustomRoles.Abilities.RedMist.GreaterSplitHorizontal
 {
     public class AttackGreaterSplitComp : MonoBehaviour
     {
+
+        private static bool Debug => MainPlugin.Instance.Config.Debug;
         private Player player;
         private bool currentUsing;
         private bool attacking;
         private GreaterSplitHorizontal ability;
-        public const float TimeAttack = 10;
+        public const float TimeAttack = 3;
         private readonly float StartTimeAttack;
         private readonly float EndTimeAttack;
 
@@ -46,9 +49,9 @@ namespace KE.CustomRoles.Abilities.RedMist.GreaterSplitHorizontal
             currentUsing = false;
             attacking = false;
 
-            if (MainPlugin.Instance.Config.Debug)
+            if (Debug)
             {
-                DisplayHandler.Instance.CreateAuto(player, (args) => GetDebug(), Position.HintPlacement, HintSyncSpeed.Fast);
+                DisplayHandler.Instance.CreateAuto(player, (args) => GetDebug(), Position.HintPlacement, HintSyncSpeed.Fastest);
             }
         }
 
@@ -189,14 +192,23 @@ namespace KE.CustomRoles.Abilities.RedMist.GreaterSplitHorizontal
 
             Vector3 position = player.Position;
 
+            if (Debug)
+            {
+                CheckPoint(position, position, direction, range, angle);
+                if (checkBack)
+                {
+                    CheckPoint(position, position, directionBack, range, angle);
+                }
+            }
+
+
             foreach (Player target in Player.List)
             {
 
                 Vector3 targetPosition = target.Position;
                 KELog.Debug("fornt");
 
-                //!checkBack || CheckPoint(targetPosition,position, directionBack,range,angle)
-
+                
 
                 if (!CheckPoint(targetPosition, position, direction, range, angle) & !(checkBack && CheckPoint(targetPosition, position, directionBack, range, angle)))
                 {
@@ -228,9 +240,27 @@ namespace KE.CustomRoles.Abilities.RedMist.GreaterSplitHorizontal
         private bool CheckPoint(Vector3 point, Vector3 center, Vector3 direction, float size, float halfAngle)
         {
             Vector2 position = new Vector2(point.x - center.x, point.z - center.z);
-
+            Vector3 playerPosition = player.Position;
             float sqrMag = position.sqrMagnitude;
 
+            float rad = halfAngle * Mathf.Deg2Rad;
+
+            Vector2 dir = new Vector2(direction.x, direction.z);
+
+            dir /= Mathf.Sqrt(dir.sqrMagnitude);
+            Vector2 leftDir = new Vector2(dir.x * Mathf.Cos(rad) - dir.y * Mathf.Sin(rad), dir.x * Mathf.Sin(rad) + dir.y * Mathf.Cos(rad));
+            Vector2 rightDir = new Vector2(dir.x * Mathf.Cos(-rad) - dir.y * Mathf.Sin(-rad), dir.x * Mathf.Sin(-rad) + dir.y * Mathf.Cos(-rad));
+
+            Vector3 leftPoint = center + new Vector3(leftDir.x, 0, leftDir.y) * size;
+            Vector3 rightPoint = center + new Vector3(rightDir.x, 0, rightDir.y) * size;
+
+            Vector3 frontPoint = playerPosition + direction * size;
+            if (Debug)
+            {
+                DrawableLines.IsDebugModeEnabled = true;
+                DrawableLines.GenerateLine(10, Color.yellow, playerPosition, leftPoint, frontPoint, rightPoint, player.Position);
+            }
+            
             if (sqrMag <= 0.0001f)
                 return false;
 
@@ -238,30 +268,16 @@ namespace KE.CustomRoles.Abilities.RedMist.GreaterSplitHorizontal
             if (radius > size)
                 return false;
 
-            Vector2 dir = new Vector2(direction.x, direction.z);
-
-            if (dir.sqrMagnitude <= 0.0001f)
-                return false;
-
-            dir /= Mathf.Sqrt(dir.sqrMagnitude);
+            
 
             Vector2 pointDir = position / radius;
 
             float cosThreshold = Mathf.Cos(halfAngle * Mathf.Deg2Rad);
 
             float dot = Vector2.Dot(dir, pointDir);
-            float rad = halfAngle * Mathf.Deg2Rad;
 
-            Vector2 leftDir = new Vector2(dir.x * Mathf.Cos(rad) - dir.y * Mathf.Sin(rad), dir.x * Mathf.Sin(rad) + dir.y * Mathf.Cos(rad));
-            Vector2 rightDir = new Vector2(dir.x * Mathf.Cos(-rad) - dir.y * Mathf.Sin(-rad), dir.x * Mathf.Sin(-rad) + dir.y * Mathf.Cos(-rad));
 
-            Vector3 leftPoint = center + new Vector3(leftDir.x, 0, leftDir.y) * size;
-            Vector3 rightPoint = center + new Vector3(rightDir.x, 0, rightDir.y) * size;
-
-            Vector3 frontPoint = player.Position + direction * size;
-
-            DrawableLines.IsDebugModeEnabled = true;
-            DrawableLines.GenerateLine(10, Color.yellow, player.Position, leftPoint, frontPoint, rightPoint, player.Position);
+            
 
 
             KELog.Debug("center =" + center);
