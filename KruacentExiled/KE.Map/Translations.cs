@@ -24,6 +24,8 @@ namespace KE.Map
         public string HeavyContainmentTranslation { get; set; } = "<color=#431919>Heavy Containment Zone</color>";
         public string EntranceZone { get; set; } = "Entrance Zone";
         public string EntranceZoneTranslation { get; set; } = "<color=#FFFF00>Entrance Zone</color>";
+        public string SurfaceZone { get; set; } = "Surface";
+        public string SurfaceZoneTranslation { get; set; } = "<color=#FF0000>Surface</color>";
 
         public string End { get; set; } = "In 5 seconds";
 

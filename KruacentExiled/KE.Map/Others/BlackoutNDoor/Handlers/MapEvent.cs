@@ -27,14 +27,22 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
                 time = Mathf.Clamp(Duration, 1, maxTime);
             }
 
-            Start(zone);
-            Timing.CallDelayed(time, delegate
+            try
             {
-                Log.Debug("stopping");
-                Stop(zone);
-                PostEventEventArgs postEv = new PostEventEventArgs(this);
-                Events.Handlers.BlackoutNDoor.OnPostEvent(postEv);
-            });
+                Start(zone);
+            }
+            finally
+            {
+                Timing.CallDelayed(time, delegate
+                {
+                    Log.Debug("stopping");
+                    Stop(zone);
+                    PostEventEventArgs postEv = new PostEventEventArgs(this);
+                    Events.Handlers.BlackoutNDoor.OnPostEvent(postEv);
+                });
+            }
+            
+            
 
 
         }

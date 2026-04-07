@@ -15,7 +15,7 @@ namespace KE.Map.Others.BlackoutNDoor
         public override string Cassie => MainPlugin.Translations.Blackout;
 
         public override string CassieTranslated => MainPlugin.Translations.BlackoutTranslation;
-        public override float Duration => 30;
+        public override float Duration => 20;
 
         private ZoneType currentZone = ZoneType.Unspecified;
         public override void Start(ZoneType zone)

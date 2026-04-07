@@ -28,7 +28,7 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
 
         public static readonly HashSet<FacilityZone> Zones = new()
         {
-            FacilityZone.LightContainment,FacilityZone.HeavyContainment,FacilityZone.Entrance
+            FacilityZone.LightContainment,FacilityZone.HeavyContainment,FacilityZone.Entrance,FacilityZone.Surface
         };
 
         private FacilityZone currentScpZone = FacilityZone.None;
@@ -142,6 +142,10 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
             {
                 zone = choseZoneEv.Zone;
             }
+            else
+            {
+                throw new ArgumentException($"zone ({choseZoneEv.Zone}) not authorized");
+            }
 
 
 
@@ -179,6 +183,7 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
                 ZoneType.LightContainment => MainPlugin.Translations.LightContainment,
                 ZoneType.HeavyContainment => MainPlugin.Translations.HeavyContainment,
                 ZoneType.Entrance => MainPlugin.Translations.EntranceZone,
+                ZoneType.Surface => MainPlugin.Translations.SurfaceZone,
                 _ => string.Empty
             };
         }
@@ -190,6 +195,7 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
                 ZoneType.LightContainment => MainPlugin.Translations.LightContainmentTranslation,
                 ZoneType.HeavyContainment => MainPlugin.Translations.HeavyContainmentTranslation,
                 ZoneType.Entrance => MainPlugin.Translations.EntranceZoneTranslation,
+                ZoneType.Surface => MainPlugin.Translations.SurfaceZoneTranslation,
                 _ => string.Empty
             };
         }
