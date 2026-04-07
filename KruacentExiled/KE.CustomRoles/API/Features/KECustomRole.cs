@@ -47,6 +47,18 @@ namespace KE.CustomRoles.API.Features
             }
         }
 
+        public sealed override bool RemovalKillsPlayer
+        {
+            get
+            {
+                return false;
+            }
+            set
+            {
+
+            }
+        }
+
         public virtual string InternalName => GetType().Name;
 
         public sealed override string Description { get; set; } = string.Empty;
