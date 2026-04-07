@@ -93,7 +93,7 @@ namespace KE.CustomRoles.CR.Human
 
         private void EffectPlayer(Player player)
         {
-            if (UnityEngine.Random.Range(0f, 100f) > .5f)
+            if (UnityEngine.Random.Range(0f, 100f) > 50f)
             {
                 player.DropHeldItem();
             }
