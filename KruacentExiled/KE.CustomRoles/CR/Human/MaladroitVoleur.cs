@@ -77,14 +77,16 @@ namespace KE.CustomRoles.CR.Human
             }
         }
 
+        public const float LowerBound = 90f;
+        public const float UpperBound = 120f;
 
         private IEnumerator<float> ThrowingItem(Player player)
         {
-
+            yield return Timing.WaitForSeconds(UnityEngine.Random.Range(LowerBound, UpperBound));
             while (Check(player))
             {
-                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(90f, 120f));
                 EffectPlayer(player);
+                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(LowerBound, UpperBound));
             }
         }
 
