@@ -30,7 +30,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override int WeightedChance { get; set; } = 5;
         public override ImpactLevel ImpactLevel => ImpactLevel.High;
-        public IEnumerable<RoomType> BlacklistedRooms { get; } = [];
+        public IEnumerable<RoomType> BlacklistedRooms { get; } = [RoomType.EzGateA, RoomType.EzGateB];
         ///<inheritdoc/>
         public void Start()
         {
