@@ -1,4 +1,5 @@
-﻿using Exiled.API.Extensions;
+﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Pools;
 using Exiled.API.Features.Spawn;
@@ -335,11 +336,18 @@ namespace KE.Items.API.Features
             {
                 return true;
             }
-            if(ItemType.GetCategory() == ItemCategory.Firearm || ItemType.GetCategory() == ItemCategory.Grenade)
+            ItemCategory itemCategory = ItemType.GetCategory();
+
+            if (itemCategory == ItemCategory.Firearm)
             {
                 return true;
             }
-
+            ProjectileType projectileType = ItemType.GetProjectileType();
+            if (projectileType == Exiled.API.Enums.ProjectileType.FragGrenade || projectileType == ProjectileType.Scp018)
+            {
+                return true;
+            }
+            
 
             return false;
         }
