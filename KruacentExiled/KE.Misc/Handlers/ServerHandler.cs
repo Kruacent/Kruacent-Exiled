@@ -12,8 +12,8 @@ namespace KE.Misc.Handlers
 
             MainPlugin.Instance.AutoTesla.StartLoop();
             MainPlugin.Instance.SCPBuff.StartBuff();
-            Respawn.SetTokens(SpawnableFaction.NtfWave, 2);
-            Respawn.SetTokens(SpawnableFaction.ChaosWave, 2);
+            Respawn.SetTokens(SpawnableFaction.NtfWave, 1);
+            Respawn.SetTokens(SpawnableFaction.ChaosWave, 1);
 
             /*
             string test = "test.png";
