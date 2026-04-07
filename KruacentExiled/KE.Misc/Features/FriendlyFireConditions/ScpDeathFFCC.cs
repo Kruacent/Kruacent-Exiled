@@ -1,5 +1,8 @@
-﻿using Exiled.Events.EventArgs.Player;
+﻿using Exiled.API.Features;
+using Exiled.Events.EventArgs.Player;
+using KE.Utils.API.Features.SCPs;
 using KE.Utils.API.Interfaces;
+using PlayerRoles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +29,8 @@ namespace KE.Misc.Features.FriendlyFireConditions
 
         private void OnDying(DyingEventArgs ev)
         {
-            if (!ev.Player.IsScp) return;
+            Player player = ev.Player;
+            if (!SCPTeam.IsSCP(player.ReferenceHub) && player.Role != RoleTypeId.Scp0492) return;
             ChangeFriendlyFire();
         }
     }
