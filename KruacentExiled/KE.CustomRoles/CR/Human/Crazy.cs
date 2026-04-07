@@ -2,6 +2,7 @@
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
+using Exiled.API.Features.Doors;
 using Exiled.CustomRoles.API.Features;
 using KE.CustomRoles.API.Features;
 using KE.Utils.Extensions;
@@ -66,7 +67,7 @@ namespace KE.CustomRoles.CR.Human
             { CrazyBehaviour.Crazying, 1 }
         };
         private List<CrazyBehaviour> WeightedList;
-        private readonly float EFFECT_INTERVAL = UnityEngine.Random.Range(180, 300);
+        private float EFFECT_INTERVAL => UnityEngine.Random.Range(180, 300);
 
         protected override void RoleAdded(Player player)
         {
@@ -158,7 +159,6 @@ namespace KE.CustomRoles.CR.Human
                 }
             }
 
-            Timing.KillCoroutines(_crazyingCoroutine);
         }
     }
 }
