@@ -74,30 +74,39 @@ namespace KE.Misc.Features.LastHuman
             if (SCPTeam.IsSCP(ev.Player.ReferenceHub)) return;
 
 
-            if(TryGetLastTarget(out Player lastTarget))
+            if (TryGetLastTarget(out Player lastTarget))
             {
+                if(lastTarget == LastTarget)
+                {
+                    KELog.Debug("target didn't change");
+                       
+                    return;
+                }
+
+                LastTarget = lastTarget;
+
                 foreach (Player player in Player.Enumerable)
                 {
-                    AbstractHint hint = DisplayHandler.Instance.GetHint(lastTarget, position.HintPlacement);
+                    AbstractHint hint = DisplayHandler.Instance.GetHint(player, position.HintPlacement);
 
                     if (hint is null || hint.Hide)
                     {
 
                         string translatedZone = lastTarget.Zone.GetTranslatedName(TranslationHub.GetLang(player));
-
+                        KELog.Debug("tra,slated zone ="+translatedZone);
                         string msg = string.Empty;
                         if (player == lastTarget)
                         {
-                            msg = MainPlugin.GetTranslation(player,TextLast.GetRandomValue());
+                            msg = MainPlugin.GetTranslation(player, TextLast.GetRandomValue());
                         }
-                        else if(!player.IsDead)
+                        else if (!player.IsDead)
                         {
-                            
+
                             msg = MainPlugin.GetTranslation(player, TextSCP).Replace("%Zone%", translatedZone);
                         }
 
 
-                        
+
 
                         if (!player.IsDead && DateTime.Now >= _nextPossibleHint)
                         {
@@ -105,33 +114,47 @@ namespace KE.Misc.Features.LastHuman
                             KELog.Debug("show message to " + lastTarget.Nickname);
                             _nextPossibleHint = DateTime.Now.Add(Cooldown);
                         }
-                        
 
-                        
+
+
+                    }
+                    else
+                    {
+                        KELog.Debug("hint still there");
                     }
                 }
-
-
-
-
-
-                
+            }
+            else
+            {
+                KELog.Debug("set target null");
+                LastTarget = null;
+            }
+        }
+        private Player last;
+        private Player LastTarget
+        {
+            get
+            {
+                return last;
+            }
+            set
+            {
+                last = value;
             }
         }
 
-
-        private static bool TryGetLastTarget(out Player lastTarget)
+        private bool TryGetLastTarget(out Player lastTarget)
         {
             lastTarget = null;
             int numberHuman = 0;
             int numberSCP = 0;
             foreach (ReferenceHub allHub in ReferenceHub.AllHubs)
             {
-                KELog.Debug(allHub.nicknameSync.DisplayName);
                 if (allHub.IsHuman() && !SCPTeam.IsSCP(allHub))
                 {
                     numberHuman++;
                     lastTarget = Player.Get(allHub);
+                    
                 }
                 else if (SCPTeam.IsSCP(allHub))
                 {
