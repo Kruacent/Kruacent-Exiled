@@ -19,7 +19,7 @@ using UnityEngine;
 
 namespace KE.Items.Items
 {
-    public class SainteGrenada : KECustomGrenade, ICustomPickupModel
+    public class SainteGrenada : KECustomGrenade, ICustomPickupModel, IViolentItem
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
@@ -37,6 +37,7 @@ namespace KE.Items.Items
                 },
             };
         }
+        public bool IsViolent => false;
         public override ItemType ItemType => ItemType.GrenadeHE;
         public override string Name { get; set; } = "SainteGrenada";
         public override float Weight { get; set; } = 1.5f;

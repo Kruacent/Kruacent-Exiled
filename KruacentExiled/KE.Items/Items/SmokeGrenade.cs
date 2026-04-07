@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Enums;
-using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
-using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Map;
 using KE.Items.API.Features;
 using KE.Items.API.Interface;
@@ -10,7 +8,7 @@ using KE.Items.Items.ItemEffects;
 
 namespace KE.Items.Items
 {
-    public class SmokeGrenade : KECustomGrenade, ISwitchableEffect
+    public class SmokeGrenade : KECustomGrenade, ISwitchableEffect,IViolentItem
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
@@ -28,6 +26,7 @@ namespace KE.Items.Items
                 },
             };
         }
+        public bool IsViolent => false;
         public override ItemType ItemType => ItemType.GrenadeFlash;
         public override string Name { get; set; } = "Smoke Grenade";
         public override float Weight { get; set; } = 0.65f;

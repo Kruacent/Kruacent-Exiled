@@ -12,7 +12,7 @@ using KE.Items.Items.PickupModels;
 
 namespace KE.Items.Items
 {
-    public class TPGrenada : KECustomGrenade, ISwitchableEffect, ICustomPickupModel
+    public class TPGrenada : KECustomGrenade, ISwitchableEffect, ICustomPickupModel,IViolentItem
     {
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
@@ -31,6 +31,7 @@ namespace KE.Items.Items
                 },
             };
         }
+        public bool IsViolent => false;
         public override ItemType ItemType => ItemType.GrenadeHE;
         public override string Name { get; set; } = "Teleportation Grenade";
         public override float Weight { get; set; } = 0.65f;

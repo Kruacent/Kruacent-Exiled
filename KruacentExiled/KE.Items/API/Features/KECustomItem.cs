@@ -324,6 +324,27 @@ namespace KE.Items.API.Features
 
         }
 
+        public virtual bool IsViolent()
+        {
+            if(this is IViolentItem item)
+            {
+                return item.IsViolent;
+            }
+
+            if (ItemType.IsWeapon(true))
+            {
+                return true;
+            }
+            if(ItemType.GetCategory() == ItemCategory.Firearm || ItemType.GetCategory() == ItemCategory.Grenade)
+            {
+                return true;
+            }
+
+
+            return false;
+        }
+
+
 
 //obselete warning
 #pragma warning disable CS0618

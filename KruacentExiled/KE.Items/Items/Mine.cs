@@ -11,7 +11,7 @@ using KE.Items.Items.PickupModels;
 
 namespace KE.Items.Items
 {
-    public class Mine : KECustomItem, ISwitchableEffect, ICustomPickupModel
+    public class Mine : KECustomItem, ISwitchableEffect, ICustomPickupModel,IViolentItem
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
@@ -30,6 +30,7 @@ namespace KE.Items.Items
             };
         }
         public override ItemType ItemType => ItemType.KeycardJanitor;
+        public bool IsViolent => true;
         public override string Name { get; set; } = "Mine";
         public override float Weight { get; set; } = 0.65f;
         public Color Color { get; set; } = Color.yellow;

@@ -21,7 +21,7 @@ using UnityEngine;
 
 namespace KE.Items.Items.LeSoleil 
 { 
-    public class LeSoleil : KECustomGrenade, IUpgradableCustomItem
+    public class LeSoleil : KECustomGrenade, IUpgradableCustomItem, IViolentItem
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
@@ -39,6 +39,8 @@ namespace KE.Items.Items.LeSoleil
                 },
             };
         }
+
+        public bool IsViolent { get; }
         public override ItemType ItemType => ItemType.GrenadeFlash;
         public override string Name { get; set; } = "Le Soleil";
         public override float Weight { get; set; } = 0.65f;

@@ -12,7 +12,7 @@ using KE.Items.API.Core.Upgrade;
 
 namespace KE.Items.Items
 {
-    public class HealZone : KECustomGrenade, ILumosItem, ISwitchableEffect, IUpgradableCustomItem
+    public class HealZone : KECustomGrenade, ILumosItem, ISwitchableEffect, IUpgradableCustomItem, IViolentItem
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
@@ -84,6 +84,8 @@ namespace KE.Items.Items
         {
             [Scp914KnobSetting.OneToOne] = new UpgradeProperties(100, "CocktailMolotov")
         };
+
+        public bool IsViolent => false;
 
         public HealZone()
         {

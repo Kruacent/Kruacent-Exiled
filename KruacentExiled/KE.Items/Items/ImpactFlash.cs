@@ -4,10 +4,11 @@ using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using KE.Items.API.Features;
+using KE.Items.API.Interface;
 
 namespace KE.Items.Items
 {
-    public class ImpactFlash : KECustomGrenade
+    public class ImpactFlash : KECustomGrenade, IViolentItem
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
@@ -30,6 +31,7 @@ namespace KE.Items.Items
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime => 3f;
         public override bool ExplodeOnCollision => true;
+        public bool IsViolent => false;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 5,

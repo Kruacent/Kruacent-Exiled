@@ -1,24 +1,17 @@
 ﻿using Exiled.API.Features;
-using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
-using Hints;
-using HintServiceMeow.UI.Utilities;
 using KE.Items.API.Features;
+using KE.Items.API.Interface;
 using KE.Utils.API.Features;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 
 namespace KE.Items.Items
 {
 
-    public class FriendMaker : KECustomWeapon
+    public class FriendMaker : KECustomWeapon, IViolentItem
     {
 
         public const string TranslationCooldown = "FriendMakerCooldown";
@@ -60,7 +53,9 @@ namespace KE.Items.Items
 
 
         public override byte ClipSize { get; } = 1;
-        
+
+        public bool IsViolent => false;
+
         private Dictionary<Player, DateTime> cooldowns;
 
         private TimeSpan Cooldown = new(0,1,0);

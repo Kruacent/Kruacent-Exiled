@@ -8,7 +8,7 @@ using KE.Items.Items.ItemEffects;
 
 namespace KE.Items.Items
 {
-    public class ProximityGrenade : KECustomGrenade, ISwitchableEffect
+    public class ProximityGrenade : KECustomGrenade, ISwitchableEffect, IViolentItem
     {
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
@@ -28,7 +28,7 @@ namespace KE.Items.Items
             };
         }
 
-
+        public bool IsViolent => false;
         public override ItemType ItemType => ItemType.GrenadeFlash;
         public override string Name { get; set; } = "ProximityGrenade";
         public override float Weight { get; set; } = 0.65f;

@@ -8,7 +8,7 @@ using KE.Items.Items.ItemEffects;
 
 namespace KE.Items.Items
 {
-    public class LowGravityGrenade : KECustomGrenade, ISwitchableEffect
+    public class LowGravityGrenade : KECustomGrenade, ISwitchableEffect, IViolentItem
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
@@ -29,6 +29,7 @@ namespace KE.Items.Items
         public override ItemType ItemType => ItemType.GrenadeHE;
         public override string Name { get; set; } = "Low Gravity Grenade";
         public override float Weight { get; set; } = 0.65f;
+        public bool IsViolent => false;
         public override float FuseTime => 3f;
         public override bool ExplodeOnCollision => false;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.gray;
