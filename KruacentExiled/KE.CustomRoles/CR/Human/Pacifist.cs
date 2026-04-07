@@ -1,9 +1,12 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Extensions;
+using Exiled.API.Features;
 using Exiled.Events.EventArgs.Item;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.ThrowableProjectiles;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.API.Interfaces;
+using KE.Utils.API.Features;
+using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -51,7 +54,7 @@ namespace KE.CustomRoles.CR.Human
             Exiled.Events.Handlers.Item.ChargingJailbird += OnChargingJailbird;
             Exiled.Events.Handlers.Player.Shooting += OnShooting;
             Exiled.Events.Handlers.Player.ThrownProjectile += OnThrownProjectile;
-            Exiled.Events.Handlers.Player.Escaped += OnEscaped;
+            Exiled.Events.Handlers.Player.Escaping += OnEscaping;
             base.SubscribeEvents();
         }
 
@@ -62,7 +65,7 @@ namespace KE.CustomRoles.CR.Human
             Exiled.Events.Handlers.Item.ChargingJailbird -= OnChargingJailbird;
             Exiled.Events.Handlers.Player.Shooting -= OnShooting;
             Exiled.Events.Handlers.Player.ThrownProjectile -= OnThrownProjectile;
-            Exiled.Events.Handlers.Player.Escaped -= OnEscaped;
+            Exiled.Events.Handlers.Player.Escaping -= OnEscaping;
             base.UnsubscribeEvents();
         }
         private void OnThrownProjectile(ThrownProjectileEventArgs ev)
@@ -105,19 +108,28 @@ namespace KE.CustomRoles.CR.Human
             }
         }
 
-
-        private void OnEscaped(EscapedEventArgs ev)
+        private void OnEscaping(EscapingEventArgs ev)
         {
             Player escape = ev.Player;
-            if (Check(escape))
+            if (Check(escape) && ev.IsAllowed)
             {
                 RemoveRole(escape);
-                if(Player.Enumerable.Count(p => p.Role == RoleTypeId.Spectator) > 0)
-                {
-                    Player respawned = Player.Enumerable.First();
 
-                    respawned.Role.Set(escape.Role, Exiled.API.Enums.SpawnReason.Escaped, RoleSpawnFlags.All);
+                Player respawned = Player.Enumerable.GetRandomValue(p => p.IsDead);
+
+
+                if (respawned != null)
+                {
+                    respawned.Role.Set(ev.NewRole, Exiled.API.Enums.SpawnReason.Respawn, RoleSpawnFlags.All);
+                    GiveRandomRole(respawned);
+
+                    Timing.CallDelayed(1f, () =>
+                    {
+                        KELog.Debug(respawned);
+                    });
                 }
+
+
 
             }
         }
