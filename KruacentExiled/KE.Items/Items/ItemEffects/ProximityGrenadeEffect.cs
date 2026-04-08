@@ -62,9 +62,7 @@ namespace KE.Items.Items.ItemEffects
             {
                 if (roomsInRange.Contains(player.CurrentRoom))
                 {
-                    var color = GetTeamColor(player);
-
-                    var lineColor = new Color(color.red, color.green, color.blue);
+                    var lineColor = player.Role.Color;
 
                     var direction = player.Position - position;
                     var distance = direction.magnitude;
@@ -81,37 +79,6 @@ namespace KE.Items.Items.ItemEffects
             }
         }
 
-        public (float red, float green, float blue) GetTeamColor(Player player)
-        {
-            float red;
-            float green;
-            float blue;
 
-            switch (player.Role.Side)
-            {
-                case Side.Mtf:
-                    red = 0;
-                    green = 0.39f;
-                    blue = 1;
-                    break;
-                case Side.ChaosInsurgency:
-                    red = 0;
-                    green = 0.51f;
-                    blue = 0;
-                    break;
-                case Side.Scp:
-                    red = 0.59f;
-                    green = 0;
-                    blue = 0;
-                    break;
-                default:
-                    red = 1;
-                    green = 0.41f;
-                    blue = 0.71f;
-                    break;
-            }
-
-            return (red, green, blue);
-        }
     }
 }
