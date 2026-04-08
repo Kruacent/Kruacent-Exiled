@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using PlayerRoles.PlayableScps.HumeShield;
+using PlayerStatsSystem;
 using System;
 using UnityEngine;
 using LabPlayer = LabApi.Features.Wrappers.Player;
@@ -12,9 +13,10 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.Tier1
         {
             return "More shield";
         }
+        public const float Shield = 1100f;
         public override string GetDescription(ReferenceHub hub)
         {
-            return "Set your max Shield at 1100\ninstead of 300";
+            return $"Set your max Shield at {Shield}\ninstead of {hub.playerStats.GetModule<HumeShieldStat>().MaxValue}";
         }
         public override void Grant(ReferenceHub hub)
         {

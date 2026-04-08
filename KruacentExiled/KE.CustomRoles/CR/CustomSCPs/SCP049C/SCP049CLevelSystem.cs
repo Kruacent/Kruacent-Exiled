@@ -296,7 +296,11 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
 
         private void Reset()
         {
-            ragdoll.GameObject.GetComponent<RagdollArrowComp>().SetColor(Color.white);
+            if(ragdoll.GameObject.TryGetComponent<RagdollArrowComp>(out var comp))
+            {
+                comp.SetColor(Color.white);
+            }
+            
             ragdoll = null;
             cooldown = 0;
         }

@@ -22,21 +22,22 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.Tier2
         }
 
 
-        private Dictionary<ReferenceHub, LastDamage> cooldowns = new();
+        private static Dictionary<ReferenceHub, LastDamage> cooldowns = new();
 
         public override void Grant(ReferenceHub hub)
         {
             cooldowns.Add(hub, null);
-            Exiled.Events.Handlers.Player.Hurting += OnHurting;
+            
         }
 
         public override void Remove(ReferenceHub hub)
         {
-            
+
+            cooldowns.Remove(hub);
         }
 
 
-        private void OnHurting(HurtingEventArgs ev)
+        internal static void OnHurting(HurtingEventArgs ev)
         {
 
             ReferenceHub hub = ev.Player.ReferenceHub;

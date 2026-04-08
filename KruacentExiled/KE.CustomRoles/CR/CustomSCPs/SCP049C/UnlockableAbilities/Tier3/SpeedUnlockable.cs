@@ -2,6 +2,7 @@
 using Exiled.API.Features;
 using InventorySystem.Items.Usables.Scp1344;
 using KE.Utils.API.Features;
+using KE.Utils.Extensions;
 using System;
 using LabPlayer = LabApi.Features.Wrappers.Player;
 namespace KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.Tier3
@@ -28,7 +29,8 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.Tier3
 
             MovementBoost move = lab.GetEffect<MovementBoost>();
 
-            lab.EnableEffect<MovementBoost>((byte)(move.Intensity + Intensity), 0, false);
+            Player.Get(lab).AddLevelEffect<MovementBoost>(Intensity);
+
             hub.GetComponent<SCP049CLevelSystem>().DisableAll();
             
 
@@ -39,10 +41,10 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.Tier3
             LabPlayer lab = LabPlayer.Get(hub);
             MovementBoost move = lab.GetEffect<MovementBoost>();
 
-            lab.EnableEffect<MovementBoost>((byte)(move.Intensity - Intensity), 0, false);
+            Player.Get(lab).AddLevelEffect<MovementBoost>(-Intensity);
 
 
-            
+
         }
     }
 }

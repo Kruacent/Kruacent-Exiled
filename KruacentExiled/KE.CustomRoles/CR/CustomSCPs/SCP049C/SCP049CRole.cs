@@ -4,6 +4,7 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp049;
 using KE.CustomRoles.API.Features;
 using KE.CustomRoles.CR.CustomSCPs.SCP049C.Positions;
+using KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.Tier2;
 using KE.Utils.API.Displays.DisplayMeow;
 using LabApi.Events.Arguments.Scp049Events;
 using NorthwoodLib.Pools;
@@ -120,6 +121,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
             Exiled.Events.Handlers.Scp049.FinishingRecall += OnFinishingRecall;
             LabApi.Events.Handlers.Scp049Events.UsedDoctorsCall += OnUsedDoctorsCall;
             Exiled.Events.Handlers.Player.SpawnedRagdoll += OnSpawnedRagdoll;
+            Exiled.Events.Handlers.Player.Hurting += DeflectDamageUnlockable.OnHurting;
             base.SubscribeEvents();
         }
         protected override void UnsubscribeEvents()
@@ -127,6 +129,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
             Exiled.Events.Handlers.Scp049.FinishingRecall -= OnFinishingRecall;
             LabApi.Events.Handlers.Scp049Events.UsedDoctorsCall -= OnUsedDoctorsCall;
             Exiled.Events.Handlers.Player.SpawnedRagdoll -= OnSpawnedRagdoll;
+            Exiled.Events.Handlers.Player.Hurting -= DeflectDamageUnlockable.OnHurting;
             base.UnsubscribeEvents();
         }
         private void OnFinishingRecall(FinishingRecallEventArgs ev)
