@@ -45,6 +45,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
 
         public void SetColor(Color color)
         {
+            if (arrow == null) return;
             StringBuilder sb = StringBuilderPool.Shared.Rent();
 
             sb.Append("<color=#");
