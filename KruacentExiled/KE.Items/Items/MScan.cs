@@ -214,7 +214,6 @@ namespace KE.Items.Items
             foreach (Pickup pickup in toDestroy)
             {
                 Remove(pickup);
-                Cooldowns.Remove(pickup);
                 pickup.Destroy();
             }
 
@@ -225,6 +224,7 @@ namespace KE.Items.Items
         {
             ActiveSensors.Remove(pickup);
             BatteryLife.Remove(pickup);
+            Cooldowns.Remove(pickup);
             //Models[pickup].Destroy();
         }
 
@@ -248,8 +248,7 @@ namespace KE.Items.Items
 
             foreach (var i in invalid)
             {
-                ActiveSensors.Remove(i);
-                BatteryLife.Remove(i);
+                Remove(i);
                 i.Destroy();
             }
             ListPool<Pickup>.Pool.Return(invalid);
