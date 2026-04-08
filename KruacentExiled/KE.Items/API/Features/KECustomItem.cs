@@ -325,7 +325,7 @@ namespace KE.Items.API.Features
 
         }
 
-        public static bool IsViolent(KECustomItem item)
+        public static bool IsConsideredViolent(KECustomItem item)
         {
             if(item is IViolentItem violent)
             {
