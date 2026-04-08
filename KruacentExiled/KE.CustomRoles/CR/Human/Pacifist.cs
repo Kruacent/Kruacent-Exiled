@@ -112,7 +112,7 @@ namespace KE.CustomRoles.CR.Human
             {
                 if (ci is KECustomItem kecr)
                 {
-                    result = KECustomItem.IsViolent(kecr);
+                    result = KECustomItem.IsConsideredViolent(kecr);
                 }
 
             }
@@ -126,7 +126,7 @@ namespace KE.CustomRoles.CR.Human
             {
                 if (ci is KECustomItem kecr)
                 {
-                    result = KECustomItem.IsViolent(kecr);
+                    result = KECustomItem.IsConsideredViolent(kecr);
                 }
 
             }
