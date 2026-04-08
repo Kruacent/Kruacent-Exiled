@@ -14,7 +14,7 @@ namespace KE.Map.Surface.ElevatorGateA
 {
     public class CustomKillerCollision : MonoBehaviour
     {
-
+        // use OnTriggerEnter instead
         private Collider[] NonAlloc = new Collider[8];
 
 
