@@ -13,14 +13,15 @@ namespace KE.GlobalEventFramework.Examples
 
         public override Version Version => new Version(1, 0, 0);
         public override string Name => "KE.GEF.Examples";
+        public static MainPlugin Instance { get; private set; }
         public override void OnEnabled()
         {
-            
+            Instance = this;
         }
 
         public override void OnDisabled()
         {
-            
+            Instance = null;
         }
     }
 }

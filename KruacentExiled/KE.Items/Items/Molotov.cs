@@ -1,120 +1,112 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
-using Exiled.API.Features.Toys;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Map;
-using KE.Items.Interface;
-using Player = Exiled.API.Features.Player;
-using MEC;
+using Exiled.Events.EventArgs.Player;
+using KE.Items.API.Core.Models;
+using KE.Items.API.Core.Upgrade;
+using KE.Items.API.Features;
+using KE.Items.API.Interface;
+using KE.Items.Items.ItemEffects;
+using KE.Items.Items.PickupModels;
+using Scp914;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.GrenadeFlash)]
-    public class Molotov : CustomGrenade, ILumosItem
+    public class Molotov : KECustomGrenade, ISwitchableEffect, ICustomPickupModel, IUpgradableCustomItem
     {
-        public override uint Id { get; set; } = 1049;
-        public override string Name { get; set; } = "Cocktail Molotov";
-        public override string Description { get; set; } = "ARSON";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Molotov Cocktail",
+                    [TranslationKeyDesc] = "ARSON",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Cocktail Molotov",
+                    [TranslationKeyDesc] = "La meilleure arme contre un blindé",
+                },
+            };
+        }
+        public override ItemType ItemType => ItemType.GrenadeFlash;
+        public override string Name { get; set; } = "CocktailMolotov";
         public override float Weight { get; set; } = 0.65f;
-        public override float FuseTime { get; set; } = 5f;
-        public override bool ExplodeOnCollision { get; set; } = true;
-        public float DamageModifier { get; set; } = 0f;
-        public UnityEngine.Color Color { get; set; } = UnityEngine.Color.yellow;
-        private const float RefreshRate = 0.5f;
-        private const float Duration = 20f;
+        public override float FuseTime => 5f;
+        public override bool ExplodeOnCollision => true;
+        public Color Color { get; set; } = Color.yellow;
+        public CustomItemEffect Effect { get; set; }
+        public PickupModel PickupModel { get; }
+
+        public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade => new Dictionary<Scp914KnobSetting, UpgradeProperties>()
+        {
+            [Scp914KnobSetting.OneToOne] = new UpgradeProperties(100, "HealZone")
+        };
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
-            Limit = 3,
+            Limit = 2,
             LockerSpawnPoints = new List<LockerSpawnPoint>
-            {
-                new LockerSpawnPoint()
-                {
-                    Chance = 75,
-                    UseChamber = true,
-                    Type = LockerType.Misc,
-                    Zone = ZoneType.Entrance,
-                },
-                new LockerSpawnPoint()
-                {
-                    Chance = 50,
-                    UseChamber = true,
-                    Type = LockerType.Misc,
-                    Zone = ZoneType.LightContainment,
-                },
-                new LockerSpawnPoint()
-                {
-                    Chance = 50,
-                    UseChamber = true,
-                    Type = LockerType.Misc,
-                    Zone = ZoneType.HeavyContainment,
-                },
+            { 
+                new LockerSpawnPoint() { Chance = 75, UseChamber = true, Type = LockerType.Misc, Zone = ZoneType.Entrance, },
+                new LockerSpawnPoint() { Chance = 50, UseChamber = true, Type = LockerType.Misc, Zone = ZoneType.LightContainment, },
+                new LockerSpawnPoint() { Chance = 50, UseChamber = true, Type = LockerType.Misc, Zone = ZoneType.HeavyContainment, },
             },
 
             RoomSpawnPoints = new List<RoomSpawnPoint>
             {
-                new RoomSpawnPoint()
-                {
-                    Chance = 75,
-                    Room = RoomType.LczGlassBox,
-                },
-                new RoomSpawnPoint()
-                {
-                    Chance = 100,
-                    Room = RoomType.HczNuke,
-                },
+                new RoomSpawnPoint() { Chance = 75, Room = RoomType.LczGlassBox, },
+                new RoomSpawnPoint() { Chance = 80, Room = RoomType.HczArmory, },
+                new RoomSpawnPoint() { Chance = 80, Room = RoomType.Hcz049, },
             },
         };
 
-        protected override void OnExploding(ExplodingGrenadeEventArgs ev)
+        public Molotov()
         {
-            float cylinderSize = 5;
-
-            ev.TargetsToAffect.Clear();
-
-            Player playerThrowingGrenade = ev.Player;
-            Vector3 molotovPosition = ev.Position;
-            Primitive wall = Primitive.Create(PrimitiveType.Cylinder, molotovPosition, null, new Vector3(cylinderSize, 0.01f, cylinderSize), true);
-            wall.Collidable = false;
-            wall.Visible = true;
-
-            wall.Color = Color.red;
-
-            var coroutineHandler = Timing.RunCoroutine(DamageInMolotovZone(wall.Position, cylinderSize, playerThrowingGrenade));
-
-            Timing.CallDelayed(Duration, () => {
-                wall.UnSpawn();
-                Timing.KillCoroutines(coroutineHandler);
-                wall.Destroy();
-            });          
+            Effect = new MolotovEffect();
+            PickupModel = new MolotovPModel(this);
         }
 
-        private IEnumerator<float> DamageInMolotovZone(Vector3 wallPosition, float cylinderSize, Player playerThrowingGrenade)
+        protected override void SubscribeEvents()
         {
-            while (true)
-            {
-                foreach (Player player in Player.List)
-                {
-                    if (IsPlayerInZone(player, wallPosition, cylinderSize))
-                    {
-                        if (Exiled.API.Features.Server.FriendlyFire || playerThrowingGrenade.Role.Team != player.Role.Team || playerThrowingGrenade == player)
-                        {
-                            player.Hurt(player.Health / 150, DamageType.Bleeding);
-                        }
-                    }
-                }
+            PickupModel.SubscribeEvents();
+            Exiled.Events.Handlers.Player.ReceivingEffect += ReceivedEffect;
+            Exiled.Events.Handlers.Player.PickingUpItem += PickingItem;
+            base.SubscribeEvents();
+        }
 
-                yield return Timing.WaitForSeconds(RefreshRate);
+        protected override void UnsubscribeEvents()
+        {
+            PickupModel.UnsubscribeEvents();
+            Exiled.Events.Handlers.Player.ReceivingEffect -= ReceivedEffect;
+            Exiled.Events.Handlers.Player.PickingUpItem -= PickingItem;
+            base.UnsubscribeEvents();
+        }
+
+        private void ReceivedEffect(ReceivingEffectEventArgs ev)
+        {
+            if (Effect is MolotovEffect molotovEffect)
+            {
+                molotovEffect.OnReceivingEffect(ev);
             }
         }
 
-        private bool IsPlayerInZone(Player player, Vector3 zonePosition, float radius)
+        private void PickingItem(PickingUpItemEventArgs ev)
         {
-            float distance = Vector3.Distance(new Vector3(player.Position.x, 0, player.Position.z),
-                                               new Vector3(zonePosition.x, 0, zonePosition.z));
-            return distance <= (radius/2) ;
+            if (Effect is MolotovEffect molotovEffect)
+            {
+                molotovEffect.OnPickingUp(ev);
+            }
+        }
+
+        protected override void OnExplodingGrenade(ExplodingGrenadeEventArgs ev)
+        {
+            Effect.Effect(ev);
+            ev.TargetsToAffect.Clear();
         }
     }
 }

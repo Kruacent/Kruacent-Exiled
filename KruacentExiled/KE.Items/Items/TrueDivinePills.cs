@@ -1,33 +1,43 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
-using MEC;
 using Exiled.Events.EventArgs.Player;
-using PlayerHandle = Exiled.Events.Handlers.Player;
-using Exiled.API.Features;
-using Exiled.API.Extensions;
-using UnityEngine;
-using CustomPlayerEffects;
-using System.Linq;
+using KE.Items.API.Features;
+using KE.Items.API.Interface;
 using PlayerRoles;
-using KE.Items.Interface;
-using Exiled.CustomItems.API.EventArgs;
-using Exiled.Events.EventArgs.Scp914;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using PlayerHandle = Exiled.Events.Handlers.Player;
 
 /// <inheritdoc />
-[CustomItem(ItemType.SCP500)]
-public class TrueDivinePills : CustomItem, ILumosItem
+public class TrueDivinePills : KECustomItem, ILumosItem
 {
-    /// <inheritdoc/>
-    public override uint Id { get; set; } = 1050;
+    protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+    {
+        return new()
+        {
+            ["en"] = new()
+            {
+                [TranslationKeyName] = "True Divine Pills",
+                [TranslationKeyDesc] = "Guaranteed to respawn everybody, drop to change the mode",
+            },
+            ["fr"] = new()
+            {
+                [TranslationKeyName] = "True Divine Pills",
+                [TranslationKeyDesc] = "Fait réappaître tout le monde, lâcher pour changer le mode",
+            },
+        };
+    }
+
+    public override ItemType ItemType => ItemType.SCP500;
 
     /// <inheritdoc/>
-    public override string Name { get; set; } = "True Divine Pills";
+    public override string Name { get; set; } = "TrueDivinePills";
 
     /// <inheritdoc/>
-    public override string Description { get; set; } = "Guaranteed to respawn everybody";
 
     /// <inheritdoc/>
     public override float Weight { get; set; } = 0.65f;
@@ -58,17 +68,19 @@ public class TrueDivinePills : CustomItem, ILumosItem
     {
         if (!Check(ev.Item))
             return;
+
         if (ev.IsThrown)
         {
             ev.IsAllowed = true;
             return;
         }
+        Player player = ev.Player;
 
         tp = !tp;
         if (tp)
-            ev.Player.ShowHint("Players will spawn to you");
+            KECustomItem.ItemEffectHint(player, "Players will spawn to you");
         else
-            ev.Player.ShowHint("Players won't spawn to you");
+            KECustomItem.ItemEffectHint(player, "Players won't spawn to you");
         ev.IsAllowed = false;
         
         
@@ -85,7 +97,7 @@ public class TrueDivinePills : CustomItem, ILumosItem
 
         if (Player.List.Where(x => x.Role == RoleTypeId.Spectator).Count() == 0)
         {
-            player.ShowHint("No one to respawn");
+            KECustomItem.ItemEffectHint(player, "No one to respawn");
             ev.IsAllowed = false;
             return;
         }

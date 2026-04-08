@@ -15,7 +15,7 @@ namespace KE.GlobalEventFramework.GEFE.Handlers
             HandleCommands();
 
 
-
+            GlobalEvent.ActivateAll();
         }
 
         private void HandleCommands()
@@ -47,7 +47,7 @@ namespace KE.GlobalEventFramework.GEFE.Handlers
                 GlobalEvent.ActiveGE = GlobalEvent.ChooseGE(nbGE);
             }
 
-            GlobalEvent.ActivateAll();
+            
         }
 
         public void OnWaitingForPlayers()
@@ -58,12 +58,12 @@ namespace KE.GlobalEventFramework.GEFE.Handlers
 		public void OnEndingRound(RoundEndedEventArgs _)
 		{
             Log.Debug("ending round");
-            GlobalEvent.ActiveGE.ForEach(e => e.UnsubscribeEvent());
+            GlobalEvent.DeactivateAll();
         }
         public void OnRestartingRound()
         {
             Log.Debug("restarting");
-            GlobalEvent.ActiveGE.ForEach(e => e.UnsubscribeEvent());
+            GlobalEvent.DeactivateAll();
         }
 
     }

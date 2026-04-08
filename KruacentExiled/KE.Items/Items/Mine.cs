@@ -1,36 +1,46 @@
-﻿using Exiled.API.Enums;
-using Exiled.API.Features.Attributes;
-using Exiled.API.Features.Spawn;
-using Exiled.CustomItems.API.Features;
-using KE.Items.Interface;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Exiled.Events.EventArgs.Player;
-using Exiled.API.Features.Toys;
-using Player = Exiled.API.Features.Player;
-using MEC;
-using Exiled.API.Features.Items;
-using Model = KE.Items.Models.Model;
-using KE.Items.Models;
+using Exiled.API.Features.Spawn;
+using KE.Items.API.Interface;
+using KE.Items.Items.ItemEffects;
+using KE.Items.API.Features;
+using System.Collections.Generic;
+using Exiled.API.Enums;
+using KE.Items.API.Core.Models;
+using KE.Items.Items.PickupModels;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.KeycardJanitor)]
-    public class Mine : CustomItem, ILumosItem
+    public class Mine : KECustomItem, ISwitchableEffect, ICustomPickupModel,IViolentItem
     {
-        public override uint Id { get; set; } = 1053;
-        public override string Name { get; set; } = "Mine";
-        public override string Description { get; set; } = "Drop to deploy the mine, little advice : don't step on it";
-        public override float Weight { get; set; } = 0.65f;
-        public UnityEngine.Color Color { get; set; } = UnityEngine.Color.yellow;
-
-        private const float RefreshRate = .01f;
-        private const int MineActivationTime = 10;
-        private const float MineRadius = 0.7f;
-
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            Limit = 2,
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Mine",
+                    [TranslationKeyDesc] = "Drop to deploy the mine, little advice : don't step on it",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Mine",
+                    [TranslationKeyDesc] = "Une Mine ! Lâcher pour la déployer",
+                },
+            };
+        }
+        public override ItemType ItemType => ItemType.KeycardJanitor;
+        public bool IsViolent => true;
+        public override string Name { get; set; } = "Mine";
+        public override float Weight { get; set; } = 0.65f;
+        public Color Color { get; set; } = Color.yellow;
+        public CustomItemEffect Effect { get; set; }
+
+
+        public override SpawnProperties SpawnProperties { get; set; } = null;
+        /*new SpawnProperties()
+        {
+            Limit = 1,
             DynamicSpawnPoints = new List<DynamicSpawnPoint>
             {
                 new DynamicSpawnPoint()
@@ -68,81 +78,45 @@ namespace KE.Items.Items
                 },
             }
 
-        };
+        };*/
+
+        public PickupModel PickupModel { get; }
+
+        public Mine()
+        {
+            Effect = new MineEffect();
+            PickupModel = new MinePModel(this);
+        }
+
+        protected override void SubscribeEvents()
+        {
+            PickupModel.SubscribeEvents();
+            base.SubscribeEvents();
+        }
+
+        protected override void UnsubscribeEvents()
+        {
+            PickupModel.UnsubscribeEvents();
+            base.UnsubscribeEvents();
+        }
 
         protected override void OnDroppingItem(DroppingItemEventArgs ev)
         {
-            if(!Check(ev.Item)) 
-                return;
+            
+
             if (ev.IsThrown)
             {
                 ev.IsAllowed = true;
                 return;
             }
-            
+
             ev.IsAllowed = false;
             ev.Player.RemoveItem(ev.Item);
+            Effect.Effect(ev);
 
-            MineModel m = new MineModel();
-
-            //put the mine on the floor
-            m.Spawn(ev.Player.Position-new Vector3(0,ev.Player.Scale.y),new Quaternion());
-
-            Timing.RunCoroutine(WaitAndActivateMine(ev.Player, m));
         }
 
 
-        private IEnumerator<float> WaitAndActivateMine(Player player, MineModel mine)
-        {
-            int countdown = MineActivationTime;
-            while (countdown > 0)
-            {
-                player.ShowHint($"The mine will be active in {countdown} seconds !", 1f);
-                yield return Timing.WaitForSeconds(1f);
-                countdown--;
-            }
-
-            // Message final lorsque la mine s'active
-            player.ShowHint("Mine activated !");
-            Timing.RunCoroutine(ActiveMine(mine, MineRadius));
-        }
-
-        private IEnumerator<float> ActiveMine(MineModel mine, float cylinderSize)
-        {
-            Timing.RunCoroutine(mine.Activate());
-            bool endWhile = true;
-            while (endWhile)
-            {
-                foreach (Player player in Player.List)
-                {
-                    if (IsPlayerInZone(player, mine.Position, cylinderSize, 3))
-                    {
-                        ((ExplosiveGrenade)Item.Create(ItemType.GrenadeHE)).SpawnActive(mine.Position).FuseTime = 0f;
-
-                        // Delete the mine
-                        mine.UnSpawn();
-                        endWhile = false;
-                        break;
-                    }
-                }
-
-                yield return Timing.WaitForSeconds(RefreshRate);
-            }
-        }
-
-        private bool IsPlayerInZone(Player player, Vector3 zonePosition, float radius, float height)
-        {
-            // Calculate the horizontal distance (x, z)
-            float horizontalDistance = Vector3.Distance(
-                new Vector3(player.Position.x, 0, player.Position.z),
-                new Vector3(zonePosition.x, 0, zonePosition.z)
-            );
-
-            // Calculate the vertical difference (y)
-            float verticalDifference = Mathf.Abs(player.Position.y - zonePosition.y);
-
-            // Check if the player is in the 3d zone.
-            return horizontalDistance <= (radius / 2) && verticalDifference <= (height / 2);
-        }
+        
     }
 }

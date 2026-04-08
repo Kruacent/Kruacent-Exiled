@@ -6,6 +6,7 @@ using Exiled.Events.EventArgs.Player;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using KE.GlobalEventFramework.GEFE.API.Interfaces;
 
 
 namespace KE.GlobalEventFramework.Examples.GE
@@ -13,7 +14,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     /// <summary>
     /// Every some amount of time all player take the position of another
     /// </summary>
-    public class Shuffle : GlobalEvent
+    public class Shuffle : GlobalEvent, IStart,IEvent
     {
         ///<inheritdoc/>
         public override uint Id { get; set; } = 1045;
@@ -26,7 +27,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         private List<Player> players;
         private List<Vector3> pos;
         ///<inheritdoc/>
-        public override IEnumerator<float> Start()
+        public IEnumerator<float> Start()
         {
             this.players = Player.List.ToList().Where(p => !p.IsNPC).ToList();
             this.players.ShuffleList();
@@ -66,12 +67,12 @@ namespace KE.GlobalEventFramework.Examples.GE
             }
         }
         ///<inheritdoc/>
-        public override void SubscribeEvent()
+        public void SubscribeEvent()
         {
             PlayerHandler.Joined += OnJoined;
         }
         ///<inheritdoc/>
-        public override void UnsubscribeEvent()
+        public void UnsubscribeEvent()
         {
             PlayerHandler.Joined -= OnJoined;
         }

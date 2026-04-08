@@ -33,17 +33,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Interfaces
         /// </summary>
         uint[] IncompatibleGE { get; set; }
 
-        /// <summary>
-        /// Is launched at the start of a round
-        /// </summary>
-        IEnumerator<float> Start();
-        /// <summary>
-        /// The method used to subcribe to event like with normal plugins
-        /// </summary>
-        void SubscribeEvent();
-        /// <summary>
-        /// The method used to unsubcribe to event like with normal plugins
-        /// </summary>
-        void UnsubscribeEvent();
+
+
     }
 }

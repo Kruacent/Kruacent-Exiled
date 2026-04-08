@@ -17,10 +17,6 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override int Weight { get; set; } = 3;
         ///<inheritdoc/>
-        public override IEnumerator<float> Start()
-        {
-            yield return 0;
-        }
 
     }
 }

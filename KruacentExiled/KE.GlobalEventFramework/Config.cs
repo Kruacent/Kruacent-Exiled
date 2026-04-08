@@ -16,6 +16,8 @@ namespace KE.GlobalEventFramework
 		public bool Debug { get; set; } = true;
 		[Description("Show the log when the plugin is registering global event (require Debug to be true)")]
 		public bool ShowRegisteringLog { get; set; } = false;
+		[Description("The chance a global event is not shown and show [REDACTED] instead (0~100)")]
+		public int ChanceRedacted { get; set; } = 10;
 
 	}
 }
