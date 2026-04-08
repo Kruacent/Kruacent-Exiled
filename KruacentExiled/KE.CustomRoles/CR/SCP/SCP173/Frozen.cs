@@ -31,7 +31,7 @@ namespace KE.CustomRoles.CR.SCP.SCP173
                 ["fr"] = new()
                 {
                     [TranslationKeyName] = "SCP-173 Glacé",
-                    [TranslationKeyDesc] = "Instead of Tantrum you drop a SCP-244.\nTué quelqu'un qui est en hypothermie donne du shield (dans le jeu hein)",
+                    [TranslationKeyDesc] = "Au lieu de chier tu poses un SCP-244.\nTué quelqu'un qui est en hypothermie donne du shield (dans le jeu hein)",
                 },
                 ["legacy"] = new()
                 {
@@ -42,7 +42,7 @@ namespace KE.CustomRoles.CR.SCP.SCP173
         }
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
-        public override float SpawnChance { get; set; } = 0;
+        public override float SpawnChance { get; set; } = 100;
         public override int MaxHealth { get; set; } = 4500;
 
         public override RoleTypeId Role => RoleTypeId.Scp173;
