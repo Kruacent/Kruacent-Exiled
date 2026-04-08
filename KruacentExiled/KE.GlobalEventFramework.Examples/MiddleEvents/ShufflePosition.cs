@@ -34,18 +34,20 @@ namespace KE.GlobalEventFramework.Examples.MiddleEvents
 
             List<Player> players = Player.Enumerable.ToList();
             List<Vector3> positions = ListPool<Vector3>.Shared.Rent(players.Count);
-
-            Vector3 tmp = positions[0];
-            for (int i = 0; i < positions.Count - 1; i++)
+            if(players.Count > 1)
             {
-                positions[i] = players[i+1].Position;
-            }
+                Vector3 tmp = positions[0];
+                for (int i = 0; i < positions.Count - 1; i++)
+                {
+                    positions[i] = players[i + 1].Position;
+                }
 
-            positions[positions.Count - 1] = tmp;
+                positions[positions.Count - 1] = tmp;
 
-            for(int i = 0; i < players.Count - 1; i++)
-            {
-                players[i].Teleport(positions[i]);
+                for (int i = 0; i < players.Count - 1; i++)
+                {
+                    players[i].Teleport(positions[i]);
+                }
             }
         }
 
