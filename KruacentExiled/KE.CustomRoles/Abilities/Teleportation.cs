@@ -14,6 +14,11 @@ namespace KE.CustomRoles.Abilities
     {
         public override string Name { get; } = "Teleportation";
 
+        public const string TranslationLift = "TeleportationLift";
+        public const string TranslationLcz = "TeleportationLcz";
+        public const string TranslationDifferentZone = "TeleportationDifferentZone";
+
+
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new()
@@ -22,17 +27,17 @@ namespace KE.CustomRoles.Abilities
                 {
                     [TranslationKeyName] = "Teleportation",
                     [TranslationKeyDesc] = $"You lose {Damage} HP per teleportation, can't be used in lifts",
-                    ["TeleportationLift"] = "can't teleport in lifts",
-                    ["TeleportationLcz"] = "The target is inaccessible",
-                    ["TeleportationDifferentZone"] = "The target is inaccessible",
+                    [TranslationLift] = "can't teleport in lifts",
+                    [TranslationLcz] = "The target is inaccessible",
+                    [TranslationDifferentZone] = "The target is inaccessible",
                 },
                 ["fr"] = new()
                 {
                     [TranslationKeyName] = "Téléportation",
                     [TranslationKeyDesc] = $"Tu perds {Damage} HP/téléportation, ne peux pas être utilisé dans les ascenseurs",
-                    ["TeleportationLift"] = "Impossible de se téléporter dans un ascenseur",
-                    ["TeleportationLcz"] = "Position inaccessible",
-                    ["TeleportationDifferentZone"] = "Position inaccessible",
+                    [TranslationLift] = "Impossible de se téléporter dans un ascenseur",
+                    [TranslationLcz] = "Position inaccessible",
+                    [TranslationDifferentZone] = "Position inaccessible",
                 }
             };
         }
@@ -85,7 +90,7 @@ namespace KE.CustomRoles.Abilities
             {
                 if (showMessage)
                 {
-                    ShowEffectHint(player, "TeleportationLift");
+                    ShowEffectHint(player, TranslationLift);
                 }
                 
                 return false;
@@ -96,7 +101,7 @@ namespace KE.CustomRoles.Abilities
             {
                 if (showMessage)
                 {
-                    ShowEffectHint(player, "TeleportationLcz");
+                    ShowEffectHint(player, TranslationLcz);
                 }
 
                 
@@ -107,7 +112,7 @@ namespace KE.CustomRoles.Abilities
             {
                 if (showMessage)
                 {
-                    ShowEffectHint(player, "TeleportationDifferentZone");
+                    ShowEffectHint(player, TranslationDifferentZone);
                 }
                 return false;
             }
