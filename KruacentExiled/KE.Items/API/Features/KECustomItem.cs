@@ -325,25 +325,25 @@ namespace KE.Items.API.Features
 
         }
 
-        public virtual bool IsViolent()
+        public static bool IsViolent(KECustomItem item)
         {
-            if(this is IViolentItem item)
+            if(item is IViolentItem violent)
             {
-                return item.IsViolent;
+                return violent.IsViolent;
             }
 
-            if (ItemType.IsWeapon(true))
+            if (item.ItemType.IsWeapon(true))
             {
                 return true;
             }
-            ItemCategory itemCategory = ItemType.GetCategory();
+            ItemCategory itemCategory = item.ItemType.GetCategory();
 
             if (itemCategory == ItemCategory.Firearm)
             {
                 return true;
             }
-            ProjectileType projectileType = ItemType.GetProjectileType();
-            if (projectileType == Exiled.API.Enums.ProjectileType.FragGrenade || projectileType == ProjectileType.Scp018)
+            ProjectileType projectileType = item.ItemType.GetProjectileType();
+            if (projectileType == ProjectileType.FragGrenade || projectileType == ProjectileType.Scp018)
             {
                 return true;
             }
