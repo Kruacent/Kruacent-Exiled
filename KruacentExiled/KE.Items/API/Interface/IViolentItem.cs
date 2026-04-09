@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Items.Interface
-{
-    internal interface ILumosItem
-    {
 
-        UnityEngine.Color Color { get; set; }
+namespace KE.Items.API.Interface
+{
+    public interface IViolentItem
+    {
+        bool IsViolent { get; }
+
     }
 }

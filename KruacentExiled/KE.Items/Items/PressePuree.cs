@@ -1,25 +1,50 @@
 ﻿
-using System;
-using System.Collections.Generic;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
+using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Scp914;
+using KE.Items.API.Core.Models;
+using KE.Items.API.Core.Upgrade;
+using KE.Items.API.Events;
+using KE.Items.API.Features;
+using KE.Items.API.Interface;
+using KE.Items.Items.PickupModels;
+using KE.Utils.API.Features;
+using Scp914;
+using System;
+using System.Collections.Generic;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.GrenadeHE)]
-    public class PressePuree : CustomGrenade
+    public class PressePuree : KECustomGrenade, IUpgradableCustomItem, ICustomPickupModel
     {
-        public override uint Id { get; set; } = 1046;
-        public override string Name { get; set; } = "Presse Purée";
-        public override string Description { get; set; } = "The grenade explode at impact but does less damage\n 5% to upgrade in 914 on very fine";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Presse Purée",
+                    [TranslationKeyDesc] = "explode at impact but does less damage",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Presse Purée",
+                    [TranslationKeyDesc] = "Explosion à l'impact mais moins efficace",
+                },
+            };
+        }
+        public override string Name { get; set; } = "PressePuree";
+
+        public override ItemType ItemType => ItemType.GrenadeHE;
         public override float Weight { get; set; } = 0.65f;
-        public override float FuseTime { get; set; } = 1.5f;
-        public override bool ExplodeOnCollision { get; set; } = true;
-        public float DamageModifier { get; set; } = 0.4f;
+        public override float FuseTime => 5f;
+        public override bool ExplodeOnCollision => true;
+        public override float DamageModifier => .3f;
+        public PickupModel PickupModel { get; }
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 5,
@@ -48,42 +73,48 @@ namespace KE.Items.Items
             },
         };
 
+        public PressePuree()
+        {
+            PickupModel = new PressePureePModel(this);
+        }
+
 
         protected override void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Scp914.UpgradingInventoryItem += OnUpgrading;
+            PickupModel.SubscribeEvents();
             base.SubscribeEvents();
         }
 
-        /// <inheritdoc/>
         protected override void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Scp914.UpgradingInventoryItem -= OnUpgrading;
+            PickupModel.UnsubscribeEvents();
             base.UnsubscribeEvents();
         }
 
-        private void OnUpgrading(UpgradingInventoryItemEventArgs ev)
-        {
-            if (!Check(ev.Item))
-                return;
-            if (ev.KnobSetting != Scp914.Scp914KnobSetting.VeryFine)
-                return;
 
-            var rng = UnityEngine.Random.Range(0, 101);
-            Log.Debug($"inventory {Name} : {rng}");
-            if (rng < 5)
+
+
+        protected override void OnExplodeDestructible(OnExplodeDestructibleEventsArgs ev)
+        {
+            KELog.Debug("old dmagea="+ev.Damage);
+            Player player = Player.Get(ev.Destructible.NetworkId);
+            if (!Check(ev.ExplosionGrenade)) return;
+
+            
+            if (ev.Damage <= 0f) return;
+
+            if (player is not null && player.IsScp)
             {
-                //success
-                ev.Player.RemoveItem(ev.Item);
-                TryGive(ev.Player, "Sainte Grenada");
-                ev.IsAllowed = true;
+                ev.Damage /= 3f;
             }
-            else
-            {
-                ev.Player.ShowHint("no luck");
-                ev.IsAllowed = false;
-            }
+
+            KELog.Debug("new daamager="+ev.Damage);
 
         }
+
+        public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade { get; private set; } = new Dictionary<Scp914KnobSetting, UpgradeProperties>()
+        {
+            { Scp914KnobSetting.VeryFine,new UpgradeProperties(5, "SainteGrenada")}
+        };
     }
 }

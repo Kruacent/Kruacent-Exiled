@@ -4,6 +4,8 @@ using System.Linq;
 using MEC;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using System;
+using KE.Utils.Display;
+using Exiled.Events.Commands.PluginManager;
 
 namespace KE.GlobalEventFramework.GEFE.API.Features
 {
@@ -31,24 +33,6 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         ///<inheritdoc/>
         public virtual uint[] IncompatibleGE { get; set; } = new uint[0];
 
-
-
-        ///<inheritdoc/>
-        public virtual IEnumerator<float> Start()
-        {
-            if (MainPlugin.Instance.Config.Debug) Log.Error($"{GetType().Name} Start is NOT overrided");
-            yield return 0;
-        }
-        ///<inheritdoc/>
-        public virtual void SubscribeEvent()
-        {
-            if (MainPlugin.Instance.Config.Debug) Log.Warn($"{GetType().Name} : SubscribeEvent is NOT overrided");
-        }
-        ///<inheritdoc/>
-        public virtual void UnsubscribeEvent()
-        {
-            if (MainPlugin.Instance.Config.Debug) Log.Warn($"{GetType().Name} : UnsubscribeEvent is NOT overrided");
-        }
         public static void Register(IGlobalEvent globalEvent)
         {
             Log.Send($"REGISTERING {globalEvent.Name}", Discord.LogLevel.Info, ConsoleColor.Blue);
@@ -106,26 +90,29 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
 
         private static void Show()
         {
-            var random = UnityEngine.Random.value;
+            var random = UnityEngine.Random.Range(0,101);
 
+            ShowConsole();
             foreach (Player player in Player.List)
             {
-                Exiled.API.Features.Broadcast b = new Exiled.API.Features.Broadcast
-                {
-                    Content = ShowText(random > .5f),
-                    Duration = 10
-                };
-                player.Broadcast(b);
+                DisplayPlayer.Get(player).Hint(new (KE.Utils.Display.Enums.HPosition.Center,KE.Utils.Display.Enums.VPosition.GlobalEvent, ShowText(random < MainPlugin.Instance.Config.ChanceRedacted), 10));
             }
         }
 
-        private static String ShowText(bool redacted = false)
+        private static void ShowConsole()
         {
-            String result = "Global Events: ";
             Log.Info($"Global Event(s) ({ActiveGE.Count()}): ");
             for (int i = 0; i < ActiveGE.Count(); i++)
             {
                 Log.Info(ActiveGE[i].Name);
+            }
+        }
+
+        private static string ShowText(bool redacted = false)
+        {
+            string result = "Global Events: ";
+            for (int i = 0; i < ActiveGE.Count(); i++)
+            {
                 if (redacted)
                 {
                     result += ActiveGE[i].Description;
@@ -162,15 +149,36 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         {
             if(globalEvent.Count != globalEvent.Distinct().Count()) throw new ArgumentException("You can't have the same GE twice in the same round");
             ActiveGE = globalEvent;
-            globalEvent.ForEach(e => e.SubscribeEvent());
 
             foreach (IGlobalEvent ge in ActiveGE)
             {
+                if(ge is IEvent geEvent)
+                {
+                    Log.Debug($"{ge.Name} implements IEvent, subscribing events");
+                    geEvent.SubscribeEvent();
+                }
+
+                if(ge is IStart geStart)
+                {
+                    Log.Debug($"{ge.Name} implements IStart, starting");
+                    CoroutineHandle a = Timing.RunCoroutine(geStart.Start());
+                    coroutineHandles.Add(a);
+                }
                 
-                CoroutineHandle a = Timing.RunCoroutine(ge.Start());
-                coroutineHandles.Add(a);
             }
             Show();
+        }
+
+
+        internal static void DeactivateAll()
+        {
+            foreach(IGlobalEvent ge in ActiveGE)
+            {
+                if (ge is IEvent geEvent)
+                {
+                    geEvent.UnsubscribeEvent();
+                }
+            }
         }
 
         private static List<IGlobalEvent> ChooseRandomGE(int nbGE = 1)

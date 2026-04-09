@@ -1,6 +1,7 @@
 ﻿using Player = Exiled.API.Features.Player;
 using System.Collections.Generic;
 using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using MEC;
 using System.Linq;
 using Exiled.API.Extensions;
@@ -8,27 +9,28 @@ using Exiled.API.Features;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
-    public class Impostor : GlobalEvent
+    public class Impostor : GlobalEvent, IStart
     {
         public override uint Id { get; set; } = 1044;
         public override string Name { get; set; } = "Impostor";
         public override string Description { get; set; } = "Ne vous fiez pas aux apparences !";
         public override int Weight { get; set; } = 1;
 
-        public override IEnumerator<float> Start()
+        public IEnumerator<float> Start()
         {
             while (!Round.IsEnded)
             {
-                int randomNumber = UnityEngine.Random.Range(180, 300);
-                yield return Timing.WaitForSeconds(randomNumber);
-                ChangingPlayer();
+                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(180, 300));
+
+                ChangingHumanApparence();
+                ChangingSCPApparence();
             }
         }
 
-        private void ChangingPlayer()
+        private void ChangingHumanApparence()
         {
             // Liste des joueurs vivants
-            List<Player> playerInServer = Player.List.Where(p => !p.IsNPC && p.IsAlive).ToList();
+            List<Player> playerInServer = Player.List.Where(p => !p.IsNPC && p.IsAlive && !p.IsScp).ToList();
 
             if (playerInServer.Count < 2)
             {
@@ -65,6 +67,13 @@ namespace KE.GlobalEventFramework.Examples.GE
             }
         }
 
+        private void ChangingSCPApparence()
+        {
+            Player randomHumanPlayer = Player.List.Where(p => !p.IsNPC && p.IsAlive && !p.IsScp).ToList().GetRandomValue();
 
+            Player randomScpPlayer = Player.List.Where(p => !p.IsNPC && p.IsAlive && p.IsScp).ToList().GetRandomValue();
+
+            randomScpPlayer.ChangeAppearance(randomHumanPlayer.Role);
+        }
     }
 }

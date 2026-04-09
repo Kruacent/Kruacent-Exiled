@@ -3,19 +3,35 @@ using Exiled.API.Enums;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
+using KE.Items.API.Features;
+using KE.Items.API.Interface;
 
 namespace KE.Items.Items
 {
-    [CustomItem(ItemType.GrenadeFlash)]
-    public class ImpactFlash : CustomGrenade
+    public class ImpactFlash : KECustomGrenade, IViolentItem
     {
-        public override uint Id { get; set; } = 1052;
-        public override string Name { get; set; } = "Impact Flash";
-        public override string Description { get; set; } = "The grenade explode at impact";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Impact Flash",
+                    [TranslationKeyDesc] = "The name is self-explanatory",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Impact Flash",
+                    [TranslationKeyDesc] = "Une flashbang qui explose à l'impacte",
+                },
+            };
+        }
+        public override ItemType ItemType => ItemType.GrenadeFlash;
+        public override string Name { get; set; } = "ImpactFlash";
         public override float Weight { get; set; } = 0.65f;
-        public override float FuseTime { get; set; } = 3f;
-        public override bool ExplodeOnCollision { get; set; } = true;
-        public float DamageModifier { get; set; } = 1f;
+        public override float FuseTime => 3f;
+        public override bool ExplodeOnCollision => true;
+        public bool IsViolent => false;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 5,
