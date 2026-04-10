@@ -74,7 +74,7 @@ namespace KE.CustomRoles.CR.MTF.RedMist
         public void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
-
+            Exiled.Events.Handlers.Player.Hurt -= OnHurt;
         }
 
         private void OnReceivingEffect(ReceivingEffectEventArgs ev)
