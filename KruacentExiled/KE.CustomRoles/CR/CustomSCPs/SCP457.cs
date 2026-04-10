@@ -107,12 +107,16 @@ namespace KE.CustomRoles.CR.CustomSCPs
             {
 
 
-                if(Physics.OverlapSphereNonAlloc(scp.Position,5, SphereNonAlloc) > 0)
+                int num = Physics.OverlapSphereNonAlloc(scp.Position, 5, SphereNonAlloc);
+
+                if (num > 0)
                 {
-                    for (int i = 0; i < SphereNonAlloc.Length; i++)
+                    for (int i = 0; i < num; i++)
                     {
                         Player player = Player.Get(SphereNonAlloc[i]);
                         if (player is null) continue;
+                        if (!HitboxIdentity.IsDamageable(scp.ReferenceHub, player.ReferenceHub)) continue;
+
                         if(Physics.Linecast(player.Position, scp.Position, out var hitinfo))
                         {
                             float damage = -(hitinfo.distance / 3) + 10;
