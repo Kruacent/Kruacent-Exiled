@@ -88,6 +88,8 @@ namespace KE.CustomRoles.Abilities
 
             obj.Damage /=3f;
 
+            GrenadesSerials.Remove(serial);
+
             KELog.Debug("explode with "+ obj.Damage);
 
         }
