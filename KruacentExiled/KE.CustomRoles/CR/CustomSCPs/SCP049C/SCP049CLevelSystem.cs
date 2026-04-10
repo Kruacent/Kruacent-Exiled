@@ -113,6 +113,9 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
 
         public void OnDestroy()
         {
+            SettingHandler.RightPressed -= SettingHandler_RightPressed;
+            SettingHandler.LeftPressed -= SettingHandler_LeftPressed;
+
             GUI.Dispose();
             gui = null;
             DisableAll();
