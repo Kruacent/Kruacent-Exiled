@@ -68,13 +68,27 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
             { AmmoType.Ammo44Cal, 19 }, { AmmoType.Nato762, 60 }
         };
 
+
+        protected override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.Hurting += OnDealingDamage;
+            base.SubscribeEvents();
+        }
+
+        protected override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.Hurting -= OnDealingDamage;
+            base.UnsubscribeEvents();
+        }
+
+
         protected override void RoleAdded(Player player)
         {
             /*Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
             _filterMems[player] = 0f;
             SetupSpeaker(player);*/
             _playerDamage[player] = 0f;
-            Exiled.Events.Handlers.Player.Hurting += OnDealingDamage;
+            
         }
 
         protected override void RoleRemoved(Player player)
@@ -83,7 +97,7 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
             DestroySpeaker(player);
             _filterMems.Remove(player);*/
 
-            Exiled.Events.Handlers.Player.Hurting -= OnDealingDamage;
+            
             _playerDamage.Remove(player);
         }
 
