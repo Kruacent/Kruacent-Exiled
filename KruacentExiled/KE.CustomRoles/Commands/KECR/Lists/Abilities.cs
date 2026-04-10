@@ -16,7 +16,7 @@ namespace KE.CustomRoles.Commands.KECR.Lists
 
         public string[] Aliases => ["a"];
 
-        public string Description => throw new NotImplementedException();
+        public string Description => "list abilities";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
