@@ -12,6 +12,7 @@ using Exiled.Events.EventArgs.Server;
 using HintServiceMeow.Core.Models.Arguments;
 using HintServiceMeow.Core.Utilities;
 using KE.CustomRoles.API.Features;
+using KE.CustomRoles.CR.MTF;
 using KE.Items.API.Features;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
@@ -246,7 +247,10 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
             if(item is not null)
             {
-                if(item.Id == 1050 || item.Id == 1047)
+
+                KECustomItem kECustomItem = item as KECustomItem;
+                
+                if (kECustomItem.Name == "TrueDivinePills" || kECustomItem.Name == "Divine Pills")
                 {
                     ShowEffectHint(player, GetTranslation(player, "SCP035CantPickup"));
                     ev.IsAllowed = false;
