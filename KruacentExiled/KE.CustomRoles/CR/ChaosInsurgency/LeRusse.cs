@@ -44,15 +44,9 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.ChaosRifleman;
 
-        public bool CanHearItself { get; set; } = false;
         public float DamageToLootbox { get; set; } = 500f;
 
         private readonly Dictionary<Player, float> _playerDamage = new();
-        private readonly Dictionary<Player, SpeakerToy> _speakers = new();
-        private readonly Dictionary<Player, float> _filterMems = new();
-
-        private readonly OpusDecoder _decoder = new();
-        private readonly OpusEncoder _encoder = new(VoiceChat.Codec.Enums.OpusApplicationType.Voip);
 
         private static object[] _lootPool = null;
 
@@ -84,18 +78,12 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
 
         protected override void RoleAdded(Player player)
         {
-            /*Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
-            _filterMems[player] = 0f;
-            SetupSpeaker(player);*/
             _playerDamage[player] = 0f;
             
         }
 
         protected override void RoleRemoved(Player player)
         {
-            /*Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
-            DestroySpeaker(player);
-            _filterMems.Remove(player);*/
 
             
             _playerDamage.Remove(player);
@@ -161,6 +149,7 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
             }
         }
 
+        
         private object GetRandomGambleReward()
         {
             if (_lootPool == null)
@@ -190,75 +179,5 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
 
             return _lootPool[Random.Range(0, _lootPool.Length)];
         }
-        private void OnVoiceChatting(VoiceChattingEventArgs ev)
-        {
-            if (!Check(ev.Player) || !_speakers.TryGetValue(ev.Player, out SpeakerToy speaker)) return;
-
-            ev.IsAllowed = false;
-
-            float[] pcmBuffer = new float[1920];
-            int length = _decoder.Decode(ev.VoiceMessage.Data, ev.VoiceMessage.DataLength, pcmBuffer);
-
-            float gateThreshold = 0.02f;
-            float muffle = 0.10f;
-            float mem = _filterMems[ev.Player];
-
-            for (int i = 0; i < length; i++)
-            {
-                float input = pcmBuffer[i];
-                if (Mathf.Abs(input) < gateThreshold)
-                {
-                    mem *= 0.9f;
-                    pcmBuffer[i] = mem;
-                    continue;
-                }
-                mem += (input - mem) * muffle;
-                float output = Mathf.Clamp(mem * 6.0f, -1f, 1f);
-                pcmBuffer[i] = output;
-            }
-            _filterMems[ev.Player] = mem;
-
-            byte[] encoded = new byte[4000];
-            int encodedLen = _encoder.Encode(pcmBuffer, encoded);
-
-            BroadcastAudio(ev.Player, speaker.NetworkControllerId, encoded, encodedLen);
-        }
-
-        private void BroadcastAudio(Player source, byte speakerId, byte[] data, int length)
-        {
-            var audioMsg = new AudioMessage(speakerId, data, (short)length);
-            Vector3 sourcePos = source.Position;
-
-            foreach (Player hub in Player.List)
-            {
-                if (hub == source && !CanHearItself) continue;
-                if (Vector3.Distance(hub.Position, sourcePos) <= 20f)
-                    hub.Connection.Send(audioMsg);
-            }
-        }
-
-        private void SetupSpeaker(Player p)
-        {
-            var prefab = NetworkClient.prefabs.Values.Select(x => x.GetComponent<SpeakerToy>()).FirstOrDefault(s => s != null);
-            if (prefab == null) return;
-
-            SpeakerToy speaker = Object.Instantiate(prefab, p.GameObject.transform);
-            speaker.transform.localPosition = Vector3.up * 1.5f;
-            speaker.transform.localScale = Vector3.zero;
-
-            NetworkServer.Spawn(speaker.gameObject);
-            speaker.NetworkControllerId = (byte)p.Id;
-            _speakers[p] = speaker;
-        }
-
-        private void DestroySpeaker(Player p)
-        {
-            if (_speakers.TryGetValue(p, out SpeakerToy speaker))
-            {
-                if (speaker != null) NetworkServer.Destroy(speaker.gameObject);
-                _speakers.Remove(p);
-            }
-        }
-
     }
 }
