@@ -4,6 +4,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.Items", "KE.Items\KE.Items.csproj", "{87D91720-B7B5-4FB7-AB18-FB6E70AC0D68}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.CustomRoles", "KE.CustomRoles\KE.CustomRoles.csproj", "{33CC074C-06DD-4545-91F2-F668F3C4779D}"
 EndProject
 Global
