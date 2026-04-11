@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
-namespace KE.Misc.Features.LobbyHints
+namespace KE.CustomRoles.Abilities.RedMist.Spear
 {
-    internal class LobbyHint : LoadingMiscFeature<LobbyHintBase>
+    public class SpearComp : MonoBehaviour
     {
+
+
+
     }
 }

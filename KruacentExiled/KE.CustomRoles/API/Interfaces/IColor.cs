@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
-namespace KE.Misc.Features.LobbyHints
+namespace KE.CustomRoles.API.Interfaces
 {
-    internal class LobbyHint : LoadingMiscFeature<LobbyHintBase>
+    public interface IColor
     {
+
+        Color32 Color { get; }
     }
 }

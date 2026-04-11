@@ -16,7 +16,7 @@ using System.Linq;
 using UnityEngine;
 using Player = Exiled.API.Features.Player;
 
-namespace KE.Items.Items
+/*namespace KE.Items.Items
 {
     public class Scp514 : KECustomItem
     {
@@ -114,12 +114,12 @@ namespace KE.Items.Items
             }
             ev.Item.Destroy();
             Vector3 pos = ev.Player.Position;
-            /*Scp514Model cage = new();
+            Scp514Model cage = new();
 
             cage.Create(pos,new());
 
             Timing.RunCoroutine(DoEffectIfInside(Radius,pos,cage));
-            */
+            
             
 
         }
@@ -163,7 +163,7 @@ namespace KE.Items.Items
             }
             _affectedPlayers.Clear();
             model.Destroy();
-        }*/
+        }
 
 
 
@@ -175,3 +175,4 @@ namespace KE.Items.Items
         }
     }
 }
+*/

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Misc.Features.LobbyHints
+namespace KE.CustomRoles.API.Interfaces
 {
-    internal class LobbyHint : LoadingMiscFeature<LobbyHintBase>
+    public interface IHealable
     {
+
+        public abstract HashSet<ItemType> HealItem { get; }
     }
 }
