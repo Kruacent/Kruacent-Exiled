@@ -2,15 +2,18 @@
 using System.Linq;
 using Exiled.API.Features;
 using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Displays.DisplayMeow.Placements;
 
 namespace KE.Misc.Features.GamblingCoin
 {
-    internal class PlayerUtils
+    internal static class PlayerUtils
     {
-        public static void SendBroadcast(Player p, string message)
+
+        private static HintPosition Position = new CoinHintPosition();
+        public static void SendBroadcast(Player player, string message)
         {
-            // todo better with SSS
-            p.Broadcast(5, message);
+            DisplayHandler.Instance.AddHint(Position.HintPlacement, player, message,5);
+            
         }
     }
 }
