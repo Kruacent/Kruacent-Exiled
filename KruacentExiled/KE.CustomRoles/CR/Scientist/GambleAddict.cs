@@ -1,32 +1,56 @@
 ﻿using Exiled.API.Features.Attributes;
+using Exiled.CustomRoles.API.Features;
+using KE.CustomRoles.Abilities;
+using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 using PlayerRoles;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace KE.CustomRoles.CR.Scientist
 {
-    [CustomRole(RoleTypeId.Scientist)]
-    internal class GambleAddict : Exiled.CustomRoles.API.Features.CustomRole
+    public class GambleAddict : KECustomRole, IColor
     {
-        public override string Name { get; set; } = "GambleAddict";
-        public override string Description { get; set; } = "Tu es un <color=#FFFF7C>Gamble Addict</color> \nT'as trade ton kit et ta carte contre 4 pièces \nfais en bon usage";
-        public override uint Id { get; set; } = 1043;
-        public override string CustomInfo { get; set; } = "GambleAddict";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Gamble Addict",
+                    [TranslationKeyDesc] = "you got 2 coins\ngood luck",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Accro du casino",
+                    [TranslationKeyDesc] = "T'as trade ton kit et ta carte contre 2 pièces \nfais en bon usage",
+                },
+                ["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Gamble Addict",
+                    [TranslationKeyDesc] = "T'as trade ton kit et ta carte contre 2 pièces \nfais en bon usage",
+                },
+            };
+        }
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.Scientist;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
-        public override bool IgnoreSpawnSystem { get; set; } = true;
 
         public override float SpawnChance { get; set; } = 100;
-        public override Vector3 Scale { get; set; } = new Vector3(1, 1, 1);
 
         public override List<string> Inventory { get; set; } = new List<string>()
-       {
+        {
           $"{ItemType.Coin}",
           $"{ItemType.Coin}",
-          $"{ItemType.Coin}",
-          $"{ItemType.Coin}"
         };
+
+        public override HashSet<string> Abilities { get; } = new()
+        {
+            "Trade"
+        };
+
+        public Color32 Color => new(0, 105, 59,0);
     }
 }

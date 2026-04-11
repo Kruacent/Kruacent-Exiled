@@ -21,7 +21,7 @@ using UnityEngine;
 
 namespace KE.Items.Items.ItemEffects
 {
-    public class MineEffect : CustomItemEffect, IUsingEvents
+    /*public class MineEffect : CustomItemEffect, IUsingEvents
     {
         private const float RefreshRate = .05f;
         private const int MineActivationTime = 10;
@@ -181,5 +181,5 @@ namespace KE.Items.Items.ItemEffects
             return horizontalDistance <= radius / 2 && verticalDifference <= height / 2;
         }
 
-    }
+    }*/
 }

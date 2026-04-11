@@ -4,6 +4,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.Items", "KE.Items\KE.Items.csproj", "{87D91720-B7B5-4FB7-AB18-FB6E70AC0D68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.CustomRoles", "KE.CustomRoles\KE.CustomRoles.csproj", "{33CC074C-06DD-4545-91F2-F668F3C4779D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,6 +12,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{33CC074C-06DD-4545-91F2-F668F3C4779D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33CC074C-06DD-4545-91F2-F668F3C4779D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33CC074C-06DD-4545-91F2-F668F3C4779D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33CC074C-06DD-4545-91F2-F668F3C4779D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{87D91720-B7B5-4FB7-AB18-FB6E70AC0D68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{87D91720-B7B5-4FB7-AB18-FB6E70AC0D68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87D91720-B7B5-4FB7-AB18-FB6E70AC0D68}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -18,6 +23,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BC01CE4A-86E8-4D2B-9046-908421EBBCD2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8FF2C1A6-0925-431F-BD27-B3353EBB6946}

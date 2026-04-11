@@ -16,7 +16,7 @@ using System.Linq;
 using UnityEngine;
 using Player = Exiled.API.Features.Player;
 
-namespace KE.Items.Items
+/*namespace KE.Items.Items
 {
     public class Scp514 : KECustomItem
     {
@@ -175,3 +175,4 @@ namespace KE.Items.Items
         }
     }
 }
+*/

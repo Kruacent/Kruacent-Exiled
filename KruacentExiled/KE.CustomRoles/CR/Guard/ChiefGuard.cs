@@ -1,22 +1,40 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features.Attributes;
+using KE.CustomRoles.API.Features;
+using KE.CustomRoles.API.Interfaces;
 using PlayerRoles;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace KE.CustomRoles.CR.Guard
 {
-    [CustomRole(RoleTypeId.FacilityGuard)]
-    internal class ChiefGuard : Exiled.CustomRoles.API.Features.CustomRole
+    public class ChiefGuard : KECustomRole, IColor
     {
-        public override string Name { get; set; } = "ChiefGuard";
-        public override string Description { get; set; } = "Tu es un <color=#70C3FF>Chef des gardes du site</color> \nT'as une carte de private \net un crossvec";
-        public override uint Id { get; set; } = 1046;
-        public override string CustomInfo { get; set; } = "Chef des Gardes";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new()
+            {
+                ["en"] = new()
+                {
+                    [TranslationKeyName] = "Chief Guard",
+                    [TranslationKeyDesc] = "you got a private card and a crossvec",
+                },
+                ["fr"] = new()
+                {
+                    [TranslationKeyName] = "Chef des gardes",
+                    [TranslationKeyDesc] = "T'as une carte de private \net un crossvec",
+                }
+                ,["legacy"] = new()
+                {
+                    [TranslationKeyName] = "Chef des gardes",
+                    [TranslationKeyDesc] = "T'as une carte de private \net un crossvec",
+                }
+            };
+        }
         public override int MaxHealth { get; set; } = 100;
         public override RoleTypeId Role { get; set; } = RoleTypeId.FacilityGuard;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
-        public override bool IgnoreSpawnSystem { get; set; } = true;
 
         public override float SpawnChance { get; set; } = 100;
 
@@ -35,5 +53,6 @@ namespace KE.CustomRoles.CR.Guard
           { AmmoType.Nato556, 120}
        };
 
+        public Color32 Color => new Color32(112, 195, 255, 0);
     }
 }
