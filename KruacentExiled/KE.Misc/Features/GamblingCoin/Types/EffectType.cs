@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Items.Interface
+namespace KE.Misc.Features.GamblingCoin.Types
 {
-    public interface IUse
-    {
-
-        string HowToUseItemDesc { get; set; }
+    public enum EffectType 
+    { 
+        Positive, 
+        Negative, 
     }
 }

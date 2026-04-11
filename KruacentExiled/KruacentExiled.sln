@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.Items", "KE.Items\KE.Items.csproj", "{87D91720-B7B5-4FB7-AB18-FB6E70AC0D68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.Misc", "KE.Misc\KE.Misc.csproj", "{378DD640-986B-4DA9-8C65-8D318E99E98C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.Items", "KE.Items\KE.Items.csproj", "{384C77EE-64DC-995B-2E8B-18F777109C62}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KE.CustomRoles", "KE.CustomRoles\KE.CustomRoles.csproj", "{33CC074C-06DD-4545-91F2-F668F3C4779D}"
 EndProject
@@ -21,6 +23,14 @@ Global
 		{87D91720-B7B5-4FB7-AB18-FB6E70AC0D68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87D91720-B7B5-4FB7-AB18-FB6E70AC0D68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87D91720-B7B5-4FB7-AB18-FB6E70AC0D68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{378DD640-986B-4DA9-8C65-8D318E99E98C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{378DD640-986B-4DA9-8C65-8D318E99E98C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{378DD640-986B-4DA9-8C65-8D318E99E98C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{378DD640-986B-4DA9-8C65-8D318E99E98C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{384C77EE-64DC-995B-2E8B-18F777109C62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{384C77EE-64DC-995B-2E8B-18F777109C62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{384C77EE-64DC-995B-2E8B-18F777109C62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{384C77EE-64DC-995B-2E8B-18F777109C62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

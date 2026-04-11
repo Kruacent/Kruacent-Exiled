@@ -119,13 +119,13 @@ using Player = Exiled.API.Features.Player;
             cage.Create(pos,new());
 
             Timing.RunCoroutine(DoEffectIfInside(Radius,pos,cage));
-
+            
             
 
         }
 
         
-        private IEnumerator<float> DoEffectIfInside(float radius,Vector3 spawnPos, Scp514Model model)
+        /*private IEnumerator<float> DoEffectIfInside(float radius,Vector3 spawnPos, Scp514Model model)
         {
             var time= Stopwatch.StartNew();
             Log.Debug("starting effect");

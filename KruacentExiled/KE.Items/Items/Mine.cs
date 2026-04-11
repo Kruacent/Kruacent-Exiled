@@ -11,7 +11,7 @@ using KE.Items.Items.PickupModels;
 
 namespace KE.Items.Items
 {
-    public class Mine : KECustomItem, ISwitchableEffect, ICustomPickupModel,IViolentItem
+    /*public class Mine : KECustomItem, ISwitchableEffect, ICustomPickupModel,IViolentItem
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
@@ -84,7 +84,7 @@ namespace KE.Items.Items
 
         public Mine()
         {
-            Effect = new MineEffect();
+            //Effect = new MineEffect();
             PickupModel = new MinePModel(this);
         }
 

@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Items.Interface
+namespace KE.Misc.Features.LobbyHints
 {
-    public interface IUse
+    internal class LobbyHint : LoadingMiscFeature<LobbyHintBase>
     {
-
-        string HowToUseItemDesc { get; set; }
     }
 }
