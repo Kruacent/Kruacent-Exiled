@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace KE.GlobalEventFramework
 {
-	internal class Config : IConfig
+	public class Config : IConfig
 	{
 
 		public bool IsEnabled { get; set; } = true;

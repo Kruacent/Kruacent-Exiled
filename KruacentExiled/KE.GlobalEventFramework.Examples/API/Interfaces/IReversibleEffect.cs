@@ -12,6 +12,5 @@ namespace KE.GlobalEventFramework.Examples.API.Interfaces
         string VoiceLineDeactivateTranslated { get; }
         sbyte MalfunctionDeactivation { get; }
         void DeactivateEffect();
-
     }
 }

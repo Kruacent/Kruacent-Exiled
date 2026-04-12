@@ -8,5 +8,6 @@ namespace KE.GlobalEventFramework.GEFE.Exceptions
 {
     public class FailedRegisterException(string message) : Exception(message)
     {
+
     }
 }
