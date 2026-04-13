@@ -6,6 +6,7 @@ using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Spawn;
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Player;
+using KE.Utils.API.Features.SCPs;
 using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,6 +80,8 @@ namespace KE.Map.Heavy.GamblingZone
             Player player = ev.Player;
             if (player == null) return;
             if (ev.Pickup == null) return;
+            if (SCPTeam.IsSCP(player.ReferenceHub)) return;
+
             if (!IsInGamblingRoom(player))
             {
                 Log.Debug($"player ({player.CustomName}) not in room ({player.Position})");
