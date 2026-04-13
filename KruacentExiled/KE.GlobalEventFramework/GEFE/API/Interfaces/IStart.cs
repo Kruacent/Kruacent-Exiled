@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace KE.GlobalEventFramework.GEFE.API.Interfaces
 {
-    public interface IReversible
+    public interface IStart
     {
-
-        public void OnDisable();
+        /// <summary>
+        /// Is launched at the start of a round
+        /// </summary>
+        void Start();
     }
 }

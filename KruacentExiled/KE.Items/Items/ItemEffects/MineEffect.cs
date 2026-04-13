@@ -1,4 +1,4 @@
-﻿using Exiled.API.Features;
+﻿/*using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Pickups.Projectiles;
@@ -181,5 +181,5 @@ namespace KE.Items.Items.ItemEffects
             return horizontalDistance <= radius / 2 && verticalDifference <= height / 2;
         }
 
-    }*/
-}
+    }
+}*/

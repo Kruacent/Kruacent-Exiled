@@ -6,18 +6,25 @@
   </PropertyGroup>
 	
   <ItemGroup>
-    <PackageReference Include="ExMod.Exiled" Version="9.6.0" />
+    <PackageReference Include="ExMod.Exiled" Version="9.13.1" />
   </ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\KE.BlackoutNDoor\KE.BlackoutNDoor.csproj" />
-		<ProjectReference Include="..\KE.Utils\KE.Utils.csproj" />
+		<ProjectReference Include="..\KE.GlobalEventFramework\KE.GlobalEventFramework.csproj" />
 	</ItemGroup>
 
   <ItemGroup>
 	  <Reference Include="Assembly-CSharp-firstpass" HintPath="$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll" />
 	  <Reference Include="UnityEngine" HintPath="$(EXILED_REFERENCES)\UnityEngine.dll" />
 	  <Reference Include="UnityEngine.CoreModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll" />
+	  <Reference Include="UnityEngine.PhysicsModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll" />
+	  <Reference Include="0Harmony" HintPath="$(EXILED_REFERENCES)\0Harmony.dll" />
+	  <Reference Include="Mirror" HintPath="$(EXILED_REFERENCES)\Mirror.dll" />
+	  <Reference Include="UnityEngine.AudioModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.AudioModule.dll" />
+	  <Reference Include="AudioPlayerApi" HintPath="$(EXILED_REFERENCES)\AudioPlayerApi.dll" />
+	  <Reference Include="KE.Utils" HintPath="$(EXILED_DEV_REFERENCES)\Plugins\KE.Utils.dll" />
+	  <Reference Include="KE.Map" HintPath="$(EXILED_DEV_REFERENCES)\Plugins\KE.Map.dll" />
+	  <Reference Include="KE.Misc" HintPath="$(EXILED_DEV_REFERENCES)\Plugins\KE.Misc.dll" />
   </ItemGroup>
 
 	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">

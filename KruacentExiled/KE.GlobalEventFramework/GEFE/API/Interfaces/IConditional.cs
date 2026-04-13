@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace KE.GlobalEventFramework.GEFE.API.Interfaces
 {
-    public interface IReversible
+    public interface IConditional
     {
-
-        public void OnDisable();
+        public bool Condition();
     }
 }

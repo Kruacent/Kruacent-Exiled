@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.GlobalEventFramework.GEFE.API.Interfaces
+namespace KE.GlobalEventFramework.GEFE.Exceptions
 {
-    public interface IReversible
+    public class FailedRegisterException(string message) : Exception(message)
     {
 
-        public void OnDisable();
     }
 }
