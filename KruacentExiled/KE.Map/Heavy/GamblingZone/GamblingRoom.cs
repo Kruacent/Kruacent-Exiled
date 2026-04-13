@@ -117,7 +117,7 @@ namespace KE.Map.Heavy.GamblingZone
             {
                 p.Destroy();
             }
-            LabApi.Events.Handlers.PlayerEvents.SearchedToy += OnPickup;
+            LabApi.Events.Handlers.PlayerEvents.SearchedToy -= OnPickup;
             _interact.Destroy();
             _list.Remove(this);
         }
