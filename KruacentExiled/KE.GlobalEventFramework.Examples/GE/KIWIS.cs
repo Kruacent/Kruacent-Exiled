@@ -4,25 +4,27 @@ using PlayerRoles;
 using Utils.NonAllocLINQ;
 using System.Collections.Generic;
 using System.Linq;
-using KE.GlobalEventFramework.GEFE.API.Features;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
-
+using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Features.Hints;
+using KE.GlobalEventFramework.GEFE.API.Enums;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
     /// <summary>
     /// The scp start with 2/3 of it's life and end with 4/3 of it's vanilla life 
     /// </summary>
-    public class KIWIS : GlobalEvent,IStart
+    public class KIWIS : GlobalEvent, IAsyncStart
     {
         ///<inheritdoc/>
         public override uint Id { get; set; } = 1047;
         ///<inheritdoc/>
         public override string Name { get; set; } = "KIWIS";
         ///<inheritdoc/>
-        public override string Description { get; set; } = "Kill It While It's Small";
+        public override string Description { get; } = "Kill It While It's Small";
+        public override ImpactLevel ImpactLevel => ImpactLevel.Medium;
         ///<inheritdoc/>
-        public override int Weight { get; set; } = 1;
+        public override int WeightedChance { get; set; } = 1;
         ///<inheritdoc/>
         public IEnumerator<float> Start()
         {

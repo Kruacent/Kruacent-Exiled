@@ -1,214 +1,275 @@
-﻿using Exiled.API.Features;
+﻿using CommandSystem.Commands.RemoteAdmin.Broadcasts;
+using Exiled.API.Extensions;
+using Exiled.API.Features;
+using Exiled.API.Features.Pools;
+using Exiled.Events.EventArgs.Map;
+using Exiled.Events.EventArgs.Server;
+using HintServiceMeow.Core.Models.Hints;
+using KE.GlobalEventFramework.GEFE.API.Enums;
+using KE.GlobalEventFramework.GEFE.API.Extensions;
+using KE.GlobalEventFramework.GEFE.API.Interfaces;
+using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using MEC;
-using KE.GlobalEventFramework.GEFE.API.Interfaces;
-using System;
-using KE.Utils.Display;
-using Exiled.Events.Commands.PluginManager;
+using System.Text;
+using UnityEngine;
 
 namespace KE.GlobalEventFramework.GEFE.API.Features
 {
-    public abstract class GlobalEvent : IGlobalEvent
+    public abstract class GlobalEvent : KEEvents
     {
-        /// <summary>
-        /// A list of Active GlobalEvents
-        /// </summary>
-        public static List<IGlobalEvent> ActiveGlobalEvents => ActiveGE.ToList();
-        internal static List<IGlobalEvent> ActiveGE { get; set; } = new List<IGlobalEvent>();
-        internal static List<CoroutineHandle> coroutineHandles = new List<CoroutineHandle>();
-        internal static Dictionary<uint, IGlobalEvent> GlobalEvents { get; private set; } = new Dictionary<uint, IGlobalEvent>();
+
+        private class GlobalEventHandler : IUsingEvents
+        {
+            private bool _eventsub = false;
+
+            public void SubscribeEvents()
+            {
+                if (_eventsub) return;
+
+                Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
+                Exiled.Events.Handlers.Server.RoundEnded += OnEndingRound;
+
+                _eventsub = true;
+            }
+
+            public void UnsubscribeEvents()
+            {
+                if (!_eventsub) return;
+                Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
+                Exiled.Events.Handlers.Server.RoundEnded -= OnEndingRound;
+
+                _eventsub = false;
+            }
+
+            private void OnEndingRound(RoundEndedEventArgs _)
+            {
+                Log.Warn("ending round");
+                DisableEvents(_activeGE);
+            }
+            private void OnRoundStarted()
+            {
+                if(ForcedGE.Count == 0)
+                {
+                    Activate();
+                }
+                else
+                {
+                    _activeGE = ForcedGE.ToHashSet();
+                    ForcedGE.Clear();
+                    EnableEvents(_activeGE);
+                    
+                    Show();
+                }
+            }
+
+
+        }
+
+
+        private static Config Config => MainPlugin.Instance.Config;
+        private static GlobalEventHandler _handler = new();
+
+        private static HashSet<GlobalEvent> _activeGE = new();
+
+        public static IReadOnlyDictionary<ImpactLevel, string> ImpactToColor = new Dictionary<ImpactLevel, string>()
+        {
+            { ImpactLevel.VeryLow, "#d8d8ff" },
+            { ImpactLevel.Low, "#d8e8f0" },
+            { ImpactLevel.Medium, "#d8fcde" },
+            { ImpactLevel.High, "#fbfbd8" },
+            { ImpactLevel.VeryHigh, "#f0e8d8" },
+            { ImpactLevel.Insane, "#ffd8d8" },
+        };
+
+
+        public static HashSet<GlobalEvent> ForcedGE { get; } = new();
+
+
         /// <summary>
         /// A list of all registered GlobalEvents
         /// </summary>
-        public static List<IGlobalEvent> GlobalEventsList => GlobalEvents.Values.ToList();
+        public static IEnumerable<GlobalEvent> GlobalEventsList => List.Where(ev => ev is GlobalEvent).Cast<GlobalEvent>();
         ///<inheritdoc/>
-        public abstract uint Id { get; set; }
-        ///<inheritdoc/>
-        public abstract string Name { get; set; }
-        ///<inheritdoc/>
-        public abstract string Description { get; set; }
-        ///<inheritdoc/>
-        public abstract int Weight { get; set; }
-        ///<inheritdoc/>
-        public virtual uint[] IncompatibleGE { get; set; } = new uint[0];
+        public abstract string Description { get; }
+        public virtual string[] AltDescription { get; } = null;
 
-        public static void Register(IGlobalEvent globalEvent)
+        public virtual ImpactLevel ImpactLevel { get; } = ImpactLevel.Medium;
+        public bool IsActive
         {
-            Log.Send($"REGISTERING {globalEvent.Name}", Discord.LogLevel.Info, ConsoleColor.Blue);
-            if (GlobalEvents.ContainsKey(globalEvent.Id))
+            get
             {
-                Log.Error($"{globalEvent.Name}'s id is already registered by {Get(globalEvent.Id)}");
-                return;
+                return _activeGE.Contains(this);
             }
-            GlobalEvents.Add(globalEvent.Id, globalEvent);
-            Log.Info($"{globalEvent.Name} is registered");
         }
 
-        public static void Register(List<IGlobalEvent> globalEvents)
+
+        public static int NumberOfGE { get; set; } = -1;
+
+
+
+        protected sealed override void SubscribeEvents()
         {
-            globalEvents.ForEach(globalEvent => Register(globalEvent));
+            _handler.SubscribeEvents();
+            base.SubscribeEvents();
         }
 
-        /// <summary>
-        /// Stop all Coroutine from GE
-        /// </summary>
-        internal static void StopCoroutines()
+        protected sealed override void UnsubscribeEvents()
         {
-            coroutineHandles.ForEach(coroutineHandle =>
+            _handler.UnsubscribeEvents();
+            
+            base.UnsubscribeEvents();
+        }
+
+
+        protected override void Disable(KEEvents ev)
+        {
+
+            _activeGE.Remove(ev as GlobalEvent);
+            base.Disable(ev);
+        }
+
+        private static void Activate()
+        {
+            if(NumberOfGE == -1)
             {
-                Timing.KillCoroutines(coroutineHandle);
-            });
-        }
-
-        public static bool TryGet(uint id, out IGlobalEvent globalEvent)
-        {
-            globalEvent = Get(id);
-            return globalEvent != null;
-        }
-
-        public static bool TryGet(string name, out IGlobalEvent globalEvent)
-        {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new System.Exception("name can't be null or empty");
+                NumberOfGE = Random.value < .1f ? 2 : 1;
             }
-            globalEvent = uint.TryParse(name, out uint id) ? Get(id) : Get(name);
 
-            return globalEvent != null;
-        }
 
-        public static IGlobalEvent Get(string name)
-        {
-            return GlobalEvents.Values.FirstOrDefault(ge => ge.Name == name);
-        }
-
-        public static IGlobalEvent Get(uint id)
-        {
-            return GlobalEvents.TryGetValue(id, out IGlobalEvent globalEvent) ? globalEvent : null;
+            _activeGE = GetRandomEvent<GlobalEvent>(NumberOfGE).ToHashSet();
+            
+            EnableEvents(_activeGE);
+            Show();
         }
 
         private static void Show()
         {
-            var random = UnityEngine.Random.Range(0,101);
+            
 
             ShowConsole();
+
+
+            string text = ShowText();
+
             foreach (Player player in Player.List)
             {
-                DisplayPlayer.Get(player).Hint(new (KE.Utils.Display.Enums.HPosition.Center,KE.Utils.Display.Enums.VPosition.GlobalEvent, ShowText(random < MainPlugin.Instance.Config.ChanceRedacted), 10));
+                AbstractHint hint = DisplayHandler.Instance.AddHint(MainPlugin.GEAnnouncement, player, text, 10);
+
+                hint.FontSize = 30;
+                
             }
         }
 
         private static void ShowConsole()
         {
-            Log.Info($"Global Event(s) ({ActiveGE.Count()}): ");
-            for (int i = 0; i < ActiveGE.Count(); i++)
+            Log.Info($"Global Event(s) ({_activeGE.Count()}): ");
+            foreach (GlobalEvent ge in _activeGE)
             {
-                Log.Info(ActiveGE[i].Name);
+                Log.Info(ge.Name);
+            }
+
+        }
+
+        private List<string> AllDesc
+        {
+            get
+            {
+                List<string> allDesc =
+                [
+                    Description, 
+                    .. AltDescription
+                ];
+                return allDesc;
             }
         }
 
-        private static string ShowText(bool redacted = false)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="desc">0 mean the default desc</param>
+        /// <param name="redacted"></param>
+        /// <returns></returns>
+        private static string ShowText()
         {
-            string result = "Global Events: ";
-            for (int i = 0; i < ActiveGE.Count(); i++)
+            StringBuilder builder = StringBuilderPool.Pool.Get();
+
+            builder.Append("Global Events: ");
+            List<GlobalEvent> ge = ListPool<GlobalEvent>.Pool.Get(_activeGE);
+
+
+
+
+
+
+
+            for (int i = 0; i < ge.Count(); i++)
             {
-                if (redacted)
+                GlobalEvent globalEvent = ge[i];
+
+
+
+
+                builder.Append("<color=");
+                builder.Append(ImpactToColor[globalEvent.ImpactLevel]);
+                builder.Append(">");
+
+                builder.Append(globalEvent.ImpactLevel.Shorten());
+
+
+
+                if (globalEvent.IsRedacted())
                 {
-                    result += ActiveGE[i].Description;
+                    builder.Append("[REDACTED]");
                 }
                 else
                 {
-                    result += "[REDACTED]";
+                    if (!Config.ActivateAltDescription || globalEvent.AltDescription == null)
+                    {
+                        builder.Append(globalEvent.Description);
+                    }
+                    else
+                    {
+                        builder.Append(globalEvent.AllDesc.GetRandomValue());
+                    }
                 }
 
-                if (ActiveGE.Count() > 1 && i < ActiveGE.Count() - 1)
+                builder.AppendLine("</color>");
+                if (ge.Count() > 1 && i < ge.Count() - 1)
                 {
-                    result += ", ";
+                    builder.Append(", ");
                 }
+
+
             }
+            ListPool<GlobalEvent>.Pool.Return(ge);
 
 
-            return result;
+            return StringBuilderPool.Pool.ToStringReturn(builder);
         }
 
-        public static List<IGlobalEvent> ChooseGE(int numberOfGlobalEvent = 1)
+
+        private bool IsRedacted()
         {
-            List<IGlobalEvent> activeGE = ChooseRandomGE(numberOfGlobalEvent);
-            Log.Debug($"activeGE size : {activeGE.Count}");
+            float chanceRedacted;
 
-            return activeGE;
-        }
-
-        internal static void ActivateAll()
-        {
-            ActivateAll(ActiveGE);
-        }
-
-        private static void ActivateAll(List<IGlobalEvent> globalEvent)
-        {
-            if(globalEvent.Count != globalEvent.Distinct().Count()) throw new ArgumentException("You can't have the same GE twice in the same round");
-            ActiveGE = globalEvent;
-
-            foreach (IGlobalEvent ge in ActiveGE)
+            if(this is IChanceRedactable force)
             {
-                if(ge is IEvent geEvent)
-                {
-                    Log.Debug($"{ge.Name} implements IEvent, subscribing events");
-                    geEvent.SubscribeEvent();
-                }
-
-                if(ge is IStart geStart)
-                {
-                    Log.Debug($"{ge.Name} implements IStart, starting");
-                    CoroutineHandle a = Timing.RunCoroutine(geStart.Start());
-                    coroutineHandles.Add(a);
-                }
-                
+                chanceRedacted = force.ChanceRedacted;
             }
-            Show();
+            else
+            {
+                chanceRedacted = Config.ChanceRedacted;
+            }
+
+            chanceRedacted = Mathf.Clamp(chanceRedacted, 0, 100);
+
+            return UnityEngine.Random.Range(0f, 100f) <= chanceRedacted;
+
+
         }
 
-
-        internal static void DeactivateAll()
-        {
-            foreach(IGlobalEvent ge in ActiveGE)
-            {
-                if (ge is IEvent geEvent)
-                {
-                    geEvent.UnsubscribeEvent();
-                }
-            }
-        }
-
-        private static List<IGlobalEvent> ChooseRandomGE(int nbGE = 1)
-        {
-            List<IGlobalEvent> result = new List<IGlobalEvent>();
-
-            List<IGlobalEvent> weightedPool = new List<IGlobalEvent>();
-            foreach (IGlobalEvent ge in GlobalEvent.GlobalEventsList)
-            {
-                for (int i = 0; i < ge.Weight; i++)
-                {
-                    weightedPool.Add(ge);
-                    Log.Debug($"getochoose : {ge.Name} ");
-                }
-            }
-
-            nbGE = Math.Min(nbGE, GlobalEvent.GlobalEventsList.Count);
-
-            for (int i = 0; i < nbGE; i++)
-            {
-                int randomIndex = UnityEngine.Random.Range(0, weightedPool.Count);
-                IGlobalEvent selectedGE = weightedPool[randomIndex];
-
-                result.Add(selectedGE);
-
-                weightedPool.RemoveAll(e => e == selectedGE);
-                weightedPool.RemoveAll(e => selectedGE.IncompatibleGE.Contains(e.Id));
-            }
-
-            return result;
-        }
     }
 }

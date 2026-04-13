@@ -1,20 +1,28 @@
 ﻿using Player = Exiled.API.Features.Player;
 using System.Collections.Generic;
-using KE.GlobalEventFramework.GEFE.API.Features;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
 using MEC;
 using System.Linq;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Features.Hints;
+using KE.GlobalEventFramework.GEFE.API.Enums;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
-    public class Impostor : GlobalEvent, IStart
+    public class Impostor : GlobalEvent, IAsyncStart
     {
         public override uint Id { get; set; } = 1044;
         public override string Name { get; set; } = "Impostor";
-        public override string Description { get; set; } = "Ne vous fiez pas aux apparences !";
-        public override int Weight { get; set; } = 1;
+        public override string Description { get; } = "Ne vous fiez pas aux apparences !";
+        public override string[] AltDescription =>
+        [
+            "sussy"
+        ];
+        public override int WeightedChance { get; set; } = 2;
+
+        public override ImpactLevel ImpactLevel => ImpactLevel.High;
 
         public IEnumerator<float> Start()
         {

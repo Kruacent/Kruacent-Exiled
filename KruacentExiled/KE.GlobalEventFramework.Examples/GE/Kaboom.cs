@@ -2,15 +2,11 @@
 using Exiled.API.Features.Items;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
-using KE.GlobalEventFramework.GEFE.API.Features;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DoorType = Exiled.API.Enums.DoorType;
-
+using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Features.Hints;
+using KE.GlobalEventFramework.GEFE.API.Enums;
+using Exiled.API.Features.Doors;
 namespace KE.GlobalEventFramework.Examples.GE
 {
     public class Kaboom : GlobalEvent, IEvent
@@ -20,10 +16,16 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override string Name { get; set; } = "Kaboom";
         ///<inheritdoc/>
-        public override string Description { get; set; } = "Les portes sont piegés attention!";
-        ///<inheritdoc/>
-        public override int Weight { get; set; } = 1;
+        public override string Description { get; } = "Les portes sont piegés attention!";
 
+        public override string[] AltDescription => 
+        [
+            "La guerrilla est présente"
+        ];
+        ///<inheritdoc/>
+        public override int WeightedChance { get; set; } = 2;
+
+        public override ImpactLevel ImpactLevel => ImpactLevel.Medium;
 
         public const float BaseChanceElevator = .05f;
         private float _chanceElevator;
@@ -83,16 +85,21 @@ namespace KE.GlobalEventFramework.Examples.GE
         private void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
             float random = UnityEngine.Random.value;
-            bool spawnGrenade = 
-                (ev.Door.IsElevator && random < .05f) ||
-                (ev.Door.IsGate && random < .5f) ||
-                (ev.Door.IsDamageable && random <.1f);
+            Door door = ev.Door;
 
-            Log.Debug($"i love debugging random value : {random} ; Kaboom? {spawnGrenade}");
-            if (spawnGrenade)
+            if (!door.IsOpen) return;
+
+
+            Log.Debug($"i love debugging random value : {random}");
+            if ((door.IsElevator && random < .05f) ||
+                (door.IsGate && random < .5f) ||
+                (door.IsDamageable && random < .1f))
             {
-                
-                ((ExplosiveGrenade)Item.Create(ItemType.GrenadeHE)).SpawnActive(ev.Door.Position);
+                ExplosiveGrenade grenade = ((ExplosiveGrenade)Item.Create(ItemType.GrenadeHE));
+                grenade.ScpDamageMultiplier = 0.5f;
+
+
+                grenade.SpawnActive(ev.Player.Position);
             }
         }
     }

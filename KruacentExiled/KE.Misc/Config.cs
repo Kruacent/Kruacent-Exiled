@@ -7,18 +7,28 @@ namespace KE.Misc
     {
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = true;
-        [Description("Chance that the friendly fire is enabled at the start of the round (set 0 to disable)")]
-        public int ChanceFF { get; set; } = 50;
-        [Description("Enable or disable the auto-nuke annoucement")]
-        public int ChanceClassDDoorGoesBoom { get; set; } = 2;
         [Description("Chance to d-boy doors goes boom")]
-        public bool AutoNukeAnnoucement {  get; set; } = true;
-        [Description("Enable or disable the lockdown of SCP-173")]
-        public bool PeanutLockDown { get; set; } = true;
+        public int ChanceClassDDoorGoesBoom { get; set; } = 2;
         [Description("Enable or disable the auto elevator")]
         public bool AutoElevator { get; set; } = true;
         [Description("Chance to get a pink candy (0-100)")]
         public int ChancePinkCandy { get; set; } = 10;
         public bool SurfaceLight { get; set; } = true;
+
+        public bool ScpPreferences { get; set; } = true;
+        public bool Scp035Enabled { get; set; } = true;
+        public bool GamblingCoin { get; set; } = true;
+        public int GamblingCoinMinUse { get; set; } = 1;
+        public int GamblingCoinMaxUse { get; set; } = 2;
+        public int GamblingCoinCooldown { get; set; } = 3;
+
+        [Description("health mutiplicator scps)")]
+        public float MultSCP049 { get; set; } = 0.8f;
+        public float MultSCP939 { get; set; } = 1.2f;
+        public float MultSCP106 { get; set; } = 1.1f;
+        public int MinPlayerVote { get; set; } = 6;
+
+
+
     }
 }

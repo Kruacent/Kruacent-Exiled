@@ -1,29 +1,31 @@
 ﻿using Exiled.API.Features;
 using MEC;
-using KE.GlobalEventFramework.GEFE.API.Features;
 using PlayerHandler = Exiled.Events.Handlers.Player;
 using Exiled.Events.EventArgs.Player;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
-
+using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Features.Hints;
+using KE.GlobalEventFramework.GEFE.API.Enums;
 
 namespace KE.GlobalEventFramework.Examples.GE
 {
     /// <summary>
     /// Every some amount of time all player take the position of another
     /// </summary>
-    public class Shuffle : GlobalEvent, IStart,IEvent
+    public class Shuffle : GlobalEvent, IAsyncStart,IEvent
     {
         ///<inheritdoc/>
         public override uint Id { get; set; } = 1045;
         ///<inheritdoc/>
         public override string Name { get; set; } = "Shuffle";
         ///<inheritdoc/>
-        public override string Description { get; set; } = "et ça fait roomba café dans le scp";
+        public override string Description { get; } = "et ça fait roomba café dans le scp";
         ///<inheritdoc/>
-        public override int Weight { get; set; } = 0;
+        public override int WeightedChance { get; set; } = 0;
+        public override ImpactLevel ImpactLevel => ImpactLevel.VeryHigh;
         private List<Player> players;
         private List<Vector3> pos;
         ///<inheritdoc/>

@@ -11,6 +11,6 @@ namespace KE.GlobalEventFramework.GEFE.API.Interfaces
         /// <summary>
         /// Is launched at the start of a round
         /// </summary>
-        IEnumerator<float> Start();
+        void Start();
     }
 }

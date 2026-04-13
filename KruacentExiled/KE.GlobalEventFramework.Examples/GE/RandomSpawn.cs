@@ -1,8 +1,11 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Enums;
 using KE.GlobalEventFramework.GEFE.API.Features;
+using KE.GlobalEventFramework.GEFE.API.Features.Hints;
 using KE.GlobalEventFramework.GEFE.API.Interfaces;
+using KE.Utils.Extensions;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -23,12 +26,13 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override string Name { get; set; } = "RandomSpawn";
         ///<inheritdoc/>
-        public override string Description { get; set; } = "Les spawns sont random";
+        public override string Description { get; } = "Les spawns sont random";
         ///<inheritdoc/>
-        public override int Weight { get; set; } = 1;
-        public IEnumerable<RoomType> BlacklistedRooms { get; } = new HashSet<RoomType>() { RoomType.EzShelter,RoomType.HczTestRoom,RoomType.EzCollapsedTunnel};
+        public override int WeightedChance { get; set; } = 5;
+        public override ImpactLevel ImpactLevel => ImpactLevel.High;
+        public IEnumerable<RoomType> BlacklistedRooms { get; } = [RoomType.EzGateA, RoomType.EzGateB];
         ///<inheritdoc/>
-        public IEnumerator<float> Start()
+        public void Start()
         {
             Room room;
             foreach (RoleTypeId r in Enum.GetValues(typeof(RoleTypeId)))
@@ -39,13 +43,12 @@ namespace KE.GlobalEventFramework.Examples.GE
 
                     if (p.Role == r)
                     {
-                        p.Teleport(room);
+                        p.Teleport(room.GetValidPosition());
                     }
 
                 }
                 
             }
-            yield return 0;
         }
 
     }

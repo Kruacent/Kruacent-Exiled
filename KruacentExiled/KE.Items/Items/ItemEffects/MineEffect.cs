@@ -1,4 +1,4 @@
-﻿using Exiled.API.Features;
+﻿/*using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Pickups.Projectiles;
@@ -21,7 +21,7 @@ using UnityEngine;
 
 namespace KE.Items.Items.ItemEffects
 {
-    public class MineEffect : CustomItemEffect, IUsingEvents
+    /*public class MineEffect : CustomItemEffect, IUsingEvents
     {
         private const float RefreshRate = .05f;
         private const int MineActivationTime = 10;
@@ -182,4 +182,4 @@ namespace KE.Items.Items.ItemEffects
         }
 
     }
-}
+}*/

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 using Exiled.Events.EventArgs.Player;
 using Exiled.API.Features.Spawn;
 using KE.Items.API.Interface;
@@ -11,7 +11,7 @@ using KE.Items.Items.PickupModels;
 
 namespace KE.Items.Items
 {
-    public class Mine : KECustomItem, ISwitchableEffect, ICustomPickupModel,IViolentItem
+    /*public class Mine : KECustomItem, ISwitchableEffect, ICustomPickupModel,IViolentItem
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
@@ -78,13 +78,13 @@ namespace KE.Items.Items
                 },
             }
 
-        };*/
+        };
 
         public PickupModel PickupModel { get; }
 
         public Mine()
         {
-            Effect = new MineEffect();
+            //Effect = new MineEffect();
             PickupModel = new MinePModel(this);
         }
 
@@ -120,3 +120,4 @@ namespace KE.Items.Items
         
     }
 }
+*/

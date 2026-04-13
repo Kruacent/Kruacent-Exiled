@@ -1,4 +1,4 @@
-﻿using Exiled.API.Features;
+﻿/*using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Interfaces;
@@ -16,7 +16,7 @@ using System.Linq;
 using UnityEngine;
 using Player = Exiled.API.Features.Player;
 
-namespace KE.Items.Items
+/*namespace KE.Items.Items
 {
     public class Scp514 : KECustomItem
     {
@@ -119,13 +119,13 @@ namespace KE.Items.Items
             cage.Create(pos,new());
 
             Timing.RunCoroutine(DoEffectIfInside(Radius,pos,cage));
-
+            
             
 
         }
 
         
-        private IEnumerator<float> DoEffectIfInside(float radius,Vector3 spawnPos, Scp514Model model)
+        /*private IEnumerator<float> DoEffectIfInside(float radius,Vector3 spawnPos, Scp514Model model)
         {
             var time= Stopwatch.StartNew();
             Log.Debug("starting effect");
@@ -175,3 +175,4 @@ namespace KE.Items.Items
         }
     }
 }
+*/

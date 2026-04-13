@@ -6,17 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ExMod.Exiled" Version="9.6.0" />
+    <PackageReference Include="ExMod.Exiled" Version="9.13.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\KE.Utils\KE.Utils.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
+	  <Reference Include="HintServiceMeow" HintPath="$(EXILED_REFERENCES)\HintServiceMeow-Exiled.dll" />
     <Reference Include="Assembly-CSharp-firstpass" HintPath="$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll" />
 	<Reference Include="UnityEngine" HintPath="$(EXILED_REFERENCES)\UnityEngine.dll" />
 	<Reference Include="UnityEngine.CoreModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll" />
+	  <Reference Include="KE.Utils" HintPath="$(EXILED_DEV_REFERENCES)\Plugins\KE.Utils.dll" />
   </ItemGroup>
 
 	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">

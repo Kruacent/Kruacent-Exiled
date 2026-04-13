@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace KE.Items.API.Interface
 {
-    public interface IUse
+    public interface IReversible
     {
 
-        string HowToUseItemDesc { get; set; }
+        public void OnDisable();
     }
 }

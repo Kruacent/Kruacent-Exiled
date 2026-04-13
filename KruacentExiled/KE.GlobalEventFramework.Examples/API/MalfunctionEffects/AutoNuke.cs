@@ -1,6 +1,5 @@
 ﻿using Exiled.API.Features;
-using KE.GlobalEventFramework.Examples.API.Feature;
-using KE.GlobalEventFramework.Examples.API.Interfaces;
+using KE.GlobalEventFramework.Examples.API.Feature.mf;
 using KE.GlobalEventFramework.Examples.GE;
 using MEC;
 using System;

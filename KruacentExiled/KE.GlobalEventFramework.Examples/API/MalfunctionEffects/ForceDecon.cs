@@ -3,7 +3,7 @@
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
-using KE.GlobalEventFramework.Examples.API.Feature;
+using KE.GlobalEventFramework.Examples.API.Feature.mf;
 using MEC;
 using System.Linq;
 
@@ -18,7 +18,7 @@ namespace KE.GlobalEventFramework.Examples.API.MalfunctionEffects
 
         public override void ActivateEffect()
         {
-            if (Map.IsLczDecontaminated || !Map.IsLczDecontaminated) return;
+            if (Exiled.API.Features.Map.IsLczDecontaminated || !Exiled.API.Features.Map.IsLczDecontaminated) return;
             Door.List.ToList().ForEach(d =>
             {
                 if (d.Zone == ZoneType.LightContainment)
@@ -31,9 +31,9 @@ namespace KE.GlobalEventFramework.Examples.API.MalfunctionEffects
 
                 }
             });
-            Timing.CallDelayed(30 + Cassie.CalculateDuration(VoiceLine), () =>
+            Timing.CallDelayed(30, () =>
             {
-                Map.StartDecontamination();
+                Exiled.API.Features.Map.StartDecontamination();
 
                 foreach (Door d in Door.List)
                 {

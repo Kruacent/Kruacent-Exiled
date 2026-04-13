@@ -1,23 +1,31 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
-using System.Collections.Generic;
 using ServerHandle = Exiled.Events.Handlers.Server;
-using Nine14Handle = Exiled.Events.Handlers.Scp914;
-using MEC;
-using Exiled.API.Features.Doors;
-using System.Linq;
 using PlayerRoles;
-using Exiled.Events.EventArgs.Player;
 using System;
+using KE.Misc.Features;
+using KE.Misc.Handlers;
+using KE.Misc.Features.GamblingCoin;
+using HarmonyLib;
+using LabApi.Events.Arguments.ServerEvents;
+using KE.Misc.Features.VoteStart;
+using KE.Misc.Features.Spawn;
+using KE.Misc.Features.LastHuman;
+using KE.Utils.API.Settings.GlobalSettings;
+using KE.Utils.API.Translations;
+using KE.Misc.Features.PostNuke;
+using Exiled.Events.EventArgs.Server;
+using KE.Misc.Features.LobbyHints;
 
 namespace KE.Misc
 {
 
-    public class MainPlugin : Plugin<Config>
+    public class MainPlugin : Plugin<Config>, ILocalizable
     {
-        public override string Author => "Patrique";
-        public override string Name => "KEMisc";
-        public override Version Version => new Version(1, 0, 0);
+        public override string Author => "Patrique & OmerGS";
+        public override string Name => "KE.Misc";
+        public override string Prefix => "KE.Misc";
+        public override Version Version => new Version(1, 1, 0);
         internal static MainPlugin Instance { get; private set; }
         private ServerHandler ServerHandler;
         internal _914 _914 { get; private set; }
@@ -25,117 +33,149 @@ namespace KE.Misc
         internal ClassDDoor ClassDDoor { get; private set; }
         internal Candy Candy { get; private set; }
         internal SurfaceLight SurfaceLight { get; private set; }
+        internal SCPBuff SCPBuff { get; private set; }
+        internal Spawn Spawn { get; private set; }
+        internal FriendlyFire FriendlyFire { get; private set; }
+        internal NukeKill AutoNukeAnnoucement { get; private set; }
+        internal AutoTesla AutoTesla { get; private set; }
+        internal EventHandlers _gamblingCoinHandler {  get; private set; }
+        internal SpawnLcz SpawnLcz { get; private set; }
+        internal LastHumanHandler LastHuman { get; private set; }
+        private Harmony harmony;
+
+        internal VoteStart vote { get; private set; }
+        internal PostNukeHandler postnuke { get; private set; }
+        internal LobbyHint LobbyHint { get; private set; }
+
+        public string LocalizationId => Prefix;
 
         public override void OnEnabled()
         {
             Instance = this;
+            harmony = new(Prefix);
+
             _914 = new _914();
             AutoElevator = new AutoElevator();
             ClassDDoor = new ClassDDoor();
-            SurfaceLight = new SurfaceLight();
+            //SurfaceLight = new SurfaceLight(); messes with the nuke light
             ServerHandler = new ServerHandler();
-            if (Instance.Config.ChancePinkCandy >= 0 && Instance.Config.ChancePinkCandy <= 100)
-            {
-                Candy = new Candy();
-                Exiled.Events.Handlers.Scp330.InteractingScp330 += Candy.InteractingScp330;
-            }
-            else
-            {
-                Log.Error("ChancePinkCandy must be between 0 and 100");
-            }
+            Spawn = new Spawn();
+            SCPBuff = new SCPBuff();
+            FriendlyFire = new();
+            AutoNukeAnnoucement = new();
+            AutoTesla = new();
+            LastHuman = new();
+            Candy = new Candy();
+            vote = new();
+            postnuke = new();
+            LobbyHint = new();
 
 
-            ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;
-            Nine14Handle.UpgradingPlayer += _914.OnUpgradingPlayer;
-            Exiled.Events.Handlers.Player.Dying += ScpNoeDeathMessage;
+            //SpawnLcz = new();
             
+            GlobalSettingsHandler.Instance.TryLoad();
+            GlobalSettingsHandler.Instance.SubscribeEvents();
+            RegisterTranslations();
 
+            harmony.PatchAll(Assembly);
+            ClassDDoor.SubscribeEvents();
+            ServerHandle.RoundEnded += OnRoundEnded;
+            MiscFeature.SubscribeAllEvents();
+            AutoNukeAnnoucement.SubscribeEvents();
+            if (Config.GamblingCoin)
+            {
+                GamblingCoinManager.RegisterAll();
+                _gamblingCoinHandler = new EventHandlers();
+                Exiled.Events.Handlers.Player.FlippingCoin += _gamblingCoinHandler.OnCoinFlip;
+            }
+            LastHuman.SubscribeEvents();
+            SCPBuff.SubscribeEvents();
+            
+            ServerHandle.RoundStarted += ServerHandler.OnRoundStarted;
+            LabApi.Events.Handlers.ServerEvents.CassieQueuingScpTermination += NoeDeath;
+            
         }
+
 
         public override void OnDisabled()
         {
             ServerHandle.RoundStarted -= ServerHandler.OnRoundStarted;
-            Nine14Handle.UpgradingPlayer -= _914.OnUpgradingPlayer;
-            Exiled.Events.Handlers.Player.Dying -= ScpNoeDeathMessage;
-            if (Instance.Config.ChancePinkCandy >= 0 && Instance.Config.ChancePinkCandy <= 100)
+            ServerHandle.RoundEnded -= OnRoundEnded;
+            LabApi.Events.Handlers.ServerEvents.CassieQueuingScpTermination -= NoeDeath;
+            AutoNukeAnnoucement.UnsubscribeEvents();
+            LastHuman.UnsubscribeEvents();
+            SCPBuff.UnsubscribeEvents();
+            if (Config.GamblingCoin)
             {
-                Exiled.Events.Handlers.Scp330.InteractingScp330 -= Candy.InteractingScp330;
-                Candy = null;
+                Exiled.Events.Handlers.Player.FlippingCoin -= _gamblingCoinHandler.OnCoinFlip;
             }
-                
+            AutoTesla.StopLoop();
+            MiscFeature.UnsubscribeAllEvents();
+            ClassDDoor.UnsubscribeEvents();
+            harmony.UnpatchAll(harmony.Id);
+            GlobalSettingsHandler.Instance.UnsubscribeEvents();
 
-            
             _914 = null;
+            Candy = null;
+            //SpawnLcz = null;
             ClassDDoor = null;
             ServerHandler = null;
+            SCPBuff = null;
+            AutoTesla = null;
+            Spawn = null;
             AutoElevator = null;
+            vote = null;
+            AutoNukeAnnoucement = null;
+            FriendlyFire = null;
+            //SurfaceLight = null;
+            GamblingCoinManager.DestroyAll();
+            _gamblingCoinHandler = null;
+            postnuke = null;
+            LobbyHint = null;
+            LastHuman = null;
+            harmony = null;
             Instance = null;
-            SurfaceLight = null;
-        }
-
-
-        /// <summary>
-        /// Set the Friendly Fire to true or false at random
-        /// </summary>
-        internal void RandomFF()
-        {
-            Server.FriendlyFire = UnityEngine.Random.Range(0, 101) < Instance.Config.ChanceFF;
-            Log.Info($"Friendly Fire : {Server.FriendlyFire}");
-        }
-
-        /// <summary>
-        /// C.A.S.S.I.E. announce 5 min before the autonuke
-        /// </summary>
-        internal IEnumerator<float> NukeAnnouncement()
-        {
-            Log.Debug("autonuke announcement : on");
-            yield return Timing.WaitUntilTrue(() => 25 <= Round.ElapsedTime.TotalMinutes);
-            Cassie.MessageTranslated("Warning automatic warhead will detonate in 5 minutes", 
-                "Warning automatic warhead will detonate in <color=#FF0000>5</color> minutes");
-        }
-
-        /// <summary>
-        /// Lock SCP-173 in its cell for an amount of time determine by the number of player
-        /// Formula : timeLock = 135-nbPlayer*15
-        /// </summary>
-        internal IEnumerator<float> PeanutLockdown()
-        {
-            if(!Player.List.Any(p => p.Role.Type == RoleTypeId.Scp173))
-            {
-                yield return 0;
-            }
-            Log.Debug("peanut lockdown");
-            Door peanutDoor = Door.List.ToList().Where(x => x.Type == DoorType.Scp173NewGate).ToList()[0];
-            peanutDoor.IsOpen = false;
-            peanutDoor.ChangeLock(DoorLockType.Lockdown2176);
-            yield return Timing.WaitForSeconds(135-Player.List.Count*15);
-            peanutDoor.IsOpen = true;
-            peanutDoor.Unlock();
-            Log.Debug("peanut free");
-        }
+        }       
         
-        /// <summary>
-        /// Special death message when Delecons dies as a SCP
-        /// </summary>
-        /// <param name="ev"></param>
-        internal void ScpNoeDeathMessage(DyingEventArgs ev)
+        private void OnRoundEnded(Exiled.Events.EventArgs.Server.RoundEndedEventArgs ev)
         {
-            
-            Player player = ev.Player;
-            Log.Debug($"someone died = {player.UserId}");
+            Server.FriendlyFire = true;
+        }
 
+        private void NoeDeath(CassieQueuingScpTerminationEventArgs ev)
+        {
+            Player player = Player.Get(ev.Player);
             if (!player.UserId.Equals("76561199066936074@steam"))
+            {
                 return;
+            }
+
+
             if (!player.IsScp)
+            {
                 return;
-            if (player.Role.Type == RoleTypeId.Scp0492)
+            }
+
+            if(player.Role == RoleTypeId.Scp0492)
+            {
                 return;
-            Cassie.MessageTranslated("SCP 69 420 has been contained successfully", "SCP-69420-NOE has been contained successfully");
+            }
+
+            ev.IsAllowed = false;
+            Exiled.API.Features.Cassie.MessageTranslated("SCP 69 420 has been contained successfully", "SCP-69420-NOE has been contained suscessfully");
         }
 
-        
+        public void RegisterTranslations()
+        {
+            TranslationHub.Add(LocalizationId, LastHumanTranslations.LangToKeyToTranslation);
+            TranslationHub.Add(LocalizationId, WrongAspectRatioWarningLobbyHint.LangToKeyToTranslation);
+            //TranslationHub.Add(LocalizationId, VoteStart.LangToKeyToTranslation);
+        }
 
 
-        
+        public static string GetTranslation(Player player,string key)
+        {
+            return TranslationHub.Get(player, Instance.LocalizationId, key);
+        }
     }
 }

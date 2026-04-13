@@ -1,20 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	  <LangVersion>13.0</LangVersion>
     <TargetFramework>net48</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ExMod.Exiled" Version="9.1.1" />
+    <PackageReference Include="ExMod.Exiled" Version="9.13.1" />
+    
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Assembly-CSharp-firstpass" HintPath="$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll"/>
-    <Reference Include="System.ComponentModel.Composition" HintPath="$(EXILED_REFERENCES)\System.ComponentModel.Composition.dll"/>
-    <Reference Include="UnityEngine.CoreModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll"/>
-    <Reference Include="UnityEngine" HintPath="$(EXILED_REFERENCES)\UnityEngine.dll"/>
-    <Reference Include="UnityEngine.PhysicsModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll"/>
-    <Reference Include="Mirror" HintPath="$(EXILED_REFERENCES)\Mirror.dll"/>
+    <Reference Include="Assembly-CSharp-firstpass" HintPath="$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll" />
+    <Reference Include="0Harmony" HintPath="$(EXILED_REFERENCES)\0Harmony.dll" />
+    <Reference Include="System.ComponentModel.Composition" HintPath="$(EXILED_REFERENCES)\System.ComponentModel.Composition.dll" />
+    <Reference Include="UnityEngine.CoreModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll" />
+    <Reference Include="UnityEngine" HintPath="$(EXILED_REFERENCES)\UnityEngine.dll" />
+	  <Reference Include="HintServiceMeow" HintPath="$(EXILED_REFERENCES)\HintServiceMeow-Exiled.dll" />
+	  <Reference Include="AudioPlayerApi" HintPath="$(EXILED_REFERENCES)\AudioPlayerApi.dll" />
+    <Reference Include="UnityEngine.PhysicsModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll" />
+    <Reference Include="Mirror" HintPath="$(EXILED_REFERENCES)\Mirror.dll" />
+    <Reference Include="LabApi" HintPath="$(EXILED_REFERENCES)\LabApi.dll" />
+    <Reference Include="KE.CustomRoles" HintPath="$(EXILED_DEV_REFERENCES)\Plugins\KE.CustomRoles.dll" />
+    <Reference Include="KE.Utils" HintPath="$(EXILED_DEV_REFERENCES)\Plugins\KE.Utils.dll" />
   </ItemGroup>
+
+	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
+		<PostBuildEvent>if not "$(EXILED_DEV_REFERENCES)"=="" copy /y "$(OutputPath)$(AssemblyName).dll" "$(EXILED_DEV_REFERENCES)\Plugins\"</PostBuildEvent>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(OS)' == 'Unix' ">
+		<PostBuildEvent>if [[ ! -z "$EXILED_DEV_REFERENCES" ]]; then cp "$(OutputPath)$(AssemblyName).dll" "$EXILED_DEV_REFERENCES/Plugins/"; fi</PostBuildEvent>
+	</PropertyGroup>
+
 
 </Project>
