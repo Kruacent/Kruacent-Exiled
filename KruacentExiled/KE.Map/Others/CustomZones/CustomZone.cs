@@ -14,9 +14,18 @@ namespace KE.Map.Others.CustomZones
         public abstract CustomFacilityZone FacilityZone { get; }
         public Layout Layout { get; private set; }
         public abstract Vector3 Spawnzone { get; }
-        public abstract void Generate(System.Random rng);
+        public void Generate(System.Random rng)
+        {
+            Generate(rng,SetRandomLayout());
+        }
 
-        protected Layout SetRandomLayout()
+        public void GenerateWithLayout(System.Random rng,Layout layout)
+        {
+            Generate(rng, layout);
+        }
+        public abstract void Generate(System.Random rng, Layout layout);
+
+        private Layout SetRandomLayout()
         {
             Layout layout =Layout.Layouts.GetRandomValue();
             Layout = layout;

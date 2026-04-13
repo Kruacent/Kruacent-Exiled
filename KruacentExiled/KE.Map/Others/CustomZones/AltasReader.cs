@@ -64,7 +64,7 @@ namespace KE.Map.Others.CustomZones
             foreach (string file in files)
             {
 
-                string noExFile = System.IO.Path.GetFileName(file);
+                string noExFile = System.IO.Path.GetFileNameWithoutExtension(file);
                 Log.Debug($"loading {file} as {noExFile}");
                 using Bitmap bmp = new Bitmap(file);
                 int width = bmp.Width;
@@ -120,13 +120,13 @@ namespace KE.Map.Others.CustomZones
                         {
                             shape = RoomShape.TShape;
                             Vector2Int coordempty = empty[0];
-                            rotation = new(0, coordempty.x * 90,0);
+                            rotation = new(0, coordempty.x * 90, 0);
 
-                            if (coordempty.x == 0 && coordempty.y == 1)
+                            if (coordempty.x == 0 && coordempty.y == -1)
                             {
                                 rotation = Vector3.zero;
                             }
-                            if (coordempty.x == 0 && coordempty.y == -1)
+                            if (coordempty.x == 0 && coordempty.y == 1)
                             {
                                 rotation = new Vector3(0, 180, 0);
                             }
@@ -141,11 +141,11 @@ namespace KE.Map.Others.CustomZones
                                 shape = RoomShape.Straight;
                                 if(empty[0].x == 0)
                                 {
-                                    rotation = Vector3.zero;
+                                    rotation = new Vector3(0, 90, 0);
                                 }
                                 else
                                 {
-                                    rotation = new Vector3(0, 90, 0);
+                                    rotation = Vector3.zero;
                                 }
                             }
                             else
@@ -197,11 +197,11 @@ namespace KE.Map.Others.CustomZones
                             }
                             if (coordnotempty.x == 1 && coordnotempty.y == 0)
                             {
-                                rotation = new Vector3(0, 90, 0);
+                                rotation = new Vector3(0, -90, 0);
                             }
                             if (coordnotempty.x == -1 && coordnotempty.y == 0)
                             {
-                                rotation = new Vector3(0, -90, 0);
+                                rotation = new Vector3(0, 90, 0);
                             }
 
 
@@ -229,13 +229,13 @@ namespace KE.Map.Others.CustomZones
                             Log.Warn($"found undefined at {coord} room skipping");
                             continue;
                         }
-                        Log.Debug($"adding {shape} at {coord} ({rotation})");
+                        Log.Debug($"adding {shape} at {coord} ({rotation.y})");
                         coordtoroom.Add(coord, new (shape,rotation));
 
                     }
                 }
                 
-                Layout layout = new(coordtoroom);
+                Layout layout = new(coordtoroom, noExFile);
                 coordtoroom.Clear();
             }
         }

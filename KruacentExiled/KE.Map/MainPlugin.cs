@@ -8,7 +8,9 @@ using HarmonyLib;
 using KE.Map.Heavy;
 using KE.Map.Heavy.GamblingZone;
 using KE.Map.Others.BlackoutNDoor.Handlers;
+using KE.Map.Others.CustomZones;
 using KE.Map.Surface.ElevatorGateA;
+using KE.Map.Surface.Rooms;
 using KE.Utils.API.Features;
 using KE.Utils.API.KETextToy;
 using KE.Utils.Extensions;
@@ -18,6 +20,7 @@ using PlayerRoles.PlayableScps.Scp106;
 using ProjectMER.Features;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 using Door = Exiled.API.Features.Doors.Door;
@@ -34,20 +37,26 @@ namespace KE.Map
         public static Translations Translations => Instance?.Translation;
         public static Config Configs => Instance?.Config;
         private Harmony harmony;
+
+        private SurfaceRooms SurfaceRooms;
+        private CREventHandler cREventHandler;
         public override void OnEnabled()
         {
             handler = new();
             harmony = new(Prefix);
-            
 
+            cREventHandler = new();
 
-
+            cREventHandler.SubscribeEvents();
             handler.SubscribeEvents();
             KE.Utils.API.Sounds.SoundPlayer.Instance.TryLoad();
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
 
+
+            //SurfaceRooms.SubscribeEvents();
+            
             GamblingRoom.SubscribeEvents();
             //MoreRoom.CreateAll();
             //MoreRoom.SubscribeEvents();
@@ -185,6 +194,10 @@ namespace KE.Map
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
+
+            cREventHandler.UnsubscribeEvents();
+            cREventHandler = null;
+
 
             harmony.UnpatchAll(harmony.Id);
             GamblingRoom.UnsubscribeEvents();

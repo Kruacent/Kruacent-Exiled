@@ -1,4 +1,6 @@
-﻿using Exiled.API.Features.Toys;
+﻿using Exiled.API.Features;
+using Exiled.API.Features.Toys;
+using KE.Map.Others.CustomZones.CustomRooms;
 using MapGeneration;
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,8 @@ namespace KE.Map.Others.CustomZones
 {
     public class SpawnedCustomRoom
     {
+        private static readonly HashSet<SpawnedCustomRoom> spawned = new();
+        public static IReadOnlyCollection<SpawnedCustomRoom> SpawnedRoom => spawned;
         public SpawnedCustomRoom(CustomRoom baseRoom, RoomShape shape, Vector3 position, Vector3 rotation, Vector2Int coord, HashSet<AdminToy> primitives)
         {
             BaseRoom = baseRoom;
@@ -18,11 +22,10 @@ namespace KE.Map.Others.CustomZones
             Position = position;
             Coord = coord;
             Primitives = [.. primitives];
-            GameObject = new GameObject();
+            spawned.Add(this);
         }
 
 
-        public GameObject GameObject { get; }
         public CustomRoom BaseRoom { get; }
         public RoomShape Shape { get; }
 
@@ -30,6 +33,34 @@ namespace KE.Map.Others.CustomZones
         public Vector3 Rotation { get; }
 
         public Vector2Int Coord { get; }
+
+        private HashSet<SpawnedCustomRoom> cachedNeighbors = null;
+        public IEnumerable<SpawnedCustomRoom> Neighbors
+        {
+            get
+            {
+                if (cachedNeighbors is null)
+                {
+                    cachedNeighbors = new();
+                    foreach (SpawnedCustomRoom scr in SpawnedRoom)
+                    {
+
+                        int dx = scr.Coord.x - Coord.x;
+                        int dy = scr.Coord.y - Coord.y;
+
+                        if ((Math.Abs(dx) == 1 && dy == 0) || (Math.Abs(dy) == 1 && dx == 0))
+                        {
+                            if (!cachedNeighbors.Contains(scr))
+                                cachedNeighbors.Add(scr);
+                        }
+                    }
+                }
+
+                return cachedNeighbors;
+            }
+        }
+
+        public HashSet<SpawnedDoorSeparator> Door { get; } = new();
 
         public HashSet<AdminToy> Primitives { get; }
 
@@ -55,6 +86,41 @@ namespace KE.Map.Others.CustomZones
             {
                 adminToy.Destroy();
             }
+        }
+
+
+
+        public bool DoorAvailable(Vector2Int roomToLink)
+        {
+            if(Shape == RoomShape.Curve)
+            {
+                var curveLinks = new Dictionary<int, (int dx, int dy)[]>
+                {
+                    {   0, new [] { ( 0, 1), ( 1,  0) } }, // Up, Right
+                    {  90, new [] { ( -1,  0), ( 0,  1) } }, // Right, Down
+                    { 180, new [] { ( 0,  -1), (-1,  0) } }, // Down, Left
+                    { 270, new [] { (1, 0), ( 0, -1) } }, // Left, Up
+                };
+
+                int rot = Mathf.RoundToInt(Rotation.y) % 360;
+
+                if (curveLinks.TryGetValue(rot, out var links))
+                {
+                    foreach (var (dx, dy) in links)
+                    {
+                        if (roomToLink.x == Coord.x + dx &&
+                            roomToLink.y == Coord.y + dy)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+
+
+            return true;
         }
 
     }

@@ -30,9 +30,10 @@ namespace KE.Map.Others.CustomZones
 
         protected abstract IEnumerable<AdminToy> SpawnRoom(Vector3 position,Vector3 rotation);
 
+
         public SpawnedCustomRoom Spawn(Vector2Int coord,Vector3 rotation,Vector3 spawnzone)
         {
-            Vector3 position = new(coord.x * Size.x+ spawnzone.x, spawnzone.y, coord.y * Size.z + spawnzone.z);
+            Vector3 position = new(-coord.x * Size.x+ spawnzone.x, spawnzone.y, coord.y * Size.z + spawnzone.z);
 
             Log.Debug("spawn room at " + position);
             IEnumerable<AdminToy> prims = SpawnRoom(position,rotation);
@@ -48,6 +49,12 @@ namespace KE.Map.Others.CustomZones
             SpawnedRoom.Add(room);
             return room;
 
+        }
+
+
+        public static Primitive CreatePrimitive(PrimitiveType type = PrimitiveType.Cube,Vector3? position = null, Vector3? rotation = null, Vector3? scale = null,Color? color = null)
+        {
+            return Primitive.Create(type, position, rotation, scale, false, color);
         }
 
 

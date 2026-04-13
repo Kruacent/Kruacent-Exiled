@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using KE.Map.Others.CustomZones.CustomRooms;
 using KE.Map.Others.CustomZones.CustomRooms.MCZ;
 using KE.Utils.API.Interfaces;
 using LabApi.Events.Arguments.ServerEvents;
@@ -49,8 +50,14 @@ namespace KE.Map.Others.CustomZones
             new SCorridor();
             new EndRoom();
             new TCorridor();
+            new Curve();
+            new XCorridor();
+            new MCZDoorSeparator();
 
-            zone.Generate(new System.Random(seed));
+            System.Random random = new System.Random(seed);
+
+            zone.Generate(random,Layout.Layouts.First(l => l.Name == "Circle"));
+
 
             teleport = CustomRoom.RegisteredRoom.First().SpawnedRoom.First(s => s.Shape == RoomShape.Straight).Position + Vector3.up * 5;
             Log.Debug("teleport " + teleport);
