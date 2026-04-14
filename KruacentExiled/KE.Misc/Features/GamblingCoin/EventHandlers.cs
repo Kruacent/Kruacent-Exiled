@@ -14,7 +14,7 @@ namespace KE.Misc.Features.GamblingCoin
 {
     public class EventHandlers
     {
-        private static Config Config => MainPlugin.Instance.Config;
+        private static Config Config => MainPlugin.Configs;
 
         private readonly Dictionary<string, DateTime> _cooldowns = new();
         public static Dictionary<ushort, int> CoinUses = new();

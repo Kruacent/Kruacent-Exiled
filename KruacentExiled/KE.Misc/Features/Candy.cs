@@ -23,7 +23,7 @@ namespace KE.Misc.Features
         }
         public void InteractingScp330(InteractingScp330EventArgs ev)
         {
-            if (UnityEngine.Random.Range(0, 100) < MainPlugin.Instance.Config.ChancePinkCandy)
+            if (UnityEngine.Random.Range(0, 100) < MainPlugin.Configs.ChancePinkCandy)
             {
                 ev.Candy = CandyKindID.Pink;
             }

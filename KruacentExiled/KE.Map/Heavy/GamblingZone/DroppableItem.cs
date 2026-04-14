@@ -1,6 +1,6 @@
-﻿using Items = Exiled.API.Features.Items.Item;
-using System;
+﻿using System;
 using UnityEngine;
+using ExiledItem = Exiled.API.Features.Items.Item;
 using Exiled.API.Features.Items;
 
 namespace KE.Map.Heavy.GamblingZone
@@ -49,11 +49,11 @@ namespace KE.Map.Heavy.GamblingZone
             return other.Item == Item && other.Chance == Chance && other.ItemCap == ItemCap && CurrentCap == other.CurrentCap;
         }
 
-        public Items GetItem()
+        public ExiledItem GetItem()
         {
             if (HasReachCap()) throw new Exception("Cap reached");
             CurrentCap++;
-            return Items.Create(Item);
+            return ExiledItem.Create(Item);
         }
 
         public bool HasReachCap()

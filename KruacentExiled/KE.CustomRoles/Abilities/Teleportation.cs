@@ -97,7 +97,7 @@ namespace KE.CustomRoles.Abilities
             }
 
 
-            if (target.GetZone() == FacilityZone.LightContainment && Map.IsLczDecontaminated)
+            if (target.GetZone() == FacilityZone.LightContainment && Exiled.API.Features.Map.IsLczDecontaminated)
             {
                 if (showMessage)
                 {

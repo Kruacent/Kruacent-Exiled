@@ -15,6 +15,7 @@ using KE.Utils.API.CustomStats;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Features.SCPs;
 using KE.Utils.API.GifAnimator;
+using KruacentExiled;
 using MEC;
 using Microsoft.Win32;
 using System;
@@ -27,14 +28,12 @@ using System.Runtime.InteropServices.ComTypes;
 
 namespace KE.CustomRoles
 {
-    public class MainPlugin : Plugin<Config>
+    public class MainPlugin : KEPlugin
     {
         public override string Name => "KE.CustomRoles";
         public override string Prefix => "KE.CR";
-        public override string Author => "Patrique & OmerGS";
-        public override Version Version => new(1, 1, 0);
         public static MainPlugin Instance;
-        public static Config Configs => Instance?.Config;
+        public static Config Configs => (Config) Instance?.Config;
         public static readonly HintPlacement CRHint = new(0, 750);
         public static readonly HintPlacement CREffect = new(700, 300);
         public static readonly HintPlacement AbilitiesDesc = new(0, 900);
@@ -48,10 +47,14 @@ namespace KE.CustomRoles
         internal Dictionary<string, TextImage> icons;
 
         public static readonly string ImageLocation = Paths.Configs + "/Img/";
+
+        public override IConfig Config => config;
+        private IConfig config = null;
         public override void OnEnabled()
         {
-            
             Instance = this;
+            config = KruacentExiled.MainPlugin.Instance.Config.CustomRoleConfig;
+
             _settingHandler = new();
             Utils.API.Settings.GlobalSettings.GlobalSettingsHandler.Instance.TryLoad();
             Utils.API.Settings.GlobalSettings.GlobalSettingsHandler.Instance.SubscribeEvents();
@@ -68,10 +71,9 @@ namespace KE.CustomRoles
             Harmony = new(Name);
             Harmony.PatchAll();
             SettingHandler.SubscribeEvents();
-            KEAbilities.Register(Assembly);
+            KEAbilities.Register(KruacentExiled.MainPlugin.Instance.Assembly);
             KECustomRole.Register();
             SubscribeEvents();
-            base.OnEnabled();
         }
 
         public override void OnDisabled()
@@ -88,7 +90,6 @@ namespace KE.CustomRoles
             Utils.API.Settings.GlobalSettings.GlobalSettingsHandler.Instance.UnsubscribeEvents();
             _settingHandler = null;
             Instance = null;
-            base.OnDisabled();
         }
 
         public void SubscribeEvents()

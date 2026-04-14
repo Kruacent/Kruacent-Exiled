@@ -7,7 +7,7 @@ namespace KE.Misc.Handlers
     {
         public void OnRoundStarted()
         {
-            if (MainPlugin.Instance.Config.AutoElevator)
+            if (MainPlugin.Configs.AutoElevator)
                 MainPlugin.Instance.AutoElevator.StartLoop();
 
             MainPlugin.Instance.AutoTesla.StartLoop();

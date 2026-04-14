@@ -68,7 +68,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         }
 
 
-        private static Config Config => MainPlugin.Instance.Config;
+        private static Config Config => MainPlugin.Configs;
         private static GlobalEventHandler _handler = new();
 
         private static HashSet<GlobalEvent> _activeGE = new();

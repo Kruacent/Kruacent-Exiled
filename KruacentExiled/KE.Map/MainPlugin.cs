@@ -14,6 +14,7 @@ using KE.Map.Surface.Rooms;
 using KE.Utils.API.Features;
 using KE.Utils.API.KETextToy;
 using KE.Utils.Extensions;
+using KruacentExiled;
 using MEC;
 using PlayerRoles;
 using PlayerRoles.PlayableScps.Scp106;
@@ -23,27 +24,39 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using static PlayerList;
 using Door = Exiled.API.Features.Doors.Door;
 using Player = Exiled.API.Features.Player;
 
 namespace KE.Map
 {
-    public class MainPlugin : Plugin<Config,Translations>
+    public class MainPlugin : KEPlugin
     {
         public override string Name => "KE.Map";
         public override string Prefix => "KE.M";
         public static MainPlugin Instance { get; private set; }
         private Handler handler;
-        public static Translations Translations => Instance?.Translation;
-        public static Config Configs => Instance?.Config;
+        public static Translations Translations { get; } = new Translations();
+        public static Config Configs => (Config) Instance?.Config;
+
+        public override IConfig Config => config;
+        private Config config;
         private Harmony harmony;
 
         private SurfaceRooms SurfaceRooms;
         private CREventHandler cREventHandler;
+
+
+        private Translations translations;
+
         public override void OnEnabled()
         {
+            Instance = this;
             handler = new();
             harmony = new(Prefix);
+
+            config = KruacentExiled.MainPlugin.Instance.Config.MapConfig;
+
 
             cREventHandler = new();
 
@@ -60,14 +73,13 @@ namespace KE.Map
             GamblingRoom.SubscribeEvents();
             //MoreRoom.CreateAll();
             //MoreRoom.SubscribeEvents();
-            harmony.PatchAll(Assembly);
+            harmony.PatchAll(KruacentExiled.MainPlugin.Instance.Assembly);
 
              
 
 
 
-            Instance = this;
-            base.OnEnabled();
+            
         }
 
         private void OnWaitingForPlayers()

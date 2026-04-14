@@ -107,7 +107,7 @@ namespace KE.Misc.Features.VoteStart
             }
 
             Voted.Add(ev.Player);
-            if (Voted.Count >= MainPlugin.Instance.Config.MinPlayerVote)
+            if (Voted.Count >= MainPlugin.Configs.MinPlayerVote)
             {
                 Log.Info("starting the round");
                 Round.IsLobbyLocked = false;
@@ -155,7 +155,7 @@ namespace KE.Misc.Features.VoteStart
 
             sb.Append(Voted.Count);
             sb.Append("/");
-            sb.Append(MainPlugin.Instance.Config.MinPlayerVote);
+            sb.Append(MainPlugin.Configs.MinPlayerVote);
 
             sb.AppendLine(") : ");
             foreach (Player other in Voted)

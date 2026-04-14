@@ -20,7 +20,7 @@ namespace KE.Misc.Features
     {
         public const float RefreshRate = 1f;
         public float IncreaseSCPHealth { get; } = 1.25f;
-        private static Config Config => MainPlugin.Instance.Config;
+        private static Config Config => MainPlugin.Configs;
 
         public Dictionary<RoleTypeId, float> RoleBuff = new()
         {

@@ -19,7 +19,7 @@ namespace KE.CustomRoles.API.Features
 
         protected abstract int SettingId { get; }
         private static HeaderSetting header = null;
-        private static int HeaderId => MainPlugin.Instance.Config.HeaderId;
+        private static int HeaderId => MainPlugin.Configs.HeaderId;
 
         private static SettingsCategory category;
         public static IEnumerable<CustomSCP> All => Registered.Where(c => c is CustomSCP).Cast<CustomSCP>();

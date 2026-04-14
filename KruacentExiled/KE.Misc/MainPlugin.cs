@@ -16,16 +16,18 @@ using KE.Utils.API.Translations;
 using KE.Misc.Features.PostNuke;
 using Exiled.Events.EventArgs.Server;
 using KE.Misc.Features.LobbyHints;
+using KruacentExiled;
+using Exiled.API.Interfaces;
 
 namespace KE.Misc
 {
 
-    public class MainPlugin : Plugin<Config>, ILocalizable
+    public class MainPlugin : KEPlugin, ILocalizable
     {
-        public override string Author => "Patrique & OmerGS";
         public override string Name => "KE.Misc";
         public override string Prefix => "KE.Misc";
-        public override Version Version => new Version(1, 1, 0);
+
+
         internal static MainPlugin Instance { get; private set; }
         private ServerHandler ServerHandler;
         internal _914 _914 { get; private set; }
@@ -49,10 +51,16 @@ namespace KE.Misc
 
         public string LocalizationId => Prefix;
 
+        public override IConfig Config => config;
+        public static Config Configs => Instance?.config;
+        private Config config;
+
         public override void OnEnabled()
         {
             Instance = this;
             harmony = new(Prefix);
+
+            config = KruacentExiled.MainPlugin.Instance.Config.MiscConfig;
 
             _914 = new _914();
             AutoElevator = new AutoElevator();
@@ -77,12 +85,12 @@ namespace KE.Misc
             GlobalSettingsHandler.Instance.SubscribeEvents();
             RegisterTranslations();
 
-            harmony.PatchAll(Assembly);
+            harmony.PatchAll(KruacentExiled.MainPlugin.Instance.Assembly);
             ClassDDoor.SubscribeEvents();
             ServerHandle.RoundEnded += OnRoundEnded;
             MiscFeature.SubscribeAllEvents();
             AutoNukeAnnoucement.SubscribeEvents();
-            if (Config.GamblingCoin)
+            if (Configs.GamblingCoin)
             {
                 GamblingCoinManager.RegisterAll();
                 _gamblingCoinHandler = new EventHandlers();
@@ -105,7 +113,7 @@ namespace KE.Misc
             AutoNukeAnnoucement.UnsubscribeEvents();
             LastHuman.UnsubscribeEvents();
             SCPBuff.UnsubscribeEvents();
-            if (Config.GamblingCoin)
+            if (Configs.GamblingCoin)
             {
                 Exiled.Events.Handlers.Player.FlippingCoin -= _gamblingCoinHandler.OnCoinFlip;
             }

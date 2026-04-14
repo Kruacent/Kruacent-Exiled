@@ -16,8 +16,8 @@ namespace KE.CustomRoles.API.Features
         private static Queue<int> FreeIds = new Queue<int>();
         private static int _autoIncrement;
 
-        private static int Min => MainPlugin.Instance.Config.CustomScpSliderRangeMin;
-        private static int Max => MainPlugin.Instance.Config.CustomScpSliderRangeMax;
+        private static int Min => MainPlugin.Configs.CustomScpSliderRangeMin;
+        private static int Max => MainPlugin.Configs.CustomScpSliderRangeMax;
 
         public RecyclableSettingId(SettingBase setting)
         {

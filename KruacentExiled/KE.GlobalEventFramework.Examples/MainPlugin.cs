@@ -4,30 +4,33 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Interfaces;
 using HarmonyLib;
+using KruacentExiled;
 using MEC;
 using UnityEngine;
 
 
 namespace KE.GlobalEventFramework.Examples
 {
-    internal class MainPlugin : Plugin<Config>
+    internal class MainPlugin : KEPlugin
     {
-        public override string Author => "Patrique & OmerGS";
 
-        public override Version Version => new Version(1, 0, 0);
         public override string Name => "KE.GEF.Examples";
         public override string Prefix => "KE.GEFE";
         public static MainPlugin Instance { get; private set; }
 
         private static Harmony Harmony;
-        public override PluginPriority Priority => PluginPriority.Lower;
 
-        
 
-        
+
+        public override IConfig Config => config;
+        private Config config;
+        public static Config Configs => Instance?.config;
+
         public override void OnEnabled()
         {
+            config = KruacentExiled.MainPlugin.Instance.Config.GEFEConfig;
             Instance = this;
             Utils.API.Sounds.SoundPlayer.Load();
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingPlayer;
@@ -65,5 +68,12 @@ namespace KE.GlobalEventFramework.Examples
             Harmony?.UnpatchAll();
             Harmony = null;
         }
+    }
+
+
+    public class Config : IConfig
+    {
+        public bool IsEnabled { get; set; } = true;
+        public bool Debug { get; set; } = false;
     }
 }

@@ -27,7 +27,7 @@ namespace KE.Misc.Features.VoteStart
 
             if(arguments.Count < 1)
             {
-                response = "current min number : "+ MainPlugin.Instance.Config.MinPlayerVote;
+                response = "current min number : "+ MainPlugin.Configs.MinPlayerVote;
                 return true;
             }
 
@@ -41,10 +41,10 @@ namespace KE.Misc.Features.VoteStart
 
 
 
-            MainPlugin.Instance.Config.MinPlayerVote = result;
+            MainPlugin.Configs.MinPlayerVote = result;
 
 
-            response = "vote set at " + MainPlugin.Instance.Config.MinPlayerVote + " players";
+            response = "vote set at " + MainPlugin.Configs.MinPlayerVote + " players";
             return true;
         }
     }

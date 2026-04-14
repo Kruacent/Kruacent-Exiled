@@ -86,7 +86,7 @@ namespace KE.Items.Items.ItemEffects
                 return ZoneType.Surface.RandomSafeRoom();
             }
 
-            if (Map.IsLczDecontaminated)
+            if (Exiled.API.Features.Map.IsLczDecontaminated)
             {
                 float random = UnityEngine.Random.value;
                 Log.Debug($"random={random}");

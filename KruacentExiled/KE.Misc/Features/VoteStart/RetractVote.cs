@@ -42,7 +42,7 @@ namespace KE.Misc.Features.VoteStart
             vote.CancelVote(player);
 
 
-            response = "vote set at " + MainPlugin.Instance.Config.MinPlayerVote + " players";
+            response = "vote set at " + MainPlugin.Configs.MinPlayerVote + " players";
             return true;
         }
     }

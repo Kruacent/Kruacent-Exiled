@@ -47,7 +47,7 @@ namespace KE.Misc.Features
 
         private void OnRoundStarted()
         {
-            if (!MainPlugin.Instance.Config.SurfaceLight)
+            if (!MainPlugin.Configs.SurfaceLight)
             {
                 return;
             }

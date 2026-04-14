@@ -35,7 +35,7 @@ namespace KE.Misc.Features.Spawn
 
         private void OnRoundStarted()
         {
-            if (!MainPlugin.Instance.Config.ScpPreferences) return;
+            if (!MainPlugin.Configs.ScpPreferences) return;
 
             eventarg = new();
 
@@ -49,7 +49,7 @@ namespace KE.Misc.Features.Spawn
 
         private bool SetScpPreferences(Player player)
         {
-            Config config = MainPlugin.Instance.Config;
+            Config config = MainPlugin.Configs;
             if (config == null)
             {
                 Log.Warn("no config, no custom preferences this round");

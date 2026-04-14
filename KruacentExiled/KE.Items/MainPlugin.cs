@@ -1,33 +1,21 @@
-﻿
-using AdminToys;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.API.Features.Toys;
-using Exiled.CustomItems.API.Features;
-using Exiled.Events.EventArgs.Map;
-using Exiled.Events.EventArgs.Player;
+using Exiled.API.Interfaces;
 using HarmonyLib;
-using InventorySystem.Items.ThrowableProjectiles;
 using KE.Items.API.Core.Lights;
 using KE.Items.API.Core.Settings;
 using KE.Items.API.Core.Upgrade;
-using KE.Items.API.Events;
 using KE.Items.API.Features;
-using KE.Items.API.Features.Complexes;
 using KE.Items.API.Features.SpawnPoints;
 using KE.Utils.API.Displays.DisplayMeow;
-using KE.Utils.API.Features;
+using KruacentExiled;
 using System;
-using System.Linq;
 using UnityEngine;
-using static PlayerRoles.Spectating.SpectatableModuleBase;
-using InteractableToy = LabApi.Features.Wrappers.InteractableToy;
 
 namespace KE.Items
 {
-    public class MainPlugin : Plugin<Config>
+    public class MainPlugin : KEPlugin
     {
-        public override string Author => "Patrique & OmerGS";
         public override string Name => "KE.Items";
         public override string Prefix => "KE.I";
         internal UpgradeHandler UpgradeHandler { get; private set; }
@@ -35,18 +23,20 @@ namespace KE.Items
         internal static MainPlugin Instance { get; private set; }
         internal SettingsHandler SettingsHandler { get; private set; }
 
+        public override IConfig Config => config;
+        private IConfig config;
+
         internal static readonly HintPlacement ItemEffectPlacement = new(0, 200, HintServiceMeow.Core.Enum.HintAlignment.Center);
         internal static readonly HintPlacement HintPlacement = new(0, 400, HintServiceMeow.Core.Enum.HintAlignment.Center);
 
-        public override PluginPriority Priority => PluginPriority.Low;
-        public override Version Version => new (1, 0, 0);
         internal Harmony harmony;
         
         public override void OnEnabled()
         {
             Instance = this;
+            config = KruacentExiled.MainPlugin.Instance.Config.CustomItemConfig;
             harmony = new(Name);
-            harmony.PatchAll(Assembly);
+            harmony.PatchAll(KruacentExiled.MainPlugin.Instance.Assembly);
             UpgradeHandler = new UpgradeHandler();
             LightsHandler = new LightsHandler();
             SettingsHandler = new();
@@ -90,7 +80,6 @@ namespace KE.Items
             UpgradeHandler.SubscribeEvents();
             LightsHandler.SubscribeEvents();
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
-            base.OnEnabled();
         }
 
         public override void OnDisabled()

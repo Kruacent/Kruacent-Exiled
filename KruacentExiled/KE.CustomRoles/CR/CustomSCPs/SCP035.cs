@@ -179,7 +179,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
 
             player.Position = RoleTypeId.Scp049.GetRandomSpawnLocation().Position;
-            player.EnableEffect<NightVision>(100, 0, false);
+            player.EnableEffect<CustomPlayerEffects.NightVision>(100, 0, false);
             base.RoleAdded(player);
         }
 
@@ -188,7 +188,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
             DisplayHandler.Instance.RemoveHint(player, position.HintPlacement);
             DisplayHandler.Instance.RemoveHint(player, logoposition.HintPlacement);
 
-            player.DisableEffect<NightVision>();
+            player.DisableEffect<CustomPlayerEffects.NightVision>();
             base.RoleRemoved(player);
         }
 
