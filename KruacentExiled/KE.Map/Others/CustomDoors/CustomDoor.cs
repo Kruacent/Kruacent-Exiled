@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-
-namespace KE.Items.API.Interface
+namespace KE.Map.Others.CustomDoors
 {
-    public interface ISwitchableEffect
+    internal class CustomDoor
     {
-        CustomItemEffect Effect { get; set; }
     }
 }

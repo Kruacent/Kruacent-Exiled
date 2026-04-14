@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-
-namespace KE.Items.API.Interface
+namespace KE.Map.Others.CustomElevators.KECustomElevators
 {
-    public interface ISwitchableEffect
+    public class KEElevatorPanel
     {
-        CustomItemEffect Effect { get; set; }
     }
 }

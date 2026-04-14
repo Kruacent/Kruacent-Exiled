@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.GlobalEventFramework.GEFE.API.Interfaces
+
+
+namespace KE.Items.API.Interface
 {
     public interface IReversible
     {

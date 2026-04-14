@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-
-namespace KE.Items.API.Interface
+namespace KE.Map.Others.CustomZones
 {
-    public interface ISwitchableEffect
+    public enum CustomFacilityZone
     {
-        CustomItemEffect Effect { get; set; }
+        None,
+        MediumContainment
     }
 }
