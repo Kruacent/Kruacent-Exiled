@@ -6,7 +6,7 @@ on:
   pull_request:
 
 env:
-  OUTPUT_FOLDER_PATH: ${{ github.workspace }}/output
+  OUTPUT_FOLDER_PATH: /home/grosserv/.config/EXILED/Plugins/
   EXILED_REFERENCES: ${{ github.workspace }}/references
   EXILED_DEV_REFERENCES: ${{ github.workspace }}/devreferences
   SERVER_LOCATION: /home/grosserv/SCPSL/
@@ -37,9 +37,7 @@ jobs:
           export EXILED_REFERENCES=${{ env.EXILED_REFERENCES }}
           export EXILED_DEV_REFERENCES=${{ env.EXILED_DEV_REFERENCES }}
           SLN=$(find . -name "*.sln" | head -n 1)
-          msbuild "$SLN" /p:Configuration=Release
+          msbuild KruacentExiled/KruacentExiled.sln \
+          /p:Configuration=Release \
+          /p:OutputPath=${{ env.OUTPUT_FOLDER_PATH }}
 
-      - name: Copy DLLs to custom folder
-        run: |
-          mkdir -p ${{ env.OUTPUT_FOLDER_PATH }}
-          find . -path "*/bin/Release/*.dll" -exec cp {} ${{ env.OUTPUT_FOLDER_PATH }} \;
