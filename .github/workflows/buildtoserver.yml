@@ -26,14 +26,12 @@ jobs:
 
       - name : Fill Exiled References
         run: |
+          mkdir ${{ env.EXILED_REFERENCES }}
+          mkdir ${{ env.EXILED_DEV_REFERENCES }}
           find ${{env.SERVER_LOCATION}}/SCPSL_Data/Managed/ -name "*.dll" | xargs cp -t ${{env.EXILED_REFERENCES}}
 
       - name: Build solution
         run: |
-          mkdir ${{ env.EXILED_REFERENCES }}
-          mkdir ${{ env.EXILED_DEV_REFERENCES }}
-
-        
           export EXILED_REFERENCES=${{ env.EXILED_REFERENCES }}
           export EXILED_DEV_REFERENCES=${{ env.EXILED_DEV_REFERENCES }}
           
