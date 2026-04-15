@@ -6,7 +6,7 @@ on:
   pull_request:
 
 env:
-  OUTPUT_FOLDER_PATH: ${{ github.workspace }}/output
+  OUTPUT_FOLDER_PATH: /home/grosserv/.config/EXILED/Plugins/
   EXILED_REFERENCES: ${{ github.workspace }}/references
   EXILED_DEV_REFERENCES: ${{ github.workspace }}/devreferences
   SERVER_LOCATION: /home/grosserv/SCPSL/
@@ -39,7 +39,13 @@ jobs:
           SLN=$(find . -name "*.sln" | head -n 1)
           msbuild "$SLN" /p:Configuration=Release
 
-      - name: Copy DLLs to custom folder
+      - name: Copy plugin to server
         run: |
-          mkdir -p ${{ env.OUTPUT_FOLDER_PATH }}
-          find . -path "*/bin/Release/*.dll" -exec cp {} ${{ env.OUTPUT_FOLDER_PATH }} \;
+          DLL=$(find . -path "*/bin/Release/*KruacentExiled.dll" | head -n 1)
+      
+          if [ -z "$DLL" ]; then
+            echo "DLL not found!"
+            exit 1
+          fi
+          cp "$DLL" $OUTPUT_FOLDER_PATH/
+
