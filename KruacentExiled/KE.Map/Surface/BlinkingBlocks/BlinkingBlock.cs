@@ -24,8 +24,8 @@ namespace KE.Map.Surface.BlinkingBlocks
 
 
 
-        private HashSet<Primitive> _list = new();
-        private HashSet<Primitive> outline = new();
+        private HashSet<Primitive> _list = new HashSet<Primitive>();
+        private HashSet<Primitive> outline = new HashSet<Primitive>();
         public BlinkingBlock(Vector3 pos, Quaternion rotation, Vector3 scale, BlockColor color)
         {
             Position = pos;

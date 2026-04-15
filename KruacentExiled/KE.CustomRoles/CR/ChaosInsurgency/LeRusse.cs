@@ -21,19 +21,19 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Russian",
                     [TranslationKeyDesc] = "RUSH B or A, i dont rember sooo good luck",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Russe",
                     [TranslationKeyDesc] = "RUSH B or A, i dont rember sooo good luck",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Russe",
                     [TranslationKeyDesc] = "RUSH B or A, i dont rember sooo good luck",
@@ -46,18 +46,18 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
 
         public float DamageToLootbox { get; set; } = 500f;
 
-        private readonly Dictionary<Player, float> _playerDamage = new();
+        private readonly Dictionary<Player, float> _playerDamage = new Dictionary<Player, float>();
 
         private static object[] _lootPool = null;
 
-        public override List<string> Inventory { get; set; } = new()
+        public override List<string> Inventory { get; set; } = new List<string>()
         {
             $"{ItemType.GunRevolver}", $"{ItemType.GunA7}", $"{ItemType.ArmorHeavy}",
             $"{ItemType.GrenadeHE}", $"{ItemType.GrenadeFlash}", $"{ItemType.Radio}",
             $"{ItemType.KeycardChaosInsurgency}"
         };
 
-        public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new()
+        public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new Dictionary<AmmoType, ushort>()
         {
             { AmmoType.Ammo44Cal, 19 }, { AmmoType.Nato762, 60 }
         };

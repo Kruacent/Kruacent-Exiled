@@ -46,7 +46,7 @@ namespace KE.Items.Items.ItemEffects
             });
             Timing.CallDelayed(5, () =>
             {
-                if(wall is not null)
+                if(wall != null)
                 {
                     wall.Color = Color.yellow;
                 }
@@ -54,7 +54,7 @@ namespace KE.Items.Items.ItemEffects
             });
             Timing.CallDelayed(8, () =>
             {
-                if (wall is not null)
+                if (wall != null)
                 {
                     wall.Color = Color.red;
                 }

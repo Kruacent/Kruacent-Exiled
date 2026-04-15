@@ -23,10 +23,10 @@ namespace KE.GlobalEventFramework.Examples.GE
         public override string Name { get; set; } = "SwitchItemEffect";
         ///<inheritdoc/>
         public override string Description { get; } = "Les effets des items ont changé";
-        public override string[] AltDescription => 
-        [
+        public override string[] AltDescription => new string[]
+        {
             "Roulette russe"
-        ];
+        };
         ///<inheritdoc/>
         public override int WeightedChance { get; set; } = 0;
 
@@ -49,7 +49,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         private void ChangeItemsEffect()
         {
 
-            List<ItemType> usableList = new();
+            List<ItemType> usableList = new List<ItemType>();
 
             foreach (var item in (ItemType[])Enum.GetValues(typeof(ItemType)))
             {
@@ -74,7 +74,7 @@ namespace KE.GlobalEventFramework.Examples.GE
 
         private void ChangeCandyEffect()
         {
-            List<CandyKindID> candys = new();
+            List<CandyKindID> candys = new List<CandyKindID>();
             foreach (var item in (CandyKindID[])Enum.GetValues(typeof(CandyKindID)))
             {
                 if (item != CandyKindID.None)
@@ -84,7 +84,7 @@ namespace KE.GlobalEventFramework.Examples.GE
                 }
             }
 
-            newCandyEffects = new();
+            newCandyEffects = new Dictionary<CandyKindID, CandyKindID>();
 
             int switchNumber = UnityEngine.Random.Range(1, candys.Count);
 

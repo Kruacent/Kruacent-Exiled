@@ -17,7 +17,7 @@ namespace KE.Misc.Features
     {
         public float Time { get; } = 198;
 
-        public static readonly Dictionary<RoleTypeId, RoomType> RoomTypes = new()
+        public static readonly Dictionary<RoleTypeId, RoomType> RoomTypes = new Dictionary<RoleTypeId, RoomType>()
         {
             { RoleTypeId.Scp939,RoomType.Lcz330 },
             { RoleTypeId.Scp096,RoomType.LczGlassBox },
@@ -36,8 +36,8 @@ namespace KE.Misc.Features
             }
         }
 
-        private HashSet<ushort> serials = new();
-        private HashSet<Door> locked = new();
+        private HashSet<ushort> serials = new HashSet<ushort>();
+        private HashSet<Door> locked = new HashSet<Door>();
 
         public override void SubscribeEvents()
         {

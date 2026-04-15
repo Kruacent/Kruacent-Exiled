@@ -21,9 +21,9 @@ namespace KE.Map.Surface.BlinkingBlocks
         private HashSet<BlinkingBlock> _list;
         public BlinkingBlocksGroup(IEnumerable<BlinkingBlock> blocks)
         {
-            _list = new(blocks);
+            _list = new HashSet<BlinkingBlock>(blocks);
 
-            Vector3 center = new(_list.Average(x => x.Position.x), _list.Average(x => x.Position.y),_list.Average(x => x.Position.z));
+            Vector3 center = new Vector3(_list.Average(x => x.Position.x), _list.Average(x => x.Position.y),_list.Average(x => x.Position.z));
 
 
             

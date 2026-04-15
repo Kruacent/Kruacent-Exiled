@@ -32,7 +32,7 @@ namespace KE.Misc.Features.VoteStart
 
         public static HintPosition HintPosition = new VotePosition();
 
-        private List<Player> Voted = new();
+        private List<Player> Voted = new List<Player>();
         private bool voteCasted = false;
         public override void SubscribeEvents()
         {

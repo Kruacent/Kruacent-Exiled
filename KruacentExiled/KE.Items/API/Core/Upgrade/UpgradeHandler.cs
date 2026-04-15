@@ -49,7 +49,7 @@ namespace KE.Items.API.Core.Upgrade
         {
             
             if (!CustomItem.TryGet(ev.Pickup, out CustomItem ci)) return;
-            if (ci is not IUpgradableCustomItem upgradable) return;
+            if (!(ci is IUpgradableCustomItem upgradable)) return;
             Log.Debug("upgrading pickup");
 
             if(upgradable.Upgrade is null || upgradable.Upgrade.Count == 0)

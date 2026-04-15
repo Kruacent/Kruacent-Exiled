@@ -13,7 +13,7 @@ namespace KE.Map.Others.CustomZones
 {
     public abstract class CustomRoom
     {
-        private static readonly HashSet<CustomRoom> registered = new();
+        private static readonly HashSet<CustomRoom> registered = new HashSet<CustomRoom>();
         public static IReadOnlyCollection<CustomRoom> RegisteredRoom => registered;
 
         public abstract RoomShape Shape { get; }
@@ -21,7 +21,7 @@ namespace KE.Map.Others.CustomZones
         public abstract CustomFacilityZone FacilityZone { get; }
         
         public Vector3 Size => RoomIdentifier.GridScale;
-        public HashSet<SpawnedCustomRoom> SpawnedRoom { get; } = new();
+        public HashSet<SpawnedCustomRoom> SpawnedRoom { get; } = new HashSet<SpawnedCustomRoom>();
 
         public CustomRoom()
         {
@@ -33,7 +33,7 @@ namespace KE.Map.Others.CustomZones
 
         public SpawnedCustomRoom Spawn(Vector2Int coord,Vector3 rotation,Vector3 spawnzone)
         {
-            Vector3 position = new(-coord.x * Size.x+ spawnzone.x, spawnzone.y, coord.y * Size.z + spawnzone.z);
+            Vector3 position = new Vector3(-coord.x * Size.x+ spawnzone.x, spawnzone.y, coord.y * Size.z + spawnzone.z);
 
             Log.Debug("spawn room at " + position);
             IEnumerable<AdminToy> prims = SpawnRoom(position,rotation);
@@ -44,7 +44,7 @@ namespace KE.Map.Others.CustomZones
             }
 
 
-            SpawnedCustomRoom room = new(this, Shape, position,rotation, coord, prims.ToHashSet());
+            SpawnedCustomRoom room = new SpawnedCustomRoom(this, Shape, position,rotation, coord, prims.ToHashSet());
             room.Spawn();
             SpawnedRoom.Add(room);
             return room;

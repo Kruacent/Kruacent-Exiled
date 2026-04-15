@@ -25,7 +25,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         public int Cooldown = 120;
         public int NbItemSpawned = 5;
 
-        public static readonly HashSet<ItemType> BlacklistedItems = new()
+        public static readonly HashSet<ItemType> BlacklistedItems = new HashSet<ItemType>()
         {
             ItemType.None,ItemType.Coal,ItemType.SpecialCoal,ItemType.Snowball,ItemType.SCP1507Tape,ItemType.Scp021J,ItemType.DebugRagdollMover,
             ItemType.KeycardCustomManagement,ItemType.KeycardCustomMetalCase,ItemType.KeycardCustomSite02,ItemType.KeycardCustomTaskForce,

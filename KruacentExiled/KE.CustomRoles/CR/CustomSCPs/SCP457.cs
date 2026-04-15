@@ -23,19 +23,19 @@ namespace KE.CustomRoles.CR.CustomSCPs
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "SCP-457",
                     [TranslationKeyDesc] = "You do passive damage around you",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "SCP-457",
                     [TranslationKeyDesc] = "j'ai dit pas trop cuite",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "SCP-457",
                     [TranslationKeyDesc] = "You do passive damage around you",
@@ -50,21 +50,21 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
         public override float SpawnChance { get; set; } = 0;
 
-        private Dictionary<Player, Light> _inside = new();
-        private Dictionary<Player, HashSet<CoroutineHandle>> _handles = new();
+        private Dictionary<Player, Light> _inside = new Dictionary<Player, Light>();
+        private Dictionary<Player, HashSet<CoroutineHandle>> _handles = new Dictionary<Player, HashSet<CoroutineHandle>>();
         
 
         public static float DamageRefreshRate = 5f;
-        public static readonly Color FlameColor = new(2, 1.08f, 0);
+        public static readonly Color FlameColor = new Color(2, 1.08f, 0);
 
         public Collider[] SphereNonAlloc = new Collider[32];
 
 
-        public override HashSet<string> Abilities => 
-        [
+        public override HashSet<string> Abilities => new HashSet<string>()
+        {
             "Fireball",
             "BlindingFlash"
-        ];
+        };
 
         protected override int SettingId => 10001;
 
@@ -72,7 +72,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
         {
             Log.Debug("adding role 457");
             _inside.Add(player, null);
-            _handles.Add(player, new());
+            _handles.Add(player, new HashSet<CoroutineHandle>());
 
             _handles[player].Add(Timing.RunCoroutine(InsideLight(player)));
             _handles[player].Add(Timing.RunCoroutine(PassiveDamage(player)));

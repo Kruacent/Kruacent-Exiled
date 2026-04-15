@@ -23,10 +23,10 @@ namespace KE.GlobalEventFramework.Examples.GE
         public override string Name { get; set; } = "RollBack";
         ///<inheritdoc/>
         public override string Description { get; } = "Shit the server is lagging";
-        public override string[] AltDescription => 
-        [
+        public override string[] AltDescription => new string[]
+        {
             "Pov Omer"
-        ];
+        };
         ///<inheritdoc/>
         public override int WeightedChance { get; set; } = 1;
 
@@ -34,7 +34,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         public static float Luck = 5;
         public override ImpactLevel ImpactLevel => ImpactLevel.High;
 
-        private Dictionary<Player, (Vector3, Quaternion)> playerpos = new();
+        private Dictionary<Player, (Vector3, Quaternion)> playerpos = new Dictionary<Player, (Vector3, Quaternion)>();
 
         ///<inheritdoc/>
         public IEnumerator<float> Start()

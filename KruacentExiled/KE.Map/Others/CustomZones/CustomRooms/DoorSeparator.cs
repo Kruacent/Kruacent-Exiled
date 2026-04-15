@@ -12,7 +12,7 @@ namespace KE.Map.Others.CustomZones.CustomRooms
 {
     public abstract class DoorSeparator
     {
-        private static readonly HashSet<DoorSeparator> registered = new();
+        private static readonly HashSet<DoorSeparator> registered = new HashSet<DoorSeparator>();
         public static IReadOnlyCollection<DoorSeparator> RegisteredDoorSeparator => registered;
         public DoorSeparator()
         {
@@ -21,7 +21,7 @@ namespace KE.Map.Others.CustomZones.CustomRooms
 
         
 
-        public HashSet<SpawnedDoorSeparator> SpawnDoorSeparator { get; } = new();
+        public HashSet<SpawnedDoorSeparator> SpawnDoorSeparator { get; } = new HashSet<SpawnedDoorSeparator>();
         public abstract CustomFacilityZone FacilityZone { get; }
 
         protected abstract IEnumerable<GameObject> Create(Vector3 position, Vector3 rotation);
@@ -43,7 +43,7 @@ namespace KE.Map.Others.CustomZones.CustomRooms
 
 
 
-            SpawnedDoorSeparator spawned = new(this, position, rotation, [room1, room2], objs.ToHashSet());
+            SpawnedDoorSeparator spawned = new SpawnedDoorSeparator(this, position, rotation, new List<SpawnedCustomRoom>() { room1, room2 }, objs.ToHashSet());
             spawned.Spawn();
             
             SpawnDoorSeparator.Add(spawned);

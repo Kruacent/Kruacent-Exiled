@@ -14,16 +14,16 @@ namespace KE.CustomRoles.Abilities.RedMist
         public override string Name { get; } = "OnRush";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "On Rush",
                     [TranslationKeyDesc] = "Manifest your E.G.O, gain powerful buff but rapid health drain.\nCan be deactivated anytime",
                     ["OnRushFailEGO"] = "You need to manifest your E.G.O. first",
                     ["OnRushFailWeapon"] = "You need your weapon",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "todo",
                     [TranslationKeyDesc] = "todo",
@@ -131,7 +131,7 @@ namespace KE.CustomRoles.Abilities.RedMist
                     }
 
 
-                    if (destructible is not null)
+                    if (destructible != null)
                     {
                         PlayerStatsSystem.DamageHandlerBase handler = new GenericDamageHandler(target, player, Damage, DamageType.Scp1509, new DamageHandlerBase.CassieAnnouncement("")).Base;
                         destructible.Damage(Damage, handler, destructible.CenterOfMass);

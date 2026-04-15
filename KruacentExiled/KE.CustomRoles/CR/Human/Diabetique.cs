@@ -19,19 +19,19 @@ namespace KE.CustomRoles.CR.Human
         public override SideEnum Side { get; set; } = SideEnum.Human;
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Diabetic",
                     [TranslationKeyDesc] = "Fucking type 1. 1",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Diabétique",
                     [TranslationKeyDesc] = "T'as mangé le crambleu au pomme de mael",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Diabetique",
                     [TranslationKeyDesc] = "T'as mangé le crambleu au pomme de mael",
@@ -42,10 +42,10 @@ namespace KE.CustomRoles.CR.Human
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
-        public HashSet<ItemType> HealItem => [ItemType.SCP500];
-        public Color32 Color => new(255, 255, 0,0);
+        public HashSet<ItemType> HealItem => new HashSet<ItemType>() { ItemType.SCP500 };
+        public Color32 Color => new Color32(255, 255, 0,0);
 
-        public HashSet<EffectType> ImmuneEffects => [EffectType.Poisoned];
+        public HashSet<EffectType> ImmuneEffects => new HashSet<EffectType>() { EffectType.Poisoned };
 
         protected override void RoleAdded(Player player)
         {

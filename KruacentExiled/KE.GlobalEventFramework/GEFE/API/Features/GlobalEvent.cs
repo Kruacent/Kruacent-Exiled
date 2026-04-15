@@ -69,9 +69,9 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
 
 
         private static Config Config => MainPlugin.Configs;
-        private static GlobalEventHandler _handler = new();
+        private static GlobalEventHandler _handler = new GlobalEventHandler();
 
-        private static HashSet<GlobalEvent> _activeGE = new();
+        private static HashSet<GlobalEvent> _activeGE = new HashSet<GlobalEvent>();
 
         public static IReadOnlyDictionary<ImpactLevel, string> ImpactToColor = new Dictionary<ImpactLevel, string>()
         {
@@ -84,7 +84,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         };
 
 
-        public static HashSet<GlobalEvent> ForcedGE { get; } = new();
+        public static HashSet<GlobalEvent> ForcedGE { get; } = new HashSet<GlobalEvent>();
 
 
         /// <summary>
@@ -176,11 +176,11 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         {
             get
             {
-                List<string> allDesc =
-                [
-                    Description, 
-                    .. AltDescription
-                ];
+                List<string> allDesc = new List<string>()
+                {
+                    Description,
+                };
+                allDesc.AddRange(AltDescription);
                 return allDesc;
             }
         }

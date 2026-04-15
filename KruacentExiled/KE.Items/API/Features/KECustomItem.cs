@@ -27,9 +27,9 @@ namespace KE.Items.API.Features
     {
 
 
-        private static Dictionary<Type, KECustomItem> _typeLookup = new();
+        private static Dictionary<Type, KECustomItem> _typeLookup = new Dictionary<Type, KECustomItem>();
 
-        private static Dictionary<string, KECustomItem> _nameLookup = new();
+        private static Dictionary<string, KECustomItem> _nameLookup = new Dictionary<string, KECustomItem>();
 
 
         [Obsolete("Uses only the name",true)]
@@ -66,14 +66,14 @@ namespace KE.Items.API.Features
 
         private Dictionary<string, Dictionary<string, string>> GetBasicTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [PickupKey] = "You've picked up ",
                     [InventoryKey] = "You've selected ",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [PickupKey] = "Tu as pris ",
                     [InventoryKey] = "Tu as selectionné ",
@@ -184,7 +184,7 @@ namespace KE.Items.API.Features
                 Log.Debug(room.Room+ " : "+PoseRoomSpawnPointHandler.UsablePoses.Count(p => p.roomType == room.Room));
                 Log.Debug($"spawning {this.Name} in {room.Room}" );
 
-                if (spawn is not null)
+                if (spawn != null)
                 {
                     Log.Debug($"spawning custom pos");
                     pickup = Spawn(spawn.Position);
@@ -197,7 +197,7 @@ namespace KE.Items.API.Features
 
 
 
-                if (pickup is not null)
+                if (pickup != null)
                 {
                     num++;
                 }

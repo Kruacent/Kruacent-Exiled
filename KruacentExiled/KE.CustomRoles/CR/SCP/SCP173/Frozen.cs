@@ -21,19 +21,19 @@ namespace KE.CustomRoles.CR.SCP.SCP173
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Frozen SCP-173",
                     [TranslationKeyDesc] = "Instead of Tantrum you drop a SCP-244.\nKilling anyone with hypothermia gives Hume Shield",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "SCP-173 Glacé",
                     [TranslationKeyDesc] = "Au lieu de chier tu poses un SCP-244.\nTué quelqu'un qui est en hypothermie donne du shield (dans le jeu hein)",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Frozen SCP-173",
                     [TranslationKeyDesc] = "Instead of Tantrum you drop a SCP-244.\nKilling anyone with hypothermia gives Hume Shield",
@@ -97,7 +97,7 @@ namespace KE.CustomRoles.CR.SCP.SCP173
             }
         }
 
-        private HashSet<Scp244DeployablePickup> _primed = new();
+        private HashSet<Scp244DeployablePickup> _primed = new HashSet<Scp244DeployablePickup>();
 
 
         private void OnCreatedTantrum(Scp173CreatedTantrumEventArgs ev)

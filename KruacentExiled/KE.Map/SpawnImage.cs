@@ -19,11 +19,11 @@ namespace KE.Map
     {
         public override string Command => "spawnimage";
 
-        public override string[] Aliases => [];
+        public override string[] Aliases => new string[0];
 
         public override string Description => "image";
 
-        public override string[] Usage => [""];
+        public override string[] Usage => new string[0];
 
         public override bool ExecuteCommand(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
@@ -48,7 +48,7 @@ namespace KE.Map
             return true;
         }
 
-        private TestHintPosition position = new();
+        private TestHintPosition position = new TestHintPosition();
     }
 
 

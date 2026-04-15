@@ -18,11 +18,11 @@ namespace KE.Map.Others.BlackoutNDoor.Commands
     {
         public override string Command => "doorstuck";
 
-        public override string[] Aliases => ["d"];
+        public override string[] Aliases => new string[] { "d" };
 
         public override string Description => "force a doorstuck";
 
-        public override string[] Usage => ["FacilityZone"];
+        public override string[] Usage => new string[] { "FacilityZone" };
 
         public override bool ExecuteCommand(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
@@ -39,7 +39,7 @@ namespace KE.Map.Others.BlackoutNDoor.Commands
             }
             
 
-            DoorStuck doorstuck = new();
+            DoorStuck doorstuck = new DoorStuck();
             doorstuck.StartEvent(zone.GetZone(),-1);
             response = "doorstuck forced at " + zone.ToString();
             

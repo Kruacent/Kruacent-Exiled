@@ -16,8 +16,8 @@ namespace KE.Misc.Features.GamblingCoin
     {
         private static Config Config => MainPlugin.Configs;
 
-        private readonly Dictionary<string, DateTime> _cooldowns = new();
-        public static Dictionary<ushort, int> CoinUses = new();
+        private readonly Dictionary<string, DateTime> _cooldowns = new Dictionary<string, DateTime>();
+        public static Dictionary<ushort, int> CoinUses = new Dictionary<ushort, int>();
 
         public void OnCoinFlip(FlippingCoinEventArgs ev)
         {
@@ -27,7 +27,7 @@ namespace KE.Misc.Features.GamblingCoin
             if (CustomItem.TryGet(item, out _)) return;
 
 
-            GamblingEventArgs ev1 = new(player, item, true);
+            GamblingEventArgs ev1 = new GamblingEventArgs(player, item, true);
 
             Events.Handlers.GamblingCoins.OnGambling(ev1);
 
@@ -84,7 +84,7 @@ namespace KE.Misc.Features.GamblingCoin
                 player.Broadcast(5, "no more coin");
                 item = null;
             }
-            GambledEventArgs ev2 = new(player, item, effect, remainingUses, shouldBreak);
+            GambledEventArgs ev2 = new GambledEventArgs(player, item, effect, remainingUses, shouldBreak);
 
             Events.Handlers.GamblingCoins.OnGambled(ev2);
 

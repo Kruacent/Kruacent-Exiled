@@ -57,9 +57,9 @@ namespace KE.Map.Others.CustomElevators.KECustomElevators
 
         private void SpawnModel()
         {
-            model = new();
-            toppanel = new();
-            bottompanel = new();
+            model = new ElevatorModel();
+            toppanel = new Panel();
+            bottompanel = new Panel();
 
         }
         private void CreateModel()
@@ -77,9 +77,9 @@ namespace KE.Map.Others.CustomElevators.KECustomElevators
 
         private void CreatePrimitives()
         {
-            Vector3 helppos = new(18.24f, 255.65f, -46.07f);
-            Vector3 postop = new(19.92f, 299.97f, -48.95f);
-            Vector3 posbot = new(15.62f, 290.65f, -45.19f);
+            Vector3 helppos = new Vector3(18.24f, 255.65f, -46.07f);
+            Vector3 postop = new Vector3(19.92f, 299.97f, -48.95f);
+            Vector3 posbot = new Vector3(15.62f, 290.65f, -45.19f);
 
             primtop = Primitive.Create(postop, null, Vector3.one * Scale);
             primtop.Flags = AdminToys.PrimitiveFlags.None;

@@ -11,7 +11,7 @@ namespace KE.Misc.Features
 {
     public abstract class MiscFeature : IUsingEvents
     {
-        private static HashSet<MiscFeature> _list = new();
+        private static HashSet<MiscFeature> _list = new HashSet<MiscFeature>();
 
 
         internal MiscFeature()

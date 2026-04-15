@@ -27,16 +27,16 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         public abstract string Name { get; set; }
         public virtual int WeightedChance { get; set; } = 1;
         public virtual uint[] IncompatibleEvents { get; set; } = new uint[0];
-        protected HashSet<CoroutineHandle> CoroutineHandles { get; } = new();
-        protected static readonly HashSet<KEEvents> s_activeEvents = new();
+        protected HashSet<CoroutineHandle> CoroutineHandles { get; } = new HashSet<CoroutineHandle>();
+        protected static readonly HashSet<KEEvents> s_activeEvents = new HashSet<KEEvents>();
 
         #endregion
 
         #region Static Variables
-        private static Dictionary<uint, KEEvents> _idLookup = new();
-        private static Dictionary<string, KEEvents> _nameLookup = new();
+        private static Dictionary<uint, KEEvents> _idLookup = new Dictionary<uint, KEEvents>();
+        private static Dictionary<string, KEEvents> _nameLookup = new Dictionary<string, KEEvents>();
 
-        public static HashSet<KEEvents> List => [.._idLookup.Values];
+        public static HashSet<KEEvents> List => new HashSet<KEEvents>(_idLookup.Values);
         #endregion
         #region Events
 
@@ -49,7 +49,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
 
         public static IEnumerable<KEEvents> RegisterAll()
         {
-            List<Assembly> assemblies = new();
+            List<Assembly> assemblies = new List<Assembly>();
             foreach(var plugin in Exiled.Loader.Loader.Plugins)
             {
                 if (!assemblies.Contains(plugin.Assembly) && plugin.Config.IsEnabled)
@@ -150,7 +150,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
             foreach (KEEvents ev in events)
             {
                 Log.Info("enabling " + ev.Name);
-                EnablingEventArgs args = new(ev, true);
+                EnablingEventArgs args = new EnablingEventArgs(ev, true);
                 KEEventsHandler.OnEnabling(args);
 
                 if (!args.IsAllowed) continue;
@@ -174,7 +174,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
 
                 s_activeEvents.Add(ev);
 
-                KEEventsHandler.OnEnabled(new(ev));
+                KEEventsHandler.OnEnabled(new EnabledEventArgs(ev));
             }
         }
 
@@ -193,7 +193,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
                     Timing.KillCoroutines(handle);
                 }
                 ev.Disable(ev);
-                KEEventsHandler.OnDisabled(new(ev));
+                KEEventsHandler.OnDisabled(new DisabledEventArgs(ev));
             }
         }
 
@@ -205,11 +205,11 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
 
         protected static IEnumerable<T> GetRandomEvent<T>(int numberEvent = 1) where T : KEEvents
         {
-            List<T> result = new();
-            List<T> weightedPool = new();
+            List<T> result = new List<T>();
+            List<T> weightedPool = new List<T>();
             foreach (T ge in List.Where(ev => ev is T))
             {
-                if (ge is not IConditional || (ge is IConditional c && c.Condition()))
+                if (!(ge is IConditional) || (ge is IConditional c && c.Condition()))
                 {
                     if (!ge.IsCompatible()) continue;
                     for (int i = 0; i < ge.WeightedChance; i++)

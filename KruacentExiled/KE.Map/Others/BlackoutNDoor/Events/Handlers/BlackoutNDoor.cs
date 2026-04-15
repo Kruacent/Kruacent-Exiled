@@ -15,8 +15,8 @@ namespace KE.Map.Others.BlackoutNDoor.Events.Handlers
         public static Event<PreEventEventArgs> PreEvent { get; set; } = new Event<PreEventEventArgs>();
         public static Event<PostEventEventArgs> PostEvent { get; set; } = new Event<PostEventEventArgs>();
 
-        public static Event<ChoseMapEventEventArgs> ChoseMapEvent { get; set; } = new();
-        public static Event<ChoseZoneEventArgs> ChoseZoneEvent { get; set; } = new();
+        public static Event<ChoseMapEventEventArgs> ChoseMapEvent { get; set; } = new Event<ChoseMapEventEventArgs>();
+        public static Event<ChoseZoneEventArgs> ChoseZoneEvent { get; set; } = new Event<ChoseZoneEventArgs>();
         public static void OnPreEvent(PreEventEventArgs ev)
         {
             PreEvent.InvokeSafely(ev);

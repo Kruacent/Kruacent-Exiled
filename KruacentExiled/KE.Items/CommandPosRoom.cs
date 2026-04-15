@@ -20,7 +20,7 @@ namespace KE.Items
     {
         public string Command => "roompos";
 
-        public string[] Aliases => [];
+        public string[] Aliases => new string[0];
 
         public string Description => "position";
 
@@ -29,7 +29,7 @@ namespace KE.Items
             var p = Player.Get(sender);
             response = string.Empty;
 
-            if(p is not null)
+            if(p != null)
             {
                 Room room = p.CurrentRoom;
 
@@ -49,7 +49,7 @@ namespace KE.Items
 
         public static void ShowPoses(RoomType roomType)
         {
-            List<Primitive> primitives = new();
+            List<Primitive> primitives = new List<Primitive>();
             Room room = Room.Get(roomType);
             foreach (ItemSpawn pose in AllPoses.Where(p => p.roomType == roomType))
             {

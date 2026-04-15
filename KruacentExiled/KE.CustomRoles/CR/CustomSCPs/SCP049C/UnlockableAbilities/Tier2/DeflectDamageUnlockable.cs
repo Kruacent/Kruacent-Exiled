@@ -22,7 +22,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.Tier2
         }
 
 
-        private static Dictionary<ReferenceHub, LastDamage> cooldowns = new();
+        private static Dictionary<ReferenceHub, LastDamage> cooldowns = new Dictionary<ReferenceHub, LastDamage>();
 
         public override void Grant(ReferenceHub hub)
         {
@@ -48,7 +48,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.Tier2
                 if(lastDamage is null || lastDamage.IsDeflectable())
                 {
                     ev.IsAllowed = false;
-                    cooldowns[hub] = new(ev.Amount);
+                    cooldowns[hub] = new LastDamage(ev.Amount);
                 }
             }
         }

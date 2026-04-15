@@ -23,14 +23,14 @@ namespace KE.Items.Items
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Presse Purée",
                     [TranslationKeyDesc] = "explode at impact but does less damage",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Presse Purée",
                     [TranslationKeyDesc] = "Explosion à l'impact mais moins efficace",
@@ -103,7 +103,7 @@ namespace KE.Items.Items
             
             if (ev.Damage <= 0f) return;
 
-            if (player is not null && player.IsScp)
+            if (player != null && player.IsScp)
             {
                 ev.Damage /= 3f;
             }

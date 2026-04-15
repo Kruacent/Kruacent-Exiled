@@ -19,7 +19,7 @@ namespace KE.Items.Items.ItemEffects
         private List<Player> effectedPlayers = new List<Player>();
         public HashSet<RoleTypeId> BlacklistedRoles { get; set; } = new HashSet<RoleTypeId>() { RoleTypeId.Scp173, RoleTypeId.Scp106, RoleTypeId.Scp049, RoleTypeId.Scp096, RoleTypeId.Scp3114, RoleTypeId.Scp0492, RoleTypeId.Scp939 };
 
-        public HashSet<RoomType> BlacklistedRooms { get; } = new()
+        public HashSet<RoomType> BlacklistedRooms { get; } = new HashSet<RoomType>()
         {
             RoomType.HczTestRoom,
             RoomType.HczTesla,
@@ -28,11 +28,11 @@ namespace KE.Items.Items.ItemEffects
 
         public override void Effect(UsedItemEventArgs ev)
         {
-            OnExploding([ev.Player]);
+            OnExploding(new HashSet<Player>() { ev.Player });
         }
         public override void Effect(DroppingItemEventArgs ev)
         {
-            OnExploding([ev.Player]);
+            OnExploding(new HashSet<Player>() { ev.Player });
         }
 
         public override void Effect(ExplodingGrenadeEventArgs ev)

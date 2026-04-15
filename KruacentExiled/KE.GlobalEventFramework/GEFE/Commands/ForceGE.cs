@@ -15,7 +15,7 @@
         public string Command { get; } = "force";
         public string[] Aliases { get; } = new string[] { "f" };
         public string Description { get; } = "force a or multiple global event";
-        internal static List<GlobalEvent> ForcedGE { get; } = new();
+        internal static List<GlobalEvent> ForcedGE { get; } = new List<GlobalEvent>();
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {

@@ -2,12 +2,16 @@ name: Build .NET Solution
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   pull_request:
+    branches: [ "master" ]
 
 env:
-  OUTPUT_FOLDER_PATH: ${{ github.workspace }}/output
-  
+  OUTPUT_FOLDER_PATH: /home/grosserv/.config/EXILED/Plugins/
+  EXILED_REFERENCES: ${{ github.workspace }}/references
+  EXILED_DEV_REFERENCES: ${{ github.workspace }}/devreferences
+  SERVER_LOCATION: /home/grosserv/SCPSL/
+  OTHER_DEPENDENCIES: /home/grosserv/OtherDependencies/
 jobs:
   build:
     runs-on: self-hosted 
@@ -16,19 +20,40 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Mono
+      - name: Restore NuGet packages
         run: |
-          sudo apt-get update
-          sudo apt-get install -y mono-complete msbuild
-        
+          SLN=$(find . -name "*.sln" | head -n 1)
+          nuget restore "$SLN"
+
+
+      - name : Fill Exiled References
+        run: |
+          mkdir ${{ env.EXILED_REFERENCES }}
+          mkdir ${{ env.EXILED_DEV_REFERENCES }}
+          find ${{env.SERVER_LOCATION}}/SCPSL_Data/Managed/ -name "*.dll" | xargs cp -t ${{env.EXILED_REFERENCES}}
+          find ${{env.OTHER_DEPENDENCIES}} -name "*.dll" | xargs cp -t ${{env.EXILED_REFERENCES}}
+
+      - name : Fill Exiled References
+        run: |
+          mkdir ${{ env.EXILED_REFERENCES }}
+          mkdir ${{ env.EXILED_DEV_REFERENCES }}
+          find ${{env.SERVER_LOCATION}}/SCPSL_Data/Managed/ -name "*.dll" | xargs cp -t ${{env.EXILED_REFERENCES}}
+          find ${{env.OTHER_DEPENDENCIES}} -name "*.dll" | xargs cp -t ${{env.EXILED_REFERENCES}}
 
       - name: Build solution
         run: |
-          export EXILED_REFERENCES=${{ github.workspace }}/references
-          export EXILED_DEV_REFERENCES=${{ github.workspace }}/devreferences
-          msbuild YourSolution.sln /p:Configuration=Release
+          export EXILED_REFERENCES=${{ env.EXILED_REFERENCES }}
+          export EXILED_DEV_REFERENCES=${{ env.EXILED_DEV_REFERENCES }}
+          SLN=$(find . -name "*.sln" | head -n 1)
+          msbuild "$SLN" /p:Configuration=Release
 
-      - name: Copy DLLs to custom folder
+      - name: Copy plugin to server
         run: |
-          mkdir -p ${{ env.OUTPUT_FOLDER_PATH }}
-          find . -path "*/bin/Release/*.dll" -exec cp {} ${{ env.OUTPUT_FOLDER_PATH }} \;
+          DLL=$(find . -path "*/bin/Release/*KruacentExiled.dll" | head -n 1)
+      
+          if [ -z "$DLL" ]; then
+            echo "DLL not found!"
+            exit 1
+          fi
+          cp "$DLL" $OUTPUT_FOLDER_PATH/
+

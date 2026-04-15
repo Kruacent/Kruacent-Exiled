@@ -47,7 +47,7 @@ namespace KE.Map.Others.BlackoutNDoor
                 }
             }
 
-            DoorStuckEventArgs ev = new(doors,zone,true);
+            DoorStuckEventArgs ev = new DoorStuckEventArgs(doors,zone,true);
             DoorStuckHandler.OnDoorStucking(ev);
 
             if (ev.IsAllowed && ev.Doors != null)

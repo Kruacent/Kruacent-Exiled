@@ -144,7 +144,7 @@ namespace KE.CustomRoles.CR.MTF.RedMist
         }
 
 
-        private static readonly Dictionary<EffectType,byte> effects = new()
+        private static readonly Dictionary<EffectType,byte> effects = new Dictionary<EffectType, byte>()
         {
             { EffectType.MovementBoost,25 },
             { EffectType.Scp1853,2 },

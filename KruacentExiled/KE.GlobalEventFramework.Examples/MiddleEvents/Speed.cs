@@ -24,7 +24,7 @@ namespace KE.GlobalEventFramework.Examples.MiddleEvents
         public override string Description { get; set; } = "Gas! gas! gas!";
         ///<inheritdoc/>
         public override int WeightedChance { get; set; } = 1;
-        public override uint[] IncompatibleEvents => [1042];
+        public override uint[] IncompatibleEvents => new uint[] { 1042 };
         /// <summary>
         /// intensity of the movement boost effect
         /// </summary>

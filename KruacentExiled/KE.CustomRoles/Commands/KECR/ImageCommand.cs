@@ -19,11 +19,11 @@ namespace KE.CustomRoles.Commands.KECR
     {
         public string Command => "img";
 
-        public string[] Aliases => [];
+        public string[] Aliases => new string[0];
 
         public string Description => "image";
 
-        public string[] Usage => [];
+        public string[] Usage => new string[0];
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {

@@ -16,9 +16,9 @@ namespace KE.Items.Items.PickupModels
         {
         }
 
-        private static Color32 red = new(255, 0, 0, 255);
-        private static Color32 gold = new(255, 215, 0, 255);
-        private static Color32 white = new(255, 255, 255, 255);
+        private static Color32 red = new Color32(255, 0, 0, 255);
+        private static Color32 gold = new Color32(255, 215, 0, 255);
+        private static Color32 white = new Color32(255, 255, 255, 255);
 
 
         public override float Scale => 0.2f;
@@ -29,16 +29,16 @@ namespace KE.Items.Items.PickupModels
 
             var sphere = CreatePrimitive(parent, PrimitiveType.Sphere, Vector3.zero, Quaternion.identity, Vector3.one, white);
 
-            var gem = CreatePrimitive(parent, PrimitiveType.Sphere, new(0,0.8f,0), Quaternion.identity, new(.15f,.1f,.1f), red);
+            var gem = CreatePrimitive(parent, PrimitiveType.Sphere, new Vector3(0,0.8f,0), Quaternion.identity, new Vector3(.15f,.1f,.1f), red);
 
-            var crossV = CreatePrimitive(parent, PrimitiveType.Cube, new(0, 0.74f, 0), Quaternion.identity, new(.1f, .5f, .1f), white);
-            var crossH = CreatePrimitive(parent, PrimitiveType.Cube, new(0, 0.8f, 0), Quaternion.identity, new(.1f, .1f, .37f), white);
+            var crossV = CreatePrimitive(parent, PrimitiveType.Cube, new Vector3(0, 0.74f, 0), Quaternion.identity, new Vector3(.1f, .5f, .1f), white);
+            var crossH = CreatePrimitive(parent, PrimitiveType.Cube, new Vector3(0, 0.8f, 0), Quaternion.identity, new Vector3(.1f, .1f, .37f), white);
 
-            var ring1 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.Euler(90,0,0), new(1.05f, .05f, 1.05f), gold);
-            var ring2 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.identity, new(1.05f, .05f, 1.05f), gold);
-            var ring3 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.Euler(90, 90, 0), new(1.05f, .05f, 1.05f), gold);
+            var ring1 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.Euler(90,0,0), new Vector3(1.05f, .05f, 1.05f), gold);
+            var ring2 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.identity, new Vector3(1.05f, .05f, 1.05f), gold);
+            var ring3 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.zero, Quaternion.Euler(90, 90, 0), new Vector3(1.05f, .05f, 1.05f), gold);
 
-            var littleBase = CreatePrimitive(parent, PrimitiveType.Cylinder, new(0, 0.5f, 0), Quaternion.identity, new(.3f, .05f, .3f), gold);
+            var littleBase = CreatePrimitive(parent, PrimitiveType.Cylinder, new Vector3(0, 0.5f, 0), Quaternion.identity, new Vector3(.3f, .05f, .3f), gold);
 
         }
     }

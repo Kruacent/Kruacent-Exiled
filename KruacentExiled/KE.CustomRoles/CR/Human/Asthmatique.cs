@@ -17,19 +17,19 @@ namespace KE.CustomRoles.CR.Human
         public override SideEnum Side { get; set; } = SideEnum.Human;
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Asthmatic",
                     [TranslationKeyDesc] = "Stamina halfed\nbut better accuracy",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Asthmatique",
                     [TranslationKeyDesc] = "T'as stamina est réduit de moitié\nMais tu vises mieux",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Asthmatique",
                     [TranslationKeyDesc] = "T'as stamina est réduit de moitié\nMais tu vises mieux",
@@ -40,9 +40,9 @@ namespace KE.CustomRoles.CR.Human
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
         public Color32 Color => new Color32(191, 255, 0, 0);
-        public HashSet<ItemType> HealItem => [ItemType.SCP500];
+        public HashSet<ItemType> HealItem => new HashSet<ItemType>() { ItemType.SCP500 };
 
-        public HashSet<EffectType> ImmuneEffects => [EffectType.Poisoned];
+        public HashSet<EffectType> ImmuneEffects => new HashSet<EffectType>() {EffectType.Poisoned};
 
         protected override void RoleAdded(Player player)
         {

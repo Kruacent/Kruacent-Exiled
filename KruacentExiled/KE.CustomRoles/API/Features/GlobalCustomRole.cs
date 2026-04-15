@@ -130,7 +130,7 @@ namespace KE.CustomRoles.API.Features
             return side switch
             {
                 Side.Scp => SideEnum.SCP,
-                Side.Tutorial or Side.Mtf or Side.ChaosInsurgency => SideEnum.Human,
+                Side.Tutorial | Side.Mtf | Side.ChaosInsurgency => SideEnum.Human,
                 Side.None => SideEnum.None,
                 _ => SideEnum.None,
             };

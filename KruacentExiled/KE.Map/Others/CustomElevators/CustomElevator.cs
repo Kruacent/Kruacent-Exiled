@@ -12,7 +12,7 @@ namespace KE.Map.Others.CustomElevators
     public class CustomElevator : KEElevator
     {
 
-        public static ElevatorModel model { get; } = new();
+        public static ElevatorModel model { get; } = new ElevatorModel();
 
         public override bool IsReady => false;
 

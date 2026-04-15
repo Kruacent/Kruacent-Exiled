@@ -17,14 +17,14 @@ namespace KE.Items.Items
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Teleportation Grenade",
                     [TranslationKeyDesc] = "This grenade does 0 damage but teleport nearby players in a random place (does work in other dimension ;3 )",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Grenade de Téléportation",
                     [TranslationKeyDesc] = "Ne fait pas de dégât mais téléporte dans une pièce aléatoire",

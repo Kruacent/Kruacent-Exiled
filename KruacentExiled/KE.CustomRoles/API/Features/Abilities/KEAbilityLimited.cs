@@ -14,7 +14,7 @@ namespace KE.CustomRoles.API.Features.Abilities
 
         public abstract int Uses { get; }
 
-        private Dictionary<Player, int> uses =new();
+        private Dictionary<Player, int> uses =new Dictionary<Player, int>();
 
         public override void AddAbility(Player player)
         {

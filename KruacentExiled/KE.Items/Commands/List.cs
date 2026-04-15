@@ -13,7 +13,7 @@ namespace KE.Items.Commands
     {
         public string Command => "list";
 
-        public string[] Aliases => ["l"];
+        public string[] Aliases => new string[] { "l" };
 
         public string Description => "list";
 

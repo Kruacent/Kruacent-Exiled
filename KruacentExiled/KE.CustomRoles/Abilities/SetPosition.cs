@@ -17,16 +17,16 @@ namespace KE.CustomRoles.Abilities
         public const string TranslationTooFar = "SetPositionTooFar";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Set Position",
                     [TranslationKeyDesc] = "Select the current position for another ability",
                     [TranslationNoTarget] = "No target set",
                     [TranslationTooFar] = "Position destroyed : too far away",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Selection de position",
                     [TranslationKeyDesc] = "Selectionne la position pour une autre abilité",
@@ -55,7 +55,7 @@ namespace KE.CustomRoles.Abilities
 
 
 
-            FollowingTextToy followingTextToy = new FollowingTextToy([player], position, Quaternion.identity, Vector3.one);
+            FollowingTextToy followingTextToy = new FollowingTextToy(new List<Player>() { player }, position, Quaternion.identity, Vector3.one);
 
             new SetPositionPosition(player,position, followingTextToy);
 
@@ -90,7 +90,7 @@ namespace KE.CustomRoles.Abilities
         {
             public const float RefreshRate = 1f;
             public const float MaxDistance = 25;
-            private static Dictionary<Player, SetPositionPosition> SelectedTarget = new();
+            private static Dictionary<Player, SetPositionPosition> SelectedTarget = new Dictionary<Player, SetPositionPosition>();
             public Player Player { get; private set; }
             public Vector3 Position { get; }
             public FollowingTextToy Follow { get; }

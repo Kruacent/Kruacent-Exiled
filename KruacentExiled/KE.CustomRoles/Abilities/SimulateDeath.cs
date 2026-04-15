@@ -18,14 +18,14 @@ namespace KE.CustomRoles.Abilities
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Play dead",
                     [TranslationKeyDesc] = "Simulate your own death",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Faire le mort",
                     [TranslationKeyDesc] = "T'es talent de mime te permettent de simuler la mort",

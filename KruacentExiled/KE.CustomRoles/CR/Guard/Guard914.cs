@@ -23,20 +23,20 @@ namespace KE.CustomRoles.CR.Guard
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Guard of SCP-914",
                     [TranslationKeyDesc] = "You are <b>The</b> <color=#6B6B38>guard of SCP-914</color> \nYou start at SCP-914 \nbut someone tampered with your card\nand also fuck you",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Garde de SCP-914",
                     [TranslationKeyDesc] = "Tu es <b>Le</b> <color=#6B6B38>garde de SCP-914</color> \nTu commences à 914 \nmais on a traffiqué ta carte \net ntm aussi",
                 }
                 ,
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Garde de SCP-914",
                     [TranslationKeyDesc] = "Tu es <b>Le</b> <color=#6B6B38>garde de SCP-914</color> \nTu commences à 914 \nmais on a traffiqué ta carte \net ntm aussi",
@@ -78,7 +78,7 @@ namespace KE.CustomRoles.CR.Guard
         public override void Init()
         {
             base.Init();
-            storedSerials = new();
+            storedSerials = new HashSet<ushort>();
         }
 
         protected override void RoleAdded(Player player)
@@ -156,11 +156,11 @@ namespace KE.CustomRoles.CR.Guard
             if (storedSerials.Contains(item.Serial))
             {
                 ItemBase itemBase = null;
-                bool equipped = player.CurrentItem is not null && player.CurrentItem.Serial == item.Serial;
+                bool equipped = player.CurrentItem != null && player.CurrentItem.Serial == item.Serial;
                 player.RemoveItem(item);
                 storedSerials.Remove(item.Serial);
 
-                if (item is not CustomKeycardItem keycard)
+                if (!(item is CustomKeycardItem keycard))
                 {
                     Log.Error("not a custom keycard");
                     return;

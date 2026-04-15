@@ -77,13 +77,13 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
         public void Awake()
         {
             _hub = ReferenceHub.GetHub(base.gameObject);
-            CurrentAbilities = new();
+            CurrentAbilities = new List<Unlockable>();
             currentkill = 0;
             currentTime = 0;
             Level = 0;
             objective = GetNbKillPerTier(0);
 
-            gui = new(this);
+            gui = new SCP049CGUI(this);
 
             SettingHandler.RightPressed += SettingHandler_RightPressed;
             SettingHandler.LeftPressed += SettingHandler_LeftPressed;

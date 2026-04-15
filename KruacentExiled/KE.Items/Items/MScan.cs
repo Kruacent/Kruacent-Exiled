@@ -30,9 +30,9 @@ namespace KE.Items.Items
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "M-Scan",
                     [TranslationKeyDesc] = "Detect movement",
@@ -42,7 +42,7 @@ namespace KE.Items.Items
                     [NoBattery] = "<color=yellow>M-Scan : No battery left</color>",
                     [Detect] = "M-SCAN: <color=%Color%>%Name%</color>",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "M-Scan",
                     [TranslationKeyDesc] = "Détecte les mouvements des personnes passant devant",
@@ -85,7 +85,7 @@ namespace KE.Items.Items
         private Dictionary<Pickup, float> Cooldowns = new Dictionary<Pickup, float>();
 
         private Dictionary<Pickup, float> BatteryLife = new Dictionary<Pickup, float>();
-        private Dictionary<Pickup, Primitive> Models = new();
+        private Dictionary<Pickup, Primitive> Models = new Dictionary<Pickup, Primitive>();
 
         private CoroutineHandle SensorRoutine;
 

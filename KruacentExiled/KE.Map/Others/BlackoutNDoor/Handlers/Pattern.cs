@@ -12,42 +12,49 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
 {
     public class Pattern
     {
-        public static readonly HashSet<Pattern> AllPatterns = new()
+        public static readonly HashSet<Pattern> AllPatterns = new HashSet<Pattern>()
         {
             new Pattern
-            ([
+            (new List<MapEvent>()
+            {
                 new Blackout(),new DoorStuck()
-            ])
+            })
             ,
             new Pattern
-            ([
+            (new List<MapEvent>()
+            {
                 new Blackout(),new Blackout(),new DoorStuck(),new DoorStuck()
-            ])
+            })
             ,
             new Pattern
-            ([
+            (new List<MapEvent>()
+            {
                 new DoorStuck(),new Blackout(),new Both(),new Blackout(),new DoorStuck(),new Both()
-            ])            
+            })            
             ,
             new Pattern
-            ([
+            (new List<MapEvent>()
+            {
                 new DoorStuck(),new Blackout(),new Both()
-            ])
+            })
             ,
             new Pattern
-            ([
+            (new List<MapEvent>()
+            {
                 new DoorStuck(),new Both()
-            ])
+            })
             ,
             new Pattern
-            ([
+            (new List<MapEvent>()
+            {
                 new Blackout(),new Both()
-            ])
+            })
             ,
             new Pattern
-            ([
+            (new List<MapEvent>()
+            {
                 new Both()
-            ])
+            })
         };
 
 
@@ -56,7 +63,7 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
 
         public Pattern(List<MapEvent> pattern)
         {
-            _pattern = new();
+            _pattern = new List<MapEvent>();
             for (int i = 0; i < pattern.Count; i++)
             {
                 _pattern.Add(pattern[i]);

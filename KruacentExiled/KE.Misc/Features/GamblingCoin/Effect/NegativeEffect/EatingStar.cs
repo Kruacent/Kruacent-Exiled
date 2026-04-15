@@ -15,8 +15,8 @@ public class EatingStar : IDurationEffect
     public EffectType Type { get; set; } = EffectType.Negative;
 
 
-    private Dictionary<Player, Light> _lights = new();
-    private Dictionary<Player, AudioClipPlayback> _clips = new();
+    private Dictionary<Player, Light> _lights = new Dictionary<Player, Light>();
+    private Dictionary<Player, AudioClipPlayback> _clips = new Dictionary<Player, AudioClipPlayback>();
 
     public float Duration { get; set; } = 20;
     private static CoroutineHandle _coroutines;

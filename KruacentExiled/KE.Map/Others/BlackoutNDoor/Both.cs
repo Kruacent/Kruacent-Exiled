@@ -10,8 +10,8 @@ namespace KE.Map.Others.BlackoutNDoor
 {
     public class Both : MapEvent
     {
-        private DoorStuck doorstuck = new();
-        private Blackout blackout = new();
+        private DoorStuck doorstuck = new DoorStuck();
+        private Blackout blackout = new Blackout();
         public override string Cassie => MainPlugin.Translations.Both;
         public override float Duration => 20;
 

@@ -16,19 +16,19 @@ namespace KE.CustomRoles.CR.Guard
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Introvert",
                     [TranslationKeyDesc] = "your better by yourself",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Introverti",
                     [TranslationKeyDesc] = "Tu n'aimes pas trop les humains",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Introvert",
                     [TranslationKeyDesc] = "Tu n'aimes pas trop les humains",
@@ -59,7 +59,7 @@ namespace KE.CustomRoles.CR.Guard
 
         public override void Init()
         {
-            _enabled = new();
+            _enabled = new Dictionary<Player, bool>();
             base.Init();
         }
 

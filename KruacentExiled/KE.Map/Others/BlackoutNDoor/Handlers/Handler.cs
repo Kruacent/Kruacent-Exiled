@@ -26,7 +26,7 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
         private float time = 0;
         public float TimeBeforeNextEvent => time;
 
-        public static readonly HashSet<FacilityZone> Zones = new()
+        public static readonly HashSet<FacilityZone> Zones = new HashSet<FacilityZone>()
         {
             FacilityZone.LightContainment,FacilityZone.HeavyContainment,FacilityZone.Entrance,FacilityZone.Surface
         };
@@ -58,9 +58,12 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
             {
                 time = 30;
                 ChosenPattern = new Pattern
-                ([
-                    new Blackout(),new DoorStuck()
-                ]);
+                (
+                    new List<MapEvent>() 
+                    {
+                        new Blackout(),new DoorStuck()
+                    }
+                );
             }
 
             
@@ -135,7 +138,7 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
             
 
             ZoneType zone = GetZone();
-            ChoseZoneEventArgs choseZoneEv = new(zone);
+            ChoseZoneEventArgs choseZoneEv = new ChoseZoneEventArgs(zone);
             EventHandle.OnChoseZoneEvent(choseZoneEv);
 
             if (Zones.Contains(choseZoneEv.Zone.GetZone()))
@@ -208,7 +211,7 @@ namespace KE.Map.Others.BlackoutNDoor.Handlers
 
         private ZoneType RandomZoneByWeight()
         {
-            List<ZoneType> weightedPool = new();
+            List<ZoneType> weightedPool = new List<ZoneType>();
 
 
 

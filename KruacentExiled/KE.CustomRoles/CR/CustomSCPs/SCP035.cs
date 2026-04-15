@@ -33,23 +33,23 @@ namespace KE.CustomRoles.CR.CustomSCPs
         public override bool IsSupport => false;
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "SCP-035",
                     [TranslationKeyDesc] = "Kill every humans!\nYou can't pick up the Micro-HID and anything made with it, but you take 3 time less damage by these weapon.",
                     ["SCP035CantPickup"] = "A strange force called 'game balance' \nprevents you from picking up this item.",
                     ["SCP035CantUse"] = "A strange force called 'game balance' \nprevents you from using this item.",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "SCP-035",
                     [TranslationKeyDesc] = "Tue tous les humains!\nTu peux pas prendre d'arme spécial mais tu prends 3 fois moins de dégât de ces armes",
                     ["SCP035CantPickup"] = "Une force étrange qui s'appelle 'équilibre' \nt'empêches de prendre cet objet.",
                     ["SCP035CantUse"] = "Une force étrange qui s'appelle 'équilibre' \nt'empêches d'utiliser cet objet.",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "SCP-035",
                     [TranslationKeyDesc] = "You can't pickup the Micro-HID and anything made with it, but you take 3 time less damage by these weapon.\nKill every humans",
@@ -65,7 +65,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
         public override RoleTypeId Role { get; set; } = RoleTypeId.Tutorial;
 
         // 035 can't pickup these items
-        public HashSet<ItemType> BlacklistedPickup = new()
+        public HashSet<ItemType> BlacklistedPickup = new HashSet<ItemType>()
         {
             ItemType.Jailbird,
             ItemType.ParticleDisruptor,
@@ -74,13 +74,13 @@ namespace KE.CustomRoles.CR.CustomSCPs
             ItemType.Medkit,
             ItemType.SCP500,
         };
-        public HashSet<ItemType> BlacklistedUsing = new()
+        public HashSet<ItemType> BlacklistedUsing = new HashSet<ItemType>()
         {
             ItemType.Painkillers,
             ItemType.Medkit,
             ItemType.SCP500,
         };
-        public HashSet<ItemType> WhitelistUsing = new()
+        public HashSet<ItemType> WhitelistUsing = new HashSet<ItemType>()
         {
             ItemType.SCP330,
             ItemType.SCP1853,
@@ -88,7 +88,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
         };
 
         // 035 can't be damaged by these
-        public HashSet<DamageType> BlacklistedDamage = new()
+        public HashSet<DamageType> BlacklistedDamage = new HashSet<DamageType>()
         {
             DamageType.Jailbird,
             DamageType.ParticleDisruptor,
@@ -245,7 +245,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
             CustomItem.TryGet(pickup, out item);
 
 
-            if(item is not null)
+            if(item != null)
             {
 
                 KECustomItem kECustomItem = item as KECustomItem;
@@ -300,7 +300,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
                     return;
                 }
 
-                if (ev.Attacker is not null && ev.Attacker.Role.Side == Side.Scp)
+                if (ev.Attacker != null && ev.Attacker.Role.Side == Side.Scp)
                 {
                     ev.IsAllowed = false;
                     return;

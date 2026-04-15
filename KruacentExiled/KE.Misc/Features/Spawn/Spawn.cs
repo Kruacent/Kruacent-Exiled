@@ -15,7 +15,7 @@ namespace KE.Misc.Features.Spawn
     public class Spawn : MiscFeature
     {
 
-        private Dictionary<string, RoleTypeId> baseRole = new ()
+        private Dictionary<string, RoleTypeId> baseRole = new Dictionary<string, RoleTypeId>()
         {
             { "173", RoleTypeId.Scp173 },
             { "106", RoleTypeId.Scp106 },
@@ -37,7 +37,7 @@ namespace KE.Misc.Features.Spawn
         {
             if (!MainPlugin.Configs.ScpPreferences) return;
 
-            eventarg = new();
+            eventarg = new SpawnedEventArgs();
 
             foreach (Player player in Player.List.Where(p => p.IsScp && !p.IsNPC))
             {
@@ -75,7 +75,7 @@ namespace KE.Misc.Features.Spawn
         private Dictionary<string, int> GetPreferences(Player player)
         {
             if (player.ScpPreferences.Preferences == null) return null;
-            Dictionary<string, int> idChance = new();
+            Dictionary<string, int> idChance = new Dictionary<string, int>();
 
 
             foreach(var kvp in baseRole)
@@ -118,7 +118,7 @@ namespace KE.Misc.Features.Spawn
         private string ChooseRandomRole(IDictionary<string, int> chancescp)
         {
             if (chancescp == null) throw new ArgumentException("Dictionary null");
-            List<string> weightedPool = new();
+            List<string> weightedPool = new List<string>();
             foreach (string ge in chancescp.Keys)
             {
                 for (int i = 0; i < chancescp[ge]; i++)

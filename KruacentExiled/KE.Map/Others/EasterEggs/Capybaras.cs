@@ -16,8 +16,8 @@ using Light = Exiled.API.Features.Toys.Light;
 namespace KE.Map.Others.EasterEggs
 {
     internal class Capybaras : IUsingEvents
-    {
-        private HashSet<SpinnyBaras> _spinnyBaras = new();
+    { 
+        private HashSet<SpinnyBaras> _spinnyBaras = new HashSet<SpinnyBaras>();
         public readonly Vector3 _capy1 = new Vector3(129, 293, 18);
 
         public void SubscribeEvents()

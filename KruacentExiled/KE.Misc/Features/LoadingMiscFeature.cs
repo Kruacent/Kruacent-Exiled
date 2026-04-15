@@ -16,7 +16,7 @@ namespace KE.Misc.Features
 
         internal LoadingMiscFeature() : base()
         {
-            _allLoadedFeatures = new(ReflectionHelper.GetObjects<T>());
+            _allLoadedFeatures = new HashSet<T>(ReflectionHelper.GetObjects<T>());
         }
 
 

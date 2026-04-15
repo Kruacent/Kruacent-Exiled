@@ -11,9 +11,9 @@ namespace KE.Map.Others.CustomZones
 {
     public struct Layout
     {
-        public static HashSet<Layout> Layouts = new();
+        public static HashSet<Layout> Layouts = new HashSet<Layout>();
         public string Name { get; }
-        public readonly Dictionary<Vector2Int, RoomShapeRotation> coordtoroom = new();
+        public readonly Dictionary<Vector2Int, RoomShapeRotation> coordtoroom;
         public Layout(Dictionary<Vector2Int, RoomShapeRotation> coordtoroom, string name)
         {
             Name = name;

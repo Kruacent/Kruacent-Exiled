@@ -63,7 +63,7 @@ namespace KE.CustomRoles.API.Features
 
         public sealed override string Description { get; set; } = string.Empty;
 
-        public static new HashSet<KECustomRole> Registered { get; } = new();
+        public static new HashSet<KECustomRole> Registered { get; } = new HashSet<KECustomRole>();
 
         public sealed override string CustomInfo { get; set; }
 
@@ -146,8 +146,8 @@ namespace KE.CustomRoles.API.Features
         }
 
 
-        private static Dictionary<Type, KECustomRole> typeLookupTable = new();
-        private static Dictionary<string, KECustomRole> stringLookupTable = new();
+        private static Dictionary<Type, KECustomRole> typeLookupTable = new Dictionary<Type, KECustomRole>();
+        private static Dictionary<string, KECustomRole> stringLookupTable = new Dictionary<string, KECustomRole>();
 
         protected const string CustomRoleNameKey = "Name";
         protected const string CustomRoleDescriptionKey = "Desc";
@@ -179,12 +179,12 @@ namespace KE.CustomRoles.API.Features
         {
             return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationGUI] = "Current Role",
                     [TranslationHealable] = "This Custom Role is healable!",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationGUI] = "Role",
                     [TranslationHealable] = "Ce custom role peut être enlevé avec un object!",
@@ -398,7 +398,7 @@ namespace KE.CustomRoles.API.Features
             Log.Debug(Name + ": new role type " + Role + ".");
 
 
-            ReceivingCustomRoleEventArgs ev1 = new(player2,this);
+            ReceivingCustomRoleEventArgs ev1 = new ReceivingCustomRoleEventArgs(player2,this);
 
             Events.Handlers.KECustomRole.OnReceivingCustomRole(ev1);
 
@@ -471,7 +471,7 @@ namespace KE.CustomRoles.API.Features
             RoleAdded(player2);
             player2.UniqueRole = Name;
             player2.TryAddCustomRoleFriendlyFire(Name, CustomRoleFFMultiplier);
-            ReceivedCustomRoleEventArgs ev2 = new(player2, this);
+            ReceivedCustomRoleEventArgs ev2 = new ReceivedCustomRoleEventArgs(player2, this);
 
             Events.Handlers.KECustomRole.OnReceivedCustomRole(ev2);
 
@@ -649,7 +649,7 @@ namespace KE.CustomRoles.API.Features
 
         public static IEnumerable<KECustomRole> Get(Player player)
         {
-            List<KECustomRole> cr = new();
+            List<KECustomRole> cr = new List<KECustomRole>();
             foreach(KECustomRole ke in Registered)
             {
                 if (ke.Check(player))
@@ -771,7 +771,7 @@ namespace KE.CustomRoles.API.Features
 
         public static IEnumerable<KECustomRole> Register()
         {
-            List<KECustomRole> list = new ();
+            List<KECustomRole> list = new List<KECustomRole>();
             Type[] types = Assembly.GetCallingAssembly().GetTypes();
             foreach (Type type in types)
             {
@@ -790,7 +790,7 @@ namespace KE.CustomRoles.API.Features
 
         public static IEnumerable<KECustomRole> Unregister()
         {
-            List<KECustomRole> list = new ();
+            List<KECustomRole> list = new List<KECustomRole>();
             foreach (KECustomRole item in Registered)
             {
                 item.TryUnregister();

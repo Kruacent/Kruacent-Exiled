@@ -17,7 +17,7 @@ namespace KE.Misc.Features._914Upgrades.RoleChanging
 
         public override IReadOnlyDictionary<Scp914KnobSetting, RoleOutput> OutputRoles { get; } = new Dictionary<Scp914KnobSetting, RoleOutput>()
         {
-            { Scp914KnobSetting.OneToOne,new(RoleTypeId.Scientist,50f)}
+            { Scp914KnobSetting.OneToOne,new RoleOutput(RoleTypeId.Scientist,50f)}
         };
 
     }
@@ -27,7 +27,7 @@ namespace KE.Misc.Features._914Upgrades.RoleChanging
 
         public override IReadOnlyDictionary<Scp914KnobSetting, RoleOutput> OutputRoles { get; } = new Dictionary<Scp914KnobSetting, RoleOutput>()
         {
-            { Scp914KnobSetting.OneToOne,new(RoleTypeId.ClassD,50f)}
+            { Scp914KnobSetting.OneToOne,new RoleOutput(RoleTypeId.ClassD,50f)}
         };
 
     }
@@ -37,7 +37,7 @@ namespace KE.Misc.Features._914Upgrades.RoleChanging
 
         public override IReadOnlyDictionary<Scp914KnobSetting, RoleOutput> OutputRoles { get; } = new Dictionary<Scp914KnobSetting, RoleOutput>()
         {
-            { Scp914KnobSetting.Rough,new(RoleTypeId.Scientist,100f)}
+            { Scp914KnobSetting.Rough,new RoleOutput(RoleTypeId.Scientist,100f)}
         };
 
         protected override void SetRole(Player player, RoleTypeId newRole)
@@ -48,22 +48,22 @@ namespace KE.Misc.Features._914Upgrades.RoleChanging
     }
     public class MTF914RC : Multiple914PlayerRoleChangeBase
     {
-        public override HashSet<RoleTypeId> InputRole => [RoleTypeId.NtfCaptain,RoleTypeId.NtfPrivate,RoleTypeId.NtfSergeant,RoleTypeId.NtfSpecialist];
+        public override HashSet<RoleTypeId> InputRole => new HashSet<RoleTypeId>(){ RoleTypeId.NtfCaptain, RoleTypeId.NtfPrivate, RoleTypeId.NtfSergeant, RoleTypeId.NtfSpecialist};
 
         public override IReadOnlyDictionary<Scp914KnobSetting, RoleOutput> OutputRoles { get; } = new Dictionary<Scp914KnobSetting, RoleOutput>()
         {
-            { Scp914KnobSetting.OneToOne,new(RoleTypeId.ChaosRifleman,50f)}
+            { Scp914KnobSetting.OneToOne,new RoleOutput(RoleTypeId.ChaosRifleman,50f)}
         };
 
     }
 
     public class Chaos914RC : Multiple914PlayerRoleChangeBase
     {
-        public override HashSet<RoleTypeId> InputRole => [RoleTypeId.ChaosRifleman, RoleTypeId.ChaosRepressor, RoleTypeId.ChaosMarauder, RoleTypeId.ChaosConscript];
+        public override HashSet<RoleTypeId> InputRole => new HashSet<RoleTypeId>() { RoleTypeId.ChaosRifleman, RoleTypeId.ChaosRepressor, RoleTypeId.ChaosMarauder, RoleTypeId.ChaosConscript };
 
         public override IReadOnlyDictionary<Scp914KnobSetting, RoleOutput> OutputRoles { get; } = new Dictionary<Scp914KnobSetting, RoleOutput>()
         {
-            { Scp914KnobSetting.OneToOne,new(RoleTypeId.NtfPrivate,50f)}
+            { Scp914KnobSetting.OneToOne,new RoleOutput(RoleTypeId.NtfPrivate,50f)}
         };
 
     }
