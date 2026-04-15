@@ -12,7 +12,6 @@ namespace KruacentExiled
     {
         public abstract string Name { get; }
         public abstract string Prefix { get; }
-
         
 
         public abstract IConfig Config { get; }
