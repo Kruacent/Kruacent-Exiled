@@ -14,14 +14,14 @@ namespace KE.Misc.Features.GamblingCoin
 {
     public static class GamblingCoinManager
     {
-        private static readonly Dictionary<string, ICoinEffect> _nameLookup = new();
-        private static readonly HashSet<ICoinEffect> _activeEffects = new();
+        private static readonly Dictionary<string, ICoinEffect> _nameLookup = new Dictionary<string, ICoinEffect>();
+        private static readonly HashSet<ICoinEffect> _activeEffects = new HashSet<ICoinEffect>();
 
-        public static List<ICoinEffect> EffectList { get; private set; } = new();
+        public static List<ICoinEffect> EffectList { get; private set; } = new List<ICoinEffect>();
 
         public static IEnumerable<ICoinEffect> RegisterAll()
         {
-            List<Assembly> assemblies = new();
+            List<Assembly> assemblies = new List<Assembly>();
             foreach (var plugin in Exiled.Loader.Loader.Plugins)
                 assemblies.Add(plugin.Assembly);
 

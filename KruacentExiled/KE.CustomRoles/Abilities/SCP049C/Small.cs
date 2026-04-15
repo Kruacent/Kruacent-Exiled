@@ -18,14 +18,14 @@ namespace KE.CustomRoles.Abilities.SCP049C
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Small",
                     [TranslationKeyDesc] = "Get small for 30 seconds",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Potit",
                     [TranslationKeyDesc] = "Devient plus petit pendant 30 secondes",

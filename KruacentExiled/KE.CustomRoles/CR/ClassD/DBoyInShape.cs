@@ -22,19 +22,19 @@ namespace KE.CustomRoles.CR.ClassD
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "DBoyInShape",
                     [TranslationKeyDesc] = "You're strong enough to open any door",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "DBoyInShape",
                     [TranslationKeyDesc] = "Dammmmnnnnnnn les gates",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "DBoyInShape",
                     [TranslationKeyDesc] = "Dammmmnnnnnnn les gates",
@@ -50,7 +50,7 @@ namespace KE.CustomRoles.CR.ClassD
 
         public const byte SpeedReduction = 15;
 
-        public override HashSet<string> Abilities => new()
+        public override HashSet<string> Abilities => new HashSet<string>()
         {
             "ForceOpen"
         };

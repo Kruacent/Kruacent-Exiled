@@ -21,9 +21,9 @@ namespace KE.Items.Items
         public const string TranslationSuccess = "FriendMakerSuccess";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Friend Maker™",
                     [TranslationKeyDesc] = "The number one (1) method to make friends",
@@ -33,7 +33,7 @@ namespace KE.Items.Items
                     [TranslationNonZombie] = "That ain't a zombie",
                     [TranslationSuccess] = "New friend acquired!",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Friend Maker™",
                     [TranslationKeyDesc] = "LA méthode pour se faire des amis ! <size=5>Produit non remboursable</size>",
@@ -58,11 +58,11 @@ namespace KE.Items.Items
 
         private Dictionary<Player, DateTime> cooldowns;
 
-        private TimeSpan Cooldown = new(0,1,0);
+        private TimeSpan Cooldown = new TimeSpan(0,1,0);
 
         protected override void SubscribeEvents()
         {
-            cooldowns = new();
+            cooldowns = new Dictionary<Player, DateTime>();
             base.SubscribeEvents();
         }
         protected override void UnsubscribeEvents()

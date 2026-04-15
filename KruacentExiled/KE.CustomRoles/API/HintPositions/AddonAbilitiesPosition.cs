@@ -20,7 +20,7 @@ namespace KE.CustomRoles.API.HintPositions
         public override float Yposition => yposition;
 
 
-        private static List<AddonAbilitiesPosition> nonalloc = new(KEAbilities.InitialAbilitySlot);
+        private static List<AddonAbilitiesPosition> nonalloc = new List<AddonAbilitiesPosition>(KEAbilities.InitialAbilitySlot);
 
 
         public static AddonAbilitiesPosition Get(AbilitiesPosition abilitiesPosition)

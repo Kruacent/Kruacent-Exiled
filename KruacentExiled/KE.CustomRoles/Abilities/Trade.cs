@@ -22,15 +22,15 @@ namespace KE.CustomRoles.Abilities
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Trade",
                     [TranslationKeyDesc] = "Your link with casinos permit your to gain more coins in exchange of items",
                     ["TradeNoItem"] = "No item?",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Trade",
                     [TranslationKeyDesc] = "T'es lien avec le casino t'as permis d'avoir un peu plus de pièce en échange d'un objet",

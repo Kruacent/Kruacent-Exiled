@@ -58,7 +58,7 @@ namespace KE.Misc
         public override void OnEnabled()
         {
             Instance = this;
-            harmony = new(Prefix);
+            harmony = new Harmony(Prefix);
 
             config = KruacentExiled.MainPlugin.Instance.Config.MiscConfig;
 
@@ -69,14 +69,14 @@ namespace KE.Misc
             ServerHandler = new ServerHandler();
             Spawn = new Spawn();
             SCPBuff = new SCPBuff();
-            FriendlyFire = new();
-            AutoNukeAnnoucement = new();
-            AutoTesla = new();
-            LastHuman = new();
+            FriendlyFire = new FriendlyFire();
+            AutoNukeAnnoucement = new NukeKill();
+            AutoTesla = new AutoTesla();
+            LastHuman = new LastHumanHandler();
             Candy = new Candy();
-            vote = new();
-            postnuke = new();
-            LobbyHint = new();
+            vote = new VoteStart();
+            postnuke = new PostNukeHandler();
+            LobbyHint = new LobbyHint();
 
 
             //SpawnLcz = new();

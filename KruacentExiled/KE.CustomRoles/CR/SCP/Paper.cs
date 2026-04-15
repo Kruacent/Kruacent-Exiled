@@ -10,19 +10,19 @@ namespace KE.CustomRoles.CR.SCP
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Paper",
                     [TranslationKeyDesc] = "uh oh. paper jam",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Paper",
                     [TranslationKeyDesc] = "uh oh. paper jam",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Paper",
                     [TranslationKeyDesc] = "uh oh. paper jam",

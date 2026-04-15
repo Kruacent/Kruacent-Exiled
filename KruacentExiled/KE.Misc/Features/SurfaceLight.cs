@@ -13,7 +13,7 @@ namespace KE.Misc.Features
     internal class SurfaceLight : MiscFeature
     {
 
-        public static readonly HashSet<Color> _colors = new()
+        public static readonly HashSet<Color> _colors = new HashSet<Color>()
         {
             Color.cyan,
             Color.red,

@@ -19,7 +19,7 @@ namespace KE.GlobalEventFramework.Examples.GE
     /// All spawn are random at the start of the game (NTF & Chaos not included)
     /// Note: all role spawn with each other except SCPs
     /// </summary>
-    public class RandomSpawn : GlobalEvent,IStart
+    public class RandomSpawn : GlobalEvent, IStart
     {
         ///<inheritdoc/>
         public override uint Id { get; set; } = 1043;
@@ -30,7 +30,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override int WeightedChance { get; set; } = 5;
         public override ImpactLevel ImpactLevel => ImpactLevel.High;
-        public IEnumerable<RoomType> BlacklistedRooms { get; } = [RoomType.EzGateA, RoomType.EzGateB];
+        public IEnumerable<RoomType> BlacklistedRooms { get; } = new List<RoomType>() { RoomType.EzGateA, RoomType.EzGateB };
         ///<inheritdoc/>
         public void Start()
         {

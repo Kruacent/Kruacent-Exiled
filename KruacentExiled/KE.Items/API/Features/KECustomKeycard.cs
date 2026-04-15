@@ -39,7 +39,7 @@ namespace KE.Items.API.Features
                 Log.Debug($"spawning {this.Name} in {room.Room}");
                 Log.Debug(room.Room + " : " + PoseRoomSpawnPointHandler.UsablePoses.Count(p => p.roomType == room.Room));
 
-                if (spawn is not null)
+                if (spawn != null)
                 {
                     Log.Debug($"spawning custom pos");
                     pickup = Spawn(spawn.Position);
@@ -52,7 +52,7 @@ namespace KE.Items.API.Features
 
 
 
-                if (pickup is not null)
+                if (pickup != null)
                 {
                     num++;
                 }

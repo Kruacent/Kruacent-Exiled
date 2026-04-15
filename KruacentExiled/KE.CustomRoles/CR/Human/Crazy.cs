@@ -35,19 +35,19 @@ namespace KE.CustomRoles.CR.Human
         public override SideEnum Side { get; set; } = SideEnum.Human;
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Crazy",
                     [TranslationKeyDesc] = "Crazy? I Was Crazy Once. They Locked Me In A Room. A Rubber Room. A Rubber Room With Rats. And Rats Make Me Crazy",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Fou de la facilité",
                     [TranslationKeyDesc] = "Je pense que le traitement que t'as eu à la fondation t'as pas aidé",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Fou de la facilité",
                     [TranslationKeyDesc] = "Je pense que le traitement que t'as eu à la fondation t'as pas aidé",
@@ -59,7 +59,7 @@ namespace KE.CustomRoles.CR.Human
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
 
-        private readonly Dictionary<CrazyBehaviour, int> WeightDictionnary = new()
+        private readonly Dictionary<CrazyBehaviour, int> WeightDictionnary = new Dictionary<CrazyBehaviour, int>()
         {
             { CrazyBehaviour.Jump, 3 },
             { CrazyBehaviour.Shoot, 3 },

@@ -21,19 +21,19 @@ namespace KE.CustomRoles.CR.Human
         public override SideEnum Side { get; set; } = SideEnum.Human;
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Old man",
                     [TranslationKeyDesc] = "I'm old",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Vieux",
                     [TranslationKeyDesc] = "Je suis vieux",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Vieux",
                     [TranslationKeyDesc] = "POV Mishima",
@@ -46,7 +46,7 @@ namespace KE.CustomRoles.CR.Human
 
         public Color32 Color => new Color32(112,112,112,0);
 
-        public HashSet<ItemType> HealItem => [ItemType.SCP500];
+        public HashSet<ItemType> HealItem => new HashSet<ItemType>() { ItemType.SCP500 };
         private Dictionary<Player, CoroutineHandle> handles;
 
         protected override void SubscribeEvents()

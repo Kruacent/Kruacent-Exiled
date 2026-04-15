@@ -23,15 +23,15 @@ namespace KE.CustomRoles.Abilities
         public override string Name { get;  } = "ForceOpen";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Force open",
                     [TranslationKeyDesc] = "Force open a door",
                     ["ForceOpenFail"] = "You failed opening the door and lost %HP% HP!",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Forcer une porte",
                     [TranslationKeyDesc] = "Force une porte (grosse description)",
@@ -43,8 +43,8 @@ namespace KE.CustomRoles.Abilities
         public override float Cooldown { get;  } = 30;
         public override int Uses { get; } = 5;
 
-        private Dictionary<Player, DateTime> abilityActivated = new();
-        public static readonly TimeSpan MaxTime = new (0, 0, 30);
+        private Dictionary<Player, DateTime> abilityActivated = new Dictionary<Player, DateTime>();
+        public static readonly TimeSpan MaxTime = new TimeSpan(0, 0, 30);
 
         protected override bool LaunchedAbility(Player player)
         {

@@ -28,17 +28,16 @@ namespace KE.Items.API.Core.Settings
         {
             HeaderSetting header = new HeaderSetting(_idHeader, "Custom Items", padding: true);
 
-            List<SettingBase> settings =
-            [
-                
+            List<SettingBase> settings = new List<SettingBase>()
+            {
+
                 new TwoButtonsSetting(_idDesc,SettingDescription,SettingDescription1,SettingDescription2,true,SettingDescriptionDescription),
                 new TwoButtonsSetting(_idPrefix,"Pickup/Select prefixes","Disabled","Enabled",false,"show/hide the whole sentence for the picking or selecting of the item, if hidden it will show a (P) if pickup or a (I) if in inventory before the name of the item "),
                 new SliderSetting(_idTimeCustomItem,"Time shown",0,30,10),
                 new SliderSetting(_idTimeCustomItemEffect,"Time effect shown",0,30,10),
+            };
 
-            ];
-
-            SettingsCategory category = new(header,999, settings);
+            SettingsCategory category = new SettingsCategory(header,999, settings);
 
             //page = new("Custom Items", settings);
 

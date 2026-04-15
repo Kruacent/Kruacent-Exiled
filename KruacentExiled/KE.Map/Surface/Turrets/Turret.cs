@@ -63,7 +63,7 @@ namespace KE.Map.Surface.Turrets
 
 
 
-        private static List<Turret> list = new();
+        private static List<Turret> list = new List<Turret>();
 
         private Turret(Player p,Vector3 position)
         {

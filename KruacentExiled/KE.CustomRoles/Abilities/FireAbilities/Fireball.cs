@@ -21,14 +21,14 @@ namespace KE.CustomRoles.Abilities.FireAbilities
         public override string Name { get; } = "Fireball";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Fireball",
                     [TranslationKeyDesc] = "I cast Fireball",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Boule de feur",
                     [TranslationKeyDesc] = "Attends j'ai fait une faute là non?",
@@ -40,10 +40,10 @@ namespace KE.CustomRoles.Abilities.FireAbilities
         public override float Cooldown { get; } = 0f;
 
 
-        public static readonly CustomReasonDamageHandler BallDamage = new("Burned to death", 25, string.Empty);
+        public static readonly CustomReasonDamageHandler BallDamage = new CustomReasonDamageHandler("Burned to death", 25, string.Empty);
         public const int MAX_BALLS = 5;
-        private static readonly Color ballColor = new(2, 1.08f, 0, .75f);
-        private Dictionary<Player, int> _activeBalls = new();
+        private static readonly Color ballColor = new Color(2, 1.08f, 0, .75f);
+        private Dictionary<Player, int> _activeBalls = new Dictionary<Player, int>();
 
         protected override bool LaunchedAbility(Player player)
         {

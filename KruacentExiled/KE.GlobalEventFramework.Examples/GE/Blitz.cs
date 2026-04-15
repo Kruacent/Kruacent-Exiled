@@ -19,10 +19,10 @@ namespace KE.GlobalEventFramework.Examples.GE
         public override string Name { get; set; } = "Blitz";
         ///<inheritdoc/>
         public override string Description { get; } = "La Luftwaffe arrive!";
-        public override string[] AltDescription =>
-        [
+        public override string[] AltDescription => new string[] 
+        {
             "Attention aux bombardements!"
-        ];
+        };
         ///<inheritdoc/>
         public override int WeightedChance => 4;
         /// <summary>

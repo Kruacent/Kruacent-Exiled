@@ -15,7 +15,7 @@ namespace KE.Map.Surface.Rooms
     {
 
         public static GameObject gameObject;
-        public static readonly HashSet<SurfaceRoom> Rooms = new()
+        public static readonly HashSet<SurfaceRoom> Rooms = new HashSet<SurfaceRoom>()
         {
             new SurfaceArmory()
         };

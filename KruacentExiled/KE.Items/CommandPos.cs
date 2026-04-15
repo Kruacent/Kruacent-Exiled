@@ -17,7 +17,7 @@ namespace KE.Items
     {
         public string Command => "curpos";
 
-        public string[] Aliases => [];
+        public string[] Aliases => new string[0];
 
         public string Description => "position";
 
@@ -26,7 +26,7 @@ namespace KE.Items
             var p = Player.Get(sender);
             response = string.Empty;
 
-            if(p is not null)
+            if(p != null)
             {
                 Primitive prim = Primitive.Create(p.Position, null, Vector3.one * .1f, true);
 

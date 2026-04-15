@@ -11,10 +11,10 @@ namespace KE.CustomRoles.Commands.KECR.Lists
 {
     public class Registered : ICommand
     {
-        public static Registered Instance = new();
+        public static Registered Instance = new Registered();
         public string Command => "registered";
 
-        public string[] Aliases => ["r"];
+        public string[] Aliases => new string[] { "r" };
 
         public string Description => "";
 

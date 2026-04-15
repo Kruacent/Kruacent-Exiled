@@ -16,10 +16,10 @@ namespace KE.GlobalEventFramework.Examples.GE
         public override uint Id { get; set; } = 1044;
         public override string Name { get; set; } = "Impostor";
         public override string Description { get; } = "Ne vous fiez pas aux apparences !";
-        public override string[] AltDescription =>
-        [
+        public override string[] AltDescription => new string[]
+        {
             "sussy"
-        ];
+        };
         public override int WeightedChance { get; set; } = 2;
 
         public override ImpactLevel ImpactLevel => ImpactLevel.High;

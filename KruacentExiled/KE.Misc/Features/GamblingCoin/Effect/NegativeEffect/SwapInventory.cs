@@ -29,8 +29,8 @@ public class SwapInventory : ICoinEffect
         List<ItemType> items1 = player.Items.Select(item => item.Type).ToList();
         List<ItemType> items2 = target.Items.Select(item => item.Type).ToList();
 
-        Dictionary<AmmoType, ushort> ammo1 = new();
-        Dictionary<AmmoType, ushort> ammo2 = new();
+        Dictionary<AmmoType, ushort> ammo1 = new Dictionary<AmmoType, ushort>();
+        Dictionary<AmmoType, ushort> ammo2 = new Dictionary<AmmoType, ushort>();
         for (int i = 0; i < player.Ammo.Count; i++)
         {
             ammo1.Add(player.Ammo.ElementAt(i).Key.GetAmmoType(), player.Ammo.ElementAt(i).Value);

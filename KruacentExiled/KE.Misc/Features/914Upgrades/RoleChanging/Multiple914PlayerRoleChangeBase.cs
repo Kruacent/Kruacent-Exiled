@@ -16,7 +16,7 @@ namespace KE.Misc.Features._914Upgrades
 {
     public abstract class Multiple914PlayerRoleChangeBase : Base914PlayerUpgrade
     {
-        protected static HashSet<Player> _upgradingPlayer = new();
+        protected static HashSet<Player> _upgradingPlayer = new HashSet<Player>();
 
         public abstract HashSet<RoleTypeId> InputRole { get; }
 

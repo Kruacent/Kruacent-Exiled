@@ -14,7 +14,7 @@ namespace KruacentExiled
 
         private KEPlugin[] plugins;
         public override string Author => "Patrique & OmerGS";
-        public override Version Version { get; } = new(2, 0, 0);
+        public override Version Version { get; } = new Version(2, 0, 0);
 
         public static MainPlugin Instance { get; private set; }
 
@@ -22,15 +22,15 @@ namespace KruacentExiled
         {
             Instance = this;
 
-            plugins =
-            [
+            plugins = new KEPlugin[]
+            {
                 new KE.CustomRoles.MainPlugin(),
                 new KE.GlobalEventFramework.MainPlugin(),
                 new KE.GlobalEventFramework.Examples.MainPlugin(),
                 new KE.Items.MainPlugin(),
                 new KE.Misc.MainPlugin(),
                 new KE.Map.MainPlugin(),
-            ];
+            };
 
             for (int i = 0; i < plugins.Length; i++)
             {
@@ -79,12 +79,12 @@ namespace KruacentExiled
         public bool Debug { get; set; } = false;
 
 
-        public KE.CustomRoles.Config CustomRoleConfig { get; set; } = new();
-        public KE.Items.Config CustomItemConfig { get; set; } = new();
-        public KE.Map.Config MapConfig { get; set; } = new();
-        public KE.Misc.Config MiscConfig { get; set; } = new();
-        public KE.GlobalEventFramework.Config GEFConfig { get; set; } = new();
-        public KE.GlobalEventFramework.Examples.Config GEFEConfig { get; set; } = new();
+        public KE.CustomRoles.Config CustomRoleConfig { get; set; } = new KE.CustomRoles.Config();
+        public KE.Items.Config CustomItemConfig { get; set; } = new KE.Items.Config();
+        public KE.Map.Config MapConfig { get; set; } = new KE.Map.Config();
+        public KE.Misc.Config MiscConfig { get; set; } = new KE.Misc.Config();
+        public KE.GlobalEventFramework.Config GEFConfig { get; set; } = new KE.GlobalEventFramework.Config();
+        public KE.GlobalEventFramework.Examples.Config GEFEConfig { get; set; } = new KE.GlobalEventFramework.Examples.Config();
     }
 
 }

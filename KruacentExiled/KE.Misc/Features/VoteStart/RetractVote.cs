@@ -14,11 +14,11 @@ namespace KE.Misc.Features.VoteStart
     {
         public override string Command => "removevote";
 
-        public override string[] Aliases => ["rv","retractv","removev"];
+        public override string[] Aliases => new string[] { "rv", "retractv", "removev" };
 
         public override string Description => "remove the set vote";
 
-        public override string[] Usage => [""];
+        public override string[] Usage => new string[] { "" };
         public override bool ExecuteCommand(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if(!Round.IsLobby)

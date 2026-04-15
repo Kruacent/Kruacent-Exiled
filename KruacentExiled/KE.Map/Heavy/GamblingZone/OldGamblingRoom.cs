@@ -17,7 +17,7 @@ namespace KE.Map.Heavy.GamblingZone
     public class OldGamblingRoom : AbstractGambling
     {
         private static readonly HashSet<OldGamblingRoom> _list = new HashSet<OldGamblingRoom>();
-        public static HashSet<OldGamblingRoom> List => new(_list);
+        public static HashSet<OldGamblingRoom> List => new HashSet<OldGamblingRoom>(_list);
 
 
         private Vector3 _position;

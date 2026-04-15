@@ -27,15 +27,15 @@ namespace KE.CustomRoles.Abilities
         public const string TranslationSomethingHere = "AirStrikeSomethingHere";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Airstrike",
                     [TranslationKeyDesc] = "Don't overuse it or your co-op will not be happy",
                     [TranslationSomethingHere] = "Something is in the way",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Bombardement",
                     [TranslationKeyDesc] = "Ne l'utilise pas trop sinon ton coop sera pas content",

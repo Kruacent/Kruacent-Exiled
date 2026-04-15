@@ -14,7 +14,7 @@ namespace KE.CustomRoles.Commands.KECR.Lists
     {
         public string Command => "Ability";
 
-        public string[] Aliases => ["a"];
+        public string[] Aliases => new string[1] { "a" };
 
         public string Description => "list abilities";
 

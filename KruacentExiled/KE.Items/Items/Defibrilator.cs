@@ -26,9 +26,9 @@ public class Defibrillator : KECustomItem, ILumosItem
     public const string TranslationInProgress = "DefibrillatorInProgress";
     protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
     {
-        return new()
+        return new Dictionary<string, Dictionary<string, string>>()
         {
-            ["en"] = new()
+            ["en"] = new Dictionary<string, string>()
             {
                 [TranslationKeyName] = "Defibrillator",
                 [TranslationKeyDesc] = "Aim for a dead body to try to re<b>sus</b>citate him",
@@ -39,7 +39,7 @@ public class Defibrillator : KECustomItem, ILumosItem
                 [TranslationSucceed] = "<color=green>Successfully ressucitate %PatientName%!</color>",
                 [TranslationInProgress] = "<color=yellow>In progress</color>",
             },
-            ["fr"] = new()
+            ["fr"] = new Dictionary<string, string>()
             {
                 [TranslationKeyName] = "Défibrillateur",
                 [TranslationKeyDesc] = "Visez un cadavre de près pour tenter une réanimation.",
@@ -86,7 +86,7 @@ public class Defibrillator : KECustomItem, ILumosItem
 
     protected override void SubscribeEvents()
     {
-        _deathRecords = new();
+        _deathRecords = new Dictionary<Player, DeathData>();
         Exiled.Events.Handlers.Player.UsingItem += OnUsingItem;
         Exiled.Events.Handlers.Player.Dying += OnDying;
         base.SubscribeEvents();

@@ -25,14 +25,14 @@ namespace KE.Items.Items.LeSoleil
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "The Sun",
                     [TranslationKeyDesc] = "Probably not the best idea to use it",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Le Soleil",
                     [TranslationKeyDesc] = "pas ouf",
@@ -64,7 +64,7 @@ namespace KE.Items.Items.LeSoleil
 
         private void CastTheSun()
         {
-            Vector3 position = new(58.72f, 300, 20f);
+            Vector3 position = new Vector3(58.72f, 300, 20f);
             Primitive prim = Primitive.Create(position, null, null, false);
             prim.Flags = AdminToys.PrimitiveFlags.None;
 

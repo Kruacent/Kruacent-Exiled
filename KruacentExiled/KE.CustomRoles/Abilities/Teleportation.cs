@@ -21,9 +21,9 @@ namespace KE.CustomRoles.Abilities
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Teleportation",
                     [TranslationKeyDesc] = $"You lose {Damage} HP per teleportation, can't be used in lifts",
@@ -31,7 +31,7 @@ namespace KE.CustomRoles.Abilities
                     [TranslationLcz] = "The target is inaccessible",
                     [TranslationDifferentZone] = "The target is inaccessible",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Téléportation",
                     [TranslationKeyDesc] = $"Tu perds {Damage} HP/téléportation, ne peux pas être utilisé dans les ascenseurs",
@@ -86,7 +86,7 @@ namespace KE.CustomRoles.Abilities
 
 
 
-            if (Lift.Get(target) is not null)
+            if (Lift.Get(target) != null)
             {
                 if (showMessage)
                 {

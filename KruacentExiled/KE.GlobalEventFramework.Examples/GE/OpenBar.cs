@@ -24,12 +24,12 @@ namespace KE.GlobalEventFramework.Examples.GE
 
         public int NbAdditionalDoor = 3;
 
-        public static readonly HashSet<DoorType> DoorsToUnlock = new()
+        public static readonly HashSet<DoorType> DoorsToUnlock = new HashSet<DoorType>()
         {
             DoorType.GateA, DoorType.GateB,
         };
 
-        public static readonly HashSet<DoorType> DoorsToMaybeUnlock = new()
+        public static readonly HashSet<DoorType> DoorsToMaybeUnlock = new HashSet<DoorType>()
         {
             DoorType.HczArmory, DoorType.HIDChamber,DoorType.Intercom,DoorType.Scp049Armory,DoorType.Scp096,DoorType.Scp106Primary,DoorType.Scp106Secondary,DoorType.Scp330,DoorType.Scp914Gate
         };
@@ -39,7 +39,7 @@ namespace KE.GlobalEventFramework.Examples.GE
         public void Start()
         {
             List<DoorType> door = DoorsToMaybeUnlock.ToList();
-            List<DoorType> result = new();
+            List<DoorType> result = new List<DoorType>();
 
             for (int i = 0; i < NbAdditionalDoor; i++)
             {

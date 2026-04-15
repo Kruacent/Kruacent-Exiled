@@ -25,8 +25,8 @@ namespace KE.Misc.Features.Spawn
 
         public SpawnedEventArgs()
         {
-            VanillaRoles = new();
-            CustomRoles = new();
+            VanillaRoles = new List<Player>();
+            CustomRoles = new List<Player>();
         }
     }
 }

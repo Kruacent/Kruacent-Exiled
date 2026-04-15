@@ -11,11 +11,11 @@ namespace KE.Misc.Features._914Upgrades
     {
         public override string Command => "giveomni";
 
-        public override string[] Aliases => [];
+        public override string[] Aliases => new string[0];
 
         public override string Description => "gives an omni card";
 
-        public override string[] Usage => [];
+        public override string[] Usage => new string[0];
 
         public override bool ExecuteCommand(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
@@ -27,7 +27,7 @@ namespace KE.Misc.Features._914Upgrades
                 return false;
             }
 
-            if(player.Role is not FpcRole)
+            if(!(player.Role is FpcRole))
             {
                 response = "wrong role";
                 return false;

@@ -20,21 +20,21 @@ namespace KE.CustomRoles.CR.Human
         public const string TranslationCantPickup = "PacifistCantPickup";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Pacifist",
                     [TranslationKeyDesc] = "You're incapable of violence.\nRemove when escaping and bring more people",
                     [TranslationCantPickup] = "Picking up this item make you sick",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Pacifiste",
                     [TranslationKeyDesc] = "T'es idées empêche quelconque violence.\nS'enlève quand tu t'échappes et ramène plus de renfort",
                     [TranslationCantPickup] = "Juste la vue de cet objet te rend malade",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Pacifiste",
                     [TranslationKeyDesc] = "T'es idées empêche quelconque violence.\nS'enlève quand tu t'échappes et ramène plus de renfort",
@@ -45,7 +45,7 @@ namespace KE.CustomRoles.CR.Human
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
 
-        public override HashSet<RoleTypeId> Roles => [RoleTypeId.Scientist,RoleTypeId.ClassD];
+        public override HashSet<RoleTypeId> Roles => new HashSet<RoleTypeId>() { RoleTypeId.Scientist, RoleTypeId.ClassD };
 
 
         protected override void SubscribeEvents()

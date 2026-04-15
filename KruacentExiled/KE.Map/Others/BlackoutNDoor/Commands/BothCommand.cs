@@ -11,11 +11,11 @@ namespace KE.Map.Others.BlackoutNDoor.Commands
     {
         public override string Command => "both";
 
-        public override string[] Aliases => [];
+        public override string[] Aliases => new string[0];
 
         public override string Description => "force a doorstuck and a blackout";
 
-        public override string[] Usage => ["FacilityZone"];
+        public override string[] Usage => new string[] { "FacilityZone" };
 
         public override bool ExecuteCommand(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
@@ -32,7 +32,7 @@ namespace KE.Map.Others.BlackoutNDoor.Commands
             }
             
 
-            Both both = new();
+            Both both = new Both();
             both.StartEvent(zone.GetZone(),-1);
             response = "both forced at " + zone.ToString();
             

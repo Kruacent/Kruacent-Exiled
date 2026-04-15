@@ -17,14 +17,14 @@ namespace KE.CustomRoles.Abilities.EmptyAbilities
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Remaining Checkpoint%S% : %remain%/%total%",
                     [TranslationKeyDesc] = "",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Checkpoint%S% restant : %remain%/%total% ",
                     [TranslationKeyDesc] = "",

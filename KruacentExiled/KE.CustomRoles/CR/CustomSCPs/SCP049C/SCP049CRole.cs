@@ -20,19 +20,19 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
         public override bool IsSupport => false;
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "SCP049-C",
                     [TranslationKeyDesc] = "A modified SCP049 instance which does not create any SCP049-2\ninstead consuming the body to gain powerful abilities\nDoctor's call gives 300 Hume Shield\nExpired body can still be consumed but need more time to do so (stay near the arrow until it disappear (10s))",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "SCP049-C",
                     [TranslationKeyDesc] = "A modified SCP049 instance which does not create any SCP049-2\ninstead consuming the body to gain powerful abilities\nDoctor's call gives 300 Hume Shield\nExpired body can still be consumed but need more time to do so (stay near the arrow until it disappear (10s))",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "SCP049-C",
                     [TranslationKeyDesc] = "A modified SCP049 instance which does not create any SCP049-2\ninstead consuming the body to gain powerful abilities\nDoctor's call gives 300 Hume Shield\nExpired body can still be consumed but need more time to do so (stay near the arrow until it disappear (10s))",
@@ -55,7 +55,7 @@ namespace KE.CustomRoles.CR.CustomSCPs.SCP049C
             base.Init();
         }
         
-        public static readonly SCP049CLevelPosition HintPosition = new();
+        public static readonly SCP049CLevelPosition HintPosition = new SCP049CLevelPosition();
 
         protected override void RoleAdded(Player player)
         {

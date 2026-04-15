@@ -15,7 +15,7 @@ namespace KE.Map.Others.BlackoutNDoor.Commands
     {
         public override string Command => "mapevent";
 
-        public override string[] Aliases => ["me"];
+        public override string[] Aliases => new string[] { "me" };
 
         public override string Description => "mapevents";
 

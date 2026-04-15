@@ -15,19 +15,19 @@ namespace KE.CustomRoles.CR.ClassD
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Kid",
                     [TranslationKeyDesc] = "do not the kid \nyou start with a rainbow candy (for real this time) \nyou're a bit smaller",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Enfant",
                     [TranslationKeyDesc] = "do not the kid \ntu commences avec un bonbon arc-en-ciel (pour de vrai cette fois) \n t'es un peu plus petit que la normal",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Enfant",
                     [TranslationKeyDesc] = "do not the kid \ntu commences avec un bonbon arc-en-ciel (pour de vrai cette fois) \n t'es un peu plus petit que la normal",
@@ -40,7 +40,7 @@ namespace KE.CustomRoles.CR.ClassD
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
-        public Color32 Color => new(255, 192, 203, 0);
+        public Color32 Color => new Color32(255, 192, 203, 0);
 
         public override float SpawnChance { get; set; } = 100;
         public override Vector3 Scale { get; set; } = new Vector3(1, 0.75f, 1);

@@ -24,7 +24,7 @@ namespace KE.CustomRoles.API.Features
             Value = setting.Id;
         }
         
-        public RecyclableSettingId()
+        /*public RecyclableSettingId()
         {
             int num = MinThreshold;
             int value;
@@ -43,8 +43,7 @@ namespace KE.CustomRoles.API.Features
             Log.Debug("creating id =" + value);
             Value = value;
 
-        }
-
+        }*/
 
 
         public void Destroy()

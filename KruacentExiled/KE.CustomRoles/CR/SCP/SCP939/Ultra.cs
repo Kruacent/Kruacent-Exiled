@@ -17,19 +17,19 @@ namespace KE.CustomRoles.CR.SCP.SCP939
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Ultra SCP-939",
                     [TranslationKeyDesc] = "You can sense where people are located",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Ultra SCP-939",
                     [TranslationKeyDesc] = "Tu sais où est tout le monde",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Ultra SCP-939",
                     [TranslationKeyDesc] = "You can sense where people are located",

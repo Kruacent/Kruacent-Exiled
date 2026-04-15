@@ -13,7 +13,7 @@ namespace KE.Map.Others.CustomZones
 {
     public class SpawnedCustomRoom
     {
-        private static readonly HashSet<SpawnedCustomRoom> spawned = new();
+        private static readonly HashSet<SpawnedCustomRoom> spawned = new HashSet<SpawnedCustomRoom>();
         public static IReadOnlyCollection<SpawnedCustomRoom> SpawnedRoom => spawned;
         public SpawnedCustomRoom(CustomRoom baseRoom, RoomShape shape, Vector3 position, Vector3 rotation, Vector2Int coord, HashSet<AdminToy> primitives)
         {
@@ -21,7 +21,7 @@ namespace KE.Map.Others.CustomZones
             Shape = shape;
             Position = position;
             Coord = coord;
-            Primitives = [.. primitives];
+            Primitives = primitives.ToHashSet();
             spawned.Add(this);
         }
 
@@ -41,7 +41,7 @@ namespace KE.Map.Others.CustomZones
             {
                 if (cachedNeighbors is null)
                 {
-                    cachedNeighbors = new();
+                    cachedNeighbors = new HashSet<SpawnedCustomRoom>();
                     foreach (SpawnedCustomRoom scr in SpawnedRoom)
                     {
 
@@ -60,7 +60,7 @@ namespace KE.Map.Others.CustomZones
             }
         }
 
-        public HashSet<SpawnedDoorSeparator> Door { get; } = new();
+        public HashSet<SpawnedDoorSeparator> Door { get; } = new HashSet<SpawnedDoorSeparator>();
 
         public HashSet<AdminToy> Primitives { get; }
 

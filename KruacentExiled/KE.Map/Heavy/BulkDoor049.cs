@@ -20,7 +20,7 @@ namespace KE.Map.Heavy
             Room room = Room.List.Where(r => r.Type == RoomType.Hcz049).First();
 
 
-            Vector3 pos = new(-19.7f ,89f, 9f);
+            Vector3 pos = new Vector3(-19.7f ,89f, 9f);
             Quaternion rot = Quaternion.identity;
 
             Vector3 worldpos = room.Position + room.Rotation*pos;

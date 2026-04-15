@@ -43,7 +43,7 @@ namespace KE.Map.Heavy.GamblingZone
             Chance = chance;
             ItemCap = itemCap;
         }
-        public static implicit operator DroppableItem(ItemType d) => new(d, 1, -1);
+        public static implicit operator DroppableItem(ItemType d) => new DroppableItem(d, 1, -1);
         public bool Equals(DroppableItem other)
         {
             return other.Item == Item && other.Chance == Chance && other.ItemCap == ItemCap && CurrentCap == other.CurrentCap;

@@ -18,19 +18,19 @@ namespace KE.CustomRoles.CR.Scientist
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Zone Manager",
                     [TranslationKeyDesc] = "Open all of the checkpoint to get a better card!",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Zone Manager",
                     [TranslationKeyDesc] = "Incroyable tu peux avoir une promotion alors fais ton boulot et ouvre tous ces checkpoints et tu pourras sortir d'ici!",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Zone Manager",
                     [TranslationKeyDesc] = "Incroyable tu peux avoir une promotion alors fais ton boulot et ouvre tous ces checkpoints et tu pourras sortir d'ici!",
@@ -59,10 +59,10 @@ namespace KE.CustomRoles.CR.Scientist
         };
 
 
-        public override HashSet<string> Abilities { get; } = 
-        [
+        public override HashSet<string> Abilities { get; } = new HashSet<string>()
+        {
             "NumberCheckpoints"
-        ];
+        };
 
         public override List<string> Inventory { get; set; } = new List<string>()
         {
@@ -79,8 +79,8 @@ namespace KE.CustomRoles.CR.Scientist
         }.AsReadOnly();
 
 
-        private static Dictionary<Player, HashSet<DoorType>> objectives = new();
-        private static Dictionary<Player, bool> flag = new();
+        private static Dictionary<Player, HashSet<DoorType>> objectives = new Dictionary<Player, HashSet<DoorType>>();
+        private static Dictionary<Player, bool> flag = new Dictionary<Player, bool>();
 
         protected override void SubscribeEvents()
         {
@@ -97,7 +97,7 @@ namespace KE.CustomRoles.CR.Scientist
 
         protected override void RoleAdded(Player player)
         {
-            objectives.Add(player, new(DoorToOpen));
+            objectives.Add(player, new HashSet<DoorType>(DoorToOpen));
             flag.Add(player, false);
         }
         protected override void RoleRemoved(Player player)

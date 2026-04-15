@@ -177,7 +177,7 @@ namespace KE.CustomRoles.Settings
 
         }
 
-        private Dictionary<Player, int> playerPos = new();
+        private Dictionary<Player, int> playerPos = new Dictionary<Player, int>();
 
         private void Up(Player player)
         {

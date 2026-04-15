@@ -22,9 +22,9 @@ namespace KE.Map.Heavy.GamblingZone
         {
             Items = new HashSet<DroppableItem>()
             {
-                new(ItemType.Jailbird,5,1),
-                new(ItemType.ParticleDisruptor,5,1),
-                new(ItemType.Radio,15),
+                new DroppableItem(ItemType.Jailbird,5,1),
+                new DroppableItem(ItemType.ParticleDisruptor,5,1),
+                new DroppableItem(ItemType.Radio,15),
             };
 
         }

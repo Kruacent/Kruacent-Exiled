@@ -11,14 +11,14 @@ namespace KE.CustomRoles.Abilities.FireAbilities
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Blinding Flash",
                     [TranslationKeyDesc] = "Spawns an active flashbang at your feet",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Le soleil",
                     [TranslationKeyDesc] = "IS THAT A MOTHERFUCKER RED FLOOD REFERENCE??????????????",

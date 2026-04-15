@@ -17,7 +17,7 @@ namespace KE.Misc.Utils
 
         public static IEnumerable<Image> GetAllImages()
         {
-            if(images is not null)
+            if(images != null)
             {
                 return images;
             }

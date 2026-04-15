@@ -20,10 +20,10 @@ namespace KE.Misc.Utils
 {
     public class TextImage : IEquatable<TextImage>
     {
-        private static HashSet<TextImage> list = new();
+        private static HashSet<TextImage> list = new HashSet<TextImage>();
 
         private string rawString = string.Empty;
-        private HashSet<TextToy> spawnedTextToys = new();
+        private HashSet<TextToy> spawnedTextToys = new HashSet<TextToy>();
 
         public static Vector2 DefaultDisplaySize => new Vector2(5000, 5000);
 
@@ -71,7 +71,7 @@ namespace KE.Misc.Utils
                     }
                 }
 
-                if (nb > 0 && oldColor is not null)
+                if (nb > 0 && oldColor != null)
                 {
                     sb.Append(StartColorTag);
                     sb.Append(ToHexValue(oldColor.Value) + ">");

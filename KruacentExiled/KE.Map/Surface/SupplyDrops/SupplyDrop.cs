@@ -57,15 +57,15 @@ namespace KE.Map.Surface.SupplyDrops
 
         private static Stopwatch _spawnTime;
         private static TimeSpan _nextSpawn;
-        private static List<SupplyDrop> list = new();
+        private static List<SupplyDrop> list = new List<SupplyDrop>();
         public static IReadOnlyCollection<Vector3> SpawnPositions = new List<Vector3>()
         {
-            new(-15,292,-39), //spawn chaos
-            new(40,301,-52), // above the gate
-            new(138,295,-64), //behind mtf spawn at the unopenable gate
-            new(124,289,22) //escape
+            new Vector3(-15,292,-39), //spawn chaos
+            new Vector3(40,301,-52), // above the gate
+            new Vector3(138,295,-64), //behind mtf spawn at the unopenable gate
+            new Vector3(124,289,22) //escape
         };
-        private HashSet<Primitive> primitives = new();
+        private HashSet<Primitive> primitives = new HashSet<Primitive>();
         private bool _detectingSomeone = false;
 
         public RoleTypeId SideClaimed { get; private set; } = RoleTypeId.None;
@@ -85,7 +85,7 @@ namespace KE.Map.Surface.SupplyDrops
             //Model
             primitives.Add(Primitive.Create(PrimitiveType.Cube,position,null,Vector3.one,false));
             //radius of pickup
-            var pr = Primitive.Create(PrimitiveType.Sphere, Position, null, new(Radius, Radius, Radius), false, new(0, 1, 0, .30f));
+            var pr = Primitive.Create(PrimitiveType.Sphere, Position, null, new Vector3(Radius, Radius, Radius), false, new Color(0, 1, 0, .30f));
             pr.Collidable = false;
             primitives.Add(pr);
 
@@ -153,7 +153,7 @@ namespace KE.Map.Surface.SupplyDrops
             //Todo random lol
             Vector3 spawnloc = SpawnPositions.GetRandomValue();
             Log.Info($"spawning drop at {spawnloc}");
-            SupplyDrop soup = new(spawnloc);
+            SupplyDrop soup = new SupplyDrop(spawnloc);
 
 
         }

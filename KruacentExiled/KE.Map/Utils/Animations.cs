@@ -10,7 +10,7 @@ namespace KE.Map.Utils
     public abstract class AnimatedModel : ModelBase
     {
 
-        protected List<string> animationNames = new();
+        protected List<string> animationNames = new List<string>();
 
 
 

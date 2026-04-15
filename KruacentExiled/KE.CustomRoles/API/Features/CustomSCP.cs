@@ -34,8 +34,8 @@ namespace KE.CustomRoles.API.Features
 
             if (category is null)
             {
-                header = new(HeaderId, "SCP Spawn Preferences",string.Empty,true);
-                category = new(header, 1001, []);
+                header = new HeaderSetting(HeaderId, "SCP Spawn Preferences",string.Empty,true);
+                category = new SettingsCategory(header, 1001, new List<SettingBase>());
             }
 
             sliderSetting= new SliderSetting(SettingId, GetTranslation("en", TranslationKeyName), MinValue, MaxValue, DefaultValue, true);

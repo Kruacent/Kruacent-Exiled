@@ -17,14 +17,14 @@ public class TrueDivinePills : KECustomItem, ILumosItem
 {
     protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
     {
-        return new()
+        return new Dictionary<string, Dictionary<string, string>>()
         {
-            ["en"] = new()
+            ["en"] = new Dictionary<string, string>()
             {
                 [TranslationKeyName] = "True Divine Pills",
                 [TranslationKeyDesc] = "Guaranteed to respawn everybody, drop to change the mode",
             },
-            ["fr"] = new()
+            ["fr"] = new Dictionary<string, string>()
             {
                 [TranslationKeyName] = "True Divine Pills",
                 [TranslationKeyDesc] = "Fait réappaître tout le monde, lâcher pour changer le mode",

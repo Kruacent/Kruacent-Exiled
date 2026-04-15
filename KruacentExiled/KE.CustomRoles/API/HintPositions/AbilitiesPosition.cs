@@ -25,7 +25,7 @@ namespace KE.CustomRoles.API.HintPositions
         private int index;
         public int Index => index;
 
-        private static List<AbilitiesPosition> nonalloc = new(KEAbilities.InitialAbilitySlot);
+        private static List<AbilitiesPosition> nonalloc = new List<AbilitiesPosition>(KEAbilities.InitialAbilitySlot);
 
         
         public static AbilitiesPosition GetIndex(int index)

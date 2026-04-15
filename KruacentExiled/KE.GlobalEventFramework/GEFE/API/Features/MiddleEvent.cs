@@ -58,7 +58,7 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
             }
             private void OnRoundStarted()
             {
-                TimeToActivate = new(0,UnityEngine.Random.Range(MinTimeToActivate.Minutes,MaxTimeToActivate.Minutes),0);
+                TimeToActivate = new TimeSpan(0,UnityEngine.Random.Range(MinTimeToActivate.Minutes,MaxTimeToActivate.Minutes),0);
                 _handle = Timing.RunCoroutine(Timer());
             }
 
@@ -81,12 +81,12 @@ namespace KE.GlobalEventFramework.GEFE.API.Features
         public abstract string Description { get; set; }
 
         public static float Chance = 37;
-        public static TimeSpan MinTimeToActivate = new(0, 10, 0);
-        public static TimeSpan MaxTimeToActivate = new(0, 16, 0);
+        public static TimeSpan MinTimeToActivate = new TimeSpan(0, 10, 0);
+        public static TimeSpan MaxTimeToActivate = new TimeSpan(0, 16, 0);
         private static TimeSpan TimeToActivate;
 
-        private static HashSet<MiddleEvent> _activeEv = new();
-        private static MiddleEventHandler _handler = new();
+        private static HashSet<MiddleEvent> _activeEv = new HashSet<MiddleEvent>();
+        private static MiddleEventHandler _handler = new MiddleEventHandler();
 
 
         public static IReadOnlyCollection<MiddleEvent> ActiveMiddleEvent => _activeEv;

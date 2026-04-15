@@ -50,15 +50,15 @@ namespace KE.Map.Surface.ElevatorGateA
                 Log.Error(e);
             }
             
-            model = new();
+            model = new ElevatorModel();
 
-            toppanel = new();
-            bottompanel = new();
+            toppanel = new Panel();
+            bottompanel = new Panel();
 
             CreatePrimitives();
 
             CreateModels();
-            step = Primitive.Create(PrimitiveType.Cube, new(18.4f, 300.35f, -49.27f),null,new Vector3(2,.5f,1f));
+            step = Primitive.Create(PrimitiveType.Cube, new Vector3(18.4f, 300.35f, -49.27f),null,new Vector3(2,.5f,1f));
 
 
             model.SendingElevator += SendingElevator;
@@ -83,10 +83,10 @@ namespace KE.Map.Surface.ElevatorGateA
 
         private static void CreatePrimitives()
         {
-            Vector3 pos = new(18.24f, 290.65f, -46.07f);
-            Vector3 helppos = new(18.24f, 255.65f, -46.07f);
-            Vector3 postop = new(19.92f, 299.97f, -48.95f);
-            Vector3 posbot = new(15.62f, 290.65f, -45.19f);
+            Vector3 pos = new Vector3(18.24f, 290.65f, -46.07f);
+            Vector3 helppos = new Vector3(18.24f, 255.65f, -46.07f);
+            Vector3 postop = new Vector3(19.92f, 299.97f, -48.95f);
+            Vector3 posbot = new Vector3(15.62f, 290.65f, -45.19f);
             prim = Primitive.Create(pos, null, Vector3.one * Scale);
             prim.Flags = AdminToys.PrimitiveFlags.None;
             prim.MovementSmoothing = 0;
@@ -167,7 +167,7 @@ namespace KE.Map.Surface.ElevatorGateA
             if (!prim.GameObject.TryGetComponent<CustomElevatorComp>(out var comp))
             {
                 comp = prim.GameObject.AddComponent<CustomElevatorComp>();
-                comp.Init(prim, [model, bottompanel, toppanel]);
+                comp.Init(prim, new List<IContainPanel>() { model, bottompanel, toppanel });
             }
             comp.Send();
         }

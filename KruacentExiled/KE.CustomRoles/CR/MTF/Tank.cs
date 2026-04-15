@@ -16,19 +16,19 @@ namespace KE.CustomRoles.CR.MTF
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Tank",
                     [TranslationKeyDesc] = "The more bullet you got, the slower you are",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Tank",
                     [TranslationKeyDesc] = "Tu es ralenti selon ton nombre de balle",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Tank",
                     [TranslationKeyDesc] = "Tu es débuff mais ta force de tir est démultiplié (fais attention à tes balles)",
@@ -40,7 +40,7 @@ namespace KE.CustomRoles.CR.MTF
         public override RoleTypeId Role { get; set; } = RoleTypeId.NtfSergeant;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
-        public Color32 Color => new (255, 192, 203,0);
+        public Color32 Color => new Color32(255, 192, 203,0);
         public override float SpawnChance { get; set; } = 100;
         public override Vector3 Scale { get; set; } = new Vector3(1.15f, 1f, 1.15f);
 

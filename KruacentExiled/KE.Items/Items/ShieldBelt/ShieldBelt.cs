@@ -158,7 +158,7 @@ namespace KE.Items.Items.ShieldBelt
                 return;
             if (ev.IsInstantKill)
                 return;
-            if (ev.DamageHandler.CustomBase is not FirearmDamageHandler)
+            if (!(ev.DamageHandler.CustomBase is FirearmDamageHandler))
                 return;
             if (!ev.Player.GameObject.TryGetComponent<ShieldBeltStat>(out var stat))
             {

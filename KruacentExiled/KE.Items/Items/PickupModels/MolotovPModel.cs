@@ -17,11 +17,11 @@ namespace KE.Items.Items.PickupModels
 
         protected override void CreateModel(Transform parent)
         {
-            var base1 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.up*.7f, Quaternion.identity, new(0.6f, 0.09f, 0.6f), bottleColor);
-            var base2 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.down *.08f, Quaternion.identity, new(0.8f,0.7f,0.8f), bottleColor);
-            var base3 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.up *.9f, Quaternion.identity, new(0.4f,0.1f,0.4f), bottleColor);
-            var base4 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.up *1.4f, Quaternion.identity, new(0.3f,0.4f,0.3f), bottleColor);
-            var base5 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.down *.8f, Quaternion.identity, new(0.6f,0.06f,0.6f), bottleColor);
+            var base1 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.up*.7f, Quaternion.identity, new Vector3(0.6f, 0.09f, 0.6f), bottleColor);
+            var base2 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.down *.08f, Quaternion.identity, new Vector3(0.8f,0.7f,0.8f), bottleColor);
+            var base3 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.up *.9f, Quaternion.identity, new Vector3(0.4f,0.1f,0.4f), bottleColor);
+            var base4 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.up *1.4f, Quaternion.identity, new Vector3(0.3f,0.4f,0.3f), bottleColor);
+            var base5 = CreatePrimitive(parent, PrimitiveType.Cylinder, Vector3.down *.8f, Quaternion.identity, new Vector3(0.6f,0.06f,0.6f), bottleColor);
         }
     }
 }

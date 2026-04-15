@@ -9,7 +9,7 @@ namespace KE.Items.Commands
     {
         public override string Command => "keci";
 
-        public override string[] Aliases => [];
+        public override string[] Aliases => new string[0];
 
         public override string Description => "kecustom item parent command";
 
