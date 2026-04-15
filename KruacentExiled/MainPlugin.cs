@@ -33,7 +33,6 @@ namespace KruacentExiled
             ];
 
 
-
             for (int i = 0; i < plugins.Length; i++)
             {
                 KEPlugin plugin = plugins[i];
