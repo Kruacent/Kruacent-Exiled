@@ -26,7 +26,7 @@ jobs:
 
       - name : Fill Exiled References
         run: |
-          find ${{env.SERVER_LOCATION}}/SCPSL_Data/Managed/ -name "*.dll" | xars cp -t ${{env.EXILED_REFERENCES}}
+          find ${{env.SERVER_LOCATION}}/SCPSL_Data/Managed/ -name "*.dll" | xargs cp -t ${{env.EXILED_REFERENCES}}
 
       - name: Build solution
         run: |
