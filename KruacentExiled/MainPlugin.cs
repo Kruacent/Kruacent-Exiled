@@ -18,7 +18,6 @@ namespace KruacentExiled
 
         public static MainPlugin Instance { get; private set; }
 
-
         public override void OnEnabled()
         {
             Instance = this;
