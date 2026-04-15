@@ -2,7 +2,7 @@ name: Build .NET Solution
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "dev" ]
   pull_request:
 
 env:
