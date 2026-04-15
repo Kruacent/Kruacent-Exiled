@@ -1,45 +1,71 @@
-<p align="center">
-  <img src="https://avatars.githubusercontent.com/Kruacent?v=4" alt="GitHub Profile Photo">
-</p>
+<div align="center">
+  <h1>Kruaçent-Exiled</h1>
+  <p><b>Gameplay overhaul plugins for SCP: Secret Laboratory.</b></p>
+  <img src="https://img.shields.io/github/v/release/Kruacent/Kruacent-Exiled?style=flat-square&color=00FF41" alt="Release">
+  <img src="https://img.shields.io/github/contributors/Kruacent/Kruacent-Exiled?style=flat-square&color=00FF41" alt="Contributors">
+</div>
 
-<h1 align="center">Kruaçent-Exiled</h1>
+---
 
-<br>
+## What is Kruaçent-Exiled?
 
-<p align="center" id="description">Kruaçent-Exiled is a plugin using the Exiled Framework for SCP: Secret Laboratory servers. The plugin was initially created for our small (6-player) private SCP:SL servers</p>
+**Kruaçent-Exiled** is a plugin built on the [EXILED](https://github.com/ExMod-Team/EXILED) framework for SCP: Secret Laboratory game. 
 
-<br>
-<hr>
-<br><br>
+Created to enhance our private servers, it has evolved into a large plugin. Its purpose is not just to add some item or role, but to **overhaul the gameplay**.
 
-<p align="center"><img src="https://socialify.git.ci/Kruacent/Kruacent-Exiled/image?issues=1&amp;language=1&amp;logo=https%3A%2F%2Favatars.githubusercontent.com%2FKruacent%3Fv%3D4&amp;name=1&amp;pulls=1&amp;stargazers=1&amp;theme=Light" alt="project-image"></p>
+---
 
-<p align="center"><img src="https://img.shields.io/github/contributors/Kruacent/Kruacent-Exiled?style=flat-square" alt="shields"><img src="https://img.shields.io/github/v/release/Kruacent/Kruacent-Exiled?style=flat-square" alt="shields"></p>
-  
-<h2>🧐 Features</h2>
+## Features
 
-Here're some of the project's features:
+The framework is divided into five main parts to reshape the Site-19 :
 
-*   **Global Event Framework** : The Global Event Framework is designed to introduce Global Events which are gameplay modifications revealed at the beginning of each round. You can easily create your own custom Global Events with dozens of examples provided.
-*   **BlackoutNDoor** : The BlackoutNDoor introduces new door and light systems. The lights randomly turn off/on and the doors can randomly open and close.
-*   **Custom Items** : The Customs Items add differents new guns and stuff in the game. You can easily create your own Custom Items with dozens of examples provided.
-*   **Miscellaneous** : The Miscellaneous plugin changes the game settings such as new inputs and outputs for human in 914 explosive D-Class cells the elevators that can move on its own and new announcements for specific players deaths.
+### 1. Global Event Framework
+Every round is unique. This sub-plugin randomly selects and triggers a "Global Event" at the start of each round.
+* **How it works :** An event can alter the rules of the current game (e.g. dropping bomb everywhere every 5 minutes, giving everyone speed boost, or creating facility malfunction).
+* **Usable by developer :** Designed to be extensible, allowing developers to add their own custom global events.
 
-<h2>🛠️ Installation Steps:</h2>
+### 2. Custom Items
+Introduces new gears into the game.
+* Features modified grenades with variety of effect.
+* Includes healing items and tactical gears.
 
-<p>1. Download the DLL you want to use from the latest release.</p>
+### 3. Custom Roles
+Introduces new roles into the game.
+* Features custom roles with variety of effect for humans and SCPs.
+* Example : 
+    * **Asthmatic** : Human with less stamina.
+    * **Pacifist** : Human who can't hurt other being.
+    * **Enderman** : Human who can set a point and teleport to it.
+    * **SCP-035**
 
-<p>2. Go to Exiled/Plugins and place the DLL there.</p>
+### 4. Miscellaneous
+A collection of modifications to the base mechanics of SCP:SL to create new experiences.
+* **SCP-914 :** New output for SCP-914
+* **Elevators :** Autonomous elevator calls and modified behaviors.
+* **Gambling coin :** Coin with magical power
 
-<p>3. Restart your SCP:SL server.</p>
+### 5. Map Modifications
+A collection of modifications of SCP:SL map.
+* **New elevators in Surface Gate A**
+* **A Gambling zone in SCP-173 Heavy Containment**
+* **Supply Drops, Turret and more**
+---
 
-<p>4. The plugin will now be in your server.</p>
+## Installation & Setup
 
+### Prerequisites
+* A working SCP:SL server
+* The [EXILED](https://github.com/ExMod-Team/EXILED) framework installed.
 
-<h2>🛡️ License:</h2>
+### Installation Steps
+1. Download the latest `Kruacent-Exiled.dll` from the [Releases](https://github.com/Kruacent/Kruacent-Exiled/releases) tab.
+2. Place the `.dll` file into your server's `/EXILED/Plugins/` directory.
+3. Restart your SCP:SL server.
 
-This project is licensed under the Apache License
-
-<br>
-<hr>
-<br>
+### Configuration
+* After the first launch, the plugin will generate a configuration file in `/EXILED/Configs/`. 
+Here, you can can adjust configuration for many things.
+---
+<div align="center">
+  <b><i>Developed by the Kruaçent Team</i></b>
+</div>
