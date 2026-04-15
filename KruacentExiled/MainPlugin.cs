@@ -38,7 +38,6 @@ namespace KruacentExiled
                 try
                 {
                     plugin.OnEnabled();
-                    
                 }
                 catch(Exception e)
                 {
