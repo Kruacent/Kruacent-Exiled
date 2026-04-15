@@ -43,7 +43,6 @@ namespace KruacentExiled
                 {
                     Log.Error(e);
                 }
-                
 
             }
 
