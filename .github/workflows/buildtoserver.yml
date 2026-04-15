@@ -16,17 +16,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Mono
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y mono-complete msbuild
-        
-
       - name: Build solution
         run: |
           export EXILED_REFERENCES=${{ github.workspace }}/references
           export EXILED_DEV_REFERENCES=${{ github.workspace }}/devreferences
-          msbuild YourSolution.sln /p:Configuration=Release
+          SLN=$(find . -name "*.sln" | head -n 1)
+          msbuild "$SLN" /p:Configuration=Release
 
       - name: Copy DLLs to custom folder
         run: |
