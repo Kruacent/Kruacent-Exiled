@@ -32,7 +32,6 @@ namespace KruacentExiled
                 new KE.Map.MainPlugin(),
             ];
 
-
             for (int i = 0; i < plugins.Length; i++)
             {
                 KEPlugin plugin = plugins[i];
