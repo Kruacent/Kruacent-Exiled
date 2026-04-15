@@ -20,7 +20,8 @@ jobs:
         run: |
           export EXILED_REFERENCES=${{ github.workspace }}/references
           export EXILED_DEV_REFERENCES=${{ github.workspace }}/devreferences
-          msbuild KruacentExiled.sln /p:Configuration=Release
+          SLN=$(find . -name "*.sln" | head -n 1)
+          msbuild "$SLN" /p:Configuration=Release
 
       - name: Copy DLLs to custom folder
         run: |
