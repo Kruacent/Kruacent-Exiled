@@ -58,9 +58,9 @@ namespace KE.Map
             config = KruacentExiled.MainPlugin.Instance.Config.MapConfig;
 
 
-            cREventHandler = new CREventHandler();
+            //cREventHandler = new CREventHandler();
 
-            cREventHandler.SubscribeEvents();
+            //cREventHandler.SubscribeEvents();
             handler.SubscribeEvents();
             KE.Utils.API.Sounds.SoundPlayer.Instance.TryLoad();
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
@@ -207,7 +207,7 @@ namespace KE.Map
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
 
-            cREventHandler.UnsubscribeEvents();
+            cREventHandler?.UnsubscribeEvents();
             cREventHandler = null;
 
 
