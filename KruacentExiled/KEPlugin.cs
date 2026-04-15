@@ -12,7 +12,6 @@ namespace KruacentExiled
     {
         public abstract string Name { get; }
         public abstract string Prefix { get; }
-
         
 
         public abstract IConfig Config { get; }
@@ -26,8 +25,6 @@ namespace KruacentExiled
 
                 Log.Send(Name + " has been enabled!", Discord.LogLevel.Info, ConsoleColor.DarkYellow);
             }
-
-            
         }
         public abstract void OnEnabled();
         public abstract void OnDisabled();

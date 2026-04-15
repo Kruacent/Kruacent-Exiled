@@ -13,8 +13,8 @@ namespace KE.Misc.Events.Handlers
 
 
 
-        public static Event<GamblingEventArgs> Gambling = new();
-        public static Event<GambledEventArgs> Gambled = new();
+        public static Event<GamblingEventArgs> Gambling = new Event<GamblingEventArgs>();
+        public static Event<GambledEventArgs> Gambled = new Event<GambledEventArgs>();
 
 
 

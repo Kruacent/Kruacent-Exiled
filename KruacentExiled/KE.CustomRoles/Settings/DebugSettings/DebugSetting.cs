@@ -14,7 +14,7 @@ namespace KE.CustomRoles.Settings.DebugSettings
     public abstract class DebugSetting
     {
 
-        internal static List<DebugSetting> settings = new();
+        internal static List<DebugSetting> settings = new List<DebugSetting>();
 
         public HeaderSetting Header;
 
@@ -46,7 +46,7 @@ namespace KE.CustomRoles.Settings.DebugSettings
         {
             if(category == null)
             {
-                category = new SettingsCategory(Header, 0, Settings.Where(s => s is not HeaderSetting).ToList());
+                category = new SettingsCategory(Header, 0, Settings.Where(s => !(s is HeaderSetting)).ToList());
             }
             return category;
         }

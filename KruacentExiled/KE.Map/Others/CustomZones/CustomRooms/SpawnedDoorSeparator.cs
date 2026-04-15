@@ -17,7 +17,7 @@ namespace KE.Map.Others.CustomZones.CustomRooms
             BaseDoor = basedoor;
             Position = position;
             Rooms = rooms;
-            GameObjects = [.. gameObjects];
+            GameObjects = gameObjects.ToHashSet();
         }
 
 

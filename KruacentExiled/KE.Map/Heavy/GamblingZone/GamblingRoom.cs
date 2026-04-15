@@ -93,9 +93,9 @@ namespace KE.Map.Heavy.GamblingZone
             Vector3 width = new Vector3(.1f, 1, .1f);
 
 
-            _model = new()
+            _model = new HashSet<Primitive>()
             {
-                Primitive.Create(PrimitiveType.Cube,positionWithOffset , null,new(1,.8f,1),true,Color.black),
+                Primitive.Create(PrimitiveType.Cube,positionWithOffset , null,new Vector3(1,.8f,1),true,Color.black),
                 Primitive.Create(PrimitiveType.Cube,positionWithOffset + Vector3.forward/2,null, Vector3.right+width,true,Color.white),
                 Primitive.Create(PrimitiveType.Cube,positionWithOffset + Vector3.back/2, null, Vector3.right+width,true,Color.white),
                 Primitive.Create(PrimitiveType.Cube,positionWithOffset + Vector3.right/2, null, Vector3.forward+width,true,Color.white),
@@ -134,7 +134,7 @@ namespace KE.Map.Heavy.GamblingZone
             if (player2.CurrentItem == null) return;
             Item item = _lootTable.GetRandomItem();
 
-            GamblingEventArgs ev1 = new(player2, item, true);
+            GamblingEventArgs ev1 = new GamblingEventArgs(player2, item, true);
 
             Events.Handlers.GamblingRoom.OnGambling(ev1);
 

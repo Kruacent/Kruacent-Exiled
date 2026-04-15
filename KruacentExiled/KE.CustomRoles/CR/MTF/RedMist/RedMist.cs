@@ -16,19 +16,19 @@ namespace KE.CustomRoles.CR.MTF.RedMist
         public override string InternalName => "RedMist";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "The Red Mist",
                     [TranslationKeyDesc] = "todo",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "The Red Mist",
                     [TranslationKeyDesc] = "todo",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "The Red Mist",
                     [TranslationKeyDesc] = "todo",
@@ -39,7 +39,7 @@ namespace KE.CustomRoles.CR.MTF.RedMist
         public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
-        public Color32 Color => new(255, 192, 203, 0);
+        public Color32 Color => new Color32(255, 192, 203, 0);
         public override float SpawnChance { get; set; } = 0;
 
         //You're the legendary Fixer, the Red Mist. This role comes with multiple strengths such as increased speed (1.5 to 2 times the normal speed ) , more health (200 health), you spawn with a machete scp but better, The Mimicry also you can't use guns.
@@ -52,13 +52,13 @@ namespace KE.CustomRoles.CR.MTF.RedMist
         //+ego : quick heal drain pause when attacking, 80 damage reduction faster
         //forward slash :  damage everything on its path max distance of a room
 
-        public override HashSet<string> Abilities { get; } =
-        [
+        public override HashSet<string> Abilities { get; } = new HashSet<string>()
+        {
             "ToggleEGO",
             "Spear",
             "OnRush",
             "GreaterSplitHorizontal",
-        ];
+        };
 
         protected override void GiveInventory(Player player)
         {

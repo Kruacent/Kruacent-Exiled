@@ -12,19 +12,19 @@ namespace KE.CustomRoles.CR.Guard
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Chief Guard",
                     [TranslationKeyDesc] = "you got a private card and a crossvec",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Chef des gardes",
                     [TranslationKeyDesc] = "T'as une carte de private \net un crossvec",
                 }
-                ,["legacy"] = new()
+                ,["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Chef des gardes",
                     [TranslationKeyDesc] = "T'as une carte de private \net un crossvec",

@@ -22,19 +22,19 @@ namespace KE.CustomRoles.CR.MTF
         public override float SpawnChance { get; set; } = 100;
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Pilot",
                     [TranslationKeyDesc] = "So I haveth a Laser Pointere",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Pilote",
                     [TranslationKeyDesc] = "Je suis pilote!",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Pilot",
                     [TranslationKeyDesc] = "So I haveth a Laser Pointere",
@@ -56,7 +56,7 @@ namespace KE.CustomRoles.CR.MTF
           { AmmoType.Nato9, 100}
         };
 
-        public override HashSet<string> Abilities { get; } = new()
+        public override HashSet<string> Abilities { get; } = new HashSet<string>()
         {
             "SetPosition",
             "AirStrike"

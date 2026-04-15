@@ -13,7 +13,7 @@ namespace KE.Map.Utils
 {
     public static class StructureSpawner
     {
-        public static Dictionary<FacilityZone, HashSet<DoorVariant>> AdditionalDoors { get; } = new();
+        public static Dictionary<FacilityZone, HashSet<DoorVariant>> AdditionalDoors { get; } = new Dictionary<FacilityZone, HashSet<DoorVariant>>();
 
 
 
@@ -62,7 +62,7 @@ namespace KE.Map.Utils
 
             if (!AdditionalDoors.ContainsKey(zone))
             {
-                AdditionalDoors.Add(zone, new());
+                AdditionalDoors.Add(zone, new HashSet<DoorVariant>());
             }
             AdditionalDoors[zone].Add(doorVariant);
 

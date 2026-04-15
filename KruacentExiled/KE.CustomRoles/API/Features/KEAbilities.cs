@@ -33,7 +33,7 @@ namespace KE.CustomRoles.API.Features
     public abstract class KEAbilities
     {
         #region static stuff
-        private static HashSet<KEAbilities> registered = new();
+        private static HashSet<KEAbilities> registered = new HashSet<KEAbilities>();
         public static HashSet<KEAbilities> Registered => registered;
         #endregion
 
@@ -49,18 +49,18 @@ namespace KE.CustomRoles.API.Features
         public abstract float Cooldown { get; }
         #endregion
 
-        private Dictionary<Player, DateTime> LastUsed = new();
-        private static Dictionary<System.Type, KEAbilities> TypeToAbility { get; } = new();
-        private static Dictionary<string, KEAbilities> NameToAbility { get; } = new();
+        private Dictionary<Player, DateTime> LastUsed = new Dictionary<Player, DateTime>();
+        private static Dictionary<System.Type, KEAbilities> TypeToAbility { get; } = new Dictionary<System.Type, KEAbilities>();
+        private static Dictionary<string, KEAbilities> NameToAbility { get; } = new Dictionary<string, KEAbilities>();
         public HashSet<Player> Players { get; } = new HashSet<Player>();
         public IReadOnlyCollection<Player> Selected => selected;
-        private HashSet<Player> selected = new();
-        private HashSet<Player> blockedPlayer = new();
-        private HashSet<Player> playerWithActiveAbility = new();
+        private HashSet<Player> selected = new HashSet<Player>();
+        private HashSet<Player> blockedPlayer = new HashSet<Player>();
+        private HashSet<Player> playerWithActiveAbility = new HashSet<Player>();
 
 
 
-        public static Dictionary<Player, List<KEAbilities>> PlayersAbility { get;} = new();
+        public static Dictionary<Player, List<KEAbilities>> PlayersAbility { get;} = new Dictionary<Player, List<KEAbilities>>();
 
 
 
@@ -267,7 +267,7 @@ namespace KE.CustomRoles.API.Features
             {
                 if(!PlayersAbility.TryGetValue(player,out var _))
                 {
-                    PlayersAbility.Add(player, new());
+                    PlayersAbility.Add(player, new List<KEAbilities>());
                 }
                 PlayersAbility[player].Add(this);
                 InitHints(player);
@@ -302,7 +302,7 @@ namespace KE.CustomRoles.API.Features
 
         public virtual bool Check(Player player)
         {
-            if(player is not null)
+            if(player != null)
             {
                 return Players.Contains(player);
             }
@@ -497,7 +497,7 @@ namespace KE.CustomRoles.API.Features
 
         public static IEnumerable<KEAbilities> Unregister()
         {
-            List<KEAbilities> list = new();
+            List<KEAbilities> list = new List<KEAbilities>();
             foreach (KEAbilities item in Registered)
             {
                 item.TryUnregister();
@@ -642,8 +642,8 @@ namespace KE.CustomRoles.API.Features
         }
 
 
-        public static Dictionary<Player, List<AbstractHint>> PlayersHints { get; } = new();
-        public static Dictionary<AbstractHint, AbstractHint> AddonHints { get; } = new();
+        public static Dictionary<Player, List<AbstractHint>> PlayersHints { get; } = new Dictionary<Player, List<AbstractHint>>();
+        public static Dictionary<AbstractHint, AbstractHint> AddonHints { get; } = new Dictionary<AbstractHint, AbstractHint>();
         public const int InitialAbilitySlot = 5;
         private void InitHints(Player player)
         {
@@ -651,7 +651,7 @@ namespace KE.CustomRoles.API.Features
 
             if (!PlayersHints.TryGetValue(player, out var _))
             {
-                PlayersHints.Add(player, new());
+                PlayersHints.Add(player, new List<AbstractHint>());
                 for (int i = 0; i < InitialAbilitySlot; i++)
                 {
                     AbilitiesPosition position = AbilitiesPosition.GetIndex(i);
@@ -666,7 +666,7 @@ namespace KE.CustomRoles.API.Features
 
         }
 
-        private static HashSet<KEAbilities> addonAbilitiesexception = new();
+        private static HashSet<KEAbilities> addonAbilitiesexception = new HashSet<KEAbilities>();
 
         /// <summary>
         /// 

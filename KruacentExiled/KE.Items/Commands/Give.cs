@@ -17,7 +17,7 @@ namespace KE.Items.Commands
     {
         public string Command => "give";
 
-        public string[] Aliases => ["g"];
+        public string[] Aliases => new string[] { "g" };
 
         public string Description => "give";
 

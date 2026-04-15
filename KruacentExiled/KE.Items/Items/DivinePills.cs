@@ -15,14 +15,14 @@ public class DivinePills : KECustomItem, ILumosItem, ISwitchableEffect, IUpgrada
 {
     protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
     {
-        return new()
+        return new Dictionary<string, Dictionary<string, string>>()
         {
-            ["en"] = new()
+            ["en"] = new Dictionary<string, string>()
             {
                 [TranslationKeyName] = "Divine Pills",
                 [TranslationKeyDesc] = "25% chance you die\n 75% you respawn someone\n",
             },
-            ["fr"] = new()
+            ["fr"] = new Dictionary<string, string>()
             {
                 [TranslationKeyName] = "Divine Pills",
                 [TranslationKeyDesc] = "25% de chance de mourrir\n 75% de ramener quelqu'un à la vie",

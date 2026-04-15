@@ -14,19 +14,19 @@ namespace KE.CustomRoles.CR.Scientist
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Gamble Addict",
                     [TranslationKeyDesc] = "you got 2 coins\ngood luck",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Accro du casino",
                     [TranslationKeyDesc] = "T'as trade ton kit et ta carte contre 2 pièces \nfais en bon usage",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Gamble Addict",
                     [TranslationKeyDesc] = "T'as trade ton kit et ta carte contre 2 pièces \nfais en bon usage",
@@ -46,11 +46,11 @@ namespace KE.CustomRoles.CR.Scientist
           $"{ItemType.Coin}",
         };
 
-        public override HashSet<string> Abilities { get; } = new()
+        public override HashSet<string> Abilities { get; } = new HashSet<string>()
         {
             "Trade"
         };
 
-        public Color32 Color => new(0, 105, 59,0);
+        public Color32 Color => new Color32(0, 105, 59,0);
     }
 }

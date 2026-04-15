@@ -24,14 +24,14 @@ namespace KE.Items.Items
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Drone",
                     [TranslationKeyDesc] = "Military drone (drop to use)",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Drone",
                     [TranslationKeyDesc] = "Drone de reconnaissance militaire (lâcher pour l'utiliser)",

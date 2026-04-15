@@ -16,14 +16,14 @@ namespace KE.Items.Items
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Heal Zone",
                     [TranslationKeyDesc] = "Allow to heal you and your ally",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Heal Zone",
                     [TranslationKeyDesc] = "Créer une zone pour soigner",

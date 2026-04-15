@@ -24,19 +24,19 @@ namespace KE.CustomRoles.CR.Human
         public override SideEnum Side { get; set; } = SideEnum.Human;
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Butter Finger Thief",
                     [TranslationKeyDesc] = "Be careful of \"your\" items!",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Maladroit Voleur",
                     [TranslationKeyDesc] = "Fais attention à \"tes\" objets !",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Maladroit Voleur",
                     [TranslationKeyDesc] = "Fais attention à \"tes\" objets !",
@@ -47,9 +47,9 @@ namespace KE.CustomRoles.CR.Human
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
 
-        public Color32 Color => new(211, 110, 112, 0);
+        public Color32 Color => new Color32(211, 110, 112, 0);
 
-        public override HashSet<string> Abilities { get; } = new()
+        public override HashSet<string> Abilities { get; } = new HashSet<string>()
         {
             "Thief"
         }; 

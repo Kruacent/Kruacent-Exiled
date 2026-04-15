@@ -14,7 +14,7 @@ namespace KE.Map.Others.BlackoutNDoor.Events.Handlers
 
 
 
-        public static Event<DoorStuckEventArgs> DoorStucking { get; set; } = new();
+        public static Event<DoorStuckEventArgs> DoorStucking { get; set; } = new Event<DoorStuckEventArgs>();
 
 
 

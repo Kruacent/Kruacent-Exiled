@@ -14,19 +14,19 @@ namespace KE.CustomRoles.CR.Human
         public override SideEnum Side { get; set; } = SideEnum.Human;
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new  Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Enderman",
                     [TranslationKeyDesc] = "Great job you're now overpowered",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Enderman",
                     [TranslationKeyDesc] = "Tu peux te téléporter ! T tro for enféte",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Enderman",
                     [TranslationKeyDesc] = "Tu peux te téléporter ! T tro for enféte",
@@ -37,7 +37,7 @@ namespace KE.CustomRoles.CR.Human
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
         public override float SpawnChance { get; set; } = 100;
-        public override HashSet<string> Abilities { get; } = new()
+        public override HashSet<string> Abilities { get; } = new HashSet<string>()
         {
             "Teleportation",
             "SetPosition"

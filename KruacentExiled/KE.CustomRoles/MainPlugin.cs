@@ -34,11 +34,11 @@ namespace KE.CustomRoles
         public override string Prefix => "KE.CR";
         public static MainPlugin Instance;
         public static Config Configs => (Config) Instance?.Config;
-        public static readonly HintPlacement CRHint = new(0, 750);
-        public static readonly HintPlacement CREffect = new(700, 300);
-        public static readonly HintPlacement AbilitiesDesc = new(0, 900);
-        public static readonly HintPlacement Abilities = new(0, 850,HintServiceMeow.Core.Enum.HintAlignment.Left);
-        public static readonly HintPlacement RightHPbars = new(55, 1000,HintServiceMeow.Core.Enum.HintAlignment.Left);
+        public static readonly HintPlacement CRHint = new HintPlacement(0, 750);
+        public static readonly HintPlacement CREffect = new HintPlacement(700, 300);
+        public static readonly HintPlacement AbilitiesDesc = new HintPlacement(0, 900);
+        public static readonly HintPlacement Abilities = new HintPlacement(0, 850,HintServiceMeow.Core.Enum.HintAlignment.Left);
+        public static readonly HintPlacement RightHPbars = new HintPlacement(55, 1000,HintServiceMeow.Core.Enum.HintAlignment.Left);
         private SettingHandler _settingHandler;
         internal static SettingHandler SettingHandler => Instance?._settingHandler;
 
@@ -55,20 +55,20 @@ namespace KE.CustomRoles
             Instance = this;
             config = KruacentExiled.MainPlugin.Instance.Config.CustomRoleConfig;
 
-            _settingHandler = new();
+            _settingHandler = new SettingHandler();
             Utils.API.Settings.GlobalSettings.GlobalSettingsHandler.Instance.TryLoad();
             Utils.API.Settings.GlobalSettings.GlobalSettingsHandler.Instance.SubscribeEvents();
 
             CustomPlayerStat.AddModule<FireStat>();
             CustomStatsEvents.SubscribeEvents();
-            icons = new();
+            icons = new Dictionary<string, TextImage>();
 
             CustomTeamEvents.SubscribeEvents();
 
             
             LoadImage();
 
-            Harmony = new(Name);
+            Harmony = new Harmony(Name);
             Harmony.PatchAll();
             SettingHandler.SubscribeEvents();
             KEAbilities.Register(KruacentExiled.MainPlugin.Instance.Assembly);

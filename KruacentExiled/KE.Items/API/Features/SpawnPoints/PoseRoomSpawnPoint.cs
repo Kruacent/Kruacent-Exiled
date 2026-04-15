@@ -68,8 +68,8 @@ namespace KE.Items.API.Features.SpawnPoints
             }
         }
 
-        public static readonly HashSet<ItemSpawn> AllPoses = new();
-        private static HashSet<ItemSpawn> usablePoses = new();
+        public static readonly HashSet<ItemSpawn> AllPoses = new HashSet<ItemSpawn>();
+        private static HashSet<ItemSpawn> usablePoses = new HashSet<ItemSpawn>();
         public static IReadOnlyCollection<ItemSpawn> UsablePoses => usablePoses;
 
         public static ItemSpawn UseRandomPose(RoomType roomType)

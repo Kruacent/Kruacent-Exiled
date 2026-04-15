@@ -21,7 +21,7 @@ namespace KE.Misc.Features._914Upgrades
             Player player = ev.Player;
             Room room = null;
 
-            if(player.Role is not PlayerRoles.FirstPersonControl.IFpcRole fpc)
+            if(!(player.Role is IFpcRole fpc))
             {
                 return false;
             }

@@ -22,7 +22,7 @@ namespace KE.Misc.Features
         public float IncreaseSCPHealth { get; } = 1.25f;
         private static Config Config => MainPlugin.Configs;
 
-        public Dictionary<RoleTypeId, float> RoleBuff = new()
+        public Dictionary<RoleTypeId, float> RoleBuff = new Dictionary<RoleTypeId, float>()
         {
             {RoleTypeId.Scp049, Config.MultSCP049 },
             {RoleTypeId.Scp939, Config.MultSCP939 },
@@ -68,7 +68,7 @@ namespace KE.Misc.Features
                 healthincrease *= val;
             }
 
-            BuffingSCPEventArgs ev1 = new(player, true, healthincrease);
+            BuffingSCPEventArgs ev1 = new BuffingSCPEventArgs(player, true, healthincrease);
             
             OnBuffingSCP?.Invoke(ev1);
             if (ev1.IsAllowed)
@@ -78,7 +78,7 @@ namespace KE.Misc.Features
                     player.MaxHealth *= healthincrease;
                     player.Health = player.MaxHealth;
                 });
-                BuffedSCPEventArgs ev2 = new(player, healthincrease);
+                BuffedSCPEventArgs ev2 = new BuffedSCPEventArgs(player, healthincrease);
                 OnBuffedSCP?.Invoke(ev2);
             }
 

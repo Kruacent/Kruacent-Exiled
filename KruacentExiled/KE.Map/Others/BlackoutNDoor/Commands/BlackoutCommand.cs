@@ -18,11 +18,11 @@ namespace KE.Map.Others.BlackoutNDoor.Commands
     {
         public override string Command => "blackout";
 
-        public override string[] Aliases => ["b"];
+        public override string[] Aliases => new string[] { "b" };
 
         public override string Description => "force a blackout";
 
-        public override string[] Usage => ["FacilityZone"];
+        public override string[] Usage => new string[] { "FacilityZone" };
 
         public override bool ExecuteCommand(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
@@ -39,7 +39,7 @@ namespace KE.Map.Others.BlackoutNDoor.Commands
             }
             
 
-            Blackout blackout = new();
+            Blackout blackout = new Blackout();
             blackout.StartEvent(zone.GetZone(),-1);
             response = "blackout forced at " + zone.ToString();
             

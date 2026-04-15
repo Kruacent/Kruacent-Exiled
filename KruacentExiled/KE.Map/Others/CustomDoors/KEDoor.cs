@@ -11,7 +11,7 @@ namespace KE.Map.Others.CustomDoors
     {
 
 
-        public static HashSet<KEDoor> doors = new();
+        public static HashSet<KEDoor> doors = new HashSet<KEDoor>();
 
 
 

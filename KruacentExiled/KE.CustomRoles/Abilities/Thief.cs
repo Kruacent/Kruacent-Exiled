@@ -24,16 +24,16 @@ namespace KE.CustomRoles.Abilities
         public const string Fail = "ThiefFail";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Steal",
                     [TranslationKeyDesc] = "Steal a random item from a player in the same room",
                     [NoPlayer] = "No player to steal from",
                     [Fail] = "I think this is a skill issue! Congrats!",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Voler",
                     [TranslationKeyDesc] = "Vole un object aléatoire à un joueur dans la même pièce",
@@ -58,7 +58,7 @@ namespace KE.CustomRoles.Abilities
             Player scp = GetClosest(sameRoom.Where(p => SCPTeam.IsSCP(p.ReferenceHub)), player.Position);
 
 
-            if(scp is not null)
+            if(scp != null)
             {
                 KELog.Debug("steal scp");
                 Steal(player, scp);
@@ -69,7 +69,7 @@ namespace KE.CustomRoles.Abilities
             Player enemy = GetClosest(sameRoom.Where(p => HitboxIdentity.IsEnemy(player.ReferenceHub, p.ReferenceHub)),player.Position);
 
 
-            if(enemy is not null)
+            if(enemy != null)
             {
                 KELog.Debug("steal enemy");
                 Steal(player, enemy);
@@ -80,7 +80,7 @@ namespace KE.CustomRoles.Abilities
             Player ally = GetClosest(sameRoom, player.Position);
 
 
-            if (ally is not null)
+            if (ally != null)
             {
                 KELog.Debug("steal ally");
                 Steal(player, ally);

@@ -14,8 +14,8 @@ namespace KE.Misc.Features._914Upgrades.RoleChanging
 
         public override IReadOnlyDictionary<Scp914KnobSetting, RoleOutput> OutputRoles { get; } = new Dictionary<Scp914KnobSetting, RoleOutput>()
         {
-            { Scp914KnobSetting.OneToOne,new(RoleTypeId.Scp3114,50f)},
-            { Scp914KnobSetting.VeryFine,new(RoleTypeId.Scp939,50f)}
+            { Scp914KnobSetting.OneToOne,new RoleOutput(RoleTypeId.Scp3114,50f)},
+            { Scp914KnobSetting.VeryFine,new RoleOutput(RoleTypeId.Scp939,50f)}
         };
 
     }
@@ -25,8 +25,8 @@ namespace KE.Misc.Features._914Upgrades.RoleChanging
 
         public override IReadOnlyDictionary<Scp914KnobSetting, RoleOutput> OutputRoles { get; } = new Dictionary<Scp914KnobSetting, RoleOutput>()
         {
-            { Scp914KnobSetting.OneToOne,new(RoleTypeId.Scp096,50f)},
-            { Scp914KnobSetting.VeryFine,new(RoleTypeId.Scp173,50f)}
+            { Scp914KnobSetting.OneToOne,new RoleOutput(RoleTypeId.Scp096,50f)},
+            { Scp914KnobSetting.VeryFine,new RoleOutput(RoleTypeId.Scp173,50f)}
         };
 
     }
@@ -36,9 +36,9 @@ namespace KE.Misc.Features._914Upgrades.RoleChanging
 
         public override IReadOnlyDictionary<Scp914KnobSetting, RoleOutput> OutputRoles { get; } = new Dictionary<Scp914KnobSetting, RoleOutput>()
         {
-            { Scp914KnobSetting.Rough,new(RoleTypeId.Scp096,50f)},
-            { Scp914KnobSetting.OneToOne,new(RoleTypeId.Scp173,50f)},
-            { Scp914KnobSetting.VeryFine,new(RoleTypeId.Scp049,50f)},
+            { Scp914KnobSetting.Rough,new RoleOutput(RoleTypeId.Scp096,50f)},
+            { Scp914KnobSetting.OneToOne,new RoleOutput(RoleTypeId.Scp173,50f)},
+            { Scp914KnobSetting.VeryFine,new RoleOutput(RoleTypeId.Scp049,50f)},
         };
 
     }
@@ -49,9 +49,9 @@ namespace KE.Misc.Features._914Upgrades.RoleChanging
 
         public override IReadOnlyDictionary<Scp914KnobSetting, RoleOutput> OutputRoles { get; } = new Dictionary<Scp914KnobSetting, RoleOutput>()
         {
-            { Scp914KnobSetting.Rough,new(RoleTypeId.Scp096,50f)},
-            { Scp914KnobSetting.OneToOne,new(RoleTypeId.Scp939,50f)},
-            { Scp914KnobSetting.VeryFine,new(RoleTypeId.Scp106,50f)},
+            { Scp914KnobSetting.Rough,new RoleOutput(RoleTypeId.Scp096,50f)},
+            { Scp914KnobSetting.OneToOne,new RoleOutput(RoleTypeId.Scp939,50f)},
+            { Scp914KnobSetting.VeryFine,new RoleOutput(RoleTypeId.Scp106,50f)},
         };
 
     }
@@ -62,8 +62,8 @@ namespace KE.Misc.Features._914Upgrades.RoleChanging
 
         public override IReadOnlyDictionary<Scp914KnobSetting, RoleOutput> OutputRoles { get; } = new Dictionary<Scp914KnobSetting, RoleOutput>()
         {
-            { Scp914KnobSetting.Rough,new(RoleTypeId.Scp173,50f)},
-            { Scp914KnobSetting.OneToOne,new(RoleTypeId.Scp049,50f)},
+            { Scp914KnobSetting.Rough,new RoleOutput(RoleTypeId.Scp173,50f)},
+            { Scp914KnobSetting.OneToOne,new RoleOutput(RoleTypeId.Scp049,50f)},
         };
 
     }
@@ -73,8 +73,8 @@ namespace KE.Misc.Features._914Upgrades.RoleChanging
 
         public override IReadOnlyDictionary<Scp914KnobSetting, RoleOutput> OutputRoles { get; } = new Dictionary<Scp914KnobSetting, RoleOutput>()
         {
-            { Scp914KnobSetting.Rough,new(RoleTypeId.Scp939,50f)},
-            { Scp914KnobSetting.OneToOne,new(RoleTypeId.Scp106,50f)},
+            { Scp914KnobSetting.Rough,new RoleOutput(RoleTypeId.Scp939,50f)},
+            { Scp914KnobSetting.OneToOne,new RoleOutput(RoleTypeId.Scp106,50f)},
         };
 
     }

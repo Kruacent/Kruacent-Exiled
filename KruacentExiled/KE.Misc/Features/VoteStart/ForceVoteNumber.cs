@@ -13,7 +13,7 @@ namespace KE.Misc.Features.VoteStart
     {
         public string Command => "nbvote";
 
-        public string[] Aliases => ["nbv"];
+        public string[] Aliases => new string[] { "nbv" };
 
         public string Description => "force a number of people needed to vote for this round only";
 

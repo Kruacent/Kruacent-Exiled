@@ -18,7 +18,7 @@ namespace KE.CustomRoles.Commands.KECR
         }
         public override string Command => "kecustomrole";
 
-        public override string[] Aliases => ["kecr"];
+        public override string[] Aliases => new string[1] { "kecr" };
 
         public override string Description => string.Empty;
 

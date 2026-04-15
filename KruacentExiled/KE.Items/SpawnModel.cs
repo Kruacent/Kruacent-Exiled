@@ -20,7 +20,7 @@ namespace KE.Items
     {
         public string Command => "spawnmodel";
 
-        public string[] Aliases => [];
+        public string[] Aliases => new string[0];
 
         public string Description => "spawnmodel";
 
@@ -29,13 +29,13 @@ namespace KE.Items
             var p = Player.Get(sender);
             response = string.Empty;
 
-            if(p is not null)
+            if(p != null)
             {
                 Primitive prim = Primitive.Create(p.Position, null, Vector3.one, false);
                 prim.Collidable = false;
                 prim.Visible = false;
                 prim.Spawn();
-                TPGrenadaPModel m = new(null);
+                TPGrenadaPModel m = new TPGrenadaPModel(null);
                 
 
                 Log.Info("position model=" + prim.Position);

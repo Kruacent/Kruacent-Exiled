@@ -24,17 +24,17 @@ namespace KE.CustomRoles.Settings.DebugSettings
         protected override List<SettingBase> CreateSettings()
         {
             created = true;
-            return 
-                [
-                    new HeaderSetting(_idHeaderTestHint,"Follow Text Creator",padding:true),
-                    new SliderSetting(_idTestHintsliderx,"x",0,360,0),
-                    new SliderSetting(_idTestHintslidery,"y",0,360,0),
-                    new SliderSetting(_idTestHintsliderz,"z",0,360,0),
-                    new SliderSetting(_idTestHintslidersize,"size",0,100,5),
-                    SettingBase.Create(new SSPlaintextSetting(_idTestHinttext,"text")),
-                    new ButtonSetting(_idTestHintspawn,"spawn","spawn"),
-                    new ButtonSetting(_idTestHintdestroy,"destroyall","destroyall"),
-                ];
+            return new List<SettingBase>()
+                {
+                    new HeaderSetting(_idHeaderTestHint, "Follow Text Creator", padding: true),
+                    new SliderSetting(_idTestHintsliderx, "x", 0, 360, 0),
+                    new SliderSetting(_idTestHintslidery, "y", 0, 360, 0),
+                    new SliderSetting(_idTestHintsliderz, "z", 0, 360, 0),
+                    new SliderSetting(_idTestHintslidersize, "size", 0, 100, 5),
+                    SettingBase.Create(new SSPlaintextSetting(_idTestHinttext, "text")),
+                    new ButtonSetting(_idTestHintspawn, "spawn", "spawn"),
+                    new ButtonSetting(_idTestHintdestroy, "destroyall", "destroyall"),
+                };
         }
         private bool created = false;
         string text = "TEST";
@@ -53,7 +53,7 @@ namespace KE.CustomRoles.Settings.DebugSettings
             }
         }
 
-        private List<FollowingTextToy> texttoy = new();
+        private List<FollowingTextToy> texttoy = new List<FollowingTextToy>();
         private void CreateTextToy(Player player, ServerSpecificSettingBase setting)
         {
             if (SettingBase.TryGetSetting<UserTextInputSetting>(player, _idTestHinttext, out var textsetting))

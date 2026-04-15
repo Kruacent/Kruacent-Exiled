@@ -14,8 +14,8 @@ namespace KE.GlobalEventFramework
 
 
 
-		public static readonly HintPlacement GEAnnouncement = new(0, 50, HintServiceMeow.Core.Enum.HintAlignment.Center);
-		public static readonly HintPlacement GEEffect = new(360, 300, HintServiceMeow.Core.Enum.HintAlignment.Right);
+		public static readonly HintPlacement GEAnnouncement = new HintPlacement(0, 50, HintServiceMeow.Core.Enum.HintAlignment.Center);
+		public static readonly HintPlacement GEEffect = new HintPlacement(360, 300, HintServiceMeow.Core.Enum.HintAlignment.Right);
 
 
         internal static MainPlugin Instance { get; private set;}

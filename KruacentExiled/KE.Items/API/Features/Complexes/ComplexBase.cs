@@ -79,7 +79,7 @@ namespace KE.Items.API.Features.Complexes
 
         public bool AddPlayer(Player player)
         {
-            if (this.player is not null) return false;
+            if (!(this.player is null)) return false;
 
             this.player = player;
             return true;

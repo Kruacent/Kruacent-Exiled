@@ -32,7 +32,7 @@ namespace KE.Map.Entrance
             primitive.Transform.localPosition = Vector3.up * 2;
             primitive.Type = PrimitiveType.Cube;
             primitive.Flags = AdminToys.PrimitiveFlags.Collidable;
-            primitive.Scale =  new (6,5,1);
+            primitive.Scale =  new Vector3(6,5,1);
             primitive.Spawn();
         }
 

@@ -14,7 +14,7 @@ namespace KE.Misc.Features.GamblingCoin
     {
         public string Command => "forcecoineffect";
 
-        public string[] Aliases => ["fce"];
+        public string[] Aliases => new string[] { "fce" };
 
         public string Description => "force a effect for a player";
 

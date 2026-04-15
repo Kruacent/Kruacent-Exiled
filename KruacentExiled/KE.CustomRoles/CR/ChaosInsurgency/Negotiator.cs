@@ -16,19 +16,19 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Negotiator",
                     [TranslationKeyDesc] = "You're immune to friendly fire and you can convert zombie into your team, isn't that nice?",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Negociateur",
                     [TranslationKeyDesc] = "T'es immunisé au tire allié et tu peux convertir des zombies",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Negotiator",
                     [TranslationKeyDesc] = "You're immune to friendly fire and you can convert zombie into your team, isn't that nice?",
@@ -43,7 +43,7 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
         public override float SpawnChance { get; set; } = 100;
 
 
-        public override List<string> Inventory { get; set; } = new()
+        public override List<string> Inventory { get; set; } = new List<string>()
         {
             "KeycardChaosInsurgency",
             "GunAK",
@@ -53,7 +53,7 @@ namespace KE.CustomRoles.CR.ChaosInsurgency
             "Radio"
         };
 
-        public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new()
+        public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new Dictionary<AmmoType, ushort>()
         {
             { AmmoType.Ammo12Gauge, 7 }, { AmmoType.Nato762, 90 }
         };

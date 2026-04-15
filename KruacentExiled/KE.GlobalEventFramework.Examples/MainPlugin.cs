@@ -40,7 +40,7 @@ namespace KE.GlobalEventFramework.Examples
 
             //Kannassie.LoadVoiceLine();
             Log.Debug("patching");
-            Harmony = new(Name);
+            Harmony = new Harmony(Name);
             //Harmony.PatchAll();
         }
 

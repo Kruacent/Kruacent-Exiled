@@ -13,19 +13,19 @@ namespace KE.CustomRoles.CR.MTF.Terroriste
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Terrorist",
                     [TranslationKeyDesc] = "Kaboom!",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Terroriste",
                     [TranslationKeyDesc] = "Ne fait pas exploser la facilité \ntu commences avec des grenades",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Terroriste",
                     [TranslationKeyDesc] = "Ne fait pas exploser la facilité \ntu commences avec des grenades",
@@ -36,7 +36,7 @@ namespace KE.CustomRoles.CR.MTF.Terroriste
         public override RoleTypeId Role { get; set; } = RoleTypeId.NtfSergeant;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
-        public Color32 Color => new(105, 52, 22, 0);
+        public Color32 Color => new Color32(105, 52, 22, 0);
 
         public override float SpawnChance { get; set; } = 100;
         public override List<string> Inventory { get; set; } = new List<string>()
@@ -55,7 +55,7 @@ namespace KE.CustomRoles.CR.MTF.Terroriste
             { AmmoType.Nato556, 100}
         };
 
-        public override HashSet<string> Abilities { get; } = new()
+        public override HashSet<string> Abilities { get; } = new HashSet<string>()
         {
             "Explode"
         };

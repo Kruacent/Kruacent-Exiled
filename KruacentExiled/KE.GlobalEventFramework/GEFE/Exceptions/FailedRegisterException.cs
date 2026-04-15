@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace KE.GlobalEventFramework.GEFE.Exceptions
 {
-    public class FailedRegisterException(string message) : Exception(message)
+    public class FailedRegisterException : Exception
     {
 
+        public FailedRegisterException(string message) : base(message)
+        {
+
+        }
     }
 }

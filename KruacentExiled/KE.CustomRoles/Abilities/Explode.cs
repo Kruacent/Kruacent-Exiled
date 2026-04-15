@@ -22,14 +22,14 @@ namespace KE.CustomRoles.Abilities
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string> ()
                 {
                     [TranslationKeyName] = "Explode",
                     [TranslationKeyDesc] = "You got an explosive belt",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Explosion",
                     [TranslationKeyDesc] = "Tu as une ceinture d'explosif autour de toi",
@@ -42,7 +42,7 @@ namespace KE.CustomRoles.Abilities
 
         public Utils.API.GifAnimator.TextImage IconName => MainPlugin.Instance.icons["Explode"];
 
-        private HashSet<ushort> GrenadesSerials = new();
+        private HashSet<ushort> GrenadesSerials = new HashSet<ushort>();
         protected override void SubscribeEvents()
         {
             GrenadesSerials = HashSetPool<ushort>.Pool.Get();

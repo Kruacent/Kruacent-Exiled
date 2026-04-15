@@ -14,7 +14,7 @@ namespace KE.Map
     {
         public string Command => "showposition";
 
-        public string[] Aliases => ["showpos"];
+        public string[] Aliases => new string[] { "showpos" };
 
         public string Description => "show pos";
 

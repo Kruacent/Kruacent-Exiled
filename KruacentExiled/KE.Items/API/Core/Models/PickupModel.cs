@@ -29,7 +29,7 @@ namespace KE.Items.API.Core.Models
 
         public void SubscribeEvents()
         {
-            PickupToParent = new();
+            PickupToParent = new Dictionary<Pickup, Primitive>();
             
             ItemPickupBase.OnPickupAdded += OnPickupAdded;
             ItemPickupBase.OnPickupDestroyed += OnPickupDestroyed;

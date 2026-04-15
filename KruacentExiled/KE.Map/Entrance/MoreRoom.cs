@@ -12,7 +12,7 @@ namespace KE.Map.Entrance
 {
     public abstract class MoreRoom
     {
-        private static HashSet<MoreRoom> all = new();
+        private static HashSet<MoreRoom> all = new HashSet<MoreRoom>();
         public MoreRoom()
         {
             all.Add(this);
@@ -24,7 +24,7 @@ namespace KE.Map.Entrance
 
         public abstract int Limit { get; }
         private int curr = 0;
-        private static HashSet<Room> usedRooms = new();
+        private static HashSet<Room> usedRooms = new HashSet<Room>();
 
         public static void CreateAll()
         {

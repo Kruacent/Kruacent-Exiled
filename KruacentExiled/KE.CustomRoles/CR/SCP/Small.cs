@@ -12,19 +12,19 @@ namespace KE.CustomRoles.CR.SCP
         public override SideEnum Side { get; set; } = SideEnum.SCP;
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Small",
                     [TranslationKeyDesc] = "u smoll",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Petit",
                     [TranslationKeyDesc] = "t poti",
                 },
-                ["legacy"] = new()
+                ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Small",
                     [TranslationKeyDesc] = "u smoll",

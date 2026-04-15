@@ -52,15 +52,15 @@ namespace KE.Map
         public override void OnEnabled()
         {
             Instance = this;
-            handler = new();
-            harmony = new(Prefix);
+            handler = new Handler();
+            harmony = new Harmony(Prefix);
 
             config = KruacentExiled.MainPlugin.Instance.Config.MapConfig;
 
 
-            cREventHandler = new();
+            //cREventHandler = new CREventHandler();
 
-            cREventHandler.SubscribeEvents();
+            //cREventHandler.SubscribeEvents();
             handler.SubscribeEvents();
             KE.Utils.API.Sounds.SoundPlayer.Instance.TryLoad();
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
@@ -207,7 +207,7 @@ namespace KE.Map
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
 
-            cREventHandler.UnsubscribeEvents();
+            cREventHandler?.UnsubscribeEvents();
             cREventHandler = null;
 
 
@@ -224,11 +224,11 @@ namespace KE.Map
         {
 
             Door lcz173 = Door.Get(Exiled.API.Enums.DoorType.Scp173Gate);
-            HashSet<DroppableItem> normal = new()
+            HashSet<DroppableItem> normal = new HashSet<DroppableItem>()
             {
-                new(ItemType.KeycardO5,1,2),
-                new(ItemType.Jailbird,1,2),
-                new(ItemType.SCP268,1,1),
+                new DroppableItem(ItemType.KeycardO5,1,2),
+                new DroppableItem(ItemType.Jailbird,1,2),
+                new DroppableItem(ItemType.SCP268,1,1),
                 ItemType.SCP500,
                 ItemType.KeycardMTFCaptain,
                 ItemType.GunCOM15,
@@ -258,7 +258,7 @@ namespace KE.Map
             };
 
 
-            var g = new GamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, new(normal));
+            var g = new GamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, new LootTable(normal));
 
             //var g = new OldGamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, Vector3.one*10, new LootTable(normal));
 

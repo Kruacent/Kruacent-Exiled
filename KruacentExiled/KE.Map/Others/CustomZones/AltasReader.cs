@@ -18,7 +18,7 @@ namespace KE.Map.Others.CustomZones
     {
 
 
-        public static readonly Dictionary<Color32, RoomShape> ColortoRoom = new()
+        public static readonly Dictionary<Color32, RoomShape> ColortoRoom = new Dictionary<Color32, RoomShape>()
         {
             { new Color32(0,255,0,255), RoomShape.Endroom },
             { new Color32(255,0,0,255), RoomShape.TShape },
@@ -55,11 +55,11 @@ namespace KE.Map.Others.CustomZones
                 return ;
             }
 
-            HashSet<Layout> layouts = new();
+            HashSet<Layout> layouts = new HashSet<Layout>();
 
             IEnumerable<string> files = Directory.GetFiles(Path, "*.png");
 
-            Dictionary<Vector2Int, RoomShapeRotation> coordtoroom = new();
+            Dictionary<Vector2Int, RoomShapeRotation> coordtoroom = new Dictionary<Vector2Int, RoomShapeRotation>();
 
             foreach (string file in files)
             {
@@ -87,12 +87,12 @@ namespace KE.Map.Others.CustomZones
                         Color pixelleft = bmp.GetPixel(x-1, y);
                         Color pixelright = bmp.GetPixel(x+1, y);
 
-                        Dictionary<Vector2Int,Color> colors = new()
+                        Dictionary<Vector2Int,Color> colors = new Dictionary<Vector2Int, Color>()
                         {
-                            { new(0,1),pixelup },
-                            { new(0,-1),pixeldown },
-                            { new(-1,0),pixelleft },
-                            { new(1,0),pixelright }
+                            { new Vector2Int(0,1),pixelup },
+                            { new Vector2Int(0,-1),pixeldown },
+                            { new Vector2Int(-1,0),pixelleft },
+                            { new Vector2Int(1,0),pixelright }
                         };
 
 
@@ -120,7 +120,7 @@ namespace KE.Map.Others.CustomZones
                         {
                             shape = RoomShape.TShape;
                             Vector2Int coordempty = empty[0];
-                            rotation = new(0, coordempty.x * 90, 0);
+                            rotation = new Vector3(0, coordempty.x * 90, 0);
 
                             if (coordempty.x == 0 && coordempty.y == -1)
                             {
@@ -152,12 +152,12 @@ namespace KE.Map.Others.CustomZones
                             {
                                 shape = RoomShape.Curve;
 
-                                Dictionary<Vector2Int, Vector3> coordToRotation = new()
+                                Dictionary<Vector2Int, Vector3> coordToRotation = new Dictionary<Vector2Int, Vector3>()
                                 {
-                                    {new (1,1),Vector3.zero },
-                                    {new (-1,1), new Vector3(0,90,0) },
-                                    {new (-1,-1), new Vector3(0,180,0) },
-                                    {new (1,-1), new Vector3(0,-90,0) }
+                                    {new  Vector2Int(1,1),Vector3.zero },
+                                    {new Vector2Int(-1,1), new Vector3(0,90,0) },
+                                    {new Vector2Int(-1,-1), new Vector3(0,180,0) },
+                                    {new Vector2Int(1,-1), new Vector3(0,-90,0) }
                                 };
 
 
@@ -230,12 +230,12 @@ namespace KE.Map.Others.CustomZones
                             continue;
                         }
                         Log.Debug($"adding {shape} at {coord} ({rotation.y})");
-                        coordtoroom.Add(coord, new (shape,rotation));
+                        coordtoroom.Add(coord, new RoomShapeRotation(shape,rotation));
 
                     }
                 }
                 
-                Layout layout = new(coordtoroom, noExFile);
+                Layout layout = new Layout(coordtoroom, noExFile);
                 coordtoroom.Clear();
             }
         }

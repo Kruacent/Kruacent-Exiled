@@ -133,7 +133,7 @@ namespace KE.Items.API.Features
 
         public override Pickup Spawn(Vector3 position, Player previousOwner = null)
         {
-            if (Item.Create(Type) is not Firearm firearm)
+            if (!(Item.Create(Type) is Firearm firearm))
             {
                 Log.Debug("Spawn: Item is not Firearm.");
                 return null;

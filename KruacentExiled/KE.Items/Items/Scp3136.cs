@@ -17,14 +17,14 @@ namespace KE.Items.Items
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            return new()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                ["en"] = new()
+                ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "SCP-3136",
                     [TranslationKeyDesc] = "A map of the facility, you could draw your friends next to you",
                 },
-                ["fr"] = new()
+                ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "SCP-3136",
                     [TranslationKeyDesc] = "Une carte de la facilité, tu pourrais dessiner tes amis proche de toi",

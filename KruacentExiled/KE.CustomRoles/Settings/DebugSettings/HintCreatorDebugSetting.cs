@@ -26,7 +26,7 @@ namespace KE.CustomRoles.Settings.DebugSettings
         private int _idHeaderTestHint = 160;
         protected override List<SettingBase> CreateSettings()
         {
-            string[] options = ["left", "center", "right"];
+            string[] options = new string[] { "left", "center", "right" };
             created = true;
             return new List<SettingBase>()
             {

@@ -18,10 +18,10 @@ namespace KE.GlobalEventFramework.Examples.GE
         ///<inheritdoc/>
         public override string Description { get; } = "Les portes sont piegés attention!";
 
-        public override string[] AltDescription => 
-        [
+        public override string[] AltDescription => new string[]
+        {
             "La guerrilla est présente"
-        ];
+        };
         ///<inheritdoc/>
         public override int WeightedChance { get; set; } = 2;
 

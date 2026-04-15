@@ -42,7 +42,7 @@ namespace KE.Items.Items.ShieldBelt
                 Break();
             }
 
-            if (primitive is not null)
+            if (!(primitive is null))
             {
                 float percent = Mathf.Clamp01(currentCharge / MaxCharge);
                 primitive.Scale = Mathf.Lerp(MinSize, MaxSize, percent)*Vector3.one;

@@ -11,7 +11,7 @@ namespace KE.Map.Others.CustomElevators
     public abstract class KEElevator
     {
 
-        public static HashSet<KEElevator> elevators = new();
+        public static HashSet<KEElevator> elevators = new HashSet<KEElevator>();
 
 
 

@@ -15,7 +15,7 @@ namespace KE.CustomRoles.Commands.KECR.Lists
         }
         public override string Command => "list";
 
-        public override string[] Aliases => ["l"];
+        public override string[] Aliases => new string[] { "l" };
 
         public override string Description => "";
 
