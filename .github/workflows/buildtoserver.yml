@@ -7,7 +7,9 @@ on:
 
 env:
   OUTPUT_FOLDER_PATH: ${{ github.workspace }}/output
-  
+  EXILED_REFERENCES: ${{ github.workspace }}/references
+  EXILED_DEV_REFERENCES: ${{ github.workspace }}/devreferences
+  SERVER_LOCATION: /home/grosserv/SCPSL/
 jobs:
   build:
     runs-on: self-hosted 
@@ -16,11 +18,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Restore NuGet packages
+        run: |
+          SLN=$(find . -name "*.sln" | head -n 1)
+          nuget restore "$SLN"
+
+
+      - name : Fill Exiled References
+        run: |
+          find ${{env.SERVER_LOCATION}}/SCPSL_Data/Managed/ -name "*.dll" | xars cp -t ${{env.EXILED_REFERENCES}}
+
       - name: Build solution
         run: |
-          export EXILED_REFERENCES=${{ github.workspace }}/references
-          export EXILED_DEV_REFERENCES=${{ github.workspace }}/devreferences
-          SLN=$(find . -name "*.sln" | head -n 1)
+          export EXILED_REFERENCES=${{ env.EXILED_REFERENCES }}
+          export EXILED_DEV_REFERENCES=${{ env.EXILED_DEV_REFERENCES }}
+          
           msbuild "$SLN" /p:Configuration=Release
 
       - name: Copy DLLs to custom folder
