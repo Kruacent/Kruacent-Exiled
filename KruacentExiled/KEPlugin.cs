@@ -26,7 +26,6 @@ namespace KruacentExiled
 
                 Log.Send(Name + " has been enabled!", Discord.LogLevel.Info, ConsoleColor.DarkYellow);
             }
-
             
         }
         public abstract void OnEnabled();
