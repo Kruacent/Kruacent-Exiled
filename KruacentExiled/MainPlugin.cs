@@ -30,7 +30,6 @@ namespace KruacentExiled
                 new KE.Items.MainPlugin(),
                 new KE.Misc.MainPlugin(),
                 new KE.Map.MainPlugin(),
-
             ];
 
 
