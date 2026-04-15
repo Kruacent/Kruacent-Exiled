@@ -34,7 +34,7 @@ jobs:
         run: |
           export EXILED_REFERENCES=${{ env.EXILED_REFERENCES }}
           export EXILED_DEV_REFERENCES=${{ env.EXILED_DEV_REFERENCES }}
-          
+          SLN=$(find . -name "*.sln" | head -n 1)
           msbuild "$SLN" /p:Configuration=Release
 
       - name: Copy DLLs to custom folder
