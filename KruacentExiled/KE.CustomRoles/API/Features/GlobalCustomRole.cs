@@ -8,6 +8,7 @@ using Exiled.Events.EventArgs.Player;
 using InventorySystem.Configs;
 using KE.CustomRoles.API.Interfaces;
 using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Features;
 using LiteNetLib4Mirror.Open.Nat;
 using MEC;
 using PlayerRoles;
@@ -92,6 +93,11 @@ namespace KE.CustomRoles.API.Features
             if (MainPlugin.SettingHandler.GetDescriptionsSettings(player))
             {
                 sb.AppendLine(GetTranslation(player, TranslationKeyDesc));
+                if (this is IHealable heal)
+                {
+                    KELog.Debug("healbel");
+                    sb.AppendLine(GetTranslation(player, TranslationHealable));
+                }
             }
 
 

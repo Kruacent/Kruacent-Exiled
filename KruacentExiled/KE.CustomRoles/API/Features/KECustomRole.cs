@@ -173,8 +173,8 @@ namespace KE.CustomRoles.API.Features
 
         private bool activated = false;
 
-        private const string TranslationGUI = "CustomRoleGUI";
-        private const string TranslationHealable = "CustomRoleHealable";
+        public const string TranslationGUI = "CustomRoleGUI";
+        public const string TranslationHealable = "CustomRoleHealable";
         private static Dictionary<string, Dictionary<string, string>> SetStaticTranslation()
         {
             return new Dictionary<string, Dictionary<string, string>>()
