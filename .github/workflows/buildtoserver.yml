@@ -5,6 +5,7 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+  workflow_dispatch:
 
 env:
   OUTPUT_FOLDER_PATH: /home/grosserv/.config/EXILED/Plugins/
@@ -25,13 +26,6 @@ jobs:
           SLN=$(find . -name "*.sln" | head -n 1)
           nuget restore "$SLN"
 
-
-      - name : Fill Exiled References
-        run: |
-          mkdir ${{ env.EXILED_REFERENCES }}
-          mkdir ${{ env.EXILED_DEV_REFERENCES }}
-          find ${{env.SERVER_LOCATION}}/SCPSL_Data/Managed/ -name "*.dll" | xargs cp -t ${{env.EXILED_REFERENCES}}
-          find ${{env.OTHER_DEPENDENCIES}} -name "*.dll" | xargs cp -t ${{env.EXILED_REFERENCES}}
 
       - name : Fill Exiled References
         run: |
