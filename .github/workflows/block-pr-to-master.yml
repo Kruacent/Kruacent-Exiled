@@ -27,7 +27,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: If you wish to contribute, please target the `dev` branch.'
+              body: "If you wish to contribute, please target the `dev` branch."
             })
             github.rest.pulls.update({
               pull_number: context.issue.number,
