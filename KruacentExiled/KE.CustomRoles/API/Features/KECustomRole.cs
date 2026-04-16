@@ -578,10 +578,39 @@ namespace KE.CustomRoles.API.Features
 
         public override void RemoveRole(Player player)
         {
-            base.RemoveRole(player);
+            if (!TrackedPlayers.Contains(player))
+            {
+                return;
+            }
+
+            Log.Debug(Name + ": Removing role from " + player.Nickname);
+            TrackedPlayers.Remove(player);
+            player.CustomInfo = string.Empty;
+            player.InfoArea |= PlayerInfoArea.Nickname | PlayerInfoArea.Role;
+            ResetHeight(player);
+            if (CustomAbilities != null)
+            {
+                foreach (CustomAbility customAbility in CustomAbilities)
+                {
+                    customAbility.RemoveAbility(player);
+                }
+            }
+
+            RoleRemoved(player);
+            player.UniqueRole = string.Empty;
+            player.TryRemoveCustomeRoleFriendlyFire(Name);
             if (Abilities != null)
             {
                 KEAbilities.TryRemoveFromPlayer(player);
+            }
+        }
+
+
+        protected virtual void ResetHeight(Player player)
+        {
+            if(Scale != Vector3.one)
+            {
+                player.Scale = Vector3.one;
             }
         }
 
