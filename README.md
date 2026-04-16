@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>Kruaçent-Exiled</h1>
+  <h1>Kruaçent-Exilede</h1>
   <p><b>Gameplay overhaul plugins for SCP: Secret Laboratory.</b></p>
   <img src="https://img.shields.io/github/v/release/Kruacent/Kruacent-Exiled?style=flat-square&color=00FF41" alt="Release">
   <img src="https://img.shields.io/github/contributors/Kruacent/Kruacent-Exiled?style=flat-square&color=00FF41" alt="Contributors">
