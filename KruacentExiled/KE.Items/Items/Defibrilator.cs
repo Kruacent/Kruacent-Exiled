@@ -3,10 +3,13 @@ using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
+using Exiled.CustomRoles.Commands;
 using Exiled.Events.EventArgs.Player;
 using KE.Items.API.Features;
 using KE.Items.API.Interface;
 using KE.Utils.API.Displays.Feeds;
+using KE.Utils.Extensions;
+using KruacentExiled.KE.Items.API.Interface;
 using MEC;
 using PlayerRoles;
 using PlayerRoles.Ragdolls;
@@ -15,7 +18,7 @@ using System.Linq;
 using UnityEngine;
 using YamlDotNet.Core.Tokens;
 
-public class Defibrillator : KECustomItem, ILumosItem
+public class Defibrillator : KECustomItem, ILumosItem, IRevivingCustomItem
 {
 
     public const string TranslationFailed = "DefibrillatorFailed";
@@ -222,4 +225,8 @@ public class Defibrillator : KECustomItem, ILumosItem
             Log.Error($"[Defib] ÉCHEC : Le joueur {patient.Nickname} n'a pas spawn.");
         }
     }
+
+
+
+
 }

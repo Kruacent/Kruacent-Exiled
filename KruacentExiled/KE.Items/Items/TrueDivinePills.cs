@@ -6,6 +6,8 @@ using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using KE.Items.API.Features;
 using KE.Items.API.Interface;
+using KE.Utils.Extensions;
+using KruacentExiled.KE.Items.API.Interface;
 using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +15,7 @@ using UnityEngine;
 using PlayerHandle = Exiled.Events.Handlers.Player;
 
 /// <inheritdoc />
-public class TrueDivinePills : KECustomItem, ILumosItem
+public class TrueDivinePills : KECustomItem, ILumosItem, IRevivingCustomItem
 {
     protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
     {
@@ -31,6 +33,8 @@ public class TrueDivinePills : KECustomItem, ILumosItem
             },
         };
     }
+
+    public bool KeepClass => false;
 
     public override ItemType ItemType => ItemType.SCP500;
 
@@ -71,7 +75,6 @@ public class TrueDivinePills : KECustomItem, ILumosItem
 
         if (ev.IsThrown)
         {
-            ev.IsAllowed = true;
             return;
         }
         Player player = ev.Player;
@@ -82,20 +85,22 @@ public class TrueDivinePills : KECustomItem, ILumosItem
         else
             KECustomItem.ItemEffectHint(player, "Players won't spawn to you");
         ev.IsAllowed = false;
-        
-        
-
     }
+
+    
 
     private void OnUsingItem(UsingItemEventArgs ev)
     {
         if (!Check(ev.Item))
             return;
         Player player = ev.Player;
-        Log.Debug(Player.List.Count);
-        Log.Debug(Player.List.Where(x => x.Role == RoleTypeId.Spectator).Count());
 
-        if (Player.List.Where(x => x.Role == RoleTypeId.Spectator).Count() == 0)
+
+        List<Player> spectators = Player.Enumerable.Where(p => p.IsDead).ToList();
+
+
+
+        if (spectators.Count == 0)
         {
             KECustomItem.ItemEffectHint(player, "No one to respawn");
             ev.IsAllowed = false;
@@ -103,23 +108,31 @@ public class TrueDivinePills : KECustomItem, ILumosItem
         }
 
 
-        Player.List.Where(x => x.Role == RoleTypeId.Spectator).ToList().ForEach(x =>
+        foreach (Player spectator in spectators)
         {
-            switch (player.Role.Side)
+            bool revived = Revive(player, spectator);
+            if (revived && tp)
             {
-                case Side.ChaosInsurgency:
-                    x.Role.Set(RoleTypeId.ChaosRifleman);
-                    break;
-                case Side.Mtf:
-                    x.Role.Set(RoleTypeId.NtfPrivate);
-                    break;
+                spectator.Teleport(player);
             }
-            if (tp)
-            {
-                x.Teleport(player);
-            }
-        });
+
+
+        }
         
     }
 
+    public bool Revive(Player reviver, Player deadPlayer)
+    {
+        switch (reviver.Role.Side)
+        {
+            case Side.ChaosInsurgency:
+                deadPlayer.ChangeRole(RoleTypeId.ChaosRifleman, SpawnReason.ForceClass, RoleSpawnFlags.AssignInventory);
+                return true;
+            case Side.Mtf:
+                deadPlayer.ChangeRole(RoleTypeId.NtfPrivate, SpawnReason.ForceClass, RoleSpawnFlags.AssignInventory);
+                return true;
+        }
+        return false;
+
+    }
 }

@@ -17,6 +17,7 @@ using KE.Items.API.Features;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
 using KE.Utils.API.Features.SCPs;
+using KruacentExiled.KE.Items.API.Interface;
 using MEC;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl.Thirdperson;
@@ -250,7 +251,7 @@ namespace KE.CustomRoles.CR.CustomSCPs
 
                 KECustomItem kECustomItem = item as KECustomItem;
                 
-                if (kECustomItem.Name == "TrueDivinePills" || kECustomItem.Name == "Divine Pills")
+                if (kECustomItem is IRevivingCustomItem)
                 {
                     ShowEffectHint(player, GetTranslation(player, "SCP035CantPickup"));
                     ev.IsAllowed = false;

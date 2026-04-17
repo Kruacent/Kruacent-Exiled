@@ -10,8 +10,9 @@ using KE.Items.API.Core.Upgrade;
 using KE.Items.API.Interface;
 using KE.Items.Items.ItemEffects;
 using KE.Items.API.Features;
+using KruacentExiled.KE.Items.API.Interface;
 
-public class DivinePills : KECustomItem, ILumosItem, ISwitchableEffect, IUpgradableCustomItem
+public class DivinePills : KECustomItem, ILumosItem, ISwitchableEffect, IUpgradableCustomItem, IRevivingCustomItem
 {
     protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
     {
