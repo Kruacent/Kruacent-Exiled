@@ -120,7 +120,6 @@ namespace KE.GlobalEventFramework.Examples.GE
                 grenade.SpawnActive(ev.Player.Position, ev.Player);
             });
 
-            ev.Player.EnableEffect<Invisible>(10);
         }
 
 
