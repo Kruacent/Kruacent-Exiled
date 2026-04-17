@@ -1,0 +1,26 @@
+﻿using Exiled.CustomItems.API.Features;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.ExceptionServices;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+using YamlDotNet.Core.Tokens;
+
+namespace KruacentExiled.CustomItems.API.Core.Upgrade
+{
+    public class UpgradeProperties
+    {
+        public float Chance { get; }
+
+        public string UpgradedItem { get; }
+
+        public UpgradeProperties(float chance, string newItem)
+        {
+            UpgradedItem = newItem;
+            Chance = Mathf.Clamp(chance, 0,100);
+        }
+
+    }
+}

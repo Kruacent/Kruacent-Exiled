@@ -1,0 +1,39 @@
+﻿using Exiled.API.Features;
+using System.Text;
+
+namespace KruacentExiled.CustomRoles.API.Features.Abilities
+{
+    public abstract class KEAbilityCost : KEAbilities
+    {
+
+        public abstract int Cost { get; }
+        public virtual string CostName { get; } = string.Empty;
+        protected sealed override bool AbilityUsed(Player player)
+        {
+            bool result = CanLaunchAbility(player);
+            if (result)
+            {
+                result = LaunchedAbility(player);
+            }
+            return result;
+        }
+
+        protected virtual bool LaunchedAbility(Player player)
+        {
+            return true;
+        }
+
+        public abstract bool CanLaunchAbility(Player player);
+
+
+        protected override void AbilityGui(StringBuilder sb,Player player)
+        {
+            base.AbilityGui(sb,player);
+            sb.Append("(");
+            sb.Append(Cost);
+            sb.Append(CostName);
+            sb.Append(")");
+            sb.Append(" ");
+        }
+    }
+}
