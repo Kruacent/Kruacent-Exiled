@@ -1,0 +1,195 @@
+﻿using Exiled.API.Features;
+using Exiled.API.Features.Pools;
+using Exiled.Events.EventArgs.Player;
+using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Displays.DisplayMeow.Placements;
+using MEC;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace KruacentExiled.Misc.Features.VoteStart
+{
+    internal class VoteStart : MiscFeature
+    {
+        public const string CancelVoteTranslation = "CancelVote";
+        //public static Dictionary<string, Dictionary<string, string>> LangToKeyToTranslation { get; } = new()
+        //{
+        //    ["en"] =
+        //    {
+        //        [CancelVoteTranslation] = "<size=14>.rv in the console to cancel your vote</size>."
+        //    },
+        //    ["fr"] =
+        //    {
+        //        [CancelVoteTranslation] = "<size=14>.rv dans la console client pour annuler le vote</size>."
+        //    }
+        //};
+
+        public static HintPosition HintPosition = new VotePosition();
+
+        private List<Player> Voted = new List<Player>();
+        private bool voteCasted = false;
+        public override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
+            Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
+            Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
+            Exiled.Events.Handlers.Player.Left += OnLeft;
+            Exiled.Events.Handlers.Player.Verified += OnVerified;
+            base.SubscribeEvents();
+        }
+
+
+        public override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
+            Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
+            Exiled.Events.Handlers.Player.Verified -= OnVerified;
+            Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
+            Exiled.Events.Handlers.Player.Left -= OnLeft;
+
+            base.UnsubscribeEvents();
+        }
+
+
+        private void OnLeft(LeftEventArgs ev)
+        {
+            Player player = ev.Player;
+            if (DidVote(player))
+            {
+                CancelVote(player);
+            }
+        }
+
+
+        public bool DidVote(Player player)
+        {
+            return Voted.Contains(player);
+        }
+
+        public void CancelVote(Player player)
+        {
+            if (!Voted.Contains(player))
+            {
+                throw new ArgumentOutOfRangeException($"Player ({player}) didn't vote");
+            }
+
+
+            Voted.Remove(player);
+            Round.IsLobbyLocked = true;
+            voteCasted = false;
+        }
+
+
+
+        private void OnVoiceChatting(VoiceChattingEventArgs ev)
+        {
+            if (voteCasted) return;
+            if (!Round.IsLobby) return;
+            if (ev.Player is null)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(ev.Player.AuthenticationToken))
+            {
+                return;
+            }
+
+            if (DidVote(ev.Player))
+            {
+                return;
+            }
+
+            Voted.Add(ev.Player);
+            if (Voted.Count >= MainPlugin.Configs.MinPlayerVote)
+            {
+                Log.Info("starting the round");
+                Round.IsLobbyLocked = false;
+                voteCasted = true;
+            }
+        }
+        private void OnWaitingForPlayers()
+        {
+            Init();
+            Round.IsLobbyLocked = true;
+        }
+
+        private void Init()
+        {
+            Voted.Clear();
+            voteCasted = false;
+        }
+
+        private void OnVerified(VerifiedEventArgs ev)
+        {
+            Player player = ev.Player;
+
+            if(ev.Player == null)
+            {
+                return;
+            }
+
+            Timing.CallDelayed(1f, () =>
+            {
+                if (Round.IsLobby)
+                {
+                    DisplayHandler.Instance.CreateAuto(player, (args) => GetPlayers(player), HintPosition.HintPlacement);
+                }
+            });
+            
+        }
+
+        private string GetPlayers(Player player)
+        {
+            if (!Round.IsLobby) return string.Empty;
+
+            StringBuilder sb = StringBuilderPool.Pool.Get();
+
+            sb.Append("Votes (");
+
+            sb.Append(Voted.Count);
+            sb.Append("/");
+            sb.Append(MainPlugin.Configs.MinPlayerVote);
+
+            sb.AppendLine(") : ");
+            foreach (Player other in Voted)
+            {
+                bool flag1 = other == player;
+
+
+                if (flag1)
+                {
+                    sb.Append("<b>");
+                }
+                sb.Append(other.Nickname);
+                if (flag1)
+                {
+                    sb.Append("</b>");
+                }
+                sb.Append(" ");
+            }
+            if (Voted.Contains(player))
+            {
+                sb.AppendLine();
+
+                sb.Append("<size=14>.rv dans la console client pour annuler le vote</size>.");
+                //sb.Append(MainPlugin.GetTranslation(player,CancelVoteTranslation));
+            }
+
+
+            return StringBuilderPool.Pool.ToStringReturn(sb);
+
+        }
+        private void OnRoundStarted()
+        {
+            foreach(Player player in Player.List)
+            {
+                DisplayHandler.Instance.RemoveHint(player, HintPosition.HintPlacement);
+            }
+
+        }
+
+
+    }
+}

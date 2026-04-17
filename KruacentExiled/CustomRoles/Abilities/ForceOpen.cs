@@ -1,0 +1,121 @@
+﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
+using Exiled.API.Features;
+using Exiled.API.Features.Doors;
+using Exiled.Events.EventArgs.Player;
+using KE.Utils.API.GifAnimator;
+using KruacentExiled.CustomRoles.API.Features.Abilities;
+using KruacentExiled.CustomRoles.API.Interfaces;
+using System;
+using System.Collections.Generic;
+
+namespace KruacentExiled.CustomRoles.Abilities
+{
+    public class ForceOpen : KEAbilityLimited, ICustomIcon
+    {
+        public override string Name { get;  } = "ForceOpen";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new Dictionary<string, Dictionary<string, string>>()
+            {
+                ["en"] = new Dictionary<string, string>()
+                {
+                    [TranslationKeyName] = "Force open",
+                    [TranslationKeyDesc] = "Force open a door",
+                    ["ForceOpenFail"] = "You failed opening the door and lost %HP% HP!",
+                },
+                ["fr"] = new Dictionary<string, string>()
+                {
+                    [TranslationKeyName] = "Forcer une porte",
+                    [TranslationKeyDesc] = "Force une porte (grosse description)",
+                    ["ForceOpenFail"] = "Tu as raté d'ouvrir la porte et a perdu %HP% HP!",
+                }
+            };
+        }
+        public TextImage IconName => MainPlugin.Instance.icons["ForceOpen"];
+        public override float Cooldown { get;  } = 30;
+        public override int Uses { get; } = 5;
+
+        private Dictionary<Player, DateTime> abilityActivated = new Dictionary<Player, DateTime>();
+        public static readonly TimeSpan MaxTime = new TimeSpan(0, 0, 30);
+
+        protected override bool LaunchedAbility(Player player)
+        {
+
+            abilityActivated[player] = DateTime.Now;
+            return base.LaunchedAbility(player);
+        }
+
+        private void InteractingDoor(InteractingDoorEventArgs ev)
+        {
+            Player player = ev.Player; 
+            if (ev.IsAllowed) return;
+            if (!abilityActivated.ContainsKey(player)) return;
+            if (DateTime.Now > abilityActivated[player] + MaxTime) return;
+
+            if (ev.Door.IsOpen) return;
+            if (ev.Door.DoorLockType >= DoorLockType.Lockdown079) return;
+
+
+            int successRate;
+            int damage;
+
+            if (ev.Door is Gate)
+            {
+                successRate = 100;
+                damage = 20;
+            }
+            else if (ev.Door.Type.IsCheckpoint())
+            {
+                successRate = 50;
+                damage = 10;
+            }
+            else
+            {
+                successRate = 50;
+                damage = 5;
+            }
+
+
+            int proba = UnityEngine.Random.Range(0, 101);
+
+            if (proba <= successRate)
+            {
+                if(ev.Door is Gate gate)
+                {
+                    gate.TryPry(player);
+                }
+                else
+                {
+                    ev.IsAllowed = true;
+                }
+            }
+            else
+            {
+
+                string text = GetTranslation(player, "ForceOpenFail").Replace("%HP%",damage.ToString());
+                ShowEffectHint(player, text,0f);
+                player.Hurt(damage, "Door too stronk");
+            }
+
+
+            abilityActivated.Remove(player);
+
+
+        }
+
+
+        protected override void SubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.InteractingDoor += InteractingDoor;
+            base.SubscribeEvents();
+        }
+
+        protected override void UnsubscribeEvents()
+        {
+            Exiled.Events.Handlers.Player.InteractingDoor -= InteractingDoor;
+            base.UnsubscribeEvents();
+        }
+
+    }
+}

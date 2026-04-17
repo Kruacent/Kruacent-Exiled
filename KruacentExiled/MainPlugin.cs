@@ -1,11 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Interfaces;
-using KE.CustomRoles.API.Features;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KruacentExiled
 {
@@ -24,12 +19,12 @@ namespace KruacentExiled
 
             plugins = new KEPlugin[]
             {
-                new KE.CustomRoles.MainPlugin(),
-                new KE.GlobalEventFramework.MainPlugin(),
-                new KE.GlobalEventFramework.Examples.MainPlugin(),
-                new KE.Items.MainPlugin(),
-                new KE.Misc.MainPlugin(),
-                new KE.Map.MainPlugin(),
+                new CustomRoles.MainPlugin(),
+                new GlobalEventFramework.MainPlugin(),
+                new GlobalEventFramework.Examples.MainPlugin(),
+                new CustomItems.MainPlugin(),
+                new Misc.MainPlugin(),
+                new Map.MainPlugin(),
             };
 
             for (int i = 0; i < plugins.Length; i++)
@@ -77,12 +72,12 @@ namespace KruacentExiled
         public bool Debug { get; set; } = false;
 
 
-        public KE.CustomRoles.Config CustomRoleConfig { get; set; } = new KE.CustomRoles.Config();
-        public KE.Items.Config CustomItemConfig { get; set; } = new KE.Items.Config();
-        public KE.Map.Config MapConfig { get; set; } = new KE.Map.Config();
-        public KE.Misc.Config MiscConfig { get; set; } = new KE.Misc.Config();
-        public KE.GlobalEventFramework.Config GEFConfig { get; set; } = new KE.GlobalEventFramework.Config();
-        public KE.GlobalEventFramework.Examples.Config GEFEConfig { get; set; } = new KE.GlobalEventFramework.Examples.Config();
+        public CustomRoles.Config CustomRoleConfig { get; set; } = new CustomRoles.Config();
+        public CustomItems.Config CustomItemConfig { get; set; } = new CustomItems.Config();
+        public Map.Config MapConfig { get; set; } = new Map.Config();
+        public Misc.Config MiscConfig { get; set; } = new Misc.Config();
+        public GlobalEventFramework.Config GEFConfig { get; set; } = new GlobalEventFramework.Config();
+        public GlobalEventFramework.Examples.Config GEFEConfig { get; set; } = new GlobalEventFramework.Examples.Config();
     }
 
 }
