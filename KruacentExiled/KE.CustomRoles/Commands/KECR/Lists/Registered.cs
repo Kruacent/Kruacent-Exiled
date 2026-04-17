@@ -39,7 +39,10 @@ namespace KE.CustomRoles.Commands.KECR.Lists
                     .Append(name[0])
                     .Append(") ")
                     .Append(name[1])
-                    .AppendLine("]");
+                    .Append("]")
+                    .Append(" spawn chance:")
+                    .Append(cr.SpawnChance)
+                    .AppendLine();
             }
 
             response = StringBuilderPool.Pool.ToStringReturn(sb);
