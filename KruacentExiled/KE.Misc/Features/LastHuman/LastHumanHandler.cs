@@ -85,6 +85,8 @@ namespace KE.Misc.Features.LastHuman
 
                 LastTarget = lastTarget;
 
+                bool showFlag = false;
+
                 foreach (Player player in Player.Enumerable)
                 {
                     AbstractHint hint = DisplayHandler.Instance.GetHint(player, position.HintPlacement);
@@ -112,17 +114,18 @@ namespace KE.Misc.Features.LastHuman
                         {
                             DisplayHandler.Instance.AddHint(position.HintPlacement, player, msg, 10);
                             KELog.Debug("show message to " + lastTarget.Nickname);
-                            _nextPossibleHint = DateTime.Now.Add(Cooldown);
+                            showFlag = true;
                         }
 
 
 
                     }
-                    else
-                    {
-                        KELog.Debug("hint still there");
-                    }
                 }
+                if (showFlag)
+                {
+                    _nextPossibleHint = DateTime.Now.Add(Cooldown);
+                }
+
             }
             else
             {
