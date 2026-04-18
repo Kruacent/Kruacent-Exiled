@@ -2,7 +2,7 @@
 using Exiled.API.Features.Core.Generic;
 using Exiled.Events.EventArgs.Warhead;
 using KE.Utils.API.Features;
-using KE.Utils.API.Features.SCPs;
+using KruacentExiled.CustomRoles.CustomSCPTeam;
 using KruacentExiled.Misc.Features;
 using LabApi.Events.Arguments.WarheadEvents;
 using MEC;

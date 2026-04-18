@@ -7,6 +7,7 @@ using Exiled.Events.EventArgs.Player;
 using KE.Utils.Extensions;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
+using KruacentExiled.Extensions;
 using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;

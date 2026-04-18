@@ -3,6 +3,7 @@ using Exiled.Events.EventArgs.Scp914;
 using KE.Utils.API.Features;
 using KE.Utils.API.Interfaces;
 using KE.Utils.Extensions;
+using KruacentExiled.Extensions;
 using MEC;
 using PlayerRoles;
 using Scp914;

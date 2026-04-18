@@ -6,7 +6,7 @@ using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Spawn;
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Player;
-using KE.Utils.API.Features.SCPs;
+using KruacentExiled.CustomRoles.CustomSCPTeam;
 using KruacentExiled.Map;
 using PlayerRoles;
 using System.Collections.Generic;

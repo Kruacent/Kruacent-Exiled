@@ -1,9 +1,9 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
-using KE.Utils.API.Features.SCPs;
 using KE.Utils.API.Interfaces;
 using KE.Utils.Extensions;
+using KruacentExiled.CustomRoles.CustomSCPTeam;
 using KruacentExiled.Map;
 using KruacentExiled.Map.Others.BlackoutNDoor.Events.EventArgs;
 using MapGeneration;

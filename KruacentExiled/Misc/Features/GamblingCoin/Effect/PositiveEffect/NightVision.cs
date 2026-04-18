@@ -1,7 +1,7 @@
 ﻿using Exiled.API.Features;
-using KE.Utils.API.Features.SCPs;
 using EffectType = KruacentExiled.Misc.Features.GamblingCoin.Types.EffectType;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
+using KruacentExiled.CustomRoles.CustomSCPTeam;
 
 internal class NightVision : ICoinEffect
 {
