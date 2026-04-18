@@ -3,7 +3,7 @@ using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Server;
-using KE.Utils.API.Features.SCPs;
+using KruacentExiled.CustomRoles.CustomSCPTeam;
 using KruacentExiled.Map;
 using KruacentExiled.Map.Heavy.GamblingZone.Events.EventArgs;
 using LabApi.Events.Arguments.PlayerEvents;

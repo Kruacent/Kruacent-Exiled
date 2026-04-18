@@ -1,7 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
-using KE.Utils.API.Features.SCPs;
 using KE.Utils.API.Interfaces;
+using KruacentExiled.CustomRoles.CustomSCPTeam;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;

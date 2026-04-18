@@ -1,6 +1,6 @@
 ﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
-using KE.Utils.API.Features.SCPs;
+using KruacentExiled.CustomRoles.CustomSCPTeam;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using PlayerRoles;
 using System.Collections.Generic;

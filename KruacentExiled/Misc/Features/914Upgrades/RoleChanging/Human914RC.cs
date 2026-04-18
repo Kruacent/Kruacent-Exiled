@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using KE.Utils.Extensions;
+using KruacentExiled.Extensions;
 using MEC;
 using PlayerRoles;
 using Scp914;
