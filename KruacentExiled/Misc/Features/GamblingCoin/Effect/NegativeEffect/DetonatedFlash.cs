@@ -7,7 +7,7 @@ internal class DetonatedFlash : ICoinEffect
 {
     public string Name { get; set; } = "DetonatedFlash";
     public string Message { get; set; } = "a gift for your eyes";
-    public int Weight { get; set; } = 50;
+    public int Weight { get; set; } = 30;
     public EffectType Type { get; set; } = EffectType.Negative;
 
     public void Execute(Player player)

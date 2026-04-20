@@ -8,7 +8,7 @@ internal class Vaporize : ICoinEffect
 {
     public string Name { get; set; } = "Vaporize";
     public string Message { get; set; } = "I think eating mosses in your cells is not good for you";
-    public int Weight { get; set; } = 1;
+    public int Weight { get; set; } = 5;
     public EffectType Type { get; set; } = EffectType.Negative;
 
     public static int MaxSeconds = 600;

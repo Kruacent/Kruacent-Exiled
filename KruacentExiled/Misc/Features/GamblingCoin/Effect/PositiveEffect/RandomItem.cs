@@ -9,7 +9,7 @@ internal class RandomItem : ICoinEffect
 {
     public string Name { get; set; } = "RandomItem";
     public string Message { get; set; } = "You got a random item !";
-    public int Weight { get; set; } = 35;
+    public int Weight { get; set; } = 20;
     public EffectType Type { get; set; } = EffectType.Positive;
 
     private HashSet<ItemType> Blacklist = new HashSet<ItemType>()
