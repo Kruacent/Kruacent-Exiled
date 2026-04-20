@@ -68,6 +68,8 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
 
         protected override int SettingId => 10001;
 
+        public override string SCPId => "SCP-457";
+
         protected override void RoleAdded(Player player)
         {
             Log.Debug("adding role 457");

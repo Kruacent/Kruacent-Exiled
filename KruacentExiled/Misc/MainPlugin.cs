@@ -18,6 +18,7 @@ using KruacentExiled.Misc.Features.VoteStart;
 using KruacentExiled.Misc.Features.PostNuke;
 using KruacentExiled.Misc.Handlers;
 using KruacentExiled.Misc.Features.LastHuman;
+using KruacentExiled.Misc.Features.SCPRebalance;
 
 namespace KruacentExiled.Misc
 {
@@ -55,6 +56,7 @@ namespace KruacentExiled.Misc
         public static Config Configs => Instance?.config;
         private Config config;
 
+        private LimitedSCP0492 LimitedSCP0492 { get; set; }
         public override void OnEnabled()
         {
             Instance = this;
@@ -65,6 +67,7 @@ namespace KruacentExiled.Misc
             _914 = new _914();
             AutoElevator = new AutoElevator();
             ClassDDoor = new ClassDDoor();
+            LimitedSCP0492 = new LimitedSCP0492();
             //SurfaceLight = new SurfaceLight(); messes with the nuke light
             ServerHandler = new ServerHandler();
             Spawn = new Spawn();
@@ -140,6 +143,7 @@ namespace KruacentExiled.Misc
             _gamblingCoinHandler = null;
             postnuke = null;
             LobbyHint = null;
+            LimitedSCP0492 = null;
             LastHuman = null;
             harmony = null;
             Instance = null;

@@ -6,7 +6,7 @@ using KruacentExiled.CustomRoles.API.HintPositions;
 using System;
 using System.Drawing;
 
-namespace KruacentExiled.CustomRoles.Commands.KECR
+namespace KruacentExiled.CustomRoles.Commands
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class ImageCommand : ICommand

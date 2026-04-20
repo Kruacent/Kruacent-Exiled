@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Exiled.API.Enums;
+using Exiled.API.Features;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Map;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomItems.Items.ItemEffects;
+using LabApi.Events.Arguments.PlayerEvents;
 
 namespace KruacentExiled.CustomItems.Items
 {
@@ -74,14 +77,31 @@ namespace KruacentExiled.CustomItems.Items
             ev.TargetsToAffect.Clear();
         }
 
+
         protected override void SubscribeEvents()
         {
+            LabApi.Events.Handlers.PlayerEvents.ChangedRole += OnChangedRole;
             base.SubscribeEvents();
         }
 
         protected override void UnsubscribeEvents()
         {
+            LabApi.Events.Handlers.PlayerEvents.ChangedRole -= OnChangedRole;
             base.UnsubscribeEvents();
+        }
+
+        private void OnChangedRole(PlayerChangedRoleEventArgs ev)
+        {
+            Player player = ev.Player;
+            if (!LowGravityGrenadeEffect.affectedPlayers.TryGetValue(player,out var time)) return;
+
+            if (time.Add(TimeSpan.FromSeconds(LowGravityGrenadeEffect.Duration)) > DateTime.UtcNow)
+            {
+                LowGravityGrenadeEffect.ResetGravity(player);
+            }
+
+            
+
         }
     }
 }

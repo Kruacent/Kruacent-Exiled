@@ -2,13 +2,14 @@
 using Exiled.API.Features.Core.UserSettings;
 using KE.Utils.API.Settings;
 using KE.Utils.API.Settings.SettingsCategories;
+using KruacentExiled.CustomRoles.API.Interfaces;
 using KruacentExiled.CustomRoles.CustomSCPTeam;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace KruacentExiled.CustomRoles.API.Features
 {
-    public abstract class CustomSCP : KECustomRole
+    public abstract class CustomSCP : KECustomRole, ISCPPreferences
     {
         public const int MinValue = -5;
         public const int MaxValue = 5;
@@ -23,10 +24,15 @@ namespace KruacentExiled.CustomRoles.API.Features
 
         private static SettingsCategory category;
         public static IEnumerable<CustomSCP> All => Registered.Where(c => c is CustomSCP).Cast<CustomSCP>();
+        public static IEnumerable<CustomSCP> AllValid => Registered.Where(c => c is CustomSCP scp && scp.IsValid).Cast<CustomSCP>();
+
+        public void Set(Player player) => AddRole(player);
+        public abstract string SCPId { get; }
+
         public override void Init()
         {
             base.Init();
-            if (SpawnChance <= 0)
+            if (!IsValid)
             {
                 return;
             }
@@ -43,6 +49,13 @@ namespace KruacentExiled.CustomRoles.API.Features
             category.Settings.Add(sliderSetting);            
         }
 
+        public bool IsValid
+        {
+            get
+            {
+                return SpawnChance > 0;
+            }
+        }
 
         public override void Destroy()
         {

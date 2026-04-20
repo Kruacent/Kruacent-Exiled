@@ -2,6 +2,7 @@
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Toys;
+using KE.Utils.API.Features;
 using MEC;
 using System;
 using System.Collections.Generic;
@@ -54,8 +55,8 @@ namespace KruacentExiled.CustomItems
             {
 
 
-                Log.Info(pose.localposition);
-                Log.Info(pose.Position);
+                KELog.Debug(pose.localposition);
+                KELog.Debug(pose.Position);
                 Color color = Color.red;
 
                 if (UsablePoses.Contains(pose))

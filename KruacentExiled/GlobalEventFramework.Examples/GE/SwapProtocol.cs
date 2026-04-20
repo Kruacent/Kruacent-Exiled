@@ -8,7 +8,7 @@ using KE.Utils.Extensions;
 using KruacentExiled.GlobalEventFramework.GEFE.API.Features;
 using KruacentExiled.GlobalEventFramework.GEFE.API.Interfaces;
 using KruacentExiled.Misc.Events.EventsArgs;
-using KruacentExiled.Misc.Features;
+using KruacentExiled.Misc.Features.SCPRebalance;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;

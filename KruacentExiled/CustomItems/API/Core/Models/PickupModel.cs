@@ -4,6 +4,7 @@ using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Toys;
 using Exiled.CustomItems.API.Features;
 using InventorySystem.Items.Pickups;
+using KE.Utils.API.Features;
 using KE.Utils.API.Features.Models;
 using KE.Utils.API.Interfaces;
 using System.Collections.Generic;
@@ -86,7 +87,7 @@ namespace KruacentExiled.CustomItems.API.Core.Models
             if(PickupToParent.TryGetValue(pickup,out Primitive prim))
             {
 
-                Log.Info("destroying parent of " + pickup);
+                KELog.Debug("destroying parent of " + pickup);
                 Destroy(prim.Transform);
                 PickupToParent.Remove(pickup);
             }

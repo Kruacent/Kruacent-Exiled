@@ -134,6 +134,17 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs.SCP049C
 
         }
 
+        public void AddKill(int numberOfKill)
+        {
+
+            for (int i = 0; i < numberOfKill; i++)
+            {
+                AddKill();
+            }
+
+
+        }
+
         public static int GetNbKillPerTier(int tier)
         {
             //int x = tier + 1;

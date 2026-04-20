@@ -25,27 +25,29 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
     public class SCP035 : CustomSCP
     {
         public override bool IsSupport => false;
+
+        public const string SCPName = "SCP-035";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new Dictionary<string, Dictionary<string, string>>()
             {
                 ["en"] = new Dictionary<string, string>()
                 {
-                    [TranslationKeyName] = "SCP-035",
+                    [TranslationKeyName] = SCPName,
                     [TranslationKeyDesc] = "Kill every humans!\nYou can't pick up the Micro-HID and anything made with it, but you take 3 time less damage by these weapon.",
                     ["SCP035CantPickup"] = "A strange force called 'game balance' \nprevents you from picking up this item.",
                     ["SCP035CantUse"] = "A strange force called 'game balance' \nprevents you from using this item.",
                 },
                 ["fr"] = new Dictionary<string, string>()
                 {
-                    [TranslationKeyName] = "SCP-035",
+                    [TranslationKeyName] = SCPName,
                     [TranslationKeyDesc] = "Tue tous les humains!\nTu peux pas prendre d'arme spécial mais tu prends 3 fois moins de dégât de ces armes",
                     ["SCP035CantPickup"] = "Une force étrange qui s'appelle 'équilibre' \nt'empêches de prendre cet objet.",
                     ["SCP035CantUse"] = "Une force étrange qui s'appelle 'équilibre' \nt'empêches d'utiliser cet objet.",
                 },
                 ["legacy"] = new Dictionary<string, string>()
                 {
-                    [TranslationKeyName] = "SCP-035",
+                    [TranslationKeyName] = SCPName,
                     [TranslationKeyDesc] = "You can't pickup the Micro-HID and anything made with it, but you take 3 time less damage by these weapon.\nKill every humans",
                     ["SCP035CantPickup"] = "A strange force called \'game balance\' \nprevents you from picking up this item",
                     ["SCP035CantUse"] = "A strange force called 'game balance' \nprevents you from using this item.",
@@ -55,6 +57,8 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
 
         public override int MaxHealth { get; set; } = 1200;
         protected override int SettingId => 10002;
+
+        public override string SCPId => SCPName;
 
         public override RoleTypeId Role { get; set; } = RoleTypeId.Tutorial;
 

@@ -17,6 +17,8 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs.SCP049C
 {
     public class SCP049CRole : CustomSCP
     {
+
+        public const string SCPName = "SCP-049-C";
         public override bool IsSupport => false;
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
@@ -24,17 +26,17 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs.SCP049C
             {
                 ["en"] = new Dictionary<string, string>()
                 {
-                    [TranslationKeyName] = "SCP049-C",
+                    [TranslationKeyName] = SCPName,
                     [TranslationKeyDesc] = "A modified SCP049 instance which does not create any SCP049-2\ninstead consuming the body to gain powerful abilities\nDoctor's call gives 300 Hume Shield\nExpired body can still be consumed but need more time to do so (stay near the arrow until it disappear (10s))",
                 },
                 ["fr"] = new Dictionary<string, string>()
                 {
-                    [TranslationKeyName] = "SCP049-C",
+                    [TranslationKeyName] = SCPName,
                     [TranslationKeyDesc] = "A modified SCP049 instance which does not create any SCP049-2\ninstead consuming the body to gain powerful abilities\nDoctor's call gives 300 Hume Shield\nExpired body can still be consumed but need more time to do so (stay near the arrow until it disappear (10s))",
                 },
                 ["legacy"] = new Dictionary<string, string>()
                 {
-                    [TranslationKeyName] = "SCP049-C",
+                    [TranslationKeyName] = SCPName,
                     [TranslationKeyDesc] = "A modified SCP049 instance which does not create any SCP049-2\ninstead consuming the body to gain powerful abilities\nDoctor's call gives 300 Hume Shield\nExpired body can still be consumed but need more time to do so (stay near the arrow until it disappear (10s))",
                 }
             };
@@ -46,6 +48,8 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs.SCP049C
         public override int MaxHealth { get; set; } = 2500;
         public override float SpawnChance { get; set; } = 100;
         protected override int SettingId => 10003;
+
+        public override string SCPId => SCPName;
 
         internal static SCP049CRole instance = null;
 

@@ -1,9 +1,12 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 using Exiled.Events.EventArgs.Server;
 using KE.Utils.API.Features;
 using KruacentExiled.CustomRoles.API.Features;
+using KruacentExiled.CustomRoles.API.Interfaces;
 using KruacentExiled.Misc;
+using KruacentExiled.Misc.Features.Spawn.DummySCPs;
 using MEC;
 using PlayerRoles;
 using System;
@@ -16,39 +19,99 @@ namespace KruacentExiled.Misc.Features.Spawn
     public class Spawn : MiscFeature
     {
 
-        private Dictionary<string, RoleTypeId> baseRole = new Dictionary<string, RoleTypeId>()
-        {
-            { "173", RoleTypeId.Scp173 },
-            { "106", RoleTypeId.Scp106 },
-            { "049", RoleTypeId.Scp049 },
-            { "939", RoleTypeId.Scp939 },
-        };
+        public static readonly IReadOnlyCollection<ISCPPreferences> allRoles;
 
 
         public const int baseValue = 1;
-
-        private Dictionary<string,CustomSCP> SelectableCustomSCPs => CustomSCP.All.ToDictionary(cs =>cs.Name, cs => cs);
 
 
         public static event Action<SpawnedEventArgs> OnAssigned = delegate { };
 
         private SpawnedEventArgs eventarg;
 
+
+        static Spawn()
+        {
+            
+            List<ISCPPreferences> role = new List<ISCPPreferences>()
+            {
+                new Dummy049(),
+                new Dummy079(),
+                new Dummy096(),
+                new Dummy106(),
+                new Dummy173(),
+                new Dummy939(),
+            };
+
+            role.AddRange(CustomSCP.AllValid);
+
+            allRoles = role.AsReadOnly();
+        }
+
+        public static ISCPPreferences GetSCP(Player player)
+        {
+            KECustomRole customrole = CustomSCP.Get(player).FirstOrDefault();
+
+            if(customrole is CustomSCP custom)
+            {
+                return custom;
+            }
+
+            foreach(ISCPPreferences scp in allRoles)
+            {
+                if(scp is DummySCP dummy)
+                {
+                    if(dummy.Role == player.Role)
+                    {
+                        return dummy;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         private void OnRoundStarted()
         {
-            if (!MainPlugin.Configs.ScpPreferences) return;
-
             eventarg = new SpawnedEventArgs();
 
-            foreach (Player player in Player.List.Where(p => p.IsScp && !p.IsNPC))
+            if (MainPlugin.Configs.ScpPreferences)
             {
-                SetScpPreferences(player);
+                int scpcount = 0;
+
+                foreach (Player player in Player.Enumerable.Where(p => p.IsScp && !p.IsNPC))
+                {
+                    if (scpcount != 1)
+                    {
+                        if (SetScpPreferences(player))
+                        {
+                            scpcount++;
+                        }
+                    }
+                    else
+                    {
+                        SetScpPreferencesWithSupport(player);
+                    }
+                }
             }
+
+            
 
             OnAssigned?.Invoke(eventarg);
         }
 
-        private bool SetScpPreferences(Player player)
+
+        private bool SetScpPreferencesWithSupport(Player player)
+        {
+
+
+            //todo make the player choose which support scp they want to play (like scp049cgui)
+            return SetScpPreferences(player, false);
+        }
+
+
+
+        private bool SetScpPreferences(Player player, bool ignoreSupport = true)
         {
             Config config = MainPlugin.Configs;
             if (config == null)
@@ -56,76 +119,42 @@ namespace KruacentExiled.Misc.Features.Spawn
                 Log.Warn("no config, no custom preferences this round");
                 return false;
             }
-            Dictionary<string, int> chancescp = GetPreferences(player);
 
-            if(chancescp == null)
+            
+            ISCPPreferences roleScp = ChooseRandomRole(player, ignoreSupport);
+
+            if(roleScp is CustomSCP)
             {
-                Log.Error("no setting found");
-                return false;
+                KELog.Debug("customSCP");
+                eventarg.CustomRolesSCPs.Add(player);
+            }
+            else
+            {
+                eventarg.VanillaSCPs.Add(player);
             }
 
 
-            string roleScp = ChooseRandomRole(chancescp);
-            KELog.Debug($"Scp ({player.Nickname}) is {roleScp} previous : {player.Role.Type}");
-            SetRoleWithId(player, roleScp);
+            KELog.Debug($"Scp ({player.Nickname}) is {roleScp.SCPId} previous : {player.Role.Type}");
+            roleScp.Set(player);
+
             return true;
             
         }
 
-
-        private Dictionary<string, int> GetPreferences(Player player)
+        private ISCPPreferences ChooseRandomRole(Player player,bool ignoreSupport)
         {
-            if (player.ScpPreferences.Preferences == null) return null;
-            Dictionary<string, int> idChance = new Dictionary<string, int>();
 
-
-            foreach(var kvp in baseRole)
+            List<ISCPPreferences> weightedPool = new List<ISCPPreferences>();
+            foreach (ISCPPreferences scp in allRoles)
             {
-                idChance.Add(kvp.Key, player.ScpPreferences.Preferences[kvp.Value] + 5 + baseValue);
-            }
+                if (scp.IsSupport && ignoreSupport) continue;
 
-            foreach (CustomSCP customSCP in SelectableCustomSCPs.Values)
-            {
-                if(customSCP.SpawnChance > 0)
+                int pref = scp.GetPreferences(player) + 5 + baseValue;
+
+                for (int i = 0; i < pref; i++)
                 {
-                    idChance.Add(customSCP.Name, customSCP.GetPreferences(player) + 5 + baseValue);
-                }
-            }
-
-            int nbNotZero = 0;
-            string scpNotZero = string.Empty;
-
-            foreach(var kvp in idChance)
-            {
-                if(kvp.Value != 0 + baseValue)
-                {
-                    nbNotZero++;
-                    scpNotZero = kvp.Key;
-                }
-            }
-
-            if(nbNotZero == 1)
-            {
-                idChance[scpNotZero] = 0;
-            }
-
-
-            return idChance;
-        }
-
-
-
-
-        private string ChooseRandomRole(IDictionary<string, int> chancescp)
-        {
-            if (chancescp == null) throw new ArgumentException("Dictionary null");
-            List<string> weightedPool = new List<string>();
-            foreach (string ge in chancescp.Keys)
-            {
-                for (int i = 0; i < chancescp[ge]; i++)
-                {
-                    KELog.Debug(ge);
-                    weightedPool.Add(ge);
+                    KELog.Debug(scp.SCPId);
+                    weightedPool.Add(scp);
                 }
             }
 
@@ -133,37 +162,6 @@ namespace KruacentExiled.Misc.Features.Spawn
 
             return weightedPool[randomIndex];
         }
-
-        private void SetRoleWithId(Player player, string name)
-        {
-
-            if (baseRole.ContainsKey(name))
-            {
-                RoleTypeId chosenRole = baseRole[name];
-                if (player.Role.Type != chosenRole)
-                {
-                    player.Role.Set(baseRole[name]);
-                }
-                eventarg.VanillaRoles.Add(player);
-                
-                Log.Info("vanilla scp");
-                return;
-            }
-
-            if (SelectableCustomSCPs.ContainsKey(name))
-            {
-                SelectableCustomSCPs[name].AddRole(player);
-                eventarg.CustomRoles.Add(player);
-                Log.Info("custom scp");
-                return;
-            }
-
-            throw new Exception($"SCP ({name}) not found");
-                
-
-
-        }
-
 
 
         public override void SubscribeEvents()

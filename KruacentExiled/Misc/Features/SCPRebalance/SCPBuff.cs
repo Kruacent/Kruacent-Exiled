@@ -6,7 +6,7 @@ using Exiled.Events.EventArgs.Scp106;
 using Exiled.Permissions.Commands.Permissions;
 using KE.Utils.API.Interfaces;
 using KE.Utils.Extensions;
-using KruacentExiled.Misc;
+using KruacentExiled.CustomRoles.CustomSCPTeam;
 using KruacentExiled.Misc.Events.EventsArgs;
 using MEC;
 using PlayerRoles;
@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace KruacentExiled.Misc.Features
+namespace KruacentExiled.Misc.Features.SCPRebalance
 {
     public class SCPBuff : IUsingEvents
     {
@@ -31,6 +31,8 @@ namespace KruacentExiled.Misc.Features
 
         };
 
+        
+
 
         internal SCPBuff() { }
 
@@ -39,12 +41,17 @@ namespace KruacentExiled.Misc.Features
 
         public void SubscribeEvents()
         {
+            
+            
+
             Exiled.Events.Handlers.Player.ChangingRole += BecomingSCP;
         }
 
         public void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.ChangingRole -= BecomingSCP;
+
+
             
         }
 
@@ -64,7 +71,7 @@ namespace KruacentExiled.Misc.Features
             if (!ev.NewRole.IsScp() || ev.NewRole == RoleTypeId.Scp0492) return;
             if(player.Role == RoleTypeId.None) return;
             float healthincrease = IncreaseSCPHealth;
-            if(RoleBuff.TryGetValue(ev.NewRole,out float val))
+            if(RoleBuff.TryGetValue(ev.NewRole,out float val) && Player.Enumerable.Count(p => SCPTeam.IsSCP(p.ReferenceHub)) > 1)
             {
                 healthincrease *= val;
             }
