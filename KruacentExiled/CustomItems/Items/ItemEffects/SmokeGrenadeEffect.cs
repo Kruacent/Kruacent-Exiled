@@ -42,6 +42,10 @@ namespace KruacentExiled.CustomItems.Items.ItemEffects
             {
                 Timing.CallDelayed(FogTime, () =>
                 {
+                    if(pickup == null)
+                    {
+                        return;
+                    }
                     pickup.Position += Vector3.down * 10;
 
                     Timing.CallDelayed(10, () =>
