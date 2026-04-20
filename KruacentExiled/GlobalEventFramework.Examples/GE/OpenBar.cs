@@ -1,12 +1,13 @@
-﻿using Exiled.API.Features.Doors;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
+using Exiled.API.Features.Doors;
+using Exiled.API.Interfaces;
+using KE.Utils.API.Features;
+using KruacentExiled.GlobalEventFramework.GEFE.API.Features;
+using KruacentExiled.GlobalEventFramework.GEFE.API.Interfaces;
+using KruacentExiled.Map.Others.BlackoutNDoor.Events.EventArgs;
 using System.Collections.Generic;
 using System.Linq;
-using Exiled.API.Enums;
-using Exiled.API.Features;
-using Exiled.API.Interfaces;
-using KruacentExiled.GlobalEventFramework.GEFE.API.Interfaces;
-using KruacentExiled.GlobalEventFramework.GEFE.API.Features;
-using KruacentExiled.Map.Others.BlackoutNDoor.Events.EventArgs;
 namespace KruacentExiled.GlobalEventFramework.Examples.GE
 {
     public class OpenBar : GlobalEvent, IStart, IEvent
@@ -87,7 +88,7 @@ namespace KruacentExiled.GlobalEventFramework.Examples.GE
 
             int result = ev.Doors.RemoveWhere(door => doorsLocked.Contains(door));
 
-            Log.Info(result);
+            KELog.Debug(result);
         }
     }
 }

@@ -153,7 +153,7 @@ namespace KruacentExiled.Misc.Features.Spawn
 
                 for (int i = 0; i < pref; i++)
                 {
-                    Log.Info(scp.SCPId);
+                    KELog.Debug(scp.SCPId);
                     weightedPool.Add(scp);
                 }
             }

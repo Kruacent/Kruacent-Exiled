@@ -3,6 +3,7 @@ using Exiled.Events.EventArgs.Scp049;
 using HintServiceMeow.Core.Enum;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
+using KE.Utils.API.Features;
 using KE.Utils.API.Interfaces;
 using KE.Utils.API.Translations;
 using KruacentExiled.CustomRoles.API.Features;
@@ -57,7 +58,7 @@ namespace KruacentExiled.Misc.Features.SCPRebalance
         private static TooMuchZombiePosition Position = new TooMuchZombiePosition();
         private void OnStartingRecall(StartingRecallEventArgs ev)
         {
-            Log.Info("recal");
+            KELog.Debug("recal");
             Player player = ev.Player;
             if (KECustomRole.Get<SCP049CRole>().Check(player))
             {
