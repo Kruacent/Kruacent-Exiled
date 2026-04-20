@@ -1,0 +1,64 @@
+﻿using System.Collections.Generic;
+using Exiled.API.Enums;
+using Exiled.API.Features.Attributes;
+using Exiled.API.Features.Spawn;
+using Exiled.CustomItems.API.Features;
+using KruacentExiled.CustomItems.API.Features;
+using KruacentExiled.CustomItems.API.Interface;
+
+namespace KruacentExiled.CustomItems.Items
+{
+    public class ImpactFlash : KECustomGrenade, IViolentItem
+    {
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new Dictionary<string, Dictionary<string, string>>()
+            {
+                ["en"] = new Dictionary<string, string>()
+                {
+                    [TranslationKeyName] = "Impact Flash",
+                    [TranslationKeyDesc] = "The name is self-explanatory",
+                },
+                ["fr"] = new Dictionary<string, string>()
+                {
+                    [TranslationKeyName] = "Impact Flash",
+                    [TranslationKeyDesc] = "Une flashbang qui explose à l'impacte",
+                },
+            };
+        }
+        public override ItemType ItemType => ItemType.GrenadeFlash;
+        public override string Name { get; set; } = "ImpactFlash";
+        public override float Weight { get; set; } = 0.65f;
+        public override float FuseTime => 3f;
+        public override bool ExplodeOnCollision => true;
+        public bool IsViolent => false;
+        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        {
+            Limit = 5,
+            DynamicSpawnPoints = new List<DynamicSpawnPoint>
+        {
+            new DynamicSpawnPoint()
+            {
+                Chance = 50,
+                Location = SpawnLocationType.InsideHczArmory,
+            },
+            new DynamicSpawnPoint()
+            {
+                Chance = 2,
+                Location = SpawnLocationType.Inside914,
+            },
+            new DynamicSpawnPoint()
+            {
+                Chance= 50,
+                Location = SpawnLocationType.Inside049Armory,
+            },
+            new DynamicSpawnPoint()
+            {
+                Chance= 50,
+                Location = SpawnLocationType.InsideLczArmory,
+            }
+        },
+
+        };
+    }
+}

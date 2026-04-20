@@ -1,0 +1,30 @@
+﻿using CustomPlayerEffects;
+using LabApi.Features.Wrappers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace KruacentExiled.Map.Others.CustomElevators
+{
+    public abstract class KEElevator
+    {
+
+        public static HashSet<KEElevator> elevators = new HashSet<KEElevator>();
+
+
+
+        public abstract bool IsReady { get; }
+        public abstract void Send();
+
+
+
+        public KEElevator()
+        {
+            elevators.Add(this);
+        }
+
+
+    }
+}
