@@ -279,7 +279,7 @@ namespace KruacentExiled.CustomRoles.API.Features
 
         public static void SpawnStartRound(Misc.Features.Spawn.SpawnedEventArgs ev)
         {
-            GiveRandomRole(Player.List.Except(ev.CustomRoles));
+            GiveRandomRole(Player.List.Except(ev.CustomRolesSCPs));
         }
 
         public static void RespawnCustomRole(RespawnedTeamEventArgs ev)

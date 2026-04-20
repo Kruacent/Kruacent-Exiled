@@ -112,7 +112,6 @@ namespace KruacentExiled.CustomRoles.API.Features
 
         public override bool IsAvailable(Player player)
         {
-            //if (player.Role == RoleTypeId.Scp106) return false;
             if (CurrentNumberOfSpawn >= Limit) return false;
             return SideClass.Get(player.Role.Side) == Side;
         }

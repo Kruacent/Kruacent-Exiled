@@ -50,8 +50,6 @@ namespace KruacentExiled.CustomRoles.Abilities
         public float height = 1;
         public TextImage IconName => MainPlugin.Instance.icons["Airstrike"];
 
-        TextImage ICustomIcon.IconName => throw new NotImplementedException();
-
         protected override bool AbilityUsed(Player player)
         {
             if (CheckValid(player, true))

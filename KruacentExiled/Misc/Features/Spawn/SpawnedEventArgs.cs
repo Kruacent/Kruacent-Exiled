@@ -12,21 +12,21 @@ namespace KruacentExiled.Misc.Features.Spawn
     {
 
 
-        public List<Player> VanillaRoles { get; }
-        public List<Player> CustomRoles { get; }
+        public List<Player> VanillaSCPs { get; }
+        public List<Player> CustomRolesSCPs { get; }
 
 
 
         public SpawnedEventArgs(List<Player> vanilla,List<Player> custom)
         {
-            VanillaRoles = vanilla;
-            CustomRoles = custom;
+            VanillaSCPs = vanilla;
+            CustomRolesSCPs = custom;
         }
 
         public SpawnedEventArgs()
         {
-            VanillaRoles = new List<Player>();
-            CustomRoles = new List<Player>();
+            VanillaSCPs = new List<Player>();
+            CustomRolesSCPs = new List<Player>();
         }
     }
 }

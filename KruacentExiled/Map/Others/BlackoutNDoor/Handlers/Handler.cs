@@ -57,7 +57,7 @@ namespace KruacentExiled.Map.Others.BlackoutNDoor.Handlers
 
             if (MainPlugin.Instance.Config.Debug)
             {
-                time = 30;
+                //time = 30;
                 ChosenPattern = new Pattern
                 (
                     new List<MapEvent>() 
