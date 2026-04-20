@@ -683,6 +683,12 @@ namespace KruacentExiled.CustomRoles.API.Features
             return cr;
         }
 
+
+        public static T Get<T>() where T : KECustomRole
+        {
+            return typeLookupTable[typeof(T)] as T;
+        }
+
         #region Spawn
 
         /// <summary>

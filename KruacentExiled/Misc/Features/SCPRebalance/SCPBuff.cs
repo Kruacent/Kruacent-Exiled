@@ -7,7 +7,6 @@ using Exiled.Permissions.Commands.Permissions;
 using KE.Utils.API.Interfaces;
 using KE.Utils.Extensions;
 using KruacentExiled.CustomRoles.CustomSCPTeam;
-using KruacentExiled.Misc;
 using KruacentExiled.Misc.Events.EventsArgs;
 using MEC;
 using PlayerRoles;
@@ -16,7 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace KruacentExiled.Misc.Features
+namespace KruacentExiled.Misc.Features.SCPRebalance
 {
     public class SCPBuff : IUsingEvents
     {
@@ -32,6 +31,8 @@ namespace KruacentExiled.Misc.Features
 
         };
 
+        
+
 
         internal SCPBuff() { }
 
@@ -40,12 +41,17 @@ namespace KruacentExiled.Misc.Features
 
         public void SubscribeEvents()
         {
+            
+            
+
             Exiled.Events.Handlers.Player.ChangingRole += BecomingSCP;
         }
 
         public void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.ChangingRole -= BecomingSCP;
+
+
             
         }
 
