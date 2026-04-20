@@ -6,6 +6,7 @@ using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Server;
 using HintServiceMeow.Core.Models.Hints;
 using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Features;
 using KE.Utils.API.Interfaces;
 using KruacentExiled.GlobalEventFramework;
 using KruacentExiled.GlobalEventFramework.GEFE.API.Enums;
@@ -31,17 +32,25 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
 
                 Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
                 Exiled.Events.Handlers.Server.RoundEnded += OnEndingRound;
+                LabApi.Events.Handlers.ServerEvents.MapGenerating += OnMapGenerating;
 
                 _eventsub = true;
             }
+
+            
 
             public void UnsubscribeEvents()
             {
                 if (!_eventsub) return;
                 Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
                 Exiled.Events.Handlers.Server.RoundEnded -= OnEndingRound;
+                LabApi.Events.Handlers.ServerEvents.MapGenerating -= OnMapGenerating;
 
                 _eventsub = false;
+            }
+            private void OnMapGenerating(LabApi.Events.Arguments.ServerEvents.MapGeneratingEventArgs ev)
+            {
+                ChooseGlobalEvent();
             }
 
             private void OnEndingRound(RoundEndedEventArgs _)
@@ -51,18 +60,14 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
             }
             private void OnRoundStarted()
             {
-                if(ForcedGE.Count == 0)
-                {
-                    Activate();
-                }
-                else
+                if(ForcedGE.Count != 0)
                 {
                     _activeGE = ForcedGE.ToHashSet();
                     ForcedGE.Clear();
-                    EnableEvents(_activeGE);
-                    
-                    Show();
                 }
+                
+                EnableEvents(_activeGE);
+                Show();
             }
 
 
@@ -131,7 +136,7 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
             base.Disable(ev);
         }
 
-        private static void Activate()
+        private static void ChooseGlobalEvent()
         {
             if(NumberOfGE == -1)
             {
@@ -140,9 +145,13 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
 
 
             _activeGE = GetRandomEvent<GlobalEvent>(NumberOfGE).ToHashSet();
+
+            foreach(GlobalEvent ge in _activeGE)
+            {
+                KELog.Debug("chose : " + ge.Name);
+            }
             
-            EnableEvents(_activeGE);
-            Show();
+
         }
 
         private static void Show()
