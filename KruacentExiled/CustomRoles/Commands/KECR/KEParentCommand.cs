@@ -26,11 +26,12 @@ namespace KruacentExiled.CustomRoles.Commands.KECR
         {
             RegisterCommand(new Lists.List());
             RegisterCommand(new Give());
+            RegisterCommand(new Remove());
         }
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            response = "Usage : list";
+            response = "Usage : list, give, remove";
             return true;
         }
     }

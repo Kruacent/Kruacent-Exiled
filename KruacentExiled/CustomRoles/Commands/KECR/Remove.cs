@@ -1,5 +1,6 @@
 ﻿using CommandSystem;
 using Exiled.API.Features;
+using KruacentExiled.CustomRoles.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,20 @@ namespace KruacentExiled.CustomRoles.Commands.KECR
                 return false;
             }
 
+
+            KECustomRole customRole = KECustomRole.Get(player).FirstOrDefault();
+
+            if(customRole == null)
+            {
+                response = "no custom role";
+                return false;
+            }
+
+            customRole.RemoveRole(player);
+            
+
+            response = "removed "+ customRole.Name + " from "+player.Nickname;
+            return false;
 
 
         }
