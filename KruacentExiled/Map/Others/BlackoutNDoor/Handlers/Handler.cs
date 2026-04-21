@@ -161,6 +161,21 @@ namespace KruacentExiled.Map.Others.BlackoutNDoor.Handlers
             EventHandle.OnPreEvent(preEv);
 
 
+            if(preEv.IsAllowed)
+            {
+                if (Warhead.IsInProgress)
+                {
+                    preEv.IsAllowed = false;
+                }
+
+
+                if (zone == ZoneType.LightContainment && Exiled.API.Features.Map.DecontaminationState == DecontaminationState.Countdown)
+                {
+                    preEv.IsAllowed = false;
+                }
+            }
+
+
             if (preEv.IsAllowed && Zones.Contains(zone.GetZone()))
             {
 

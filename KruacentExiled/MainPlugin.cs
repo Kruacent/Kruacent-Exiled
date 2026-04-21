@@ -9,7 +9,7 @@ namespace KruacentExiled
 
         private KEPlugin[] plugins;
         public override string Author => "Patrique & OmerGS";
-        public override Version Version { get; } = new Version(2, 0, 0);
+        public override Version Version { get; } = new Version(2, 0, 1);
 
         public static MainPlugin Instance { get; private set; }
 

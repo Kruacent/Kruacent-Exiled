@@ -100,9 +100,25 @@ namespace KruacentExiled.CustomRoles.CR.Human
 
             ISCPPreferences trueSCP = Spawn.GetSCP(Player.Get(randomscp));
 
+
+
+            List<ISCPPreferences> allOtherRole;
+
+            int numberscp = Player.Enumerable.Count(p => SCPTeam.IsSCP(p.ReferenceHub));
+            if (numberscp == 0) return;
+
+            if (numberscp <= 1)
+            {
+                allOtherRole = Spawn.allRoles.Where(s => s != trueSCP && !s.IsSupport).ToList();
+            }
+            else
+            {
+                allOtherRole = Spawn.allRoles.Where(s => s != trueSCP).ToList();
+                
+            }
             KELog.Debug(trueSCP.SCPId);
 
-            List<ISCPPreferences> allOtherRole = Spawn.allRoles.Where(s => s != trueSCP).ToList();
+
 
             ISCPPreferences fakeSCP1 = allOtherRole.PullRandomItem();
             KELog.Debug(fakeSCP1.SCPId);
