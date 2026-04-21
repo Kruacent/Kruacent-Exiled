@@ -29,6 +29,11 @@ namespace KruacentExiled.Misc.Features.Spawn.DummySCPs
 
         public int GetPreferences(Player player)
         {
+            if (player.IsNPC)
+            {
+                return 0;
+            }
+
             return player.ScpPreferences.Preferences[Role];
         }
 

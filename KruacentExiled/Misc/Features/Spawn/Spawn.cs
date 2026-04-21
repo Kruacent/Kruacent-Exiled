@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Pools;
 using Exiled.Events.EventArgs.Server;
@@ -78,19 +79,23 @@ namespace KruacentExiled.Misc.Features.Spawn
             if (MainPlugin.Configs.ScpPreferences)
             {
                 int scpcount = 0;
+                HashSet<ISCPPreferences> freeRoles = new HashSet<ISCPPreferences>(allRoles);
 
-                foreach (Player player in Player.Enumerable.Where(p => p.IsScp && !p.IsNPC))
+                foreach (Player player in Player.Enumerable.Where(p => p.IsScp))
                 {
-                    if (scpcount != 1)
+                    bool flag;
+                    if (scpcount <= 1)
                     {
-                        if (SetScpPreferences(player))
-                        {
-                            scpcount++;
-                        }
+                        flag = SetScpPreferences(player, freeRoles);
                     }
                     else
                     {
-                        SetScpPreferencesWithSupport(player);
+                        flag = SetScpPreferencesWithSupport(player, freeRoles);
+                    }
+
+                    if (flag)
+                    {
+                        scpcount++;
                     }
                 }
             }
@@ -101,17 +106,17 @@ namespace KruacentExiled.Misc.Features.Spawn
         }
 
 
-        private bool SetScpPreferencesWithSupport(Player player)
+        private bool SetScpPreferencesWithSupport(Player player, HashSet<ISCPPreferences> availableRoles)
         {
 
 
             //todo make the player choose which support scp they want to play (like scp049cgui)
-            return SetScpPreferences(player, false);
+            return SetScpPreferences(player, availableRoles, false);
         }
 
 
 
-        private bool SetScpPreferences(Player player, bool ignoreSupport = true)
+        private bool SetScpPreferences(Player player, HashSet<ISCPPreferences> availableRoles, bool ignoreSupport = true)
         {
             Config config = MainPlugin.Configs;
             if (config == null)
@@ -121,7 +126,7 @@ namespace KruacentExiled.Misc.Features.Spawn
             }
 
             
-            ISCPPreferences roleScp = ChooseRandomRole(player, ignoreSupport);
+            ISCPPreferences roleScp = ChooseRandomRole(player,availableRoles, ignoreSupport);
 
             if(roleScp is CustomSCP)
             {
@@ -130,30 +135,42 @@ namespace KruacentExiled.Misc.Features.Spawn
             }
             else
             {
+                KELog.Debug("vanilla scp");
                 eventarg.VanillaSCPs.Add(player);
             }
 
 
             KELog.Debug($"Scp ({player.Nickname}) is {roleScp.SCPId} previous : {player.Role.Type}");
             roleScp.Set(player);
+            availableRoles.Remove(roleScp);
 
             return true;
             
         }
 
-        private ISCPPreferences ChooseRandomRole(Player player,bool ignoreSupport)
+        private ISCPPreferences ChooseRandomRole(Player player, HashSet<ISCPPreferences> availableRoles, bool ignoreSupport)
         {
 
             List<ISCPPreferences> weightedPool = new List<ISCPPreferences>();
-            foreach (ISCPPreferences scp in allRoles)
+
+
+
+            if(availableRoles.Count == 0)
+            {
+                availableRoles = allRoles.ToHashSet();
+            }
+
+
+            foreach (ISCPPreferences scp in availableRoles)
             {
                 if (scp.IsSupport && ignoreSupport) continue;
 
                 int pref = scp.GetPreferences(player) + 5 + baseValue;
 
+                KELog.Debug(scp.SCPId + " : " + pref);
                 for (int i = 0; i < pref; i++)
                 {
-                    KELog.Debug(scp.SCPId);
+                    
                     weightedPool.Add(scp);
                 }
             }
@@ -162,7 +179,6 @@ namespace KruacentExiled.Misc.Features.Spawn
 
             return weightedPool[randomIndex];
         }
-
 
         public override void SubscribeEvents()
         {
