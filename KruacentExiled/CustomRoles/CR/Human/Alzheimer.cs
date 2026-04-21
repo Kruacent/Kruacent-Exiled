@@ -109,11 +109,12 @@ namespace KruacentExiled.CustomRoles.CR.Human
 
             if (numberscp <= 1)
             {
-                allOtherRole = Spawn.allRoles.Where(s => s != trueSCP).ToList();
+                allOtherRole = Spawn.allRoles.Where(s => s != trueSCP && !s.IsSupport).ToList();
             }
             else
             {
-                allOtherRole = Spawn.allRoles.Where(s => s != trueSCP && !s.IsSupport).ToList();
+                allOtherRole = Spawn.allRoles.Where(s => s != trueSCP).ToList();
+                
             }
             KELog.Debug(trueSCP.SCPId);
 
