@@ -4,7 +4,9 @@ using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp096;
 using Exiled.Events.EventArgs.Scp1509;
+using Exiled.Events.EventArgs.Scp173;
 using Exiled.Events.EventArgs.Server;
 using HintServiceMeow.Core.Models.Arguments;
 using HintServiceMeow.Core.Utilities;
@@ -102,6 +104,9 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
             Exiled.Events.Handlers.Scp1509.Resurrecting += OnResurrecting;
             Exiled.Events.Handlers.Player.UsingItem += OnUsingItem;
             Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
+            Exiled.Events.Handlers.Scp096.AddingTarget += OnAddingTarget;
+            Exiled.Events.Handlers.Scp173.AddingObserver += OnAddingObserver;
+
 
             base.SubscribeEvents();
         }
@@ -115,6 +120,8 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
             Exiled.Events.Handlers.Server.EndingRound -= OnEndingRound;
             Exiled.Events.Handlers.Scp1509.Resurrecting -= OnResurrecting;
             Exiled.Events.Handlers.Player.UsingItem -= OnUsingItem;
+            Exiled.Events.Handlers.Scp096.AddingTarget -= OnAddingTarget;
+            Exiled.Events.Handlers.Scp173.AddingObserver -= OnAddingObserver;
             base.UnsubscribeEvents();
         }
         private static HintPosition position = new RemainingPlayerPosition();
@@ -126,6 +133,27 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
 
             Exiled.API.Features.Cassie.CustomScpTermination("SCP 0 3 5", ev.DamageHandler);
             
+        }
+
+        private void OnAddingObserver(AddingObserverEventArgs ev)
+        {
+            if (!ev.IsAllowed) return;
+            if (Check(ev.Observer))
+            {
+                ev.IsAllowed = false;
+            }
+        }
+
+
+        private void OnAddingTarget(AddingTargetEventArgs ev)
+        {
+            if (!ev.IsAllowed) return;
+            if (Check(ev.Target))
+            {
+                ev.IsAllowed = false;
+            }
+
+
         }
 
         private void OnVoiceChatting(VoiceChattingEventArgs ev)
