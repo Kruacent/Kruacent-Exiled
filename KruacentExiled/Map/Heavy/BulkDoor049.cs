@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Interactables.Interobjects.DoorUtils;
 using KE.Utils.API.Map;
 using MEC;
@@ -38,11 +39,12 @@ namespace KruacentExiled.Map.Heavy
             
             Log.Debug("spawn 049 bulk door at "+ worldpos);
         }
-
+        private static CoroutineHandle handle;
         private static void DoorVariant_OnInstanceRemoved(DoorVariant obj)
         {
             door.OnStateChanged -= Door_OnStateChanged;
             DoorVariant.OnInstanceRemoved -= DoorVariant_OnInstanceRemoved;
+            Timing.KillCoroutines(handle);
         }
 
         public const float IdleDuration = 20f;
@@ -52,7 +54,7 @@ namespace KruacentExiled.Map.Heavy
         {
             if (door.NetworkTargetState)
             {
-                Timing.RunCoroutine(AutoClose());
+                handle = Timing.RunCoroutine(AutoClose());
             }
             
         }
@@ -67,14 +69,18 @@ namespace KruacentExiled.Map.Heavy
                 {
                     yield break;
                 }
-                duration -= RefreshRate;
-                Log.Info(duration);
-                if (duration <= 0)
+                if(door.NetworkActiveLocks == 0)
                 {
-                    Log.Info("auto close");
-                    door.NetworkTargetState = false;
-                    duration = IdleDuration;
+                    duration -= RefreshRate;
+                    Log.Debug(duration);
+                    if (duration <= 0)
+                    {
+                        Log.Debug("auto close");
+                        door.NetworkTargetState = false;
+                        duration = IdleDuration;
+                    }
                 }
+               
                 yield return Timing.WaitForSeconds(RefreshRate);
               
             }

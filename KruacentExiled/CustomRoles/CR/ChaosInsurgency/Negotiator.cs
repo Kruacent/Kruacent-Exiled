@@ -70,7 +70,7 @@ namespace KruacentExiled.CustomRoles.CR.ChaosInsurgency
         {
             base.GiveInventory(player);
 
-            Exiled.CustomItems.API.Features.CustomItem.TryGive(player, "Friend Maker", false);
+            Exiled.CustomItems.API.Features.CustomItem.TryGive(player, "FriendMaker", false);
 
         }
 

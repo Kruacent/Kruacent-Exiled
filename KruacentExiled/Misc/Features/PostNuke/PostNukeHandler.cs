@@ -72,7 +72,7 @@ namespace KruacentExiled.Misc.Features.PostNuke
             KELog.Debug(trigger);
 
             if (trigger == Faction.Unclassified 
-                || trigger == Faction.FoundationStaff 
+                || trigger == Faction.SCP 
                 || trigger == Faction.Flamingos) return;
 
 

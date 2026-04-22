@@ -28,6 +28,7 @@ namespace KruacentExiled.Misc
         public float MultSCP106 { get; set; } = 1.1f;
         public int MinPlayerVote { get; set; } = 6;
 
+        public float MultBaseSCP { get; set; } = 1.25f;
 
 
     }
