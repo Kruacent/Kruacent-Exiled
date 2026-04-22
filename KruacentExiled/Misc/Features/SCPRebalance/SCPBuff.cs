@@ -20,7 +20,7 @@ namespace KruacentExiled.Misc.Features.SCPRebalance
     public class SCPBuff : IUsingEvents
     {
         public const float RefreshRate = 1f;
-        public float IncreaseSCPHealth { get; } = 1.25f;
+        public float IncreaseSCPHealth => MainPlugin.Configs.MultBaseSCP;
         private static Config Config => MainPlugin.Configs;
 
         public Dictionary<RoleTypeId, float> RoleBuff = new Dictionary<RoleTypeId, float>()
