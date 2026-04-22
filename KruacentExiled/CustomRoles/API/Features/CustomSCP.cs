@@ -75,11 +75,11 @@ namespace KruacentExiled.CustomRoles.API.Features
             if(sliderSetting is null)
             {
                 Log.Error("slider setting is null in custom scp");
-                return -6;
+                return 0;
             }
 
 
-            if (!SettingBase.TryGetSetting<SliderSetting>(player, sliderSetting.Id, out var setting)) return -6;
+            if (!SettingBase.TryGetSetting<SliderSetting>(player, sliderSetting.Id, out var setting)) return 0;
             return (int) setting.SliderValue;
         }
 

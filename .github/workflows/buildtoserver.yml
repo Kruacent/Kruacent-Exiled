@@ -42,6 +42,7 @@ jobs:
           msbuild "$SLN" /p:Configuration=Release
 
       - name: Copy plugin to server
+        if: github.event_name == 'push'
         run: |
           DLL=$(find . -path "*/bin/Release/*KruacentExiled.dll" | head -n 1)
       
@@ -51,3 +52,12 @@ jobs:
           fi
           cp "$DLL" $OUTPUT_FOLDER_PATH/
 
+      - name: Create GitHub Release Draft
+        if: github.event_name == 'push'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: draft-${{ github.sha }}
+          name: "Draft Release"
+          draft: true
+          files: "**/bin/Release/*KruacentExiled.dll"
+          generate_release_notes: false
