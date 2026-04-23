@@ -7,6 +7,9 @@ on:
     branches: [ "master" ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 env:
   OUTPUT_FOLDER_PATH: /home/grosserv/.config/EXILED/Plugins/
   EXILED_REFERENCES: ${{ github.workspace }}/references
@@ -43,6 +46,7 @@ jobs:
 
       - name: Copy plugin to server
         if: github.event_name == 'push'
+        id: copy_step
         run: |
           DLL=$(find . -path "*/bin/Release/*KruacentExiled.dll" | head -n 1)
       
@@ -52,12 +56,14 @@ jobs:
           fi
           cp "$DLL" $OUTPUT_FOLDER_PATH/
 
+          echo "dll_path=$DLL" >> $GITHUB_OUTPUT
+
       - name: Create GitHub Release Draft
         if: github.event_name == 'push'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # release v2.6.2
         with:
           tag_name: draft-${{ github.sha }}
           name: "Draft Release"
           draft: true
-          files: "**/bin/Release/*KruacentExiled.dll"
+          files: ${{ steps.copy_step.outputs.dll_path }}
           generate_release_notes: false
