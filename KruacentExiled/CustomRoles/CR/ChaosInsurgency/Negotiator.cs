@@ -39,7 +39,7 @@ namespace KruacentExiled.CustomRoles.CR.ChaosInsurgency
 
         public override HashSet<string> Abilities => new HashSet<string>()
         {
-            "Convert"
+            //"Convert"
         };
 
 
@@ -85,6 +85,16 @@ namespace KruacentExiled.CustomRoles.CR.ChaosInsurgency
             if (!Check(ev.Player)) return;
             if (!ev.IsAllowed) return;
             if (ev.Attacker is null) return;
+
+            Log.Info(ev.Player);
+            Log.Info(ev.Attacker);
+            Log.Info(ev.Amount);
+            Log.Info(ev.DamageHandler.IsSuicide);
+
+
+            if (ev.Attacker == ev.Player) return;
+
+
 
             if(ev.Attacker.Role.Side == ev.Player.Role.Side)
             {

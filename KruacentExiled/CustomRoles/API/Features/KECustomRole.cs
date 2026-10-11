@@ -638,7 +638,7 @@ namespace KruacentExiled.CustomRoles.API.Features
         {
             KEAbilities.TryRemoveFromPlayer(player);
 
-            if (Abilities != null)
+            if (Abilities != null && Abilities.Count > 0)
             {
                 foreach (string name in Abilities)
                 {
