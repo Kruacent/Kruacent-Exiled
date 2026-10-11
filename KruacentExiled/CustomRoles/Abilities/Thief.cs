@@ -95,7 +95,7 @@ namespace KruacentExiled.CustomRoles.Abilities
         private void Steal(Player player, Player thiefed)
         {
 
-            Item item;
+            Item item = null;
 
             if(player.CurrentItem is null || Random.Range(0f,100f) < 50f)
             {
@@ -104,6 +104,11 @@ namespace KruacentExiled.CustomRoles.Abilities
             else
             {
                 item = player.CurrentItem;
+            }
+
+            if(item == null)
+            {
+                return;
             }
 
 
