@@ -52,14 +52,14 @@ namespace KruacentExiled.CustomRoles.CR.ChaosInsurgency
 
         public override List<string> Inventory { get; set; } = new List<string>()
         {
-            $"{ItemType.GunRevolver}", $"{ItemType.GunA7}", $"{ItemType.ArmorHeavy}",
+            $"{ItemType.GunRevolver}", $"{ItemType.GunLogicer}", $"{ItemType.ArmorHeavy}",
             $"{ItemType.GrenadeHE}", $"{ItemType.GrenadeFlash}", $"{ItemType.Radio}",
             $"{ItemType.KeycardChaosInsurgency}"
         };
 
         public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new Dictionary<AmmoType, ushort>()
         {
-            { AmmoType.Ammo44Cal, 19 }, { AmmoType.Nato762, 60 }
+            { AmmoType.Ammo44Cal, 19 }, { AmmoType.Nato762, 200 }
         };
 
 
@@ -107,6 +107,7 @@ namespace KruacentExiled.CustomRoles.CR.ChaosInsurgency
         {
             Primitive box = Primitive.Create(PrimitiveType.Cube, pos + Vector3.up * 0.5f, Vector3.zero, new Vector3(0.5f, 0.5f, 0.5f), true);
             box.Color = Color.black;
+            box.Flags = PrimitiveFlags.Visible;
             Timing.RunCoroutine(LootBoxAnimation(box, owner));
         }
 

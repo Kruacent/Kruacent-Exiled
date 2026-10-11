@@ -125,7 +125,6 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs.SCP049C
             Exiled.Events.Handlers.Scp049.FinishingRecall += OnFinishingRecall;
             LabApi.Events.Handlers.Scp049Events.UsedDoctorsCall += OnUsedDoctorsCall;
             Exiled.Events.Handlers.Player.SpawnedRagdoll += OnSpawnedRagdoll;
-            Exiled.Events.Handlers.Player.Hurting += DeflectDamageUnlockable.OnHurting;
             base.SubscribeEvents();
         }
         protected override void UnsubscribeEvents()
@@ -133,7 +132,6 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs.SCP049C
             Exiled.Events.Handlers.Scp049.FinishingRecall -= OnFinishingRecall;
             LabApi.Events.Handlers.Scp049Events.UsedDoctorsCall -= OnUsedDoctorsCall;
             Exiled.Events.Handlers.Player.SpawnedRagdoll -= OnSpawnedRagdoll;
-            Exiled.Events.Handlers.Player.Hurting -= DeflectDamageUnlockable.OnHurting;
             base.UnsubscribeEvents();
         }
         private void OnFinishingRecall(FinishingRecallEventArgs ev)

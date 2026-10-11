@@ -46,7 +46,6 @@ namespace KruacentExiled.CustomRoles.CR.MTF
 
         public override List<string> Inventory { get; set; } = new List<string>()
        {
-          $"{ItemType.GunLogicer}",
           $"{ItemType.GunFRMG0}",
           $"{ItemType.Radio}",
           $"{ItemType.GrenadeHE}",
