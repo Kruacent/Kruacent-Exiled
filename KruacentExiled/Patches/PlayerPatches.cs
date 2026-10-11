@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using YamlDotNet.Core.Tokens;
 
@@ -18,19 +19,13 @@ namespace KruacentExiled.Patches
         {
             public static void Prefix(Player __instance,ref string value)
             {
-                //KELog.Debug($"changed cinfo {__instance.CustomInfo} to {value}");
-                //if (!NicknameSync.ValidateCustomInfo(value, out var rejectionText))
-                //{
-                //    Log.Error("invalid custominfo : "+ rejectionText);
-                //    value = "invalid";
-                //}
+                KELog.Debug($"changed cinfo {__instance.CustomInfo} to {value}");
+                if (!NicknameSync.ValidateCustomInfo(value, out var rejectionText))
+                {
+                    Log.Error("invalid custominfo : " + rejectionText);
+                    value = Regex.Replace(value, @"[^\p{L}\p{P}\p{Sc}\p{N} ^=+|~`<>\n]", "");
+                }
             }
-
-
-            
-
-
-
         }
     }
 }
