@@ -9,6 +9,7 @@ using KruacentExiled.Misc;
 using KruacentExiled.Misc.Events.EventsArgs.GamblingCoinsEventArgs;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using KruacentExiled.Misc.Features.GamblingCoin.Types;
+using KruacentExiled.Misc.Utils;
 using MEC;
 
 namespace KruacentExiled.Misc.Features.GamblingCoin
@@ -56,11 +57,16 @@ namespace KruacentExiled.Misc.Features.GamblingCoin
             CoinUses[itemSerial]--;
 
 
+            bool finalResult = RandomNumberGenerator.RollChance(50, player, true);
 
-            EffectType type = ev.IsTails ? EffectType.Negative : EffectType.Positive;
+            EffectType type = EffectType.Negative;
+            if (finalResult)
+            {
+                type = EffectType.Positive;
+            }
 
             ICoinEffect effect = GamblingCoinManager.GetRandomEffect(type);
-            
+
             if (effect == null)
             {
                 Log.Warn($"No {type} effect found in GamblingCoinManager!");

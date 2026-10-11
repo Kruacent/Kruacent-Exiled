@@ -7,9 +7,12 @@ using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.Extensions;
 using KruacentExiled.CustomItems.API.Interface;
+using KruacentExiled.CustomRoles.API.Features;
+using KruacentExiled.CustomRoles.API.Interfaces;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace KruacentExiled.CustomItems.Items.ItemEffects
@@ -66,6 +69,20 @@ namespace KruacentExiled.CustomItems.Items.ItemEffects
                     if (line)
                     {
                         effectedPlayers.Add(player);
+                        Room destinationRoom;
+
+                        bool isLucky = KECustomRole.Get(player).OfType<ILucky>().Any(r => r.LuckProfile == LuckProfile.UltimateLucky);
+                        Log.Debug(isLucky);
+
+                        if (isLucky)
+                        {
+                            destinationRoom = GetLuckyRoom(player);
+                        }
+                        else
+                        {
+                            destinationRoom = RandomRoom();
+                        }
+
                         player.Teleport(RandomRoom().GetValidPosition());
                     }
                 }
@@ -75,8 +92,6 @@ namespace KruacentExiled.CustomItems.Items.ItemEffects
                 }
             }
         }
-
-
 
         private Room RandomRoom()
         {
@@ -107,6 +122,118 @@ namespace KruacentExiled.CustomItems.Items.ItemEffects
 
             Log.Debug($"roomZone={room.Zone}");
             return room;
+        }
+
+        public Room GetLuckyRoom(Player luckyPlayer)
+        {
+            List<Room> validRooms = GetValidRooms();
+
+            if (validRooms.Count == 0)
+            {
+                return Room.List.First(r => r.Zone == ZoneType.Surface);
+            }
+
+            List<Player> enemies = new List<Player>();
+            List<Player> teammates = new List<Player>();
+
+            foreach (Player p in Player.List)
+            {
+                if (!p.IsAlive) continue;
+                if (p == luckyPlayer) continue;
+
+                if (p.Role.Side != luckyPlayer.Role.Side)
+                {
+                    enemies.Add(p);
+                }
+                else
+                {
+                    teammates.Add(p);
+                }
+            }
+
+            Room bestRoom = validRooms[0];
+            float bestScore = -9999f;
+
+            foreach (Room room in validRooms)
+            {
+                float score = 0f;
+                float distanceToClosestEnemy = GetClosestDistance(room.Position, enemies);
+
+                if (distanceToClosestEnemy < 15f && enemies.Count > 0)
+                {
+                    continue;
+                }
+
+                score += distanceToClosestEnemy;
+
+                if (teammates.Count > 0)
+                {
+                    float distanceToTeammate = GetClosestDistance(room.Position, teammates);
+
+                    score -= (distanceToTeammate * 2f);
+                }
+
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    bestRoom = room;
+                }
+            }
+
+            return bestRoom;
+        }
+
+        private List<Room> GetValidRooms()
+        {
+            List<Room> validRooms = new List<Room>();
+
+            if (Warhead.IsDetonated)
+            {
+                validRooms.AddRange(Room.List.Where(r => r.Zone == ZoneType.Surface && r.IsSafe()));
+                return validRooms;
+            }
+
+            foreach (Room r in Room.List)
+            {
+                if (BlacklistedRooms.Contains(r.Type))
+                {
+                    continue;
+                }
+
+                if (!r.IsSafe())
+                {
+                    continue;
+                }
+
+                if (Exiled.API.Features.Map.IsLczDecontaminated && r.Zone == ZoneType.LightContainment)
+                {
+                    continue;
+                }
+
+                validRooms.Add(r);
+            }
+
+            return validRooms;
+        }
+
+        private float GetClosestDistance(Vector3 roomPosition, List<Player> players)
+        {
+            if (players.Count == 0)
+            {
+                return 9999f;
+            }
+
+            float minDistance = float.MaxValue;
+            foreach (Player p in players)
+            {
+                float distance = Vector3.Distance(roomPosition, p.Position);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                }
+            }
+
+            return minDistance;
         }
     }
 }

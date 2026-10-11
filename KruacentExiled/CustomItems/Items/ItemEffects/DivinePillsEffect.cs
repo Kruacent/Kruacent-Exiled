@@ -7,6 +7,7 @@ using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using KruacentExiled.CustomItems.API.Extensions;
 using KruacentExiled.CustomItems.API.Interface;
+using KruacentExiled.Misc.Utils;
 using MEC;
 using PlayerRoles;
 using System.Linq;
@@ -42,10 +43,11 @@ namespace KruacentExiled.CustomItems.Items.ItemEffects
                 player.ItemEffectHint("No spectators to respawn");
                 return;
             }
-            var random = Random.Range(0, 100);
 
- 
-            if (random < 25)
+            bool itemActivation = RandomNumberGenerator.RollChance(75, player, false);
+            bool spawnToPlayer = RandomNumberGenerator.RollChance(33, player, true);
+
+            if (itemActivation)
             {
                 player.Kill("unlucky bro");
                 return;
@@ -61,7 +63,7 @@ namespace KruacentExiled.CustomItems.Items.ItemEffects
                     break;
             }
 
-            if (random >= 75)
+            if (spawnToPlayer)
             {
                 Log.Debug("tp");
                 Timing.CallDelayed(1, () =>respawning.Teleport(player));

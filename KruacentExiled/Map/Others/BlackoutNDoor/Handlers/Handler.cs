@@ -3,9 +3,12 @@ using Exiled.API.Extensions;
 using Exiled.API.Features;
 using KE.Utils.API.Interfaces;
 using KE.Utils.Extensions;
+using KruacentExiled.CustomRoles.API.Features;
+using KruacentExiled.CustomRoles.API.Interfaces;
 using KruacentExiled.CustomRoles.CustomSCPTeam;
 using KruacentExiled.Map;
 using KruacentExiled.Map.Others.BlackoutNDoor.Events.EventArgs;
+using KruacentExiled.Misc.Utils;
 using MapGeneration;
 using MEC;
 using PlayerRoles;
@@ -249,10 +252,34 @@ namespace KruacentExiled.Map.Others.BlackoutNDoor.Handlers
                     }
                 }
 
-
-                
             }
+
+            weightedPool = RemoveZoneWhereLuckyAre(weightedPool);
+
             return weightedPool.GetRandomValue();
+        }
+
+        private List<ZoneType> RemoveZoneWhereLuckyAre(List<ZoneType> list)
+        {
+            List<ZoneType> copyList = list.ToList();
+
+            foreach (KECustomRole role in KECustomRole.Registered)
+            {
+                if (role is ILucky lucky)
+                {
+                    foreach (Player player in role.TrackedPlayers)
+                    {
+                        copyList.RemoveAll(z => z == player.Zone);
+                    }
+                }
+            }
+
+            if (copyList.IsEmpty())
+            {
+                return list;
+            }
+
+            return copyList;
         }
     }
 }

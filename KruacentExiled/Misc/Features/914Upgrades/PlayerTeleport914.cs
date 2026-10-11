@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Scp914;
 using InventorySystem.Items.Usables.Scp330;
 using KE.Utils.API.Features;
@@ -21,13 +22,13 @@ namespace KE.Misc.Features._914Upgrades
             Player player = ev.Player;
             Room room = null;
 
-            if(!(player.Role is IFpcRole fpc))
+            if(!(player.Role is FpcRole fpc))
             {
                 return false;
             }
 
             //TeleportOutcome.GetBestExitPosition(fpc);
-            if (ev.KnobSetting == Scp914KnobSetting.Fine && LuckCheck(ChanceTpEntrance))
+            if (ev.KnobSetting == Scp914KnobSetting.Fine && LuckCheck(ChanceTpEntrance, ev.Player))
             {
                 try
                 {
@@ -40,7 +41,7 @@ namespace KE.Misc.Features._914Upgrades
                 
                 
             }
-            if(ev.KnobSetting == Scp914KnobSetting.Coarse && LuckCheck(25))
+            if(ev.KnobSetting == Scp914KnobSetting.Coarse && LuckCheck(25, ev.Player))
             {
                 try
                 {
