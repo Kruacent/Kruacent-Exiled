@@ -8,6 +8,8 @@ using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using InventorySystem.Configs;
+using InventorySystem.Items;
+using InventorySystem.Items.Firearms.Attachments;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
 using KE.Utils.API.Translations;
@@ -547,15 +549,41 @@ namespace KruacentExiled.CustomRoles.API.Features
 
             for (int i = 0; i < Inventory.Count; i++)
             {
-                string item = Inventory[i];
-                Log.Debug(Name + ": Adding " + item + " to inventory.");
-                if (TryAddItem(player, item) && CustomItem.TryGet(item, out CustomItem customItem) && customItem is CustomWeapon customWeapon && player.CurrentItem is Firearm firearm && !customWeapon.Attachments.IsEmpty())
+                string itemName = Inventory[i];
+
+
+                Item item = null;
+                if (Enum.TryParse<ItemType>(itemName, out var result))
                 {
-                    firearm.AddAttachment(customWeapon.Attachments);
-                    Log.Debug(Name + ": Applied attachments to " + item + ".");
+                    if (result.IsAmmo())
+                    {
+                        player.Ammo[result] = 100;
+                    }
+                    else
+                    {
+                        item = player.AddItem(result);
+                    }
+                }
+
+
+                Log.Debug(Name + ": Adding " + item + " to inventory.");
+                if (item != null)
+                {
+
+                    if (CustomItem.TryGet(item, out CustomItem customItem) && customItem is CustomWeapon customWeapon && player.CurrentItem is Firearm currentFirearm && !customWeapon.Attachments.IsEmpty())
+                    {
+                        currentFirearm.AddAttachment(customWeapon.Attachments);
+                    }
+                    else if (item is Firearm firearm)
+                    {
+                        uint code = AttachmentsServerHandler.ServerGetReceivedPlayerPreference(firearm.Base);
+                        firearm.Base.ApplyAttachmentsCode(code, reValidate: true);
+
+                    }
                 }
             }
         }
+
 
         protected virtual void GiveAmmo(Player player)
         {
