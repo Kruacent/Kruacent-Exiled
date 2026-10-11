@@ -8,6 +8,7 @@ using KruacentExiled.CustomRoles.API.Interfaces;
 using MEC;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace KruacentExiled.CustomRoles.Abilities
 {
@@ -52,19 +53,9 @@ namespace KruacentExiled.CustomRoles.Abilities
             {
                 setPosition.Destroy();
             }
+            SetPositionPosition.Create(player,position);
 
-            
-
-
-
-            FollowingTextToy followingTextToy = new FollowingTextToy(new List<Player>() { player }, position, Quaternion.identity, Vector3.one);
-
-            new SetPositionPosition(player,position, followingTextToy);
-
-            
-
-            followingTextToy.OnlyMoveY = true;
-            followingTextToy.Text = "↓";
+ 
 
             Log.Debug("set position at " + position);
             return base.AbilityUsed(player);
@@ -95,30 +86,29 @@ namespace KruacentExiled.CustomRoles.Abilities
             private static Dictionary<Player, SetPositionPosition> SelectedTarget = new Dictionary<Player, SetPositionPosition>();
             public Player Player { get; private set; }
             public Vector3 Position { get; }
-            public FollowingTextToy Follow { get; }
+
+            private ClientPrimitives.ClientSidePrimitive _clientSidePrimitive = null;
+
+
             private readonly CoroutineHandle handle;
 
-            public SetPositionPosition(Player player,Vector3 position, FollowingTextToy follow)
+            public static SetPositionPosition Create(Player player, Vector3 position)
+            {
+                if (player == null) throw new ArgumentNullException(nameof(player));
+                return new SetPositionPosition(player, position);
+            }
+
+            private SetPositionPosition(Player player,Vector3 position)
             {
                 Position = position;
-                Follow = follow;
                 Player = player;
+                _clientSidePrimitive = new ClientPrimitives.ClientSidePrimitive(Position, Quaternion.identity, Vector3.one * .1f, PrimitiveType.Sphere, Color.magenta, AdminToys.PrimitiveFlags.Visible, player);
+                _clientSidePrimitive.SpawnClientPrimitive();
                 handle = Timing.RunCoroutine(CheckPosition());
                 SelectedTarget.Add(Player, this);
             }
 
-            public static void TryDestroyFollowingTextToy(Player player)
-            {
-                if (SelectedTarget.ContainsKey(player))
-                {
-                    SetPositionPosition setposition = SelectedTarget[player];
 
-                    if (setposition.Follow != null)
-                    {
-                        setposition.Follow.Destroy();
-                    }
-                }
-            }
 
             public static bool TryGet(Player player, out SetPositionPosition position)
             {
@@ -128,7 +118,7 @@ namespace KruacentExiled.CustomRoles.Abilities
 
             public void Destroy()
             {
-                Follow.Destroy();
+                _clientSidePrimitive.DestroyClientPrimitive();
                 SelectedTarget.Remove(Player);
                 Timing.KillCoroutines(handle);
                 Player = null;
