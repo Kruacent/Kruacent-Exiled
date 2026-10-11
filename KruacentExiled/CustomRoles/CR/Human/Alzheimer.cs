@@ -1,21 +1,17 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.API.Features.Attributes;
-using Exiled.API.Features.Items;
 using Exiled.API.Features.Pools;
-using Exiled.CustomRoles.API.Features;
-using Exiled.Events.EventArgs.Player;
-using HarmonyLib;
 using HintServiceMeow.Core.Enum;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
 using KE.Utils.API.Features;
-using KE.Utils.API.Translations.Events;
 using KE.Utils.Extensions;
 using KruacentExiled.CustomRoles.API.Features;
 using KruacentExiled.CustomRoles.API.Interfaces;
 using KruacentExiled.CustomRoles.CustomSCPTeam;
+using KruacentExiled.CustomSpawnPoint;
+using KruacentExiled.CustomSpawnPoint.Spawned;
 using KruacentExiled.Misc.Features.Spawn;
 using MEC;
 using PlayerRoles;
@@ -24,7 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace KruacentExiled.CustomRoles.CR.Human
 {
@@ -80,7 +75,7 @@ namespace KruacentExiled.CustomRoles.CR.Human
         {
             try
             {
-                if (Round.ElapsedTime.TotalSeconds <= 20 )
+                if (Round.ElapsedTime.TotalSeconds <= 20)
                 {
                     Timing.CallDelayed(1f, () => CreateSpawnHint(player));
                 }
@@ -173,7 +168,12 @@ namespace KruacentExiled.CustomRoles.CR.Human
             if (player is null) return;
             player.EnableEffect(EffectType.Flashed, 1, 5);
             player.EnableEffect(EffectType.Invisible, 1, 6);
-            player.Teleport(player.Zone.RandomSafeRoom());
+
+
+            Room room = player.Zone.RandomSafeRoom();
+            RoomSpawnedCustomPoint point = RoomCustomPointHandler.GetRandomPoint(RoomCustomPointType.Teleport,room);
+
+            player.Teleport(point);
         }
 
 
