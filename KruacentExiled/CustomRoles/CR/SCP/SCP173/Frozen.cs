@@ -120,8 +120,19 @@ namespace KruacentExiled.CustomRoles.CR.SCP.SCP173
 
             Timing.CallDelayed(time, () =>
             {
-                scp244Pickup.Destroy();
-                _primed.Remove(scp244Pickup.Base);
+                try
+                {
+                    if (scp244Pickup.Base != null && scp244Pickup.GameObject != null)
+                    {
+                        scp244Pickup.Destroy();
+                    }
+                }
+                finally
+                {
+                    _primed.Remove(scp244Pickup.Base);
+                }
+                
+                
             });
 
 
