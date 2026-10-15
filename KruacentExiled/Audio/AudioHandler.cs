@@ -172,8 +172,12 @@ namespace KruacentExiled.Audio
             if (speaker == null) return null;
             speaker.transform.SetParent(gameObject.transform);
             speaker.transform.localPosition = Vector3.zero;
+            KELog.Debug($"speaker pos = {speaker.Position}");
+            KELog.Debug($"player pos = {player.Position}");
+
 
             speaker.MaxDistance = maxDistance;
+            speaker.MinDistance = 1f;
 
             if (!audioPlayers.ContainsKey(player))
             {
@@ -197,8 +201,39 @@ namespace KruacentExiled.Audio
         public AudioClipPlayback Play(Player listener, SoundType soundType,string clipName,Vector3 position, float maxDistance = 20)
         {
             GameObject gameObject = new GameObject();
-            gameObject.transform.position = position;
-            return Play(listener, soundType, clipName, gameObject, maxDistance);
+
+            if (gameObject == null)
+            {
+                Log.Error("go null");
+            }
+            if (listener == null)
+            {
+                Log.Error("player null");
+            }
+
+
+            Log.Info($"play position ({gameObject.name}) {listener.Nickname} [{soundType}] ({clipName})");
+            AudioPlayer audioPlayer = CreateOrGet(listener, soundType, clipName);
+            float volume = GetVolume(listener, soundType);
+
+            Speaker speaker = CreateSpeaker(audioPlayer, soundType, volume);
+
+            if (speaker == null) return null;
+            speaker.Position = position;
+
+
+            speaker.MaxDistance = maxDistance;
+            speaker.MinDistance = 1f;
+
+            if (!audioPlayers.ContainsKey(listener))
+            {
+                audioPlayers[listener] = new AudioCollection();
+            }
+
+
+            audioPlayers[listener].AddPlayer(audioPlayer, soundType);
+
+            return audioPlayer.AddClip(clipName);
         }
 
 
