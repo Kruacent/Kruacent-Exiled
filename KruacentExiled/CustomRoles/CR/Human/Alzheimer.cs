@@ -77,7 +77,7 @@ namespace KruacentExiled.CustomRoles.CR.Human
             {
                 if (Round.ElapsedTime.TotalSeconds <= 20)
                 {
-                    Timing.CallDelayed(1f, () => CreateSpawnHint(player));
+                    Timing.CallDelayed(3f, () => CreateSpawnHint(player));
                 }
                 handles[player] = Timing.RunCoroutine(Teleport(player));
             }catch(Exception e)
@@ -99,9 +99,12 @@ namespace KruacentExiled.CustomRoles.CR.Human
 
             List<ISCPPreferences> allOtherRole;
 
-            int numberscp = Player.Enumerable.Count(p => SCPTeam.IsSCP(p.ReferenceHub));
-            if (numberscp == 0) return;
-
+            int numberscp = SCPTeam.SCPs.Count;
+            if (numberscp == 0)
+            {
+                Log.Warn("no scp found");
+                return;
+            }
             if (numberscp <= 1)
             {
                 allOtherRole = Spawn.allRoles.Where(s => s != trueSCP && !s.IsSupport).ToList();
@@ -130,7 +133,7 @@ namespace KruacentExiled.CustomRoles.CR.Human
             allOtherRole.ShuffleListSecure();
 
             StringBuilder sb = StringBuilderPool.Pool.Get();
-            sb.AppendLine("<color=red><size=20> probable SCP(s) :")
+            sb.AppendLine("<color=red><size=20> probable SCP :")
                 .Append(allOtherRole.ElementAt(0).SCPId)
                 .Append(' ')
                 .Append(allOtherRole.ElementAt(1).SCPId)
