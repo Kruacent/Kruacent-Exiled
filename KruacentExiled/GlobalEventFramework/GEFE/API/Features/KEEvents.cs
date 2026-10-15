@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using KE.Utils.API;
+using KE.Utils.API.Features;
 using KruacentExiled.GlobalEventFramework.GEFE.API.Interfaces;
 using KruacentExiled.GlobalEventFramework.GEFE.Events.EventArgs;
 using KruacentExiled.GlobalEventFramework.GEFE.Events.Handlers;
@@ -243,11 +244,15 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
             {
                 int randomIndex = UnityEngine.Random.Range(0, weightedPool.Count);
                 T selectedGE = weightedPool[randomIndex];
-
                 result.Add(selectedGE);
+                if (selectedGE is IOnlyEvent)
+                {
+                    KELog.Debug($"selected : {selectedGE.Name} is only event");
+                    break;
+                }
 
                 weightedPool.Remove(selectedGE);
-                weightedPool.RemoveAll(e => selectedGE.IncompatibleEvents.Contains(e.Name));
+                weightedPool.RemoveAll(e => selectedGE.IncompatibleEvents.Contains(e.Name) || e is IOnlyEvent);
                 if (weightedPool.Count == 0) break;
             }
 

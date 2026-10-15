@@ -157,9 +157,11 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
             base.Disable(ev);
         }
 
-        private static void ChooseGlobalEvent()
+        internal static void ChooseGlobalEvent(int numberGE = -1)
         {
-            if(NumberOfGE == -1)
+            NumberOfGE = numberGE;
+
+            if (NumberOfGE == -1)
             {
                 NumberOfGE = Random.value < .1f ? 2 : 1;
             }

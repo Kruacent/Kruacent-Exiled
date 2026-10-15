@@ -8,7 +8,6 @@ using System;
 namespace KruacentExiled.Commands.DebugCommands
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    [CommandHandler(typeof(GameConsoleCommandHandler))]
     internal class GetRandomRoom914 : KECommand
     {
         public override string Command => "getrandomroom914";
