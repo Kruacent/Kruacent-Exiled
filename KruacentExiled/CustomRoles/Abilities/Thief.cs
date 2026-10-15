@@ -97,13 +97,13 @@ namespace KruacentExiled.CustomRoles.Abilities
 
             Item item = null;
 
-            if(player.CurrentItem is null || Random.Range(0f,100f) < 50f)
+            if(thiefed.CurrentItem is null || Random.Range(0f,100f) < 50f)
             {
                 item = thiefed.Items.GetRandomValue();
             }
             else
             {
-                item = player.CurrentItem;
+                item = thiefed.CurrentItem;
             }
 
             if(item == null)
@@ -126,11 +126,7 @@ namespace KruacentExiled.CustomRoles.Abilities
             }
             finally
             {
-                if(item != null)
-                {
-                    thiefed.RemoveItem(item);
-                }
-                
+                thiefed.RemoveItem(item);
             }
 
             
