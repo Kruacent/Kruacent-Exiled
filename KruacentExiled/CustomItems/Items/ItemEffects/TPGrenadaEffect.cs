@@ -7,6 +7,7 @@ using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.Extensions;
 using KruacentExiled.CustomItems.API.Interface;
+using KruacentExiled.CustomSpawnPoint.Spawned;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -66,7 +67,21 @@ namespace KruacentExiled.CustomItems.Items.ItemEffects
                     if (line)
                     {
                         effectedPlayers.Add(player);
-                        player.Teleport(RandomRoom().GetValidPosition());
+                        Room room = RandomRoom();
+                        RoomSpawnedCustomPoint point = CustomSpawnPoint.RoomCustomPointHandler.GetRandomPoint(CustomSpawnPoint.RoomCustomPointType.Teleport, room);
+                        Vector3 teleport;
+                        if (point != null)
+                        {
+                            teleport = point.Position;
+                        }
+                        else
+                        {
+                            teleport = room.GetValidPosition();
+                        }
+
+
+
+                        player.Teleport(teleport);
                     }
                 }
                 catch (Exception exception)
