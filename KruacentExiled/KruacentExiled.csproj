@@ -10,7 +10,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="ExMod.Exiled" Version="9.14.2" />
+    <PackageReference Include="ExMod.Exiled" Version="9.15.1" />
     
   </ItemGroup>
 

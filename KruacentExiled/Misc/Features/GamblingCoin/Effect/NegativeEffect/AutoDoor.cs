@@ -11,7 +11,7 @@ internal class AutoDoor : ICoinEffect
 {
     public string Name { get; set; } = "AutoDoor";
     public string Message { get; set; } = "You are very talented in messing up the game !";
-    public int Weight { get; set; } = 5;
+    public int Weight { get; set; } = 10;
     public EffectType Type { get; set; } = EffectType.Negative;
 
     public void Execute(Player player)

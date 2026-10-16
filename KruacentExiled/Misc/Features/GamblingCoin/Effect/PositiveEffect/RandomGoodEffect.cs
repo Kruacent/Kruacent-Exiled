@@ -23,7 +23,7 @@ internal class RandomGoodEffect : ICoinEffect
 
         if (positiveEffects.Count == 0)
         {
-            Log.Warn("no negative effect found");
+            Log.Warn("no positive effect found");
             return;
         }
 

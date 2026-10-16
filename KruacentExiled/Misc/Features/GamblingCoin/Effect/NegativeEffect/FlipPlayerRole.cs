@@ -8,7 +8,7 @@ internal class FlipPlayerRole : ICoinEffect
 {
     public string Name { get; set; } = "FlipPlayerRole";
     public string Message { get; set; } = "That's what I call an UNO reverse card!";
-    public int Weight { get; set; } = 10;
+    public int Weight { get; set; } = 6;
     public EffectType Type { get; set; } = EffectType.Negative;
 
     private static readonly Dictionary<RoleTypeId, RoleTypeId> RoleInversions = new Dictionary<RoleTypeId, RoleTypeId>
