@@ -30,6 +30,13 @@ namespace KruacentExiled.CustomRoles.Abilities
     {
         public override string Name { get;  } = "Convert";
 
+
+        public const string ConvertNobodyTranslation = "ConvertNobody";
+        public const string ConvertSameTeamTranslation = "ConvertSameTeam";
+        public const string ConvertNonZombieTranslation = "ConvertNonZombie";
+        public const string ConvertSuccessTranslation = "ConvertSuccess";
+
+
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new Dictionary<string, Dictionary<string, string>>()
@@ -38,19 +45,19 @@ namespace KruacentExiled.CustomRoles.Abilities
                 {
                     [TranslationKeyName] = "Convert",
                     [TranslationKeyDesc] = "Convert a zombie to your team",
-                    ["ConvertNobody"] = "But nobody's here",
-                    ["ConvertSameTeam"] = "I know you don't like them, but they're in your team",
-                    ["ConvertNonZombie"] = "That ain't a zombie",
-                    ["ConvertSuccess"] = "New friend acquired!",
+                    [ConvertNobodyTranslation] = "But nobody's here",
+                    [ConvertSameTeamTranslation] = "I know you don't like them, but they're in your team",
+                    [ConvertNonZombieTranslation] = "That ain't a zombie",
+                    [ConvertSuccessTranslation] = "New friend acquired!",
                 },
                 ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Convert",
                     [TranslationKeyDesc] = "Converti un zombie à la bonne foi",
-                    ["ConvertNobody"] = "Mais personne n'est venu",
-                    ["ConvertSameTeam"] = "Je sais que tu l'aimes pas mais il est bien avec toi",
-                    ["ConvertNonZombie"] = "C'est pas un zombie ça",
-                    ["ConvertSuccess"] = "Ami obtenu!",
+                    [ConvertNobodyTranslation] = "Mais personne n'est venu",
+                    [ConvertSameTeamTranslation] = "Je sais que tu l'aimes pas mais il est bien avec toi",
+                    [ConvertNonZombieTranslation] = "C'est pas un zombie ça",
+                    [ConvertSuccessTranslation] = "Ami obtenu !",
                 }
             };
         }
@@ -95,20 +102,22 @@ namespace KruacentExiled.CustomRoles.Abilities
 
             if (playerHit == null || playerHit == player)
             {
-                ShowEffectHint(player, "But nobody's here");
+
+                
+                ShowEffectHint(player, ConvertNobodyTranslation);
                 return false;
             }
 
 
             if (playerHit.Role.Side == player.Role.Side)
             {
-                ShowEffectHint(player, "I know you don't like them but they're in your team");
+                ShowEffectHint(player, ConvertSameTeamTranslation);
                 return false;
             }
 
             if (playerHit.IsScp && playerHit.Role != RoleTypeId.Scp0492)
             {
-                ShowEffectHint(player, "That ain't a zombie");
+                ShowEffectHint(player, ConvertNonZombieTranslation);
                 return false;
             }
 
@@ -122,7 +131,7 @@ namespace KruacentExiled.CustomRoles.Abilities
                 playerHit.Role.Set(player.Role, RoleSpawnFlags.None);
             }
 
-            MainPlugin.ShowEffectHint(player, "New friend acquired!");
+            ShowEffectHint(player, ConvertSuccessTranslation);
             return base.AbilityUsed(player);
         }
 

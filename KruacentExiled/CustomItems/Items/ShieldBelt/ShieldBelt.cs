@@ -48,8 +48,8 @@ namespace KruacentExiled.CustomItems.Items.ShieldBelt
                 },
                 ["fr"] = new Dictionary<string, string>()
                 {
-                    [TranslationKeyName] = "Shield belt",
-                    [TranslationKeyDesc] = "A projectile-repulsion device.\nIt will attempt to stop incoming projectiles or shrapnel, but does nothing against melee attacks or heat.\nIt prevents the wearer from firing out.\n(works in the inventory) ",
+                    [TranslationKeyName] = "Bouclier d'énergie",
+                    [TranslationKeyDesc] = "Un bouclier d'énergie personnel conçu pour repousser les projectiles de tous les types d'armes à distance et les fragments de shrapnels, mais il est inefficace dans les combats en mêlée .\Il empêche également son utilisateur d'utiliser des armes à distance.\n(marche dans l'inventaire) ",
                 },
             };
         }

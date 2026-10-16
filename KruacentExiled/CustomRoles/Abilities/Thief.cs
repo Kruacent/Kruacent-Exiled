@@ -87,8 +87,7 @@ namespace KruacentExiled.CustomRoles.Abilities
                 Steal(player, ally);
                 return true;
             }
-
-            MainPlugin.ShowEffectHint(player, "no player to steal from");
+            ShowEffectHint(player, Fail);
             return false;
         }
 
