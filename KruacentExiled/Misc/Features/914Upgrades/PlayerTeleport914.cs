@@ -5,6 +5,8 @@ using Exiled.Events.EventArgs.Scp914;
 using InventorySystem.Items.Usables.Scp330;
 using KE.Utils.API.Features;
 using KE.Utils.Extensions;
+using KruacentExiled.CustomSpawnPoint;
+using KruacentExiled.CustomSpawnPoint.Spawned;
 using MEC;
 using PlayerRoles.FirstPersonControl;
 using Scp914;
@@ -35,7 +37,8 @@ namespace KE.Misc.Features._914Upgrades
                 Timing.CallDelayed(.1f, delegate
                 {
                     KELog.Debug($"teleporting {player.Nickname} to {room.Name}");
-                    player.Teleport(room);
+                    RoomSpawnedCustomPoint point = RoomCustomPointHandler.GetRandomPoint(RoomCustomPointType.Teleport, room);
+                    player.Teleport(point.Position);
                 });
                 
             }
