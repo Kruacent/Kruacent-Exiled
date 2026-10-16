@@ -16,6 +16,8 @@ using KE.Utils.API.Translations;
 using KruacentExiled.CustomRoles.API.HintPositions;
 using KruacentExiled.CustomRoles.API.Interfaces;
 using KruacentExiled.CustomRoles.Events.EventArgs;
+using KruacentExiled.Misc.Events;
+using KruacentExiled.Misc.Utils;
 using MEC;
 using PlayerRoles;
 using System;
@@ -255,7 +257,11 @@ namespace KruacentExiled.CustomRoles.API.Features
             {
                 Exiled.Events.Handlers.Player.ReceivingEffect += OnReceivingEffect;
             }
-            
+
+            if (this is ILucky)
+            {
+                RandomNumberGenerator.OnRollingChance += HandleRollingChance;
+            }
         }
 
 
@@ -268,6 +274,11 @@ namespace KruacentExiled.CustomRoles.API.Features
             if (this is IEffectImmunity)
             {
                 Exiled.Events.Handlers.Player.ReceivingEffect -= OnReceivingEffect;
+            }
+
+            if (this is ILucky)
+            {
+                RandomNumberGenerator.OnRollingChance -= HandleRollingChance;
             }
         }
 
@@ -307,6 +318,33 @@ namespace KruacentExiled.CustomRoles.API.Features
                 ev.IsAllowed = false;
             }
 
+        }
+
+        private void HandleRollingChance(RollingChanceEventArgs ev)
+        {
+            ILucky luckyRole = this as ILucky;
+
+            if (ev.TargetPlayer != null)
+            {
+                if (TrackedPlayers.Contains(ev.TargetPlayer))
+                {
+                    ApplyLuck(luckyRole, ev);
+                }
+                return;
+            }
+        }
+
+        private void ApplyLuck(ILucky luckyRole, RollingChanceEventArgs ev)
+        {
+            switch (luckyRole.LuckProfile)
+            {
+                case LuckProfile.UltimateLucky:
+                    ev.ForcedResult = ev.IsBeneficial;
+                    break;
+                case LuckProfile.UltimateUnlucky:
+                    ev.ForcedResult = !ev.IsBeneficial;
+                    break;
+            }
         }
 
 

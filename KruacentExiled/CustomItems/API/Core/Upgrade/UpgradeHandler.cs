@@ -5,6 +5,7 @@ using Exiled.Events.EventArgs.Scp914;
 using KE.Utils.API.Interfaces;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
+using KruacentExiled.Misc.Utils;
 using Scp914;
 
 namespace KruacentExiled.CustomItems.API.Core.Upgrade
@@ -30,7 +31,7 @@ namespace KruacentExiled.CustomItems.API.Core.Upgrade
             if (!CustomItem.TryGet(ev.Item, out CustomItem ci)) return;
             if (!(ci is IUpgradableCustomItem upgradable)) return;
             Log.Debug("upgrading item");
-            if (UpgradeCheck(upgradable, ev.KnobSetting))
+            if (UpgradeCheck(upgradable, ev.KnobSetting, ev.Player))
             {
                 Log.Debug("success");
                 var newItemid = upgradable.Upgrade[ev.KnobSetting].UpgradedItem;
@@ -47,7 +48,6 @@ namespace KruacentExiled.CustomItems.API.Core.Upgrade
 
         private void UpgradePickUp(UpgradingPickupEventArgs ev)
         {
-            
             if (!CustomItem.TryGet(ev.Pickup, out CustomItem ci)) return;
             if (!(ci is IUpgradableCustomItem upgradable)) return;
             Log.Debug("upgrading pickup");
@@ -58,7 +58,7 @@ namespace KruacentExiled.CustomItems.API.Core.Upgrade
             }
 
 
-            if (UpgradeCheck(upgradable, ev.KnobSetting))
+            if (UpgradeCheck(upgradable, ev.KnobSetting, ev.Pickup.PreviousOwner))
             {
                 Log.Debug("success");
                 string newItemName = upgradable.Upgrade[ev.KnobSetting].UpgradedItem;
@@ -77,7 +77,7 @@ namespace KruacentExiled.CustomItems.API.Core.Upgrade
             ev.IsAllowed = false;
         }
 
-        private bool UpgradeCheck(IUpgradableCustomItem upgradable, Scp914KnobSetting knob)
+        private bool UpgradeCheck(IUpgradableCustomItem upgradable, Scp914KnobSetting knob, Player player)
         {
             if (!upgradable.Upgrade.TryGetValue(knob, out UpgradeProperties item)) return false;
             if (MainPlugin.Instance.Config.Debug)
@@ -85,8 +85,9 @@ namespace KruacentExiled.CustomItems.API.Core.Upgrade
                 Log.Warn("debug activated!");
                 return true;
             }
-            float random = UnityEngine.Random.Range(0f, 100f);
-            return random < item.Chance;
+
+            bool willUpgrade = RandomNumberGenerator.RollChance(item.Chance, player, true);
+            return willUpgrade;
         }
 
     }

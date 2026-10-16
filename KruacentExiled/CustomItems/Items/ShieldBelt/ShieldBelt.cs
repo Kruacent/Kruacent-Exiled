@@ -49,7 +49,7 @@ namespace KruacentExiled.CustomItems.Items.ShieldBelt
                 ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Bouclier d'énergie",
-                    [TranslationKeyDesc] = "Un bouclier d'énergie personnel conçu pour repousser les projectiles de tous les types d'armes à distance et les fragments de shrapnels, mais il est inefficace dans les combats en mêlée .\Il empêche également son utilisateur d'utiliser des armes à distance.\n(marche dans l'inventaire) ",
+                    [TranslationKeyDesc] = "Un bouclier d'énergie personnel conçu pour repousser les projectiles de tous les types d'armes à distance et les fragments de shrapnels, mais il est inefficace dans les combats en mêlée .\nIl empêche également son utilisateur d'utiliser des armes à distance.\n(marche dans l'inventaire) ",
                 },
             };
         }

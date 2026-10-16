@@ -27,9 +27,7 @@ namespace KE.Misc.Features._914Upgrades
             {
                 return false;
             }
-
-            //TeleportOutcome.GetBestExitPosition(fpc);
-            Room room = GetRoom(ev.KnobSetting);
+            Room room = GetRoom(ev.KnobSetting,player);
 
             if (room != null)
             {
@@ -49,12 +47,12 @@ namespace KE.Misc.Features._914Upgrades
 
 
 
-        public static Room GetRoom(Scp914KnobSetting setting)
+        public Room GetRoom(Scp914KnobSetting setting,Player player)
         {
             Room room = null;
 
             KELog.Debug("tp entrance");
-            if (setting == Scp914KnobSetting.Fine && LuckCheck(ChanceTpEntrance))
+            if (setting == Scp914KnobSetting.Fine && LuckCheck(ChanceTpEntrance,player))
             {
                 try
                 {
@@ -68,8 +66,7 @@ namespace KE.Misc.Features._914Upgrades
 
 
             }
-            KELog.Debug("tp light");
-            if (setting == Scp914KnobSetting.Coarse && LuckCheck(25))
+            if(setting == Scp914KnobSetting.Coarse && LuckCheck(25, player))
             {
                 try
                 {
