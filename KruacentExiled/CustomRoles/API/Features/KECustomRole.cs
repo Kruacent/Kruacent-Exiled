@@ -16,7 +16,7 @@ using KE.Utils.API.Translations;
 using KruacentExiled.CustomRoles.API.HintPositions;
 using KruacentExiled.CustomRoles.API.Interfaces;
 using KruacentExiled.CustomRoles.Events.EventArgs;
-using KruacentExiled.Misc.Events;
+using KruacentExiled.Misc.Events.EventsArgs;
 using KruacentExiled.Misc.Utils;
 using MEC;
 using PlayerRoles;

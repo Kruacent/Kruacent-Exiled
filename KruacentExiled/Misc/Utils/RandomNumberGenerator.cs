@@ -1,8 +1,8 @@
 ﻿using System;
 using Exiled.API.Features;
 using UnityEngine;
-using KruacentExiled.Misc.Events;
 using KE.Utils.API.Features;
+using KruacentExiled.Misc.Events.EventsArgs;
 
 namespace KruacentExiled.Misc.Utils
 {
