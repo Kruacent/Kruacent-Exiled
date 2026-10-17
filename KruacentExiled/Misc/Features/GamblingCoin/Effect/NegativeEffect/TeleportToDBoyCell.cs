@@ -13,7 +13,6 @@ internal class TeleportToDBoyCell : ICoinEffect
 
     public void Execute(Player player)
     {
-        player.DropHeldItem();
         player.Teleport(Door.Get(DoorType.PrisonDoor));
 
         if (Warhead.IsDetonated)

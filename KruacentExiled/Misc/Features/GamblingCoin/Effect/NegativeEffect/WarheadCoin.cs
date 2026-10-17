@@ -6,7 +6,7 @@ internal class WarheadCoin : ICoinEffect
 {
     public string Name { get; set; } = "Warhead";
     public string Message { get; set; } = string.Empty;
-    public int Weight { get; set; } = 10;
+    public int Weight { get; set; } = 5;
     public EffectType Type { get; set; } = EffectType.Negative;
 
     public void Execute(Player player)

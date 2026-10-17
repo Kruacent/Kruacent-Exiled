@@ -16,30 +16,8 @@ internal class TeleportToEnemy : ICoinEffect
 
     public void Execute(Player player)
     {
+        Player enemy = Player.List.Where(p => p != player && p.Role.Team != player.Role.Team || p.IsScp).GetRandomValue();
 
-
-        List<ReferenceHub> scp = SCPTeam.SCPs.ToList();
-
-
-        Player target = null;
-
-        if (scp.Count > 0)
-        {
-            target = Player.Get(scp.GetRandomValue());
-        }
-        else
-        {
-            var enemies = Player.List
-                .Where(p => p != player && p.Role.Team != player.Role.Team)
-                .ToList();
-
-            if (enemies.Count > 0)
-                target = enemies[UnityEngine.Random.Range(0, enemies.Count)];
-        }
-
-        if (target != null)
-        {
-            player.Teleport(target.Position);
-        }
+        player.Teleport(enemy);
     }
 }

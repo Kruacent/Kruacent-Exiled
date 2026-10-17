@@ -7,9 +7,9 @@ internal class NightVision : ICoinEffect
 {
     public string Name { get; set; } = "NightVision";
     public string Message { get; set; } = "Yippee, you can see in the dark";
-    public int Weight { get; set; } = 5;
+    public int Weight { get; set; } = 10;
     public EffectType Type { get; set; } = EffectType.Positive;
-    public float Duration { get; set; } = 30;
+    public float Duration { get; set; } = 120;
 
     public void Execute(Player player)
     {

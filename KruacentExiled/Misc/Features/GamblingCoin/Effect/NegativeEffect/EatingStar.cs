@@ -12,7 +12,7 @@ public class EatingStar : IDurationEffect
 {
     public string Name { get; set; } = "EatingStar";
     public string Message { get; set; } = "Eating the disco ball wasn't good idea";
-    public int Weight { get; set; } = 2;
+    public int Weight { get; set; } = 7;
     public EffectType Type { get; set; } = EffectType.Negative;
 
 
