@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Spawn;
+using Exiled.Events.Commands.Reload;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
+using KE.Utils.API.Features;
 using KruacentExiled.CustomItems.API.Core.Models;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomItems.Items.PickupModels;
+using MEC;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace KruacentExiled.CustomItems.Items
@@ -73,7 +77,15 @@ namespace KruacentExiled.CustomItems.Items
 
         protected override void OnThrownProjectile(ThrownProjectileEventArgs ev)
         {
-            KE.Utils.API.Sounds.SoundPlayer.Instance.Play("worms", ev.Projectile.Position, 50,20f);
+            KELog.Debug("playing worms at "+ ev.Projectile.Position);
+            KELog.Debug("player position" + ev.Player.Position);
+            Timing.CallDelayed(.1f, () =>
+            {
+                KruacentExiled.MainPlugin.AudioHandler.Play(Player.List, Audio.SoundType.Noise, "worms", ev.Projectile.GameObject,40f);
+                //KE.Utils.API.Sounds.SoundPlayer.Instance.Play("worms", ev.Projectile.GameObject, 5f, 20); // 50,20
+            });
+            
+            
         }
         protected override void OnExplodingGrenade(ExplodingGrenadeEventArgs ev)
         {

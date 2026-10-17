@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using KE.Utils.API;
+using KE.Utils.API.Features;
 using KruacentExiled.GlobalEventFramework.GEFE.API.Interfaces;
 using KruacentExiled.GlobalEventFramework.GEFE.Events.EventArgs;
 using KruacentExiled.GlobalEventFramework.GEFE.Events.Handlers;
@@ -16,20 +17,33 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
     public abstract class KEEvents
     {
         #region Abstract Properties
-        public abstract uint Id { get; set; }
+        /// <summary>
+        /// The unique id of the <see cref="KEEvents"/>
+        /// </summary>
+        //public abstract uint Id { get; set; }
+        /// <summary>
+        /// The name of the <see cref="KEEvents"/>
+        /// </summary>
         public abstract string Name { get; set; }
+        /// <summary>
+        /// <para>The chance to get this <see cref="KEEvents"/></para>
+        /// <para>Note: Set to 0 or lower to disable it</para>
+        /// </summary>
         public virtual int WeightedChance { get; set; } = 1;
-        public virtual uint[] IncompatibleEvents { get; set; } = new uint[0];
+        /// <summary>
+        /// List of incompatible <see cref="KEEvents"/> by its id
+        /// </summary>
+        public virtual string[] IncompatibleEvents { get; set; } = new string[0];
         protected HashSet<CoroutineHandle> CoroutineHandles { get; } = new HashSet<CoroutineHandle>();
         protected static readonly HashSet<KEEvents> s_activeEvents = new HashSet<KEEvents>();
 
         #endregion
 
         #region Static Variables
-        private static Dictionary<uint, KEEvents> _idLookup = new Dictionary<uint, KEEvents>();
+        //private static Dictionary<uint, KEEvents> _idLookup = new Dictionary<uint, KEEvents>();
         private static Dictionary<string, KEEvents> _nameLookup = new Dictionary<string, KEEvents>();
 
-        public static HashSet<KEEvents> List => new HashSet<KEEvents>(_idLookup.Values);
+        public static HashSet<KEEvents> List => new HashSet<KEEvents>(_nameLookup.Values);
         #endregion
         #region Events
 
@@ -72,9 +86,9 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
         }
         public virtual void Register()
         {
-            if (_idLookup.ContainsKey(Id))
+            if (_nameLookup.ContainsKey(Name))
             {
-                throw new FailedRegisterException($"id already used by {Get(Id).Name} ");
+                throw new FailedRegisterException($"name already used");
             }
             LogRegister();
             Init();
@@ -82,7 +96,6 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
 
         public virtual void Init()
         {
-            _idLookup.Add(Id, this);
             _nameLookup.Add(Name, this);
             SubscribeEvents();
         }
@@ -90,7 +103,6 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
 
         public virtual void Destroy()
         {
-            _idLookup.Remove(Id);
             _nameLookup.Remove(Name);
             foreach(CoroutineHandle handle in CoroutineHandles)
             {
@@ -171,7 +183,10 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
             }
         }
 
-
+        /// <summary>
+        /// Disable all active <see cref="KEEvents"/>
+        /// </summary>
+        /// <param name="events"></param>
         protected static void DisableEvents(IEnumerable<KEEvents> events)
         {
             foreach (KEEvents ev in events.ToList())
@@ -189,13 +204,21 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
                 KEEventsHandler.OnDisabled(new DisabledEventArgs(ev));
             }
         }
-
+        /// <summary>
+        /// Executed after the <see cref="KEEvents"/> is disabled
+        /// </summary>
+        /// <param name="ev"></param>
         protected virtual void Disable(KEEvents ev)
         {
 
         }
 
-
+        /// <summary>
+        /// Get a random <see cref="KEEvents"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="numberEvent"></param>
+        /// <returns></returns>
         protected static IEnumerable<T> GetRandomEvent<T>(int numberEvent = 1) where T : KEEvents
         {
             List<T> result = new List<T>();
@@ -209,8 +232,9 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
                     {
 
                         weightedPool.Add(ge);
-                        Log.Debug($"gettochoose : {ge.Name} ");
+                        
                     }
+                    Log.Debug($"[{ge.Name}] weight : {ge.WeightedChance} ");
                 }
             }
 
@@ -220,11 +244,15 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
             {
                 int randomIndex = UnityEngine.Random.Range(0, weightedPool.Count);
                 T selectedGE = weightedPool[randomIndex];
-
                 result.Add(selectedGE);
+                if (selectedGE is IOnlyEvent)
+                {
+                    KELog.Debug($"selected : {selectedGE.Name} is only event");
+                    break;
+                }
 
                 weightedPool.Remove(selectedGE);
-                weightedPool.RemoveAll(e => selectedGE.IncompatibleEvents.Contains(e.Id));
+                weightedPool.RemoveAll(e => selectedGE.IncompatibleEvents.Contains(e.Name) || e is IOnlyEvent);
                 if (weightedPool.Count == 0) break;
             }
 
@@ -235,52 +263,46 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
             Log.Send($"REGISTERED {Name}", Discord.LogLevel.Info, ConsoleColor.Blue);
 
         #region Getter
-        public static bool TryGet(uint id, out KEEvents globalEvent)
-        {
-            globalEvent = Get(id);
-            return globalEvent != null;
-        }
 
+        /// <summary>
+        /// Try to get a <see cref="KEEvents"/> by its name
+        /// </summary>
         public static bool TryGet(string name, out KEEvents globalEvent)
         {
+            globalEvent = null;
             if (string.IsNullOrEmpty(name))
             {
-                throw new ArgumentException("name can't be null or empty");
+                return false;
             }
-            globalEvent = uint.TryParse(name, out uint id) ? Get(id) : Get(name);
+
+            if (!_nameLookup.ContainsKey(name))
+            {
+                return false;
+            }
+
+            globalEvent = Get(name);
 
             return globalEvent != null;
         }
-
+        /// <summary>
+        /// Get a <see cref="KEEvents"/> by its name
+        /// </summary>
         public static KEEvents Get(string name)
         {
             return _nameLookup[name];
         }
 
-        public static KEEvents Get(uint id)
-        {
-            return _idLookup.TryGetValue(id, out KEEvents globalEvent) ? globalEvent : null;
-        }
-
-
-        public static T Get<T>(uint id) where T : KEEvents
-        {
-            return _idLookup.TryGetValue(id, out KEEvents globalEvent) && globalEvent is T ? globalEvent as T : null;
-        }
-
-        public static bool TryGet<T>(uint id, out T events) where T : KEEvents
-        {
-            events = Get<T>(id);
-            return events != null;
-        }
-
+        /// <summary>
+        /// Check if this <see cref="KEEvents"/> is compatible with active <see cref="KEEvents"/>
+        /// </summary>
+        /// <returns></returns>
         public bool IsCompatible()
         {
             foreach(KEEvents ev in s_activeEvents)
             {
-                foreach(int i in ev.IncompatibleEvents)
+                foreach(string i in ev.IncompatibleEvents)
                 {
-                    if (i == Id)
+                    if (i == Name)
                         return false;
                 }
             }

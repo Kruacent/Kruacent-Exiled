@@ -6,11 +6,13 @@ using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
+using KruacentExiled.Audio;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Light = Exiled.API.Features.Toys.Light;
 
@@ -90,9 +92,21 @@ namespace KruacentExiled.CustomItems.Items.ItemEffects
             return l;
         }
 
+        public const string SoundImpact = "Fire_Spew_Resolve_01c";
+        public const string SoundAmbient = "fire";
+
         private IEnumerator<float> Fire(Pickup jar, Primitive zone, List<Light> lights, Player owner, Vector3 center)
         {
             float elapsed = 0f;
+
+            AudioHandler.Instance.PlayToAll(SoundType.Noise, SoundImpact, zone.GameObject, 20);
+            var clips = AudioHandler.Instance.PlayToAll(SoundType.Noise, SoundAmbient, zone.GameObject, 20).Values;
+            foreach (var clip in clips)
+            {
+                clip.Loop = true;
+            }
+
+
 
             while (elapsed < Duration)
             {
@@ -140,6 +154,11 @@ namespace KruacentExiled.CustomItems.Items.ItemEffects
 
                 yield return Timing.WaitForSeconds(TickRate);
                 elapsed += TickRate;
+            }
+
+            foreach (var clip in clips)
+            {
+                clip.Loop = false;
             }
 
             if (zone != null) zone.Destroy();

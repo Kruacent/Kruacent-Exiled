@@ -36,7 +36,7 @@ namespace KruacentExiled.CustomItems.Items
                 {
                     [TranslationKeyName] = "M-Scan",
                     [TranslationKeyDesc] = "Detect movement",
-                    [Deploy] = "<color=#00ff00>MSCAN DEPLOYED</color> Battery: {TimeUp} seconds",
+                    [Deploy] = "<color=#00ff00>MSCAN DEPLOYED</color> Battery: %TimeUp% seconds",
                     [PickUp] = "M-Scan picked up",
                     [TranslationDestroy] = "<color=red>M-SCAN DESTROYED</color>",
                     [NoBattery] = "<color=yellow>M-Scan : No battery left</color>",
@@ -46,7 +46,7 @@ namespace KruacentExiled.CustomItems.Items
                 {
                     [TranslationKeyName] = "M-Scan",
                     [TranslationKeyDesc] = "Détecte les mouvements des personnes passant devant",
-                    [Deploy] = "<color=#00ff00>SCANNER DÉPLOYÉ</color> Batterie: {TimeUp} secondes",
+                    [Deploy] = "<color=#00ff00>SCANNER DÉPLOYÉ</color> Batterie: %TimeUp% secondes",
                     [PickUp] = "Scanner récupéré.",
                     [TranslationDestroy] = "<color=red>SCANNER DÉTRUIT</color>",
                     [NoBattery] = "<color=yellow>Scanner: Batterie épuisée.</color>",
@@ -157,7 +157,9 @@ namespace KruacentExiled.CustomItems.Items
                 BatteryLife[pickup] = Time.time + TimeUp;
                 //Models[pickup] = CreateBaseModel(pickup);
 
-                TranslationFeed(player, Deploy);
+                string translation = GetTranslation(player, Deploy).Replace("%TimeUp%", TimeUp.ToString());
+
+                HintFeed.AddFeed(player, translation);
             }
         }
 

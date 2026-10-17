@@ -1,78 +1,150 @@
 ﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.API.Features.Doors;
+using Exiled.API.Features.Items;
+using Exiled.API.Features.Items.Keycards;
 using Exiled.API.Features.Pickups;
-using Exiled.API.Features.Spawn;
-using Exiled.CustomItems.API.Features;
-using KruacentExiled.CustomItems.API.Features.SpawnPoints;
+using Exiled.API.Interfaces.Keycards;
+using InventorySystem.Items.Keycards;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static KruacentExiled.CustomItems.API.Features.SpawnPoints.PoseRoomSpawnPointHandler;
+using UnityEngine;
 
 namespace KruacentExiled.CustomItems.API.Features
 {
-    public abstract class KECustomKeycard : CustomKeycard
+    /// <summary>
+    /// <see cref="Exiled.CustomItems.API.Features.CustomKeycard"/>
+    /// </summary>
+    public abstract class KECustomKeycard : KECustomItem
     {
 
-        public override KeycardPermissions Permissions { get; set; } = KeycardPermissions.None;
+        public KeycardPermissions Permissions { get; set; } = KeycardPermissions.None;
 
 
-        public override uint Spawn(IEnumerable<SpawnPoint> spawnPoints, uint limit)
+
+        public virtual Color32? KeycardPermissionsColor { get; set; } = null;
+        public virtual Color32? KeycardLabelColor { get; set; } = null;
+        public virtual byte Wear { get; set; }
+        public virtual byte Rank { get; set; }
+
+        public virtual Color32? TintColor { get; set; } = null;
+        public virtual string KeycardName { get; set; } = null;
+        public virtual string KeycardLabel { get; set; } = null;
+        public virtual string SerialNumber { get; set; } = null;
+
+        public override ItemType ItemType
         {
-            Log.Debug($"spawning {Name}");
-            HashSet<SpawnPoint> spawns = spawnPoints.ToHashSet();
-            uint num = 0;
-            foreach (SpawnPoint spawnpoint in spawnPoints.Where(sp => sp is RoomSpawnPoint))
+            get
             {
-                Pickup pickup;
-                if (Exiled.Loader.Loader.Random.NextDouble() * 100.0 >= (double)spawnpoint.Chance || limit != 0 && num >= limit)
-                {
-                    continue;
-                }
-                spawns.Remove(spawnpoint);
-                RoomSpawnPoint room = spawnpoint as RoomSpawnPoint;
-                ItemSpawn spawn = UseRandomPose(room.Room);
-
-                Log.Debug($"spawning {Name} in {room.Room}");
-                Log.Debug(room.Room + " : " + UsablePoses.Count(p => p.roomType == room.Room));
-
-                if (spawn != null)
-                {
-                    Log.Debug($"spawning custom pos");
-                    pickup = Spawn(spawn.Position);
-                }
-                else
-                {
-                    Log.Error($"can't spawn ({Name}) in custom ({room.Room})");
-                    pickup = Spawn(spawnpoint.Position);
-                }
-
-
-
-                if (pickup != null)
-                {
-                    num++;
-                }
-
-
+                return base.Type;
             }
-
-            return base.Spawn(spawns, limit - num);
         }
 
+
+        protected virtual void SetupKeycard(Keycard keycard)
+        {
+            NametagDetail detail = keycard.Base.Details.OfType<NametagDetail>().FirstOrDefault();
+            if (keycard is CustomKeycardItem customKeycardItem)
+            {
+                customKeycardItem.Permissions = Permissions;
+                if (KeycardPermissionsColor.HasValue)
+                {
+                    customKeycardItem.PermissionsColor = KeycardPermissionsColor.Value;
+                }
+
+                if (TintColor.HasValue)
+                {
+                    customKeycardItem.Color = TintColor.Value;
+                }
+
+                if (!string.IsNullOrEmpty(Name))
+                {
+                    customKeycardItem.ItemName = Name;
+                }
+
+                if (!string.IsNullOrEmpty(KeycardName) && customKeycardItem is INameTagKeycard nameTagKeycard)
+                {
+                    nameTagKeycard.NameTag = KeycardName;
+                }
+
+                if (customKeycardItem is ILabelKeycard labelKeycard)
+                {
+                    if (!string.IsNullOrEmpty(KeycardLabel))
+                    {
+                        labelKeycard.Label = KeycardLabel;
+                    }
+
+                    if (KeycardLabelColor.HasValue)
+                    {
+                        labelKeycard.LabelColor = KeycardLabelColor.Value;
+                    }
+                }
+
+                if (customKeycardItem is IWearKeycard wearKeycard)
+                {
+                    wearKeycard.Wear = Wear;
+                }
+
+                if (customKeycardItem is ISerialNumberKeycard serialNumberKeycard)
+                {
+                    serialNumberKeycard.SerialNumber = SerialNumber;
+                }
+
+                if (customKeycardItem is IRankKeycard rankKeycard)
+                {
+                    rankKeycard.Rank = Rank;
+                }
+            }
+            //else if (keycard.Base.Customizable && detail != null)
+            //{
+            //    detail.SetArguments(KeycardName);
+            //    if (KeycardDetailSynchronizer.Database.Remove(keycard.Serial))
+            //    {
+            //        KeycardDetailSynchronizer.ServerProcessItem(keycard.Base);
+            //    }
+            //}
+        }
+
+        public override void Init()
+        {
+            if (!ItemType.IsKeycard())
+            {
+                throw new ArgumentOutOfRangeException("ItemType", ItemType, "Invalid keycard type.");
+            }
+
+
+            base.Init();
+        }
+
+        public override void Give(Player player, Item item, bool displayMessage = true)
+        {
+            if (item.Is<Keycard>(out var param))
+            {
+                SetupKeycard(param);
+            }
+
+            base.Give(player, item, displayMessage);
+        }
+
+        public override Pickup Spawn(Vector3 position, Item item, Player previousOwner = null)
+        {
+            if (item.Is<Keycard>(out var param))
+            {
+                SetupKeycard(param);
+            }
+
+            return base.Spawn(position, item, previousOwner);
+        }
 
 
         protected override void ShowPickedUpMessage(Player player)
         {
-            KECustomItem.Message(this, player, true);
+            Message(this, player, true);
         }
 
         protected override void ShowSelectedMessage(Player player)
         {
-            KECustomItem.Message(this, player);
+            Message(this, player);
         }
 
     }

@@ -16,7 +16,6 @@ namespace KruacentExiled.GlobalEventFramework.Examples.GE
     public class ChangedItemEffect : GlobalEvent,IStart ,IEvent
     {
 
-        public override uint Id { get; set; } = 1080;
         ///<inheritdoc/>
         public override string Name { get; set; } = "SwitchItemEffect";
         ///<inheritdoc/>

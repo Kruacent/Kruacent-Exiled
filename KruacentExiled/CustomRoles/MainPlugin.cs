@@ -9,6 +9,7 @@ using KruacentExiled.CustomRoles.Abilities.FireAbilities;
 using KruacentExiled.CustomRoles.API.Features;
 using KruacentExiled.CustomRoles.CustomSCPTeam;
 using KruacentExiled.CustomRoles.Settings;
+using MEC;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -54,7 +55,7 @@ namespace KruacentExiled.CustomRoles
             CustomTeamEvents.SubscribeEvents();
 
             
-            LoadImage();
+            Timing.RunCoroutine(LoadImage());
 
             Harmony = new Harmony(Name);
             Harmony.PatchAll();
@@ -98,8 +99,9 @@ namespace KruacentExiled.CustomRoles
 
 
 
-        private void LoadImage()
+        private IEnumerator<float> LoadImage()
         {
+
             if (!Directory.Exists(ImageLocation))
             {
                 Log.Warn("Directory not found. creating...");
@@ -114,6 +116,9 @@ namespace KruacentExiled.CustomRoles
                 Log.Info($"loading {file} as {noExFile}");
                 icons.Add(noExFile,new TextImage(Image.FromFile(file),5));
             }
+
+            yield return 0;
+
         }
 
 

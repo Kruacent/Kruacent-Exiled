@@ -17,14 +17,12 @@ namespace KruacentExiled.GlobalEventFramework.Examples.MiddleEvents
     public class SpeedM : MiddleEvent, IAsyncStart, IEvent
     {
         ///<inheritdoc/>
-        public override uint Id { get; set; } = 10042;
-        ///<inheritdoc/>
         public override string Name { get; set; } = "SpeedM";
         ///<inheritdoc/>
         public override string Description { get; set; } = "Gas! gas! gas!";
         ///<inheritdoc/>
         public override int WeightedChance { get; set; } = 1;
-        public override uint[] IncompatibleEvents => new uint[] { 1042 };
+        public override string[] IncompatibleEvents => new string[] { "Speed" };
         /// <summary>
         /// intensity of the movement boost effect
         /// </summary>

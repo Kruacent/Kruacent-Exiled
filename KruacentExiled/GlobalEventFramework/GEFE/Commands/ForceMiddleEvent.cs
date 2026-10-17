@@ -7,16 +7,43 @@
     using System.Runtime.InteropServices.WindowsRuntime;
     using GEFE.API.Interfaces;
     using GEFE.API.Features;
+    using KE.Utils.API.Commands;
 
-    public class ForceMiddleEvent : ICommand
+    public class ForceMiddleEvent : KECommand
     {
-        public string Command { get; } = "forcemiddle";
-        public string[] Aliases { get; } = new string[] { "fm" };
-        public string Description { get; } = "force a random middle event";
+        public override string Command { get; } = "forcemiddle";
+        public override string[] Aliases { get; } = new string[] { "fm" };
+        public override string Description { get; } = "force a middle event";
 
-        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        public override string[] Usage => new string[] { "<MiddleEvent>" };
+
+        public override bool ExecuteCommand(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            bool res = MiddleEvent.Activate();
+            MiddleEvent middle = null;
+            if (arguments.Count > 0)
+            {
+                if (!MiddleEvent.TryGet(arguments.At(0), out var @event))
+                {
+                    middle = @event as MiddleEvent;
+                    if(middle == null)
+                    {
+                        response = "not a middle event";
+                        return false;
+                    }
+
+                }
+                else
+                {
+                    response = "middle event not found";
+                    return false;
+                }
+            }
+
+
+
+            
+
+            bool res = MiddleEvent.Activate(middle);
 
             response = res ? "activated" : "not activated";
             return res;

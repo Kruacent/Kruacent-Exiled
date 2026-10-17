@@ -15,8 +15,7 @@ namespace KruacentExiled.GlobalEventFramework.Examples.GE
     /// </summary>
     public class KIWIS : GlobalEvent, IAsyncStart
     {
-        ///<inheritdoc/>
-        public override uint Id { get; set; } = 1047;
+
         ///<inheritdoc/>
         public override string Name { get; set; } = "KIWIS";
         ///<inheritdoc/>

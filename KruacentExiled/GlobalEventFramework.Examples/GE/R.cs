@@ -1,14 +1,13 @@
 ﻿using KruacentExiled.GlobalEventFramework.GEFE.API.Enums;
 using KruacentExiled.GlobalEventFramework.GEFE.API.Features;
+using KruacentExiled.GlobalEventFramework.GEFE.API.Interfaces;
 namespace KruacentExiled.GlobalEventFramework.Examples.GE
 {
     /// <summary>
     /// Literally does nothing
     /// </summary>
-    public class R : GlobalEvent
+    public class R : GlobalEvent,IOnlyEvent
     {
-        ///<inheritdoc/>
-        public override uint Id { get; set; } = 0;
         ///<inheritdoc/>
         public override string Name { get; set; } = "nothing";
         ///<inheritdoc/>

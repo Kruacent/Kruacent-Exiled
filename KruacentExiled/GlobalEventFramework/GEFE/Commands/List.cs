@@ -78,10 +78,8 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.Commands
         {
 
             builder.Append(" (");
-            builder.Append(events.Id);
-            builder.Append(") ");
             builder.Append(events.Name);
-            builder.Append(" - ");
+            builder.Append(") ");
             builder.Append(events.WeightedChance);
         }
     }

@@ -20,7 +20,6 @@ namespace KruacentExiled.GlobalEventFramework.Examples.GE
 {
     public class SwapProtocol : GlobalEvent, IAsyncStart, IEvent
     {
-        public override uint Id { get; set; } = 1051;
         public override string Name { get; set; } = "SwapProtocol";
         public override string Description { get; } = "EEEEEEEET c'est parti la roulette tourne";
         public override int WeightedChance { get; set; } = 0;

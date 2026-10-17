@@ -1,10 +1,13 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using KruacentExiled.CustomSpawnPoint;
+using KruacentExiled.CustomSpawnPoint.Spawned;
 using KruacentExiled.GlobalEventFramework.GEFE.API.Enums;
 using KruacentExiled.GlobalEventFramework.GEFE.API.Features;
 using KruacentExiled.GlobalEventFramework.GEFE.API.Interfaces;
 using MEC;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace KruacentExiled.GlobalEventFramework.Examples.GE
 {
@@ -13,8 +16,6 @@ namespace KruacentExiled.GlobalEventFramework.Examples.GE
     /// </summary>
     public class Blitz : GlobalEvent, IAsyncStart
     {
-        ///<inheritdoc/>
-        public override uint Id { get; set; } = 1046;
         ///<inheritdoc/>
         public override string Name { get; set; } = "Blitz";
         ///<inheritdoc/>
@@ -46,12 +47,19 @@ namespace KruacentExiled.GlobalEventFramework.Examples.GE
                 yield return Timing.WaitForSeconds(Cooldown);
                 for (int i = 0; i < NbGrenadeSpawned; i++)
                 {
-                    ((ExplosiveGrenade)Item.Create(ItemType.GrenadeHE)).SpawnActive(Room.Random().Position);
-                }
-                
+                    Room randomRoom = Room.Random();
 
+                    if (!RoomCustomPointHandler.HaveASpawnedPoint(randomRoom))
+                    {
+                        continue;
+                    }
+
+                    foreach (RoomSpawnedCustomPoint point in RoomCustomPointHandler.GetAll(randomRoom, RoomCustomPointType.Teleport))
+                    {
+                        ((ExplosiveGrenade)Item.Create(ItemType.GrenadeHE)).SpawnActive(point.Position);
+                    }
+                }
             }
         }
-
     }
 }

@@ -16,8 +16,6 @@ namespace KruacentExiled.GlobalEventFramework.Examples.MiddleEvents
     public class WallHackM : MiddleEvent, IAsyncStart, IEvent
     {
         ///<inheritdoc/>
-        public override uint Id { get; set; } = 10052;
-        ///<inheritdoc/>
         public override string Name { get; set; } = "WallHack";
         ///<inheritdoc/>
         public override string Description { get; set; } = "Tout le monde wallhack yippee!!!!!";

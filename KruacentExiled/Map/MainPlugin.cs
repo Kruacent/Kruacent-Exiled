@@ -15,6 +15,7 @@ using KruacentExiled.Map.Others.BlackoutNDoor.Handlers;
 using KruacentExiled.Map.Others.CustomZones;
 using KruacentExiled.Map.Surface.ElevatorGateA;
 using KruacentExiled.Map.Surface.Rooms;
+using KruacentExiled.Map.Surface.SupplyDrops;
 using MEC;
 using PlayerRoles;
 using PlayerRoles.PlayableScps.Scp106;
@@ -69,7 +70,7 @@ namespace KruacentExiled.Map
 
 
             //SurfaceRooms.SubscribeEvents();
-            
+            SupplyDrop.SubscribeEvents();
             GamblingRoom.SubscribeEvents();
             //MoreRoom.CreateAll();
             //MoreRoom.SubscribeEvents();
@@ -211,6 +212,7 @@ namespace KruacentExiled.Map
             cREventHandler = null;
 
 
+            SupplyDrop.UnsubscribeEvents();
             harmony.UnpatchAll(harmony.Id);
             GamblingRoom.UnsubscribeEvents();
             //MoreRoom.UnsubscribeEvents();
@@ -299,6 +301,7 @@ namespace KruacentExiled.Map
         public bool TurretEnabled { get; set; } = false;
         public bool EasterEggEnabled { get; set; } = true;
         public bool BlackoutNDoorEnabled { get; set; } = true;
+        public bool BlackoutNDoorWeightVerbose { get; set; } = false;
 
 
     }

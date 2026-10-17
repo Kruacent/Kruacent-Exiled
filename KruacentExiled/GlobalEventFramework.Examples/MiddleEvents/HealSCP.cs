@@ -18,8 +18,6 @@ namespace KruacentExiled.GlobalEventFramework.Examples.MiddleEvents
     public class HealSCP : MiddleEvent, IStart, IConditional
     {
         ///<inheritdoc/>
-        public override uint Id { get; set; } = 10043;
-        ///<inheritdoc/>
         public override string Name { get; set; } = "HealSCPM";
         ///<inheritdoc/>
         public override string Description { get; set; } = "Bon aller on rallonge un peu la game";

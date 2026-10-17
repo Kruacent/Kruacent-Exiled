@@ -87,37 +87,50 @@ namespace KruacentExiled.CustomRoles.Abilities
                 Steal(player, ally);
                 return true;
             }
-
-            MainPlugin.ShowEffectHint(player, "no player to steal from");
+            ShowEffectHint(player, Fail);
             return false;
         }
 
         private void Steal(Player player, Player thiefed)
         {
 
-            Item item;
+            Item item = null;
 
-            if(player.CurrentItem is null || Random.Range(0f,100f) < 50f)
+            if(thiefed.CurrentItem is null || Random.Range(0f,100f) < 50f)
             {
                 item = thiefed.Items.GetRandomValue();
             }
             else
             {
-                item = player.CurrentItem;
+                item = thiefed.CurrentItem;
+            }
+
+            if(item == null)
+            {
+                return;
             }
 
 
-            if(CustomItem.TryGet(item,out CustomItem ci))
+            try
             {
-                ci.Give(player);
+                if (CustomItem.TryGet(item, out CustomItem ci))
+                {
+                    ci.Give(player);
+                }
+                else
+                {
+                    Item newitem = item.Clone();
+                    newitem.Give(player);
+                }
             }
-            else
+            finally
             {
-                Item newitem = item.Clone();
-                newitem.Give(player);
+                thiefed.RemoveItem(item);
             }
+
             
-            thiefed.RemoveItem(item);
+            
+            
         }
 
 

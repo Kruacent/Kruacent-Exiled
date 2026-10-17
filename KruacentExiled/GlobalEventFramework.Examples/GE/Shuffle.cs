@@ -17,8 +17,6 @@ namespace KruacentExiled.GlobalEventFramework.Examples.GE
     public class Shuffle : GlobalEvent, IAsyncStart,IEvent
     {
         ///<inheritdoc/>
-        public override uint Id { get; set; } = 1045;
-        ///<inheritdoc/>
         public override string Name { get; set; } = "Shuffle";
         ///<inheritdoc/>
         public override string Description { get; } = "et ça fait roomba café dans le scp";

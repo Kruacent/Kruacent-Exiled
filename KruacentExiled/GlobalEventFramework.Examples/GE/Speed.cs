@@ -23,8 +23,6 @@ namespace KruacentExiled.GlobalEventFramework.Examples.GE
         public override ImpactLevel ImpactLevel => ImpactLevel.VeryHigh;
 
         ///<inheritdoc/>
-        public override uint Id { get; set; } = 1042;
-        ///<inheritdoc/>
         public override string Name { get; set; } = "Speed";
         ///<inheritdoc/>
         public override string Description { get; } = "Gas! gas! gas!";

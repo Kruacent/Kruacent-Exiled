@@ -114,11 +114,21 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
         /// <summary>
         /// Get a random <see cref="MiddleEvent"/> and activate it
         /// </summary>
-        public static bool Activate()
+        public static bool Activate(MiddleEvent middleEvent = null)
         {
             if (_activeEv.Count > 0) return false;
 
-            _activeEv = GetRandomEvent<MiddleEvent>().ToHashSet();
+            if(middleEvent == null)
+            {
+                _activeEv = GetRandomEvent<MiddleEvent>().ToHashSet();
+            }
+            else
+            {
+                _activeEv = new HashSet<MiddleEvent>()
+                {
+                    middleEvent
+                };
+            }
             EnableEvents(_activeEv);
             Show();
 

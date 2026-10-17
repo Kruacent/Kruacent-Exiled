@@ -1,24 +1,28 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
+using Exiled.API.Features.Pools;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp0492;
 using Exiled.Events.EventArgs.Scp096;
 using Exiled.Events.EventArgs.Scp1509;
 using Exiled.Events.EventArgs.Scp173;
-using Exiled.Events.EventArgs.Server;
 using HintServiceMeow.Core.Models.Arguments;
-using HintServiceMeow.Core.Utilities;
+using InventorySystem.Items.Firearms.Attachments;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomRoles.API.Features;
 using KruacentExiled.CustomRoles.CustomSCPTeam;
+using LabApi.Events.Arguments.PlayerEvents;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VoiceChat.Networking;
 
@@ -29,6 +33,10 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
         public override bool IsSupport => false;
 
         public const string SCPName = "SCP-035";
+
+
+        public const string CantPickupTranslation = "SCP035CantPickup";
+        public const string CantUseTranslation = "SCP035CantUse";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new Dictionary<string, Dictionary<string, string>>()
@@ -37,27 +45,27 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
                 {
                     [TranslationKeyName] = SCPName,
                     [TranslationKeyDesc] = "Kill every humans!\nYou can't pick up the Micro-HID and anything made with it, but you take 3 time less damage by these weapon.",
-                    ["SCP035CantPickup"] = "A strange force called 'game balance' \nprevents you from picking up this item.",
-                    ["SCP035CantUse"] = "A strange force called 'game balance' \nprevents you from using this item.",
+                    [CantPickupTranslation] = "A strange force called 'game balance' \nprevents you from picking up this item.",
+                    [CantUseTranslation] = "A strange force called 'game balance' \nprevents you from using this item.",
                 },
                 ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = SCPName,
                     [TranslationKeyDesc] = "Tue tous les humains!\nTu peux pas prendre d'arme spécial mais tu prends 3 fois moins de dégât de ces armes",
-                    ["SCP035CantPickup"] = "Une force étrange qui s'appelle 'équilibre' \nt'empêches de prendre cet objet.",
-                    ["SCP035CantUse"] = "Une force étrange qui s'appelle 'équilibre' \nt'empêches d'utiliser cet objet.",
+                    [CantPickupTranslation] = "Une force étrange qui s'appelle 'équilibre' \nt'empêches de prendre cet objet.",
+                    [CantUseTranslation] = "Une force étrange qui s'appelle 'équilibre' \nt'empêches d'utiliser cet objet.",
                 },
                 ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = SCPName,
                     [TranslationKeyDesc] = "You can't pickup the Micro-HID and anything made with it, but you take 3 time less damage by these weapon.\nKill every humans",
-                    ["SCP035CantPickup"] = "A strange force called \'game balance\' \nprevents you from picking up this item",
-                    ["SCP035CantUse"] = "A strange force called 'game balance' \nprevents you from using this item.",
+                    [CantPickupTranslation] = "A strange force called \'game balance\' \nprevents you from picking up this item",
+                    [CantUseTranslation] = "A strange force called 'game balance' \nprevents you from using this item.",
                 }
             };
         }
 
-        public override int MaxHealth { get; set; } = 1200;
+        public override int MaxHealth { get; set; } = 1600;
         protected override int SettingId => 10002;
 
         public override string SCPId => SCPName;
@@ -73,6 +81,10 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
             ItemType.Painkillers,
             ItemType.Medkit,
             ItemType.SCP500,
+            ItemType.GunFRMG0,
+            ItemType.GunAK,
+            ItemType.GunShotgun,
+            ItemType.GunLogicer
         };
         public HashSet<ItemType> BlacklistedUsing = new HashSet<ItemType>()
         {
@@ -87,7 +99,7 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
             ItemType.SCP1509,
         };
 
-        // 035 can't be damaged by these
+        // 035 can't be damaged much by these
         public HashSet<DamageType> BlacklistedDamage = new HashSet<DamageType>()
         {
             DamageType.Jailbird,
@@ -97,43 +109,78 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
 
         protected override void SubscribeEvents()
         {
+            _intercom = HashSetPool<Player>.Pool.Get();
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Dying += OnDying;
             Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
-            Exiled.Events.Handlers.Server.EndingRound += OnEndingRound;
             Exiled.Events.Handlers.Scp1509.Resurrecting += OnResurrecting;
             Exiled.Events.Handlers.Player.UsingItem += OnUsingItem;
             Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
             Exiled.Events.Handlers.Scp096.AddingTarget += OnAddingTarget;
             Exiled.Events.Handlers.Scp173.AddingObserver += OnAddingObserver;
-
-
+            LabApi.Events.Handlers.PlayerEvents.UsingIntercom += OnUsingIntercom;
+            LabApi.Events.Handlers.PlayerEvents.UsedIntercom += OnUsedIntercom;
+            Exiled.Events.Handlers.Scp0492.TriggeringBloodlust += OnTriggeringBloodlust;
             base.SubscribeEvents();
         }
 
+     
 
         protected override void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
             Exiled.Events.Handlers.Player.Dying -= OnDying;
             Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
-            Exiled.Events.Handlers.Server.EndingRound -= OnEndingRound;
             Exiled.Events.Handlers.Scp1509.Resurrecting -= OnResurrecting;
             Exiled.Events.Handlers.Player.UsingItem -= OnUsingItem;
             Exiled.Events.Handlers.Scp096.AddingTarget -= OnAddingTarget;
             Exiled.Events.Handlers.Scp173.AddingObserver -= OnAddingObserver;
+            LabApi.Events.Handlers.PlayerEvents.UsingIntercom -= OnUsingIntercom;
+            LabApi.Events.Handlers.PlayerEvents.UsedIntercom -= OnUsedIntercom;
+            Exiled.Events.Handlers.Scp0492.TriggeringBloodlust -= OnTriggeringBloodlust;
+            HashSetPool<Player>.Pool.Return(_intercom);
             base.UnsubscribeEvents();
         }
+
+
+        private void OnTriggeringBloodlust(TriggeringBloodlustEventArgs ev)
+        {
+            if (ev.IsAllowed && Check(ev.Target))
+            {
+                ev.IsAllowed = false;
+            }
+        }
+
         private static HintPosition position = new RemainingPlayerPosition();
         private static HintPosition logoposition = new LogoPosition();
         private void OnDying(DyingEventArgs ev)
         {
             if (!Check(ev.Player)) return;
             Log.Debug("cassie message");
-
             Exiled.API.Features.Cassie.CustomScpTermination("SCP 0 3 5", ev.DamageHandler);
             
         }
+
+
+        private HashSet<Player> _intercom;
+
+        private void OnUsingIntercom(PlayerUsingIntercomEventArgs ev)
+        {
+            if (Check(ev.Player))
+            {
+                _intercom.Add(ev.Player);
+                Log.Warn("using intercom");
+            }
+        }
+        private void OnUsedIntercom(PlayerUsedIntercomEventArgs ev)
+        {
+            if (Check(ev.Player))
+            {
+                _intercom.Remove(ev.Player);
+                Log.Warn("used intercom");
+            }
+        }
+        
 
         private void OnAddingObserver(AddingObserverEventArgs ev)
         {
@@ -152,18 +199,17 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
             {
                 ev.IsAllowed = false;
             }
-
-
         }
 
         private void OnVoiceChatting(VoiceChattingEventArgs ev)
         {
             Player player = ev.Player;
 
-            
             VoiceMessage msg = ev.VoiceMessage;
 
-            if(msg.Channel == VoiceChat.VoiceChatChannel.ScpChat)
+            //Log.Info("msg.Channel =" + msg.Channel);
+
+            if (msg.Channel == VoiceChat.VoiceChatChannel.ScpChat)
             {
                 msg.Channel = VoiceChat.VoiceChatChannel.RoundSummary;
 
@@ -175,35 +221,36 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
                     }
                 }
             }
-
-
-
             if (Check(player))
             {
-                msg.Channel = VoiceChat.VoiceChatChannel.RoundSummary;
-
-                foreach (ReferenceHub hub in SCPTeam.SCPs)
+                HashSet<ReferenceHub> receiver;
+                if (_intercom.Contains(player))
+                {
+                    msg.Channel = VoiceChat.VoiceChatChannel.Intercom;
+                    receiver = ReferenceHub.AllHubs;
+                }
+                else
+                {
+                    msg.Channel = VoiceChat.VoiceChatChannel.RoundSummary;
+                    receiver = SCPTeam.SCPs.ToHashSet();
+                }
+                foreach (ReferenceHub hub in receiver)
                 {
                     if (hub != player.ReferenceHub)
                     {
                         hub.connectionToClient.Send(msg);
                     }
-                    
                 }
+
+
                 ev.IsAllowed = false;
             }
         }
 
         protected override void RoleAdded(Player player)
         {
-            PlayerDisplay dis = PlayerDisplay.Get(player);
             DisplayHandler.Instance.CreateAuto(player, (args) => GetPlayers(args), position.HintPlacement,HintServiceMeow.Core.Enum.HintSyncSpeed.Normal);
             DisplayHandler.Instance.CreateAuto(player, (args) => GetLogo(args), logoposition.HintPlacement,HintServiceMeow.Core.Enum.HintSyncSpeed.Normal);
-
-
-
-
-
             player.Position = RoleTypeId.Scp049.GetRandomSpawnLocation().Position;
             player.EnableEffect<CustomPlayerEffects.NightVision>(100, 0, false);
             base.RoleAdded(player);
@@ -217,9 +264,18 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
             player.DisableEffect<CustomPlayerEffects.NightVision>();
             base.RoleRemoved(player);
         }
+        protected override void GiveInventory(Player player)
+        {
+            Firearm firearm = player.AddItem(ItemType.GunFSP9) as Firearm;
+            uint code = AttachmentsServerHandler.ServerGetReceivedPlayerPreference(firearm.Base);
+            firearm.Base.ApplyAttachmentsCode(code, reValidate: true);
+            player.AddItem(ItemType.ArmorLight);
+            player.AddItem(ItemType.KeycardGuard);
+
+        }
 
 
-        
+
 
 
         private string GetPlayers(AutoContentUpdateArg arg)
@@ -252,7 +308,7 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
             {
 
 
-                ShowEffectHint(player, GetTranslation(player, "SCP035CantUse"));
+                ShowEffectHint(player, GetTranslation(player, CantUseTranslation));
                 ev.IsAllowed = false;
                 return;
             }
@@ -278,7 +334,7 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
                 
                 if (kECustomItem is IRevivingCustomItem)
                 {
-                    ShowEffectHint(player, GetTranslation(player, "SCP035CantPickup"));
+                    ShowEffectHint(player, GetTranslation(player, CantPickupTranslation));
                     ev.IsAllowed = false;
                     return;
                 }
@@ -287,14 +343,14 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
 
             if (pickup.Type.IsScp() && !WhitelistUsing.Contains(pickup.Type))
             {
-                ShowEffectHint(player, GetTranslation(player, "SCP035CantPickup"));
+                ShowEffectHint(player, GetTranslation(player, CantPickupTranslation));
                 ev.IsAllowed = false;
                 return;
             }
 
             if (pickup.Type == ItemType.GunSCP127)
             {
-                ShowEffectHint(player, GetTranslation(player, "SCP035CantPickup"));
+                ShowEffectHint(player, GetTranslation(player, CantPickupTranslation));
                 ev.IsAllowed = false;
                 return;
             }
@@ -305,7 +361,7 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
 
             if (BlacklistedPickup.Contains(pickup.Type))
             {
-                ShowEffectHint(player, GetTranslation(player, "SCP035CantPickup"));
+                ShowEffectHint(player, GetTranslation(player, CantPickupTranslation));
                 ev.IsAllowed = false;
                 return;
                 
@@ -351,16 +407,6 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
             if (!Check(ev.Player)) return;
             ev.NewRole = RoleTypeId.Scp0492;
             Timing.CallDelayed(1, () => ev.Target.Health = 100);
-        }
-
-        public void OnEndingRound(EndingRoundEventArgs ev)
-        {
-            /*if (TrackedPlayers.Count <= 0) return;
-
-            if (ev.ClassList.mtf_and_guards != 0 || ev.ClassList.scientists != 0) ev.IsAllowed = false;
-            else if (ev.ClassList.class_ds != 0 || ev.ClassList.chaos_insurgents != 0) ev.IsAllowed = false;
-            else if (ev.ClassList.scps_except_zombies + ev.ClassList.zombies > 0) ev.IsAllowed = true;
-            else ev.IsAllowed = true;*/
         }
     }
 }

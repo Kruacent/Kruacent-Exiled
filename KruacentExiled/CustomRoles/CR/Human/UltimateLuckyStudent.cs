@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace KruacentExiled.CustomRoles.CR.Human
 {
-    public class UltimateLuckyStudent : GlobalCustomRole, IColor, ILucky
+    public class UltimateLuckyStudent : GlobalCustomRole, IColor, ILucky,IRareCustomRole
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;
         public LuckProfile LuckProfile => LuckProfile.UltimateLucky;
@@ -36,7 +36,7 @@ namespace KruacentExiled.CustomRoles.CR.Human
         }
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
-        public override float SpawnChance { get; set; } = 100;
+        public override float SpawnChance { get; set; } = 0;
         public Color32 Color => new Color32(3, 238, 255, 0);
 
         protected override void SubscribeEvents()

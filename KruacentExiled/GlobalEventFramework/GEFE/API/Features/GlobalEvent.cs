@@ -32,6 +32,7 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
 
                 Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
                 Exiled.Events.Handlers.Server.RoundEnded += OnEndingRound;
+                LabApi.Events.Handlers.ServerEvents.RoundRestarted += OnRoundRestarted;
                 LabApi.Events.Handlers.ServerEvents.MapGenerating += OnMapGenerating;
 
                 _eventsub = true;
@@ -44,6 +45,7 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
                 if (!_eventsub) return;
                 Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
                 Exiled.Events.Handlers.Server.RoundEnded -= OnEndingRound;
+                LabApi.Events.Handlers.ServerEvents.RoundRestarted -= OnRoundRestarted;
                 LabApi.Events.Handlers.ServerEvents.MapGenerating -= OnMapGenerating;
 
                 _eventsub = false;
@@ -56,6 +58,13 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
             private void OnEndingRound(RoundEndedEventArgs _)
             {
                 Log.Warn("ending round");
+                DisableEvents(_activeGE);
+            }
+
+
+            private void OnRoundRestarted()
+            {
+                Log.Warn("restarted round");
                 DisableEvents(_activeGE);
             }
             private void OnRoundStarted()
@@ -79,6 +88,9 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
 
         private static HashSet<GlobalEvent> _activeGE = new HashSet<GlobalEvent>();
 
+        /// <summary>
+        /// The color of all the <see cref="API.Enums."/>
+        /// </summary>
         public static IReadOnlyDictionary<ImpactLevel, string> ImpactToColor = new Dictionary<ImpactLevel, string>()
         {
             { ImpactLevel.VeryLow, "#d8d8ff" },
@@ -97,8 +109,14 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
         /// A list of all registered GlobalEvents
         /// </summary>
         public static IEnumerable<GlobalEvent> GlobalEventsList => List.Where(ev => ev is GlobalEvent).Cast<GlobalEvent>();
-        ///<inheritdoc/>
+        
+        /// <summary>
+        /// The text shown to the player when the <see cref="GlobalEvent"/> is activated
+        /// </summary>
         public abstract string Description { get; }
+        /// <summary>
+        /// Other form of the <see cref="Description"/>
+        /// </summary>
         public virtual string[] AltDescription { get; } = null;
 
         public virtual ImpactLevel ImpactLevel { get; } = ImpactLevel.Medium;
@@ -110,7 +128,10 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
             }
         }
 
-
+        /// <summary>
+        /// <para>Number of <see cref="GlobalEvent"/> chose</para>
+        /// <para>-1 if it wasn't chose yet</para>
+        /// </summary>
         public static int NumberOfGE { get; set; } = -1;
 
 
@@ -136,9 +157,11 @@ namespace KruacentExiled.GlobalEventFramework.GEFE.API.Features
             base.Disable(ev);
         }
 
-        private static void ChooseGlobalEvent()
+        internal static void ChooseGlobalEvent(int numberGE = -1)
         {
-            if(NumberOfGE == -1)
+            NumberOfGE = numberGE;
+
+            if (NumberOfGE == -1)
             {
                 NumberOfGE = Random.value < .1f ? 2 : 1;
             }

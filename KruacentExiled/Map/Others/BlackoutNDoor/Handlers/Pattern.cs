@@ -9,25 +9,25 @@ namespace KruacentExiled.Map.Others.BlackoutNDoor.Handlers
             new Pattern
             (new List<MapEvent>()
             {
-                new Blackout(),new DoorStuck()
+                new Blackout(),new DoorStuck(), new ElevatorStuck()
             })
             ,
             new Pattern
             (new List<MapEvent>()
             {
-                new Blackout(),new Blackout(),new DoorStuck(),new DoorStuck()
+                new Blackout(),new Blackout(),new DoorStuck(),new DoorStuck(), new ElevatorStuck(), new ElevatorStuck(),
             })
             ,
             new Pattern
             (new List<MapEvent>()
             {
-                new DoorStuck(),new Blackout(),new Both(),new Blackout(),new DoorStuck(),new Both()
-            })            
+                new DoorStuck(),new Blackout(), new ElevatorStuck(),new Both(), new ElevatorStuck(),new Blackout(),new DoorStuck(),new Both()
+            })
             ,
             new Pattern
             (new List<MapEvent>()
             {
-                new DoorStuck(),new Blackout(),new Both()
+                new DoorStuck(),new Blackout(), new ElevatorStuck(),new Both()
             })
             ,
             new Pattern
@@ -40,6 +40,12 @@ namespace KruacentExiled.Map.Others.BlackoutNDoor.Handlers
             (new List<MapEvent>()
             {
                 new Blackout(),new Both()
+            })
+            ,
+            new Pattern
+            (new List<MapEvent>()
+            {
+                new ElevatorStuck(),new Both()
             })
             ,
             new Pattern

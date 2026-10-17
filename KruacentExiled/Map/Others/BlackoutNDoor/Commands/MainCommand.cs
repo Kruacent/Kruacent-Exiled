@@ -16,6 +16,7 @@ namespace KruacentExiled.Map.Others.BlackoutNDoor.Commands
         {
             RegisterCommand(new BlackoutCommand());
             RegisterCommand(new DoorstuckCommand());
+            RegisterCommand(new ElevatorstuckCommand());
             RegisterCommand(new BothCommand());
         }
 

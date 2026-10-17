@@ -1,15 +1,17 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
+using Exiled.API.Features;
 using Exiled.API.Features.Doors;
+using Interactables.Interobjects.DoorUtils;
+using KruacentExiled.GlobalEventFramework.Examples.API.Feature.MF;
+using KruacentExiled.GlobalEventFramework.GEFE.API.Enums;
+using KruacentExiled.GlobalEventFramework.GEFE.API.Features;
+using KruacentExiled.GlobalEventFramework.GEFE.API.Interfaces;
+using MapGeneration;
 using MEC;
 using System.Collections.Generic;
 using System.Linq;
-using Interactables.Interobjects.DoorUtils;
-using Exiled.API.Enums;
-using Exiled.API.Extensions;
-using KruacentExiled.GlobalEventFramework.GEFE.API.Interfaces;
-using KruacentExiled.GlobalEventFramework.GEFE.API.Enums;
-using KruacentExiled.GlobalEventFramework.Examples.API.Feature.MF;
-using KruacentExiled.GlobalEventFramework.GEFE.API.Features;
+using UnityEngine;
 namespace KruacentExiled.GlobalEventFramework.Examples.GE
 {
     /// <summary>
@@ -21,13 +23,11 @@ namespace KruacentExiled.GlobalEventFramework.Examples.GE
     /// <item>Checkpoints can open randomly</item>
     /// </list>
     /// </summary>
-    public class SystemMalfunction : GlobalEvent, IAsyncStart, IEvent
+    public class SystemMalfunction : GlobalEvent, IStart
     {
 
 
         public override ImpactLevel ImpactLevel => ImpactLevel.VeryLow;
-        /// <inheritdoc/>
-        public override uint Id { get; set; } = 1041;
         /// <inheritdoc/>        
         public override string Name { get; set; } = "System Malfunction";
         /// <inheritdoc/>
@@ -38,99 +38,64 @@ namespace KruacentExiled.GlobalEventFramework.Examples.GE
         };
         /// <inheritdoc/>
         public override int WeightedChance { get; set; } = 1;
-        ///<inheritdoc/>
-        public override uint[] IncompatibleEvents { get; set; } = { 38 };
-        /// <summary>
-        /// Set the cooldown for the BlackoutNDoor
-        /// </summary>
-        public int NewCooldown { get; set; } = 180;
-        public static Malfunctions Malfunction { get; private set; }
-        
 
+
+
+        public float ChanceNukeEveryMinute { get; set; } = 5;
+
+        private CoroutineHandle handleNuke;
+        private CoroutineHandle handleCheckpoints;
 
         /// <inheritdoc/>
-        public IEnumerator<float> Start()
+        public void Start()
         {
-            Log.Debug("system malfunction start");
-            //MoreBlackOutNDoors();
-            //Coroutine.LaunchCoroutine(EarlyNuke());
-            
-            Timing.RunCoroutine(Malfunction.Tick());
-            CoroutineHandle handle;
+            //5% every minute nuke start
+            handleNuke = Timing.RunCoroutine(EarlyNuke());
 
-            while(Round.InProgress){
-                Log.Debug("system malfunction");
-                yield return Timing.WaitForSeconds(UnityEngine.Random.Range(200, 300));
-                List<IEnumerator<float>> l = new []{CheckpointMalfunction(),GateLockdown(),ElevatorLockdown()}.ToList();
-                handle = Timing.RunCoroutine(l[UnityEngine.Random.Range(0,3)]);
-                yield return Timing.WaitUntilDone(handle);
-            }
-            yield return 0;
+            // checkpoints auto open starts at light
+            handleCheckpoints = Timing.RunCoroutine(AutoCheckpoints());
+
         }
 
-
-        public void SubscribeEvent()
+        public override void Destroy()
         {
-            Malfunction = new Malfunctions();
-            Exiled.Events.Handlers.Player.Dying += Malfunction.OnDying;
-            Exiled.Events.Handlers.Scp049.FinishingRecall += Malfunction.OnFinishingRevive;
-
-
-            //Searching for the plugin
-            /*var otherPlugin = Exiled.Loader.Loader.Plugins.FirstOrDefault(plugin => plugin.Name == "KE.BlackoutDoor");
-            if (otherPlugin != null)
-            {
-
-                if (otherPlugin is BlackoutNDoor.MainPlugin blackout)
-                {
-                    Log.Info("Found BlackOutNDoors");
-                    BlackoutNDoor = blackout;
-                    return;
-                }
-
-            }*/
-        }
-        public void UnsubscribeEvent()
-        {
-            Exiled.Events.Handlers.Player.Dying -= Malfunction.OnDying;
-            Exiled.Events.Handlers.Scp049.FinishingRecall -= Malfunction.OnFinishingRevive;
-            Malfunction = null;
+            Timing.KillCoroutines(handleNuke, handleCheckpoints);
+            base.Destroy();
         }
 
         private IEnumerator<float> EarlyNuke()
         {
-            int timeNuke = UnityEngine.Random.Range(15, 30);
-            Log.Debug($"the nuke will detonate in {timeNuke}min");
-            yield return Timing.WaitUntilTrue(() => timeNuke == Round.ElapsedTime.TotalMinutes);
-            Warhead.Start();
-            Log.Debug($"kaboom");
+            bool stopped = false;
+            while (!stopped)
+            {
+                yield return Timing.WaitForSeconds(60);
+                if (Random.Range(0f, 100f) < ChanceNukeEveryMinute)
+                {
+                    Warhead.Start();
+                    stopped = true;
+                }
+            }
         }
 
 
-        private IEnumerator<float> CheckpointMalfunction(){
-            Log.Debug("CheckpointMalfunction");
-            var checkpoints = Door.List.Where(d => d.IsCheckpoint).ToList().RandomItem().IsOpen =true;
-            yield return Timing.WaitForSeconds(UnityEngine.Random.Range(20, 60));
-
+        private CheckpointDoor RandomDoor(ZoneType zone = ZoneType.Unspecified)
+        {
+            return Door.List.GetRandomValue(d => d.IsCheckpoint && (zone == ZoneType.Unspecified || d.Zone == zone)) as CheckpointDoor;
         }
 
-        private IEnumerator<float> GateLockdown(){
-            Log.Debug("GateLockdown");
-            var gates = Door.List.Where(d => d.Type == DoorType.GateA ||d.Type == DoorType.GateB);
-            var gate = gates.GetRandomValue();
-            gate.IsOpen = UnityEngine.Random.value <= .5f ? false : true ;
-            var timelock = UnityEngine.Random.Range(10,30);
-            gate.Lock(timelock,DoorLockType.Isolation);
-            yield return Timing.WaitForSeconds(timelock);
+        private IEnumerator<float> AutoCheckpoints()
+        {
+            CheckpointDoor door = RandomDoor(ZoneType.LightContainment);
+
+
+            while (true)
+            {
+                yield return Timing.WaitForSeconds(Random.Range(2*60,5*60));
+                door.IsOpen = true;
+                door = RandomDoor();
+            }
         }
 
-        private IEnumerator<float> ElevatorLockdown(){
-            Log.Debug("ElevatorLockdown");
-            var lift = Lift.Random;
-            lift.ChangeLock(DoorLockReason.Isolation);
-            yield return Timing.WaitForSeconds(UnityEngine.Random.Range(10,20));
-            lift.ChangeLock(DoorLockReason.None);
-        }
         
     }
 }

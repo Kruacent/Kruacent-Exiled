@@ -1,5 +1,9 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Extensions;
+using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using Exiled.API.Features.Pickups;
+using KruacentExiled.CustomSpawnPoint;
+using KruacentExiled.CustomSpawnPoint.Spawned;
 using KruacentExiled.GlobalEventFramework.GEFE.API.Features;
 using KruacentExiled.GlobalEventFramework.GEFE.API.Interfaces;
 using MEC;
@@ -14,16 +18,14 @@ namespace KruacentExiled.GlobalEventFramework.Examples.GE
     public class ItemRain : GlobalEvent, IAsyncStart
     {
         ///<inheritdoc/>
-        public override uint Id { get; set; } = 1090;
-        ///<inheritdoc/>
         public override string Name { get; set; } = "ItemRain";
         ///<inheritdoc/>
         public override string Description { get; } = "Il pleut des items !!";
         ///<inheritdoc/>
         public override int WeightedChance => 1;
 
-        public int Cooldown = 120;
-        public int NbItemSpawned = 5;
+        public int Cooldown { get; set; } = 120;
+        public int NbItemSpawned { get; set; } = 5;
 
         public static readonly HashSet<ItemType> BlacklistedItems = new HashSet<ItemType>()
         {
@@ -45,7 +47,10 @@ namespace KruacentExiled.GlobalEventFramework.Examples.GE
 
                     if (CheckItemType(itemType)) continue;
 
-                    Item.Create(itemType).CreatePickup(Room.Random().Position);
+                    Room randomRoom = Room.Random();
+
+                    RoomSpawnedCustomPoint point = RoomCustomPointHandler.GetAll(randomRoom,RoomCustomPointType.Teleport).GetRandomValue();
+                    Pickup.CreateAndSpawn(itemType, point.Position);
                 }
             }
         }

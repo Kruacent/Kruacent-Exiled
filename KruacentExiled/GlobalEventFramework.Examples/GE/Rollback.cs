@@ -13,8 +13,6 @@ namespace KruacentExiled.GlobalEventFramework.Examples.GE
     public class RollBack: GlobalEvent, IAsyncStart
     {
         ///<inheritdoc/>
-        public override uint Id { get; set; } = 10800;
-        ///<inheritdoc/>
         public override string Name { get; set; } = "RollBack";
         ///<inheritdoc/>
         public override string Description { get; } = "Shit the server is lagging";

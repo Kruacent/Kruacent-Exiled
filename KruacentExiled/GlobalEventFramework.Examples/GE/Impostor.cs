@@ -12,7 +12,6 @@ namespace KruacentExiled.GlobalEventFramework.Examples.GE
 {
     public class Impostor : GlobalEvent, IAsyncStart
     {
-        public override uint Id { get; set; } = 1044;
         public override string Name { get; set; } = "Impostor";
         public override string Description { get; } = "Ne vous fiez pas aux apparences !";
         public override string[] AltDescription => new string[]

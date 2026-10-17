@@ -19,8 +19,6 @@ namespace KruacentExiled.GlobalEventFramework.Examples.GE
     public class RandomSpawn : GlobalEvent, IStart
     {
         ///<inheritdoc/>
-        public override uint Id { get; set; } = 1043;
-        ///<inheritdoc/>
         public override string Name { get; set; } = "RandomSpawn";
         ///<inheritdoc/>
         public override string Description { get; } = "Les spawns sont random";

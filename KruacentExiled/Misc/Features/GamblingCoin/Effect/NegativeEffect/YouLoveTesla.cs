@@ -1,7 +1,13 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Extensions;
+using Exiled.API.Features;
+using Exiled.API.Features.Pools;
+using KruacentExiled.CustomSpawnPoint;
+using KruacentExiled.CustomSpawnPoint.Spawned;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using KruacentExiled.Misc.Features.GamblingCoin.Types;
+using System.Collections.Generic;
 using System.Linq;
+using Tesla = Exiled.API.Features.TeslaGate;
 
 internal class YouLoveTesla : ICoinEffect
 {
@@ -12,9 +18,19 @@ internal class YouLoveTesla : ICoinEffect
 
     public void Execute(Player player)
     {
-        player.DropHeldItem();
+        List<Room> rooms = ListPool<Room>.Pool.Get();
 
-        player.Teleport(Exiled.API.Features.TeslaGate.List.ToList().RandomItem());
+
+        foreach (Tesla tesla in Tesla.List)
+        {
+            rooms.Add(tesla.Room);
+        }
+
+
+
+        RoomSpawnedCustomPoint point = RoomCustomPointHandler.GetRandomPoint(RoomCustomPointType.Teleport, rooms.GetRandomValue());
+
+        player.Teleport(point.Position);
 
         if (Warhead.IsDetonated)
         {

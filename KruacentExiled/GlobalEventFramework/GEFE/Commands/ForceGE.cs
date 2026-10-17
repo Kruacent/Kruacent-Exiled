@@ -28,26 +28,29 @@
                 return false;
             }
 
-            if (!uint.TryParse(arguments.At(0),out uint arg1))
-            {
-                response = "argument 1 invalid";
-                return false;
-            }
 
 
-            if (!KEEvents.TryGet(arg1, out GlobalEvent ge1) || ge1 == null)
+
+            if (!KEEvents.TryGet(arguments.At(0), out KEEvents kEEvents) || kEEvents == null)
             {
                 response = $"Global event ({arguments.At(0)}) not found ";
                 return false;
             }
 
-            if (arguments.Count == 1)
+            if(!(kEEvents is GlobalEvent globalEvent))
             {
-                response = $"Forcing {ge1.Name}";
-                return GlobalEvent.ForcedGE.Add(ge1);
+                response = "not a global event";
+                return false;
             }
 
-            response = "WIP";
+
+            if (arguments.Count == 1)
+            {
+                response = $"Forcing {globalEvent.Name}";
+                return GlobalEvent.ForcedGE.Add(globalEvent);
+            }
+
+            response = "";
             return false;
 
 

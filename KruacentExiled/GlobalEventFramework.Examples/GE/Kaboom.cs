@@ -5,12 +5,12 @@ using Exiled.API.Features.Doors;
 using KruacentExiled.GlobalEventFramework.GEFE.API.Interfaces;
 using KruacentExiled.GlobalEventFramework.GEFE.API.Enums;
 using KruacentExiled.GlobalEventFramework.GEFE.API.Features;
+using KE.Utils.API.Features;
 namespace KruacentExiled.GlobalEventFramework.Examples.GE
 {
     public class Kaboom : GlobalEvent, IEvent
     {
-        ///<inheritdoc/>
-        public override uint Id { get; set; } = 1052;
+
         ///<inheritdoc/>
         public override string Name { get; set; } = "Kaboom";
         ///<inheritdoc/>
@@ -87,8 +87,10 @@ namespace KruacentExiled.GlobalEventFramework.Examples.GE
 
             if (!door.IsOpen) return;
 
+            if (!ev.IsAllowed) return;
 
-            Log.Debug($"i love debugging random value : {random}");
+
+            KELog.Debug($"i love debugging random value : {random}");
             if (door.IsElevator && random < .05f ||
                 door.IsGate && random < .5f ||
                 door.IsDamageable && random < .1f)

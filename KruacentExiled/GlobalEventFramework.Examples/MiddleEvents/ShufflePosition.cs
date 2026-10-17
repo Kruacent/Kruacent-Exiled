@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using KE.Utils.API.Features;
 using KruacentExiled.GlobalEventFramework.GEFE.API.Features;
 using KruacentExiled.GlobalEventFramework.GEFE.API.Interfaces;
 using MEC;
@@ -14,11 +15,12 @@ using UnityEngine;
 
 namespace KruacentExiled.GlobalEventFramework.Examples.MiddleEvents
 {
+    /// <summary>
+    /// shuffle the position of all player when activated
+    /// </summary>
     public class ShufflePosition : MiddleEvent, IStart
     {
-        //shuffle de position une fois quand il est activé
-        ///<inheritdoc/>
-        public override uint Id { get; set; } = 10045;
+        
         ///<inheritdoc/>
         public override string Name { get; set; } = "MShuffleP";
         ///<inheritdoc/>
@@ -28,29 +30,29 @@ namespace KruacentExiled.GlobalEventFramework.Examples.MiddleEvents
 
         public void Start()
         {
-
-
-
-
             List<Player> players = Player.Enumerable.ToList();
-            List<Vector3> positions = ListPool<Vector3>.Shared.Rent(players.Count);
-            if(players.Count > 1)
+            Vector3[] positions = new Vector3[players.Count];
+
+            for(int i = 0; i < players.Count; i++)
+            {
+                positions[i] = players[i].Position;
+            }
+
+            if (players.Count > 1)
             {
                 Vector3 tmp = positions[0];
-                for (int i = 0; i < positions.Count - 1; i++)
+                for (int i = 0; i < positions.Length - 1; i++)
                 {
                     positions[i] = players[i + 1].Position;
                 }
 
-                positions[positions.Count - 1] = tmp;
+                positions[positions.Length - 1] = tmp;
 
-                for (int i = 0; i < players.Count - 1; i++)
+                for (int i = 0; i < players.Count; i++)
                 {
                     players[i].Teleport(positions[i]);
                 }
             }
         }
-
-
     }
 }

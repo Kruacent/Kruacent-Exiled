@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.API.Features.Pools;
 using KE.Utils.API.Features;
 using KE.Utils.API.GifAnimator;
@@ -59,13 +60,10 @@ namespace KruacentExiled.CustomRoles.Abilities
 
             
             grenade.FuseTime = 0.2f;
-            grenade.SpawnActive(player.Position);
+            ExplosionGrenadeProjectile projectile = grenade.SpawnActive(player.Position);
 
-
-            //idk why it's the next one but it is
-            ushort serial = (ushort) (grenade.Serial + 1);
-
-            GrenadesSerials.Add(serial);
+            
+            GrenadesSerials.Add(projectile.Serial);
 
             return base.AbilityUsed(player);
         }
@@ -80,7 +78,7 @@ namespace KruacentExiled.CustomRoles.Abilities
 
             if (!GrenadesSerials.Contains(serial)) return;
 
-            obj.Damage /=3f;
+            obj.Damage /=2f;
 
             GrenadesSerials.Remove(serial);
 
