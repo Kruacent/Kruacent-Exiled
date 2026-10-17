@@ -33,12 +33,11 @@ namespace KruacentExiled
             Instance = this;
 
             KE.Utils.API.Sounds.SoundPlayer.Load();
-
+            
             plugins = new KEPlugin[]
             {
                 new CustomRoles.MainPlugin(),
-                new GlobalEventFramework.MainPlugin(),
-                new GlobalEventFramework.Examples.MainPlugin(),
+                new GlobalEvents.MainPlugin(),
                 new CustomItems.MainPlugin(),
                 new Misc.MainPlugin(),
                 new Map.MainPlugin(),
@@ -152,8 +151,7 @@ namespace KruacentExiled
         public CustomItems.Config CustomItemConfig { get; set; } = new CustomItems.Config();
         public Map.Config MapConfig { get; set; } = new Map.Config();
         public Misc.Config MiscConfig { get; set; } = new Misc.Config();
-        public GlobalEventFramework.Config GEFConfig { get; set; } = new GlobalEventFramework.Config();
-        public GlobalEventFramework.Examples.Config GEFEConfig { get; set; } = new GlobalEventFramework.Examples.Config();
+        public GlobalEvents.Config GEFEConfig { get; set; } = new GlobalEvents.Config();
     }
 
 }
