@@ -1,9 +1,12 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Scp914;
 using InventorySystem.Items.Usables.Scp330;
 using KE.Utils.API.Features;
 using KE.Utils.Extensions;
+using KruacentExiled.CustomSpawnPoint;
+using KruacentExiled.CustomSpawnPoint.Spawned;
 using MEC;
 using PlayerRoles.FirstPersonControl;
 using Scp914;
@@ -13,44 +16,18 @@ namespace KE.Misc.Features._914Upgrades
 {
     public class PlayerTeleport914 : Base914PlayerUpgrade
     {
-        public float ChanceTpEntrance = 1;
+        public const float ChanceTpEntrance = 1;
         protected override float Chance => 100;
         protected override bool OnUpgradingPlayer(UpgradingPlayerEventArgs ev)
         {
             KELog.Debug("Upgrade teleport");
             Player player = ev.Player;
-            Room room = null;
 
-            if(!(player.Role is IFpcRole fpc))
+            if(!(player.Role is FpcRole fpc))
             {
                 return false;
             }
-
-            //TeleportOutcome.GetBestExitPosition(fpc);
-            if (ev.KnobSetting == Scp914KnobSetting.Fine && LuckCheck(ChanceTpEntrance))
-            {
-                try
-                {
-                    room = ZoneType.Entrance.RandomSafeRoom();
-                }
-                catch (Exception)
-                {
-                    room = Room.Random(ZoneType.Entrance);
-                }
-                
-                
-            }
-            if(ev.KnobSetting == Scp914KnobSetting.Coarse && LuckCheck(25))
-            {
-                try
-                {
-                    room = ZoneType.LightContainment.RandomSafeRoom();
-                }
-                catch (Exception)
-                {
-                    room = Room.Random(ZoneType.LightContainment);
-                }
-            }
+            Room room = GetRoom(ev.KnobSetting,player);
 
             if (room != null)
             {
@@ -58,7 +35,8 @@ namespace KE.Misc.Features._914Upgrades
                 Timing.CallDelayed(.1f, delegate
                 {
                     KELog.Debug($"teleporting {player.Nickname} to {room.Name}");
-                    player.Teleport(room);
+                    RoomSpawnedCustomPoint point = RoomCustomPointHandler.GetRandomPoint(RoomCustomPointType.Teleport, room);
+                    player.Teleport(point.Position);
                 });
                 
             }
@@ -68,6 +46,41 @@ namespace KE.Misc.Features._914Upgrades
         }
 
 
+
+        public Room GetRoom(Scp914KnobSetting setting,Player player)
+        {
+            Room room = null;
+
+            KELog.Debug("tp entrance");
+            if (setting == Scp914KnobSetting.Fine && LuckCheck(ChanceTpEntrance,player))
+            {
+                try
+                {
+                    room = ZoneType.Entrance.RandomSafeRoom();
+                }
+                catch (Exception e)
+                {
+                    Log.Error("error trying to get a room in entrance : " + e);
+                    room = Room.Random(ZoneType.Entrance);
+                }
+
+
+            }
+            if(setting == Scp914KnobSetting.Coarse && LuckCheck(25, player))
+            {
+                try
+                {
+                    room = ZoneType.LightContainment.RandomSafeRoom();
+                }
+                catch (Exception e)
+                {
+                    Log.Error("error trying to get a room in light : " + e );
+                    room = Room.Random(ZoneType.LightContainment);
+                }
+            }
+
+            return room;
+        }
 
 
     }

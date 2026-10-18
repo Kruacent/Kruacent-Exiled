@@ -9,7 +9,7 @@ namespace KruacentExiled.CustomItems.API.Core.Lights
 {
     internal class LightsHandler : IUsingEvents
     {
-        public float Intensity { get; set; } = .5f;
+        public static float Intensity { get; set; } = .5f;
         public void SubscribeEvents()
         {
             ItemPickupBase.OnPickupAdded += AddPickup;
@@ -21,7 +21,7 @@ namespace KruacentExiled.CustomItems.API.Core.Lights
         }
 
 
-        private void AddPickup(ItemPickupBase pickup)
+        public static void AddPickup(ItemPickupBase pickup)
         {
             if (CustomItem.TryGet(Exiled.API.Features.Pickups.Pickup.Get(pickup), out CustomItem item) && item is ILumosItem li)
             {

@@ -14,8 +14,13 @@ internal class GiveRandomKeycard : ICoinEffect
 
     public void Execute(Player player)
     {
+
+        if (player == null) return;
         LabApi.Features.Wrappers.KeycardItem keycard = LabApi.Features.Wrappers.KeycardItem.CreateCustomKeycardManagement(player, "Keycard", "Keycard",
             new Interactables.Interobjects.DoorUtils.KeycardLevels(Random.Range(0, 4), Random.Range(0, 4), Random.Range(0, 4)), RandomColor(), RandomColor(), RandomColor());
+
+        //full inventory
+        if (keycard == null) return;
 
         
         player.DropItem(Item.Get(keycard.Base));

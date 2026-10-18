@@ -5,6 +5,7 @@ using Exiled.API.Features.Items;
 using Exiled.API.Features.Toys;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
+using KE.Utils.API.Features;
 using KruacentExiled.CustomRoles.API.Features;
 using MEC;
 using Mirror;
@@ -52,14 +53,14 @@ namespace KruacentExiled.CustomRoles.CR.ChaosInsurgency
 
         public override List<string> Inventory { get; set; } = new List<string>()
         {
-            $"{ItemType.GunRevolver}", $"{ItemType.GunA7}", $"{ItemType.ArmorHeavy}",
+            $"{ItemType.GunRevolver}", $"{ItemType.GunLogicer}", $"{ItemType.ArmorHeavy}",
             $"{ItemType.GrenadeHE}", $"{ItemType.GrenadeFlash}", $"{ItemType.Radio}",
             $"{ItemType.KeycardChaosInsurgency}"
         };
 
         public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new Dictionary<AmmoType, ushort>()
         {
-            { AmmoType.Ammo44Cal, 19 }, { AmmoType.Nato762, 60 }
+            { AmmoType.Ammo44Cal, 19 }, { AmmoType.Nato762, 200 }
         };
 
 
@@ -107,6 +108,7 @@ namespace KruacentExiled.CustomRoles.CR.ChaosInsurgency
         {
             Primitive box = Primitive.Create(PrimitiveType.Cube, pos + Vector3.up * 0.5f, Vector3.zero, new Vector3(0.5f, 0.5f, 0.5f), true);
             box.Color = Color.black;
+            box.Flags = PrimitiveFlags.Visible;
             Timing.RunCoroutine(LootBoxAnimation(box, owner));
         }
 
@@ -135,10 +137,13 @@ namespace KruacentExiled.CustomRoles.CR.ChaosInsurgency
 
                 if (reward is CustomItem custom)
                 {
+
+                    KELog.Debug(custom.Name);
                     custom.Spawn(box.Position);
                 }
                 else if (reward is ItemType baseItem)
                 {
+                    KELog.Debug(baseItem.ToString());
                     Item.Create(baseItem).CreatePickup(box.Position);
                 }
             }
@@ -159,7 +164,7 @@ namespace KruacentExiled.CustomRoles.CR.ChaosInsurgency
                 foreach (ItemType item in System.Enum.GetValues(typeof(ItemType)))
                 {
                     if (item == ItemType.None || item == ItemType.MicroHID || item == ItemType.Jailbird ||
-                        item == ItemType.ParticleDisruptor || item == ItemType.GunSCP127) continue;
+                        item == ItemType.ParticleDisruptor || item == ItemType.GunSCP127 || item == ItemType.DebugRagdollMover) continue;
 
                     if (item.ToString().Contains("Ammo")) continue;
 

@@ -1,21 +1,17 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.API.Features.Attributes;
-using Exiled.API.Features.Items;
 using Exiled.API.Features.Pools;
-using Exiled.CustomRoles.API.Features;
-using Exiled.Events.EventArgs.Player;
-using HarmonyLib;
 using HintServiceMeow.Core.Enum;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
 using KE.Utils.API.Features;
-using KE.Utils.API.Translations.Events;
 using KE.Utils.Extensions;
 using KruacentExiled.CustomRoles.API.Features;
 using KruacentExiled.CustomRoles.API.Interfaces;
 using KruacentExiled.CustomRoles.CustomSCPTeam;
+using KruacentExiled.CustomSpawnPoint;
+using KruacentExiled.CustomSpawnPoint.Spawned;
 using KruacentExiled.Misc.Features.Spawn;
 using MEC;
 using PlayerRoles;
@@ -24,7 +20,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace KruacentExiled.CustomRoles.CR.Human
 {
@@ -80,9 +75,9 @@ namespace KruacentExiled.CustomRoles.CR.Human
         {
             try
             {
-                if (Round.ElapsedTime.TotalSeconds <= 20 )
+                if (Round.ElapsedTime.TotalSeconds <= 20)
                 {
-                    Timing.CallDelayed(1f, () => CreateSpawnHint(player));
+                    Timing.CallDelayed(3f, () => CreateSpawnHint(player));
                 }
                 handles[player] = Timing.RunCoroutine(Teleport(player));
             }catch(Exception e)
@@ -104,9 +99,12 @@ namespace KruacentExiled.CustomRoles.CR.Human
 
             List<ISCPPreferences> allOtherRole;
 
-            int numberscp = Player.Enumerable.Count(p => SCPTeam.IsSCP(p.ReferenceHub));
-            if (numberscp == 0) return;
-
+            int numberscp = SCPTeam.SCPs.Count;
+            if (numberscp == 0)
+            {
+                Log.Warn("no scp found");
+                return;
+            }
             if (numberscp <= 1)
             {
                 allOtherRole = Spawn.allRoles.Where(s => s != trueSCP && !s.IsSupport).ToList();
@@ -135,7 +133,7 @@ namespace KruacentExiled.CustomRoles.CR.Human
             allOtherRole.ShuffleListSecure();
 
             StringBuilder sb = StringBuilderPool.Pool.Get();
-            sb.AppendLine("<color=red><size=20> probable SCP(s) :")
+            sb.AppendLine("<color=red><size=20> probable SCP :")
                 .Append(allOtherRole.ElementAt(0).SCPId)
                 .Append(' ')
                 .Append(allOtherRole.ElementAt(1).SCPId)
@@ -173,7 +171,12 @@ namespace KruacentExiled.CustomRoles.CR.Human
             if (player is null) return;
             player.EnableEffect(EffectType.Flashed, 1, 5);
             player.EnableEffect(EffectType.Invisible, 1, 6);
-            player.Teleport(player.Zone.RandomSafeRoom());
+
+
+            Room room = player.Zone.RandomSafeRoom();
+            RoomSpawnedCustomPoint point = RoomCustomPointHandler.GetRandomPoint(RoomCustomPointType.Teleport,room);
+
+            player.Teleport(point);
         }
 
 

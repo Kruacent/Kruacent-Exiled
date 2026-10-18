@@ -1,25 +1,26 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Lockers;
 using Exiled.API.Features.Pools;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API;
 using Exiled.CustomItems.API.Features;
+using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.Feeds;
+using KE.Utils.API.Features;
 using KE.Utils.API.Translations;
-using KruacentExiled.CustomItems;
-using KruacentExiled.CustomItems.API.Features.SpawnPoints;
+using KruacentExiled.CustomItems.API.Core.Lights;
+using KruacentExiled.CustomItems.API.Exceptions;
 using KruacentExiled.CustomItems.API.Interface;
-using PlayerRoles.SpawnData;
+using KruacentExiled.CustomSpawnPoint.Spawned;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using UnityEngine;
-using static KruacentExiled.CustomItems.API.Features.SpawnPoints.PoseRoomSpawnPointHandler;
 using Pickup = Exiled.API.Features.Pickups.Pickup;
 
 namespace KruacentExiled.CustomItems.API.Features
@@ -117,6 +118,7 @@ namespace KruacentExiled.CustomItems.API.Features
             Name = Name.RemoveSpaces();
 
             _nameLookup.Add(Name, this);
+            InternalSubscribeEvent();
             SubscribeEvents();
 
             OneTimeInit();
@@ -125,16 +127,97 @@ namespace KruacentExiled.CustomItems.API.Features
             TranslationHub.Add(CustomItemTranslationId, translate);
         }
 
+        private void InternalSubscribeEvent()
+        {
+            Exiled.Events.Handlers.Map.FillingLocker += InternalOnFillingLocker;
+            Exiled.Events.Handlers.Map.Generating += InternalOnGenerating;
+        }
+
+        private void InternalUnsubscribeEvent()
+        {
+            Exiled.Events.Handlers.Map.FillingLocker -= InternalOnFillingLocker;
+            Exiled.Events.Handlers.Map.Generating -= InternalOnGenerating;
+        }
+
+
+        protected virtual uint MaxPerLocker { get; } = 1;
+        protected virtual List<LockerSpawnPoint> LockerSpawnPoint { get; } = null;
 
         public override void Destroy()
         {
+            InternalUnsubscribeEvent();
             UnsubscribeEvents();
             _nameLookup.Remove(Name);
             _typeLookup.Remove(GetType());
         }
 
 
+        private Dictionary<Locker, uint> _numberInLocker = null;
 
+        private void InternalOnGenerating(GeneratingEventArgs ev)
+        {
+
+            if (_numberInLocker != null)
+            {
+                _numberInLocker.Clear();
+            }
+            else
+            {
+                _numberInLocker = new Dictionary<Locker, uint>();
+            }
+
+        }
+
+        private void InternalOnFillingLocker(FillingLockerEventArgs ev)
+        {
+            if (LockerSpawnPoint == null) return;
+
+            Locker locker = ev.Locker;
+
+            if(_numberInLocker.TryGetValue(locker,out uint value) && value >= MaxPerLocker)
+            {
+                KELog.Debug("max got");
+                return;
+            }
+
+
+
+
+            foreach (LockerSpawnPoint spawnpoint in LockerSpawnPoint)
+            {
+                if (!spawnpoint.UseChamber) continue;
+
+                if (spawnpoint.Type != locker.Type) continue;
+                if (spawnpoint.Zone != locker.Zone) continue;
+
+                double rng = Exiled.Loader.Loader.Random.NextDouble() * 100.0;
+                double luck = (double)spawnpoint.Chance;
+
+                bool luckCheck = rng < luck;
+
+                KELog.Debug($"luck check of {Name} at {spawnpoint.Position} ({spawnpoint.Name})  : {luckCheck}");
+
+                if (!luckCheck)
+                {
+                    continue;
+                }
+
+                if (ev.Pickup.Type == Type)
+                {
+                    SetItem(ev.Pickup);
+                    if (!_numberInLocker.ContainsKey(locker))
+                    {
+                        _numberInLocker[locker] = 1;
+                    }
+                    else
+                    {
+                        _numberInLocker[locker]++;
+                    }
+                    KELog.Debug("setitem at " + ev.Pickup.Position + " at " + spawnpoint.Type);
+                }
+            }
+
+        }
         
 
         public static T Get<T>() where T : KECustomItem
@@ -143,6 +226,12 @@ namespace KruacentExiled.CustomItems.API.Features
         }
         public new static KECustomItem Get(string name)
         {
+            if (!name.Contains(name))
+            {
+                throw new CustomItemNotFoundException(name);
+            }
+
+
             return _nameLookup[name];
         }
         public static bool TryGet(string name, out KECustomItem item)
@@ -169,31 +258,51 @@ namespace KruacentExiled.CustomItems.API.Features
             
 
 
-            Log.Debug($"spawning {Name}");
             HashSet<SpawnPoint> spawns = spawnPoints.ToHashSet();
             uint num = 0;
             foreach (SpawnPoint spawnpoint in spawnPoints.Where(sp => sp is RoomSpawnPoint))
             {
-                Pickup pickup;
+                Pickup pickup = null;
                 if (Exiled.Loader.Loader.Random.NextDouble() * 100.0 >= (double)spawnpoint.Chance || limit != 0 && num >= limit)
                 {
                     continue;
                 }
                 spawns.Remove(spawnpoint);
                 RoomSpawnPoint room = spawnpoint as RoomSpawnPoint;
-                ItemSpawn spawn = UseRandomPose(room.Room);
-                Log.Debug(room.Room+ " : "+ UsablePoses.Count(p => p.roomType == room.Room));
-                Log.Debug($"spawning {Name} in {room.Room}" );
+                RoomCustomItemPoint spawn = RoomCustomItemPoint.UseRandom(room.Room);
 
                 if (spawn != null)
                 {
-                    Log.Debug($"spawning custom pos");
+                    //Log.Debug($"spawning custom pos");
                     pickup = Spawn(spawn.Position);
                 }
                 else
                 {
-                    Log.Error($"can't spawn ({Name}) in custom ({room.Room})");
-                    pickup = Spawn(spawnpoint.Position);
+                    if (spawnpoint is LockerSpawnPoint { UseChamber: true } lockerSpawnPoint)
+                    {
+                        try
+                        {
+                            lockerSpawnPoint.GetSpawningInfo(out var _, out var chamber, out var position);
+
+                            if(chamber.Base.Content.Count == 0)
+                            {
+                                pickup = Spawn(position);
+                                chamber?.AddItem(pickup);
+                            }
+
+                            
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error($"CustomItem {Name}(failed to spawn: {ex.Message})");
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        Log.Error($"can't spawn ({Name}) in custom ({room.Room})");
+                        pickup = Spawn(spawnpoint.Position);
+                    }
                 }
 
 
@@ -206,22 +315,25 @@ namespace KruacentExiled.CustomItems.API.Features
                     
             }
 
-            return base.Spawn(spawns, limit-num);
+            return num;
         }
 
 
 
-        public void ReplacePickup(Pickup pickup)
-        {
-            Vector3 position = pickup.Position;
-            pickup.Destroy();
-            Spawn(position);
-        }
 
 
         internal static void Message(CustomItem c, Player player, bool pickedUp = false)
         {
             KECustomItem kECustomItem = c as KECustomItem;
+
+            if(kECustomItem is IHiddenName hidden) 
+            {
+                if(hidden.IsHiddenName)
+                {
+                    return;
+                }
+            }
+
             StringBuilder builder = StringBuilderPool.Pool.Get();
 
             string lang = TranslationHub.GetLang(player);
@@ -324,6 +436,26 @@ namespace KruacentExiled.CustomItems.API.Features
             return true;
 
 
+        }
+
+        /// <summary>
+        /// Set a <see cref="Pickup"/> as the <see cref="KECustomItem"/>
+        /// </summary>
+        /// <param name="pickup"></param>
+        /// <param name="forceSameItem">force the pickup to be the same item as the <see cref="KECustomItem"/><br/> see <seealso cref="Type"/></param>
+        public void SetItem(Pickup pickup,bool forceSameItem = true)
+        {
+            
+            if(forceSameItem && pickup.Type != Type)
+            {
+                throw new ArgumentException("wrong item type");
+            }
+
+            pickup.Scale = Scale;
+            pickup.Weight = Weight;
+
+            TrackedSerials.Add(pickup.Serial);
+            LightsHandler.AddPickup(pickup.Base);
         }
 
         public static bool IsConsideredViolent(KECustomItem item)

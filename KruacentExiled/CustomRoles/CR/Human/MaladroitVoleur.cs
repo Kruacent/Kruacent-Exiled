@@ -93,6 +93,12 @@ namespace KruacentExiled.CustomRoles.CR.Human
 
         private void EffectPlayer(Player player)
         {
+            if (player.CurrentItem == null || player.CurrentItem.IsWeapon)
+            {
+                return;
+            }
+
+
             if (UnityEngine.Random.Range(0f, 100f) > 50f)
             {
                 player.DropHeldItem();

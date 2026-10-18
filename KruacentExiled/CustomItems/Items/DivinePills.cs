@@ -9,41 +9,55 @@ using KruacentExiled.CustomItems.API.Core.Upgrade;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.Items.ItemEffects;
 
-public class DivinePills : KECustomItem, ILumosItem, ISwitchableEffect, IUpgradableCustomItem, IRevivingCustomItem
+namespace KruacentExiled.CustomItems.Items
 {
-    protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+    public class DivinePills : KECustomItem, ILumosItem, ISwitchableEffect, IUpgradableCustomItem, IRevivingCustomItem
     {
-        return new Dictionary<string, Dictionary<string, string>>()
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
-            ["en"] = new Dictionary<string, string>()
+            return new Dictionary<string, Dictionary<string, string>>()
             {
-                [TranslationKeyName] = "Divine Pills",
-                [TranslationKeyDesc] = "25% chance you die\n 75% you respawn someone\n",
-            },
-            ["fr"] = new Dictionary<string, string>()
-            {
-                [TranslationKeyName] = "Divine Pills",
-                [TranslationKeyDesc] = "25% de chance de mourrir\n 75% de ramener quelqu'un à la vie",
-            },
-        };
-    }
-    public override ItemType ItemType => ItemType.Painkillers;
+                ["en"] = new Dictionary<string, string>()
+                {
+                    [TranslationKeyName] = "Divine Pills",
+                    [TranslationKeyDesc] = "25% chance you die\n 75% you respawn someone\n",
+                },
+                ["fr"] = new Dictionary<string, string>()
+                {
+                    [TranslationKeyName] = "Divine Pills",
+                    [TranslationKeyDesc] = "25% de chance de mourrir\n 75% de ramener quelqu'un à la vie",
+                },
+            };
+        }
+        public override ItemType ItemType => ItemType.Painkillers;
 
-    /// <inheritdoc/>
-    public override string Name { get; set; } = "Divine Pills";
+        /// <inheritdoc/>
+        public override string Name { get; set; } = "Divine Pills";
 
-    /// <inheritdoc/>
-    public override float Weight { get; set; } = 0.65f;
-    public UnityEngine.Color Color { get; set; } = UnityEngine.Color.yellow;
-    public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade { get; private set; } = new Dictionary<Scp914KnobSetting, UpgradeProperties>()
+        /// <inheritdoc/>
+        public override float Weight { get; set; } = 0.65f;
+        public UnityEngine.Color Color { get; set; } = UnityEngine.Color.yellow;
+        public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade { get; private set; } = new Dictionary<Scp914KnobSetting, UpgradeProperties>()
         {
             { Scp914KnobSetting.VeryFine,new UpgradeProperties(10, "TrueDivinePills")}
         };
 
-    /// <inheritdoc/>
-    public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
-    {
-        LockerSpawnPoints = new List<LockerSpawnPoint>
+        /// <inheritdoc/>
+        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        {
+            RoomSpawnPoints = new List<RoomSpawnPoint>
+            {
+                new RoomSpawnPoint()
+                {
+                    Chance = 80,
+                    Room = RoomType.LczGlassBox,
+                },
+            },
+
+        };
+
+
+        protected override List<LockerSpawnPoint> LockerSpawnPoint => new List<LockerSpawnPoint>()
         {
             new LockerSpawnPoint()
             {
@@ -59,42 +73,32 @@ public class DivinePills : KECustomItem, ILumosItem, ISwitchableEffect, IUpgrada
                 Type = LockerType.Medkit,
                 Zone = ZoneType.LightContainment,
             },
-        },
-        RoomSpawnPoints = new List<RoomSpawnPoint>
+        };
+
+        public CustomItemEffect Effect { get; set; }
+        public DivinePills()
         {
-            new RoomSpawnPoint()
-            {
-                Chance = 80,
-                Room = RoomType.LczGlassBox,
-            },
-        },
+            Effect = new DivinePillsEffect();
+        }
 
-    };
+        /// <inheritdoc/>
+        protected override void SubscribeEvents()
+        {
+            PlayerHandle.UsedItem += OnUsedItem;
+            base.SubscribeEvents();
+        }
 
-    public CustomItemEffect Effect { get;set; }
-    public DivinePills()
-    {
-        Effect = new DivinePillsEffect();
+        /// <inheritdoc/>
+        protected override void UnsubscribeEvents()
+        {
+            PlayerHandle.UsedItem -= OnUsedItem;
+            base.UnsubscribeEvents();
+        }
+
+        private void OnUsedItem(UsedItemEventArgs ev)
+        {
+            if (!Check(ev.Item)) return;
+            Effect.Effect(ev);
+        }
     }
-
-    /// <inheritdoc/>
-    protected override void SubscribeEvents()
-    {
-        PlayerHandle.UsedItem += OnUsedItem;
-        base.SubscribeEvents();
-    }
-
-    /// <inheritdoc/>
-    protected override void UnsubscribeEvents()
-    {
-        PlayerHandle.UsedItem -= OnUsedItem;
-        base.UnsubscribeEvents();
-    }
-
-    private void OnUsedItem(UsedItemEventArgs ev)
-    {
-        if (!Check(ev.Item)) return;
-        Effect.Effect(ev);
-    }
-
 }

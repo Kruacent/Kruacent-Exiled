@@ -52,7 +52,7 @@ namespace KruacentExiled.CustomRoles.Abilities
 
         protected override bool AbilityUsed(Player player)
         {
-            if (CheckValid(player, true))
+            if (!CheckValid(player, true))
             {
                 return false;
             }

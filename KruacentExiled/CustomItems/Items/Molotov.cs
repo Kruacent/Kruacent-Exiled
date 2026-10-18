@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace KruacentExiled.CustomItems.Items
 {
-    public class Molotov : KECustomGrenade, ISwitchableEffect, ICustomPickupModel, IUpgradableCustomItem
+    public class Molotov : KECustomGrenade, ISwitchableEffect, ICustomPickupModel, IUpgradableCustomItem,IViolentItem
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
@@ -62,6 +62,8 @@ namespace KruacentExiled.CustomItems.Items
                 new RoomSpawnPoint() { Chance = 80, Room = RoomType.Hcz049, },
             },
         };
+
+        public bool IsViolent => true;
 
         public Molotov()
         {

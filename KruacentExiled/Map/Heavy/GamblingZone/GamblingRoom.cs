@@ -181,16 +181,23 @@ namespace KruacentExiled.Map.Heavy.GamblingZone
         public static void SubscribeEvents()
         {
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
+            Exiled.Events.Handlers.Server.RestartingRound += OnRestartingRound;
         }
 
         public static void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+            Exiled.Events.Handlers.Server.RestartingRound -= OnRestartingRound;
             DestroyAll();
         }
 
 
         private static void OnRoundEnded(RoundEndedEventArgs ev)
+        {
+            DestroyAll();
+        }
+
+        private static void OnRestartingRound()
         {
             DestroyAll();
         }

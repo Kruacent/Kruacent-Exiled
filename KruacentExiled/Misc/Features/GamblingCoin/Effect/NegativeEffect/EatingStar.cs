@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Toys;
+using KruacentExiled.Audio;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using KruacentExiled.Misc.Features.GamblingCoin.Types;
 using MEC;
@@ -11,7 +12,7 @@ public class EatingStar : IDurationEffect
 {
     public string Name { get; set; } = "EatingStar";
     public string Message { get; set; } = "Eating the disco ball wasn't good idea";
-    public int Weight { get; set; } = 2;
+    public int Weight { get; set; } = 7;
     public EffectType Type { get; set; } = EffectType.Negative;
 
 
@@ -29,9 +30,17 @@ public class EatingStar : IDurationEffect
         _lights[player] = light;
 
 
-        var c = KE.Utils.API.Sounds.SoundPlayer.Instance.Play("starman", player.GameObject,volume:.5f);
 
-        _clips[player] = c;
+        
+
+        var c = AudioHandler.Instance.PlayToAll(SoundType.Noise, "starman", player.GameObject, 50);
+
+        foreach(AudioClipPlayback clip in c.Values)
+        {
+            _clips.Add(player, clip);
+        }
+
+
         _coroutines = Timing.RunCoroutine(ColorTransformer(player));
     }
 
@@ -64,8 +73,13 @@ public class EatingStar : IDurationEffect
     {
         Timing.KillCoroutines(_coroutines);
         Light light = _lights[player];
+
+        foreach(var kvp in _clips)
+        {
+            kvp.Value.Loop = false;
+        }
+
         light.Destroy();
-        _clips[player].IsPaused = true;
         _lights.Remove(player);
 
     }

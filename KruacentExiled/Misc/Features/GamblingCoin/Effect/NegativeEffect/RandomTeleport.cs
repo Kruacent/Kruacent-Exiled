@@ -1,5 +1,7 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
+using KruacentExiled.CustomSpawnPoint;
+using KruacentExiled.CustomSpawnPoint.Spawned;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using System;
 using EffectType = KruacentExiled.Misc.Features.GamblingCoin.Types.EffectType;
@@ -13,6 +15,7 @@ public class RandomTeleport : ICoinEffect
 
     public void Execute(Player player)
     {
-        player.Teleport(Room.Random());
+        RoomSpawnedCustomPoint point = RoomCustomPointHandler.GetRandomPoint(RoomCustomPointType.Teleport, Room.Random());
+        player.Teleport(point.Position);
     }
 }

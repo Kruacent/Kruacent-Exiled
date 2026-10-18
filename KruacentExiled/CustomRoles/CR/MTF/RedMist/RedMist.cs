@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace KruacentExiled.CustomRoles.CR.MTF.RedMist
 {
-    public class RedMistRole : KECustomRole, IColor
+    public class RedMistRole : KECustomRole, IColor, IRareCustomRole
     {
         public override string InternalName => "RedMist";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()

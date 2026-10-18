@@ -13,6 +13,7 @@ namespace KruacentExiled.Map.Others.BlackoutNDoor
     {
         private DoorStuck doorstuck = new DoorStuck();
         private Blackout blackout = new Blackout();
+        private ElevatorStuck elevator = new ElevatorStuck();
         public override string Cassie => MainPlugin.Translations.Both;
         public override float Duration => 20;
 
@@ -21,12 +22,14 @@ namespace KruacentExiled.Map.Others.BlackoutNDoor
         {
             doorstuck.Start(zone);
             blackout.Start(zone);
+            elevator.Start(zone);
         }
 
         public override void Stop(ZoneType zone)
         {
             doorstuck.Stop(zone);
             blackout.Stop(zone);
+            elevator.Stop(zone);
         }
     }
 }

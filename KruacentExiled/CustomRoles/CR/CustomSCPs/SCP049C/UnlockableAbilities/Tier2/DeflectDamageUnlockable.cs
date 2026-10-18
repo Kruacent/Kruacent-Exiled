@@ -1,18 +1,15 @@
 ﻿using Exiled.API.Features;
-using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
-using KE.Utils.API.Features;
-using KruacentExiled.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities;
-using PlayerRoles.FirstPersonControl;
-using System;
+using KruacentExiled.CustomRoles.API.Features;
 using System.Collections.Generic;
-using UnityEngine.Windows.Speech;
-using LabPlayer = LabApi.Features.Wrappers.Player;
 namespace KruacentExiled.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.Tier2
 {
-    internal class DeflectDamageUnlockable : Unlockable
+    internal class DeflectDamageUnlockable : UnlockableAbility
     {
         public override byte Tier => 2;
+
+        public override KEAbilities Ability => KEAbilities.Get("Parry");
+
         public override string GetName(ReferenceHub hub)
         {
             return "Deflect Damages";
@@ -23,60 +20,32 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.T
         }
 
 
-        private static Dictionary<ReferenceHub, LastDamage> cooldowns = new Dictionary<ReferenceHub, LastDamage>();
+        private static HashSet<ReferenceHub> _players = new HashSet<ReferenceHub>();
 
         public override void Grant(ReferenceHub hub)
         {
-            cooldowns.Add(hub, null);
-            
+            _players.Add(hub);
         }
 
         public override void Remove(ReferenceHub hub)
         {
-
-            cooldowns.Remove(hub);
+            _players.Remove(hub);
         }
-
-
         internal static void OnHurting(HurtingEventArgs ev)
         {
-
+            
             ReferenceHub hub = ev.Player.ReferenceHub;
-            if (ev.IsAllowed && cooldowns.ContainsKey(hub))
+            if (ev.IsAllowed && _players.Contains(hub))
             {
-                LastDamage lastDamage = cooldowns[hub];
+                Log.Info("hurted");
+                ev.IsAllowed = false;
 
-                if(lastDamage is null || lastDamage.IsDeflectable())
-                {
-                    ev.IsAllowed = false;
-                    cooldowns[hub] = new LastDamage(ev.Amount);
-                }
+
             }
         }
 
-        private class LastDamage
-        {
-            public float DamageAmount;
-            public DateTime Time;
-            public LastDamage(float damageAmount)
-            {
-                DamageAmount = damageAmount;
-                Time = DateTime.Now;
-            }
 
 
-            public bool IsDeflectable()
-            {
-                return DateTime.Now > Time + GetCooldown(DamageAmount);
-            }
-
-
-            public static TimeSpan GetCooldown(float damage)
-            {
-                return TimeSpan.FromSeconds(damage * .5f);
-            }
-
-        }
     }
 
 

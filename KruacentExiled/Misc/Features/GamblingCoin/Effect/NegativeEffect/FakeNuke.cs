@@ -6,7 +6,7 @@ internal class FakeNuke : IDurationEffect
 {
     public string Name { get; set; } = "FakeNuke";
     public string Message { get; set; } = string.Empty;
-    public int Weight { get; set; } = 5;
+    public int Weight { get; set; } = 10;
     public EffectType Type { get; set; } = EffectType.Negative;
     public float Duration { get; set; } = 15;
 

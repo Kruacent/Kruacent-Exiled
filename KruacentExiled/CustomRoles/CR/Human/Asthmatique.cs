@@ -1,10 +1,12 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
+using Exiled.API.Features.Pickups;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
 using KruacentExiled.CustomRoles.API.Features;
 using KruacentExiled.CustomRoles.API.Interfaces;
+using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,8 +46,28 @@ namespace KruacentExiled.CustomRoles.CR.Human
 
         public HashSet<EffectType> ImmuneEffects => new HashSet<EffectType>() {EffectType.Poisoned};
 
+
+
+
         protected override void RoleAdded(Player player)
         {
+
+
+            Timing.CallDelayed(TimeAttributingInventory, () =>
+            {
+                if (player.IsInventoryFull)
+                {
+                    Pickup.CreateAndSpawn(ItemType.Adrenaline, player.Position);
+                }
+                else
+                {
+                    player.AddItem(ItemType.Adrenaline);
+                }
+
+            });
+
+
+
             player.EnableEffect(EffectType.Scp1853, -1, true);
             player.EnableEffect(EffectType.Exhausted, -1, true);
         }

@@ -1,0 +1,65 @@
+﻿using Exiled.API.Features;
+using Exiled.API.Features.Items;
+using KruacentExiled.CustomSpawnPoint;
+using KruacentExiled.CustomSpawnPoint.Spawned;
+using GlobalEventFramework.API.Enums;
+using GlobalEventFramework.API.Features;
+using GlobalEventFramework.API.Interfaces;
+using MEC;
+using System.Collections.Generic;
+using System.Drawing;
+
+namespace KruacentExiled.GlobalEvents.GE
+{
+    /// <summary>
+    /// Spawn fused grenades in random rooms in the map 
+    /// </summary>
+    public class Blitz : GlobalEvent, IAsyncStart
+    {
+        ///<inheritdoc/>
+        public override string Name { get; set; } = "Blitz";
+        ///<inheritdoc/>
+        public override string Description { get; } = "La Luftwaffe arrive!";
+        public override string[] AltDescription => new string[] 
+        {
+            "Attention aux bombardements!"
+        };
+        ///<inheritdoc/>
+        public override int WeightedChance => 4;
+        /// <summary>
+        /// The cooldown between 2 spawn of grenades
+        /// </summary>
+        public int Cooldown { get; set; } = 120;
+        /// <summary>
+        /// The number of grenades in each spawn
+        /// </summary>
+        public int NbGrenadeSpawned { get; set; } = 5;
+
+        public override ImpactLevel ImpactLevel => ImpactLevel.Low;
+
+
+        ///<inheritdoc/>
+        public IEnumerator<float> Start()
+        {
+            while (!Round.IsEnded)
+            {
+                Log.Debug("waiting");
+                yield return Timing.WaitForSeconds(Cooldown);
+                for (int i = 0; i < NbGrenadeSpawned; i++)
+                {
+                    Room randomRoom = Room.Random();
+
+                    if (!RoomCustomPointHandler.HaveASpawnedPoint(randomRoom))
+                    {
+                        continue;
+                    }
+
+                    foreach (RoomSpawnedCustomPoint point in RoomCustomPointHandler.GetAll(randomRoom, RoomCustomPointType.Teleport))
+                    {
+                        ((ExplosiveGrenade)Item.Create(ItemType.GrenadeHE)).SpawnActive(point.Position);
+                    }
+                }
+            }
+        }
+    }
+}
