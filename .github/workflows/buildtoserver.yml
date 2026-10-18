@@ -72,7 +72,7 @@ jobs:
       - name: Copy resources to server
         if: github.event_name == 'push' && github.ref_name == 'master'
         run: |
-          cp -r ${{ github.workspace }}/Resources/. {{ env.OUTPUT_RESOURCES_PATH }}
+          cp -r ${{ github.workspace }}/Resources/. ${{ env.OUTPUT_RESOURCES_PATH }}
                     
 
       - name: Create GitHub Release Draft
