@@ -28,6 +28,7 @@
     <Reference Include="Mirror" HintPath="$(EXILED_REFERENCES)\Mirror.dll" Publicize="true" />
     <Reference Include="LabApi" HintPath="$(EXILED_REFERENCES)\LabApi.dll" />
     <Reference Include="KE.Utils" HintPath="$(EXILED_REFERENCES)\KE.Utils.dll" />
+    <Reference Include="GlobalEventFramework" HintPath="$(EXILED_REFERENCES)\GlobalEventFramework.dll" />
 	<Reference Include="ProjectMER" HintPath="$(EXILED_REFERENCES)\ProjectMER.dll" />
 	<Reference Include="Unity.TextMeshPro" HintPath="$(EXILED_REFERENCES)\Unity.TextMeshPro.dll" />
   </ItemGroup>

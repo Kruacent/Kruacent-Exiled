@@ -2,7 +2,7 @@
 using Exiled.API.Features;
 using UnityEngine;
 
-namespace KruacentExiled.Misc.Events
+namespace KruacentExiled.Misc.Events.EventsArgs
 {
     public class RollingChanceEventArgs : EventArgs
     {
