@@ -16,7 +16,7 @@ internal class MakeOneHP : ICoinEffect
             player.Health = 1;
         } else
         {
-            player.Hurt(99999, "No luck");
+            player.Explode();
         }
     }
 }

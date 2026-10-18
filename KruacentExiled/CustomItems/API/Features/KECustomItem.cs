@@ -325,6 +325,15 @@ namespace KruacentExiled.CustomItems.API.Features
         internal static void Message(CustomItem c, Player player, bool pickedUp = false)
         {
             KECustomItem kECustomItem = c as KECustomItem;
+
+            if(kECustomItem is IHiddenName hidden) 
+            {
+                if(hidden.IsHiddenName)
+                {
+                    return;
+                }
+            }
+
             StringBuilder builder = StringBuilderPool.Pool.Get();
 
             string lang = TranslationHub.GetLang(player);
