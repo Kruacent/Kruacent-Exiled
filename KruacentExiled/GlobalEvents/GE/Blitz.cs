@@ -49,7 +49,7 @@ namespace KruacentExiled.GlobalEvents.GE
                 {
                     Room randomRoom = Room.Random();
 
-                    if (!RoomCustomPointHandler.HaveASpawnedPoint(randomRoom))
+                    if (!RoomCustomPointHandler.HasASpawnedPoint(randomRoom))
                     {
                         continue;
                     }

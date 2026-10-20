@@ -35,9 +35,9 @@ public class EatingStar : IDurationEffect
 
         var c = AudioHandler.Instance.PlayToAll(SoundType.Noise, "starman", player.GameObject, 50);
 
-        foreach(AudioClipPlayback clip in c.Values)
+        foreach (AudioClipPlayback clip in c.Values)
         {
-            _clips.Add(player, clip);
+            _clips[player] = clip;
         }
 
 

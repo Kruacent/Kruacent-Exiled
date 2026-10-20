@@ -16,7 +16,7 @@ namespace KruacentExiled.CustomSpawnPoint.Spawned
     /// <summary>
     /// Spawned variant of <see cref="RoomCustomPoint"/>
     /// </summary>
-    public abstract class RoomSpawnedCustomPoint : IPosition
+    public class RoomSpawnedCustomPoint : IPosition
     {
 
 
@@ -188,7 +188,8 @@ namespace KruacentExiled.CustomSpawnPoint.Spawned
                     result = new RoomCustomItemPoint(roomCustomPoint, room, !register);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(roomCustomPoint), "type not set");
+                    result = new RoomSpawnedCustomPoint(roomCustomPoint, room, !register);
+                    break;
             }
 
             

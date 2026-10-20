@@ -12,13 +12,24 @@ using UnityEngine;
 
 namespace KruacentExiled.CustomItems.API.Core.Models
 {
+    /// <summary>
+    /// Models of <see cref="Pickup"/>s
+    /// </summary>
     public abstract class PickupModel : ModelBase, IUsingEvents
     {
-
+        /// <summary>
+        /// The <see cref="CustomItem"/> of the model
+        /// </summary>
         public CustomItem KECI { get; }
+        /// <summary>
+        /// The scale of the model (1 is default)
+        /// </summary>
         public abstract float Scale { get; }
 
-
+        /// <summary>
+        /// Initialize a new instance of <see cref="PickupModel"/>
+        /// </summary>
+        /// <param name="customItem">The custom item which gets the model</param>
         public PickupModel(CustomItem customItem)
         {
             KECI = customItem;
@@ -46,6 +57,11 @@ namespace KruacentExiled.CustomItems.API.Core.Models
             return base.CreatePrimitive(parent, type, localPosition, localRotation, localScale, color, 0, false);
         }
 
+        /// <summary>
+        /// Create the parent primitive of the model
+        /// </summary>
+        /// <param name="pickup"></param>
+        /// <returns></returns>
         private Primitive CreateParent(Pickup pickup)
         {
 
@@ -93,7 +109,11 @@ namespace KruacentExiled.CustomItems.API.Core.Models
             }
             
         }
-
+        /// <summary>
+        /// Check if the pickup can have this model
+        /// </summary>
+        /// <param name="pickup"></param>
+        /// <returns>true if the pickup can use this model ; false otherwise</returns>
         public bool Check(Pickup pickup)
         {
             if (pickup is null) return false;

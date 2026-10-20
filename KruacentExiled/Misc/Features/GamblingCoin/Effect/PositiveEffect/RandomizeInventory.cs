@@ -6,6 +6,7 @@ using KruacentExiled.Misc.Features.GamblingCoin.Types;
 using KruacentExiled.Misc.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 internal class RandomizeInventory : ICoinEffect
 {

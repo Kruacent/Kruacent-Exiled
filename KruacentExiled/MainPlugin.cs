@@ -1,7 +1,11 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
+using Exiled.API.Features.Items;
+using Exiled.API.Features.Pickups;
 using Exiled.API.Interfaces;
 using HarmonyLib;
 using KE.Utils.API;
+using KE.Utils.API.Features;
 using KruacentExiled.Audio;
 using KruacentExiled.ClientPrimitives;
 using KruacentExiled.CustomSpawnPoint;
@@ -10,6 +14,7 @@ using KruacentExiled.DebugSettings;
 using LabApi.Events.Arguments.ServerEvents;
 using MEC;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace KruacentExiled
@@ -122,6 +127,45 @@ namespace KruacentExiled
         {
             Log.Warn("map generated");
             RoomSpawnedCustomPoint.SpawnAll();
+
+            Timing.CallDelayed(.1f, () =>
+            {
+                try
+                {
+                    SpawnItems();
+                }
+                catch(Exception e)
+                {
+                    Log.Error(e);
+                }
+            });
+
+
+        }
+
+        private void SpawnItems()
+        {
+            Dictionary<Exiled.API.Enums.RoomType, ItemType> dict = new Dictionary<Exiled.API.Enums.RoomType, ItemType>()
+            {
+                {RoomType.EzGateA,ItemType.KeycardZoneManager },
+                {RoomType.EzDownstairsPcs,ItemType.Flashlight },
+
+            };
+
+
+            foreach(var kvp in dict)
+            {
+                Room room = Room.Get(kvp.Key);
+
+                RoomSpawnedCustomPoint point = RoomCustomPointHandler.GetAll(room, RoomCustomPointType.ItemSpawn).First();
+                if(point == null)
+                {
+                    KELog.Debug("null");
+                }
+                Pickup pickup = Pickup.CreateAndSpawn(kvp.Value, point.Position);
+                KELog.Debug("spawned " + pickup);
+            }
+
         }
 
         public void OnRoundEnded(RoundEndedEventArgs ev)

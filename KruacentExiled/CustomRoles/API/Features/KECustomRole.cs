@@ -885,7 +885,7 @@ namespace KruacentExiled.CustomRoles.API.Features
         /// <returns>A <see cref="DictionaryPool{TKey, TValue}"/> of all <see cref="KECustomRole"/> available to the <see cref="Player"/> and its chance</returns>
         public static Dictionary<KECustomRole, float> GetAvailableCustomRole(Player player)
         {
-            return Registered.Where(cr => cr.IsAvailable(player)).ToDictionary(c => c, c => c.SpawnChance);
+            return Registered.Where(cr => cr.IsAvailable(player) && cr.SpawnChance > 0).ToDictionary(c => c, c => c.SpawnChance);
         }
         /// <summary>
         /// Give a random <see cref="KECustomRole"/> to a <see cref="Player"/>. <br/>

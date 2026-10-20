@@ -7,8 +7,16 @@ using LabApi.Features.Wrappers;
 
 namespace KruacentExiled.CustomItems.API.Core.Lights
 {
+
+    /// <summary>
+    /// Spawn a <see cref="LightSourceToy"/> at the pickup of any <see cref="ILumosItem"/>
+    /// </summary>
     internal class LightsHandler : IUsingEvents
     {
+
+        /// <summary>
+        /// The intensity of the <see cref="LightSourceToy"/>
+        /// </summary>
         public static float Intensity { get; set; } = .5f;
         public void SubscribeEvents()
         {

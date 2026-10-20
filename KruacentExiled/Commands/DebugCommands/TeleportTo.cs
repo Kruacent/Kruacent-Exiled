@@ -13,7 +13,7 @@ namespace KruacentExiled.Commands.DebugCommands
 
         public override string[] Aliases => new string[] { "tp" };
 
-        public override string Description => "";
+        public override string Description => "Teleports to coordinates";
 
         public override string[] Usage => new string[] { "<x> <y> <z>" };
 
