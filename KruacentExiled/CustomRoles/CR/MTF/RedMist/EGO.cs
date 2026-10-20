@@ -140,7 +140,7 @@ namespace KruacentExiled.CustomRoles.CR.MTF.RedMist
         {
             active = !Active;
             KELog.Debug("toggle now active? "+ Active);
-            Effect();
+            //Effect();
         }
 
 

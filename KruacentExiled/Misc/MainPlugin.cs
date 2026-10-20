@@ -41,6 +41,7 @@ namespace KruacentExiled.Misc
         internal FriendlyFire FriendlyFire { get; private set; }
         internal NukeKill AutoNukeAnnoucement { get; private set; }
         internal AutoTesla AutoTesla { get; private set; }
+        internal TeslaDeathRedMist DeathRedMist { get; private set; }
         internal EventHandlers _gamblingCoinHandler {  get; private set; }
         internal SpawnLcz SpawnLcz { get; private set; }
         internal LastHumanHandler LastHuman { get; private set; }
@@ -75,6 +76,7 @@ namespace KruacentExiled.Misc
             FriendlyFire = new FriendlyFire();
             AutoNukeAnnoucement = new NukeKill();
             AutoTesla = new AutoTesla();
+            DeathRedMist = new TeslaDeathRedMist();
             LastHuman = new LastHumanHandler();
             Candy = new Candy();
             vote = new VoteStart();
@@ -93,6 +95,7 @@ namespace KruacentExiled.Misc
             ServerHandle.RoundEnded += OnRoundEnded;
             MiscFeature.SubscribeAllEvents();
             AutoNukeAnnoucement.SubscribeEvents();
+            DeathRedMist.RegisterEvents();
             if (Configs.GamblingCoin)
             {
                 GamblingCoinManager.RegisterAll();
@@ -116,6 +119,7 @@ namespace KruacentExiled.Misc
             AutoNukeAnnoucement.UnsubscribeEvents();
             LastHuman.UnsubscribeEvents();
             SCPBuff.UnsubscribeEvents();
+            DeathRedMist.UnregisterEvents();
             if (Configs.GamblingCoin)
             {
                 Exiled.Events.Handlers.Player.FlippingCoin -= _gamblingCoinHandler.OnCoinFlip;
@@ -133,6 +137,7 @@ namespace KruacentExiled.Misc
             ServerHandler = null;
             SCPBuff = null;
             AutoTesla = null;
+            DeathRedMist = null;
             Spawn = null;
             AutoElevator = null;
             vote = null;
