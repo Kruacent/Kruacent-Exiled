@@ -74,8 +74,15 @@ namespace KruacentExiled.Misc.Features.GamblingCoin
                 return;
             }
 
-
-            effect.ExecuteEffect(player);
+            try
+            {
+                effect.ExecuteEffect(player);
+            }
+            catch(Exception e)
+            {
+                Log.Error(e);
+            }
+            
 
             if (!string.IsNullOrEmpty(effect.Message))
             {
