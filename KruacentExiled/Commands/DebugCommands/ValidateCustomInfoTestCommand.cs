@@ -17,7 +17,7 @@ namespace KruacentExiled.Commands.DebugCommands
 
         public override string[] Aliases => new string[0];
 
-        public override string Description => "";
+        public override string Description => "Check if a custom info is valid";
 
         public override string[] Usage => new string[] { "<CustomInfo>" };
 

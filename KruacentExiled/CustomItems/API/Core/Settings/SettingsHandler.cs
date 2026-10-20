@@ -7,6 +7,9 @@ using System.Collections.Generic;
 
 namespace KruacentExiled.CustomItems.API.Core.Settings
 {
+    /// <summary>
+    /// The ServerSpecificSettings for the custom roles
+    /// </summary>
     internal class SettingsHandler
     {
 
@@ -23,7 +26,9 @@ namespace KruacentExiled.CustomItems.API.Core.Settings
         public const string SettingDescription2 = "Enabled";
         public const string SettingDescriptionDescription = "hide/show the description of the item and its upgrade chances";
 
-
+        /// <summary>
+        /// Creates the settings
+        /// </summary>
         public SettingsHandler()
         {
             HeaderSetting header = new HeaderSetting(_idHeader, "Custom Items", padding: true);
@@ -44,13 +49,21 @@ namespace KruacentExiled.CustomItems.API.Core.Settings
         }
 
 
-
+        /// <summary>
+        /// Get the time of the hint when a player picks up a <see cref="Features.KECustomItem"/>
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
         internal float GetTime(Player p)
         {
             if (!SettingBase.TryGetSetting<SliderSetting>(p, _idTimeCustomItem, out var setting)) return 10;
             return setting.SliderValue;
         }
-
+        /// <summary>
+        /// Get the time of the hint when a player gets an effect of a <see cref="Features.KECustomItem"/>
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
         internal float GetTimeEffect(Player p)
         {
             if (!SettingBase.TryGetSetting<SliderSetting>(p, _idTimeCustomItemEffect, out var setting)) return 10;

@@ -10,7 +10,8 @@ namespace KruacentExiled.CustomSpawnPoint
     {
         Unknown = -1,
         CustomItemSpawn,
-        Teleport
-
+        Teleport,
+        ItemSpawn,
+        Capybara
     }
 }

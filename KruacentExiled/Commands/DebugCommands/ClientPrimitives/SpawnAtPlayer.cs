@@ -14,7 +14,7 @@ namespace KruacentExiled.Commands.DebugCommands.ClientPrimitives
 
         public override string[] Aliases => new string[] { "scp" };
 
-        public override string Description => "";
+        public override string Description => "Spawn a client primitives at the player's position";
 
         public override string[] Usage => new string[0];
 
