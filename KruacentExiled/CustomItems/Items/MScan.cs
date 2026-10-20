@@ -12,6 +12,7 @@ using Exiled.Events.EventArgs.Scp106;
 using Exiled.Events.EventArgs.Scp939;
 using KE.Utils.API.Displays.Feeds;
 using KruacentExiled.CustomItems.API.Features;
+using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomRoles.API.Interfaces;
 using MEC;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ using UnityEngine;
 
 namespace KruacentExiled.CustomItems.Items
 {
-    public class MScan : KECustomItem,IColor
+    public class MScan : KECustomItem,ILumosItem
     {
 
 
@@ -58,7 +59,7 @@ namespace KruacentExiled.CustomItems.Items
         public override ItemType ItemType => ItemType.Flashlight;
         public override string Name { get; set; } = "MScan";
         public override float Weight { get; set; } = 1.5f;
-        public Color32 Color { get; set; } = UnityEngine.Color.cyan;
+        public Color Color { get; set; } = UnityEngine.Color.cyan;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 2,
