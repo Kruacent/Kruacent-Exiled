@@ -1,12 +1,13 @@
 ﻿using Exiled.API.Enums;
-using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
-using Exiled.Events.Handlers;
 using KE.Utils.API.Features;
 using KE.Utils.Extensions;
+using UnityEngine;
 using KruacentExiled.CustomRoles.API.Features;
-using LabApi.Features.Wrappers;
 using PlayerRoles;
+using KruacentExiled.CustomSpawnPoint.Spawned;
+using Exiled.API.Features;
+using Exiled.API.Extensions;
 
 namespace KruacentExiled.Misc.Features
 {
@@ -54,7 +55,20 @@ namespace KruacentExiled.Misc.Features
                 {
                     ev.IsAllowed = false;
                     kecr.AddRole(ev.Player);
-                    ev.Player.Teleport(ev.Player.Zone.RandomSafeRoom());
+
+                    Room room = Room.List.GetRandomValue();
+                    RoomSpawnedCustomPoint point = CustomSpawnPoint.RoomCustomPointHandler.GetRandomPoint(CustomSpawnPoint.RoomCustomPointType.Teleport, room);
+                    Vector3 teleport;
+                    if (point != null)
+                    {
+                        teleport = point.Position;
+                    }
+                    else
+                    {
+                        teleport = room.GetValidPosition();
+                    }
+                    
+                    ev.Player.Teleport(teleport);
                 }
             }
         }
