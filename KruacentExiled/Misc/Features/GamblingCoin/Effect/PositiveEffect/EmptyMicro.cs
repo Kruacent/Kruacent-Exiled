@@ -15,7 +15,6 @@ internal class EmptyMicro : ICoinEffect
     {
         MicroHid item = (MicroHid)Item.Create(ItemType.MicroHID, player);
         item.Energy = 0;
-        item.Scale = Vector3.one * 5;
         item.CreatePickup(player.Position);
     }
 }
