@@ -9,20 +9,51 @@ using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
 using KruacentExiled.CustomItems.API.Features;
 using MapGeneration;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace KruacentExiled.CustomItems.Items.ShieldBelt
 {
-    [CustomItem(ItemType.KeycardCustomSite02)]
+    //[CustomItem(ItemType.KeycardCustomSite02)]
     public class ShieldBelt : KECustomKeycard
     {
 
-        public override uint Id { get; set; } = 5982;
+        //public override uint Id { get; set; } = 5982;
         public override string Name { get; set; } = "Shield belt";
-        public override string Description { get; set; } = "A projectile-repulsion device.\nIt will attempt to stop incoming projectiles or shrapnel, but does nothing against melee attacks or heat.\nIt prevents the wearer from firing out.\n(works in the inventory) ";
+        //public override string Description { get; set; } = "A projectile-repulsion device.\nIt will attempt to stop incoming projectiles or shrapnel, but does nothing against melee attacks or heat.\nIt prevents the wearer from firing out.\n(works in the inventory) ";
         public override float Weight { get; set; } = 0.65f;
         public override SpawnProperties SpawnProperties { get; set; } = null;
+
+        public override ItemType ItemType => ItemType.KeycardCustomManagement;
+
+        public override Color32? KeycardLabelColor { get; set; } = Color.blue;
+        public override Color32? KeycardPermissionsColor { get; set; } = Color.red;
+        public override Color32? TintColor { get; set; } = Color.red;
+        public override void Init()
+        {
+            KeycardLabel = Name;
+            base.Init();
+        }
+
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new Dictionary<string, Dictionary<string, string>>()
+            {
+                ["en"] = new Dictionary<string, string>()
+                {
+                    [TranslationKeyName] = "Shield belt",
+                    [TranslationKeyDesc] = "A projectile-repulsion device.\nIt will attempt to stop incoming projectiles or shrapnel, but does nothing against melee attacks or heat.\nIt prevents the wearer from firing out.\n(works in the inventory) ",
+                },
+                ["fr"] = new Dictionary<string, string>()
+                {
+                    [TranslationKeyName] = "Bouclier d'énergie",
+                    [TranslationKeyDesc] = "Un bouclier d'énergie personnel conçu pour repousser les projectiles de tous les types d'armes à distance et les fragments de shrapnels, mais il est inefficace dans les combats en mêlée .\nIl empêche également son utilisateur d'utiliser des armes à distance.\n(marche dans l'inventaire) ",
+                },
+            };
+        }
+
 
         protected override void SubscribeEvents()
         {
@@ -155,7 +186,20 @@ namespace KruacentExiled.CustomItems.Items.ShieldBelt
                 return;
             }
             if (!stat.IsActive) return;
-            ev.Amount = stat.Damage(ev.Amount);
+
+            if(ev.Attacker == null)
+            {
+                return;
+            }
+
+
+            if (HitboxIdentity.IsDamageable(ev.Attacker.ReferenceHub, ev.Player.ReferenceHub))
+            {
+                ev.Amount = stat.Damage(ev.Amount);
+                ev.Attacker.ShowHitMarker();
+                return;
+            }
+            
             
 
 

@@ -2,17 +2,10 @@
 using Exiled.API.Features.Components;
 using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Pickups.Projectiles;
-using Exiled.API.Features.Spawn;
-using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
-using Exiled.Events.Features;
 using InventorySystem.Items.ThrowableProjectiles;
-using KE.Utils.API.Features;
 using KruacentExiled.CustomItems.API.Events;
-using System.Collections.Generic;
-using System.Linq;
-using static KruacentExiled.CustomItems.API.Features.SpawnPoints.PoseRoomSpawnPointHandler;
 
 namespace KruacentExiled.CustomItems.API.Features
 {

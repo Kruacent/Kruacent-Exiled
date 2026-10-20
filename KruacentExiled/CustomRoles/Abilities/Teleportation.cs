@@ -1,11 +1,14 @@
 ﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
 using KE.Utils.API.GifAnimator;
+using KruacentExiled.Audio;
+using KruacentExiled.Commands.DebugCommands;
 using KruacentExiled.CustomRoles;
 using KruacentExiled.CustomRoles.API.Features;
 using KruacentExiled.CustomRoles.API.Interfaces;
 using KruacentExiled.CustomRoles.API.Interfaces.Ability;
 using MapGeneration;
+using MEC;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -45,7 +48,7 @@ namespace KruacentExiled.CustomRoles.Abilities
         }
 
         public TextImage IconName => MainPlugin.Instance.icons[Name];
-        public override float Cooldown { get; } = 130f;
+        public override float Cooldown { get; } = 90f;
         public static float Damage { get; set; } = 60;
 
         protected override bool AbilityUsed(Player player)
@@ -56,21 +59,28 @@ namespace KruacentExiled.CustomRoles.Abilities
                 return false;
             }
             SetPosition.TryGetTarget(player, out Vector3 target);
-            player.Hurt(Damage, Exiled.API.Enums.DamageType.Asphyxiation);
-
-            if(Random.Range(1f, 100f) < 5)
+    
+            if(Player.Count > 1 && Random.Range(1f, 100f) < 5)
             {
-                if (Player.Enumerable.Count() > 1)
-                {
-                    player.Teleport(Player.Enumerable.GetRandomValue(p => p != player));
-                }
+                TeleportTo(player, Player.Enumerable.GetRandomValue(p => p != player).Position);
             }
             else
             {
-                player.Position = target;
+                TeleportTo(player, target);
             }
             return base.AbilityUsed(player);
 
+        }
+
+        public const string TeleportSound = "Teleport2";
+        private void TeleportTo(Player teleported, Vector3 position)
+        {
+            
+            Timing.CallDelayed(.01f, () =>
+            {
+                AudioHandler.Instance.PlayToAll(SoundType.Noise, TeleportSound, teleported.GameObject, 40);
+            });
+            teleported.Position = position;
         }
 
 

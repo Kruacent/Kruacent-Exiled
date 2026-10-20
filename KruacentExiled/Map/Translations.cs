@@ -14,6 +14,8 @@ namespace KruacentExiled.Map
         public string BlackoutTranslation { get; set; } = "<color=#F00>Warning</color> Failure Of All Lights In";
         public string Doorstuck { get; set; } = "Warning Failure Of All Doors In";
         public string DoorstuckTranslation { get; set; } = "<color=#F00>Warning</color> Failure Of All Doors In";
+        public string Elevatorstuck { get; set; } = "Warning Failure Of All Elevators In";
+        public string ElevatorstuckTranslation { get; set; } = "<color=#F00>Warning</color> Failure Of All Elevators In";
         public string Both { get; set; } = "Warning Failure Of All Systems In";
         public string BothTranslation { get; set; } = "<color=#F00>Warning</color> Failure Of All Systems In";
 

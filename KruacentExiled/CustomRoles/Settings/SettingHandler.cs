@@ -6,7 +6,7 @@ using KE.Utils.API.Settings;
 using KE.Utils.API.Settings.SettingsCategories;
 using KruacentExiled.CustomRoles;
 using KruacentExiled.CustomRoles.API.Features;
-using KruacentExiled.CustomRoles.Settings.DebugSettings;
+using KruacentExiled.DebugSettings;
 using LabApi.Events.Arguments.PlayerEvents;
 using System;
 using System.Collections.Generic;
@@ -73,17 +73,7 @@ namespace KruacentExiled.CustomRoles.Settings
             SettingsCategory cat = new SettingsCategory(header,1000,settings);
             
 
-            if (MainPlugin.Instance.Config.Debug)
-            {
-
-                ReflectionHelper.GetObjects<DebugSetting>().ToList();
-                foreach (DebugSetting debug in DebugSetting.settings)
-                {
-                    debug.Create();
-                    debug.GetCategory();
-                }
-                
-            }
+            
             
         }
 

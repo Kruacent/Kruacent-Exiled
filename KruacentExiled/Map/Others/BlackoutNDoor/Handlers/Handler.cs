@@ -22,6 +22,8 @@ namespace KruacentExiled.Map.Others.BlackoutNDoor.Handlers
 {
     public class Handler : IUsingEvents
     {
+
+        public static bool WeightVerbose => MainPlugin.Configs.BlackoutNDoorWeightVerbose;
         public static float MinInterval = 60 * 3;
         public static float MaxInterval = 60 * 6;
 
@@ -109,12 +111,19 @@ namespace KruacentExiled.Map.Others.BlackoutNDoor.Handlers
                 {
                     currentScpZone = FacilityZone.None;
                 }
+
+
+                time -= timeRefresh;
+                if (WeightVerbose)
+                {
+                    Log.Debug("weight=" + weight + " at " + currentScpZone);
+                    Log.Debug(time + "s");
+                }
                 
-                Log.Debug("weight=" + weight + " at " + currentScpZone);
 
 
-                time-= timeRefresh;
-                Log.Debug(time +"s");
+                
+                
                 if (time <= 0)
                 {
                     LaunchEvent();

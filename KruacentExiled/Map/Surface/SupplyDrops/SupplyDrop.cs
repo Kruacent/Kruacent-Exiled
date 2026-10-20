@@ -1,13 +1,18 @@
-﻿using Exiled.API.Enums;
+﻿using Achievements.Handlers;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Toys;
 using Exiled.API.Interfaces;
 using KE.Utils.API;
+using KruacentExiled.CustomRoles.CustomSCPTeam;
 using KruacentExiled.Map;
+using KruacentExiled.Map.Surface.SupplyDrops.SupplyDropTimeModifier;
+using LabApi.Events.Handlers;
 using MEC;
 using PlayerRoles;
+using ProjectMER.Features.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,68 +26,93 @@ namespace KruacentExiled.Map.Surface.SupplyDrops
 
         public static bool IsActivated => MainPlugin.Configs.SupplyDropEnabled;
 
-        private static byte _scpSteal = 0;
-
-        public const byte ScpStealLimit = 3;
+        /// <summary>
+        /// The maximum <see cref="SupplyDrop"/> that can spawn in one round
+        /// </summary>
         public const byte MaxSupplyDrop = 10;
-        public static readonly TimeSpan TimeStaying = new TimeSpan(0, 1, 0);
-        public static readonly TimeSpan TimeSpawn = new TimeSpan(0, 5, 0);
-        public const float Radius = 7f;
-        public const float RefreshRate = .1f;
         
-        public bool Show
-        {
-            get
-            {
-                DayOfWeek day = DateTime.Now.DayOfWeek;
+        /// <summary>
+        /// Time between each random spawn
+        /// </summary>
+        public static readonly TimeSpan TimeSpawn = new TimeSpan(0, 5, 0);
 
-                if (day == DayOfWeek.Saturday)
-                    return true;
-                //starting at monday
-                int idDay = (int)day +1;
 
-                if ( idDay % 2 == 0 && NumberDrop % 2 != 0)
-                {
-                    return true;
-                }
-                if (idDay % 2 != 0 && NumberDrop % 2 == 0)
-                {
-                    return true;
-                }
 
-                return false;
-            }
-        }
+        public static readonly TimeSpan DefaultTimeSpawn = new TimeSpan(0, 5, 0);
+        public static readonly TimeSpan MinimumTimeSpawn = new TimeSpan(0, 0, 30);
+        public static readonly TimeSpan MaxTimeSpawn = new TimeSpan(1, 0, 0);
+        public static readonly TimeSpan CurrentTimeSpawn = new TimeSpan(0, 5, 0);
+
+        /// <summary>
+        /// The time after someone pickup the <see cref="SupplyDrop"/> before it explodes
+        /// </summary>
+        public static readonly TimeSpan TimeStay = new TimeSpan(0, 0, 20);
+        public const float Radius = 7f;
+        public const float RefreshRate = 5f;
+        
+        /// <summary>
+        /// The position of the <see cref="SupplyDrop"/>
+        /// </summary>
         public Vector3 Position { get; }
         public int NumberDrop => list.FindIndex(s => s == this);
 
         private static Stopwatch _spawnTime;
         private static TimeSpan _nextSpawn;
+
+
+
+        public static TimeSpan Clamp(TimeSpan value, TimeSpan min, TimeSpan max)
+        {
+            if (value < min)
+            {
+                value = min;
+            }
+            else if (value > max)
+            {
+                value = max;
+            }
+
+            return value;
+        }
+
+        public static void ChangeTime(TimeSpan delta)
+        {
+            _nextSpawn = Clamp(_nextSpawn + delta, MinimumTimeSpawn, MaxTimeSpawn);
+        }
+
+
         private static List<SupplyDrop> list = new List<SupplyDrop>();
         public static IReadOnlyCollection<Vector3> SpawnPositions = new List<Vector3>()
         {
             new Vector3(-15,292,-39), //spawn chaos
-            new Vector3(40,301,-52), // above the gate
+            new Vector3(40,301,-52), // above the central gate
             new Vector3(138,295,-64), //behind mtf spawn at the unopenable gate
             new Vector3(124,289,22) //escape
         };
-        private HashSet<Primitive> primitives = new HashSet<Primitive>();
-        private bool _detectingSomeone = false;
+        private HashSet<Primitive> primitives;
 
         public RoleTypeId SideClaimed { get; private set; } = RoleTypeId.None;
         public Player PlayerClaimed { get; private set; }
 
-        public static readonly string CassieMessageDrop = "Drop in surface";
-        public static readonly string CassieTooMuchStealing = "Too Much Supplys Taken By SCPs";
-        public static readonly string CassieTooMuchStealingSub = "Too Much Supplies Taken By SCPs";
+        private SupplyCollisionHandler handler;
 
+
+        /// <summary>
+        /// Current spawned <see cref="SupplyDrop"/>
+        /// </summary>
         private static SupplyDrop CurrentDrop = null;
         private static CoroutineHandle _handle;
-        public SupplyDrop(Vector3 position)
+
+        
+        /// <summary>
+        /// Create and spawn a <see cref="SupplyDrop"/> at a position
+        /// </summary>
+        /// <param name="position"></param>
+        private SupplyDrop(Vector3 position)
         {
             list.Add(this);
             Position = position;
-
+            primitives = new HashSet<Primitive>();
             //Model
             primitives.Add(Primitive.Create(PrimitiveType.Cube,position,null,Vector3.one,false));
             //radius of pickup
@@ -91,17 +121,23 @@ namespace KruacentExiled.Map.Surface.SupplyDrops
             primitives.Add(pr);
 
 
-            if (Show)
-            {
-                //Cassie.Message(CassieMessageDrop);
-            }
-
             foreach (var p in primitives)
             {
                 p.Spawn();
             }
+
+            GameObject customEscapePrimitive = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            customEscapePrimitive.isStatic = true;
+            customEscapePrimitive.transform.position = Position;
+            customEscapePrimitive.transform.localScale = Vector3.one * Radius;
+            customEscapePrimitive.GetComponent<Collider>().isTrigger = true;
+            handler = customEscapePrimitive.AddComponent<SupplyCollisionHandler>();
+
+            handler.Init(this);
+
+
             CurrentDrop = this;
-            Timing.RunCoroutine(Detecting());
+
         }
 
 
@@ -112,18 +148,25 @@ namespace KruacentExiled.Map.Surface.SupplyDrops
             if (!IsActivated) return;
 
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
+            SupplyDropTimeModifierBase.InternalSubscribeEvents();
         }
 
         public static void UnsubscribeEvents()
         {
             if (!IsActivated) return;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
+            SupplyDropTimeModifierBase.InternalUnsubscribeEvents();
+
+            if (_handle.IsValid)
+            {
+                Timing.KillCoroutines(_handle);
+            }
         }
 
         public static void OnRoundStarted()
         {
             _spawnTime = Stopwatch.StartNew();
-            _nextSpawn = TimeSpawn;
+            _nextSpawn = DefaultTimeSpawn;
 
             _handle = Timing.RunCoroutine(Loop());
         }
@@ -149,82 +192,85 @@ namespace KruacentExiled.Map.Surface.SupplyDrops
             }
         }
 
-        private static void SpawnRandom()
+        /// <summary>
+        /// Spawn a <see cref="SupplyDrop"/> at a random position at Surface
+        /// </summary>
+        public static SupplyDrop SpawnRandom()
         {
-            //Todo random lol
             Vector3 spawnloc = SpawnPositions.GetRandomValue();
             Log.Info($"spawning drop at {spawnloc}");
-            SupplyDrop soup = new SupplyDrop(spawnloc);
-
+            return new SupplyDrop(spawnloc);
 
         }
 
-        public void Destroy()
+
+        /// <summary>
+        /// Destroy this <see cref="SupplyDrop"/>
+        /// </summary>
+        /// <param name="spawnGrenade">whenever if it spawned a primed grenade when destroyed</param>
+        public void Destroy(bool spawnGrenade = true)
         {
-            float timeExplode = 10;
-            var grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
-            grenade.ScpDamageMultiplier = 1;
-            grenade.BurnDuration = timeExplode;
-            grenade.SpawnActive(Position + Vector3.up);
+            if (spawnGrenade)
+            {
+                float timeExplode = 10;
+                var grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE);
+                grenade.ScpDamageMultiplier = 1;
+                grenade.BurnDuration = timeExplode;
+                grenade.SpawnActive(Position + Vector3.up);
+
+            }
 
             foreach (var p in primitives)
             {
                 p.Destroy();
             }
+
+            handler.Destroy();
+            
             CurrentDrop = null;
 
 
         }
 
-        private IEnumerator<float> Detecting()
-        {
-            var s = Stopwatch.StartNew();
-            var playerAlreadyIn = Player.List.Where(p => InRadius(p)).ToHashSet();
 
-            _detectingSomeone = true;
-            while (_detectingSomeone && s.Elapsed < TimeStaying)
-            {
-                yield return Timing.WaitForSeconds(RefreshRate);
-                foreach (Player p in Player.List.Where(p=> p.IsAlive && p.Role != RoleTypeId.Scp106))
-                {
-                    if (!playerAlreadyIn.Contains(p) && InRadius(p))
-                    {
-                        Effect(p);
-                        _detectingSomeone = false;
-                        
-                    }
-                    if (playerAlreadyIn.Contains(p))
-                    {
-                        if (!InRadius(p))
-                        {
-                            playerAlreadyIn.Remove(p);
-                        }
-                    }
-                }
-            }
-            _detectingSomeone = false;
-            Destroy();
+        /// <summary>
+        /// Check if a <see cref="Player"/> can interact with the <see cref="SupplyDrop"/>
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public bool CheckPlayer(Player player)
+        {
+            return player.IsAlive && !alreadyUsed;
         }
 
-        private bool InRadius(Player p) => OtherUtils.IsInCircle(p.Position, Position, Radius / 2);
-         
+        private bool alreadyUsed;
 
-        private void Effect(Player p)
+        public void TryEffect(Player p)
         {
+            if (!CheckPlayer(p))
+            {
+                return;
+            }
             Log.Debug($"Player {p.Id} got the supply drop");
             //todo add trapped drop (explode)
+
+
+
             SideClaimed = p.Role;
             PlayerClaimed = p;
 
-            if (p.IsScp)
-            {
-                BuffScps();
-            }
-            else
+            if (!SCPTeam.IsSCP(p.ReferenceHub))
             {
                 SpawnLoot(p);
             }
 
+            alreadyUsed = true;
+
+
+            Timing.CallDelayed((float)TimeStay.TotalSeconds, () =>
+            {
+                Destroy();
+            });
 
         }
 
@@ -243,26 +289,7 @@ namespace KruacentExiled.Map.Surface.SupplyDrops
             p.AddAmmo(AmmoType.Nato9, 50);
         }
 
-        private void BuffScps()
-        {
-            Log.Debug("scps got it!");
-            foreach(Player p in Player.List.Where(p => p.IsScp && p.Role != RoleTypeId.Scp106))
-            {
-                float healthAdded = p.MaxHealth * 1.2f;
-                p.MaxHealth += healthAdded;
-                p.Health += healthAdded;
-                
-            }
-            _scpSteal++;
 
-            if (_scpSteal >= ScpStealLimit)
-            {
-                //Cassie.MessageTranslated(CassieTooMuchStealing,CassieTooMuchStealingSub);
-                Warhead.Start(true, true);
-                _spawnTime.Stop();
-                Timing.KillCoroutines(_handle);
-            }
-        }
 
 
 

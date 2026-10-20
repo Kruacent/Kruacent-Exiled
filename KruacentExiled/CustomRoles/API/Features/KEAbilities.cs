@@ -338,6 +338,12 @@ namespace KruacentExiled.CustomRoles.API.Features
         }
 
 
+        public void ResetCooldown(Player player)
+        {
+            LastUsed[player] = DateTime.MinValue;
+        }
+
+
 
         public static void UseSelected(Player player)
         {

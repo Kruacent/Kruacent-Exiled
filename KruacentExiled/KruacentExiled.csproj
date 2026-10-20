@@ -3,6 +3,7 @@
   <PropertyGroup>
 	  <LangVersion>8.0</LangVersion>
     <TargetFramework>net48</TargetFramework>
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,19 +16,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Assembly-CSharp-firstpass" HintPath="$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll" />
+    <Reference Include="Assembly-CSharp-firstpass" HintPath="$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll" Publicize="true" />
+    <Reference Include="Assembly-CSharp" HintPath="$(EXILED_REFERENCES)\Assembly-CSharp.dll" />
     <Reference Include="0Harmony" HintPath="$(EXILED_REFERENCES)\0Harmony.dll" />
     <Reference Include="System.ComponentModel.Composition" HintPath="$(EXILED_REFERENCES)\System.ComponentModel.Composition.dll" />
     <Reference Include="UnityEngine.CoreModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll" />
     <Reference Include="UnityEngine" HintPath="$(EXILED_REFERENCES)\UnityEngine.dll" />
-	  <Reference Include="HintServiceMeow" HintPath="$(EXILED_REFERENCES)\HintServiceMeow-Exiled.dll" />
-	  <Reference Include="AudioPlayerApi" HintPath="$(EXILED_REFERENCES)\AudioPlayerApi.dll" />
+	<Reference Include="HintServiceMeow" HintPath="$(EXILED_REFERENCES)\HintServiceMeow-Exiled.dll" />
+	<Reference Include="AudioPlayerApi" HintPath="$(EXILED_REFERENCES)\AudioPlayerApi.dll" />
     <Reference Include="UnityEngine.PhysicsModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll" />
-    <Reference Include="Mirror" HintPath="$(EXILED_REFERENCES)\Mirror.dll" />
+    <Reference Include="Mirror" HintPath="$(EXILED_REFERENCES)\Mirror.dll" Publicize="true" />
     <Reference Include="LabApi" HintPath="$(EXILED_REFERENCES)\LabApi.dll" />
     <Reference Include="KE.Utils" HintPath="$(EXILED_REFERENCES)\KE.Utils.dll" />
-	  <Reference Include="ProjectMER" HintPath="$(EXILED_REFERENCES)\ProjectMER.dll" />
-	  <Reference Include="Unity.TextMeshPro" HintPath="$(EXILED_REFERENCES)\Unity.TextMeshPro.dll" />
+    <Reference Include="GlobalEventFramework" HintPath="$(EXILED_REFERENCES)\GlobalEventFramework.dll" />
+	<Reference Include="ProjectMER" HintPath="$(EXILED_REFERENCES)\ProjectMER.dll" />
+	<Reference Include="Unity.TextMeshPro" HintPath="$(EXILED_REFERENCES)\Unity.TextMeshPro.dll" />
   </ItemGroup>
 
 	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">

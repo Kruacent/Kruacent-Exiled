@@ -1,11 +1,14 @@
 ﻿using CommandSystem;
 using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utils;
+using static HarmonyLib.Code;
 
 namespace KruacentExiled.Misc.Features.GamblingCoin
 {
@@ -20,13 +23,10 @@ namespace KruacentExiled.Misc.Features.GamblingCoin
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            Player player = Player.Get(sender);
+            
 
-            if (player is null)
-            {
-                response = "player not found";
-                return false;
-            }
+
+            
 
             if (arguments.Count < 1)
             {
@@ -43,31 +43,52 @@ namespace KruacentExiled.Misc.Features.GamblingCoin
                     break;
                 }
             }
-
-
-
-
-            
-
             if (chose is null)
             {
                 response = $"effect {arguments.At(0)} not found";
                 return false;
             }
 
+            List<ReferenceHub> listhub = RAUtils.ProcessPlayerIdOrNamesList(arguments, 1, out string[] newargs);
 
-            try
+
+
+            if(listhub.Count == 0)
             {
-                chose.ExecuteEffect(player);
+                
+                Player player = Player.Get(sender);
+                if (player is null)
+                {
+                    response = "player not found";
+                    return false;
+                }
+
+                listhub.Add(player.ReferenceHub);
             }
-            catch(Exception e)
+
+            foreach (ReferenceHub hub in listhub)
             {
-                Log.Error(e);
+                Player player = Player.Get(hub);
+                try
+                {
+                    chose.ExecuteEffect(player);
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                    response = "error with coin effect";
+                    return false;
+                }
             }
-            response = $"forced effect {chose.Name} on {player.Nickname}";
+            string text = string.Join(" ", newargs);
+            
+            response = $"forced effect {chose.Name} on {text}";
             return true;
 
 
         }
+
+
+        
     }
 }

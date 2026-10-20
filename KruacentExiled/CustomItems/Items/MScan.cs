@@ -12,13 +12,15 @@ using Exiled.Events.EventArgs.Scp106;
 using Exiled.Events.EventArgs.Scp939;
 using KE.Utils.API.Displays.Feeds;
 using KruacentExiled.CustomItems.API.Features;
+using KruacentExiled.CustomItems.API.Interface;
+using KruacentExiled.CustomRoles.API.Interfaces;
 using MEC;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace KruacentExiled.CustomItems.Items
 {
-    public class MScan : KECustomItem
+    public class MScan : KECustomItem,ILumosItem
     {
 
 
@@ -36,7 +38,7 @@ namespace KruacentExiled.CustomItems.Items
                 {
                     [TranslationKeyName] = "M-Scan",
                     [TranslationKeyDesc] = "Detect movement",
-                    [Deploy] = "<color=#00ff00>MSCAN DEPLOYED</color> Battery: {TimeUp} seconds",
+                    [Deploy] = "<color=#00ff00>MSCAN DEPLOYED</color> Battery: %TimeUp% seconds",
                     [PickUp] = "M-Scan picked up",
                     [TranslationDestroy] = "<color=red>M-SCAN DESTROYED</color>",
                     [NoBattery] = "<color=yellow>M-Scan : No battery left</color>",
@@ -46,7 +48,7 @@ namespace KruacentExiled.CustomItems.Items
                 {
                     [TranslationKeyName] = "M-Scan",
                     [TranslationKeyDesc] = "Détecte les mouvements des personnes passant devant",
-                    [Deploy] = "<color=#00ff00>SCANNER DÉPLOYÉ</color> Batterie: {TimeUp} secondes",
+                    [Deploy] = "<color=#00ff00>SCANNER DÉPLOYÉ</color> Batterie: %TimeUp% secondes",
                     [PickUp] = "Scanner récupéré.",
                     [TranslationDestroy] = "<color=red>SCANNER DÉTRUIT</color>",
                     [NoBattery] = "<color=yellow>Scanner: Batterie épuisée.</color>",
@@ -57,7 +59,7 @@ namespace KruacentExiled.CustomItems.Items
         public override ItemType ItemType => ItemType.Flashlight;
         public override string Name { get; set; } = "MScan";
         public override float Weight { get; set; } = 1.5f;
-        public Color Color { get; set; } = Color.cyan;
+        public Color Color { get; set; } = UnityEngine.Color.cyan;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 2,
@@ -80,6 +82,7 @@ namespace KruacentExiled.CustomItems.Items
                 },
             },
         };
+
 
         private Dictionary<Pickup, Player> ActiveSensors;
         private Dictionary<Pickup, float> Cooldowns = new Dictionary<Pickup, float>();
@@ -157,7 +160,9 @@ namespace KruacentExiled.CustomItems.Items
                 BatteryLife[pickup] = Time.time + TimeUp;
                 //Models[pickup] = CreateBaseModel(pickup);
 
-                TranslationFeed(player, Deploy);
+                string translation = GetTranslation(player, Deploy).Replace("%TimeUp%", TimeUp.ToString());
+
+                HintFeed.AddFeed(player, translation);
             }
         }
 

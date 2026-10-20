@@ -16,7 +16,7 @@ public class BigJump : ICoinEffect, IDurationEffect
     {
         if (!player.GameObject.TryGetComponent<HigherJumpComp>(out var comp))
         {
-            player.GameObject.AddComponent<HigherJumpComp>();
+            comp= player.GameObject.AddComponent<HigherJumpComp>();
         }
         comp.IsActive = !comp.IsActive;
     }
@@ -27,6 +27,5 @@ public class BigJump : ICoinEffect, IDurationEffect
         {
             comp.Destroy();
         }
-        comp.IsActive = !comp.IsActive;
     }
 }
