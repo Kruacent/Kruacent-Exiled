@@ -72,22 +72,8 @@ jobs:
       - name: Copy resources to server
         if: github.event_name == 'push' && github.ref_name == 'master'
         run: |
-          cp -r ${{ github.workspace }}/Resources/. {{ env.OUTPUT_RESOURCES_PATH }}
-          
-      - name: Copy plugin to server
-        if: github.event_name == 'push' && github.ref_name == 'master'
-        id: copy_step
-        run: |
-          DLL=$(find . -path "*/bin/Release/*KruacentExiled.dll" | head -n 1)
-      
-          if [ -z "$DLL" ]; then
-            echo "DLL not found!"
-            exit 1
-          fi
-          cp "$DLL" ${{ env.OUTPUT_FOLDER_PATH }}
-
-          echo "dll_path=$DLL" >> $GITHUB_OUTPUT
-          
+          cp -r ${{ github.workspace }}/Resources/. ${{ env.OUTPUT_RESOURCES_PATH }}
+                    
 
       - name: Create GitHub Release Draft
         if: github.event_name == 'push' && github.ref_name == 'master'

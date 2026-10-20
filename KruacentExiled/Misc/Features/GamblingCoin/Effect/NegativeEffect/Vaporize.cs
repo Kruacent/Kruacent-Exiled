@@ -18,6 +18,7 @@ internal class Vaporize : ICoinEffect
         Timing.CallDelayed(UnityEngine.Random.Range(30, MaxSeconds), () =>
         {
             player.Vaporize();
+            KruacentExiled.CustomRoles.MainPlugin.ShowEffectHint(player, "You shouldn't gamble too much (you eated moss)");
         });
     }
 }
