@@ -173,14 +173,13 @@ namespace KruacentExiled.CustomSpawnPoint
                         continue;
                     }
 
-                    KELog.Debug("registered rcp at " + roomType);
-
                     RoomCustomPoint roomCustomPoint = new RoomCustomPoint(roomType, localPos, localRot, type);
 
                     _all.Add(roomCustomPoint);
                     i++;
 
                 }
+                Log.Info($"registered {i} Room Custom Points");
             }
             catch(Exception e)
             {
