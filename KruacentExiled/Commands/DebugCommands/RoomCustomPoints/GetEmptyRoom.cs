@@ -20,17 +20,38 @@ namespace KruacentExiled.Commands.DebugCommands.RoomCustomPoints
 
         public override string Description => "Gets all room with no Room Spawned Custom Point";
 
-        public override string[] Usage => new string[0];
+        public override string[] Usage => new string[] { "<RoomCustomPointType>" };
 
         public override bool ExecuteCommand(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             StringBuilder sb = StringBuilderPool.Pool.Get();
 
-            int i = 0;
+            RoomCustomPointType type = RoomCustomPointType.Unknown;
 
-            foreach(Room room in Room.List)
+
+            if (arguments.Count >= 1)
             {
-                if (!RoomCustomPointHandler.HaveASpawnedPoint(room))
+                if(!Enum.TryParse(arguments.At(0), out type))
+                {
+                    response = "couldn't parse args";
+                    return false;
+                }
+            }
+
+            int i = 0;
+            foreach (Room room in Room.List)
+            {
+                bool result;
+                if(type == RoomCustomPointType.Unknown)
+                {
+                    result = RoomCustomPointHandler.HasASpawnedPoint(room);
+                }
+                else
+                {
+                    result = RoomCustomPointHandler.HasASpawnedPoint(room,type);
+                }
+
+                if (!result)
                 {
                     i++;
                     sb.Append(room.Type)

@@ -57,9 +57,26 @@ namespace KruacentExiled.CustomSpawnPoint
         }
 
 
-        public static bool HaveASpawnedPoint(Room room)
+        public static bool HasASpawnedPoint(Room room)
         {
             return RoomSpawnedCustomPoint.Dictionary.ContainsKey(room);
+        }
+
+        public static bool HasASpawnedPoint(Room room, RoomCustomPointType type)
+        {
+            if (!RoomSpawnedCustomPoint.Dictionary.ContainsKey(room))
+            {
+                return false;
+            }
+
+            foreach(RoomSpawnedCustomPoint point in RoomSpawnedCustomPoint.Dictionary[room])
+            {
+                if(point.type == type)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -69,7 +86,7 @@ namespace KruacentExiled.CustomSpawnPoint
         /// <returns></returns>
         public static IEnumerable<RoomSpawnedCustomPoint> GetAll(Room room,RoomCustomPointType type)
         {
-            if (!HaveASpawnedPoint(room))
+            if (!HasASpawnedPoint(room))
             {
                 return null;
             }
