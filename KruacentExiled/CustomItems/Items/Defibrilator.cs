@@ -202,6 +202,7 @@ namespace KruacentExiled.CustomItems.Items
                 patient.Position = ragdoll.transform.position + Vector3.up * 0.5f;
 
                 patient.Health = patient.MaxHealth * .2f;
+                patient.AddAhp(50);
                 patient.EnableEffect(EffectType.Flashed, 2f);
                 patient.EnableEffect(EffectType.Concussed, 20f);
                 patient.EnableEffect(EffectType.Deafened, 20f);
