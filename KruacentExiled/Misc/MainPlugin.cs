@@ -19,6 +19,7 @@ using KruacentExiled.Misc.Features.PostNuke;
 using KruacentExiled.Misc.Handlers;
 using KruacentExiled.Misc.Features.LastHuman;
 using KruacentExiled.Misc.Features.SCPRebalance;
+using KruacentExiled.Misc.Features.DisplayPluginVersion;
 
 namespace KruacentExiled.Misc
 {
@@ -48,6 +49,7 @@ namespace KruacentExiled.Misc
         private Harmony harmony;
 
         internal VoteStart vote { get; private set; }
+        internal DisplayPluginVersion PluginVersion { get; private set; }
         internal PostNukeHandler postnuke { get; private set; }
         internal LobbyHint LobbyHint { get; private set; }
 
@@ -80,6 +82,7 @@ namespace KruacentExiled.Misc
             LastHuman = new LastHumanHandler();
             Candy = new Candy();
             vote = new VoteStart();
+            PluginVersion = new DisplayPluginVersion();
             postnuke = new PostNukeHandler();
             LobbyHint = new LobbyHint();
 
@@ -141,6 +144,7 @@ namespace KruacentExiled.Misc
             Spawn = null;
             AutoElevator = null;
             vote = null;
+            PluginVersion = null;
             AutoNukeAnnoucement = null;
             FriendlyFire = null;
             //SurfaceLight = null;

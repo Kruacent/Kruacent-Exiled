@@ -53,22 +53,24 @@ namespace KruacentExiled.Misc.Features
 
                 if (KECustomRole.TryGet("CLASSD_RedMist", out KECustomRole kecr))
                 {
-                    ev.IsAllowed = false;
-                    kecr.AddRole(ev.Player);
+                    if(kecr.CurrentNumberOfSpawn == 0)
+                    {
+                        ev.IsAllowed = false;
+                        kecr.AddRole(ev.Player);
+                        Room room = Room.List.GetRandomValue();
+                        RoomSpawnedCustomPoint point = CustomSpawnPoint.RoomCustomPointHandler.GetRandomPoint(CustomSpawnPoint.RoomCustomPointType.Teleport, room);
+                        Vector3 teleport;
+                        if (point != null)
+                        {
+                            teleport = point.Position;
+                        }
+                        else
+                        {
+                            teleport = room.GetValidPosition();
+                        }
 
-                    Room room = Room.List.GetRandomValue();
-                    RoomSpawnedCustomPoint point = CustomSpawnPoint.RoomCustomPointHandler.GetRandomPoint(CustomSpawnPoint.RoomCustomPointType.Teleport, room);
-                    Vector3 teleport;
-                    if (point != null)
-                    {
-                        teleport = point.Position;
+                        ev.Player.Teleport(teleport);
                     }
-                    else
-                    {
-                        teleport = room.GetValidPosition();
-                    }
-                    
-                    ev.Player.Teleport(teleport);
                 }
             }
         }
