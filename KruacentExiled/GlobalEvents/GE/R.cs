@@ -16,6 +16,9 @@ namespace KruacentExiled.GlobalEvents.GE
         public override int WeightedChance => 10;
         public override ImpactLevel ImpactLevel => ImpactLevel.VeryLow;
 
-
+        public override string[] AltDescription => new string[]
+        {
+            "faut tuer le SCP",
+        };
     }
 }

@@ -45,7 +45,6 @@ namespace KruacentExiled.CustomRoles.CR.ClassD
         public override float SpawnChance { get; set; } = 100;
         public override Vector3 Scale { get; set; } = new Vector3(1, 0.75f, 1);
 
-
         protected override void GiveInventory(Player player)
         {
             player.ReferenceHub.GrantCandy(CandyKindID.Rainbow, InventorySystem.Items.ItemAddReason.StartingItem);

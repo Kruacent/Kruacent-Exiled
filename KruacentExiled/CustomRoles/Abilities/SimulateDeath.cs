@@ -57,9 +57,13 @@ namespace KruacentExiled.CustomRoles.Abilities
 
         public void ActionAfterAbility(Player player)
         {
-            ragdoll.Destroy();
             player.Scale = pScale;
-            player.Position = pPos;
+
+            if (ragdoll != null)
+            {
+                player.Position = ragdoll.Position;
+                ragdoll.Destroy();
+            }
         }
     }
 }

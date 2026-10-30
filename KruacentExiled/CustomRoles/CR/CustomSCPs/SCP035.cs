@@ -2,9 +2,7 @@
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
-using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Pools;
-using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp0492;
 using Exiled.Events.EventArgs.Scp096;
@@ -14,9 +12,8 @@ using HintServiceMeow.Core.Models.Arguments;
 using InventorySystem.Items.Firearms.Attachments;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
-using KruacentExiled.CustomItems.API.Features;
-using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomRoles.API.Features;
+using KruacentExiled.CustomRoles.API.Interfaces;
 using KruacentExiled.CustomRoles.CustomSCPTeam;
 using LabApi.Events.Arguments.PlayerEvents;
 using MEC;
@@ -28,15 +25,14 @@ using VoiceChat.Networking;
 
 namespace KruacentExiled.CustomRoles.CR.CustomSCPs
 {
-    public class SCP035 : CustomSCP
+    public class SCP035 : CustomSCP, INoPickupItem 
     {
         public override bool IsSupport => false;
 
         public const string SCPName = "SCP-035";
 
-
-        public const string CantPickupTranslation = "SCP035CantPickup";
         public const string CantUseTranslation = "SCP035CantUse";
+        public string NoPickupTranslationKey => Name + "_NoPickup";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new Dictionary<string, Dictionary<string, string>>()
@@ -45,21 +41,21 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
                 {
                     [TranslationKeyName] = SCPName,
                     [TranslationKeyDesc] = "Kill every humans!\nYou can't pick up the Micro-HID and anything made with it, but you take 3 time less damage by these weapon.",
-                    [CantPickupTranslation] = "A strange force called 'game balance' \nprevents you from picking up this item.",
+                    [NoPickupTranslationKey] = "A strange force called 'game balance' \nprevents you from picking up this item.",
                     [CantUseTranslation] = "A strange force called 'game balance' \nprevents you from using this item.",
                 },
                 ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = SCPName,
                     [TranslationKeyDesc] = "Tue tous les humains!\nTu peux pas prendre d'arme spécial mais tu prends 3 fois moins de dégât de ces armes",
-                    [CantPickupTranslation] = "Une force étrange qui s'appelle 'équilibre' \nt'empêches de prendre cet objet.",
+                    [NoPickupTranslationKey] = "Une force étrange qui s'appelle 'équilibre' \nt'empêches de prendre cet objet.",
                     [CantUseTranslation] = "Une force étrange qui s'appelle 'équilibre' \nt'empêches d'utiliser cet objet.",
                 },
                 ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = SCPName,
                     [TranslationKeyDesc] = "You can't pickup the Micro-HID and anything made with it, but you take 3 time less damage by these weapon.\nKill every humans",
-                    [CantPickupTranslation] = "A strange force called \'game balance\' \nprevents you from picking up this item",
+                    [NoPickupTranslationKey] = "A strange force called \'game balance\' \nprevents you from picking up this item",
                     [CantUseTranslation] = "A strange force called 'game balance' \nprevents you from using this item.",
                 }
             };
@@ -73,30 +69,45 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
         public override RoleTypeId Role { get; set; } = RoleTypeId.Tutorial;
 
         // 035 can't pickup these items
-        public HashSet<ItemType> BlacklistedPickup = new HashSet<ItemType>()
+        public List<string> BannedItem { get; set; } = new List<string>()
         {
-            ItemType.Jailbird,
-            ItemType.ParticleDisruptor,
-            ItemType.MicroHID,
-            ItemType.Painkillers,
-            ItemType.Medkit,
-            ItemType.SCP500,
-            ItemType.GunFRMG0,
-            ItemType.GunAK,
-            ItemType.GunShotgun,
-            ItemType.GunLogicer
+            $"{ItemType.Jailbird}",
+            $"{ItemType.ParticleDisruptor}",
+            $"{ItemType.MicroHID}",
+            $"{ItemType.Painkillers}",
+            $"{ItemType.Medkit}",
+            $"{ItemType.GunFRMG0}",
+            $"{ItemType.GunAK}",
+            $"{ItemType.GunShotgun}",
+            $"{ItemType.GunSCP127}",
+            $"{ItemType.GunE11SR}",
+
+            "ExplosiveProofArmor",
+            "FaradayArmor",
+            "FlowerStick",
+            "FriendMaker",
+            "OverseerProtocolsDocument",
+            "SCP-1650",
+            "SCP-3136",
+            "SCP-3136"
         };
+
+        public List<string> WhitelistItem { get; set; } = new List<string>()
+        {
+            $"{ItemType.SCP330}",
+            $"{ItemType.SCP1853}",
+            $"{ItemType.SCP1509}"
+        };
+
+        public bool BlockScpItems { get; set; } = true;
+        public bool BlockRevivingItems { get; set; } = true;
+        public bool BlockViolentItems { get; set; } = false;
+
         public HashSet<ItemType> BlacklistedUsing = new HashSet<ItemType>()
         {
             ItemType.Painkillers,
             ItemType.Medkit,
             ItemType.SCP500,
-        };
-        public HashSet<ItemType> WhitelistUsing = new HashSet<ItemType>()
-        {
-            ItemType.SCP330,
-            ItemType.SCP1853,
-            ItemType.SCP1509,
         };
 
         // 035 can't be damaged much by these
@@ -112,7 +123,6 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
             _intercom = HashSetPool<Player>.Pool.Get();
             Exiled.Events.Handlers.Player.Hurting += OnHurting;
             Exiled.Events.Handlers.Player.Dying += OnDying;
-            Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingPickup;
             Exiled.Events.Handlers.Scp1509.Resurrecting += OnResurrecting;
             Exiled.Events.Handlers.Player.UsingItem += OnUsingItem;
             Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
@@ -130,7 +140,6 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
         {
             Exiled.Events.Handlers.Player.Hurting -= OnHurting;
             Exiled.Events.Handlers.Player.Dying -= OnDying;
-            Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingPickup;
             Exiled.Events.Handlers.Scp1509.Resurrecting -= OnResurrecting;
             Exiled.Events.Handlers.Player.UsingItem -= OnUsingItem;
             Exiled.Events.Handlers.Scp096.AddingTarget -= OnAddingTarget;
@@ -274,10 +283,6 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
 
         }
 
-
-
-
-
         private string GetPlayers(AutoContentUpdateArg arg)
         {
 
@@ -311,60 +316,6 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
                 ShowEffectHint(player, GetTranslation(player, CantUseTranslation));
                 ev.IsAllowed = false;
                 return;
-            }
-        }
-
-        private void OnSearchingPickup(SearchingPickupEventArgs ev)
-        {
-            Player player = ev.Player;
-            Pickup pickup = ev.Pickup;
-            if (!Check(ev.Player)) return;
-
-
-
-            CustomItem item = null;
-
-            CustomItem.TryGet(pickup, out item);
-
-
-            if(item != null)
-            {
-
-                KECustomItem kECustomItem = item as KECustomItem;
-                
-                if (kECustomItem is IRevivingCustomItem)
-                {
-                    ShowEffectHint(player, GetTranslation(player, CantPickupTranslation));
-                    ev.IsAllowed = false;
-                    return;
-                }
-            }
-
-
-            if (pickup.Type.IsScp() && !WhitelistUsing.Contains(pickup.Type))
-            {
-                ShowEffectHint(player, GetTranslation(player, CantPickupTranslation));
-                ev.IsAllowed = false;
-                return;
-            }
-
-            if (pickup.Type == ItemType.GunSCP127)
-            {
-                ShowEffectHint(player, GetTranslation(player, CantPickupTranslation));
-                ev.IsAllowed = false;
-                return;
-            }
-
-
-
-
-
-            if (BlacklistedPickup.Contains(pickup.Type))
-            {
-                ShowEffectHint(player, GetTranslation(player, CantPickupTranslation));
-                ev.IsAllowed = false;
-                return;
-                
             }
         }
 
