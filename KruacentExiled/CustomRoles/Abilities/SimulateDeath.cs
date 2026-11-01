@@ -37,14 +37,12 @@ namespace KruacentExiled.CustomRoles.Abilities
 
         private Ragdoll ragdoll;
         private Vector3 pScale;
-        private Vector3 pPos;
 
         protected override bool AbilityUsed(Player player)
         {
             Dictionary<byte, DeathTranslation> deathTranslation = DeathTranslations.TranslationsById;
 
             pScale = player.Scale;
-            pPos = player.Position;
             ragdoll = Ragdoll.CreateAndSpawn(player.Role, player.DisplayNickname, deathTranslation[(byte)Random.Range(0, deathTranslation.Count)].DeathscreenTranslation, player.Position, player.ReferenceHub.PlayerCameraReference.rotation, player);
             
             player.EnableEffect(EffectType.Invisible, Duration);
@@ -57,9 +55,13 @@ namespace KruacentExiled.CustomRoles.Abilities
 
         public void ActionAfterAbility(Player player)
         {
-            ragdoll.Destroy();
             player.Scale = pScale;
-            player.Position = pPos;
+
+            if (ragdoll != null)
+            {
+                player.Position = ragdoll.Position;
+                ragdoll.Destroy();
+            }
         }
     }
 }
