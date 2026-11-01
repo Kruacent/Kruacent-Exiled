@@ -22,7 +22,7 @@ namespace KruacentExiled.GlobalEvents.MiddleEvents
 
         public void Start()
         {
-            List<Player> players = Player.Enumerable.ToList();
+            List<Player> players = Player.Enumerable.Where(p => p.IsAlive).ToList();
             Vector3[] positions = new Vector3[players.Count];
 
             for(int i = 0; i < players.Count; i++)
