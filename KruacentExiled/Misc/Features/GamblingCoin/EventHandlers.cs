@@ -120,7 +120,7 @@ namespace KruacentExiled.Misc.Features.GamblingCoin
             CoinUses[itemSerial] = ev2.RemainingUses;
         }
 
-        private IEnumerator<float> CompressedFlips(Player player, int count)
+        public static IEnumerator<float> CompressedFlips(Player player, int count)
         {
             for (int i = 0; i < count; i++)
             {
@@ -149,7 +149,7 @@ namespace KruacentExiled.Misc.Features.GamblingCoin
                     }
                 }
 
-                yield return Timing.WaitForSeconds(0.5f);
+                yield return Timing.WaitForOneFrame;
             }
         }
     }
