@@ -349,6 +349,12 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
                 }
             }
 
+            if(ev.DamageHandler.Type == DamageType.Scp1509)
+            {
+                ev.Amount /= 2;
+                return;
+            }
+
 
 
         }
