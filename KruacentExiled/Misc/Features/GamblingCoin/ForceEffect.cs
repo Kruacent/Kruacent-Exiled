@@ -1,61 +1,48 @@
 ﻿using CommandSystem;
 using Exiled.API.Features;
-using Exiled.API.Features.Pools;
-using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
+using Exiled.API.Features.Items;
+using KruacentExiled.CustomItems.API.Features;
+using KruacentExiled.CustomItems.Items;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Utils;
-using static HarmonyLib.Code;
 
 namespace KruacentExiled.Misc.Features.GamblingCoin
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    public class ForceCoinEffect : ICommand
+    public class GiveCompressedCoin : ICommand
     {
-        public string Command => "forcecoineffect";
+        public string Command => "givecompressedcoin";
 
-        public string[] Aliases => new string[] { "fce" };
+        public string[] Aliases => new string[] { "gcc", "givecc" };
 
-        public string Description => "force a effect for a player";
+        public string Description => "give a compressed coin with custom effect count to a player";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            
-
-
-            
-
             if (arguments.Count < 1)
             {
-                response = "need effect";
+                response = "need effect count";
                 return false;
             }
 
-            ICoinEffect chose= null;
-            foreach (ICoinEffect effect in GamblingCoinManager.EffectList)
+            if (!int.TryParse(arguments.At(0), out int flipCount) || flipCount <= 0)
             {
-                if (effect.Name == arguments.At(0))
-                {
-                    chose = effect;
-                    break;
-                }
+                response = $"invalid effect count {arguments.At(0)}";
+                return false;
             }
-            if (chose is null)
+
+            if (!KECustomItem.TryGet("CompressedCoin", out KECustomItem customItem))
             {
-                response = $"effect {arguments.At(0)} not found";
+                response = "custom item CompressedCoin not found";
                 return false;
             }
 
             List<ReferenceHub> listhub = RAUtils.ProcessPlayerIdOrNamesList(arguments, 1, out string[] newargs);
 
-
-
-            if(listhub.Count == 0)
+            if (listhub.Count == 0)
             {
-                
                 Player player = Player.Get(sender);
                 if (player is null)
                 {
@@ -69,26 +56,31 @@ namespace KruacentExiled.Misc.Features.GamblingCoin
             foreach (ReferenceHub hub in listhub)
             {
                 Player player = Player.Get(hub);
+                if (player is null) continue;
+
                 try
                 {
-                    chose.ExecuteEffect(player);
+                    customItem.Give(player);
+
+                    Item givedItem = player.Items.LastOrDefault(i => i.Type == customItem.ItemType && KECustomItem.TryGet(i, out var found) && found == customItem);
+
+                    if (givedItem != null)
+                    {
+                        CompressedCoin.TrySetCoinUses(givedItem.Serial, flipCount);
+                    }
                 }
                 catch (Exception e)
                 {
                     Log.Error(e);
-                    response = "error with coin effect";
+                    response = "error with give compressed coin";
                     return false;
                 }
             }
+
             string text = string.Join(" ", newargs);
-            
-            response = $"forced effect {chose.Name} on {text}";
+
+            response = $"given CompressedCoin ({flipCount} effects) to {text}";
             return true;
-
-
         }
-
-
-        
     }
 }

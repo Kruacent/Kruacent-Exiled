@@ -1,14 +1,12 @@
 ﻿using Exiled.API.Features;
-using Exiled.API.Features.Attributes;
-using Exiled.CustomRoles.API.Features;
+using Exiled.API.Features.Items;
+using KE.Utils.API.Features;
 using KE.Utils.API.GifAnimator;
+using KruacentExiled.CustomItems.API.Features;
+using KruacentExiled.CustomItems.Items;
 using KruacentExiled.CustomRoles.API.Features;
 using KruacentExiled.CustomRoles.API.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace KruacentExiled.CustomRoles.Abilities
@@ -63,6 +61,16 @@ namespace KruacentExiled.CustomRoles.Abilities
                     player.Kill("The casino always win");
                     return base.AbilityUsed(player);
                 }*/
+            }
+
+            if (KruacentExiled.Misc.Utils.RandomNumberGenerator.RollChance(10, player, true))
+            {
+                if (KECustomItem.TryGet("CompressedCoin", out KECustomItem customItem))
+                {
+                    customItem.Give(player);
+
+                    return base.AbilityUsed(player);
+                }
             }
 
             player.AddItem(ItemType.Coin);

@@ -5,6 +5,8 @@ using Exiled.API.Features.Items;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Features;
+using KruacentExiled.CustomItems.Items;
+using KruacentExiled.Extensions;
 using KruacentExiled.Misc;
 using KruacentExiled.Misc.Events.EventsArgs.GamblingCoinsEventArgs;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
@@ -26,7 +28,8 @@ namespace KruacentExiled.Misc.Features.GamblingCoin
             Player player = ev.Player;
             Item item = ev.Item;
 
-            if (CustomItem.TryGet(item, out _)) return;
+            bool isCompressedCoin = item.GetName() == "CompressedCoin";
+            if (CustomItem.TryGet(item, out _) && !isCompressedCoin) return;
 
 
             GamblingEventArgs ev1 = new GamblingEventArgs(player, item, true);
@@ -44,8 +47,20 @@ namespace KruacentExiled.Misc.Features.GamblingCoin
             }
 
             _cooldowns[player.UserId] = DateTime.UtcNow;
-            ushort itemSerial = player.CurrentItem.Serial;
 
+            if (isCompressedCoin)
+            {
+                ushort serial = item.Serial;
+
+                int flipCount = CompressedCoin.GetCoinUses(serial);
+                player.RemoveHeldItem();
+                CompressedCoin.RemoveCoinUses(serial);
+
+                Timing.RunCoroutine(CompressedFlips(player, flipCount));
+                return;
+            }
+
+            ushort itemSerial = player.CurrentItem.Serial;
 
             if (!CoinUses.ContainsKey(itemSerial))
             {
@@ -105,5 +120,37 @@ namespace KruacentExiled.Misc.Features.GamblingCoin
             CoinUses[itemSerial] = ev2.RemainingUses;
         }
 
+        private IEnumerator<float> CompressedFlips(Player player, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                if (player == null || !player.IsConnected || !player.IsAlive) yield break;
+
+                bool finalResult = RandomNumberGenerator.RollChance(50, player, true);
+                EffectType type = EffectType.Negative;
+                if (finalResult)
+                {
+                    type = EffectType.Positive;
+                }
+
+                ICoinEffect effect = GamblingCoinManager.GetRandomEffect(type);
+                if (effect != null)
+                {
+                    try
+                    {
+                        effect.ExecuteEffect(player);
+                        {
+                            PlayerUtils.SendBroadcast(player, $"[{i + 1}/{count}] {effect.Message}");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e);
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(0.5f);
+            }
+        }
     }
 }
