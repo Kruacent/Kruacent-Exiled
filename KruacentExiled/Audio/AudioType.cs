@@ -36,9 +36,10 @@ namespace KruacentExiled.Audio
             {
                 foreach (AudioPlayer player in players)
                 {
-                    foreach (AudioClipPlayback clip in player.ClipsById.Values)
+                    foreach (Speaker speaker in player.SpeakersByName.Values)
                     {
-                        clip.Volume = newVolume;
+                        if (speaker == null) continue;
+                        speaker.Volume = newVolume;
                     }
                 }
             }

@@ -49,7 +49,7 @@ namespace KruacentExiled.Audio
 
         private int GetSettingId(SoundType type)
         {
-            return (int) type + _idSound;
+            return (int) type + _idSound + 1;
         }
 
         private bool CheckSetting(int settingId)
@@ -123,7 +123,7 @@ namespace KruacentExiled.Audio
             {
                 volume = DefaultValue;
             }
-            volume /= 25;
+            volume /= 100;
 
             return volume;
 
