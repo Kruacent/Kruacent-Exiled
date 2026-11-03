@@ -9,6 +9,7 @@ using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.Extensions;
 using PlayerRoles;
+using ProjectMER.Features.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -35,8 +36,6 @@ namespace KruacentExiled.CustomItems.Items
             };
         }
 
-        public bool KeepClass => false;
-
         public override ItemType ItemType => ItemType.SCP500;
 
         /// <inheritdoc/>
@@ -47,7 +46,7 @@ namespace KruacentExiled.CustomItems.Items
         /// <inheritdoc/>
         public override float Weight { get; set; } = 0.65f;
         public Color Color { get; set; } = Color.yellow;
-        private bool tp = false;
+        private Dictionary<ushort, bool> TpOnPlayer = new Dictionary<ushort, bool>();
 
         /// <inheritdoc/>
         public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
@@ -80,8 +79,10 @@ namespace KruacentExiled.CustomItems.Items
             }
             Player player = ev.Player;
 
-            tp = !tp;
-            if (tp)
+            TpOnPlayer.TryGetValue(ev.Item.Serial, out bool spawnToPlayer);
+            TpOnPlayer[ev.Item.Serial] = !spawnToPlayer;
+
+            if (!spawnToPlayer)
                 KECustomItem.ItemEffectHint(player, "Players will spawn to you");
             else
                 KECustomItem.ItemEffectHint(player, "Players won't spawn to you");
@@ -96,10 +97,7 @@ namespace KruacentExiled.CustomItems.Items
                 return;
             Player player = ev.Player;
 
-
-            List<Player> spectators = Player.Enumerable.Where(p => p.IsDead).ToList();
-
-
+            List<Player> spectators = Player.Enumerable.Where(p => p.IsDead && !p.IsOverwatchEnabled).ToList();
 
             if (spectators.Count == 0)
             {
@@ -112,7 +110,7 @@ namespace KruacentExiled.CustomItems.Items
             foreach (Player spectator in spectators)
             {
                 bool revived = Revive(player, spectator);
-                if (revived && tp)
+                if (revived && TpOnPlayer.TryGetValue(ev.Item.Serial, out bool tp) && tp)
                 {
                     spectator.Teleport(player);
                 }
