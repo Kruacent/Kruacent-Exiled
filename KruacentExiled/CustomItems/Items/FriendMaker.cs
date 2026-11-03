@@ -1,4 +1,6 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
+using Exiled.API.Features.DamageHandlers;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Features;
@@ -98,10 +100,8 @@ namespace KruacentExiled.CustomItems.Items
             Player attacker = ev.Attacker;
             Player player = ev.Player;
             if (!Check(attacker)) return;
+            if (ev.DamageHandler.Type != DamageType.Com15) return;
             ev.IsAllowed = false;
-
-
-            
 
             if(Convert(ev.Player, ev.Attacker))
             {
