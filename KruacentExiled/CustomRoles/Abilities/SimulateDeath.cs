@@ -61,7 +61,7 @@ namespace KruacentExiled.CustomRoles.Abilities
 
             if (ragdoll != null)
             {
-                player.Position = ragdoll.Position;
+                player.Position = ragdoll.Position + new Vector3(0, 1, 0);
                 ragdoll.Destroy();
             }
         }
