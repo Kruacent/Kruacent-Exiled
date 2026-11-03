@@ -24,6 +24,7 @@ namespace KruacentExiled.Misc.Features
         }
         public void StartLoop()
         {
+            StopLoop();
             handle = Timing.RunCoroutine(StartElevator());
         }
         /// <summary>
@@ -31,9 +32,11 @@ namespace KruacentExiled.Misc.Features
         /// </summary>
         private IEnumerator<float> StartElevator()
         {
-            while (!Round.IsEnded)
+            while (Round.InProgress)
             {
                 yield return Timing.WaitForSeconds(UnityEngine.Random.Range(120f, 200f));
+                if (!Round.InProgress) yield break;
+
                 Tesla tesla = Tesla.List.GetRandomValue();
 
                 tesla.Trigger();
