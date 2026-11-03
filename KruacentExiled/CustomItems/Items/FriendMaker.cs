@@ -6,6 +6,7 @@ using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Features;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
+using KruacentExiled.CustomRoles.CustomSCPTeam;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -143,7 +144,7 @@ namespace KruacentExiled.CustomItems.Items
             }
 
 
-            if (player.IsScp && player.Role != RoleTypeId.Scp0492)
+            if (SCPTeam.IsSCP(player.ReferenceHub) && player.Role != RoleTypeId.Scp0492)
             {
                 TranslationHint(attacker, TranslationNonZombie);
                 return false;
