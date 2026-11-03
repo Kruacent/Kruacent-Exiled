@@ -37,7 +37,7 @@ namespace KruacentExiled.CustomItems.Items
         public override bool ExplodeOnCollision => false;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.gray;
         public CustomItemEffect Effect { get; set; }
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 2,
             RoomSpawnPoints = new List<RoomSpawnPoint>
@@ -54,16 +54,6 @@ namespace KruacentExiled.CustomItems.Items
                     Chance = 25
                 },
             },
-
-            DynamicSpawnPoints = new List<DynamicSpawnPoint>
-            {
-                new DynamicSpawnPoint()
-                {
-                    Chance = 25,
-                    Location = SpawnLocationType.InsideHidLab,
-                },
-            },
-
         };
 
         public LowGravityGrenade()

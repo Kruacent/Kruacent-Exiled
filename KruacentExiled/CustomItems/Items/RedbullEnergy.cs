@@ -34,7 +34,7 @@ namespace KruacentExiled.CustomItems.Items
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.blue;
         public CustomItemEffect Effect { get; set; }
 
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 2,
             RoomSpawnPoints = new List<RoomSpawnPoint>

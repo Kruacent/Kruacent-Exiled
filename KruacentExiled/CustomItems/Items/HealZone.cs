@@ -35,7 +35,7 @@ namespace KruacentExiled.CustomItems.Items
         public override bool ExplodeOnCollision => true;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.green;
         public CustomItemEffect Effect { get; set; }
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 3,
             LockerSpawnPoints = new List<LockerSpawnPoint>

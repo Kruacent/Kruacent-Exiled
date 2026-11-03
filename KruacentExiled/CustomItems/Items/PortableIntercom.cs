@@ -32,7 +32,7 @@ namespace KruacentExiled.CustomItems.Items
         public Color Color { get; set; } = UnityEngine.Color.green;
         public override string Name { get; set; } = "PortableIntercom";
         public override float Weight { get; set; } = 0.5f;
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 1,
             RoomSpawnPoints = new List<RoomSpawnPoint>

@@ -37,33 +37,39 @@ namespace KruacentExiled.CustomItems.Items
         public override bool ExplodeOnCollision => false;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.cyan;
         public CustomItemEffect Effect { get; set; }
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 3,
-            DynamicSpawnPoints = new List<DynamicSpawnPoint>
+            RoomSpawnPoints = new List<RoomSpawnPoint>
             {
-                new DynamicSpawnPoint()
+                new RoomSpawnPoint()
                 {
-                    Chance = 50,
-                    Location = SpawnLocationType.InsideHczArmory,
+                    Room = RoomType.HczArmory,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 50
                 },
-                new DynamicSpawnPoint()
-                {
-                    Chance =2,
-                    Location = SpawnLocationType.Inside914,
-                },
-                new DynamicSpawnPoint()
-                {
-                    Chance=50,
-                    Location = SpawnLocationType.Inside049Armory,
-                },
-                new DynamicSpawnPoint()
-                {
-                    Chance=50,
-                    Location = SpawnLocationType.InsideLczArmory,
-                }
-            },
 
+                new RoomSpawnPoint()
+                {
+                    Room = RoomType.Lcz914,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 2
+                },
+
+                new RoomSpawnPoint()
+                {
+                    Room = RoomType.Hcz049,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 50
+                },
+
+                new RoomSpawnPoint()
+                {
+                    Room = RoomType.LczArmory,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 50
+                },
+            },
         };
 
         public PickupModel PickupModel { get; }

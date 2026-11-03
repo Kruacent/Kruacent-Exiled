@@ -50,7 +50,7 @@ namespace KruacentExiled.CustomItems.Items
         private bool tp = false;
 
         /// <inheritdoc/>
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
 
         };

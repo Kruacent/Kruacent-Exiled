@@ -48,7 +48,7 @@ namespace KruacentExiled.CustomItems.Items
         public float GrenadeSize { get; set; } = 4f;
 
 
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
 
         };

@@ -430,6 +430,18 @@ namespace KruacentExiled.CustomItems.API.Features
                 return false;
             }
 
+            if (SpawnProperties != null)
+            {
+                if (!(SpawnProperties is KESpawnProperties))
+                {
+                    Log.Warn($"[KECustomItem {Name}] use KESpawnProperties instead of SpawnProperties");
+                }
+
+                if (SpawnProperties.DynamicSpawnPoints.Count > 0)
+                {
+                    Log.Warn($"[KECustomItem {Name}] DynamicSpawnPoints is deprecated use RoomSpawnPoints instead");
+                }
+            }
 
             Registered.Add(this);
             Init();

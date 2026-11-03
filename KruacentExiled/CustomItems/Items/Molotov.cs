@@ -45,7 +45,7 @@ namespace KruacentExiled.CustomItems.Items
         {
             [Scp914KnobSetting.OneToOne] = new UpgradeProperties(100, "HealZone")
         };
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 2,
             LockerSpawnPoints = new List<LockerSpawnPoint>

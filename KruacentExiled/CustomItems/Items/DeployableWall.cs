@@ -45,21 +45,24 @@ namespace KruacentExiled.CustomItems.Items
         public override Color32? TintColor { get; set; } = new Color32(139, 127, 158, 255); // janitor card color
 
         public CustomItemEffect Effect { get; set; }
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 2,
-            DynamicSpawnPoints = new List<DynamicSpawnPoint>
+            RoomSpawnPoints = new List<RoomSpawnPoint>
             {
-                new DynamicSpawnPoint()
+                new RoomSpawnPoint()
                 {
-                    Chance=25,
-                    Location = SpawnLocationType.Inside049Armory,
+                    Room = RoomType.Hcz049,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 25
                 },
-                new DynamicSpawnPoint()
+
+                new RoomSpawnPoint()
                 {
-                    Chance=25,
-                    Location = SpawnLocationType.InsideLczArmory,
-                }
+                    Room = RoomType.LczArmory,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 25
+                },
             },
             LockerSpawnPoints = new List<LockerSpawnPoint>
             {

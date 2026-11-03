@@ -43,7 +43,7 @@ namespace KruacentExiled.CustomItems.Items
         };
 
         /// <inheritdoc/>
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             RoomSpawnPoints = new List<RoomSpawnPoint>
             {

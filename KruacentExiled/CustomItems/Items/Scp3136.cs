@@ -41,7 +41,7 @@ namespace KruacentExiled.CustomItems.Items
             { Faction.FoundationEnemy , Vector3.zero}
         };
 
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 1,
             LockerSpawnPoints = new List<LockerSpawnPoint>()

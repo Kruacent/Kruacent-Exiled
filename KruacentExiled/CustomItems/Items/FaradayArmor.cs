@@ -38,7 +38,7 @@ namespace KruacentExiled.CustomItems.Items
         public override string Name { get; set; } = "FaradayArmor";
         public override float Weight { get; set; } = 4f;
         public Color Color { get; set; } = UnityEngine.Color.green;
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 1,
             RoomSpawnPoints = new List<RoomSpawnPoint>

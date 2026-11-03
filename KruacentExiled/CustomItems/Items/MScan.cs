@@ -60,7 +60,7 @@ namespace KruacentExiled.CustomItems.Items
         public override string Name { get; set; } = "MScan";
         public override float Weight { get; set; } = 1.5f;
         public Color Color { get; set; } = UnityEngine.Color.cyan;
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 2,
             RoomSpawnPoints = new List<RoomSpawnPoint>

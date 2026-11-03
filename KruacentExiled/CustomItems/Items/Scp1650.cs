@@ -33,7 +33,7 @@ namespace KruacentExiled.CustomItems.Items
         public override float Weight { get; set; } = 0.65f;
         public CustomItemEffect Effect { get; set; }
 
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 1,
             LockerSpawnPoints = new List<LockerSpawnPoint>()

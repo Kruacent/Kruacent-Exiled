@@ -45,7 +45,7 @@ namespace KruacentExiled.CustomItems.Items
         public override Color32? KeycardLabelColor { get; set; } = Color.red;
         public override Color32? KeycardPermissionsColor { get; set; } = Color.red;
         public override Color32? TintColor { get; set; } = new Color32(255, 255, 255, 255);
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 1,
             RoomSpawnPoints = new List<RoomSpawnPoint>

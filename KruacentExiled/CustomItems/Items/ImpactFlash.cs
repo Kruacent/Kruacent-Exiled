@@ -32,33 +32,46 @@ namespace KruacentExiled.CustomItems.Items
         public override float FuseTime => 3f;
         public override bool ExplodeOnCollision => true;
         public bool IsViolent => false;
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 5,
-            DynamicSpawnPoints = new List<DynamicSpawnPoint>
-        {
-            new DynamicSpawnPoint()
+            RoomSpawnPoints = new List<RoomSpawnPoint>
             {
-                Chance = 50,
-                Location = SpawnLocationType.InsideHczArmory,
-            },
-            new DynamicSpawnPoint()
-            {
-                Chance = 2,
-                Location = SpawnLocationType.Inside914,
-            },
-            new DynamicSpawnPoint()
-            {
-                Chance= 50,
-                Location = SpawnLocationType.Inside049Armory,
-            },
-            new DynamicSpawnPoint()
-            {
-                Chance= 50,
-                Location = SpawnLocationType.InsideLczArmory,
-            }
-        },
+                new RoomSpawnPoint()
+                {
+                    Room = RoomType.HczArmory,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 50
+                },
 
+                new RoomSpawnPoint()
+                {
+                    Room = RoomType.Lcz914,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 2
+                },
+
+                new RoomSpawnPoint()
+                {
+                    Room = RoomType.HczArmory,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 50
+                },
+
+                new RoomSpawnPoint()
+                {
+                    Room = RoomType.Hcz049,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 50
+                },
+
+                new RoomSpawnPoint()
+                {
+                    Room = RoomType.LczArmory,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 50
+                },
+            },
         };
     }
 }

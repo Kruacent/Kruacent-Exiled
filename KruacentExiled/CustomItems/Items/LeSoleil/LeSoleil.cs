@@ -41,7 +41,7 @@ namespace KruacentExiled.CustomItems.Items.LeSoleil
         {
             //[Scp914KnobSetting.OneToOne] = new UpgradeProperties(100, 1051)
         };
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
 
         };
