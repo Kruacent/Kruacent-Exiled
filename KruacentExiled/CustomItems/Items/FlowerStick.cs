@@ -48,7 +48,7 @@ namespace KruacentExiled.CustomItems.Items
         };
 
 
-        public float CooldownInspect { get; }
+        public float CooldownInspect { get; } = 2f;
         private Dictionary<Player, DateTime> cooldownInspect;
         protected override void SubscribeEvents()
         {
@@ -147,7 +147,7 @@ namespace KruacentExiled.CustomItems.Items
 
             if (cooldownInspect.TryGetValue(player, out DateTime value))
             {
-                if (value.AddSeconds(CooldownInspect) < DateTime.Now)
+                if (value.AddSeconds(CooldownInspect) > DateTime.Now)
                 {
                     return;
                 }
