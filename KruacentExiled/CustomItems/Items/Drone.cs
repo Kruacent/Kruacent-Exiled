@@ -6,6 +6,7 @@ using Exiled.API.Features.Roles;
 using Exiled.API.Features.Spawn;
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Player;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomRoles.API.Features;
 using MEC;
@@ -21,6 +22,7 @@ namespace KruacentExiled.CustomItems.Items
         public override float Weight { get; set; } = 3f;
         public Color Color { get; set; } = Color.blue;
         public override ItemType ItemType => ItemType.KeycardJanitor;// make a custom keycard
+        public override ItemRank Rank { get; } = ItemRank.Basic;
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {

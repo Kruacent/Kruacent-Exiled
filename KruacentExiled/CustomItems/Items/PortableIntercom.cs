@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using MEC;
@@ -32,6 +33,7 @@ namespace KruacentExiled.CustomItems.Items
         public Color Color { get; set; } = UnityEngine.Color.green;
         public override string Name { get; set; } = "PortableIntercom";
         public override float Weight { get; set; } = 0.5f;
+        public override ItemRank Rank { get; } = ItemRank.Legendary;
         public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 1,

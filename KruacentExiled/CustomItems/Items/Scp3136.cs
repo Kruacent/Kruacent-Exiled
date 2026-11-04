@@ -6,6 +6,7 @@ using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using PlayerRoles;
 using System.Collections.Generic;
@@ -34,6 +35,7 @@ namespace KruacentExiled.CustomItems.Items
         public override ItemType ItemType => ItemType.SCP1576;
         public override string Name { get; set; } = "SCP-3136";
         public override float Weight { get; set; } = 0.65f;
+        public override ItemRank Rank { get; } = ItemRank.Basic;
 
         private Dictionary<Faction,Vector3> _respawnPositions = new Dictionary<Faction,Vector3>
         {

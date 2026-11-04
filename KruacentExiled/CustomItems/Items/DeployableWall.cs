@@ -6,6 +6,7 @@ using Exiled.API.Features.Items;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
 using KruacentExiled.ClientPrimitives;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomItems.Items.ItemEffects;
@@ -43,6 +44,7 @@ namespace KruacentExiled.CustomItems.Items
         public override Color32? KeycardLabelColor { get; set; } = Color.black;
         public override Color32? KeycardPermissionsColor { get; set; } = Color.black;
         public override Color32? TintColor { get; set; } = new Color32(139, 127, 158, 255); // janitor card color
+        public override ItemRank Rank { get; } = ItemRank.Good;
 
         public CustomItemEffect Effect { get; set; }
         public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()

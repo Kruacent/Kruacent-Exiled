@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomRoles.API.Interfaces;
@@ -38,6 +39,7 @@ namespace KruacentExiled.CustomItems.Items
         public override string Name { get; set; } = "FaradayArmor";
         public override float Weight { get; set; } = 4f;
         public Color Color { get; set; } = UnityEngine.Color.green;
+        public override ItemRank Rank { get; } = ItemRank.Epic;
         public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 1,

@@ -1,147 +1,89 @@
-﻿/*
-using Exiled.API.Enums;
-using Exiled.API.Extensions;
+﻿using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.API.Features.Attributes;
-using Exiled.CustomRoles.API.Features;
-using Exiled.Events.EventArgs.Map;
-using Exiled.Events.EventArgs.Player;
-using KE.CustomRoles.API;
+using Exiled.API.Features.Items;
+using Exiled.API.Features.Pickups;
+using KruacentExiled.CustomItems.Items;
+using KruacentExiled.CustomRoles.API.Features;
+using KruacentExiled.CustomRoles.API.Interfaces;
 using MEC;
-using PlayerRoles;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using Utils.NonAllocLINQ;
 
-namespace KE.CustomRoles.CR.Human
+namespace KruacentExiled.CustomRoles.CR.Human
 {
-    internal class Curiosophile : GlobalCustomRole
+    public class Curiosophile : GlobalCustomRole, IColor
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;
-        public override string Name { get; set; } = "Curiosophile";
-        public override string Description { get; set; } = "Tu veux récuperer tous ce que tu vois !";
-        public override uint Id { get; set; } = 1059;
-        public override string CustomInfo { get; set; } = "Curiosophile";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new Dictionary<string, Dictionary<string, string>>()
+            {
+                ["en"] = new Dictionary<string, string>()
+                {
+                    [TranslationKeyName] = "Curiosophile",
+                    [TranslationKeyDesc] = "",
+                },
+                ["fr"] = new Dictionary<string, string>()
+                {
+                    [TranslationKeyName] = "Curiosophile",
+                    [TranslationKeyDesc] = "",
+                },
+                ["legacy"] = new Dictionary<string, string>()
+                {
+                    [TranslationKeyName] = "Curiosophile",
+                    [TranslationKeyDesc] = "",
+                }
+
+            };
+        }
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
         public override float SpawnChance { get; set; } = 100;
+        public Color32 Color => new Color32(9, 25, 67,0);
 
-        private readonly List<ItemType> LowQualityItem =
-        [
-            ItemType.GunA7,
-            ItemType.GunCOM15,
-            ItemType.Flashlight,
-            ItemType.Coin,
-            ItemType.KeycardJanitor,
-            ItemType.KeycardGuard,
-        ];
-
-        private readonly List<ItemType> HighQualityItem =
-        [
-            ItemType.MicroHID,
-            ItemType.Jailbird,
-            ItemType.GunFRMG0,
-            ItemType.ArmorHeavy,
-            ItemType.ParticleDisruptor,
-            ItemType.Adrenaline,
-            ItemType.SCP1344,
-            ItemType.SCP500,
-            ItemType.AntiSCP207,
-            ItemType.KeycardMTFCaptain,
-            ItemType.KeycardO5,
-            ItemType.KeycardFacilityManager,
-        ];
-
-        private readonly List<EffectType> BuffEffect =
-        [
-            EffectType.Vitality,
-            EffectType.RainbowTaste,
-            EffectType.BodyshotReduction,
-            EffectType.AntiScp207
-        ];
-
-        private readonly List<EffectType> NerfEffect =
-        [
-            EffectType.Deafened,
-            EffectType.AmnesiaVision,
-            EffectType.InsufficientLighting,
-            EffectType.Stained,
-            EffectType.Blurred
-        ];
-
-        private Dictionary<EffectType, int> activeEffect = new Dictionary<EffectType, int>();
-
-        protected override void SubscribeEvents()
+        private Dictionary<string, int> ItemValues = new Dictionary<string, int>()
         {
-            Exiled.Events.Handlers.Player.ItemAdded += PickupItem;
-            Exiled.Events.Handlers.Player.ItemRemoved += ThrowItem;
-        }
+            { "TrueDivinePills", -30 },
+        };
 
-        protected override void UnsubscribeEvents()
+        /// <summary>
+        /// < 0 -> Buff player
+        /// 0 -> Neutral
+        /// > 0 -> Nerf player
+        /// </summary>
+        /// <param name="inventory"></param>
+        /// <returns></returns>
+        private int InventoryScore(List<Item> inventory)
         {
-            Exiled.Events.Handlers.Player.ItemAdded -= PickupItem;
-            Exiled.Events.Handlers.Player.ItemRemoved -= ThrowItem;
-        }
-
-        public void PickupItem(ItemAddedEventArgs ev)
-        {
-            if (!Check(ev.Player)) return;
-
-            CheckupInventory(ev.Player);            
-        }
-
-        public void ThrowItem(ItemRemovedEventArgs ev)
-        {
-            if (!Check(ev.Player)) return;
-
-            CheckupInventory(ev.Player);
-        }
-
-        private void CheckupInventory(Player p)
-        {
-            IEnumerable<ItemType> playerItems = p.Items.Select(item => item.Type);
-
-            int buffedItemCount = playerItems.Intersect(LowQualityItem).Count();
-            int nerfedItemCount = playerItems.Intersect(HighQualityItem).Count();
-
-            
-
-            ApplyRandomBuffEffects(buffedItemCount, p);
-            ApplyRandomNerfEffects(nerfedItemCount, p);
-        }
-
-        private void ApplyRandomBuffEffects(int buffedItemCount, Player p)
-        {
-            if (buffedItemCount > 0)
+            int inventoryScore = 0;
+            foreach (Item item in inventory)
             {
-                Log.Info("Buff Effect Applied");
-                int effectsToApply = Mathf.Min(buffedItemCount, BuffEffect.Count);
-
-                for (int i = 0; i < effectsToApply; i++)
-                {
-                    var randomBuff = BuffEffect[UnityEngine.Random.Range(0, BuffEffect.Count)];
-                    p.EnableEffect(randomBuff, -1);
-                }
+                inventoryScore += ItemScore(item);
             }
-        }
 
-        private void ApplyRandomNerfEffects(int nerfedItemCount, Player p)
+            return inventoryScore;
+        } 
+
+        private int ItemScore(Item item)
         {
-            if (nerfedItemCount > 0)
-            {
-                Log.Info("Nerf Effect Applied");
+            ItemTierFlags
 
-                int effectsToApply = Mathf.Min(nerfedItemCount, NerfEffect.Count);
+            // IRevivingItem, SainteGrenada -> -30
+            // item arme spécial -> -20 // ItemCategory.SpecialWeapon
+            // OverseerProtocolDocument -> -15
+            // arme lourde -> -15 (Logicer, Capitaine)
+            // item SCP -> -10 (sauf mami)
+            // Com 45 -> -7
+            // keycard avec plus de 7 permission -> -5
+            // TP Grenada -> -3
 
-                for (int i = 0; i < effectsToApply; i++)
-                {
-                    var randomNerf = NerfEffect[UnityEngine.Random.Range(0, NerfEffect.Count)];
-                    p.EnableEffect(randomNerf, -1);
-                }
-            }
+            // Soin +3
+            // item osef -> flashlight, radio -> +4
+            // SCP Mami, Smoke Grenade, Impact Flash, Presse Purée -> +5
+            // Arme légère +8 (Com 15, Com 18, Crossvec, FSP9)
+            // HealZone, Molotov, Pièce, LGG, Proximity Grenade -> + 15
+            // A7 -> +20
+            // Life Ender -> +40
         }
     }
 }
-*/

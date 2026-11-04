@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Map;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomItems.Items.ItemEffects;
+using System.Collections.Generic;
 
 namespace KruacentExiled.CustomItems.Items
 {
@@ -33,6 +34,7 @@ namespace KruacentExiled.CustomItems.Items
         public override string Name { get; set; } = "ProximityGrenade";
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime => 3f;
+        public override ItemRank Rank { get; } = ItemRank.Basic;
         public override bool ExplodeOnCollision => false;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.red;
         public CustomItemEffect Effect { get; set; }

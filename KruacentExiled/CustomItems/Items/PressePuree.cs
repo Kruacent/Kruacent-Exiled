@@ -5,6 +5,7 @@ using Exiled.API.Features.Spawn;
 using KE.Utils.API.Features;
 using KruacentExiled.CustomItems.API.Core.Models;
 using KruacentExiled.CustomItems.API.Core.Upgrade;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Events;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
@@ -39,6 +40,7 @@ namespace KruacentExiled.CustomItems.Items
         public override float FuseTime => 5f;
         public override bool ExplodeOnCollision => true;
         public override float DamageModifier => .3f;
+        public override ItemRank Rank { get; } = ItemRank.Good;
         public PickupModel PickupModel { get; }
         public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {

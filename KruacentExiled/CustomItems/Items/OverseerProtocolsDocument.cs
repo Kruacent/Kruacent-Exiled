@@ -5,6 +5,7 @@ using Exiled.API.Features.Items;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Features;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using PlayerRoles;
@@ -45,6 +46,7 @@ namespace KruacentExiled.CustomItems.Items
         public override Color32? KeycardLabelColor { get; set; } = Color.red;
         public override Color32? KeycardPermissionsColor { get; set; } = Color.red;
         public override Color32? TintColor { get; set; } = new Color32(255, 255, 255, 255);
+        public override ItemRank Rank { get; } = ItemRank.Exotic;
         public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 1,
