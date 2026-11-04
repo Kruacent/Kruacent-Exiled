@@ -23,9 +23,8 @@ namespace KruacentExiled.GlobalEvents.MiddleEvents
         {
             yield return Timing.WaitForSeconds(1);
 
-            List<Player> list = Player.Enumerable.ToList();
 
-            foreach (var player in list)
+            foreach (var player in Player.Enumerable)
             {
                 if (SCPTeam.IsSCP(player.ReferenceHub))
                 {

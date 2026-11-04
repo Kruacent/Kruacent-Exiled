@@ -51,9 +51,13 @@ namespace KruacentExiled.CustomRoles.Abilities
                 if(effect.GetEffectType() == EffectType.MovementBoost)
                 {
                     effect.Intensity += 50;
+                    int tempIntensity = effect.Intensity;
                     Timing.CallDelayed(5f, () =>
                     {
-                        effect.Intensity -= 50;
+                        if (effect.isActiveAndEnabled && effect.Intensity == tempIntensity)
+                        {
+                            effect.Intensity -= 50;
+                        }
                     });
                     wentIn = true;
                 }

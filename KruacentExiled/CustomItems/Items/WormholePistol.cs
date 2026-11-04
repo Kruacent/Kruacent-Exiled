@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace KruacentExiled.CustomItems.Items
 {
-    public class WormholePistol : KECustomWeapon, IViolentItem
+    public class WormholePistol : KECustomWeapon, IViolentItem, ILumosItem
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
@@ -39,30 +39,31 @@ namespace KruacentExiled.CustomItems.Items
         public override float Weight { get; set; } = 1f;
         public override float Damage { get; set; } = 1f;
         public override byte ClipSize { get; } = 2;
+        public UnityEngine.Color Color { get; set; } = UnityEngine.Color.magenta;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties
         {
             Limit = 1,
-            DynamicSpawnPoints = new List<DynamicSpawnPoint>
+            RoomSpawnPoints = new List<RoomSpawnPoint>
             {
-                new DynamicSpawnPoint()
+                new RoomSpawnPoint()
                 {
                     Chance = 25,
-                    Location = SpawnLocationType.InsideLczWc,
+                    Room = RoomType.LczPlants,
                 },
-                new DynamicSpawnPoint()
+                new RoomSpawnPoint()
                 {
                     Chance = 25,
-                    Location = SpawnLocationType.Inside939Cryo,
+                    Room = RoomType.HczNuke,
                 },
-                new DynamicSpawnPoint()
+                new RoomSpawnPoint()
                 {
                     Chance = 25,
-                    Location = SpawnLocationType.InsideHidLab,
+                    Room = RoomType.Hcz939,
                 },
-                new DynamicSpawnPoint()
+                new RoomSpawnPoint()
                 {
                     Chance = 25,
-                    Location = SpawnLocationType.InsideIntercom,
+                    Room = RoomType.EzShelter,
                 }
             }
         };
@@ -81,9 +82,12 @@ namespace KruacentExiled.CustomItems.Items
 
                 Vector3 targetPos = target.Position;
 
-                Timing.CallDelayed(0.1f, () => attacker.Position = targetPos); 
+                if ((attacker != null && target != null) && (attacker.IsAlive && target.IsAlive))
+                {
+                    Timing.CallDelayed(0.1f, () => attacker.Position = targetPos);
 
-                Timing.CallDelayed(0.1f, () => target.Position = attackerPos);
+                    Timing.CallDelayed(0.1f, () => target.Position = attackerPos);
+                }
                 
             }
             
