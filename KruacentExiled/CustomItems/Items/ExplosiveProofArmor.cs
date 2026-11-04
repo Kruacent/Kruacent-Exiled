@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using System.Collections.Generic;
@@ -34,6 +35,7 @@ namespace KruacentExiled.CustomItems.Items
         public override string Name { get; set; } = "ExplosiveProofArmor";
         public override float Weight { get; set; } = 2f;
         public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
+        public override ItemRank Rank { get; } = ItemRank.Legendary;
         {
             Limit = 1,
             RoomSpawnPoints = new List<RoomSpawnPoint>

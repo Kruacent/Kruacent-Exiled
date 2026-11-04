@@ -1,21 +1,22 @@
 ﻿using Exiled.API.Enums;
-using Exiled.API.Features.Spawn;
-using System.Collections.Generic;
-using UnityEngine;
-using Exiled.Events.EventArgs.Player;
-using KruacentExiled.CustomItems.API.Interface;
-using KruacentExiled.CustomItems.API.Features;
-using KruacentExiled.CustomItems.Items.ItemEffects;
-using Exiled.Events.EventArgs.Item;
-using Exiled.API.Features.Items;
-using KE.Utils.API.Features;
-using InventorySystem.Items.Jailbird;
 using Exiled.API.Features;
-using KruacentExiled.Audio;
-using System;
-using System.Linq;
-using MEC;
+using Exiled.API.Features.Items;
+using Exiled.API.Features.Spawn;
+using Exiled.Events.EventArgs.Item;
 using Exiled.Events.EventArgs.Map;
+using Exiled.Events.EventArgs.Player;
+using InventorySystem.Items.Jailbird;
+using KE.Utils.API.Features;
+using KruacentExiled.Audio;
+using KruacentExiled.CustomItems.API.Enum;
+using KruacentExiled.CustomItems.API.Features;
+using KruacentExiled.CustomItems.API.Interface;
+using KruacentExiled.CustomItems.Items.ItemEffects;
+using MEC;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace KruacentExiled.CustomItems.Items
 {
@@ -40,6 +41,7 @@ namespace KruacentExiled.CustomItems.Items
         public override ItemType ItemType => ItemType.Jailbird;
         public override string Name { get; set; } = "FlowerStick";
         public override float Weight { get; set; } = 0.65f;
+        public override ItemRank Rank { get; } = ItemRank.Exotic;
 
         public CustomItemEffect Effect { get; set; }
         public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()

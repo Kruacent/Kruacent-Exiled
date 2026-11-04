@@ -13,6 +13,7 @@ using KE.Utils.API.Displays.Feeds;
 using KE.Utils.API.Features;
 using KE.Utils.API.Translations;
 using KruacentExiled.CustomItems.API.Core.Lights;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Exceptions;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomSpawnPoint.Spawned;
@@ -61,7 +62,7 @@ namespace KruacentExiled.CustomItems.API.Features
 
         public const string CustomItemTranslationId = "CustomItem";
         protected abstract Dictionary<string, Dictionary<string, string>> SetTranslation();
-
+        public abstract ItemRank Rank { get; }
 
         public const string PickupKey = "Pickup";
         public const string InventoryKey = "Inventory";

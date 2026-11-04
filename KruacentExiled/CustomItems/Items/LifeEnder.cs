@@ -2,6 +2,7 @@
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Features;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using System.Collections.Generic;
@@ -33,6 +34,7 @@ namespace KruacentExiled.CustomItems.Items
         public override string Name { get; set; } = "LifeEnder";
         public override float Weight { get; set; } = 1f;
         public override SpawnProperties SpawnProperties { get; set; } = null;
+        public override ItemRank Rank { get; } = ItemRank.Good;
 
         public bool IsViolent => true;
 

@@ -4,6 +4,7 @@ using Exiled.API.Features.DamageHandlers;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Features;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomRoles.CustomSCPTeam;
@@ -52,6 +53,7 @@ namespace KruacentExiled.CustomItems.Items
         public override ItemType ItemType => ItemType.GunCOM15;
         public override string Name { get; set; } = "FriendMaker";
         public override float Weight { get; set; } = 1f;
+        public override ItemRank Rank { get;  } = ItemRank.Epic;
         public override SpawnProperties SpawnProperties { get; set; } = null;
 
 

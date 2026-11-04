@@ -5,6 +5,7 @@ using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.Extensions;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.Extensions;
@@ -45,6 +46,7 @@ namespace KruacentExiled.CustomItems.Items
 
         /// <inheritdoc/>
         public override float Weight { get; set; } = 0.65f;
+        public override ItemRank Rank { get; } = ItemRank.Legendary;
         public Color Color { get; set; } = Color.yellow;
         private Dictionary<ushort, bool> TpOnPlayer = new Dictionary<ushort, bool>();
 

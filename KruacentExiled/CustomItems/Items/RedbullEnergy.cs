@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomItems.Items.ItemEffects;
+using System.Collections.Generic;
 
 namespace KruacentExiled.CustomItems.Items
 {
@@ -31,6 +32,7 @@ namespace KruacentExiled.CustomItems.Items
         public override ItemType ItemType => ItemType.SCP207;
         public override string Name { get; set; } = "RedBullEnergy";
         public override float Weight { get; set; } = 0.65f;
+        public override ItemRank Rank { get; } = ItemRank.Basic;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.blue;
         public CustomItemEffect Effect { get; set; }
 

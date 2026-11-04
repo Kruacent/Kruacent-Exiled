@@ -6,6 +6,7 @@ using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Features;
 using KruacentExiled.CustomItems.API.Core.Models;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomItems.Items.PickupModels;
@@ -40,6 +41,7 @@ namespace KruacentExiled.CustomItems.Items
         public override float FuseTime => 6f;
         public override bool ExplodeOnCollision => false;
         public override float DamageModifier => 3f;
+        public override ItemRank Rank { get; } = ItemRank.Exotic;
         public Color Color { get; set; } = Color.red;
 
 

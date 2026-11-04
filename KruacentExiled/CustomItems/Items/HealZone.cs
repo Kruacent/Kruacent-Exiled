@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Map;
-using Scp914;
-using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomItems.API.Core.Upgrade;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
+using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomItems.Items.ItemEffects;
+using Scp914;
+using System.Collections.Generic;
 
 namespace KruacentExiled.CustomItems.Items
 {
@@ -34,6 +35,7 @@ namespace KruacentExiled.CustomItems.Items
         public override float FuseTime => 5f;
         public override bool ExplodeOnCollision => true;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.green;
+        public override ItemRank Rank { get; } = ItemRank.Basic;
         public CustomItemEffect Effect { get; set; }
         public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
