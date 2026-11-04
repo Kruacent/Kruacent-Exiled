@@ -41,7 +41,7 @@ namespace KruacentExiled.CustomItems.Items
         public override ItemRank Rank { get; } = ItemRank.Epic;
         public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade { get; private set; } = new Dictionary<Scp914KnobSetting, UpgradeProperties>()
         {
-            { Scp914KnobSetting.VeryFine,new UpgradeProperties(10, "TrueDivinePills")}
+            { Scp914KnobSetting.VeryFine,new UpgradeProperties(10, "TrueDivinePills", 25)}
         };
 
         /// <inheritdoc/>

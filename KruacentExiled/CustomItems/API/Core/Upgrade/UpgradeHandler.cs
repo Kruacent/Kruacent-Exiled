@@ -3,6 +3,7 @@ using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Scp914;
+using KE.Utils.API.Features;
 using KE.Utils.API.Interfaces;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
@@ -45,6 +46,10 @@ namespace KruacentExiled.CustomItems.API.Core.Upgrade
                 newItem?.Give(ev.Player);
                 if (newItem == null) Log.Warn("warning id of custom item not found");
 
+            } else if (DestroyCheck(upgradable, ev.KnobSetting, ev.Player))
+            {
+                KELog.Debug("destroyed");
+                ev.Player.RemoveItem(ev.Item);
             }
             ev.IsAllowed = false;
         }
@@ -79,8 +84,12 @@ namespace KruacentExiled.CustomItems.API.Core.Upgrade
                 
                 Pickup newPickup = newItem.Spawn(ev.OutputPosition);
                 newPickup.Rotation = rotation;
-                
+            } else if (DestroyCheck(upgradable, ev.KnobSetting, pickup.PreviousOwner))
+            {
+                KELog.Debug("destroyed");
+                pickup.Destroy();
             }
+
 
             ev.IsAllowed = false;
         }
@@ -98,5 +107,14 @@ namespace KruacentExiled.CustomItems.API.Core.Upgrade
             return willUpgrade;
         }
 
+        private bool DestroyCheck(IUpgradableCustomItem upgradable, Scp914KnobSetting knob, Player player)
+        {
+            if (!upgradable.Upgrade.TryGetValue(knob, out UpgradeProperties item)) return false;
+            if (item.DestroyChance <= 0) return false;
+
+            KELog.Debug($"Item destroy chance for 914 is {item.DestroyChance}");
+            bool willDestroy = RandomNumberGenerator.RollChance(item.DestroyChance, player, false);
+            return willDestroy;
+        }
     }
 }

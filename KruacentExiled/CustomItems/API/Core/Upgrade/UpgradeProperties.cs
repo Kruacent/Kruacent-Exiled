@@ -13,13 +13,14 @@ namespace KruacentExiled.CustomItems.API.Core.Upgrade
     public class UpgradeProperties
     {
         public float Chance { get; }
-
+        public float DestroyChance { get; }
         public string UpgradedItem { get; }
 
-        public UpgradeProperties(float chance, string newItem)
+        public UpgradeProperties(float chance, string newItem, float destroyChance = 0)
         {
             UpgradedItem = newItem;
             Chance = Mathf.Clamp(chance, 0,100);
+            DestroyChance = Mathf.Clamp(destroyChance, 0, 100);
         }
 
     }
