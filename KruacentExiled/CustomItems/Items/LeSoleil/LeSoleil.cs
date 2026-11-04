@@ -3,6 +3,7 @@ using Exiled.API.Features.Spawn;
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Map;
 using KruacentExiled.CustomItems.API.Core.Upgrade;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using Scp914;
@@ -34,6 +35,7 @@ namespace KruacentExiled.CustomItems.Items.LeSoleil
         public override ItemType ItemType => ItemType.GrenadeFlash;
         public override string Name { get; set; } = "Le Soleil";
         public override float Weight { get; set; } = 0.65f;
+        public override ItemRank Rank { get; } = ItemRank.Basic;
         public override float FuseTime =>5f;
         public override bool ExplodeOnCollision =>true;
 

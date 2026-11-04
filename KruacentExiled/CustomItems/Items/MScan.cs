@@ -75,7 +75,7 @@ namespace KruacentExiled.CustomItems.Items
                 new RoomSpawnPoint()
                 {
                     Chance = 25,
-                    Room = RoomType.HczIncineratorWayside,
+                    Room = RoomType.Hcz127,
                 },
                 new RoomSpawnPoint()
                 {

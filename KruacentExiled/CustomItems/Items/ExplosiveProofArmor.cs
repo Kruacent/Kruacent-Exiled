@@ -34,8 +34,8 @@ namespace KruacentExiled.CustomItems.Items
         public Color Color { get; set; } = UnityEngine.Color.red;
         public override string Name { get; set; } = "ExplosiveProofArmor";
         public override float Weight { get; set; } = 2f;
-        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         public override ItemRank Rank { get; } = ItemRank.Legendary;
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 1,
             RoomSpawnPoints = new List<RoomSpawnPoint>

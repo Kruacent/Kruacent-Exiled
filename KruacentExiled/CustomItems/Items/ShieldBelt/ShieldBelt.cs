@@ -7,6 +7,7 @@ using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using MapGeneration;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace KruacentExiled.CustomItems.Items.ShieldBelt
         public override string Name { get; set; } = "Shield belt";
         //public override string Description { get; set; } = "A projectile-repulsion device.\nIt will attempt to stop incoming projectiles or shrapnel, but does nothing against melee attacks or heat.\nIt prevents the wearer from firing out.\n(works in the inventory) ";
         public override float Weight { get; set; } = 0.65f;
+        public override ItemRank Rank { get; } = ItemRank.Epic;
         public override SpawnProperties SpawnProperties { get; set; } = null;
 
         public override ItemType ItemType => ItemType.KeycardCustomManagement;

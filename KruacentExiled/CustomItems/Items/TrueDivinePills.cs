@@ -46,7 +46,7 @@ namespace KruacentExiled.CustomItems.Items
 
         /// <inheritdoc/>
         public override float Weight { get; set; } = 0.65f;
-        public override ItemRank Rank { get; } = ItemRank.Legendary;
+        public override ItemRank Rank { get; } = ItemRank.Exotic;
         public Color Color { get; set; } = Color.yellow;
         private Dictionary<ushort, bool> TpOnPlayer = new Dictionary<ushort, bool>();
 
