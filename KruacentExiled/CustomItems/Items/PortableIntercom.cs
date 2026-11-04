@@ -12,6 +12,11 @@ namespace KruacentExiled.CustomItems.Items
 {
     public class PortableIntercom : KECustomItem, IViolentItem, ILumosItem
     {
+        public const string TranslationNotARadio = "PortableIntercomNotARadio";
+        public const string TranslationTooLong = "PortableIntercomTooLong";
+        public const string TranslationCooldown = "PortableIntercomCooldown";
+        public const string TranslationInUse = "PortableIntercomInUse";
+
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new Dictionary<string, Dictionary<string, string>>()
@@ -20,11 +25,19 @@ namespace KruacentExiled.CustomItems.Items
                 {
                     [TranslationKeyName] = "Portable Intercom",
                     [TranslationKeyDesc] = "You can talk at the intercom",
+                    [TranslationNotARadio] = "This is not a radio mate",
+                    [TranslationTooLong] = "Ohhh shut the f*ck up",
+                    [TranslationCooldown] = "You must wait %second%s before using the portable intercom again",
+                    [TranslationInUse] = "The intercom is already in use",
                 },
                 ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Intercom Portable",
                     [TranslationKeyDesc] = "Tu peux parler à Intercom",
+                    [TranslationNotARadio] = "Ceci n'est pas une radio mais un intercom portable",
+                    [TranslationTooLong] = "Ohhh tu parles trop là",
+                    [TranslationCooldown] = "Il reste %second%s avant de pouvoir réutiliser l'intercom portable",
+                    [TranslationInUse] = "Intercom est déjà en cours d'utilisation",
                 },
             };
         }
@@ -74,7 +87,7 @@ namespace KruacentExiled.CustomItems.Items
         {
             if (!Check(ev.Player)) return;
             ev.IsAllowed = false;
-            KECustomItem.ItemEffectHint(ev.Player, "Ceci n'est pas une radio mais un intercom portable");
+            KECustomItem.ItemEffectHint(ev.Player, GetTranslation(ev.Player, TranslationNotARadio));
         }
 
         protected void OnTalking(VoiceChattingEventArgs ev)
@@ -86,7 +99,7 @@ namespace KruacentExiled.CustomItems.Items
                 if (Time.time - _startUsingItemTime[ev.Player] >= SpeachDuration)
                 {
                     StopIntercom(ev.Player);
-                    KECustomItem.ItemEffectHint(ev.Player, "Ohhh tu parles trop là");
+                    KECustomItem.ItemEffectHint(ev.Player, GetTranslation(ev.Player, TranslationTooLong));
                     return;
                 }
 
@@ -101,14 +114,15 @@ namespace KruacentExiled.CustomItems.Items
                 if (elapsed < InternalCooldown)
                 {
                     float remaining = Mathf.Ceil(InternalCooldown - elapsed);
-                    KECustomItem.ItemEffectHint(ev.Player, $"Il reste {remaining}s avant de pouvoir réutiliser l'intercom portable");
+                    string msg = GetTranslation(ev.Player, TranslationCooldown).Replace("%second%", remaining.ToString());
+                    KECustomItem.ItemEffectHint(ev.Player, msg);
                     return;
                 }
             }
 
             if (Intercom.InUse)
             {
-                KECustomItem.ItemEffectHint(ev.Player, "Intercom est déjà en cours d'utilisation");
+                KECustomItem.ItemEffectHint(ev.Player, GetTranslation(ev.Player, TranslationInUse));
                 return;
             }
 
@@ -124,6 +138,7 @@ namespace KruacentExiled.CustomItems.Items
         {
             if (player != null && player.IsConnected)
             {
+                Intercom.PlaySound(false);
                 Intercom.TrySetOverride(player, false);
                 _cooldowns[player] = Time.time;
             }
