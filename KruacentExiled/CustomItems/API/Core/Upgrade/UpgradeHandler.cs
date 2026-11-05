@@ -112,8 +112,12 @@ namespace KruacentExiled.CustomItems.API.Core.Upgrade
             if (!upgradable.Upgrade.TryGetValue(knob, out UpgradeProperties item)) return false;
             if (item.DestroyChance <= 0) return false;
 
+            float remain = 100f - item.Chance;
+            if (remain <= 0) return false;
+            float value = (item.Chance * 100) / remain;
+
             KELog.Debug($"Item destroy chance for 914 is {item.DestroyChance}");
-            bool willDestroy = RandomNumberGenerator.RollChance(item.DestroyChance, player, false);
+            bool willDestroy = RandomNumberGenerator.RollChance(value, player, false);
             return willDestroy;
         }
     }

@@ -383,11 +383,8 @@ namespace KruacentExiled.CustomItems.API.Features
 
                         if(a.Value.DestroyChance > 0)
                         {
-                            // real destruction chance because we check upgrade before destroy so the chance is slighly incorrect
-                            float destroyChance = (100 - a.Value.Chance) * a.Value.DestroyChance / 100;
-
                             builder.Append("<color=red> (destruction : ");
-                            builder.Append(destroyChance);
+                            builder.Append(a.Value.DestroyChance);
                             builder.Append("%) </color>");
                         }
                     }
