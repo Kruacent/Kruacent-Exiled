@@ -1,16 +1,13 @@
-﻿using Exiled.API.Features.Items;
-using Exiled.API.Features.Spawn;
-using KE.Utils.API.Features;
+﻿using Exiled.API.Features.Spawn;
 using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace KruacentExiled.CustomItems.Items
 {
-    public class CompressedCoin : KECustomItem, IViolentItem, ILumosItem
+    public class CompressedCoin : KECustomItem, IViolentItem, IHiddenName
     {
         private static readonly Dictionary<ushort, int> ItemFlips = new Dictionary<ushort, int>();
         public override ItemType ItemType => ItemType.Coin;
@@ -19,7 +16,7 @@ namespace KruacentExiled.CustomItems.Items
         public override float Weight { get; set; } = 0.2f;
         public override SpawnProperties SpawnProperties { get; set; } = null;
         public bool IsViolent => false;
-
+        public bool IsHiddenName => true;
         public override ItemRank Rank { get; } = ItemRank.Good;
 
         public static bool TrySetCoinUses(ushort serial, int count)
