@@ -7,6 +7,7 @@ using Exiled.CustomRoles.Commands;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Displays.Feeds;
 using KE.Utils.Extensions;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using MEC;
@@ -60,22 +61,44 @@ namespace KruacentExiled.CustomItems.Items
         public override string Name { get; set; } = "Defibrillator";
         public override float Weight { get; set; } = 1.0f;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.magenta;
+        public override ItemRank Rank { get; } = ItemRank.Epic;
 
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 4,
-            DynamicSpawnPoints = new List<DynamicSpawnPoint>
-        {
-            new DynamicSpawnPoint() { Chance = 50, Location = SpawnLocationType.Inside079Secondary },
-            new DynamicSpawnPoint() { Chance = 10, Location = SpawnLocationType.Inside096 },
-            new DynamicSpawnPoint() { Chance = 10, Location = SpawnLocationType.Inside330 },
-            new DynamicSpawnPoint() { Chance = 10, Location = SpawnLocationType.Inside939Cryo },
-        },
+            RoomSpawnPoints = new List<RoomSpawnPoint>
+            {
+                 new RoomSpawnPoint()
+                {
+                    Room = RoomType.Hcz079,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 50
+                },
+                 new RoomSpawnPoint()
+                {
+                    Room = RoomType.Hcz096,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 10
+                },
+                 new RoomSpawnPoint()
+                {
+                    Room = RoomType.Lcz330,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 10
+                },
+                 new RoomSpawnPoint()
+                {
+                    Room = RoomType.Hcz939,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 10
+                },
+            },
+
             LockerSpawnPoints = new List<LockerSpawnPoint>
-        {
-             new LockerSpawnPoint(){ Chance= 50, Type = LockerType.Medkit, },
-             new LockerSpawnPoint(){ Chance= 20, Type = LockerType.Misc, },
-        }
+            {
+                 new LockerSpawnPoint(){ Chance= 50, Type = LockerType.Medkit, },
+                 new LockerSpawnPoint(){ Chance= 20, Type = LockerType.Misc, },
+            }
         };
 
         private struct DeathData

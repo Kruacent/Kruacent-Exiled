@@ -1,31 +1,16 @@
-﻿
-using AdminToys;
-using Exiled.API.Extensions;
-using Exiled.API.Features;
-using Exiled.API.Features.Toys;
+﻿using Exiled.API.Extensions;
 using Exiled.API.Interfaces;
 using HarmonyLib;
-using KE.Utils.API.Features;
-using KE.Utils.API.KETextToy;
-using KE.Utils.Extensions;
-using KruacentExiled;
 using KruacentExiled.Map.Heavy;
 using KruacentExiled.Map.Heavy.GamblingZone;
 using KruacentExiled.Map.Others.BlackoutNDoor.Handlers;
-using KruacentExiled.Map.Others.CustomZones;
 using KruacentExiled.Map.Surface.ElevatorGateA;
-using KruacentExiled.Map.Surface.Rooms;
 using KruacentExiled.Map.Surface.SupplyDrops;
-using MEC;
 using PlayerRoles;
-using PlayerRoles.PlayableScps.Scp106;
 using ProjectMER.Features;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEngine;
-using static PlayerList;
 using Door = Exiled.API.Features.Doors.Door;
 using Player = Exiled.API.Features.Player;
 
@@ -44,12 +29,6 @@ namespace KruacentExiled.Map
         private Config config;
         private Harmony harmony;
 
-        private SurfaceRooms SurfaceRooms;
-        private CREventHandler cREventHandler;
-
-
-        private Translations translations;
-
         public override void OnEnabled()
         {
             Instance = this;
@@ -58,29 +37,15 @@ namespace KruacentExiled.Map
 
             config = KruacentExiled.MainPlugin.Instance.Config.MapConfig;
 
-
-            //cREventHandler = new CREventHandler();
-
-            //cREventHandler.SubscribeEvents();
             handler.SubscribeEvents();
             KE.Utils.API.Sounds.SoundPlayer.Instance.TryLoad();
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
 
-
-            //SurfaceRooms.SubscribeEvents();
             SupplyDrop.SubscribeEvents();
             GamblingRoom.SubscribeEvents();
-            //MoreRoom.CreateAll();
-            //MoreRoom.SubscribeEvents();
             harmony.PatchAll(KruacentExiled.MainPlugin.Instance.Assembly);
-
-             
-
-
-
-            
         }
 
         private void OnWaitingForPlayers()
@@ -96,107 +61,8 @@ namespace KruacentExiled.Map
             {
                 Player player = Player.List.First();
                 Vector3 pos;
-                //StructureSpawner.SpawnPedestal(ItemType.KeycardJanitor,player.Position,Quaternion.identity,Vector3.one);
-
-                //player.Teleport(Room.List.Where(r => r.Type == Exiled.API.Enums.RoomType.EzVent).First());
-
-
-                //player.Teleport(teleport);
-
-                Timing.CallDelayed(2, () =>
-                {
-                    //player.Teleport(teleport);
-                });
-
-                //pos = RoleTypeId.Scp049.GetRandomSpawnLocation().Position;
                 pos = player.Position;
-
-
-
-
-                //glass or door w/glass => fake to 106s & 173s & 049-2s & 049s & 096s & ghostly
-                //door w/out glass => fake to 106s & ghostly
-
-                //Primitive prim = Primitive.Create(PrimitiveType.Cube, pos, spawn: false);
-
-                //prim.Base.gameObject.layer = 14;
-                //prim.Spawn();
-                //Collider col = prim.Base.gameObject.GetComponent<BoxCollider>();
-
-                //MirrorExtensions.SendFakeSyncVar(player, prim.Base.netIdentity,typeof(PrimitiveObjectToy), "NetworkPrimitiveFlags", PrimitiveFlags.Visible);
-
-
-                //Log.Info(prim.Base.gameObject.layer);
-                //Log.Info(LayerMask.LayerToName(14));
-
-                //Log.Info(Scp106MovementModule.GetSlowdownFromCollider(col, out bool passable) + " passable?" + passable);
-
-                //FollowingTextToy f1 = new([player], player.Position, Quaternion.identity, Vector3.one);
-                //f1.Toy.TextFormat = "F1 sur un bateau";
-
-                //FollowingTextToy f2 = new([], player.Position, Quaternion.identity, Vector3.one);
-                //f2.Toy.TextFormat = "F2 tombe à l'eau";
-
-
-                // [█ ]
-                //[█      ]
-                //[█      ]
-
-                //[█                                                            ]\n[██████████]
-                /*try
-                {
-                    Primitive parent = Primitive.Create(PrimitiveType.Cube, pos, spawn: false);
-                    parent.Flags = PrimitiveFlags.None;
-
-                    parent.Spawn();
-
-                    Primitive prim = Primitive.Create(PrimitiveType.Cube, null, spawn: false);
-                    prim.Transform.parent = parent.Transform;
-                    prim.Transform.localPosition = Vector3.zero;
-                    prim.Flags = PrimitiveFlags.Visible;
-                    prim.MovementSmoothing = 60;
-                    prim.Spawn();
-
-                    Log.Info(prim.Position);
-
-                    AnimationClip clip = new AnimationClip();
-                    clip.legacy = true;
-                    clip.wrapMode = WrapMode.PingPong;
-
-                    Transform t = prim.GameObject.transform;
-
-                    float startX = t.localPosition.x;
-
-                    AnimationCurve curve = AnimationCurve.Linear(
-                        0f, startX,
-                        3f, startX + 1f
-                    );
-
-                    clip.SetCurve("", typeof(Transform), "localPosition.x", curve);
-
-                    Animation animation = prim.GameObject.AddComponent<Animation>();
-                    animation.AddClip(clip, "move");
-                    animation.Play("move");
-
-
-                    Log.Debug(animation.IsPlaying("move"));
-                    Timing.CallDelayed(3, () =>
-                    {
-                        Log.Info(prim.Position);
-                        player.Position = prim.Position;
-                    });
-                }
-                catch(Exception e)
-                {
-                    Log.Error(e);
-                }
-
-                */
-
-
             }
-
-
         }
 
 
@@ -208,14 +74,9 @@ namespace KruacentExiled.Map
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
 
-            cREventHandler?.UnsubscribeEvents();
-            cREventHandler = null;
-
-
             SupplyDrop.UnsubscribeEvents();
             harmony.UnpatchAll(harmony.Id);
             GamblingRoom.UnsubscribeEvents();
-            //MoreRoom.UnsubscribeEvents();
             handler = null;
             Instance = null;
         }
@@ -261,35 +122,7 @@ namespace KruacentExiled.Map
 
 
             var g = new GamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, new LootTable(normal));
-
-            //var g = new OldGamblingRoom(RoleTypeId.Scp173.GetRandomSpawnLocation().Position + Vector3.down, Vector3.one*10, new LootTable(normal));
-
-            
-
-
-            /*
-
-            if (Config.Debug)
-            {
-                var door = KEDoor.Create(null, RoleTypeId.Scp049.GetRandomSpawnLocation().Position, new());
-                var d2 = KEDoor.Create(null, RoleTypeId.Scp049.GetRandomSpawnLocation().Position + Vector3.forward * 2, new());
-                door.LinkOtherDoor(d2);
-            }
-
-            
-            //Blinking Blocks
-            HashSet<BlinkingBlock> list = new()
-            {
-                new BlinkingBlock(new(19, 300, -44), new(), new(2, .5f, 2), BlockColor.Red),
-                new BlinkingBlock(new(19, 300, -38), new(), new(2, .5f, 2), BlockColor.Blue)
-            };
-            
-            BlinkingBlocksGroup group = new(list);
-            Timing.RunCoroutine(ShowPos());
-            */
-
         }
-
     }
 
 
@@ -302,7 +135,5 @@ namespace KruacentExiled.Map
         public bool EasterEggEnabled { get; set; } = true;
         public bool BlackoutNDoorEnabled { get; set; } = true;
         public bool BlackoutNDoorWeightVerbose { get; set; } = false;
-
-
     }
 }
