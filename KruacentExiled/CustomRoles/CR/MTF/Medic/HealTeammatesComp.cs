@@ -96,15 +96,6 @@ namespace KruacentExiled.CustomRoles.CR.MTF.Medic
         public void DestroyZoneAndComponent()
         {
             IsActive = false;
-
-            if (_zonePrimitive != null)
-            {
-                _zonePrimitive.UnSpawn();
-                _zonePrimitive.Destroy();
-                _zonePrimitive = null;
-            }
-
-            Timing.KillCoroutines(_healCoroutine);
             Destroy(this);
         }
     }

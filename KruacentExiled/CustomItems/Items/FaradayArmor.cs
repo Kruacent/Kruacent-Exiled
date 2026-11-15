@@ -55,7 +55,7 @@ namespace KruacentExiled.CustomItems.Items
 
         };
 
-        public bool IsViolent => true;
+        public bool IsViolent => false;
 
         // Electrical damage will be divided by this amount
         private int DamageReductionByElectricalDamage = 2;
@@ -86,6 +86,7 @@ namespace KruacentExiled.CustomItems.Items
         protected void OnHurting(HurtingEventArgs ev)
         {
             if (!Check(ev.Player.CurrentArmor)) return;
+            if (!ev.IsAllowed) return;
 
             if(ev.DamageHandler.Type == DamageType.MicroHid)
             {

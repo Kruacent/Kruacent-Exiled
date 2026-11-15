@@ -114,7 +114,7 @@ namespace KruacentExiled.CustomItems.API.Core.Upgrade
 
             float remain = 100f - item.Chance;
             if (remain <= 0) return false;
-            float value = (item.Chance * 100) / remain;
+            float value = (item.DestroyChance * 100) / remain;
 
             KELog.Debug($"Item destroy chance for 914 is {item.DestroyChance}");
             bool willDestroy = RandomNumberGenerator.RollChance(value, player, false);

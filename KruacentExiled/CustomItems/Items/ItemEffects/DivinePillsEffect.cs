@@ -68,7 +68,7 @@ namespace KruacentExiled.CustomItems.Items.ItemEffects
                 default: return;
             }
 
-            Player respawning = Player.List.GetRandomValue(x => x.Role == RoleTypeId.Spectator);
+            Player respawning = Player.Enumerable.GetRandomValue(x => x.Role == RoleTypeId.Spectator);
             respawning.Role.Set(newRole);
 
             if (spawnToPlayer)

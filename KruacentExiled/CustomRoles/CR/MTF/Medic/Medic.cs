@@ -18,7 +18,7 @@ namespace KruacentExiled.CustomRoles.CR.MTF.Medic
                 ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Medic",
-                    [TranslationKeyDesc] = "You are here to heal other's",
+                    [TranslationKeyDesc] = "You are here to heal others",
                 },
                 ["fr"] = new Dictionary<string, string>()
                 {
@@ -28,7 +28,7 @@ namespace KruacentExiled.CustomRoles.CR.MTF.Medic
                 ["legacy"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Medic",
-                    [TranslationKeyDesc] = "You are here to heal other's",
+                    [TranslationKeyDesc] = "You are here to heal others",
                 }
             };
         }

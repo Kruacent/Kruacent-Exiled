@@ -17,7 +17,7 @@ namespace KruacentExiled.CustomRoles.Abilities
                 ["en"] = new Dictionary<string, string> ()
                 {
                     [TranslationKeyName] = "Heal Aura",
-                    [TranslationKeyDesc] = "You can heal teammates arround you",
+                    [TranslationKeyDesc] = "You can heal teammates around you",
                 },
                 ["fr"] = new Dictionary<string, string>()
                 {

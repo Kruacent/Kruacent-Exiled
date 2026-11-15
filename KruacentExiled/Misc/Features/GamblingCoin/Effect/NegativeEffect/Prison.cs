@@ -83,6 +83,8 @@ public class Prison : IDurationEffect
         {
             bar.Destroy();
         }
+
+        Exiled.Events.Handlers.Server.RestartingRound -= OnRestartingRound;
     }
 
     private void OnRestartingRound()
@@ -91,5 +93,7 @@ public class Prison : IDurationEffect
         {
             DestroyPrison(_prisons.Dequeue());
         }
+
+        Exiled.Events.Handlers.Server.RestartingRound -= OnRestartingRound;
     }
 }

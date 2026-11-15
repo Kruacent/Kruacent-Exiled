@@ -50,7 +50,7 @@ namespace KruacentExiled.CustomItems.Items
 
         };
 
-        public bool IsViolent => true;
+        public bool IsViolent => false;
 
         private int DamageReductionByExplosion = 3;
 

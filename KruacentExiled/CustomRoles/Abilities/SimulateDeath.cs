@@ -78,7 +78,7 @@ namespace KruacentExiled.CustomRoles.Abilities
             TrackFakeRagdoll(ragdoll.Base);
 
             HidePlayer(player);
-            fakeDeath.CameraMovement = Timing.RunCoroutine(FollowRagdollMoove(player, ragdoll));
+            fakeDeath.CameraMovement = Timing.RunCoroutine(FollowRagdollMove(player, ragdoll));
 
             return base.AbilityUsed(player);
         }
@@ -145,7 +145,7 @@ namespace KruacentExiled.CustomRoles.Abilities
             TargetCountHider.Hide(player);
         }
 
-        private IEnumerator<float> FollowRagdollMoove(Player player, Ragdoll ragdoll)
+        private IEnumerator<float> FollowRagdollMove(Player player, Ragdoll ragdoll)
         {
             Transform newCameraPosition = FindHead(ragdoll);
             float elapsed = 0f;
