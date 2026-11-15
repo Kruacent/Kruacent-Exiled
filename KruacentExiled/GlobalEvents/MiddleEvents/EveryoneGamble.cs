@@ -5,7 +5,6 @@ using GlobalEventFramework.API.Interfaces;
 using KruacentExiled.CustomRoles.CustomSCPTeam;
 using MEC;
 using System.Collections.Generic;
-using System.Linq;
 
 
 namespace KruacentExiled.GlobalEvents.MiddleEvents

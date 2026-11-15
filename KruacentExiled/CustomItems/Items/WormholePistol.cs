@@ -8,9 +8,6 @@ using KruacentExiled.CustomItems.API.Interface;
 using MEC;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace KruacentExiled.CustomItems.Items
@@ -39,6 +36,10 @@ namespace KruacentExiled.CustomItems.Items
         public override float Weight { get; set; } = 1f;
         public override float Damage { get; set; } = 1f;
         public override byte ClipSize { get; } = 2;
+        private TimeSpan Cooldown = new TimeSpan(0, 1, 0);
+        private DateTime time;
+        public bool IsViolent => true;
+        protected int NbShot = 0;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.magenta;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties
         {
@@ -68,8 +69,6 @@ namespace KruacentExiled.CustomItems.Items
             }
         };
 
-        public bool IsViolent => true;
-
         protected override void OnHurting(HurtingEventArgs ev)
         {
             Player attacker = ev.Attacker;
@@ -91,6 +90,36 @@ namespace KruacentExiled.CustomItems.Items
                 
             }
             
+        }
+
+        protected override void OnShooting(ShootingEventArgs ev)
+        {
+            if (CheckCooldown())
+            {
+                ev.IsAllowed = true;
+                if (NbShot < 2)
+                {
+                    NbShot++;
+                }
+            }
+            else
+            {
+                ev.IsAllowed = false;
+                
+            }
+            
+            
+        }
+
+        private bool CheckCooldown()
+        {
+            bool canShot = false;
+            if(DateTime.Now >= time + Cooldown)
+            {
+                canShot = true;
+                NbShot = 0;
+            }
+            return canShot;
         }
 
     }

@@ -3,15 +3,13 @@ using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using KE.Utils.API.GifAnimator;
-using KE.Utils.Extensions;
 using KruacentExiled.CustomRoles.API.Features;
 using KruacentExiled.CustomRoles.API.Interfaces;
+using KruacentExiled.CustomRoles.API.Interfaces.Ability;
 using MEC;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace KruacentExiled.CustomRoles.Abilities
 {
