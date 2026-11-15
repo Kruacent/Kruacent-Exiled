@@ -57,7 +57,8 @@ namespace KruacentExiled.CustomRoles.CR.MTF.Terroriste
 
         public override HashSet<string> Abilities { get; } = new HashSet<string>()
         {
-            "Explode"
+            "Explode",
+            "GrenadeFabrication"
         };
 
 

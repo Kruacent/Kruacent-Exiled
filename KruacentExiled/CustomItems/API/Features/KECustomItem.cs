@@ -13,6 +13,7 @@ using KE.Utils.API.Displays.Feeds;
 using KE.Utils.API.Features;
 using KE.Utils.API.Translations;
 using KruacentExiled.CustomItems.API.Core.Lights;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Exceptions;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomSpawnPoint.Spawned;
@@ -61,7 +62,7 @@ namespace KruacentExiled.CustomItems.API.Features
 
         public const string CustomItemTranslationId = "CustomItem";
         protected abstract Dictionary<string, Dictionary<string, string>> SetTranslation();
-
+        public abstract ItemRank Rank { get; }
 
         public const string PickupKey = "Pickup";
         public const string InventoryKey = "Inventory";
@@ -379,10 +380,16 @@ namespace KruacentExiled.CustomItems.API.Features
                         builder.Append(" (");
                         builder.Append(a.Value.Chance);
                         builder.Append("%) -> ???");
+
+                        if(a.Value.DestroyChance > 0)
+                        {
+                            builder.Append("<color=red> (destruction : ");
+                            builder.Append(a.Value.DestroyChance);
+                            builder.Append("%) </color>");
+                        }
                     }
                     builder.AppendLine("</b>");
                 }
-
             }
 
 
@@ -430,6 +437,18 @@ namespace KruacentExiled.CustomItems.API.Features
                 return false;
             }
 
+            if (SpawnProperties != null)
+            {
+                if (!(SpawnProperties is KESpawnProperties))
+                {
+                    Log.Warn($"[KECustomItem {Name}] use KESpawnProperties instead of SpawnProperties");
+                }
+
+                if (SpawnProperties.DynamicSpawnPoints.Count > 0)
+                {
+                    Log.Warn($"[KECustomItem {Name}] DynamicSpawnPoints is deprecated use RoomSpawnPoints instead");
+                }
+            }
 
             Registered.Add(this);
             Init();
