@@ -347,13 +347,14 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
                     ev.IsAllowed = Server.FriendlyFire || ev.Attacker.IsFriendlyFireEnabled;
                     return;
                 }
+                if (ev.DamageHandler.Type == DamageType.Scp1509)
+                {
+                    ev.Amount /= 2;
+                    return;
+                }
+
             }
 
-            if(ev.DamageHandler.Type == DamageType.Scp1509)
-            {
-                ev.Amount /= 2;
-                return;
-            }
 
 
 
