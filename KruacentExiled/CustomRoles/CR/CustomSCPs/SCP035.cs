@@ -80,7 +80,6 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
             $"{ItemType.GunAK}",
             $"{ItemType.GunShotgun}",
             $"{ItemType.GunSCP127}",
-            $"{ItemType.GunE11SR}",
 
             "ExplosiveProofArmor",
             "FaradayArmor",
