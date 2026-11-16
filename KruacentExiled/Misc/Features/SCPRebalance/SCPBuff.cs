@@ -86,9 +86,11 @@ namespace KruacentExiled.Misc.Features.SCPRebalance
 
             if (!ev1.IsAllowed) return;
 
+            healthIncrease = ev1.BuffAmount;
+
             KELog.Debug("before coroutine timingcalldelayed");
 
-            CoroutineHandle handle = Timing.CallDelayed(2f, () => ApplyBuff(player, healthIncrease));
+            CoroutineHandle handle = Timing.CallDelayed(1f, () => ApplyBuff(player, healthIncrease));
             _activeBuffCoroutines[player] = handle;
         }
         
@@ -113,10 +115,13 @@ namespace KruacentExiled.Misc.Features.SCPRebalance
         {
             if (player != null)
             {
-                KELog.Debug("cancelled buff");
-                _activeBuffCoroutines.TryGetValue(player, out CoroutineHandle handle);
-                Timing.KillCoroutines(handle);
-                _activeBuffCoroutines.Remove(player);
+                
+                if(_activeBuffCoroutines.TryGetValue(player, out CoroutineHandle handle))
+                {
+                    Timing.KillCoroutines(handle);
+                    _activeBuffCoroutines.Remove(player);
+                    KELog.Debug("cancelled buff");
+                }
             }
         }
 
