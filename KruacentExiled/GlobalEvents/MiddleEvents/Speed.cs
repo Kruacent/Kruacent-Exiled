@@ -2,15 +2,14 @@
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp173;
-using InventorySystem.Items.Usables;
 using GlobalEventFramework.API.Features;
 using GlobalEventFramework.API.Interfaces;
 using MEC;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace KruacentExiled.GlobalEvents.MiddleEvents
 {
