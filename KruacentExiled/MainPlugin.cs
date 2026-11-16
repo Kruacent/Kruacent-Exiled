@@ -15,6 +15,7 @@ using LabApi.Events.Arguments.ServerEvents;
 using MEC;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace KruacentExiled
@@ -192,6 +193,8 @@ namespace KruacentExiled
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = false;
 
+        [Description("show when player enter or leaves the scp team")]
+        public bool VerboseSCPTeam { get; set; } = true;
         public CustomRoles.Config CustomRoleConfig { get; set; } = new CustomRoles.Config();
         public CustomItems.Config CustomItemConfig { get; set; } = new CustomItems.Config();
         public Map.Config MapConfig { get; set; } = new Map.Config();
