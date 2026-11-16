@@ -33,6 +33,7 @@ namespace KruacentExiled.CustomRoles.CustomSCPTeam
                 Exiled.Events.Handlers.Server.EndingRound -= OnRoundEnding;
                 LabApi.Events.Handlers.ServerEvents.RoundEndingConditionsCheck -= OnRoundEndingConditionsCheck;
                 LabApi.Events.Handlers.PlayerEvents.ChangedRole -= OnChangedRole;
+                LabApi.Events.Handlers.PlayerEvents.Left -= OnLeft;
                 _event = false;
             }
         }
