@@ -17,7 +17,7 @@ namespace KruacentExiled.GlobalEvents.MiddleEvents
     {
         public override string Name { get; set; } = "EGamble";
         public override string Description { get; set; } = "Everyone, throw the game now!";
-        public override int WeightedChance { get; set; } = 1;
+        public override int DefaultWeightedChance => 1;
 
         public IEnumerator<float> Start()
         {
