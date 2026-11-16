@@ -1,9 +1,13 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
+using Exiled.API.Features.DamageHandlers;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Features;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
+using KruacentExiled.CustomRoles.CustomSCPTeam;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -49,6 +53,7 @@ namespace KruacentExiled.CustomItems.Items
         public override ItemType ItemType => ItemType.GunCOM15;
         public override string Name { get; set; } = "FriendMaker";
         public override float Weight { get; set; } = 1f;
+        public override ItemRank Rank { get;  } = ItemRank.Epic;
         public override SpawnProperties SpawnProperties { get; set; } = null;
 
 
@@ -98,10 +103,8 @@ namespace KruacentExiled.CustomItems.Items
             Player attacker = ev.Attacker;
             Player player = ev.Player;
             if (!Check(attacker)) return;
+            if (ev.DamageHandler.Type != DamageType.Com15) return;
             ev.IsAllowed = false;
-
-
-            
 
             if(Convert(ev.Player, ev.Attacker))
             {
@@ -143,7 +146,7 @@ namespace KruacentExiled.CustomItems.Items
             }
 
 
-            if (player.IsScp && player.Role != RoleTypeId.Scp0492)
+            if (SCPTeam.IsSCP(player.ReferenceHub) && player.Role != RoleTypeId.Scp0492)
             {
                 TranslationHint(attacker, TranslationNonZombie);
                 return false;

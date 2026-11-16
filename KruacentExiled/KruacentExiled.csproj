@@ -31,6 +31,7 @@
     <Reference Include="GlobalEventFramework" HintPath="$(EXILED_REFERENCES)\GlobalEventFramework.dll" />
 	<Reference Include="ProjectMER" HintPath="$(EXILED_REFERENCES)\ProjectMER.dll" />
 	<Reference Include="Unity.TextMeshPro" HintPath="$(EXILED_REFERENCES)\Unity.TextMeshPro.dll" />
+	<Reference Include="Pooling" HintPath="$(EXILED_REFERENCES)\Pooling.dll" />
   </ItemGroup>
 
 	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">

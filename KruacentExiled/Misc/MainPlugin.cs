@@ -36,15 +36,13 @@ namespace KruacentExiled.Misc
         internal AutoElevator AutoElevator { get; private set; }
         internal ClassDDoor ClassDDoor { get; private set; }
         internal Candy Candy { get; private set; }
-        internal SurfaceLight SurfaceLight { get; private set; }
         internal SCPBuff SCPBuff { get; private set; }
         internal Spawn Spawn { get; private set; }
         internal FriendlyFire FriendlyFire { get; private set; }
-        internal NukeKill AutoNukeAnnoucement { get; private set; }
         internal AutoTesla AutoTesla { get; private set; }
         internal TeslaDeathRedMist DeathRedMist { get; private set; }
+        internal NtfSpawn NtfSpawnMusic { get; private set; }
         internal EventHandlers _gamblingCoinHandler {  get; private set; }
-        internal SpawnLcz SpawnLcz { get; private set; }
         internal LastHumanHandler LastHuman { get; private set; }
         private Harmony harmony;
 
@@ -76,9 +74,9 @@ namespace KruacentExiled.Misc
             Spawn = new Spawn();
             SCPBuff = new SCPBuff();
             FriendlyFire = new FriendlyFire();
-            AutoNukeAnnoucement = new NukeKill();
             AutoTesla = new AutoTesla();
             DeathRedMist = new TeslaDeathRedMist();
+            NtfSpawnMusic = new NtfSpawn();
             LastHuman = new LastHumanHandler();
             Candy = new Candy();
             vote = new VoteStart();
@@ -97,8 +95,8 @@ namespace KruacentExiled.Misc
             ClassDDoor.SubscribeEvents();
             ServerHandle.RoundEnded += OnRoundEnded;
             MiscFeature.SubscribeAllEvents();
-            AutoNukeAnnoucement.SubscribeEvents();
             DeathRedMist.RegisterEvents();
+            NtfSpawnMusic.RegisterEvents();
             if (Configs.GamblingCoin)
             {
                 GamblingCoinManager.RegisterAll();
@@ -119,10 +117,10 @@ namespace KruacentExiled.Misc
             ServerHandle.RoundStarted -= ServerHandler.OnRoundStarted;
             ServerHandle.RoundEnded -= OnRoundEnded;
             LabApi.Events.Handlers.ServerEvents.CassieQueuingScpTermination -= NoeDeath;
-            AutoNukeAnnoucement.UnsubscribeEvents();
             LastHuman.UnsubscribeEvents();
             SCPBuff.UnsubscribeEvents();
             DeathRedMist.UnregisterEvents();
+            NtfSpawnMusic.UnregisterEvents();
             if (Configs.GamblingCoin)
             {
                 Exiled.Events.Handlers.Player.FlippingCoin -= _gamblingCoinHandler.OnCoinFlip;
@@ -141,11 +139,11 @@ namespace KruacentExiled.Misc
             SCPBuff = null;
             AutoTesla = null;
             DeathRedMist = null;
+            NtfSpawnMusic = null;
             Spawn = null;
             AutoElevator = null;
             vote = null;
             PluginVersion = null;
-            AutoNukeAnnoucement = null;
             FriendlyFire = null;
             //SurfaceLight = null;
             GamblingCoinManager.DestroyAll();

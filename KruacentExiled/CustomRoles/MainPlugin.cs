@@ -5,7 +5,6 @@ using KE.Utils.API.CustomStats;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.GifAnimator;
 using KE.Utils.API.Settings.GlobalSettings;
-using KruacentExiled.CustomRoles.Abilities.FireAbilities;
 using KruacentExiled.CustomRoles.API.Features;
 using KruacentExiled.CustomRoles.CustomSCPTeam;
 using KruacentExiled.CustomRoles.Settings;
@@ -48,7 +47,6 @@ namespace KruacentExiled.CustomRoles
             GlobalSettingsHandler.Instance.TryLoad();
             GlobalSettingsHandler.Instance.SubscribeEvents();
 
-            CustomPlayerStat.AddModule<FireStat>();
             CustomStatsEvents.SubscribeEvents();
             icons = new Dictionary<string, TextImage>();
 

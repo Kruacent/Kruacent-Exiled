@@ -25,7 +25,7 @@ namespace KruacentExiled.CustomItems.API.Features
         public virtual Color32? KeycardPermissionsColor { get; set; } = null;
         public virtual Color32? KeycardLabelColor { get; set; } = null;
         public virtual byte Wear { get; set; }
-        public virtual byte Rank { get; set; }
+        public virtual byte KeycardRank { get; set; }
 
         public virtual Color32? TintColor { get; set; } = null;
         public virtual string KeycardName { get; set; } = null;
@@ -92,7 +92,7 @@ namespace KruacentExiled.CustomItems.API.Features
 
                 if (customKeycardItem is IRankKeycard rankKeycard)
                 {
-                    rankKeycard.Rank = Rank;
+                    rankKeycard.Rank = KeycardRank;
                 }
             }
             //else if (keycard.Base.Customizable && detail != null)
