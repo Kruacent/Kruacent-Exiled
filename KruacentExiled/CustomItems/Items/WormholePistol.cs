@@ -3,6 +3,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Roles;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using MEC;
@@ -31,6 +32,7 @@ namespace KruacentExiled.CustomItems.Items
             };
         }
 
+        public override ItemRank Rank => ItemRank.Epic;
         public override ItemType ItemType => ItemType.GunCOM18;
         public override string Name { get; set; } = "WormholePistol";
         public override float Weight { get; set; } = 1f;
