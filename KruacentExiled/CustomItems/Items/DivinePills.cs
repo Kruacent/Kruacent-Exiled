@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
-using PlayerHandle = Exiled.Events.Handlers.Player;
-using Scp914;
-using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomItems.API.Core.Upgrade;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
+using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomItems.Items.ItemEffects;
+using Scp914;
+using System.Collections.Generic;
+using PlayerHandle = Exiled.Events.Handlers.Player;
 
 namespace KruacentExiled.CustomItems.Items
 {
@@ -37,13 +38,14 @@ namespace KruacentExiled.CustomItems.Items
         /// <inheritdoc/>
         public override float Weight { get; set; } = 0.65f;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.yellow;
+        public override ItemRank Rank { get; } = ItemRank.Epic;
         public IReadOnlyDictionary<Scp914KnobSetting, UpgradeProperties> Upgrade { get; private set; } = new Dictionary<Scp914KnobSetting, UpgradeProperties>()
         {
-            { Scp914KnobSetting.VeryFine,new UpgradeProperties(10, "TrueDivinePills")}
+            { Scp914KnobSetting.VeryFine,new UpgradeProperties(10, "TrueDivinePills", 25)}
         };
 
         /// <inheritdoc/>
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             RoomSpawnPoints = new List<RoomSpawnPoint>
             {

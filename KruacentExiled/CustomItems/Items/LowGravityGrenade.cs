@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Map;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomItems.Items.ItemEffects;
 using LabApi.Events.Arguments.PlayerEvents;
+using System;
+using System.Collections.Generic;
 
 namespace KruacentExiled.CustomItems.Items
 {
@@ -35,9 +36,10 @@ namespace KruacentExiled.CustomItems.Items
         public bool IsViolent => false;
         public override float FuseTime => 3f;
         public override bool ExplodeOnCollision => false;
+        public override ItemRank Rank { get; } = ItemRank.Basic;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.gray;
         public CustomItemEffect Effect { get; set; }
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 2,
             RoomSpawnPoints = new List<RoomSpawnPoint>
@@ -54,16 +56,6 @@ namespace KruacentExiled.CustomItems.Items
                     Chance = 25
                 },
             },
-
-            DynamicSpawnPoints = new List<DynamicSpawnPoint>
-            {
-                new DynamicSpawnPoint()
-                {
-                    Chance = 25,
-                    Location = SpawnLocationType.InsideHidLab,
-                },
-            },
-
         };
 
         public LowGravityGrenade()

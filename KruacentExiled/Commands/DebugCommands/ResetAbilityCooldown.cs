@@ -18,7 +18,7 @@ namespace KruacentExiled.Commands.DebugCommands
     {
         public override string Command => "ResetAbilityCooldown";
 
-        public override string[] Aliases => new string[0];
+        public override string[] Aliases => new string[] { "rac" };
 
         public override string Description => "Reset all abilities of a player";
 

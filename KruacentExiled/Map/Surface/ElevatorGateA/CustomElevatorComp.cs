@@ -1,17 +1,7 @@
 ﻿using Exiled.API.Enums;
-using Exiled.API.Extensions;
-using Exiled.API.Features.Objectives;
 using Exiled.API.Features.Toys;
-using KE.Utils.Quality.Models;
-using KruacentExiled.Commands.DebugCommands.ClientPrimitives;
-using KruacentExiled.Map.Entrance;
-using KruacentExiled.Map.Others.CustomElevators.KECustomElevators;
-using MapGeneration;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace KruacentExiled.Map.Surface.ElevatorGateA

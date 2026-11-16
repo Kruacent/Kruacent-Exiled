@@ -1,23 +1,20 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.API.Features.Items;
-using Exiled.API.Features.Pickups;
-using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Item;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Features;
-using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomRoles.API.Features;
+using KruacentExiled.CustomRoles.API.Interfaces;
 using MEC;
 using PlayerRoles;
 using System.Collections.Generic;
 
 namespace KruacentExiled.CustomRoles.CR.Human
 {
-    public class Pacifist : KECustomRoleMultipleRole
+    public class Pacifist : KECustomRoleMultipleRole, INoPickupItem
     {
-        public const string TranslationCantPickup = "PacifistCantPickup";
+        public string NoPickupTranslationKey => "PacifistCantPickup";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new Dictionary<string, Dictionary<string, string>>()
@@ -26,13 +23,13 @@ namespace KruacentExiled.CustomRoles.CR.Human
                 {
                     [TranslationKeyName] = "Pacifist",
                     [TranslationKeyDesc] = "You're incapable of violence.\nRemove when escaping and bring more people",
-                    [TranslationCantPickup] = "Picking up this item make you sick",
+                    [NoPickupTranslationKey] = "Picking up this item make you sick",
                 },
                 ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Pacifiste",
                     [TranslationKeyDesc] = "T'es idées empêche quelconque violence.\nS'enlève quand tu t'échappes et ramène plus de renfort",
-                    [TranslationCantPickup] = "Juste la vue de cet objet te rend malade",
+                    [NoPickupTranslationKey] = "Juste la vue de cet objet te rend malade",
                 },
                 ["legacy"] = new Dictionary<string, string>()
                 {
@@ -44,9 +41,15 @@ namespace KruacentExiled.CustomRoles.CR.Human
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
+        public override bool KeepInventoryOnSpawn { get; set; } = true;
 
         public override HashSet<RoleTypeId> Roles => new HashSet<RoleTypeId>() { RoleTypeId.Scientist, RoleTypeId.ClassD };
 
+        public List<string> BannedItem { get; set; } = null;
+        public List<string> WhitelistItem { get; set; } = null;
+        public bool BlockScpItems { get; set; } = false;
+        public bool BlockRevivingItems { get; set; } = false;
+        public bool BlockViolentItems { get; set; } = true;
 
         protected override void SubscribeEvents()
         {
@@ -55,8 +58,6 @@ namespace KruacentExiled.CustomRoles.CR.Human
             Exiled.Events.Handlers.Item.ChargingJailbird += OnChargingJailbird;
             Exiled.Events.Handlers.Player.Shooting += OnShooting;
             Exiled.Events.Handlers.Player.Escaping += OnEscaping;
-            Exiled.Events.Handlers.Player.PickingUpItem += OnPickingUpItem;
-            Exiled.Events.Handlers.Player.ItemAdded += OnItemAdded;
             base.SubscribeEvents();
         }
 
@@ -67,92 +68,8 @@ namespace KruacentExiled.CustomRoles.CR.Human
             Exiled.Events.Handlers.Item.ChargingJailbird -= OnChargingJailbird;
             Exiled.Events.Handlers.Player.Shooting -= OnShooting;
             Exiled.Events.Handlers.Player.Escaping -= OnEscaping;
-            Exiled.Events.Handlers.Player.PickingUpItem -= OnPickingUpItem;
-            Exiled.Events.Handlers.Player.ItemAdded -= OnItemAdded;
             base.UnsubscribeEvents();
         }
-
-        private void OnItemAdded(ItemAddedEventArgs ev)
-        {
-            Player player = ev.Player;
-            if (!Check(player)) return;
-            Item item = ev.Item;
-
-            if (IsViolent(item))
-            {
-                ShowEffectHint(player, GetTranslation(player, TranslationCantPickup));
-                Timing.CallDelayed(.01f, () =>
-                {
-                    player.DropItem(item);
-                });
-            }           
-        }
-
-
-        private void OnPickingUpItem(PickingUpItemEventArgs ev)
-        {
-            Player player = ev.Player;
-            if (!ev.IsAllowed) return;
-            if (!Check(player)) return;
-
-            bool isViolent = IsViolent(ev.Pickup);
-            ev.IsAllowed = !isViolent;
-
-            KELog.Debug("violent " + isViolent);
-            if (isViolent)
-            {
-                ShowEffectHint(player, GetTranslation(player, TranslationCantPickup));
-            }
-        }
-
-        private bool IsViolent(Pickup pickup)
-        {
-            bool result = IsViolent(pickup.Type);
-            if (CustomItem.TryGet(pickup, out CustomItem ci))
-            {
-                if (ci is KECustomItem kecr)
-                {
-                    result = KECustomItem.IsConsideredViolent(kecr);
-                }
-
-            }
-            return result;
-        }
-
-        private bool IsViolent(Item item)
-        {
-            bool result = IsViolent(item.Type);
-            if (CustomItem.TryGet(item, out CustomItem ci))
-            {
-                if (ci is KECustomItem kecr)
-                {
-                    result = KECustomItem.IsConsideredViolent(kecr);
-                }
-
-            }
-            return result;
-        }
-
-        private bool IsViolent(ItemType itemtype)
-        {
-            if (itemtype.IsWeapon())
-            {
-                return true;
-            }
-
-            if (itemtype.GetCategory() == ItemCategory.Firearm)
-            {
-                return true;
-            }
-
-            ProjectileType projectileType = itemtype.GetProjectileType();
-            if (projectileType == ProjectileType.FragGrenade || projectileType == ProjectileType.Scp018)
-            {
-                return true;
-            }
-            return false;
-        }
-
 
         private void OnDisruptorFiring(DisruptorFiringEventArgs ev)
         {
@@ -205,13 +122,7 @@ namespace KruacentExiled.CustomRoles.CR.Human
                         KELog.Debug(respawned);
                     });
                 }
-
-
-
             }
         }
-
-
-
     }
 }

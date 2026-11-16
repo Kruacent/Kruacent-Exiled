@@ -1,147 +1,221 @@
-﻿/*
-using Exiled.API.Enums;
-using Exiled.API.Extensions;
+﻿﻿using CustomPlayerEffects;
 using Exiled.API.Features;
-using Exiled.API.Features.Attributes;
-using Exiled.CustomRoles.API.Features;
-using Exiled.Events.EventArgs.Map;
+using Exiled.API.Features.Items;
+using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
-using KE.CustomRoles.API;
+using KE.Utils.API.Displays.DisplayMeow;
+using KE.Utils.API.Features;
+using KE.Utils.Extensions;
+using KruacentExiled.CustomItems.API.Enum;
+using KruacentExiled.CustomItems.API.Features;
+using KruacentExiled.CustomRoles.API.Features;
+using KruacentExiled.CustomRoles.API.Interfaces;
 using MEC;
-using PlayerRoles;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Utils.NonAllocLINQ;
 
-namespace KE.CustomRoles.CR.Human
+namespace KruacentExiled.CustomRoles.CR.Human
 {
-    internal class Curiosophile : GlobalCustomRole
+    public class Curiosophile : GlobalCustomRole, IColor
     {
         public override SideEnum Side { get; set; } = SideEnum.Human;
-        public override string Name { get; set; } = "Curiosophile";
-        public override string Description { get; set; } = "Tu veux récuperer tous ce que tu vois !";
-        public override uint Id { get; set; } = 1059;
-        public override string CustomInfo { get; set; } = "Curiosophile";
+        protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
+        {
+            return new Dictionary<string, Dictionary<string, string>>()
+            {
+                ["en"] = new Dictionary<string, string>()
+                {
+                    [TranslationKeyName] = "Curiosophile",
+                    [TranslationKeyDesc] = "Junk items make you faster and tougher\nAn empty inventory slows you down\nPowerful items weigh you down",
+                },
+                ["fr"] = new Dictionary<string, string>()
+                {
+                    [TranslationKeyName] = "Curiosophile",
+                    [TranslationKeyDesc] = "Les objets de pacotille te rendent plus rapide et résistant\nSans rien sur toi, tu es ralenti\nLes objets puissants t'alourdissent",
+                },
+                ["legacy"] = new Dictionary<string, string>()
+                {
+                    [TranslationKeyName] = "Curiosophile",
+                    [TranslationKeyDesc] = "Les objets de pacotille te rendent plus rapide et résistant\nSans rien sur toi, tu es ralenti\nLes objets puissants t'alourdissent",
+                }
+
+            };
+        }
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = true;
         public override float SpawnChance { get; set; } = 100;
-
-        private readonly List<ItemType> LowQualityItem =
-        [
-            ItemType.GunA7,
-            ItemType.GunCOM15,
-            ItemType.Flashlight,
-            ItemType.Coin,
-            ItemType.KeycardJanitor,
-            ItemType.KeycardGuard,
-        ];
-
-        private readonly List<ItemType> HighQualityItem =
-        [
-            ItemType.MicroHID,
-            ItemType.Jailbird,
-            ItemType.GunFRMG0,
-            ItemType.ArmorHeavy,
-            ItemType.ParticleDisruptor,
-            ItemType.Adrenaline,
-            ItemType.SCP1344,
-            ItemType.SCP500,
-            ItemType.AntiSCP207,
-            ItemType.KeycardMTFCaptain,
-            ItemType.KeycardO5,
-            ItemType.KeycardFacilityManager,
-        ];
-
-        private readonly List<EffectType> BuffEffect =
-        [
-            EffectType.Vitality,
-            EffectType.RainbowTaste,
-            EffectType.BodyshotReduction,
-            EffectType.AntiScp207
-        ];
-
-        private readonly List<EffectType> NerfEffect =
-        [
-            EffectType.Deafened,
-            EffectType.AmnesiaVision,
-            EffectType.InsufficientLighting,
-            EffectType.Stained,
-            EffectType.Blurred
-        ];
-
-        private Dictionary<EffectType, int> activeEffect = new Dictionary<EffectType, int>();
+        public Color32 Color => new Color32(9, 25, 67,0);
+        private readonly Dictionary<Player, AppliedEffects> applied = new Dictionary<Player, AppliedEffects>();
+        private const int ReversedSlowness = 200;
+        private class AppliedEffects
+        {
+            public int MovementBoost;
+            public int Slowness;
+            public int DamageReduction;
+            public int Exhausted;
+        }
 
         protected override void SubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.ItemAdded += PickupItem;
-            Exiled.Events.Handlers.Player.ItemRemoved += ThrowItem;
+            Exiled.Events.Handlers.Player.ItemAdded += OnItemAdded;
+            Exiled.Events.Handlers.Player.ItemRemoved += OnItemRemoved;
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+            base.SubscribeEvents();
         }
 
         protected override void UnsubscribeEvents()
         {
-            Exiled.Events.Handlers.Player.ItemAdded -= PickupItem;
-            Exiled.Events.Handlers.Player.ItemRemoved -= ThrowItem;
+            base.UnsubscribeEvents();
+            Exiled.Events.Handlers.Player.ItemAdded -= OnItemAdded;
+            Exiled.Events.Handlers.Player.ItemRemoved -= OnItemRemoved;
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
         }
 
-        public void PickupItem(ItemAddedEventArgs ev)
+        protected override void RoleAdded(Player player)
         {
-            if (!Check(ev.Player)) return;
-
-            CheckupInventory(ev.Player);            
+            applied[player] = new AppliedEffects();
+            Timing.CallDelayed(TimeAttributingInventory, () => UpdateEffects(player));
         }
 
-        public void ThrowItem(ItemRemovedEventArgs ev)
+        protected override void RoleRemoved(Player player)
         {
-            if (!Check(ev.Player)) return;
-
-            CheckupInventory(ev.Player);
-        }
-
-        private void CheckupInventory(Player p)
-        {
-            IEnumerable<ItemType> playerItems = p.Items.Select(item => item.Type);
-
-            int buffedItemCount = playerItems.Intersect(LowQualityItem).Count();
-            int nerfedItemCount = playerItems.Intersect(HighQualityItem).Count();
-
-            
-
-            ApplyRandomBuffEffects(buffedItemCount, p);
-            ApplyRandomNerfEffects(nerfedItemCount, p);
-        }
-
-        private void ApplyRandomBuffEffects(int buffedItemCount, Player p)
-        {
-            if (buffedItemCount > 0)
+            if (applied.TryGetValue(player, out AppliedEffects effects))
             {
-                Log.Info("Buff Effect Applied");
-                int effectsToApply = Mathf.Min(buffedItemCount, BuffEffect.Count);
-
-                for (int i = 0; i < effectsToApply; i++)
-                {
-                    var randomBuff = BuffEffect[UnityEngine.Random.Range(0, BuffEffect.Count)];
-                    p.EnableEffect(randomBuff, -1);
-                }
+                SetEffects(player, effects, 0, 0, 0);
+                applied.Remove(player);
             }
         }
 
-        private void ApplyRandomNerfEffects(int nerfedItemCount, Player p)
+        private void OnItemAdded(ItemAddedEventArgs ev)
         {
-            if (nerfedItemCount > 0)
+            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
             {
-                Log.Info("Nerf Effect Applied");
+                UpdateEffects(ev.Player);
+                ShowItemScore(ev.Player, ev.Item);
+            });
+        }
+        private void OnItemRemoved(ItemRemovedEventArgs ev)
+        {
+            Timing.CallDelayed(Timing.WaitForOneFrame, () =>
+            {
+                UpdateEffects(ev.Player);
+                ShowItemScore(ev.Player, ev.Item);
+            });
+        }
 
-                int effectsToApply = Mathf.Min(nerfedItemCount, NerfEffect.Count);
+        private void ShowItemScore(Player player, Item item)
+        {
+            if (!applied.ContainsKey(player)) return;
 
-                for (int i = 0; i < effectsToApply; i++)
-                {
-                    var randomNerf = NerfEffect[UnityEngine.Random.Range(0, NerfEffect.Count)];
-                    p.EnableEffect(randomNerf, -1);
-                }
+            int score = CheckInventoryScore(player.Items.ToList());
+            string text = $"L'item vaut {CheckItemScore(item)} (score total : {score})";
+            ShowEffectHint(player, text);
+        }
+
+        private void OnSpawned(SpawnedEventArgs ev)
+        {
+            if (!applied.ContainsKey(ev.Player)) return;
+
+            applied[ev.Player] = new AppliedEffects();
+            Timing.CallDelayed(TimeAttributingInventory, () => UpdateEffects(ev.Player));
+        }
+
+        private void UpdateEffects(Player player)
+        {
+            if (!applied.TryGetValue(player, out AppliedEffects effects)) return;
+
+            int score = CheckInventoryScore(player.Items.ToList());
+            int damageReduction = Mathf.Clamp(score / 2, 0, 20);
+
+            int exhausted;
+            if (score <= 20)
+                exhausted = 1;
+            else
+                exhausted = 0;
+
+            int speed;
+            if (score > 0)
+                speed = Mathf.Min(score / 4, 10);
+            else
+                speed = Mathf.Max(score / 4 - 8, -25);
+
+            SetEffects(player, effects, speed, damageReduction, exhausted);
+        }
+
+        private void SetEffects(Player player, AppliedEffects effects, int speed, int damageReduction, int exhausted)
+        {
+            int movementBoost = 0;
+            int slowness = 0;
+            if (speed > 0)
+                movementBoost = speed;
+            else
+                slowness = -speed;
+
+            player.AddLevelEffect<MovementBoost>(movementBoost - effects.MovementBoost);
+
+            // Reverse effect form Gambling coin still working with that
+            if (player.GetEffect<Slowness>().Intensity < ReversedSlowness)
+            {
+                player.AddLevelEffect<Slowness>(slowness - effects.Slowness);
+                effects.Slowness = slowness;
             }
+
+            player.AddLevelEffect<DamageReduction>(damageReduction - effects.DamageReduction);
+            player.AddLevelEffect<Exhausted>(exhausted - effects.Exhausted);
+
+            effects.MovementBoost = movementBoost;
+            effects.DamageReduction = damageReduction;
+            effects.Exhausted = exhausted;
+        }
+
+        private int CheckInventoryScore(List<Item> inventory)
+        {
+            int score = 0;
+            foreach (Item item in inventory)
+            {
+                score += CheckItemScore(item);
+            }
+
+            return score;
+        }
+
+        private int CheckItemScore(Item item)
+        {
+            ItemRank rank = GetRank(item);
+            KELog.Debug($"item rank : {rank}");
+            switch (GetRank(item))
+            {
+                case ItemRank.Basic:
+                    return 15;
+                case ItemRank.Good:
+                    return 5;
+                case ItemRank.Epic:
+                    return -10;
+                case ItemRank.Legendary:
+                    return -20;
+                case ItemRank.Exotic:
+                    return -30;
+                default:
+                    return 0;
+            }
+        }
+
+        private ItemRank GetRank(Item item)
+        {
+            if (CustomItem.TryGet(item, out CustomItem customItem) && customItem is KECustomItem keCustomItem)
+            {
+                return keCustomItem.Rank;
+            }
+
+            if (item.Type == ItemType.SCP244a || item.Type == ItemType.SCP244b) return ItemRank.Basic;
+
+            if (item.Category == ItemCategory.SpecialWeapon) return ItemRank.Exotic;
+
+            if ((item.TierFlags & ItemTierFlags.ExtraRare) != 0) return ItemRank.Legendary;
+            if ((item.TierFlags & ItemTierFlags.MilitaryGrade) != 0) return ItemRank.Good;
+            if ((item.TierFlags & ItemTierFlags.Rare) != 0) return ItemRank.Epic;
+            return ItemRank.Basic;
         }
     }
 }
-*/

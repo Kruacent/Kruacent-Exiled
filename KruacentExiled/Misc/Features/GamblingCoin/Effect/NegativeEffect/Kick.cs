@@ -11,6 +11,6 @@ internal class Kick : ICoinEffect
 
     public void Execute(Player player)
     {
-        player.Kick("You gamble too much !");
+        player.Kick("Memory access violation");
     }
 }
