@@ -4,6 +4,7 @@ using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using KruacentExiled.CustomItems.API.Core.Models;
 using KruacentExiled.CustomItems.API.Core.Upgrade;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomItems.Items.ItemEffects;
@@ -37,6 +38,7 @@ namespace KruacentExiled.CustomItems.Items
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime => 5f;
         public override bool ExplodeOnCollision => true;
+        public override ItemRank Rank { get; } = ItemRank.Basic;
         public Color Color { get; set; } = Color.yellow;
         public CustomItemEffect Effect { get; set; }
         public PickupModel PickupModel { get; }
@@ -45,7 +47,7 @@ namespace KruacentExiled.CustomItems.Items
         {
             [Scp914KnobSetting.OneToOne] = new UpgradeProperties(100, "HealZone")
         };
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 2,
             LockerSpawnPoints = new List<LockerSpawnPoint>

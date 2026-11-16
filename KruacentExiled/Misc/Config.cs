@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Interfaces;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace KruacentExiled.Misc
@@ -30,6 +31,20 @@ namespace KruacentExiled.Misc
 
         public float MultBaseSCP { get; set; } = 1.25f;
 
+        [Description("birthday song for other person")]
+        public string DefaultBirthdayMusic { get; set; } = "birthday_default";
+
+        [Description("personalized birthday song for every player here")]
+        public Dictionary<string, string> CustomBirthdayMusicPerPlayer { get; set; } = new Dictionary<string, string>()
+        {
+            { "76561199573165041@steam", "birthday_rotakzz" },
+            { "76561198356056056@steam", "birthday_patrique" },
+            { "76561199116619876@steam", "birthday_choco" },
+            { "76561199151610419@steam", "birthday_jomamouel" },
+            { "76561199066936074@steam", "birthday_delecons" },
+            { "76561198209599925@steam", "birthday_alex" },
+            { "76561198847052333@steam", "birthday_caedit" }
+        };
 
     }
 }

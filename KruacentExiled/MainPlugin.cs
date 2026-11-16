@@ -24,7 +24,7 @@ namespace KruacentExiled
 
         private KEPlugin[] plugins;
         public override string Author => "Patrique & OmerGS";
-        public override Version Version { get; } = new Version(2, 1, 2);
+        public override Version Version { get; } = new Version(2, 2, 0);
 
         public static MainPlugin Instance { get; private set; }
 
@@ -46,6 +46,7 @@ namespace KruacentExiled
                 new CustomItems.MainPlugin(),
                 new Misc.MainPlugin(),
                 new Map.MainPlugin(),
+                new ServerTools.MainPlugin(),
             };
 
             for (int i = 0; i < plugins.Length; i++)
@@ -195,6 +196,7 @@ namespace KruacentExiled
         public CustomItems.Config CustomItemConfig { get; set; } = new CustomItems.Config();
         public Map.Config MapConfig { get; set; } = new Map.Config();
         public Misc.Config MiscConfig { get; set; } = new Misc.Config();
+        public ServerTools.Config ServerToolsConfig { get; set; } = new ServerTools.Config();
         public GlobalEvents.Config GEFEConfig { get; set; } = new GlobalEvents.Config();
     }
 

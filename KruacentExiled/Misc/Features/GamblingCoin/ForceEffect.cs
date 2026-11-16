@@ -1,16 +1,10 @@
 ﻿using CommandSystem;
 using Exiled.API.Features;
-using Exiled.API.Features.Pools;
+using KruacentExiled.Misc.Features.GamblingCoin;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Utils;
-using static HarmonyLib.Code;
 
-namespace KruacentExiled.Misc.Features.GamblingCoin
+namespace KE.Misc.Features.GamblingCoin
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class ForceCoinEffect : ICommand
@@ -23,13 +17,21 @@ namespace KruacentExiled.Misc.Features.GamblingCoin
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            Player player = Player.Get(sender);
+
+            if (player is null)
+            {
+                response = "player not found";
+                return false;
+            }
+
             if (arguments.Count < 1)
             {
                 response = "need effect";
                 return false;
             }
 
-            ICoinEffect chose= null;
+            ICoinEffect chose = null;
             foreach (ICoinEffect effect in GamblingCoinManager.EffectList)
             {
                 if (effect.Name == arguments.At(0))
@@ -38,61 +40,31 @@ namespace KruacentExiled.Misc.Features.GamblingCoin
                     break;
                 }
             }
-            if (chose == null)
+
+
+
+
+
+
+            if (chose is null)
             {
                 response = $"effect {arguments.At(0)} not found";
                 return false;
             }
-            string players;
-            if (arguments.Count >= 2)
+
+
+            try
             {
-                List<ReferenceHub> listhub = RAUtils.ProcessPlayerIdOrNamesList(arguments, 1, out string[] newargs);
-                if (listhub == null)
-                {
-                    response = "error parsing players";
-                    return false;
-                }
-                foreach (ReferenceHub hub in listhub)
-                {
-                    Player player = Player.Get(hub);
-                    try
-                    {
-                        chose.ExecuteEffect(player);
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error(e);
-                        response = "error with coin effect";
-                        return false;
-                    }
-                }
-                ListPool<ReferenceHub>.Pool.Return(listhub);
-                players = string.Join(" ", newargs);
+                chose.ExecuteEffect(player);
             }
-            else
+            catch (Exception e)
             {
-                Player player = Player.Get(sender);
-                try
-                {
-                    chose.ExecuteEffect(player);
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e);
-                    response = "error with coin effect";
-                    return false;
-                }
-                players = player.Nickname;
+                Log.Error(e);
             }
-            
-            
-            response = $"forced effect {chose.Name} on {players}";
+            response = $"forced effect {chose.Name} on {player.Nickname}";
             return true;
 
 
         }
-
-
-        
     }
 }
