@@ -5,8 +5,10 @@ using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.Features;
 using InventorySystem.Items.Keycards;
 using KruacentExiled.CustomRoles.API.Features;
+using KruacentExiled.CustomRoles.Events.EventArgs.ZoneManager;
 using PlayerRoles;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,6 +119,14 @@ namespace KruacentExiled.CustomRoles.CR.Scientist
             return objectives[player].Count;
         }
 
+        public static Event<UpgradedKeycardZoneManagerEventArgs> UpgradingKeycardZoneManager { get; set; } = new Event<UpgradedKeycardZoneManagerEventArgs>();
+
+        public void OnUpgradingKeycardZoneManager(UpgradedKeycardZoneManagerEventArgs ev)
+        {
+            UpgradingKeycardZoneManager?.InvokeSafely(ev);
+        }
+
+
         private void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
             Player player = ev.Player;
@@ -146,6 +156,9 @@ namespace KruacentExiled.CustomRoles.CR.Scientist
                 {
                     player.CurrentItem = engineerKeycard;
                 }
+
+                OnUpgradingKeycardZoneManager(new UpgradedKeycardZoneManagerEventArgs(player));
+
             }
 
         }

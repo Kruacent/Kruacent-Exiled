@@ -3,6 +3,7 @@ using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Features;
+using KruacentExiled.Achievements.CustomItems;
 using KruacentExiled.CustomItems.API.Interface;
 using MEC;
 using PlayerRoles.FirstPersonControl;
@@ -32,11 +33,15 @@ namespace KruacentExiled.CustomItems.Items.ItemEffects
         {
             ev.IsAllowed = false;
 
+            if(ev.TargetsToAffect.Count == Player.Count && !ev.Player.IsHost)
+            {
+                MoonWalk.GiveAchievementStatic(ev.Player);
+            }
+
             foreach(Player player in ev.TargetsToAffect)
             {
                 OnExploding(player);
             }
-
             
         }
 

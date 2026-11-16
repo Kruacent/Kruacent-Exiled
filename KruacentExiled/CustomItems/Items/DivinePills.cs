@@ -8,11 +8,13 @@ using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomItems.API.Core.Upgrade;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.Items.ItemEffects;
+using Exiled.API.Features;
 
 namespace KruacentExiled.CustomItems.Items
 {
     public class DivinePills : KECustomItem, ILumosItem, ISwitchableEffect, IUpgradableCustomItem, IRevivingCustomItem
     {
+        public const string NoSpec = "DivinePillsNoSpect";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new Dictionary<string, Dictionary<string, string>>()
@@ -21,11 +23,13 @@ namespace KruacentExiled.CustomItems.Items
                 {
                     [TranslationKeyName] = "Divine Pills",
                     [TranslationKeyDesc] = "25% chance you die\n 75% you respawn someone\n",
+                    [NoSpec] = "No spectators to respawn",
                 },
                 ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Divine Pills",
                     [TranslationKeyDesc] = "25% de chance de mourrir\n 75% de ramener quelqu'un à la vie",
+                    [NoSpec] = "Pas de spectateur",
                 },
             };
         }
