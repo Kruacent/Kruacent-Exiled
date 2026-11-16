@@ -1,21 +1,14 @@
-﻿using Exiled.API.Enums;
-using Exiled.API.Extensions;
+﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.Events;
 using Exiled.Events.EventArgs.Player;
-using Exiled.Events.EventArgs.Scp106;
-using Exiled.Permissions.Commands.Permissions;
+using Exiled.Events.Features;
 using KE.Utils.API.Features;
 using KE.Utils.API.Interfaces;
-using KE.Utils.Extensions;
 using KruacentExiled.CustomRoles.CustomSCPTeam;
 using KruacentExiled.Misc.Events.EventsArgs;
 using MEC;
 using PlayerRoles;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 namespace KruacentExiled.Misc.Features.SCPRebalance
 {
@@ -39,9 +32,16 @@ namespace KruacentExiled.Misc.Features.SCPRebalance
 
         internal SCPBuff() { }
 
-        public static event Action<BuffingSCPEventArgs> OnBuffingSCP = delegate { };
-        public static event Action<BuffedSCPEventArgs> OnBuffedSCP = delegate { };
-
+        public static Event<BuffingSCPEventArgs> BuffingSCP { get; set; } = new Event<BuffingSCPEventArgs>();
+        public static void OnBuffingSCP(BuffingSCPEventArgs ev)
+        {
+            BuffingSCP?.InvokeSafely(ev);
+        }
+        public static Event<BuffedSCPEventArgs> BuffedSCP { get; set; } = new Event<BuffedSCPEventArgs>();
+        public static void OnBuffedSCP(BuffedSCPEventArgs ev)
+        {
+            BuffedSCP?.InvokeSafely(ev);
+        }
         public void SubscribeEvents()
         {
             Exiled.Events.Handlers.Player.ChangingRole += BecomingSCP;
@@ -82,7 +82,7 @@ namespace KruacentExiled.Misc.Features.SCPRebalance
 
             BuffingSCPEventArgs ev1 = new BuffingSCPEventArgs(player, true, healthIncrease);
             
-            OnBuffingSCP?.Invoke(ev1);
+            OnBuffingSCP(ev1);
 
             if (!ev1.IsAllowed) return;
 
@@ -108,7 +108,7 @@ namespace KruacentExiled.Misc.Features.SCPRebalance
             KELog.Debug("health increase");
 
             BuffedSCPEventArgs ev2 = new BuffedSCPEventArgs(player, healthIncrease);
-            OnBuffedSCP?.Invoke(ev2);
+            OnBuffedSCP(ev2);
         }
 
         private void CancelBuff(Player player)
