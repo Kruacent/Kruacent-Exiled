@@ -20,12 +20,12 @@ namespace KruacentExiled.CustomItems.Items
                 ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Explosive Proof Armor",
-                    [TranslationKeyDesc] = "Explosion damage is reduced by 4 times ! Yippee !",
+                    [TranslationKeyDesc] = $"Explosion damage is reduced by {DamageReductionByExplosion} times ! Yippee !",
                 },
                 ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Armure Anti Explosion",
-                    [TranslationKeyDesc] = "Tu prends 4 fois moins de dégats lors d'explosion !",
+                    [TranslationKeyDesc] = $"Tu prends {DamageReductionByExplosion} fois moins de dégats lors d'explosion !",
                 },
             };
         }
@@ -52,7 +52,7 @@ namespace KruacentExiled.CustomItems.Items
 
         public bool IsViolent => false;
 
-        private int DamageReductionByExplosion = 3;
+        private const int DamageReductionByExplosion = 3;
 
         protected override void SubscribeEvents()
         {
