@@ -1,10 +1,13 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Extensions;
+using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Exiled.API.Features.Objectives;
 using Exiled.API.Features.Toys;
 using KE.Utils.API.Features;
 using KE.Utils.Quality.Models;
 using KruacentExiled.Map.Surface.ElevatorGateA;
 using MEC;
+using PlayerRoles.PlayableScps.Scp3114;
 using ProjectMER.Commands.Modifying.Scale;
 using System;
 using System.Collections.Generic;
@@ -36,6 +39,16 @@ namespace KruacentExiled.Map.Others.CustomElevators.KECustomElevators
         private static Primitive step;
         private static Primitive help;
 
+        public static IReadOnlyCollection<KECustomElevator> List => list;
+
+        private static List<KECustomElevator> list = new List<KECustomElevator>();
+
+        public bool Locked { get; private set; }
+
+
+        public static readonly Color ColorReady = Color.blue;
+        public static readonly Color ColorMoving = Color.yellow;
+        public static readonly Color ColorLocked = Color.red;
 
         private void Awake()
         {
@@ -50,10 +63,14 @@ namespace KruacentExiled.Map.Others.CustomElevators.KECustomElevators
             model.SendingElevator += TrySend;
             bottompanel.SendingElevator += TrySend;
             toppanel.SendingElevator += TrySend;
+
+            list.Add(this);
         }
 
 
         public const float Scale = 0.8f;
+
+      
 
         private void SpawnModel()
         {
@@ -69,9 +86,9 @@ namespace KruacentExiled.Map.Others.CustomElevators.KECustomElevators
             bottompanel.Create(transform);
 
 
-            model.button.NetworkMaterialColor = Color.blue;
-            bottompanel.button.NetworkMaterialColor = Color.blue;
-            toppanel.button.NetworkMaterialColor = Color.blue;
+            model.button.NetworkMaterialColor = ColorReady;
+            bottompanel.button.NetworkMaterialColor = ColorReady;
+            toppanel.button.NetworkMaterialColor = ColorReady;
 
         }
 
@@ -91,7 +108,7 @@ namespace KruacentExiled.Map.Others.CustomElevators.KECustomElevators
 
 
             help = Primitive.Create(PrimitiveType.Cube, helppos, null, new Vector3(50, 50, 50), false);
-            help.Flags = AdminToys.PrimitiveFlags.Visible;
+            help.Flags = AdminToys.PrimitiveFlags.None;
             help.Spawn();
             help.GameObject.AddComponent<CustomKillerCollision>();
         }
@@ -122,6 +139,8 @@ namespace KruacentExiled.Map.Others.CustomElevators.KECustomElevators
         public void TrySend()
         {
             if (isMoving) return;
+            if (Locked) return;
+            
 
             startY = transform.position.y;
             elapsed = 0f;
@@ -145,9 +164,9 @@ namespace KruacentExiled.Map.Others.CustomElevators.KECustomElevators
         {
             if (isMoving)
             {
-                model.button.NetworkMaterialColor = Color.yellow;
-                bottompanel.button.NetworkMaterialColor = Color.yellow;
-                toppanel.button.NetworkMaterialColor = Color.yellow;
+                model.button.NetworkMaterialColor = ColorMoving;
+                bottompanel.button.NetworkMaterialColor = ColorMoving;
+                toppanel.button.NetworkMaterialColor = ColorMoving;
 
                 elapsed += Time.deltaTime;
 
@@ -175,9 +194,9 @@ namespace KruacentExiled.Map.Others.CustomElevators.KECustomElevators
             }
             else
             {
-                model.button.NetworkMaterialColor = Color.blue;
-                bottompanel.button.NetworkMaterialColor = Color.blue;
-                toppanel.button.NetworkMaterialColor = Color.blue;
+                model.button.NetworkMaterialColor = ColorReady;
+                bottompanel.button.NetworkMaterialColor = ColorReady;
+                toppanel.button.NetworkMaterialColor = ColorReady;
             }
         }
         private void Update()

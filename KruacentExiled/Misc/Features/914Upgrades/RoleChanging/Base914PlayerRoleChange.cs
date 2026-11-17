@@ -28,8 +28,11 @@ namespace KE.Misc.Features._914Upgrades
         {
             Player player = ev.Player;
             if (player.Role != InputRole) return false;
+            KELog.Debug($"upgrading {player.Role.Type}");
             if (!OutputRoles.TryGetValue(ev.KnobSetting, out var newRole)) return false;
+            KELog.Debug($"to {newRole.role}");
             if (_upgradingPlayer.Contains(player)) return false;
+            KELog.Debug($"not already upgriading");
             if (!LuckCheck(newRole.chance, ev.Player)) return false;
             
             KELog.Debug($"upgrading {player.Role.Type}->{newRole.role}");

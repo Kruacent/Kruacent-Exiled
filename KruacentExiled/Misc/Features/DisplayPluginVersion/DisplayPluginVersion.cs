@@ -4,6 +4,8 @@ using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
 using MEC;
+using System;
+using System.Diagnostics;
 using System.Text;
 
 namespace KruacentExiled.Misc.Features.DisplayPluginVersion
@@ -12,10 +14,16 @@ namespace KruacentExiled.Misc.Features.DisplayPluginVersion
     {
         public static HintPosition HintPosition = new DisplayPluginVersionPosition();
 
+        private StringBuilder stringBuilder;
+        private Stopwatch stopwatch;
+
         public override void SubscribeEvents()
         {
+            stringBuilder = StringBuilderPool.Pool.Get();
+            stopwatch = new Stopwatch();
             Exiled.Events.Handlers.Player.Verified += OnVerified;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
+            Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             base.SubscribeEvents();
         }
 
@@ -23,7 +31,17 @@ namespace KruacentExiled.Misc.Features.DisplayPluginVersion
         {
             Exiled.Events.Handlers.Player.Verified -= OnVerified;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
+            Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
+            StringBuilderPool.Pool.Return(stringBuilder);
+            stopwatch.Stop();
+            stopwatch = null;
+
             base.UnsubscribeEvents();
+        }
+
+        private void OnWaitingForPlayers()
+        {
+            stopwatch.Restart();
         }
 
         private void OnVerified(VerifiedEventArgs ev)
@@ -39,22 +57,37 @@ namespace KruacentExiled.Misc.Features.DisplayPluginVersion
             {
                 if (Round.IsLobby)
                 {
-                    DisplayHandler.Instance.CreateAuto(player, (args) => GetPlayers(player), HintPosition.HintPlacement);
+                    //probably better with the Addhint
+                    DisplayHandler.Instance.CreateAuto(player, (args) => GetPlayers(), HintPosition.HintPlacement,HintServiceMeow.Core.Enum.HintSyncSpeed.Slow);
                 }
             });
-
+            
         }
 
-        private string GetPlayers(Player player)
+        private string GetPlayers()
         {
             if (!Round.IsLobby) return string.Empty;
+            stringBuilder.Clear();
+            stringBuilder.Append('v');
+            stringBuilder.Append(KruacentExiled.MainPlugin.Instance.Version);
 
-            StringBuilder sb = StringBuilderPool.Pool.Get();
+            if (MainPlugin.Configs.Debug)
+            {
+                stringBuilder.Append(" -  DEBUG");
+            }
 
-            sb.Append("v");
-            sb.Append(KruacentExiled.MainPlugin.Instance.Version);
+            double time = Math.Floor(stopwatch.Elapsed.TotalMinutes);
 
-            return StringBuilderPool.Pool.ToStringReturn(sb);
+            stringBuilder.Append("   Lobby time : ")
+                .Append(time.ToString())
+                .Append(" minute");
+
+            if(time != 1)
+            {
+                stringBuilder.Append('s');
+            }
+
+            return stringBuilder.ToString();
         }
 
         private void OnRoundStarted()

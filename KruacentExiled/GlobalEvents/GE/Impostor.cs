@@ -18,7 +18,7 @@ namespace KruacentExiled.GlobalEvents.GE
         {
             "sussy"
         };
-        public override int WeightedChance { get; set; } = 2;
+        public override int DefaultWeightedChance { get; } = 2;
 
         public override ImpactLevel ImpactLevel => ImpactLevel.High;
 

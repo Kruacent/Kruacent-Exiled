@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 using KE.Utils.API;
 using KE.Utils.API.Features;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
@@ -21,24 +22,31 @@ namespace KruacentExiled.Misc.Features.GamblingCoin
 
         public static IEnumerable<ICoinEffect> RegisterAll()
         {
-            List<Assembly> assemblies = new List<Assembly>();
+            List<Assembly> assemblies = ListPool<Assembly>.Pool.Get();
             foreach (var plugin in Exiled.Loader.Loader.Plugins)
                 assemblies.Add(plugin.Assembly);
 
             IEnumerable<ICoinEffect> effects = ReflectionHelper.GetObjects<ICoinEffect>(assemblies)
                 .Where(e => e != null);
+            ListPool<Assembly>.Pool.Return(assemblies);
+
+            int registered = 0;
 
             foreach (var effect in effects)
             {
                 try
                 {
                     Register(effect);
+                    registered++;
                 }
                 catch (Exception ex)
                 {
                     Log.Error($"[GamblingCoin] Failed to register {effect.Name} : {ex}");
                 }
             }
+
+            KELog.Register($"[GamblingCoin] Registered {registered}/{effects.Count()}");
+
 
             BuildWeightedList();
 
@@ -55,7 +63,6 @@ namespace KruacentExiled.Misc.Features.GamblingCoin
             if (effect.Weight > 0)
                 _activeEffects.Add(effect);
                 
-            KELog.Register($"[GamblingCoin] {effect.Name}");
 
         }
 

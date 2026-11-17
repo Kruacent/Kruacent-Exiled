@@ -24,7 +24,7 @@ namespace KruacentExiled.GlobalEvents.GE
         ///<inheritdoc/>
         public override string Description { get; } = "Il pleut des items !!";
         ///<inheritdoc/>
-        public override int WeightedChance => 1;
+        public override int DefaultWeightedChance => 1;
 
         public int Cooldown { get; set; } = 120;
         public int NbItemSpawned { get; set; } = 5;
