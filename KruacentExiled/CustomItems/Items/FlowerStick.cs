@@ -50,7 +50,7 @@ namespace KruacentExiled.CustomItems.Items
         };
 
 
-        public float CooldownInspect { get; }
+        public float CooldownInspect { get; } = 2;
 
         public bool IsHiddenName => true;
 
