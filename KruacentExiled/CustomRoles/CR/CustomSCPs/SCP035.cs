@@ -88,7 +88,6 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
             "OverseerProtocolsDocument",
             "SCP-1650",
             "SCP-3136",
-            "SCP-3136"
         };
 
         public List<string> WhitelistItem { get; set; } = new List<string>()
