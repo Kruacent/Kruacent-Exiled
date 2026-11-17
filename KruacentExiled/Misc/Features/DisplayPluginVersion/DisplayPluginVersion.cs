@@ -76,9 +76,16 @@ namespace KruacentExiled.Misc.Features.DisplayPluginVersion
                 stringBuilder.Append(" -  DEBUG");
             }
 
+            double time = Math.Floor(stopwatch.Elapsed.TotalMinutes);
+
             stringBuilder.Append("   Lobby time : ")
-                .Append(stopwatch.Elapsed.TotalMinutes)
-                .Append(" minutes");
+                .Append(time.ToString())
+                .Append(" minute");
+
+            if(time != 1)
+            {
+                stringBuilder.Append('s');
+            }
 
             return stringBuilder.ToString();
         }
