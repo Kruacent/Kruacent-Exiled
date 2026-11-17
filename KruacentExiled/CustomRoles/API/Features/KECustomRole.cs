@@ -220,6 +220,10 @@ namespace KruacentExiled.CustomRoles.API.Features
             typeLookupTable.Remove(GetType());
             stringLookupTable.Remove(Name);
             InternalUnsubscribeEvents();
+            foreach (Player trackedPlayer in TrackedPlayers.ToList())
+            {
+                RemoveRole(trackedPlayer);
+            }
             UnsubscribeEvents();
         }
 
@@ -1035,7 +1039,16 @@ namespace KruacentExiled.CustomRoles.API.Features
         }
         public bool TryUnregister()
         {
-            Destroy();
+            try
+            {
+                Destroy();
+            }
+            catch(Exception e)
+            {
+                Log.Error("error unregister " + e);
+                return false;
+            }
+
             if (!Registered.Remove(this))
             {
                 Log.Warn($"Cannot unregister {Name} [{Role}], it hasn't been registered yet.");
