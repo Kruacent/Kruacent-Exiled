@@ -1,10 +1,15 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Toys;
+using KE.Utils.API.Features;
 using KruacentExiled.Audio;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using KruacentExiled.Misc.Features.GamblingCoin.Types;
 using MEC;
+using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Linq;
+using System.Xml.Linq;
 using UnityEngine;
 using Light = Exiled.API.Features.Toys.Light;
 
@@ -15,75 +20,145 @@ public class EatingStar : IDurationEffect
     public int Weight { get; set; } = 7;
     public EffectType Type { get; set; } = EffectType.Negative;
 
+    
 
-    private Dictionary<Player, Light> _lights = new Dictionary<Player, Light>();
-    private Dictionary<Player, AudioClipPlayback> _clips = new Dictionary<Player, AudioClipPlayback>();
+    public const string FileName = "starman";
+    public const float CooldownLight = .5f;
 
     public float Duration { get; set; } = 20;
     private static CoroutineHandle _coroutines;
 
     public void Execute(Player player)
     {
-        Light light = Light.Create(player.Position, null, null, true, UnityEngine.Color.blue);
-        light.Transform.parent = player.GameObject.transform;
-        light.MovementSmoothing = 0;
-        _lights[player] = light;
-
-
-
-        
-
-        var c = AudioHandler.Instance.PlayToAll(SoundType.Noise, "starman", player.GameObject, 50);
-
-        foreach (AudioClipPlayback clip in c.Values)
+        if (PlayerEatingStarData.IsRunning(player))
         {
-            _clips.Add(player,clip);
+            return;
         }
 
+        PlayerEatingStarData.Start(player);
 
-        _coroutines = Timing.RunCoroutine(ColorTransformer(player));
-    }
-
-    public IEnumerator<float> ColorTransformer(Player player)
-    {
-        while (true)
+        if (!_coroutines.IsValid || !_coroutines.IsRunning)
         {
-            if(_lights.TryGetValue(player,out var l))
-            {
-                l.Color = ColorPicker();
-            }
-            else
-            {
-                yield break;
-            }
-            yield return Timing.WaitForSeconds(0.5f);
+            _coroutines = Timing.RunCoroutine(ColorTransformer());
         }
     }
 
-    public static Color32 ColorPicker()
+    public IEnumerator<float> ColorTransformer()
     {
-        byte r = (byte)UnityEngine.Random.Range(0, 256);
-        byte g = (byte)UnityEngine.Random.Range(0, 256);
-        byte b = (byte)UnityEngine.Random.Range(0, 256);
-
-        return new Color32(r, g, b, 0);
+        while (PlayerEatingStarData.Count > 0)
+        {
+            foreach(PlayerEatingStarData data in PlayerEatingStarData.Data)
+            {
+                data.ChangeLightColor();
+            }
+            yield return Timing.WaitForSeconds(CooldownLight);
+        }
     }
+
+    
 
     public void ExecuteAfterDuration(Player player)
     {
-        Timing.KillCoroutines(_coroutines);
-        Light light = _lights[player];
+        PlayerEatingStarData.Get(player)?.Stop();
+    }
 
 
+    private class PlayerEatingStarData
+    {
+        private static readonly Queue<PlayerEatingStarData> emptyDatas = new Queue<PlayerEatingStarData>();
+        private Light light = null;
+        private readonly List<AudioClipPlayback> clips = new List<AudioClipPlayback>();
 
-
-        foreach(var kvp in _clips)
+        private static Dictionary<Player, PlayerEatingStarData> _data = new Dictionary<Player, PlayerEatingStarData>();
+        public static IReadOnlyCollection<PlayerEatingStarData> Data => _data.Values;
+        public static int Count => _data.Count;
+        public static bool IsRunning(Player player)
         {
-            kvp.Value.Loop = false;
+            return _data.ContainsKey(player);
         }
 
-        light.Destroy();
-        _lights.Remove(player);
+        public static PlayerEatingStarData Get(Player player)
+        {
+            PlayerEatingStarData result = null;
+            _data.TryGetValue(player, out result);
 
+            return result;
+        }
+
+        public static void Start(Player player)
+        {
+            PlayerEatingStarData result;
+
+            if (emptyDatas.Count > 0)
+            {
+                result = emptyDatas.Dequeue();
+            }
+            else
+            {
+                result = new PlayerEatingStarData();
+            }
+            try
+            {
+                result.InternalStart(player);
+            }
+            catch(Exception e)
+            {
+                Log.Error(e);
+            }
+        }
+
+
+        private void InternalStart(Player player)
+        {
+            var c = AudioHandler.Instance.PlayToAll(SoundType.Noise, FileName, player.GameObject, 50);
+
+            foreach (AudioClipPlayback clip in c.Values)
+            {
+                clips.Add(clip);
+            }
+
+            Light light = Light.Create(player.Position, null, null, true, UnityEngine.Color.blue);
+            light.Transform.parent = player.GameObject.transform;
+            light.MovementSmoothing = 0;
+            this.light = light;
+
+            _data.Add(player, this);
+        }
+
+        public void ChangeLightColor()
+        {
+            if(light == null)
+            {
+                throw new NullReferenceException("light null");
+            }
+            light.Color = ColorPicker();
+        }
+
+        private static Color32 ColorPicker()
+        {
+            byte r = (byte)UnityEngine.Random.Range(0, 256);
+            byte g = (byte)UnityEngine.Random.Range(0, 256);
+            byte b = (byte)UnityEngine.Random.Range(0, 256);
+
+            return new Color32(r, g, b, 0);
+        }
+
+        public void Stop()
+        {
+            foreach(AudioClipPlayback audioClipPlayback in clips)
+            {
+                KELog.Debug("stop clip : " + audioClipPlayback.Clip);
+
+                audioClipPlayback.Loop = false;
+                KELog.Debug("loop : " + audioClipPlayback.Loop);
+            }
+
+            light?.Destroy();
+            light = null;
+
+            clips.Clear();
+
+            emptyDatas.Enqueue(this);
+        }
     }
 }
