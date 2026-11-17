@@ -33,7 +33,7 @@ namespace KruacentExiled.GlobalEvents.GE
             "La facilité marche pas trop là"
         };
         /// <inheritdoc/>
-        public override int WeightedChance { get; set; } = 1;
+        public override int DefaultWeightedChance { get; } = 1;
 
 
 

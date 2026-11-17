@@ -258,7 +258,7 @@ namespace KruacentExiled.CustomRoles.Abilities.RedMist.GreaterSplitHorizontal
             Vector3 frontPoint = playerPosition + direction * size;
             if (Debug)
             {
-                DrawableLines.IsDebugModeEnabled = true;
+                DrawableLines.IsDebugModeEnabled = MainPlugin.Configs.Debug;
                 DrawableLines.GenerateLine(10, Color.yellow, playerPosition, leftPoint, frontPoint, rightPoint, player.Position);
             }
             

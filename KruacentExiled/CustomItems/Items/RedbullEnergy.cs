@@ -41,8 +41,8 @@ namespace KruacentExiled.CustomItems.Items
             Limit = 2,
             RoomSpawnPoints = new List<RoomSpawnPoint>
             {
-                new RoomSpawnPoint() { Room = RoomType.EzStraight, Chance = 25 },
-                new RoomSpawnPoint() { Room = RoomType.LczCrossing, Chance = 25 },
+                new RoomSpawnPoint() { Room = RoomType.EzUpstairsPcs, Chance = 25 },
+                new RoomSpawnPoint() { Room = RoomType.LczPlants, Chance = 25 },
             },
             LockerSpawnPoints = new List<LockerSpawnPoint>
             {

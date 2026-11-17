@@ -21,7 +21,7 @@ namespace KruacentExiled.GlobalEvents.GE
             "La guerrilla est présente"
         };
         ///<inheritdoc/>
-        public override int WeightedChance { get; set; } = 2;
+        public override int DefaultWeightedChance { get; } = 2;
 
         public override ImpactLevel ImpactLevel => ImpactLevel.Medium;
 

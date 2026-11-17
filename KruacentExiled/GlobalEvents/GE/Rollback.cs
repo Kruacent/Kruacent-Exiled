@@ -21,7 +21,7 @@ namespace KruacentExiled.GlobalEvents.GE
             "Pov Omer"
         };
         ///<inheritdoc/>
-        public override int WeightedChance { get; set; } = 1;
+        public override int DefaultWeightedChance { get; } = 1;
 
         public static readonly float RefreshRate = 30;
         public static float Luck = 5;

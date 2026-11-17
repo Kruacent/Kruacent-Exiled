@@ -11,19 +11,25 @@ namespace KruacentExiled.CustomRoles.CustomSCPTeam
 
         public static void AddSCP(ReferenceHub hub)
         {
-            Log.Info("adding player");
             _scps.Add(hub);
+            Log("adding player, new count : "+SCPs.Count);
         }
 
         public static void RemoveSCP(ReferenceHub hub)
         {
-            Log.Info("removeign player");
             _scps.Remove(hub);
+            Log("removing player, new count : " + SCPs.Count);
         }
 
         public static bool IsSCP(ReferenceHub hub)
         {
             return SCPs.Contains(hub);
+        }
+
+
+        private static void Log(string msg)
+        {
+            Exiled.API.Features.Log.SendRaw($"[SCPTeam] " + msg,System.ConsoleColor.DarkYellow);
         }
     }
 }

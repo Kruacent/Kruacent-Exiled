@@ -248,7 +248,7 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs.SCP049C
         }
 
  
-        private Collider[] NonAlloc = new Collider[8];
+        private Collider[] NonAlloc = new Collider[64];
         private Ragdoll ragdoll = null;
 
         private float cooldown = 0f;
@@ -266,13 +266,17 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs.SCP049C
             }
 
         }
+        private bool CheckRagdollExist()
+        {
+            return ragdoll != null && ragdoll.Base != null && ragdoll.Base.gameObject != null;
+        }
 
         public const float MaxDistance = 2;
 
         private void UpdateTime()
         {
 
-            if(ragdoll.GameObject == null)
+            if(!CheckRagdollExist())
             {
                 Reset();
                 return;

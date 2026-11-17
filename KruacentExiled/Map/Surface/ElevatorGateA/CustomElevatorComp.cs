@@ -1,11 +1,7 @@
-﻿using Exiled.API.Features.Objectives;
+﻿using Exiled.API.Enums;
 using Exiled.API.Features.Toys;
-using KE.Utils.Quality.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace KruacentExiled.Map.Surface.ElevatorGateA
@@ -16,9 +12,12 @@ namespace KruacentExiled.Map.Surface.ElevatorGateA
 
         private HashSet<IContainPanel> Models;
 
-        public void Init(Primitive primitive,IEnumerable<IContainPanel> models)
+        public ZoneType Zone { get; private set; }
+
+        public void Init(Primitive primitive,IEnumerable<IContainPanel> models,ZoneType zone)
         {
             Primitive = primitive;
+            Zone = zone;
             Models = models.ToHashSet();
 
             baseheight = Primitive.Position.y;
@@ -26,6 +25,46 @@ namespace KruacentExiled.Map.Surface.ElevatorGateA
 
             startPos = Primitive.Position;
             endPos = new Vector3(startPos.x, objective, startPos.z);
+            list.Add(this);
+
+        }
+        private bool locked = false;
+        public bool Locked
+        {
+            get
+            {
+                return locked;
+            }
+            set
+            {
+                SetLockState(value);
+            }
+        }
+        public void SetLockState(bool newState)
+        {
+            if (newState != Locked)
+            {
+                if (newState)
+                {
+                    ChangeAllPanel(ColorLocked);
+                }
+                else
+                {
+                    if (isMoving)
+                    {
+                        ChangeAllPanel(ColorMoving);
+                    }
+                    else
+                    {
+                        ChangeAllPanel(ColorReady);
+                    }
+                }
+                locked = newState;
+            }
+        }
+        private void OnDestroy()
+        {
+            list.Remove(this);
         }
 
         private float baseheight;
@@ -34,6 +73,12 @@ namespace KruacentExiled.Map.Surface.ElevatorGateA
         private float duration = 5f;
         private bool isMoving = false;
 
+        public static readonly Color ColorReady = Color.blue;
+        public static readonly Color ColorMoving = Color.yellow;
+        public static readonly Color ColorLocked = Color.red;
+        public static IReadOnlyCollection<CustomElevatorComp> List => list;
+
+        private static List<CustomElevatorComp> list = new List<CustomElevatorComp>();
 
         private float startY;
         private float elapsed;
@@ -41,10 +86,11 @@ namespace KruacentExiled.Map.Surface.ElevatorGateA
         {
             if (isMoving) return;
             if (Primitive == null) return;
+            if (Locked) return;
 
             isMoving = true;
 
-            ChangeAllPanel(Color.yellow);
+            ChangeAllPanel(ColorMoving);
 
             startY = Primitive.Position.y;
             elapsed = 0f;
@@ -93,7 +139,11 @@ namespace KruacentExiled.Map.Surface.ElevatorGateA
                     ? increase
                     : baseheight;
 
-                ChangeAllPanel(Color.blue);
+                if (!Locked)
+                {
+                    ChangeAllPanel(ColorReady);
+                }
+                
 
                 isMoving = false;
             }

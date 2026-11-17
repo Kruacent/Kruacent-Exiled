@@ -159,7 +159,7 @@ namespace KruacentExiled.Map.Surface.ElevatorGateA
             if (!prim.GameObject.TryGetComponent<CustomElevatorComp>(out var comp))
             {
                 comp = prim.GameObject.AddComponent<CustomElevatorComp>();
-                comp.Init(prim, new List<IContainPanel>() { model, bottompanel, toppanel });
+                comp.Init(prim, new List<IContainPanel>() { model, bottompanel, toppanel },Exiled.API.Enums.ZoneType.Surface);
             }
             comp.Send();
         }

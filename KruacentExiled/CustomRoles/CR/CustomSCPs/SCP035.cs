@@ -80,7 +80,6 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
             $"{ItemType.GunAK}",
             $"{ItemType.GunShotgun}",
             $"{ItemType.GunSCP127}",
-            $"{ItemType.GunE11SR}",
 
             "ExplosiveProofArmor",
             "FaradayArmor",
@@ -89,7 +88,6 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
             "OverseerProtocolsDocument",
             "SCP-1650",
             "SCP-3136",
-            "SCP-3136"
         };
 
         public List<string> WhitelistItem { get; set; } = new List<string>()
@@ -347,13 +345,14 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
                     ev.IsAllowed = Server.FriendlyFire || ev.Attacker.IsFriendlyFireEnabled;
                     return;
                 }
+                if (ev.DamageHandler.Type == DamageType.Scp1509)
+                {
+                    ev.Amount /= 2;
+                    return;
+                }
+
             }
 
-            if(ev.DamageHandler.Type == DamageType.Scp1509)
-            {
-                ev.Amount /= 2;
-                return;
-            }
 
 
 

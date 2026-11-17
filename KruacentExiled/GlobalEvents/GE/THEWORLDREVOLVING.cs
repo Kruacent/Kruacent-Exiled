@@ -19,7 +19,7 @@ namespace KruacentExiled.GlobalEvents.GE
         ///<inheritdoc/>
         public override string Description { get; } = "THE WORLD REVOLVING";
         ///<inheritdoc/>
-        public override int WeightedChance => 0; //2
+        public override int DefaultWeightedChance => 0; //2
         public override ImpactLevel ImpactLevel => ImpactLevel.Medium;
 
 

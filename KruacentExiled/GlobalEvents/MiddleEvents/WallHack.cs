@@ -20,7 +20,7 @@ namespace KruacentExiled.GlobalEvents.MiddleEvents
         ///<inheritdoc/>
         public override string Description { get; set; } = "Tout le monde wallhack yippee!!!!!";
         ///<inheritdoc/>
-        public override int WeightedChance { get; set; } = 1;
+        public override int DefaultWeightedChance { get; } = 1;
 
         ///<inheritdoc/>
         public IEnumerator<float> Start()
@@ -42,7 +42,7 @@ namespace KruacentExiled.GlobalEvents.MiddleEvents
 
         }
 
-        protected override void Disable(KEEvents ev)
+        protected override void Disable()
         {
             OnDisable();
         }

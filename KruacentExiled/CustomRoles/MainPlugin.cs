@@ -9,9 +9,11 @@ using KruacentExiled.CustomRoles.API.Features;
 using KruacentExiled.CustomRoles.CustomSCPTeam;
 using KruacentExiled.CustomRoles.Settings;
 using MEC;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 
 namespace KruacentExiled.CustomRoles
@@ -30,7 +32,6 @@ namespace KruacentExiled.CustomRoles
         private SettingHandler _settingHandler;
         internal static SettingHandler SettingHandler => Instance?._settingHandler;
 
-        private Harmony Harmony;
 
         internal Dictionary<string, TextImage> icons;
 
@@ -55,8 +56,7 @@ namespace KruacentExiled.CustomRoles
             
             Timing.RunCoroutine(LoadImage());
 
-            Harmony = new Harmony(Name);
-            Harmony.PatchAll();
+
             SettingHandler.SubscribeEvents();
             KEAbilities.Register(KruacentExiled.MainPlugin.Instance.Assembly);
             KECustomRole.Register();
@@ -65,10 +65,9 @@ namespace KruacentExiled.CustomRoles
 
         public override void OnDisabled()
         {
-            
+            icons?.Clear();
             KECustomRole.Unregister();
             SettingHandler.UnsubscribeEvents();
-            Harmony.UnpatchAll();
 
             KEAbilities.Unregister();
             UnsubscribeEvents();
@@ -107,13 +106,22 @@ namespace KruacentExiled.CustomRoles
             }
 
             string[] rawfile = Directory.GetFiles(ImageLocation, "*.png");
-
+            int countloaded = 0;
             foreach (string file in rawfile)
             {
-                string noExFile = Path.GetFileNameWithoutExtension(file);
-                Log.Info($"loading {file} as {noExFile}");
-                icons.Add(noExFile,new TextImage(Image.FromFile(file),5));
+                try
+                {
+                    string noExFile = Path.GetFileNameWithoutExtension(file);
+                    icons.Add(noExFile, new TextImage(Image.FromFile(file), 5));
+                    countloaded++;
+                }
+                catch(Exception)
+                {
+                    Log.Error("couldn't load icon at " + file);
+                }
+                
             }
+            Log.Info($"loaded {countloaded} /{rawfile.Length} icons");
 
             yield return 0;
 

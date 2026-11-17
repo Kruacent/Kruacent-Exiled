@@ -27,13 +27,11 @@ namespace KruacentExiled.Map
 
         public override IConfig Config => config;
         private Config config;
-        private Harmony harmony;
 
         public override void OnEnabled()
         {
             Instance = this;
             handler = new Handler();
-            harmony = new Harmony(Prefix);
 
             config = KruacentExiled.MainPlugin.Instance.Config.MapConfig;
 
@@ -45,7 +43,13 @@ namespace KruacentExiled.Map
 
             SupplyDrop.SubscribeEvents();
             GamblingRoom.SubscribeEvents();
-            harmony.PatchAll(KruacentExiled.MainPlugin.Instance.Assembly);
+
+
+             
+
+
+
+            
         }
 
         private void OnWaitingForPlayers()
@@ -75,7 +79,6 @@ namespace KruacentExiled.Map
             Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
 
             SupplyDrop.UnsubscribeEvents();
-            harmony.UnpatchAll(harmony.Id);
             GamblingRoom.UnsubscribeEvents();
             handler = null;
             Instance = null;

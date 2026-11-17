@@ -13,7 +13,8 @@ namespace KruacentExiled.GlobalEvents.GE
         ///<inheritdoc/>
         public override string Description { get; } = "y'a r";
         ///<inheritdoc/>
-        public override int WeightedChance => 10;
+        ///
+        public override int DefaultWeightedChance => 10;
         public override ImpactLevel ImpactLevel => ImpactLevel.VeryLow;
 
         public override string[] AltDescription => new string[]

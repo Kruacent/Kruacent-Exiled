@@ -32,14 +32,11 @@ namespace KruacentExiled.CustomItems
         internal static readonly HintPlacement ItemEffectPlacement = new HintPlacement(0, 200, HintServiceMeow.Core.Enum.HintAlignment.Center);
         internal static readonly HintPlacement HintPlacement = new HintPlacement(0, 400, HintServiceMeow.Core.Enum.HintAlignment.Center);
 
-        internal Harmony harmony;
         
         public override void OnEnabled()
         {
             Instance = this;
             config = KruacentExiled.MainPlugin.Instance.Config.CustomItemConfig;
-            harmony = new Harmony(Name);
-            harmony.PatchAll(KruacentExiled.MainPlugin.Instance.Assembly);
             UpgradeHandler = new UpgradeHandler();
             LightsHandler = new LightsHandler();
             SettingsHandler = new SettingsHandler();
@@ -95,7 +92,6 @@ namespace KruacentExiled.CustomItems
             UpgradeHandler?.UnsubscribeEvents();
             LightsHandler?.UnsubscribeEvents();
 
-            harmony.UnpatchAll(harmony.Id);
             SettingsHandler = null;
             LightsHandler = null;
             UpgradeHandler = null;

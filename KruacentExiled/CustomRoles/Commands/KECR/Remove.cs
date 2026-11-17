@@ -39,7 +39,7 @@ namespace KruacentExiled.CustomRoles.Commands.KECR
             
 
             response = "removed "+ customRole.Name + " from "+player.Nickname;
-            return false;
+            return true;
 
 
         }

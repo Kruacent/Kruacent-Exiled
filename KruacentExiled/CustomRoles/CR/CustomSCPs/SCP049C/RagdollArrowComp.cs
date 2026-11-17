@@ -68,7 +68,6 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs.SCP049C
 
             arrow.OnlyMoveY = true;
             SetColor(Color.white);
-            arrow.Toy.Spawn();
         }
     }
 }
