@@ -53,7 +53,7 @@ namespace KE.Misc.Features._914Upgrades
             KELog.Debug("luckcheck entrance : " + luckcheckEntrance);
 
             bool luckcheckLcz = LuckCheck(25, player);
-            KELog.Debug("luckcheck lcz : " + luckcheckEntrance);
+            KELog.Debug("luckcheck lcz : " + luckcheckLcz);
             if (setting == Scp914KnobSetting.Fine && luckcheckEntrance)
             {
                 try
