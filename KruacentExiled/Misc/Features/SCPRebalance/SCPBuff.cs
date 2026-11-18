@@ -73,7 +73,7 @@ namespace KruacentExiled.Misc.Features.SCPRebalance
             if (player == null) return;
             CancelBuff(player);
             if (!ev.NewRole.IsScp() || ev.NewRole == RoleTypeId.Scp0492) return;
-            if(player.Role == RoleTypeId.None) return;
+            KELog.Debug("player old role type " + player.Role.Type);
             float healthIncrease = IncreaseSCPHealth;
             if(RoleBuff.TryGetValue(ev.NewRole,out float val) && SCPTeam.SCPs.Count > 1)
             {
@@ -99,6 +99,7 @@ namespace KruacentExiled.Misc.Features.SCPRebalance
             _activeBuffCoroutines.Remove(player);
             if (player == null || !player.IsConnected || !player.IsAlive || !SCPTeam.IsSCP(player.ReferenceHub))
             {
+                KELog.Debug("player not ok");
                 return;
             }
 

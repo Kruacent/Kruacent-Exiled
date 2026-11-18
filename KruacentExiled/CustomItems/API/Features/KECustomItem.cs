@@ -474,7 +474,12 @@ namespace KruacentExiled.CustomItems.API.Features
             pickup.Weight = Weight;
 
             TrackedSerials.Add(pickup.Serial);
-            LightsHandler.AddPickup(pickup.Base);
+            
+            if(this is ILumosItem li)
+            {
+                LightsHandler.ForceAddLight(pickup.Base,li.Color);
+            }
+            
         }
 
         public static bool IsConsideredViolent(KECustomItem item)
