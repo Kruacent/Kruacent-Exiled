@@ -3,6 +3,7 @@ using Exiled.API.Features.Items;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using KruacentExiled.Misc.Features.GamblingCoin.Types;
 using MEC;
+using System.Collections.Generic;
 
 internal class Vaporize : ICoinEffect
 {
@@ -11,14 +12,18 @@ internal class Vaporize : ICoinEffect
     public int Weight { get; set; } = 5;
     public EffectType Type { get; set; } = EffectType.Negative;
 
-    public static int MaxSeconds = 600;
+    public const int MaxSeconds = 600;
 
     public void Execute(Player player)
     {
-        Timing.CallDelayed(UnityEngine.Random.Range(30, MaxSeconds), () =>
+        int id = player.Role.Base.UniqueLifeIdentifier;
+        CoroutineHandle handle = Timing.CallDelayed(UnityEngine.Random.Range(30, MaxSeconds), () =>
         {
-            player.Vaporize();
-            KruacentExiled.CustomRoles.MainPlugin.ShowEffectHint(player, "You shouldn't gamble too much (you ate moss)");
+            if (id == player.Role.Base.UniqueLifeIdentifier)
+            {
+                player.Vaporize();
+                KruacentExiled.CustomRoles.MainPlugin.ShowEffectHint(player, "You shouldn't gamble too much (you ate moss)");
+            }
         });
     }
 }
