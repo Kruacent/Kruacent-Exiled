@@ -45,7 +45,7 @@ namespace KruacentExiled.CustomRoles.CR.Guard
         public override List<string> Inventory { get; set; } = new List<string>()
         {
           $"{ItemType.KeycardGuard}",
-          $"{ItemType.GunFSP9}",
+          $"{ItemType.GunCrossvec}",
           $"{ItemType.Medkit}",
           $"{ItemType.GrenadeFlash}",
           $"{ItemType.GrenadeFlash}",
@@ -54,7 +54,7 @@ namespace KruacentExiled.CustomRoles.CR.Guard
 
         public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new Dictionary<AmmoType, ushort>()
         {
-          { AmmoType.Nato556, 60}
+          { AmmoType.Nato9, 70}
         };
 
         public override void Init()
