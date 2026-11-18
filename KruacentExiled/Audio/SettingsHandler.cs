@@ -14,7 +14,8 @@ namespace KruacentExiled.Audio
     {
         private int _idSound = 900;
 
-        public const float DefaultValue = 50;
+        public const float DefaultValue = 100;
+        public const float MaxValue = 400;
 
 
 
@@ -105,7 +106,7 @@ namespace KruacentExiled.Audio
 
         private SliderSetting CreateSliderSetting(int id, SoundType type, HeaderSetting header)
         {
-            return new SliderSetting(id, type.ToString(), 0, 100, DefaultValue, header:header);
+            return new SliderSetting(id, type.ToString(), 0, MaxValue, DefaultValue, header:header);
         }
 
 

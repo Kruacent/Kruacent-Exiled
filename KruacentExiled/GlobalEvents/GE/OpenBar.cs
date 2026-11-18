@@ -14,7 +14,7 @@ namespace KruacentExiled.GlobalEvents.GE
     {
         public override string Name { get; set; } = "OpenBar";
         public override string Description { get; } = "j'espère que vous avez pas prévu de kampé";
-        public override int WeightedChance { get; set; } = 3;
+        public override int DefaultWeightedChance { get; } = 3;
 
         public int NbAdditionalDoor = 3;
 

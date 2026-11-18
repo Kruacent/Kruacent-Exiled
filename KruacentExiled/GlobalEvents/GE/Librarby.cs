@@ -24,7 +24,7 @@ namespace KruacentExiled.GlobalEvents.GE
         ///<inheritdoc/>
         public override string Description { get; } = "Ne parlez pas trop fort sinon vous subirez les conséquences !";
         ///<inheritdoc/>
-        public override int WeightedChance => 1;
+        public override int DefaultWeightedChance => 1;
 
         public float ChanceRedacted => 0;
 

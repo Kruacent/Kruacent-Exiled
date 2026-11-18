@@ -19,7 +19,7 @@ namespace KruacentExiled.Audio.Patches
             {
                 if (__instance.ClipsById.Count == 0)
                 {
-                    foreach (string speaker in __instance.SpeakersByName.Keys)
+                    foreach (string speaker in __instance.SpeakersByName.Keys.ToList())
                     {
                         __instance.RemoveSpeaker(speaker);
                         KELog.Debug($"destroyed speaker ({speaker}) from {__instance.Name}");

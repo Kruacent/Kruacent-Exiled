@@ -66,10 +66,10 @@ namespace KruacentExiled.CustomRoles.CR.Human
 
         protected override void UnsubscribeEvents()
         {
-            base.UnsubscribeEvents();
             Exiled.Events.Handlers.Player.ItemAdded -= OnItemAdded;
             Exiled.Events.Handlers.Player.ItemRemoved -= OnItemRemoved;
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+            base.UnsubscribeEvents();
         }
 
         protected override void RoleAdded(Player player)

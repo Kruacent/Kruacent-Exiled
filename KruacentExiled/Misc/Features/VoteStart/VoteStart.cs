@@ -142,7 +142,8 @@ namespace KruacentExiled.Misc.Features.VoteStart
 
         private string GetPlayers(Player player)
         {
-            if (!Round.IsLobby) return string.Empty;
+            if (!Round.IsLobby) return " ";
+            if (Voted == null) return " ";
 
             StringBuilder sb = StringBuilderPool.Pool.Get();
 

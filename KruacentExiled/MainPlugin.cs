@@ -15,6 +15,7 @@ using LabApi.Events.Arguments.ServerEvents;
 using MEC;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace KruacentExiled
@@ -24,7 +25,7 @@ namespace KruacentExiled
 
         private KEPlugin[] plugins;
         public override string Author => "Patrique & OmerGS";
-        public override Version Version { get; } = new Version(2, 2, 0);
+        public override Version Version { get; } = new Version(2, 2, 1);
 
         public static MainPlugin Instance { get; private set; }
 
@@ -74,8 +75,8 @@ namespace KruacentExiled
                 }
 
             }
-            //harmony = new Harmony("KEMainPlugin");
-            //harmony.PatchAll();
+            harmony = new Harmony("KEMainPlugin");
+            harmony.PatchAll();
 
             AudioHandler = new AudioHandler(Config.Debug);
             AudioHandler.SubscribeEvents();
@@ -100,7 +101,7 @@ namespace KruacentExiled
         public override void OnDisabled()
         {
 
-            //harmony.UnpatchAll("KEMainPlugin");
+            harmony.UnpatchAll("KEMainPlugin");
 
             for (int i = 0; i < plugins.Length; i++)
             {
@@ -192,6 +193,8 @@ namespace KruacentExiled
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = false;
 
+        [Description("show when player enter or leaves the scp team")]
+        public bool VerboseSCPTeam { get; set; } = true;
         public CustomRoles.Config CustomRoleConfig { get; set; } = new CustomRoles.Config();
         public CustomItems.Config CustomItemConfig { get; set; } = new CustomItems.Config();
         public Map.Config MapConfig { get; set; } = new Map.Config();

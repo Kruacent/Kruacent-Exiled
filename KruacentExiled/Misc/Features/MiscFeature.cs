@@ -23,8 +23,14 @@ namespace KruacentExiled.Misc.Features
         {
             foreach (MiscFeature f in _list)
             {
-                KELog.Debug($"subscribing events in {f.GetType()}");
-                f.SubscribeEvents();
+                try
+                {
+                    f.SubscribeEvents();
+                }catch(Exception e)
+                {
+                    Log.Error(e);
+                }
+                
             }
                 
         }
@@ -32,7 +38,16 @@ namespace KruacentExiled.Misc.Features
         internal static void UnsubscribeAllEvents()
         {
             foreach (MiscFeature f in _list)
-                f.UnsubscribeEvents();
+            {
+                try
+                {
+                    f.UnsubscribeEvents();
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
+            }
             _list.Clear();
         }
 

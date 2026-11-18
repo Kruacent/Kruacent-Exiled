@@ -32,7 +32,7 @@ namespace KruacentExiled.CustomRoles.Abilities.RedMist.Spear
             _player = player;
             _direction = direction;
             _primitive = primitive;
-            DrawableLines.IsDebugModeEnabled = true;
+            DrawableLines.IsDebugModeEnabled = MainPlugin.Configs.Debug;
 
         }
 

@@ -452,7 +452,6 @@ namespace KruacentExiled.CustomRoles.API.Features
             {
                 Registered.Add(this);
                 Init();
-                Log.Debug("registered " + Name);
                 return true;
             }
 
@@ -488,17 +487,15 @@ namespace KruacentExiled.CustomRoles.API.Features
             Destroy();
             if (Registered.Remove(this))
             {
-                Log.Debug("unregistered " + this);
                 return true;
             }
-            Log.Warn(this + " was not registered");
             return false;
         }
 
         public static IEnumerable<KEAbilities> Unregister()
         {
             List<KEAbilities> list = new List<KEAbilities>();
-            foreach (KEAbilities item in Registered)
+            foreach (KEAbilities item in Registered.ToList())
             {
                 item.TryUnregister();
                 list.Add(item);

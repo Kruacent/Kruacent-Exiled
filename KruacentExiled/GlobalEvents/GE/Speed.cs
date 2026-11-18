@@ -33,7 +33,7 @@ namespace KruacentExiled.GlobalEvents.GE
             "Mayhem mode activated",
         };
         ///<inheritdoc/>
-        public override int WeightedChance { get; set; } = 5;
+        public override int DefaultWeightedChance { get; } = 5;
         /// <summary>
         /// intensity of the movement boost effect
         /// </summary>

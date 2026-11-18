@@ -2,6 +2,10 @@
 using Exiled.API.Features;
 using Exiled.API.Features.Pools;
 using KruacentExiled.Map.Others.BlackoutNDoor.Handlers;
+using KruacentExiled.Map.Others.CustomElevators;
+using KruacentExiled.Map.Others.CustomElevators.KECustomElevators;
+using KruacentExiled.Map.Surface.ElevatorGateA;
+using LabApi.Features.Wrappers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +18,7 @@ namespace KruacentExiled.Map.Others.BlackoutNDoor
     {
 
         private List<Lift> _lifts;
+        private List<CustomElevatorComp> _elevators;
         public override string Cassie => MainPlugin.Translations.Elevatorstuck;
 
         public override string CassieTranslated => MainPlugin.Translations.ElevatorstuckTranslation;
@@ -21,6 +26,7 @@ namespace KruacentExiled.Map.Others.BlackoutNDoor
         public override void Start(ZoneType zone)
         {
             _lifts = ListPool<Lift>.Pool.Get();
+            _elevators = ListPool<CustomElevatorComp>.Pool.Get();
 
             foreach(Lift lift in Lift.List)
             {
@@ -31,10 +37,14 @@ namespace KruacentExiled.Map.Others.BlackoutNDoor
                 }
             }
 
-
-            
-
-
+            foreach(CustomElevatorComp elevator in CustomElevatorComp.List)
+            {
+                if (!elevator.Locked && elevator.Zone == zone)
+                {
+                    _elevators.Add(elevator);
+                    elevator.Locked = true;
+                }
+            }
         }
 
         public override void Stop(ZoneType zone)
@@ -44,9 +54,14 @@ namespace KruacentExiled.Map.Others.BlackoutNDoor
             {
                 lift.ChangeLock(Interactables.Interobjects.DoorUtils.DoorLockReason.None);
             }
-
-
             ListPool<Lift>.Pool.Return(_lifts);
+            foreach (CustomElevatorComp elevator in _elevators)
+            {
+                elevator.Locked = false;
+            }
+
+            ListPool<CustomElevatorComp>.Pool.Return(_elevators);
+
         }
     }
 }

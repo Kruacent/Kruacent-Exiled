@@ -23,7 +23,7 @@ namespace KruacentExiled.GlobalEvents.GE
         ///<inheritdoc/>
         public override string Description { get; } = "Les spawns sont random";
         ///<inheritdoc/>
-        public override int WeightedChance { get; set; } = 5;
+        public override int DefaultWeightedChance { get; } = 5;
         public override ImpactLevel ImpactLevel => ImpactLevel.High;
         public IEnumerable<RoomType> BlacklistedRooms { get; } = new List<RoomType>() { RoomType.EzGateA, RoomType.EzGateB };
         ///<inheritdoc/>

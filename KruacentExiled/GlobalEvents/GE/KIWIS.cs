@@ -22,7 +22,7 @@ namespace KruacentExiled.GlobalEvents.GE
         public override string Description { get; } = "Kill It While It's Small";
         public override ImpactLevel ImpactLevel => ImpactLevel.Medium;
         ///<inheritdoc/>
-        public override int WeightedChance { get; set; } = 1;
+        public override int DefaultWeightedChance { get; } = 1;
         ///<inheritdoc/>
         public IEnumerator<float> Start()
         {

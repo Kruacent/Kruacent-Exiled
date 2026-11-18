@@ -10,7 +10,7 @@
         ///<inheritdoc/>
         public override string Description { get; set; } = "Aller on change de role";
         ///<inheritdoc/>
-        public override int WeightedChance { get; set; } = 0;
+        public override int DefaultWeightedChance { get; } = 0;
 
         public IEnumerator<float> Start()
         {

@@ -20,7 +20,7 @@ using UnityEngine;
 
 namespace KruacentExiled.CustomItems.Items
 {
-    public class FlowerStick : KECustomItem
+    public class FlowerStick : KECustomItem, IHiddenName
     {
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
@@ -50,7 +50,10 @@ namespace KruacentExiled.CustomItems.Items
         };
 
 
-        public float CooldownInspect { get; } = 2f;
+        public float CooldownInspect { get; } = 2;
+
+        public bool IsHiddenName => true;
+
         private Dictionary<Player, DateTime> cooldownInspect;
         protected override void SubscribeEvents()
         {

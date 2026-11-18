@@ -2,15 +2,14 @@
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp173;
-using InventorySystem.Items.Usables;
 using GlobalEventFramework.API.Features;
 using GlobalEventFramework.API.Interfaces;
 using MEC;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace KruacentExiled.GlobalEvents.MiddleEvents
 {
@@ -21,7 +20,7 @@ namespace KruacentExiled.GlobalEvents.MiddleEvents
         ///<inheritdoc/>
         public override string Description { get; set; } = "Gas! gas! gas!";
         ///<inheritdoc/>
-        public override int WeightedChance { get; set; } = 1;
+        public override int DefaultWeightedChance { get; } = 1;
         public override string[] IncompatibleEvents => new string[] { "Speed" };
         /// <summary>
         /// intensity of the movement boost effect
@@ -48,10 +47,10 @@ namespace KruacentExiled.GlobalEvents.MiddleEvents
             Exiled.Events.Handlers.Scp173.Blinking -= SpeedyNut;
         }
 
-        protected override void Disable(KEEvents ev)
+        protected override void Disable()
         {
             OnDisable();
-            base.Disable(ev);
+            base.Disable();
         }
 
         public void OnDisable()

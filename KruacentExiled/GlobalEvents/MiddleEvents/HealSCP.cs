@@ -14,7 +14,7 @@ namespace KruacentExiled.GlobalEvents.MiddleEvents
         ///<inheritdoc/>
         public override string Description { get; set; } = "Bon aller on rallonge un peu la game";
         ///<inheritdoc/>
-        public override int WeightedChance { get; set; } = 1;
+        public override int DefaultWeightedChance { get; } = 1;
 
         public bool Condition()
         {

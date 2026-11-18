@@ -529,7 +529,7 @@ namespace KruacentExiled.CustomItems.API.Features
 
         public new static void UnregisterItems()
         {
-            foreach(CustomItem item in Registered)
+            foreach(CustomItem item in Registered.ToList())
             {
                 item.Unregister();
             }
