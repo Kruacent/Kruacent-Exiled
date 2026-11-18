@@ -25,7 +25,7 @@ namespace KruacentExiled
 
         private KEPlugin[] plugins;
         public override string Author => "Patrique & OmerGS";
-        public override Version Version { get; } = new Version(2, 2, 1);
+        public override Version Version { get; } = new Version(2, 2, 2);
 
         public static MainPlugin Instance { get; private set; }
 
@@ -196,7 +196,6 @@ namespace KruacentExiled
         [Description("show when player enter or leaves the scp team")]
         public bool VerboseSCPTeam { get; set; } = true;
         public CustomRoles.Config CustomRoleConfig { get; set; } = new CustomRoles.Config();
-        public CustomItems.Config CustomItemConfig { get; set; } = new CustomItems.Config();
         public Map.Config MapConfig { get; set; } = new Map.Config();
         public Misc.Config MiscConfig { get; set; } = new Misc.Config();
         public ServerTools.Config ServerToolsConfig { get; set; } = new ServerTools.Config();

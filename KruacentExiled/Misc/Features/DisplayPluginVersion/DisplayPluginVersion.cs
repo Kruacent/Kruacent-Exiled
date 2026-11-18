@@ -71,7 +71,7 @@ namespace KruacentExiled.Misc.Features.DisplayPluginVersion
             stringBuilder.Append('v');
             stringBuilder.Append(KruacentExiled.MainPlugin.Instance.Version);
 
-            if (MainPlugin.Configs.Debug)
+            if (KruacentExiled.MainPlugin.Instance.Config.Debug)
             {
                 stringBuilder.Append(" -  DEBUG");
             }
