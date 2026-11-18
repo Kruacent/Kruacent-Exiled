@@ -311,7 +311,7 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs.SCP049C
 
         private void Reset()
         {
-            if(ragdoll != null && ragdoll.GameObject.TryGetComponent<RagdollArrowComp>(out var comp))
+            if(CheckRagdollExist() && ragdoll.GameObject.TryGetComponent<RagdollArrowComp>(out var comp))
             {
                 comp.SetColor(Color.white);
             }
