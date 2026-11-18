@@ -19,7 +19,7 @@ namespace KruacentExiled
 
         public void InternalOnEnabled()
         {
-            if (Config.IsEnabled)
+            if (Config != null && Config.IsEnabled)
             {
                 OnEnabled();
 

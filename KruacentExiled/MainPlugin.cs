@@ -196,7 +196,6 @@ namespace KruacentExiled
         [Description("show when player enter or leaves the scp team")]
         public bool VerboseSCPTeam { get; set; } = true;
         public CustomRoles.Config CustomRoleConfig { get; set; } = new CustomRoles.Config();
-        public CustomItems.Config CustomItemConfig { get; set; } = new CustomItems.Config();
         public Map.Config MapConfig { get; set; } = new Map.Config();
         public Misc.Config MiscConfig { get; set; } = new Misc.Config();
         public ServerTools.Config ServerToolsConfig { get; set; } = new ServerTools.Config();
