@@ -19,6 +19,9 @@ namespace KruacentExiled.Test
         {
             Assembly assembly = Assembly.GetCallingAssembly();
 
+            int count = 0;
+            int countSuccess = 0;
+
             foreach (Type type in assembly.GetTypes())
             {
                 if (!type.IsDefined(typeof(TestClassAttribute), true))
@@ -37,7 +40,11 @@ namespace KruacentExiled.Test
                 {
                     if (method.IsDefined(typeof(TestMethodAttribute), true))
                     {
-                        ExecuteTest(instance, method, null);
+                        count++;
+                        if(ExecuteTest(instance, method, null))
+                        {
+                            countSuccess++;
+                        }
                         continue;
                     }
 
@@ -48,14 +55,28 @@ namespace KruacentExiled.Test
 
                     foreach (TestCaseAttribute testCase in testCases)
                     {
-                        ExecuteTest(instance, method, testCase.Arguments);
+                        count++;
+                        if(ExecuteTest(instance, method, testCase.Arguments))
+                        {
+                            countSuccess++;
+                        }
                     }
                 }
             }
+
+            Log.SendRaw($"Test passed : {countSuccess}/{count}", ConsoleColor.DarkGreen);
+            int testFailed = count - countSuccess;
+            if(testFailed > 0)
+            {
+                Log.SendRaw($"Test failed : {testFailed}/{count}", ConsoleColor.DarkRed);
+            }
+            
+
         }
 
-        private void ExecuteTest(object instance, MethodInfo method, object[] arguments)
+        private bool ExecuteTest(object instance, MethodInfo method, object[] arguments)
         {
+            bool result = false;
             try
             {
                 LogExecuting(method);
@@ -63,6 +84,7 @@ namespace KruacentExiled.Test
                 method.Invoke(instance, arguments ?? new object[0]);
 
                 LogSuccess();
+                result = true;
             }
             catch (TargetInvocationException ex)
             {
@@ -80,6 +102,7 @@ namespace KruacentExiled.Test
             {
                 LogFail($"Runner error: {ex}");
             }
+            return result;
         }
 
 
