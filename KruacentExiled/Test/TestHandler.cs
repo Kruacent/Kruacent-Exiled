@@ -5,6 +5,7 @@ using KE.Utils.API;
 using KruacentExiled.Test.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -73,21 +74,22 @@ namespace KruacentExiled.Test
             
 
         }
-
         private bool ExecuteTest(object instance, MethodInfo method, object[] arguments)
         {
+            Stopwatch stopwatch = new Stopwatch();
             bool result = false;
             try
             {
                 LogExecuting(method);
-
-                method.Invoke(instance, arguments ?? new object[0]);
-
+                stopwatch.Start();
+                method.Invoke(instance, arguments ?? Array.Empty<object>());
+                stopwatch.Stop();
                 LogSuccess();
                 result = true;
             }
             catch (TargetInvocationException ex)
             {
+                stopwatch.Stop();
                 Exception exception = ex.InnerException ?? ex;
                 if (exception is AssertionException)
                 {
@@ -100,8 +102,20 @@ namespace KruacentExiled.Test
             }
             catch (Exception ex)
             {
+                stopwatch.Stop();
                 LogFail($"Runner error: {ex}");
             }
+            finally
+            {
+                if (stopwatch.IsRunning)
+                {
+                    stopwatch.Stop();
+                }
+
+                Log.SendRaw($"Time: {stopwatch.Elapsed.TotalMilliseconds:F2}ms", ConsoleColor.White);
+                
+            }
+            
             return result;
         }
 
