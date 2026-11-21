@@ -69,19 +69,35 @@ namespace KruacentExiled.Misc.Features.SCPRebalance
 
 
             if (!ev.IsAllowed) return;
-            int maxZombie = ZombiePer049 * CurrentAlive049;
 
-            if(maxZombie < CurrentAliveZombies + 1)
+            int number049 = CurrentAlive049;
+            int numberZombie = CurrentAliveZombies;
+
+            int maxZombie = GetMaxZombie(number049);
+
+            if(HasMaxZombie(numberZombie, number049))
             {
                 ev.IsAllowed = false;
                 string msg = TranslationHub.Get(player, TranslationId, TooMuchZombies)
-                    .Replace("%CurrZombies%", CurrentAliveZombies.ToString()).Replace("%MaxZombies%", maxZombie.ToString());
+                    .Replace("%CurrZombies%", numberZombie.ToString()).Replace("%MaxZombies%", maxZombie.ToString());
 
 
                 DisplayHandler.Instance.AddHint(Position.HintPlacement, player, msg, 3);
             }
 
 
+        }
+
+
+        public static bool HasMaxZombie(int numberZombie, int number049)
+        {
+            return GetMaxZombie(number049) <= numberZombie;
+        }
+
+
+        public static int GetMaxZombie(int number049)
+        {
+            return number049 * ZombiePer049;
         }
     }
 
