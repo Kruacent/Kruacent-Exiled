@@ -32,15 +32,16 @@ namespace KruacentExiled.Misc.Features.VoteStart
             Player player = Player.Get(sender);
 
             VoteStart vote = MainPlugin.Instance.vote;
+            int playerId = player.Id;
 
-            if (!vote.DidVote(player))
+            if (!vote.DidVote(playerId))
             {
                 response = "you didn't vote";
                 return false;
             }
 
 
-            vote.CancelVote(player);
+            vote.CancelVote(playerId);
 
 
             response = "vote set at " + MainPlugin.Configs.MinPlayerVote + " players";

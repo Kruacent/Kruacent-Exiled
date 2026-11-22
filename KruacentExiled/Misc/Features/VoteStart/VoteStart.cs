@@ -27,8 +27,21 @@ namespace KruacentExiled.Misc.Features.VoteStart
 
         public static HintPosition HintPosition = new VotePosition();
 
-        private List<Player> Voted = new List<Player>();
+        private List<int> Voted;
         private bool voteCasted = false;
+
+
+        internal VoteStart() : base()
+        {
+            Voted = ListPool<int>.Pool.Get();
+        }
+
+        ~VoteStart()
+        {
+            ListPool<int>.Pool.Return(Voted);
+        }
+
+
         public override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
@@ -54,30 +67,50 @@ namespace KruacentExiled.Misc.Features.VoteStart
 
         private void OnLeft(LeftEventArgs ev)
         {
-            Player player = ev.Player;
-            if (DidVote(player))
+            int playerId = ev.Player.Id;
+            if (DidVote(playerId))
             {
-                CancelVote(player);
+                CancelVote(playerId);
             }
         }
 
 
-        public bool DidVote(Player player)
+        public bool DidVote(int playerId)
         {
-            return Voted.Contains(player);
+            return Voted.Contains(playerId);
         }
 
-        public void CancelVote(Player player)
+        public void CancelVote(int playerId)
         {
-            if (!Voted.Contains(player))
+            if (!Voted.Contains(playerId))
             {
-                throw new ArgumentOutOfRangeException($"Player ({player}) didn't vote");
+                throw new ArgumentOutOfRangeException($"Player ({playerId}) didn't vote");
             }
 
 
-            Voted.Remove(player);
-            Round.IsLobbyLocked = true;
-            voteCasted = false;
+            Voted.Remove(playerId);
+            if(Voted.Count < MainPlugin.Configs.MinPlayerVote)
+            {
+                Round.IsLobbyLocked = true;
+                voteCasted = false;
+            }
+            
+        }
+
+
+        public void AddVote(int playerId)
+        {
+            if (Voted.Contains(playerId))
+            {
+                throw new ArgumentException($"Player ({playerId}) already voted");
+            }
+
+            Voted.Add(playerId);
+            if (Voted.Count >= MainPlugin.Configs.MinPlayerVote)
+            {
+                Round.IsLobbyLocked = false;
+                voteCasted = true;
+            }
         }
 
 
@@ -95,19 +128,17 @@ namespace KruacentExiled.Misc.Features.VoteStart
             {
                 return;
             }
+            int playerId = ev.Player.Id;
 
-            if (DidVote(ev.Player))
+            if (DidVote(playerId))
             {
                 return;
             }
 
-            Voted.Add(ev.Player);
-            if (Voted.Count >= MainPlugin.Configs.MinPlayerVote)
-            {
-                Log.Info("starting the round");
-                Round.IsLobbyLocked = false;
-                voteCasted = true;
-            }
+            AddVote(playerId);
+
+
+
         }
         private void OnWaitingForPlayers()
         {
@@ -130,6 +161,8 @@ namespace KruacentExiled.Misc.Features.VoteStart
                 return;
             }
 
+            
+
             Timing.CallDelayed(1f, () =>
             {
                 if (Round.IsLobby)
@@ -144,6 +177,7 @@ namespace KruacentExiled.Misc.Features.VoteStart
         {
             if (!Round.IsLobby) return " ";
             if (Voted == null) return " ";
+            if (player == null) return " ";
 
             StringBuilder sb = StringBuilderPool.Pool.Get();
 
@@ -154,8 +188,12 @@ namespace KruacentExiled.Misc.Features.VoteStart
             sb.Append(MainPlugin.Configs.MinPlayerVote);
 
             sb.AppendLine(") : ");
-            foreach (Player other in Voted)
+            int playerId = player.Id;
+            foreach (int otherId in Voted)
             {
+
+                Player other = Player.Get(otherId);
+
                 bool flag1 = other == player;
 
 
@@ -170,7 +208,7 @@ namespace KruacentExiled.Misc.Features.VoteStart
                 }
                 sb.Append(" ");
             }
-            if (Voted.Contains(player))
+            if (DidVote(playerId))
             {
                 sb.AppendLine();
 
