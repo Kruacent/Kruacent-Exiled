@@ -52,11 +52,21 @@ namespace KruacentExiled.CustomRoles.Abilities
 
         protected override bool AbilityUsed(Player player)
         {
+            if(!SetPosition.TryGetTarget(player, out Vector3 target))
+            {
+                SetPosition setPosition = (SetPosition)SetPosition.Get("SetPosition");
+
+                setPosition.UseAbility(player);
+                return false;
+            }
+
+
+
             if (!CheckValid(player, true))
             {
                 return false;
             }
-            SetPosition.TryGetTarget(player, out Vector3 target);
+            
             var l = Light.Create(target, null, null, true, Color.red);
 
             ExplosiveGrenade grenade = (ExplosiveGrenade)Item.Create(ItemType.GrenadeHE, player);
