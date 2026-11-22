@@ -31,7 +31,7 @@ namespace KruacentExiled.CustomRoles.Abilities.SCP049C
             };
         }
 
-        public override float Cooldown { get; } = 120f;
+        public override float Cooldown { get; } = 60f;
 
         protected override bool AbilityUsed(Player player)
         {
