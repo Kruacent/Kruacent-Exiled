@@ -1,6 +1,6 @@
 Resources:
 - changed-files:
-  - any-glob-to-any-file: Resources/**
+  - any-glob-to-any-file: 'Resources/**'
 
 'Global Event':
 - all:
