@@ -61,7 +61,7 @@ namespace KruacentExiled.CustomRoles.CR.MTF.Medic
         {
             base.GiveInventory(player);
 
-            Exiled.CustomItems.API.Features.CustomItem.TryGive(player, "Defibrillator", false);
+            Exiled.CustomItems.API.Features.CustomItem.TryGive(player, "Defibrilator", false);
         }
 
         public override HashSet<string> Abilities { get; } = new HashSet<string>()
