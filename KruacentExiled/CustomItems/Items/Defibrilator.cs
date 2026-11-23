@@ -1,12 +1,9 @@
 using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
-using Exiled.CustomRoles.Commands;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Displays.Feeds;
-using KE.Utils.Extensions;
 using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
@@ -14,33 +11,31 @@ using MEC;
 using PlayerRoles;
 using PlayerRoles.Ragdolls;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using YamlDotNet.Core.Tokens;
 
 namespace KruacentExiled.CustomItems.Items
 {
-    public class Defibrillator : KECustomItem, ILumosItem, IRevivingCustomItem
+    public class Defibrilator : KECustomItem, ILumosItem, IRevivingCustomItem
     {
 
-        public const string TranslationFailed = "DefibrillatorFailed";
-        public const string TranslationExpired = "DefibrillatorExpired";
-        public const string TranslationTooFar = "DefibrillatorTooFar";
-        public const string TranslationRevived = "DefibrillatorRevived";
-        public const string TranslationSucceed = "DefibrillatorSucceed";
-        public const string TranslationInProgress = "DefibrillatorInProgress";
+        public const string TranslationFailed = "DefibrilatorFailed";
+        public const string TranslationExpired = "DefibrilatorExpired";
+        public const string TranslationTooFar = "DefibrilatorTooFar";
+        public const string TranslationRevived = "DefibrilatorRevived";
+        public const string TranslationSucceed = "DefibrilatorSucceed";
+        public const string TranslationInProgress = "DefibrilatorInProgress";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new Dictionary<string, Dictionary<string, string>>()
             {
                 ["en"] = new Dictionary<string, string>()
                 {
-                    [TranslationKeyName] = "Defibrillator",
+                    [TranslationKeyName] = "Defibrilator",
                     [TranslationKeyDesc] = "Aim for a dead body to try to re<b>sus</b>citate him",
                     [TranslationFailed] = "<color=red>Failed!</color>",
                     [TranslationExpired] = "<color=red>Body expired.</color>",
                     [TranslationTooFar] = "<color=yellow>Aim at a body.</color>",
-                    [TranslationRevived] = "<color=cyan>Revived by %MedicName%\n<b>you got brian damage</b></color>",
+                    [TranslationRevived] = "<color=blue>Revived by %MedicName%\n<b>you got brian damage</b></color>",
                     [TranslationSucceed] = "<color=green>Successfully ressucitate %PatientName%!</color>",
                     [TranslationInProgress] = "<color=yellow>In progress</color>",
                 },
@@ -58,7 +53,7 @@ namespace KruacentExiled.CustomItems.Items
             };
         }
         public override ItemType ItemType => ItemType.SCP1853;
-        public override string Name { get; set; } = "Defibrillator";
+        public override string Name { get; set; } = "Defibrilator";
         public override float Weight { get; set; } = 1.0f;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.magenta;
         public override ItemRank Rank { get; } = ItemRank.Epic;
@@ -199,7 +194,7 @@ namespace KruacentExiled.CustomItems.Items
                 {
                     TranslationFeed(medic, TranslationFailed);
                     shockLight.Destroy();
-                    CustomItem.TryGive(medic, "Defibrillator", false);
+                    CustomItem.TryGive(medic, "Defibrilator", false);
                     yield break;
                 }
 
@@ -214,7 +209,7 @@ namespace KruacentExiled.CustomItems.Items
             yield return Timing.WaitForSeconds(0.2f);
             shockLight.Destroy();
 
-            patient.Role.Set(previousRole, SpawnReason.Revived, RoleSpawnFlags.All);
+            patient.Role.Set(previousRole, SpawnReason.Revived, RoleSpawnFlags.None);
 
             yield return Timing.WaitForSeconds(0.4f);
 
@@ -222,8 +217,6 @@ namespace KruacentExiled.CustomItems.Items
 
             if (patient.IsAlive)
             {
-                patient.Position = ragdoll.transform.position + Vector3.up * 0.5f;
-
                 patient.Health = patient.MaxHealth * .2f;
                 patient.AddAhp(50);
                 patient.EnableEffect(EffectType.Flashed, 2f);
