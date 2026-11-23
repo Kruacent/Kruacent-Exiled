@@ -30,15 +30,18 @@ namespace KruacentExiled.Misc.Features.VoteStart
         private List<int> Voted;
         private bool voteCasted = false;
 
+        private StringBuilder sb;
 
         internal VoteStart() : base()
         {
             Voted = ListPool<int>.Pool.Get();
+            sb = StringBuilderPool.Pool.Get();
         }
 
         ~VoteStart()
         {
             ListPool<int>.Pool.Return(Voted);
+            StringBuilderPool.Pool.Return(sb);
         }
 
 
@@ -179,7 +182,7 @@ namespace KruacentExiled.Misc.Features.VoteStart
             if (Voted == null) return " ";
             if (player == null) return " ";
 
-            StringBuilder sb = StringBuilderPool.Pool.Get();
+            sb.Clear();
 
             sb.Append("Votes (");
 
@@ -217,7 +220,7 @@ namespace KruacentExiled.Misc.Features.VoteStart
             }
 
 
-            return StringBuilderPool.Pool.ToStringReturn(sb);
+            return sb.ToString();
 
         }
         private void OnRoundStarted()
