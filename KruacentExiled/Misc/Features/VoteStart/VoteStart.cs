@@ -32,6 +32,8 @@ namespace KruacentExiled.Misc.Features.VoteStart
 
         private StringBuilder sb;
 
+        public int MinimumVote { get; set; } = MainPlugin.Configs.MinPlayerVote;
+
         internal VoteStart() : base()
         {
             Voted = ListPool<int>.Pool.Get();

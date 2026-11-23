@@ -16,7 +16,7 @@ namespace KruacentExiled.Misc.Features.VoteStart
 
         public string[] Aliases => new string[] { "nbv" };
 
-        public string Description => "force a number of people needed to vote for this round only";
+        public string Description => "force a number of people needed to vote";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
@@ -43,7 +43,7 @@ namespace KruacentExiled.Misc.Features.VoteStart
 
 
             MainPlugin.Configs.MinPlayerVote = result;
-
+            MainPlugin.Instance.vote.MinimumVote = result;
 
             response = "vote set at " + MainPlugin.Configs.MinPlayerVote + " players";
             return true;
