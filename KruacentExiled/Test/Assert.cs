@@ -29,5 +29,23 @@ namespace KruacentExiled.Test
         {
             throw new AssertionException(message);
         }
+
+        public static void Catch<TException>(Action action, string messageIfFailed) where TException : Exception
+        {
+            try
+            {
+                action();
+            }
+            catch (TException)
+            {
+                return;
+            }
+            catch (Exception e)
+            {
+                throw new AssertionException($"{messageIfFailed} : waiting {typeof(TException).Name}, got {e.GetType().Name}");
+            }
+
+            throw new AssertionException($"{messageIfFailed} : waiting {typeof(TException).Name}, no exceptions");
+        }
     }
 }
