@@ -27,7 +27,7 @@ namespace KruacentExiled.Misc.Features.VoteStart
 
         public static HintPosition HintPosition = new VotePosition();
 
-        private List<int> Voted;
+        private readonly List<int> Voted;
         private bool voteCasted = false;
 
         private StringBuilder sb;
@@ -44,6 +44,9 @@ namespace KruacentExiled.Misc.Features.VoteStart
             StringBuilderPool.Pool.Return(sb);
         }
 
+
+        public bool EveryoneVoted => voteCasted;
+        public int NumberVote => Voted.Count;
 
         public override void SubscribeEvents()
         {
@@ -63,7 +66,6 @@ namespace KruacentExiled.Misc.Features.VoteStart
             Exiled.Events.Handlers.Player.Verified -= OnVerified;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             Exiled.Events.Handlers.Player.Left -= OnLeft;
-
             base.UnsubscribeEvents();
         }
 
@@ -77,6 +79,22 @@ namespace KruacentExiled.Misc.Features.VoteStart
             }
         }
 
+
+        public void RemoveAllVote()
+        {
+            Voted.Clear();
+            Round.IsLobbyLocked = true;
+            voteCasted = false;
+        }
+
+        /// <summary>
+        /// Check if the minimum number of player voted
+        /// </summary>
+        /// <returns></returns>
+        public bool CheckVote()
+        {
+            return Voted.Count >= MainPlugin.Configs.MinPlayerVote;
+        }
 
         public bool DidVote(int playerId)
         {
@@ -92,7 +110,7 @@ namespace KruacentExiled.Misc.Features.VoteStart
 
 
             Voted.Remove(playerId);
-            if(Voted.Count < MainPlugin.Configs.MinPlayerVote)
+            if(!CheckVote())
             {
                 Round.IsLobbyLocked = true;
                 voteCasted = false;
@@ -109,7 +127,7 @@ namespace KruacentExiled.Misc.Features.VoteStart
             }
 
             Voted.Add(playerId);
-            if (Voted.Count >= MainPlugin.Configs.MinPlayerVote)
+            if (CheckVote())
             {
                 Round.IsLobbyLocked = false;
                 voteCasted = true;
@@ -120,7 +138,7 @@ namespace KruacentExiled.Misc.Features.VoteStart
 
         private void OnVoiceChatting(VoiceChattingEventArgs ev)
         {
-            if (voteCasted) return;
+            if (EveryoneVoted) return;
             if (!Round.IsLobby) return;
             if (ev.Player is null)
             {
