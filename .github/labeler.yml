@@ -21,8 +21,9 @@ Map:
 Miscellaneous:
 - all:
     - changed-files:
-        - any-glob-to-any-file: 'KruacentExiled/Misc/**/*'
-        - all-glob-to-all-files: '!KruacentExiled/Misc/Features/GamblingCoin/**/*'
+        - all-globs-to-any-file:
+          - 'KruacentExiled/Misc/**/*'
+          - '!KruacentExiled/Misc/Features/GamblingCoin/**/*'
 'Gambling Coin':
 - all:
     - changed-files:
