@@ -3,11 +3,13 @@ using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
+using Exiled.CustomRoles.Commands;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.Extensions;
 using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
+using KruacentExiled.CustomRoles.CR.MTF.Medic;
 using KruacentExiled.Extensions;
 using PlayerRoles;
 using ProjectMER.Features.Extensions;
@@ -20,6 +22,13 @@ namespace KruacentExiled.CustomItems.Items
 {
     public class TrueDivinePills : KECustomItem, ILumosItem, IRevivingCustomItem
     {
+        private const string PlayerWillSpawnToYou = "PlayerWillSpawnToYou";
+        private const string PlayerWontSpawnToYou = "PlayerWontSpawnToYou";
+        private const string NoOneToRevive = "NoOneToRevive";
+        private const string SummonedPlayer = "SummonedPlayer";
+
+        private int _numberOfPlayerSpawned; 
+
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new Dictionary<string, Dictionary<string, string>>()
@@ -28,11 +37,19 @@ namespace KruacentExiled.CustomItems.Items
                 {
                     [TranslationKeyName] = "True Divine Pills",
                     [TranslationKeyDesc] = "Guaranteed to respawn everybody, drop to change the mode",
+                    [PlayerWillSpawnToYou] = "Players will spawn to you",
+                    [PlayerWontSpawnToYou] = "Players won't spawn to you",
+                    [NoOneToRevive] = "No one to respawn",
+                    [SummonedPlayer] = $"You summoned %NumberOfPlayer% player",
                 },
                 ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "True Divine Pills",
                     [TranslationKeyDesc] = "Fait réappaître tout le monde, lâcher pour changer le mode",
+                    [PlayerWillSpawnToYou] = "Les joueurs vont apparaître sur toi",
+                    [PlayerWontSpawnToYou] = "Les joueurs ne vont pas apparaître sur toi",
+                    [NoOneToRevive] = "Pas de joueur à faire réapparaître",
+                    [SummonedPlayer] = $"Tu as fait réapparaître %NumberOfPlayer%",
                 },
             };
         }
@@ -85,9 +102,9 @@ namespace KruacentExiled.CustomItems.Items
             TpOnPlayer[ev.Item.Serial] = !spawnToPlayer;
 
             if (!spawnToPlayer)
-                KECustomItem.ItemEffectHint(player, "Players will spawn to you");
+                KECustomItem.ItemEffectHint(player, GetTranslation(player, PlayerWillSpawnToYou));
             else
-                KECustomItem.ItemEffectHint(player, "Players won't spawn to you");
+                KECustomItem.ItemEffectHint(player, GetTranslation(player, PlayerWontSpawnToYou));
             ev.IsAllowed = false;
         }
 
@@ -103,22 +120,30 @@ namespace KruacentExiled.CustomItems.Items
 
             if (spectators.Count == 0)
             {
-                KECustomItem.ItemEffectHint(player, "No one to respawn");
+                KECustomItem.ItemEffectHint(player, GetTranslation(player, NoOneToRevive));
                 ev.IsAllowed = false;
                 return;
             }
 
+            ev.Item.Destroy();
+            int i = 0;
 
             foreach (Player spectator in spectators)
             {
                 bool revived = Revive(player, spectator);
-                if (revived && TpOnPlayer.TryGetValue(ev.Item.Serial, out bool tp) && tp)
+                if (revived)
                 {
-                    spectator.Teleport(player);
+                    if(TpOnPlayer.TryGetValue(ev.Item.Serial, out bool tp) && tp)
+                    {
+                        spectator.Teleport(player);
+                    }
+
+                    i++;
                 }
-
-
             }
+
+            string msgNumberOfPlayer = GetTranslation(player, SummonedPlayer);
+            KECustomItem.ItemEffectHint(player, msgNumberOfPlayer.Replace("%NumberOfPlayer%", i.ToString()));
 
         }
 
