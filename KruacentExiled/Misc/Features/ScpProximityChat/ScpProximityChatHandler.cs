@@ -162,7 +162,7 @@ namespace KruacentExiled.Misc.Features.ScpProximityChat
 
             AudioMessage audio = new AudioMessage(voice.AudioPlayer.ControllerID, data, length);
 
-            foreach (Player target in Player.List)
+            foreach (Player target in Player.Enumerable)
             {
                 if (SCPTeam.IsSCP(target.ReferenceHub)) continue;
                 if (!CanHearProximity(target, ev.Player)) continue;

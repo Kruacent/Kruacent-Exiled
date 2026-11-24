@@ -45,7 +45,7 @@ namespace KruacentExiled.CustomRoles.CR.Guard
         public override List<string> Inventory { get; set; } = new List<string>()
         {
           $"{ItemType.KeycardGuard}",
-          $"{ItemType.GunCrossvec}",
+          $"{ItemType.GunFSP9}",
           $"{ItemType.Medkit}",
           $"{ItemType.GrenadeFlash}",
           $"{ItemType.GrenadeFlash}",

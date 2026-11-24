@@ -15,22 +15,22 @@ using UnityEngine;
 
 namespace KruacentExiled.CustomItems.Items
 {
-    public class Defibrilator : KECustomItem, ILumosItem, IRevivingCustomItem
+    public class Defibrillator : KECustomItem, ILumosItem, IRevivingCustomItem
     {
 
-        public const string TranslationFailed = "DefibrilatorFailed";
-        public const string TranslationExpired = "DefibrilatorExpired";
-        public const string TranslationTooFar = "DefibrilatorTooFar";
-        public const string TranslationRevived = "DefibrilatorRevived";
-        public const string TranslationSucceed = "DefibrilatorSucceed";
-        public const string TranslationInProgress = "DefibrilatorInProgress";
+        public const string TranslationFailed = "DefibrillatorFailed";
+        public const string TranslationExpired = "DefibrillatorExpired";
+        public const string TranslationTooFar = "DefibrillatorTooFar";
+        public const string TranslationRevived = "DefibrillatorRevived";
+        public const string TranslationSucceed = "DefibrillatorSucceed";
+        public const string TranslationInProgress = "DefibrillatorInProgress";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new Dictionary<string, Dictionary<string, string>>()
             {
                 ["en"] = new Dictionary<string, string>()
                 {
-                    [TranslationKeyName] = "Defibrilator",
+                    [TranslationKeyName] = "Defibrillator",
                     [TranslationKeyDesc] = "Aim for a dead body to try to re<b>sus</b>citate him",
                     [TranslationFailed] = "<color=red>Failed!</color>",
                     [TranslationExpired] = "<color=red>Body expired.</color>",
@@ -53,7 +53,7 @@ namespace KruacentExiled.CustomItems.Items
             };
         }
         public override ItemType ItemType => ItemType.SCP1853;
-        public override string Name { get; set; } = "Defibrilator";
+        public override string Name { get; set; } = "Defibrillator";
         public override float Weight { get; set; } = 1.0f;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.magenta;
         public override ItemRank Rank { get; } = ItemRank.Epic;
@@ -194,7 +194,7 @@ namespace KruacentExiled.CustomItems.Items
                 {
                     TranslationFeed(medic, TranslationFailed);
                     shockLight.Destroy();
-                    CustomItem.TryGive(medic, "Defibrilator", false);
+                    CustomItem.TryGive(medic, "Defibrillator", false);
                     yield break;
                 }
 
