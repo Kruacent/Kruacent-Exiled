@@ -31,6 +31,7 @@ namespace KruacentExiled.Misc.Features.ScpProximityChat
         public static HintPosition TextPosition = new ScpProximityChatPosition();
 
         private readonly Dictionary<Player, ProximityVoice> _voices = new Dictionary<Player, ProximityVoice>();
+        private readonly SettingsCategory _settingsCategory;
 
         private class ProximityVoice
         {
@@ -45,7 +46,7 @@ namespace KruacentExiled.Misc.Features.ScpProximityChat
 
             HeaderSetting header = new HeaderSetting(HeaderId, "SCP Proximity Chat");
             KeybindSetting keybind = new KeybindSetting(KeybindId, "Toggle SCP proximity chat", KeyCode.None, hintDescription: "Lets humans near you hear your voice", header: header);
-            new SettingsCategory(header, 1006, new List<SettingBase>() { keybind });
+            _settingsCategory = new SettingsCategory(header, 1006, new List<SettingBase>() { keybind });
         }
 
         public static bool IsEnabled(Player player)

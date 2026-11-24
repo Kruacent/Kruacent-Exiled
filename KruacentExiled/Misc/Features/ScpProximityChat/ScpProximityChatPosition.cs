@@ -10,6 +10,6 @@ namespace KruacentExiled.Misc.Features.ScpProximityChat
         public override float Yposition => 100;
         public override string Name => "ScpProximityChat";
 
-        public override HintAlignment HintAlignment => HintAlignment.Left;
+        public override HintAlignment HintAlignment => HintServiceMeow.Core.Enum.HintAlignment.Left;
     }
 }
