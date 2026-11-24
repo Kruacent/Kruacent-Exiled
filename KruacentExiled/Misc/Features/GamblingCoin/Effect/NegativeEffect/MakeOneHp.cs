@@ -2,21 +2,24 @@
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using KruacentExiled.Misc.Features.GamblingCoin.Types;
 
-internal class MakeOneHP : ICoinEffect
+namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.NegativeEffect
 {
-    public string Name { get; set; } = "MakeOneHP";
-    public string Message { get; set; } = "";
-    public int Weight { get; set; } = 15;
-    public EffectType Type { get; set; } = EffectType.Negative;
-
-    public void Execute(Player player)
+    internal class MakeOneHP : ICoinEffect
     {
-        if (player.Health > 1)
+        public string Name { get; set; } = "MakeOneHP";
+        public string Message { get; set; } = "";
+        public int Weight { get; set; } = 15;
+        public EffectType Type { get; set; } = EffectType.Negative;
+
+        public void Execute(Player player)
         {
-            player.Health = 1;
-        } else
-        {
-            player.Explode();
+            if (player.Health > 1)
+            {
+                player.Health = 1;
+            } else
+            {
+                player.Explode();
+            }
         }
     }
 }

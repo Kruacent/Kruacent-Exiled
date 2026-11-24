@@ -2,24 +2,27 @@
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using KruacentExiled.Misc.Features.GamblingCoin.Types;
 
-internal class FakeNuke : IDurationEffect
+namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.NegativeEffect
 {
-    public string Name { get; set; } = "FakeNuke";
-    public string Message { get; set; } = string.Empty;
-    public int Weight { get; set; } = 10;
-    public EffectType Type { get; set; } = EffectType.Negative;
-    public float Duration { get; set; } = 15;
-
-    public void Execute(Player player)
+    internal class FakeNuke : IDurationEffect
     {
-        if(!Warhead.IsDetonated) Warhead.Start();
-    }
+        public string Name { get; set; } = "FakeNuke";
+        public string Message { get; set; } = string.Empty;
+        public int Weight { get; set; } = 10;
+        public EffectType Type { get; set; } = EffectType.Negative;
+        public float Duration { get; set; } = 15;
 
-    public void ExecuteAfterDuration(Player player)
-    {
-        if (Warhead.IsInProgress && Warhead.Controller.Info.ScenarioType != WarheadScenarioType.DeadmanSwitch)
+        public void Execute(Player player)
         {
-            Warhead.Stop();
+            if(!Warhead.IsDetonated) Warhead.Start();
+        }
+
+        public void ExecuteAfterDuration(Player player)
+        {
+            if (Warhead.IsInProgress && Warhead.Controller.Info.ScenarioType != WarheadScenarioType.DeadmanSwitch)
+            {
+                Warhead.Stop();
+            }
         }
     }
 }

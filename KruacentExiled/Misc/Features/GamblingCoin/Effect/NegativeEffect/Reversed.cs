@@ -3,36 +3,39 @@ using Exiled.API.Features;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using EffectType = KruacentExiled.Misc.Features.GamblingCoin.Types.EffectType;
 
-internal class Reversed : IDurationEffect
+namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.NegativeEffect
 {
-    public string Name { get; set; } = "Reversed";
-    public string Message { get; set; } = "Oops ! I connected your keyboard in the wrong way, sorryyyy";
-    public float Duration { get; set; } = 40;
-    public int Weight { get; set; } = 10;
-    public EffectType Type { get; set; } = EffectType.Negative;
-
-    public void Execute(Player player)
+    internal class Reversed : IDurationEffect
     {
-        StatusEffectBase effect = player.GetEffect(Exiled.API.Enums.EffectType.Slowness);
-        if (effect.Intensity >= 200)
-        {
-            effect.Intensity = 0;
-        } else
-        {
-            player.EnableEffect(Exiled.API.Enums.EffectType.Slowness, 200);
-        }
-    }
+        public string Name { get; set; } = "Reversed";
+        public string Message { get; set; } = "Oops ! I connected your keyboard in the wrong way, sorryyyy";
+        public float Duration { get; set; } = 40;
+        public int Weight { get; set; } = 10;
+        public EffectType Type { get; set; } = EffectType.Negative;
 
-    public void ExecuteAfterDuration(Player player)
-    {
-        StatusEffectBase effect = player.GetEffect(Exiled.API.Enums.EffectType.Slowness);
-        if (effect.Intensity >= 200)
+        public void Execute(Player player)
         {
-            effect.Intensity = 0;
+            StatusEffectBase effect = player.GetEffect(Exiled.API.Enums.EffectType.Slowness);
+            if (effect.Intensity >= 200)
+            {
+                effect.Intensity = 0;
+            } else
+            {
+                player.EnableEffect(Exiled.API.Enums.EffectType.Slowness, 200);
+            }
         }
-        else
+
+        public void ExecuteAfterDuration(Player player)
         {
-            player.EnableEffect(Exiled.API.Enums.EffectType.Slowness, 200);
+            StatusEffectBase effect = player.GetEffect(Exiled.API.Enums.EffectType.Slowness);
+            if (effect.Intensity >= 200)
+            {
+                effect.Intensity = 0;
+            }
+            else
+            {
+                player.EnableEffect(Exiled.API.Enums.EffectType.Slowness, 200);
+            }
         }
     }
 }

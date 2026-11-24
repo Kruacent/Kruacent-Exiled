@@ -1,10 +1,9 @@
 ﻿using CommandSystem;
 using Exiled.API.Features;
-using KruacentExiled.Misc.Features.GamblingCoin;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using System;
 
-namespace KE.Misc.Features.GamblingCoin
+namespace KruacentExiled.Misc.Features.GamblingCoin
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class ForceCoinEffect : ICommand
