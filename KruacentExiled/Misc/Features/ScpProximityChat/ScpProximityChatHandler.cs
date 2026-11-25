@@ -31,6 +31,9 @@ namespace KruacentExiled.Misc.Features.ScpProximityChat
         public static HintPosition TextPosition = new ScpProximityChatPosition();
 
         private readonly Dictionary<Player, ProximityVoice> _voices = new Dictionary<Player, ProximityVoice>();
+        private readonly Dictionary<Player, float> _lastToggleTime = new Dictionary<Player, float>();
+        private const float _MinimumTimeBetweenTwoToggle = 0.3f;
+
         private readonly SettingsCategory _settingsCategory;
 
         private class ProximityVoice
@@ -57,6 +60,7 @@ namespace KruacentExiled.Misc.Features.ScpProximityChat
         public override void SubscribeEvents()
         {
             ServerSpecificSettingsSync.ServerOnSettingValueReceived += OnKeyPressed;
+            Exiled.Events.Handlers.Player.TogglingNoClip += OnTogglingNoClip;
             Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
             Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
             Exiled.Events.Handlers.Player.Left += OnLeft;
@@ -66,6 +70,7 @@ namespace KruacentExiled.Misc.Features.ScpProximityChat
         public override void UnsubscribeEvents()
         {
             ServerSpecificSettingsSync.ServerOnSettingValueReceived -= OnKeyPressed;
+            Exiled.Events.Handlers.Player.TogglingNoClip -= OnTogglingNoClip;
             Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
             Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
             Exiled.Events.Handlers.Player.Left -= OnLeft;
@@ -80,8 +85,38 @@ namespace KruacentExiled.Misc.Features.ScpProximityChat
                 if (!SettingHandler.CheckPressed(setting, KeybindId)) return;
 
                 Player player = Player.Get(hub);
-                if (player == null || !SCPTeam.IsSCP(hub) || player.Role.Type == RoleTypeId.Scp079) return;
+                if (!CanUseProximity(player)) return;
 
+                Toggle(player);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+            }
+        }
+
+        private void OnTogglingNoClip(TogglingNoClipEventArgs ev)
+        {
+            if (!CanUseProximity(ev.Player)) return;
+
+            Toggle(ev.Player);
+        }
+
+        private static bool CanUseProximity(Player player)
+        {
+            if (player == null) return false;
+            if (!SCPTeam.IsSCP(player.ReferenceHub)) return false;
+            if (player.Role.Type == RoleTypeId.Scp079) return false;
+
+            return true;
+        }
+
+        private void Toggle(Player player)
+        {
+            _lastToggleTime.TryGetValue(player, out float lastTime);
+
+            if (Time.time - lastTime > _MinimumTimeBetweenTwoToggle)
+            {
                 if (_enabled.Contains(player))
                 {
                     Disable(player);
@@ -92,10 +127,8 @@ namespace KruacentExiled.Misc.Features.ScpProximityChat
                     Enable(player);
                     ShowHint(player, ScpProximityChatTranslations.Enabled);
                 }
-            }
-            catch (Exception e)
-            {
-                Log.Error(e);
+
+                _lastToggleTime[player] = Time.time;
             }
         }
 
@@ -174,11 +207,13 @@ namespace KruacentExiled.Misc.Features.ScpProximityChat
         private void OnChangingRole(ChangingRoleEventArgs ev)
         {
             Disable(ev.Player);
+            _lastToggleTime.Remove(ev.Player);
         }
 
         private void OnLeft(LeftEventArgs ev)
         {
             Disable(ev.Player);
+            _lastToggleTime.Remove(ev.Player);
         }
 
         private static bool CanHearProximity(Player listener, Player speaker)
