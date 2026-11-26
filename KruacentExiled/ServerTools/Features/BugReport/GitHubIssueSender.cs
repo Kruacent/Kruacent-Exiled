@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using System;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Utf8Json;
@@ -29,7 +30,15 @@ namespace KruacentExiled.ServerTools.Features.BugReport
             }
             catch (Exception e)
             {
-                Log.Error("issue wasn't created : " + e.Message);
+                WebException webException = e as WebException;
+                if (webException == null)
+                {
+                    webException = e.InnerException as WebException;
+                }
+
+                string status = webException != null ? webException.Status.ToString() : "nothing";
+
+                Log.Error($"issue wasn't created (statut : {status}) : {e}");
             }
         }
     }

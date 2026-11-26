@@ -1,12 +1,9 @@
 using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
-using Exiled.CustomRoles.Commands;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Displays.Feeds;
-using KE.Utils.Extensions;
 using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
@@ -14,9 +11,7 @@ using MEC;
 using PlayerRoles;
 using PlayerRoles.Ragdolls;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using YamlDotNet.Core.Tokens;
 
 namespace KruacentExiled.CustomItems.Items
 {
@@ -40,7 +35,7 @@ namespace KruacentExiled.CustomItems.Items
                     [TranslationFailed] = "<color=red>Failed!</color>",
                     [TranslationExpired] = "<color=red>Body expired.</color>",
                     [TranslationTooFar] = "<color=yellow>Aim at a body.</color>",
-                    [TranslationRevived] = "<color=cyan>Revived by %MedicName%\n<b>you got brian damage</b></color>",
+                    [TranslationRevived] = "<color=blue>Revived by %MedicName%\n<b>you got brian damage</b></color>",
                     [TranslationSucceed] = "<color=green>Successfully ressucitate %PatientName%!</color>",
                     [TranslationInProgress] = "<color=yellow>In progress</color>",
                 },
@@ -214,7 +209,7 @@ namespace KruacentExiled.CustomItems.Items
             yield return Timing.WaitForSeconds(0.2f);
             shockLight.Destroy();
 
-            patient.Role.Set(previousRole, SpawnReason.Revived, RoleSpawnFlags.All);
+            patient.Role.Set(previousRole, SpawnReason.Revived, RoleSpawnFlags.None);
 
             yield return Timing.WaitForSeconds(0.4f);
 
@@ -222,8 +217,6 @@ namespace KruacentExiled.CustomItems.Items
 
             if (patient.IsAlive)
             {
-                patient.Position = ragdoll.transform.position + Vector3.up * 0.5f;
-
                 patient.Health = patient.MaxHealth * .2f;
                 patient.AddAhp(50);
                 patient.EnableEffect(EffectType.Flashed, 2f);

@@ -4,18 +4,21 @@ using InventorySystem.Items.Firearms.Attachments;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using KruacentExiled.Misc.Features.GamblingCoin.Types;
 
-internal class Revolver : ICoinEffect
+namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.PositiveEffect
 {
-    public string Name { get; set; } = "Revolver";
-    public string Message { get; set; } = "It's a gift from the sky !!";
-    public int Weight { get; set; } = 5;
-    public EffectType Type { get; set; } = EffectType.Positive;
-
-    public void Execute(Player player)
+    internal class Revolver : ICoinEffect
     {
-        Firearm revo = (Firearm)Item.Create(ItemType.GunRevolver);
-        revo.AddAttachment(new[]
-            {AttachmentName.CylinderMag7, AttachmentName.ShortBarrel, AttachmentName.ScopeSight});
-        revo.CreatePickup(player.Position);
+        public string Name { get; set; } = "Revolver";
+        public string Message { get; set; } = "It's a gift from the sky !!";
+        public int Weight { get; set; } = 5;
+        public EffectType Type { get; set; } = EffectType.Positive;
+
+        public void Execute(Player player)
+        {
+            Firearm revo = (Firearm)Item.Create(ItemType.GunRevolver);
+            revo.AddAttachment(new[]
+                {AttachmentName.CylinderMag7, AttachmentName.ShortBarrel, AttachmentName.ScopeSight});
+            revo.CreatePickup(player.Position);
+        }
     }
 }

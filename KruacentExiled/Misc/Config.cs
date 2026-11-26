@@ -31,6 +31,11 @@ namespace KruacentExiled.Misc
 
         public float MultBaseSCP { get; set; } = 1.25f;
 
+        [Description("SCP proximity chat")]
+        public float ScpProximityChatVolume { get; set; } = 10f;
+        public float ScpProximityChatMinDistance { get; set; } = 2f;
+        public float ScpProximityChatMaxDistance { get; set; } = 10f;
+
         [Description("birthday song for other person")]
         public string DefaultBirthdayMusic { get; set; } = "birthday_default";
 

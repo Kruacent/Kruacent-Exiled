@@ -7,24 +7,27 @@ using System;
 using System.Linq;
 using EffectType = KruacentExiled.Misc.Features.GamblingCoin.Types.EffectType;
 
-internal class AutoDoor : ICoinEffect
+namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.NegativeEffect
 {
-    public string Name { get; set; } = "AutoDoor";
-    public string Message { get; set; } = "You are very talented in messing up the game !";
-    public int Weight { get; set; } = 10;
-    public EffectType Type { get; set; } = EffectType.Negative;
-
-    public void Execute(Player player)
+    internal class AutoDoor : ICoinEffect
     {
-        Array values = Enum.GetValues(typeof(FacilityZone));
-        FacilityZone randomZone = (FacilityZone)values.GetValue(UnityEngine.Random.Range(0, values.Length));
+        public string Name { get; set; } = "AutoDoor";
+        public string Message { get; set; } = "You are very talented in messing up the game !";
+        public int Weight { get; set; } = 10;
+        public EffectType Type { get; set; } = EffectType.Negative;
 
-        
-
-        foreach(Door door in Door.List.Where(d => d.Position.GetZone() == randomZone && d.DoorLockType == DoorLockType.None))
+        public void Execute(Player player)
         {
-            door.IsOpen = true;
+            Array values = Enum.GetValues(typeof(FacilityZone));
+            FacilityZone randomZone = (FacilityZone)values.GetValue(UnityEngine.Random.Range(0, values.Length));
+
+
+
+            foreach(Door door in Door.List.Where(d => d.Position.GetZone() == randomZone && d.DoorLockType == DoorLockType.None))
+            {
+                door.IsOpen = true;
+            }
+
         }
-        
     }
 }
