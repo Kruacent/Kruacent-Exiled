@@ -116,6 +116,8 @@ namespace KruacentExiled
             LabApi.Events.Handlers.ServerEvents.RoundRestarted -= OnRoundRestarted;
             AudioHandler.UnsubscribeEvents();
 
+            DebugSetting.DestroyAll();
+
             Instance = null;
             AudioHandler = null;
 
