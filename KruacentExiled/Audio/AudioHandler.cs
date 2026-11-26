@@ -42,6 +42,7 @@ namespace KruacentExiled.Audio
             settingsHandler.UnsubscribeEvents();
             LabApi.Events.Handlers.PlayerEvents.Left -= OnLeft;
             LabApi.Events.Handlers.ServerEvents.RoundRestarted -= OnRoundEnded;
+            Instance = null;
         }
 
 
