@@ -269,7 +269,7 @@ namespace KruacentExiled.CustomRoles.API.Features
 
             if (this is ILucky)
             {
-                RandomNumberGenerator.OnRollingChance += HandleRollingChance;
+                RandomNumberGenerator.RollingChance += OnRollingChance;
             }
 
             if (this is INoPickupItem)
@@ -293,7 +293,7 @@ namespace KruacentExiled.CustomRoles.API.Features
 
             if (this is ILucky)
             {
-                RandomNumberGenerator.OnRollingChance -= HandleRollingChance;
+                RandomNumberGenerator.RollingChance -= OnRollingChance;
             }
 
             if (this is INoPickupItem)
@@ -341,7 +341,7 @@ namespace KruacentExiled.CustomRoles.API.Features
 
         }
 
-        private void HandleRollingChance(RollingChanceEventArgs ev)
+        private void OnRollingChance(RollingChanceEventArgs ev)
         {
             ILucky luckyRole = this as ILucky;
 

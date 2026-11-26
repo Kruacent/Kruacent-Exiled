@@ -5,17 +5,20 @@ using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using UnityEngine;
 using EffectType = KruacentExiled.Misc.Features.GamblingCoin.Types.EffectType;
 
-internal class HolyGrenade : ICoinEffect
+namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.NegativeEffect
 {
-    public string Name { get; set; } = "HolyGrenade";
-    public string Message { get; set; } = "Watch a holy grenade !";
-    public int Weight { get; set; } = 15;
-    public EffectType Type { get; set; } = EffectType.Negative;
-
-    public void Execute(Player player)
+    internal class HolyGrenade : ICoinEffect
     {
-        KECustomGrenade.TrySpawn("SainteGrenada", player.Position + Vector3.up, out Pickup pickup);
-        GrenadePickup grenadePickup = (GrenadePickup)pickup;
-        grenadePickup.Explode(player.Footprint);
+        public string Name { get; set; } = "HolyGrenade";
+        public string Message { get; set; } = "Watch a holy grenade !";
+        public int Weight { get; set; } = 15;
+        public EffectType Type { get; set; } = EffectType.Negative;
+
+        public void Execute(Player player)
+        {
+            KECustomGrenade.TrySpawn("SainteGrenada", player.Position + Vector3.up, out Pickup pickup);
+            GrenadePickup grenadePickup = (GrenadePickup)pickup;
+            grenadePickup.Explode(player.Footprint);
+        }
     }
 }

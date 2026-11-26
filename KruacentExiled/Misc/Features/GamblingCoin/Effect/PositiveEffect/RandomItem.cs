@@ -7,28 +7,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-internal class RandomItem : ICoinEffect
+namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.PositiveEffect
 {
-    public string Name { get; set; } = "RandomItem";
-    public string Message { get; set; } = "You got a random item !";
-    public int Weight { get; set; } = 20;
-    public EffectType Type { get; set; } = EffectType.Positive;
-
-    public void Execute(Player player)
+    internal class RandomItem : ICoinEffect
     {
-        if (player == null) return;
-        Array values = Enum.GetValues(typeof(ItemType));
-        ItemType randomItem = (ItemType)values.GetValue(UnityEngine.Random.Range(0, values.Length));
+        public string Name { get; set; } = "RandomItem";
+        public string Message { get; set; } = "You got a random item !";
+        public int Weight { get; set; } = 20;
+        public EffectType Type { get; set; } = EffectType.Positive;
 
-        if (BlacklistItemTypeManager.BlackListItem.Contains(randomItem))
+        public void Execute(Player player)
         {
-            return;
+            if (player == null) return;
+            Array values = Enum.GetValues(typeof(ItemType));
+            ItemType randomItem = (ItemType)values.GetValue(UnityEngine.Random.Range(0, values.Length));
+
+            if (BlacklistItemTypeManager.BlackListItem.Contains(randomItem))
+            {
+                return;
+            }
+
+            Item item = Item.Create(randomItem);
+
+            if (item == null) return;
+
+            item.CreatePickup(player.Position);
         }
-
-        Item item = Item.Create(randomItem);
-
-        if (item == null) return;
-
-        item.CreatePickup(player.Position);
     }
 }

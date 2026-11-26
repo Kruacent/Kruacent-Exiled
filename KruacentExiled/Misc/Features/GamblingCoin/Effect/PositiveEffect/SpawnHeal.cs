@@ -4,16 +4,19 @@ using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using KruacentExiled.Misc.Features.GamblingCoin.Types;
 using UnityEngine;
 
-internal class SpawnHeal : ICoinEffect
+namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.PositiveEffect
 {
-    public string Name { get; set; } = "SpawnHeal";
-    public string Message { get; set; } = string.Empty;
-    public int Weight { get; set; } = 25;
-    public EffectType Type { get; set; } = EffectType.Positive;
-
-    public void Execute(Player player)
+    internal class SpawnHeal : ICoinEffect
     {
-        Pickup.CreateAndSpawn(ItemType.Medkit, player.Position, new Quaternion());
-        Pickup.CreateAndSpawn(ItemType.Painkillers, player.Position, new Quaternion());
+        public string Name { get; set; } = "SpawnHeal";
+        public string Message { get; set; } = string.Empty;
+        public int Weight { get; set; } = 25;
+        public EffectType Type { get; set; } = EffectType.Positive;
+
+        public void Execute(Player player)
+        {
+            Pickup.CreateAndSpawn(ItemType.Medkit, player.Position, new Quaternion());
+            Pickup.CreateAndSpawn(ItemType.Painkillers, player.Position, new Quaternion());
+        }
     }
 }
