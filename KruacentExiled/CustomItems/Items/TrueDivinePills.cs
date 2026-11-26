@@ -27,8 +27,6 @@ namespace KruacentExiled.CustomItems.Items
         private const string NoOneToRevive = "NoOneToRevive";
         private const string SummonedPlayer = "SummonedPlayer";
 
-        private int _numberOfPlayerSpawned; 
-
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new Dictionary<string, Dictionary<string, string>>()
