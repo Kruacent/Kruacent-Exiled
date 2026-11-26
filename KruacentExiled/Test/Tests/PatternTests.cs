@@ -45,14 +45,11 @@ namespace KruacentExiled.Test.Tests
 
             };
 
-            try
+
+            Assert.Catch<NoMapEventException>(() =>
             {
                 _pattern = new Pattern(mapEvents);
-            }
-            catch (NoMapEventException)
-            {
-                Assert.IsTrue(true, "should send an exception");
-            }
+            }, "should send an exception");
         }
 
         //Null
@@ -62,15 +59,11 @@ namespace KruacentExiled.Test.Tests
             List<MapEvent> mapEvents = null;
 
 
-
-            try
+            Assert.Catch<NullMapEventsException>(() =>
             {
                 _pattern = new Pattern(mapEvents);
-            }
-            catch (NullMapEventsException)
-            {
-                Assert.IsTrue(true, "should send an exception");
-            }
+            }, "should send an exception");
+
         }
 
 
