@@ -11,6 +11,7 @@ using KruacentExiled.ClientPrimitives;
 using KruacentExiled.CustomSpawnPoint;
 using KruacentExiled.CustomSpawnPoint.Spawned;
 using KruacentExiled.DebugSettings;
+using KruacentExiled.Test;
 using LabApi.Events.Arguments.ServerEvents;
 using MEC;
 using System;
@@ -32,6 +33,8 @@ namespace KruacentExiled
 
         public static AudioHandler AudioHandler { get; private set; }
 
+        public static TestHandler TestHandler { get; private set; }
+
         private static Harmony harmony;
 
         public override void OnEnabled()
@@ -39,7 +42,7 @@ namespace KruacentExiled
             Instance = this;
 
             KE.Utils.API.Sounds.SoundPlayer.Load();
-            
+            TestHandler = new TestHandler();
             plugins = new KEPlugin[]
             {
                 new CustomRoles.MainPlugin(),
@@ -116,6 +119,7 @@ namespace KruacentExiled
             LabApi.Events.Handlers.ServerEvents.RoundRestarted -= OnRoundRestarted;
             AudioHandler.UnsubscribeEvents();
 
+            TestHandler = null;
             DebugSetting.DestroyAll();
 
             Instance = null;
