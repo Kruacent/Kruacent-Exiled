@@ -4,9 +4,11 @@ using Exiled.Events.EventArgs.Player;
 using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
+using LabApi.Events.Arguments.PlayerEvents;
 using MEC;
 using System.Collections.Generic;
 using UnityEngine;
+using static RoundSummary;
 
 namespace KruacentExiled.CustomItems.Items
 {
@@ -63,8 +65,8 @@ namespace KruacentExiled.CustomItems.Items
 
         public bool IsViolent => false;
 
-        private float SpeachDuration = 10f;
-        private float InternalCooldown = 90f;
+        private const float SpeachDuration = 10f;
+        private const float InternalCooldown = 90f;
         private Dictionary<Player, float> _cooldowns = new Dictionary<Player, float>();
         private Dictionary<Player, CoroutineHandle> _talkingCoroutines = new Dictionary<Player, CoroutineHandle>();
         private Dictionary<Player, float> _startUsingItemTime = new Dictionary<Player, float>();
@@ -74,6 +76,7 @@ namespace KruacentExiled.CustomItems.Items
             base.SubscribeEvents();
             Exiled.Events.Handlers.Player.VoiceChatting += OnTalking;
             Exiled.Events.Handlers.Player.TogglingRadio += OnTogglingRadio;
+            LabApi.Events.Handlers.PlayerEvents.Left += OnLeft;
         }
 
         protected override void UnsubscribeEvents()
@@ -81,6 +84,14 @@ namespace KruacentExiled.CustomItems.Items
             base.UnsubscribeEvents();
             Exiled.Events.Handlers.Player.VoiceChatting -= OnTalking;
             Exiled.Events.Handlers.Player.TogglingRadio -= OnTogglingRadio;
+            LabApi.Events.Handlers.PlayerEvents.Left -= OnLeft;
+        }
+
+        private void OnLeft(PlayerLeftEventArgs ev)
+        {
+            Player player = ev.Player;
+            _cooldowns.Remove(player);
+            Destroy(player);
         }
 
         private void OnTogglingRadio(TogglingRadioEventArgs ev)
@@ -143,16 +154,19 @@ namespace KruacentExiled.CustomItems.Items
                 _cooldowns[player] = Time.time;
             }
 
+            Destroy(player);
+
+        }
+
+        private void Destroy(Player player)
+        {
             if (_talkingCoroutines.TryGetValue(player, out CoroutineHandle handle))
             {
                 Timing.KillCoroutines(handle);
                 _talkingCoroutines.Remove(player);
             }
 
-            if (_startUsingItemTime.ContainsKey(player))
-            {
-                _startUsingItemTime.Remove(player);
-            }
+            _startUsingItemTime.Remove(player);
         }
     }
 }

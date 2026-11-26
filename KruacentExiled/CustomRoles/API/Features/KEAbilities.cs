@@ -281,6 +281,7 @@ namespace KruacentExiled.CustomRoles.API.Features
                 PlayersAbility[player].Remove(this);
                 Players.Remove(player);
                 UnselectAbility(player);
+                LastUsed.Remove(player);
                 AbilityRemoved(player);
             }
         }
@@ -596,10 +597,15 @@ namespace KruacentExiled.CustomRoles.API.Features
             }
             else
             {
-                DateTime dateTime = LastUsed[player] + TimeSpan.FromSeconds(Cooldown);
-                sb.Append("[");
-                sb.Append(Math.Round((dateTime - DateTime.Now).TotalSeconds, 0));
-                sb.Append("s]");
+                if (LastUsed.TryGetValue(player,out DateTime lastAbilityUsed ))
+                {
+                    DateTime dateTime = lastAbilityUsed + TimeSpan.FromSeconds(Cooldown);
+                    sb.Append("[");
+                    sb.Append(Math.Round((dateTime - DateTime.Now).TotalSeconds, 0));
+                    sb.Append("s]");
+                }
+
+                
             }
         }
 
