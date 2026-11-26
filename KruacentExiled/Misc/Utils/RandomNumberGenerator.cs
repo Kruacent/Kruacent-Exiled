@@ -8,12 +8,12 @@ namespace KruacentExiled.Misc.Utils
 {
     public class RandomNumberGenerator
     {
-        public static event Action<RollingChanceEventArgs> OnRollingChance;
+        public static event Action<RollingChanceEventArgs> RollingChance;
 
         public static bool RollChance(float successChance, Player player, bool isBeneficial = true)
         {
             RollingChanceEventArgs ev = new RollingChanceEventArgs(successChance, player, isBeneficial);
-            OnRollingChance?.Invoke(ev);
+            RollingChance?.Invoke(ev);
 
 
             if (ev.ForcedResult.HasValue)

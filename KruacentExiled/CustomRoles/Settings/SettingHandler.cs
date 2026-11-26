@@ -87,6 +87,7 @@ namespace KruacentExiled.CustomRoles.Settings
             ServerSpecificSettingsSync.ServerOnSettingValueReceived += SafeOnSettingValueReceived;
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             LabApi.Events.Handlers.PlayerEvents.Joined += AddPlayer;
+            LabApi.Events.Handlers.PlayerEvents.Left += OnLeft;
             DownPressed += Down;
             UpPressed += Up;
 
@@ -97,10 +98,15 @@ namespace KruacentExiled.CustomRoles.Settings
             ServerSpecificSettingsSync.ServerOnSettingValueReceived -= SafeOnSettingValueReceived;
             LabApi.Events.Handlers.PlayerEvents.Joined -= AddPlayer;
             Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
+            LabApi.Events.Handlers.PlayerEvents.Left -= OnLeft;
             DownPressed -= Down;
             UpPressed -= Up;
         }
         
+        private void OnLeft(PlayerLeftEventArgs ev)
+        {
+            playerPos.Remove(ev.Player);
+        }
 
         private void AddPlayer(PlayerJoinedEventArgs ev)
         {

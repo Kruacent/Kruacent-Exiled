@@ -3,17 +3,20 @@ using Exiled.API.Features.Items;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using KruacentExiled.Misc.Features.GamblingCoin.Types;
 
-internal class OneAmmoLogicer : ICoinEffect
+namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.PositiveEffect
 {
-    public string Name { get; set; } = "OneAmmoLogicer";
-    public string Message { get; set; } = "Were you hiding that in your... ";
-    public int Weight { get; set; } = 5;
-    public EffectType Type { get; set; } = EffectType.Positive;
-
-    public void Execute(Player player)
+    internal class OneAmmoLogicer : ICoinEffect
     {
-        Firearm gun = (Firearm)Item.Create(ItemType.GunLogicer);
-        gun.BarrelAmmo = 1;
-        gun.CreatePickup(player.Position);
+        public string Name { get; set; } = "OneAmmoLogicer";
+        public string Message { get; set; } = "Were you hiding that in your... ";
+        public int Weight { get; set; } = 5;
+        public EffectType Type { get; set; } = EffectType.Positive;
+
+        public void Execute(Player player)
+        {
+            Firearm gun = (Firearm)Item.Create(ItemType.GunLogicer);
+            gun.BarrelAmmo = 1;
+            gun.CreatePickup(player.Position);
+        }
     }
 }

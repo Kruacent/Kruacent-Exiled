@@ -4,6 +4,7 @@ using Exiled.Events.EventArgs.Player;
 using KE.Utils.API.Features;
 using KE.Utils.API.Interfaces;
 using KruacentExiled.Interfaces;
+using LabApi.Events.Arguments.PlayerEvents;
 using ProjectMER.Commands.Modifying.Position;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using YamlDotNet.Core.Tokens;
+using static RoundSummary;
 
 namespace KruacentExiled.Audio
 {
@@ -31,11 +33,27 @@ namespace KruacentExiled.Audio
         public void SubscribeEvents()
         {
             settingsHandler.SubscribeEvents();
+            LabApi.Events.Handlers.PlayerEvents.Left += OnLeft;
+            LabApi.Events.Handlers.ServerEvents.RoundRestarted += OnRoundEnded;
 
         }
         public void UnsubscribeEvents()
         {
             settingsHandler.UnsubscribeEvents();
+            LabApi.Events.Handlers.PlayerEvents.Left -= OnLeft;
+            LabApi.Events.Handlers.ServerEvents.RoundRestarted -= OnRoundEnded;
+            Instance = null;
+        }
+
+
+        private void OnLeft(PlayerLeftEventArgs ev)
+        {
+            audioPlayers.Remove(ev.Player);
+        }
+
+        private void OnRoundEnded()
+        {
+            audioPlayers.Clear();
         }
 
 
@@ -195,24 +213,17 @@ namespace KruacentExiled.Audio
         /// <param name="listener">the <see cref="Player"/> who can hear the clip</param>
         /// <param name="soundType"></param>
         /// <param name="clipName"></param>
-        /// <param name="gameObject"></param>
         /// <param name="maxDistance"></param>
         /// <returns>return null if the speaker couldn't be created </returns>
         public AudioClipPlayback Play(Player listener, SoundType soundType,string clipName,Vector3 position, float maxDistance = 20)
         {
-            GameObject gameObject = new GameObject();
-
-            if (gameObject == null)
-            {
-                Log.Error("go null");
-            }
             if (listener == null)
             {
-                Log.Error("player null");
+                throw new ArgumentNullException(nameof(listener));
             }
 
 
-            Log.Info($"play position ({gameObject.name}) {listener.Nickname} [{soundType}] ({clipName})");
+            Log.Info($"play position ({position}) {listener.Nickname} [{soundType}] ({clipName})");
             AudioPlayer audioPlayer = CreateOrGet(listener, soundType, clipName);
             float volume = GetVolume(listener, soundType);
 
@@ -254,7 +265,7 @@ namespace KruacentExiled.Audio
         /// <summary>
         /// All <see cref="Speaker"/> and its ids
         /// </summary>
-        internal Dictionary<Speaker, RecyclableId> Speakers = new Dictionary<Speaker, RecyclableId>();
+        internal Dictionary<Speaker, RecyclableId> Speakers { get; set; } = new Dictionary<Speaker, RecyclableId>();
 
         private Speaker CreateSpeaker(AudioPlayer audioPlayer,SoundType type,float volume)
         {

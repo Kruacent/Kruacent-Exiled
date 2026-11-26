@@ -9,13 +9,20 @@ namespace KruacentExiled.CustomRoles.API.Features.Abilities
 
         public abstract int Uses { get; }
 
-        private Dictionary<Player, int> uses =new Dictionary<Player, int>();
+        private Dictionary<Player, int> uses = new Dictionary<Player, int>();
 
         public override void AddAbility(Player player)
         {
             uses[player] = Uses;
             base.AddAbility(player);
         }
+
+        protected override void AbilityRemoved(Player player)
+        {
+            base.AbilityRemoved(player);
+            uses.Remove(player);
+        }
+
         protected sealed override bool AbilityUsed(Player player)
         {
             bool result = false;

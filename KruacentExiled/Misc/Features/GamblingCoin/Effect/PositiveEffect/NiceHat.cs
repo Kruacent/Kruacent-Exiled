@@ -4,15 +4,18 @@ using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using KruacentExiled.Misc.Features.GamblingCoin.Types;
 using UnityEngine;
 
-internal class NiceHat : ICoinEffect
+namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.PositiveEffect
 {
-    public string Name { get; set; } = "NiceHat";
-    public string Message { get; set; } = "You've got a nice hat !";
-    public int Weight { get; set; } = 10;
-    public EffectType Type { get; set; } = EffectType.Positive;
-
-    public void Execute(Player player)
+    internal class NiceHat : ICoinEffect
     {
-        Pickup.CreateAndSpawn(ItemType.SCP268, player.Position, Quaternion.identity);
+        public string Name { get; set; } = "NiceHat";
+        public string Message { get; set; } = "You've got a nice hat !";
+        public int Weight { get; set; } = 10;
+        public EffectType Type { get; set; } = EffectType.Positive;
+
+        public void Execute(Player player)
+        {
+            Pickup.CreateAndSpawn(ItemType.SCP268, player.Position, Quaternion.identity);
+        }
     }
 }

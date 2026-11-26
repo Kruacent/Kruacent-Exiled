@@ -3,6 +3,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Roles;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
+using KE.Utils.API.Features;
 using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
@@ -15,6 +16,7 @@ namespace KruacentExiled.CustomItems.Items
 {
     public class WormholePistol : KECustomWeapon, IViolentItem, ILumosItem
     {
+        public const string TranslationCooldown = "WormholePistolCooldown";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new Dictionary<string, Dictionary<string, string>>()
@@ -23,11 +25,13 @@ namespace KruacentExiled.CustomItems.Items
                 {
                     [TranslationKeyName] = "Wormhole Pistol",
                     [TranslationKeyDesc] = "Change position with the target you shot at, 'MERICA!",
+                    [TranslationCooldown] = "You must wait %second% seconds before using it again",
                 },
                 ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Pistolet TP",
                     [TranslationKeyDesc] = "Tire et POUF, tu change de position avec la cible",
+                    [TranslationCooldown] = "Tu dois attendre %second% secondes avant de pouvoir l'utiliser à nouveau",
                 },
             };
         }
@@ -39,6 +43,7 @@ namespace KruacentExiled.CustomItems.Items
         public override float Damage { get; set; } = 1f;
         public override byte ClipSize { get; } = 2;
         private TimeSpan Cooldown = new TimeSpan(0, 1, 0);
+        private bool _isTimeSet = false;
         private DateTime time;
         public bool IsViolent => true;
         protected int NbShot = 0;
@@ -73,8 +78,8 @@ namespace KruacentExiled.CustomItems.Items
 
         protected override void OnHurting(HurtingEventArgs ev)
         {
+            if (!ev.IsAllowed) return;
             Player attacker = ev.Attacker;
-
             Player target = ev.Player;
 
             if (attacker.Role is FpcRole attRole && attRole.IsGrounded)
@@ -91,23 +96,40 @@ namespace KruacentExiled.CustomItems.Items
                 }
                 
             }
+
+            base.OnHurting(ev);
             
         }
 
         protected override void OnShooting(ShootingEventArgs ev)
         {
+            if (!ev.IsAllowed) return;
+
+
+            KELog.Debug("shot =" + NbShot);
+            KELog.Debug("now =" + DateTime.Now);
+            KELog.Debug("next posible =" + (time + Cooldown));
+
             if (CheckCooldown())
             {
-                ev.IsAllowed = true;
+
+
                 if (NbShot < 2)
                 {
                     NbShot++;
+                }
+                else
+                {
+                    time = DateTime.Now;
+                    ev.IsAllowed = false;
+                    KELog.Debug("no shot");
                 }
             }
             else
             {
                 ev.IsAllowed = false;
-                
+                string msg = GetTranslation(ev.Player, TranslationCooldown).Replace("%second%", Math.Round((Cooldown - (DateTime.Now-time)).TotalSeconds).ToString());
+                ItemEffectHint(ev.Player, msg);
             }
             
             
@@ -116,10 +138,22 @@ namespace KruacentExiled.CustomItems.Items
         private bool CheckCooldown()
         {
             bool canShot = false;
-            if(DateTime.Now >= time + Cooldown)
+
+            if (!_isTimeSet)
+            {
+                time = DateTime.Now;
+                canShot = true;
+                _isTimeSet = true;
+            }
+            else if(NbShot < 2)
+            {
+                canShot = true;
+            }
+            else if (DateTime.Now >= time + Cooldown)
             {
                 canShot = true;
                 NbShot = 0;
+                time = DateTime.Now;
             }
             return canShot;
         }

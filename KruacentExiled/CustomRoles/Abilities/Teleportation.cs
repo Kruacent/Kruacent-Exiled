@@ -53,12 +53,18 @@ namespace KruacentExiled.CustomRoles.Abilities
 
         protected override bool AbilityUsed(Player player)
         {
+            if (!SetPosition.TryGetTarget(player, out Vector3 target))
+            {
+                SetPosition setPosition = (SetPosition)SetPosition.Get("SetPosition");
+
+                setPosition.UseAbility(player);
+                return false;
+            }
 
             if (!CheckValid(player, true))
             {
                 return false;
             }
-            SetPosition.TryGetTarget(player, out Vector3 target);
     
             if(Player.Count > 1 && Random.Range(1f, 100f) < 5)
             {

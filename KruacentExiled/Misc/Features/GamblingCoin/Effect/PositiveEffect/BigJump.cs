@@ -3,29 +3,32 @@ using KruacentExiled.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.Tier1
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using EffectType = KruacentExiled.Misc.Features.GamblingCoin.Types.EffectType;
 
-public class BigJump : ICoinEffect, IDurationEffect
+namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.PositiveEffect
 {
-    public string Name { get; set; } = "BigJump";
-    public string Message { get; set; } = "Congratulations, you can now jump higher";
-    public int Weight { get; set; } = 5;
-    public EffectType Type { get; set; } = EffectType.Positive;
-
-    public float Duration { get; set; } = 90;
-
-    public void Execute(Player player)
+    public class BigJump : ICoinEffect, IDurationEffect
     {
-        if (!player.GameObject.TryGetComponent<HigherJumpComp>(out var comp))
+        public string Name { get; set; } = "BigJump";
+        public string Message { get; set; } = "Congratulations, you can now jump higher";
+        public int Weight { get; set; } = 5;
+        public EffectType Type { get; set; } = EffectType.Positive;
+
+        public float Duration { get; set; } = 90;
+
+        public void Execute(Player player)
         {
-            comp= player.GameObject.AddComponent<HigherJumpComp>();
+            if (!player.GameObject.TryGetComponent<HigherJumpComp>(out var comp))
+            {
+                comp= player.GameObject.AddComponent<HigherJumpComp>();
+            }
+            comp.IsActive = !comp.IsActive;
         }
-        comp.IsActive = !comp.IsActive;
-    }
 
-    public void ExecuteAfterDuration(Player player)
-    {
-        if (player.GameObject.TryGetComponent<HigherJumpComp>(out var comp))
+        public void ExecuteAfterDuration(Player player)
         {
-            comp.Destroy();
+            if (player.GameObject.TryGetComponent<HigherJumpComp>(out var comp))
+            {
+                comp.Destroy();
+            }
         }
     }
 }

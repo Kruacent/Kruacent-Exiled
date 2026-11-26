@@ -8,40 +8,43 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-internal class RandomizeInventory : ICoinEffect
+namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.PositiveEffect
 {
-    public string Name { get; set; } = "RandomizeInventory";
-    public string Message { get; set; } = "You shouldn't gamble !";
-    public int Weight { get; set; } = 10;
-    public EffectType Type { get; set; } = EffectType.Positive;
-
-    public void Execute(Player player)
+    internal class RandomizeInventory : ICoinEffect
     {
-        int numberOfItem = player.Items.Count;
-        player.ClearInventory();
+        public string Name { get; set; } = "RandomizeInventory";
+        public string Message { get; set; } = "You shouldn't gamble !";
+        public int Weight { get; set; } = 10;
+        public EffectType Type { get; set; } = EffectType.Positive;
 
-        for (int i = 0; i < numberOfItem; i++)
+        public void Execute(Player player)
         {
-            player.AddItem(GiveRandomItem());
-        }
-    }
+            int numberOfItem = player.Items.Count;
+            player.ClearInventory();
 
-    public static ItemType GiveRandomItem()
-    {
-        Array values = Enum.GetValues(typeof(ItemType));
-        List<ItemType> itemPool = new List<ItemType>();
-                
-        foreach (ItemType item in values)
-        {
-            if(!BlacklistItemTypeManager.BlackListItem.Contains(item))
+            for (int i = 0; i < numberOfItem; i++)
             {
-                itemPool.Add(item);
+                player.AddItem(GiveRandomItem());
             }
         }
 
-        ItemType randomItem = itemPool.RandomItem();
-        KELog.Debug($"Random Item {randomItem}");
+        public static ItemType GiveRandomItem()
+        {
+            Array values = Enum.GetValues(typeof(ItemType));
+            List<ItemType> itemPool = new List<ItemType>();
 
-        return randomItem;
+            foreach (ItemType item in values)
+            {
+                if(!BlacklistItemTypeManager.BlackListItem.Contains(item))
+                {
+                    itemPool.Add(item);
+                }
+            }
+
+            ItemType randomItem = itemPool.RandomItem();
+            KELog.Debug($"Random Item {randomItem}");
+
+            return randomItem;
+        }
     }
 }

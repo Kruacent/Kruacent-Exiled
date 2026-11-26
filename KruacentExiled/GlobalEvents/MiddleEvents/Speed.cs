@@ -4,6 +4,7 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp173;
 using GlobalEventFramework.API.Features;
 using GlobalEventFramework.API.Interfaces;
+using KruacentExiled.GlobalEvents.GE;
 using MEC;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,13 +39,13 @@ namespace KruacentExiled.GlobalEvents.MiddleEvents
         public void SubscribeEvent()
         {
             Exiled.Events.Handlers.Player.ChangingRole += ReactivateEffectSpawn;
-            Exiled.Events.Handlers.Scp173.Blinking += SpeedyNut;
+            Exiled.Events.Handlers.Scp173.Blinking += Speed.SpeedyNut;
         }
         ///<inheritdoc/>
         public void UnsubscribeEvent()
         {
             Exiled.Events.Handlers.Player.ChangingRole -= ReactivateEffectSpawn;
-            Exiled.Events.Handlers.Scp173.Blinking -= SpeedyNut;
+            Exiled.Events.Handlers.Scp173.Blinking -= Speed.SpeedyNut;
         }
 
         protected override void Disable()
@@ -56,14 +57,6 @@ namespace KruacentExiled.GlobalEvents.MiddleEvents
         public void OnDisable()
         {
             Player.List.ToList().ForEach(p => p.DisableEffect<MovementBoost>());
-        }
-
-        /// <summary>
-        /// Decrease the blink cooldown of SCP-173
-        /// </summary>
-        private void SpeedyNut(BlinkingEventArgs ev)
-        {
-            ev.BlinkCooldown = ev.BlinkCooldown / 4;
         }
 
         /// <summary>

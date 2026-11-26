@@ -105,6 +105,7 @@ namespace KruacentExiled.CustomItems.Items.ItemEffects
                     Log.Error($"{nameof(OnExploding)} error: {exception}");
                 }
             }
+            ListPool<Player>.Pool.Return(effectedPlayers);
         }
 
         private Room RandomRoom()

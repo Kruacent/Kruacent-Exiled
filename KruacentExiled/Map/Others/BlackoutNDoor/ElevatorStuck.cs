@@ -2,15 +2,9 @@
 using Exiled.API.Features;
 using Exiled.API.Features.Pools;
 using KruacentExiled.Map.Others.BlackoutNDoor.Handlers;
-using KruacentExiled.Map.Others.CustomElevators;
-using KruacentExiled.Map.Others.CustomElevators.KECustomElevators;
 using KruacentExiled.Map.Surface.ElevatorGateA;
-using LabApi.Features.Wrappers;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KruacentExiled.Map.Others.BlackoutNDoor
 {

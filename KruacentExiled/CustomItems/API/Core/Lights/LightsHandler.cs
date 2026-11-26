@@ -4,6 +4,7 @@ using InventorySystem.Items.Pickups;
 using KE.Utils.API.Interfaces;
 using KruacentExiled.CustomItems.API.Interface;
 using LabApi.Features.Wrappers;
+using UnityEngine;
 
 namespace KruacentExiled.CustomItems.API.Core.Lights
 {
@@ -33,14 +34,19 @@ namespace KruacentExiled.CustomItems.API.Core.Lights
         {
             if (CustomItem.TryGet(Exiled.API.Features.Pickups.Pickup.Get(pickup), out CustomItem item) && item is ILumosItem li)
             {
-
-                var l = LightSourceToy.Create(pickup.transform, false);
-                l.Color = li.Color;
-                l.Intensity = Intensity;
-                l.MovementSmoothing = 0;
-                l.Spawn();
+                ForceAddLight(pickup, li.Color);
             }
 
+        }
+
+
+        internal static void ForceAddLight(ItemPickupBase pickup,Color color)
+        {
+            var l = LightSourceToy.Create(pickup.transform, false);
+            l.Color = color;
+            l.Intensity = Intensity;
+            l.MovementSmoothing = 0;
+            l.Spawn();
         }
     }
 }
