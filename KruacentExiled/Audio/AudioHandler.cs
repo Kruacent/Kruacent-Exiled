@@ -219,7 +219,7 @@ namespace KruacentExiled.Audio
         {
             if (listener == null)
             {
-                Log.Error("player null");
+                throw new ArgumentNullException(nameof(listener));
             }
 
 
