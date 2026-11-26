@@ -15,6 +15,7 @@ using KE.Utils.API.Displays.DisplayMeow.Placements;
 using KruacentExiled.CustomRoles.API.Features;
 using KruacentExiled.CustomRoles.API.Interfaces;
 using KruacentExiled.CustomRoles.CustomSCPTeam;
+using KruacentExiled.Misc.Features.ScpProximityChat;
 using LabApi.Events.Arguments.PlayerEvents;
 using MEC;
 using PlayerRoles;
@@ -140,6 +141,7 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
             Exiled.Events.Handlers.Player.Dying -= OnDying;
             Exiled.Events.Handlers.Scp1509.Resurrecting -= OnResurrecting;
             Exiled.Events.Handlers.Player.UsingItem -= OnUsingItem;
+            Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
             Exiled.Events.Handlers.Scp096.AddingTarget -= OnAddingTarget;
             Exiled.Events.Handlers.Scp173.AddingObserver -= OnAddingObserver;
             LabApi.Events.Handlers.PlayerEvents.UsingIntercom -= OnUsingIntercom;
@@ -228,30 +230,71 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
                     }
                 }
             }
-            if (Check(player))
+            if (!Check(player)) return;
+
+            if (_intercom.Contains(player) || Intercom.HasOverride(player))
             {
-                HashSet<ReferenceHub> receiver;
-                if (_intercom.Contains(player))
-                {
-                    msg.Channel = VoiceChat.VoiceChatChannel.Intercom;
-                    receiver = ReferenceHub.AllHubs;
-                }
-                else
-                {
-                    msg.Channel = VoiceChat.VoiceChatChannel.RoundSummary;
-                    receiver = SCPTeam.SCPs.ToHashSet();
-                }
-                foreach (ReferenceHub hub in receiver)
+                msg.Channel = VoiceChat.VoiceChatChannel.Intercom;
+                foreach (ReferenceHub hub in ReferenceHub.AllHubs)
                 {
                     if (hub != player.ReferenceHub)
                     {
                         hub.connectionToClient.Send(msg);
                     }
                 }
-
-
                 ev.IsAllowed = false;
+                return;
             }
+
+            VoiceChat.VoiceChatChannel channel = ev.VoiceMessage.Channel;
+            bool onRadio = channel == VoiceChat.VoiceChatChannel.Radio && HasUsableRadio(player);
+            bool onProximity = channel == VoiceChat.VoiceChatChannel.Proximity && ScpProximityChatHandler.IsEnabled(player);
+            bool gameSends = onRadio || onProximity;
+
+            // SCPs hear 035 anywhere, except those already hearing it through the game
+            msg.Channel = VoiceChat.VoiceChatChannel.RoundSummary;
+            foreach (ReferenceHub hub in SCPTeam.SCPs)
+            {
+                if (hub == player.ReferenceHub) continue;
+                if (gameSends && WillReceive(hub, player.ReferenceHub, channel)) continue;
+                hub.connectionToClient.Send(msg);
+            }
+
+            ev.IsAllowed = gameSends;
+        }
+
+        private static bool HasUsableRadio(Player player)
+        {
+            bool hasUsableRadio = false;
+            IEnumerable<Item> itemList = player.Items.Where(item => item.Type == ItemType.Radio);
+
+            foreach (Radio item in itemList)
+            {
+                if (item.BatteryLevel > 0)
+                {
+                    hasUsableRadio = true;
+                    break;
+                }
+            }
+
+            return hasUsableRadio;
+        }
+
+        private static bool WillReceive(ReferenceHub receiver, ReferenceHub speaker, VoiceChat.VoiceChatChannel channel)
+        {
+            if (!(receiver.roleManager.CurrentRole is PlayerRoles.Voice.IVoiceRole voiceRole))
+            {
+                return false;
+            }
+
+            VoiceChat.VoiceChatChannel receivedChannel = voiceRole.VoiceModule.ValidateReceive(speaker, channel);
+
+            if (receivedChannel == VoiceChat.VoiceChatChannel.None)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         protected override void RoleAdded(Player player)

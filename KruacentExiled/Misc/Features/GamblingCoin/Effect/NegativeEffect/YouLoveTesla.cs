@@ -6,35 +6,37 @@ using KruacentExiled.CustomSpawnPoint.Spawned;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using KruacentExiled.Misc.Features.GamblingCoin.Types;
 using System.Collections.Generic;
-using System.Linq;
 using Tesla = Exiled.API.Features.TeslaGate;
 
-internal class YouLoveTesla : ICoinEffect
+namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.NegativeEffect
 {
-    public string Name { get; set; } = "YouLoveTesla";
-    public string Message { get; set; } = "You love Tesla much more than Elon Musk";
-    public int Weight { get; set; } = 15;
-    public EffectType Type { get; set; } = EffectType.Negative;
-
-    public void Execute(Player player)
+    internal class YouLoveTesla : ICoinEffect
     {
-        List<Room> rooms = ListPool<Room>.Pool.Get();
+        public string Name { get; set; } = "YouLoveTesla";
+        public string Message { get; set; } = "You love Tesla much more than Elon Musk";
+        public int Weight { get; set; } = 15;
+        public EffectType Type { get; set; } = EffectType.Negative;
 
-
-        foreach (Tesla tesla in Tesla.List)
+        public void Execute(Player player)
         {
-            rooms.Add(tesla.Room);
-        }
+            List<Room> rooms = ListPool<Room>.Pool.Get();
+
+
+            foreach (Tesla tesla in Tesla.List)
+            {
+                rooms.Add(tesla.Room);
+            }
 
 
 
-        RoomSpawnedCustomPoint point = RoomCustomPointHandler.GetRandomPoint(RoomCustomPointType.Teleport, rooms.GetRandomValue());
+            RoomSpawnedCustomPoint point = RoomCustomPointHandler.GetRandomPoint(RoomCustomPointType.Teleport, rooms.GetRandomValue());
 
-        player.Teleport(point.Position);
+            player.Teleport(point.Position);
 
-        if (Warhead.IsDetonated)
-        {
-            player.Kill(Exiled.API.Enums.DamageType.Decontamination);
+            if (Warhead.IsDetonated)
+            {
+                player.Kill(Exiled.API.Enums.DamageType.Decontamination);
+            }
         }
     }
 }

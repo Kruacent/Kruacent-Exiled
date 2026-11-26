@@ -9,8 +9,9 @@ using UnityEngine;
 
 namespace KruacentExiled.CustomRoles.CR.MTF.Medic
 {
-    public class Medic : KECustomRole, IColor
+    public class Medic : KECustomRole, IColor, INoPickupItem
     {
+        public string NoPickupTranslationKey => "MTFMEDICNOPICKUPITEM";
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new Dictionary<string, Dictionary<string, string>>()
@@ -41,6 +42,11 @@ namespace KruacentExiled.CustomRoles.CR.MTF.Medic
         public override float SpawnChance { get; set; } = 100;
         public override Vector3 Scale { get; set; } = new Vector3(1f, 1f, 1f);
 
+        public bool BlockScpItems { get; set; } = false;
+        public bool BlockRevivingItems { get; set; } = false;
+        public bool BlockViolentItems { get; set; } = false;
+        public List<string> WhitelistItem { get; set; }
+
         public override List<string> Inventory { get; set; } = new List<string>()
         {
           $"{ItemType.KeycardMTFOperative}",
@@ -52,6 +58,17 @@ namespace KruacentExiled.CustomRoles.CR.MTF.Medic
           $"{ItemType.ArmorLight}",
         };
 
+        public List<string> BannedItem { get; set; } = new List<string>()
+        {
+            $"{ItemType.Jailbird}",
+            $"{ItemType.ParticleDisruptor}",
+            $"{ItemType.MicroHID}",
+            $"{ItemType.GunFRMG0}",
+            $"{ItemType.GunLogicer}",
+            $"{ItemType.GunAK}",
+            $"{ItemType.GunE11SR}",
+        };
+
         public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new Dictionary<AmmoType, ushort>()
         {
           { AmmoType.Nato9, 70},
@@ -61,7 +78,7 @@ namespace KruacentExiled.CustomRoles.CR.MTF.Medic
         {
             base.GiveInventory(player);
 
-            Exiled.CustomItems.API.Features.CustomItem.TryGive(player, "Defibrillator", false);
+            Exiled.CustomItems.API.Features.CustomItem.TryGive(player, "Defibrilator", false);
         }
 
         public override HashSet<string> Abilities { get; } = new HashSet<string>()

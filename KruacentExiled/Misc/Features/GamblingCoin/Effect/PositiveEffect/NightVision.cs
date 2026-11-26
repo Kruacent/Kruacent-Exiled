@@ -3,17 +3,20 @@ using EffectType = KruacentExiled.Misc.Features.GamblingCoin.Types.EffectType;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using KruacentExiled.CustomRoles.CustomSCPTeam;
 
-internal class NightVision : ICoinEffect
+namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.PositiveEffect
 {
-    public string Name { get; set; } = "NightVision";
-    public string Message { get; set; } = "Yippee, you can see in the dark";
-    public int Weight { get; set; } = 10;
-    public EffectType Type { get; set; } = EffectType.Positive;
-    public float Duration { get; set; } = 120;
-
-    public void Execute(Player player)
+    internal class NightVision : ICoinEffect
     {
-        if (SCPTeam.IsSCP(player.ReferenceHub)) return;
-        player.EnableEffect<CustomPlayerEffects.NightVision>(100, Duration, true);
+        public string Name { get; set; } = "NightVision";
+        public string Message { get; set; } = "Yippee, you can see in the dark";
+        public int Weight { get; set; } = 10;
+        public EffectType Type { get; set; } = EffectType.Positive;
+        public float Duration { get; set; } = 120;
+
+        public void Execute(Player player)
+        {
+            if (SCPTeam.IsSCP(player.ReferenceHub)) return;
+            player.EnableEffect<CustomPlayerEffects.NightVision>(100, Duration, true);
+        }
     }
 }

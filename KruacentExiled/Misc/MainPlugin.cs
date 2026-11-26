@@ -20,6 +20,7 @@ using KruacentExiled.Misc.Handlers;
 using KruacentExiled.Misc.Features.LastHuman;
 using KruacentExiled.Misc.Features.SCPRebalance;
 using KruacentExiled.Misc.Features.DisplayPluginVersion;
+using KruacentExiled.Misc.Features.ScpProximityChat;
 
 namespace KruacentExiled.Misc
 {
@@ -49,6 +50,7 @@ namespace KruacentExiled.Misc
         internal DisplayPluginVersion PluginVersion { get; private set; }
         internal PostNukeHandler postnuke { get; private set; }
         internal LobbyHint LobbyHint { get; private set; }
+        internal ScpProximityChatHandler ScpProximityChat { get; private set; }
 
         public string LocalizationId => Prefix;
 
@@ -81,6 +83,7 @@ namespace KruacentExiled.Misc
             PluginVersion = new DisplayPluginVersion();
             postnuke = new PostNukeHandler();
             LobbyHint = new LobbyHint();
+            ScpProximityChat = new ScpProximityChatHandler();
 
 
             //SpawnLcz = new();
@@ -147,6 +150,7 @@ namespace KruacentExiled.Misc
             _gamblingCoinHandler = null;
             postnuke = null;
             LobbyHint = null;
+            ScpProximityChat = null;
             LimitedSCP0492 = null;
             LastHuman = null;
             Instance = null;
@@ -184,6 +188,7 @@ namespace KruacentExiled.Misc
         {
             TranslationHub.Add(LocalizationId, LastHumanTranslations.LangToKeyToTranslation);
             TranslationHub.Add(LocalizationId, WrongAspectRatioWarningLobbyHint.LangToKeyToTranslation);
+            TranslationHub.Add(LocalizationId, ScpProximityChatTranslations.LangToKeyToTranslation);
             //TranslationHub.Add(LocalizationId, VoteStart.LangToKeyToTranslation);
         }
 
