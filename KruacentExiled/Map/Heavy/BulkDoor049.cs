@@ -14,6 +14,8 @@ namespace KruacentExiled.Map.Heavy
     public static class BulkDoor049
     {
         private static DoorVariant door;
+
+        public static Vector3 DoorPosition => door.transform.position;
         public static void Create()
         {
 

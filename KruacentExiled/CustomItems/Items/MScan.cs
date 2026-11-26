@@ -10,10 +10,12 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp096;
 using Exiled.Events.EventArgs.Scp106;
 using Exiled.Events.EventArgs.Scp939;
+using Exiled.Events.Features;
 using KE.Utils.API.Displays.Feeds;
 using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
+using KruacentExiled.CustomItems.Events.CustomItem.EventArgs;
 using KruacentExiled.CustomRoles.API.Interfaces;
 using MEC;
 using System.Collections.Generic;
@@ -23,7 +25,24 @@ namespace KruacentExiled.CustomItems.Items
 {
     public class MScan : KECustomItem,ILumosItem
     {
-
+        public static Event<ScannedByMScanEventArgs> ScannedByMScan { get; set; } = new Event<ScannedByMScanEventArgs>();
+        public static void OnScannedByMScan(ScannedByMScanEventArgs ev)
+        {
+            ScannedByMScan?.InvokeSafely(ev);
+        }
+        public static Event<DeployedMScanEventArgs> DeployedMScan { get; set; } = new Event<DeployedMScanEventArgs>();
+        public static void OnDeployedMScan(DeployedMScanEventArgs ev)
+        {
+            DeployedMScan?.InvokeSafely(ev);
+        }
+        /// <summary>
+        /// Called when the MScan is destroyed or picked up
+        /// </summary>
+        public static Event<RemovedMScanEventArgs> RemovedMScan { get; set; } = new Event<RemovedMScanEventArgs>();
+        public static void OnRemovedMScan(RemovedMScanEventArgs ev)
+        {
+            RemovedMScan?.InvokeSafely(ev);
+        }
 
         public const string Deploy = "MScanDeploy";
         public const string PickUp = "MScanPickUp";
@@ -165,6 +184,8 @@ namespace KruacentExiled.CustomItems.Items
                 string translation = GetTranslation(player, Deploy).Replace("%TimeUp%", TimeUp.ToString());
 
                 HintFeed.AddFeed(player, translation);
+                OnDeployedMScan(new DeployedMScanEventArgs(player, this));
+
             }
         }
 
@@ -229,9 +250,17 @@ namespace KruacentExiled.CustomItems.Items
 
         private void Remove(Pickup pickup)
         {
+            ActiveSensors.TryGetValue(pickup, out Player player);
+
             ActiveSensors.Remove(pickup);
             BatteryLife.Remove(pickup);
             Cooldowns.Remove(pickup);
+            
+            if(player != null)
+            {
+                OnRemovedMScan(new RemovedMScanEventArgs(player, this));
+            }
+
             //Models[pickup].Destroy();
         }
 
@@ -305,6 +334,8 @@ namespace KruacentExiled.CustomItems.Items
                                 string msg = GetTranslation(owner, Detect).Replace("%Color%", color).Replace("%Name%", target.Role.Name);
 
                                 HintFeed.AddFeed(owner, msg);
+
+                                OnScannedByMScan(new ScannedByMScanEventArgs(owner, this, target));
                             }
 
                             break;

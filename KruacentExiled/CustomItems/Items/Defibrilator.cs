@@ -3,10 +3,12 @@ using Exiled.API.Features;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.Features;
 using KE.Utils.API.Displays.Feeds;
 using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
+using KruacentExiled.CustomItems.Events.CustomItem.EventArgs;
 using MEC;
 using PlayerRoles;
 using PlayerRoles.Ragdolls;
@@ -17,7 +19,17 @@ namespace KruacentExiled.CustomItems.Items
 {
     public class Defibrillator : KECustomItem, ILumosItem, IRevivingCustomItem
     {
+        #region events
 
+        public static Event<RevivedByDefibrilatorArgs> RevivedByDefibrilator { get; set; } = new Event<RevivedByDefibrilatorArgs>();
+        public static void OnRevivedByDefibrilator(RevivedByDefibrilatorArgs ev)
+        {
+            RevivedByDefibrilator?.InvokeSafely(ev);
+        }
+
+
+
+        #endregion
         public const string TranslationFailed = "DefibrillatorFailed";
         public const string TranslationExpired = "DefibrillatorExpired";
         public const string TranslationTooFar = "DefibrillatorTooFar";
@@ -209,6 +221,7 @@ namespace KruacentExiled.CustomItems.Items
             yield return Timing.WaitForSeconds(0.2f);
             shockLight.Destroy();
 
+            OnRevivedByDefibrilator(new RevivedByDefibrilatorArgs(patient, medic));
             patient.Role.Set(previousRole, SpawnReason.Revived, RoleSpawnFlags.None);
 
             yield return Timing.WaitForSeconds(0.4f);
