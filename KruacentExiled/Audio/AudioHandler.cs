@@ -254,7 +254,7 @@ namespace KruacentExiled.Audio
         /// <summary>
         /// All <see cref="Speaker"/> and its ids
         /// </summary>
-        internal Dictionary<Speaker, RecyclableId> Speakers = new Dictionary<Speaker, RecyclableId>();
+        internal Dictionary<Speaker, RecyclableId> Speakers { get; set; } = new Dictionary<Speaker, RecyclableId>();
 
         private Speaker CreateSpeaker(AudioPlayer audioPlayer,SoundType type,float volume)
         {
