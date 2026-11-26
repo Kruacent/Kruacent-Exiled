@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Extensions;
+using Exiled.API.Features;
 using Exiled.API.Features.Toys;
 using KE.Utils.API.Features;
 using System;
@@ -15,7 +16,7 @@ namespace KruacentExiled.Map.Surface.ElevatorGateA
         
 
         private static Primitive step;
-        private static Primitive help;
+        private static GameObject killer;
 
         private static Panel toppanel;
         private static Primitive primtop;
@@ -76,7 +77,7 @@ namespace KruacentExiled.Map.Surface.ElevatorGateA
         private static void CreatePrimitives()
         {
             Vector3 pos = new Vector3(18.24f, 290.65f, -46.07f);
-            Vector3 helppos = new Vector3(18.24f, 255.65f, -46.07f);
+            Vector3 killerPos = new Vector3(18.24f, 255.65f, -46.07f);
             Vector3 postop = new Vector3(19.92f, 299.97f, -48.95f);
             Vector3 posbot = new Vector3(15.62f, 290.65f, -45.19f);
             prim = Primitive.Create(pos, null, Vector3.one * Scale);
@@ -89,12 +90,16 @@ namespace KruacentExiled.Map.Surface.ElevatorGateA
             primbottom.Flags = AdminToys.PrimitiveFlags.None;
 
 
-            help = Primitive.Create(PrimitiveType.Cube,helppos,null,new Vector3(50,50,50),false);
-            help.Flags = AdminToys.PrimitiveFlags.Visible;
-            help.Spawn();
-            help.GameObject.AddComponent<CustomKillerCollision>();
 
-            helpPlatform = Primitive.Create(PrimitiveType.Cube, helppos, null, new Vector3(50, 1, 50), false);
+
+            killer = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            killer.SetWorldScale(Vector3.one * 50f);
+            killer.transform.position = killerPos;
+            killer.isStatic = true;
+            killer.GetComponent<BoxCollider>().isTrigger = true;
+            killer.AddComponent<PitKiller>();
+
+            helpPlatform = Primitive.Create(PrimitiveType.Cube, killerPos, null, new Vector3(50, 1, 50), false);
             helpPlatform.Flags = AdminToys.PrimitiveFlags.Visible | AdminToys.PrimitiveFlags.Collidable;
             helpPlatform.Spawn();
         }
@@ -118,11 +123,10 @@ namespace KruacentExiled.Map.Surface.ElevatorGateA
                 step.Destroy();
                 step = null;
             }
-            if (CheckPrimitive(help))
-            {
-                help.Destroy();
-                help = null;
-            }
+
+
+            GameObject.Destroy(killer);
+            killer = null;
             if (CheckPrimitive(helpPlatform))
             {
                 helpPlatform.Destroy();
