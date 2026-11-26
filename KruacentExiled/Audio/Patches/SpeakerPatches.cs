@@ -18,6 +18,7 @@ namespace KruacentExiled.Audio.Patches
                 if (MainPlugin.AudioHandler.Speakers.TryGetValue(__instance, out RecyclableId id))
                 {
                     id.Destroy();
+                    MainPlugin.AudioHandler.Speakers.Remove(__instance);
                 }
 
             }

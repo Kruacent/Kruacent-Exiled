@@ -27,8 +27,29 @@ namespace KruacentExiled.Misc.Features.VoteStart
 
         public static HintPosition HintPosition = new VotePosition();
 
-        private List<Player> Voted = new List<Player>();
+        private readonly List<int> Voted;
         private bool voteCasted = false;
+
+        private StringBuilder sb;
+
+        public int MinimumVote { get; set; } = MainPlugin.Configs.MinPlayerVote;
+
+        internal VoteStart() : base()
+        {
+            Voted = ListPool<int>.Pool.Get();
+            sb = StringBuilderPool.Pool.Get();
+        }
+
+        ~VoteStart()
+        {
+            ListPool<int>.Pool.Return(Voted);
+            StringBuilderPool.Pool.Return(sb);
+        }
+
+
+        public bool EveryoneVoted => voteCasted;
+        public int NumberVote => Voted.Count;
+
         public override void SubscribeEvents()
         {
             Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
@@ -47,44 +68,79 @@ namespace KruacentExiled.Misc.Features.VoteStart
             Exiled.Events.Handlers.Player.Verified -= OnVerified;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             Exiled.Events.Handlers.Player.Left -= OnLeft;
-
             base.UnsubscribeEvents();
         }
 
 
         private void OnLeft(LeftEventArgs ev)
         {
-            Player player = ev.Player;
-            if (DidVote(player))
+            int playerId = ev.Player.Id;
+            if (DidVote(playerId))
             {
-                CancelVote(player);
+                CancelVote(playerId);
             }
         }
 
 
-        public bool DidVote(Player player)
+        public void RemoveAllVote()
         {
-            return Voted.Contains(player);
-        }
-
-        public void CancelVote(Player player)
-        {
-            if (!Voted.Contains(player))
-            {
-                throw new ArgumentOutOfRangeException($"Player ({player}) didn't vote");
-            }
-
-
-            Voted.Remove(player);
+            Voted.Clear();
             Round.IsLobbyLocked = true;
             voteCasted = false;
+        }
+
+        /// <summary>
+        /// Check if the minimum number of player voted
+        /// </summary>
+        /// <returns></returns>
+        public bool CheckVote()
+        {
+            return Voted.Count >= MainPlugin.Configs.MinPlayerVote;
+        }
+
+        public bool DidVote(int playerId)
+        {
+            return Voted.Contains(playerId);
+        }
+
+        public void CancelVote(int playerId)
+        {
+            if (!Voted.Contains(playerId))
+            {
+                throw new ArgumentOutOfRangeException($"Player ({playerId}) didn't vote");
+            }
+
+
+            Voted.Remove(playerId);
+            if(!CheckVote())
+            {
+                Round.IsLobbyLocked = true;
+                voteCasted = false;
+            }
+            
+        }
+
+
+        public void AddVote(int playerId)
+        {
+            if (Voted.Contains(playerId))
+            {
+                throw new ArgumentException($"Player ({playerId}) already voted");
+            }
+
+            Voted.Add(playerId);
+            if (CheckVote())
+            {
+                Round.IsLobbyLocked = false;
+                voteCasted = true;
+            }
         }
 
 
 
         private void OnVoiceChatting(VoiceChattingEventArgs ev)
         {
-            if (voteCasted) return;
+            if (EveryoneVoted) return;
             if (!Round.IsLobby) return;
             if (ev.Player is null)
             {
@@ -95,19 +151,17 @@ namespace KruacentExiled.Misc.Features.VoteStart
             {
                 return;
             }
+            int playerId = ev.Player.Id;
 
-            if (DidVote(ev.Player))
+            if (DidVote(playerId))
             {
                 return;
             }
 
-            Voted.Add(ev.Player);
-            if (Voted.Count >= MainPlugin.Configs.MinPlayerVote)
-            {
-                Log.Info("starting the round");
-                Round.IsLobbyLocked = false;
-                voteCasted = true;
-            }
+            AddVote(playerId);
+
+
+
         }
         private void OnWaitingForPlayers()
         {
@@ -130,6 +184,8 @@ namespace KruacentExiled.Misc.Features.VoteStart
                 return;
             }
 
+            
+
             Timing.CallDelayed(1f, () =>
             {
                 if (Round.IsLobby)
@@ -144,8 +200,9 @@ namespace KruacentExiled.Misc.Features.VoteStart
         {
             if (!Round.IsLobby) return " ";
             if (Voted == null) return " ";
+            if (player == null) return " ";
 
-            StringBuilder sb = StringBuilderPool.Pool.Get();
+            sb.Clear();
 
             sb.Append("Votes (");
 
@@ -154,8 +211,12 @@ namespace KruacentExiled.Misc.Features.VoteStart
             sb.Append(MainPlugin.Configs.MinPlayerVote);
 
             sb.AppendLine(") : ");
-            foreach (Player other in Voted)
+            int playerId = player.Id;
+            foreach (int otherId in Voted)
             {
+
+                Player other = Player.Get(otherId);
+
                 bool flag1 = other == player;
 
 
@@ -170,7 +231,7 @@ namespace KruacentExiled.Misc.Features.VoteStart
                 }
                 sb.Append(" ");
             }
-            if (Voted.Contains(player))
+            if (DidVote(playerId))
             {
                 sb.AppendLine();
 
@@ -179,7 +240,7 @@ namespace KruacentExiled.Misc.Features.VoteStart
             }
 
 
-            return StringBuilderPool.Pool.ToStringReturn(sb);
+            return sb.ToString();
 
         }
         private void OnRoundStarted()

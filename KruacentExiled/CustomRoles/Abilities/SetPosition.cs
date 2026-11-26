@@ -5,14 +5,17 @@ using KE.Utils.API.KETextToy;
 using KruacentExiled.CustomRoles;
 using KruacentExiled.CustomRoles.API.Features;
 using KruacentExiled.CustomRoles.API.Interfaces;
+using KruacentExiled.CustomRoles.API.Interfaces.Ability;
 using MEC;
-using System.Collections.Generic;
-using UnityEngine;
 using System;
+using System.Collections.Generic;
+using System.Security.Policy;
+using System.Text;
+using UnityEngine;
 
 namespace KruacentExiled.CustomRoles.Abilities
 {
-    public class SetPosition : KEAbilities, ICustomIcon
+    public class SetPosition : KEAbilities, ICustomIcon, IDynamicName
     {
         public override string Name { get; } = "SetPosition";
 
@@ -41,8 +44,6 @@ namespace KruacentExiled.CustomRoles.Abilities
         
         public override float Cooldown { get; } = 5f;
         public TextImage IconName => MainPlugin.Instance.icons[Name];
-
-
 
         protected override bool AbilityUsed(Player player)
         {
@@ -77,6 +78,18 @@ namespace KruacentExiled.CustomRoles.Abilities
         public static bool TryGetTarget(Player p, out Vector3 target)
         {
             return SetPositionPosition.TryGetTarget(p, out target);
+        }
+
+        public void GetName(StringBuilder sb, Player player)
+        {
+            sb.Append(GetTranslation(player, TranslationKeyName));
+            if (SetPosition.TryGetTarget(player, out Vector3 point))
+            {
+                float distance = Vector3.Distance(player.Position, point);
+                sb.Append(" (")
+                    .Append(distance.ToString("0.0"))
+                    .Append("m)");
+            }
         }
 
         private class SetPositionPosition

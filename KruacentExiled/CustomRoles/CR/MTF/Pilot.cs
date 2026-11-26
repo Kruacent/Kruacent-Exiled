@@ -51,8 +51,8 @@ namespace KruacentExiled.CustomRoles.CR.MTF
 
         public override HashSet<string> Abilities { get; } = new HashSet<string>()
         {
-            "SetPosition",
-            "AirStrike"
+            "AirStrike",
+            "SetPosition"
         };
     }
 }

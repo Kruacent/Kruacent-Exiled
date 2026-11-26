@@ -45,7 +45,7 @@ namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.NegativeEffect
         {
             while (PlayerEatingStarData.Count > 0)
             {
-                foreach(PlayerEatingStarData data in PlayerEatingStarData.Data)
+                foreach (PlayerEatingStarData data in PlayerEatingStarData.Data)
                 {
                     data.ChangeLightColor();
                 }
@@ -70,6 +70,7 @@ namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.NegativeEffect
             private static Dictionary<Player, PlayerEatingStarData> _data = new Dictionary<Player, PlayerEatingStarData>();
             public static IReadOnlyCollection<PlayerEatingStarData> Data => _data.Values;
             public static int Count => _data.Count;
+            private Player _player;
             public static bool IsRunning(Player player)
             {
                 return _data.ContainsKey(player);
@@ -99,7 +100,7 @@ namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.NegativeEffect
                 {
                     result.InternalStart(player);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Log.Error(e);
                 }
@@ -125,7 +126,7 @@ namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.NegativeEffect
 
             public void ChangeLightColor()
             {
-                if(light == null)
+                if (light == null)
                 {
                     throw new NullReferenceException("light null");
                 }
@@ -143,19 +144,16 @@ namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.NegativeEffect
 
             public void Stop()
             {
-                foreach(AudioClipPlayback audioClipPlayback in clips)
+                foreach (AudioClipPlayback audioClipPlayback in clips)
                 {
-                    KELog.Debug("stop clip : " + audioClipPlayback.Clip);
-
                     audioClipPlayback.Loop = false;
-                    KELog.Debug("loop : " + audioClipPlayback.Loop);
                 }
 
                 light?.Destroy();
                 light = null;
-
                 clips.Clear();
-
+                _data.Remove(_player);
+                _player = null;
                 emptyDatas.Enqueue(this);
             }
         }

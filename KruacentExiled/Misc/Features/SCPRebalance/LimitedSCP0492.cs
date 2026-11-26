@@ -12,6 +12,7 @@ using PlayerRoles;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace KruacentExiled.Misc.Features.SCPRebalance
 {
@@ -53,7 +54,6 @@ namespace KruacentExiled.Misc.Features.SCPRebalance
         private int CurrentAliveZombies => Player.Enumerable.Count(p => p.Role == RoleTypeId.Scp0492);
         private int CurrentAlive049 => Player.Enumerable.Count(p => p.Role == RoleTypeId.Scp049);
 
-        public const int ZombiePer049 = 2;
 
         private static TooMuchZombiePosition Position = new TooMuchZombiePosition();
         private void OnStartingRecall(StartingRecallEventArgs ev)
@@ -69,20 +69,46 @@ namespace KruacentExiled.Misc.Features.SCPRebalance
 
 
             if (!ev.IsAllowed) return;
-            int maxZombie = ZombiePer049 * CurrentAlive049;
 
-            if(maxZombie < CurrentAliveZombies + 1)
+            int number049 = CurrentAlive049;
+            int numberZombie = CurrentAliveZombies;
+
+            int maxZombie = GetMaxZombie(number049);
+
+            if(HasMaxZombie(numberZombie, number049))
             {
                 ev.IsAllowed = false;
                 string msg = TranslationHub.Get(player, TranslationId, TooMuchZombies)
-                    .Replace("%CurrZombies%", CurrentAliveZombies.ToString()).Replace("%MaxZombies%", maxZombie.ToString());
-
-
+                    .Replace("%CurrZombies%", numberZombie.ToString()).Replace("%MaxZombies%", maxZombie.ToString());
                 DisplayHandler.Instance.AddHint(Position.HintPlacement, player, msg, 3);
             }
 
 
         }
+
+
+        public static bool HasMaxZombie(int numberZombie, int number049)
+        {
+            return GetMaxZombie(number049) <= numberZombie;
+        }
+
+
+        public static int GetMaxZombie(int number049)
+        {
+            return number049 * GetZombiePer049();
+        }
+
+        public static int GetZombiePer049()
+        {
+            int result = Player.ConnectedCount / 3;
+            if (result < 2)
+            {
+                result = 2;
+            }
+
+            return result;
+        }
+
     }
 
     public class TooMuchZombiePosition : HintPosition

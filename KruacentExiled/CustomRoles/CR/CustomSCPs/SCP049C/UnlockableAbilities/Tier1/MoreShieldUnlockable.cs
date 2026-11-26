@@ -23,7 +23,7 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.T
         {
             LabPlayer lab = LabPlayer.Get(hub);
 
-            lab.MaxHumeShield = 1100;
+            lab.MaxHumeShield = 800;
         }
 
         public override void Remove(ReferenceHub hub)

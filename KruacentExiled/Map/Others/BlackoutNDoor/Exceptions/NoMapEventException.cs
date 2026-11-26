@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KruacentExiled.Map.Others.CustomElevators.KECustomElevators
+namespace KruacentExiled.Map.Others.BlackoutNDoor.Exceptions
 {
-    public class KEElevatorPanel
+    public class NoMapEventException : Exception
     {
     }
 }
