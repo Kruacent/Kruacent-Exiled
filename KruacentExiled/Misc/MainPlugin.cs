@@ -20,6 +20,7 @@ using KruacentExiled.Misc.Handlers;
 using KruacentExiled.Misc.Features.LastHuman;
 using KruacentExiled.Misc.Features.SCPRebalance;
 using KruacentExiled.Misc.Features.DisplayPluginVersion;
+using KruacentExiled.Misc.Features.ScpProximityChat;
 
 namespace KruacentExiled.Misc
 {
@@ -36,22 +37,20 @@ namespace KruacentExiled.Misc
         internal AutoElevator AutoElevator { get; private set; }
         internal ClassDDoor ClassDDoor { get; private set; }
         internal Candy Candy { get; private set; }
-        internal SurfaceLight SurfaceLight { get; private set; }
         internal SCPBuff SCPBuff { get; private set; }
         internal Spawn Spawn { get; private set; }
         internal FriendlyFire FriendlyFire { get; private set; }
-        internal NukeKill AutoNukeAnnoucement { get; private set; }
         internal AutoTesla AutoTesla { get; private set; }
         internal TeslaDeathRedMist DeathRedMist { get; private set; }
+        internal NtfSpawn NtfSpawnMusic { get; private set; }
         internal EventHandlers _gamblingCoinHandler {  get; private set; }
-        internal SpawnLcz SpawnLcz { get; private set; }
         internal LastHumanHandler LastHuman { get; private set; }
-        private Harmony harmony;
 
         internal VoteStart vote { get; private set; }
         internal DisplayPluginVersion PluginVersion { get; private set; }
         internal PostNukeHandler postnuke { get; private set; }
         internal LobbyHint LobbyHint { get; private set; }
+        internal ScpProximityChatHandler ScpProximityChat { get; private set; }
 
         public string LocalizationId => Prefix;
 
@@ -63,7 +62,6 @@ namespace KruacentExiled.Misc
         public override void OnEnabled()
         {
             Instance = this;
-            harmony = new Harmony(Prefix);
 
             config = KruacentExiled.MainPlugin.Instance.Config.MiscConfig;
 
@@ -76,15 +74,16 @@ namespace KruacentExiled.Misc
             Spawn = new Spawn();
             SCPBuff = new SCPBuff();
             FriendlyFire = new FriendlyFire();
-            AutoNukeAnnoucement = new NukeKill();
             AutoTesla = new AutoTesla();
             DeathRedMist = new TeslaDeathRedMist();
+            NtfSpawnMusic = new NtfSpawn();
             LastHuman = new LastHumanHandler();
             Candy = new Candy();
             vote = new VoteStart();
             PluginVersion = new DisplayPluginVersion();
             postnuke = new PostNukeHandler();
             LobbyHint = new LobbyHint();
+            ScpProximityChat = new ScpProximityChatHandler();
 
 
             //SpawnLcz = new();
@@ -93,12 +92,11 @@ namespace KruacentExiled.Misc
             GlobalSettingsHandler.Instance.SubscribeEvents();
             RegisterTranslations();
 
-            harmony.PatchAll(KruacentExiled.MainPlugin.Instance.Assembly);
             ClassDDoor.SubscribeEvents();
             ServerHandle.RoundEnded += OnRoundEnded;
             MiscFeature.SubscribeAllEvents();
-            AutoNukeAnnoucement.SubscribeEvents();
             DeathRedMist.RegisterEvents();
+            NtfSpawnMusic.RegisterEvents();
             if (Configs.GamblingCoin)
             {
                 GamblingCoinManager.RegisterAll();
@@ -113,16 +111,17 @@ namespace KruacentExiled.Misc
             
         }
 
+        
 
         public override void OnDisabled()
         {
             ServerHandle.RoundStarted -= ServerHandler.OnRoundStarted;
             ServerHandle.RoundEnded -= OnRoundEnded;
             LabApi.Events.Handlers.ServerEvents.CassieQueuingScpTermination -= NoeDeath;
-            AutoNukeAnnoucement.UnsubscribeEvents();
             LastHuman.UnsubscribeEvents();
             SCPBuff.UnsubscribeEvents();
             DeathRedMist.UnregisterEvents();
+            NtfSpawnMusic.UnregisterEvents();
             if (Configs.GamblingCoin)
             {
                 Exiled.Events.Handlers.Player.FlippingCoin -= _gamblingCoinHandler.OnCoinFlip;
@@ -130,7 +129,6 @@ namespace KruacentExiled.Misc
             AutoTesla.StopLoop();
             MiscFeature.UnsubscribeAllEvents();
             ClassDDoor.UnsubscribeEvents();
-            harmony.UnpatchAll(harmony.Id);
             GlobalSettingsHandler.Instance.UnsubscribeEvents();
 
             _914 = null;
@@ -141,20 +139,20 @@ namespace KruacentExiled.Misc
             SCPBuff = null;
             AutoTesla = null;
             DeathRedMist = null;
+            NtfSpawnMusic = null;
             Spawn = null;
             AutoElevator = null;
             vote = null;
             PluginVersion = null;
-            AutoNukeAnnoucement = null;
             FriendlyFire = null;
             //SurfaceLight = null;
             GamblingCoinManager.DestroyAll();
             _gamblingCoinHandler = null;
             postnuke = null;
             LobbyHint = null;
+            ScpProximityChat = null;
             LimitedSCP0492 = null;
             LastHuman = null;
-            harmony = null;
             Instance = null;
         }       
         
@@ -190,6 +188,7 @@ namespace KruacentExiled.Misc
         {
             TranslationHub.Add(LocalizationId, LastHumanTranslations.LangToKeyToTranslation);
             TranslationHub.Add(LocalizationId, WrongAspectRatioWarningLobbyHint.LangToKeyToTranslation);
+            TranslationHub.Add(LocalizationId, ScpProximityChatTranslations.LangToKeyToTranslation);
             //TranslationHub.Add(LocalizationId, VoteStart.LangToKeyToTranslation);
         }
 

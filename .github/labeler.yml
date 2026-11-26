@@ -1,0 +1,29 @@
+Resources:
+- changed-files:
+    - any-glob-to-any-file: 'Resources/**'
+
+'Global Event':
+- all:
+    - changed-files:
+        - any-glob-to-any-file: 'KruacentExiled/GlobalEvents/**/*'
+'Custom Item':
+- all:
+    - changed-files:
+        - any-glob-to-any-file: 'KruacentExiled/CustomItems/**/*'
+'Custom Role':
+- all:
+    - changed-files:
+        - any-glob-to-any-file: 'KruacentExiled/CustomRoles/**/*'
+Map:
+- all:
+    - changed-files:
+        - any-glob-to-any-file: 'KruacentExiled/Map/**/*'
+Miscellaneous:
+- all:
+    - changed-files:
+        - any-glob-to-any-file: 'KruacentExiled/Misc/**/*'
+        - all-globs-to-all-files: '!KruacentExiled/Misc/Features/GamblingCoin/**/*'
+'Gambling Coin':
+- all:
+    - changed-files:
+        - any-glob-to-any-file: 'KruacentExiled/Misc/Features/GamblingCoin/**/*'

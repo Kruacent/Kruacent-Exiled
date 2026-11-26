@@ -2,16 +2,19 @@
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using EffectType = KruacentExiled.Misc.Features.GamblingCoin.Types.EffectType;
 
-internal class WarheadCoin : ICoinEffect
+namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.NegativeEffect
 {
-    public string Name { get; set; } = "Warhead";
-    public string Message { get; set; } = string.Empty;
-    public int Weight { get; set; } = 5;
-    public EffectType Type { get; set; } = EffectType.Negative;
-
-    public void Execute(Player player)
+    internal class WarheadCoin : ICoinEffect
     {
-        if (!Warhead.IsDetonated || !Warhead.IsInProgress)
-            Warhead.Start();
+        public string Name { get; set; } = "Warhead";
+        public string Message { get; set; } = string.Empty;
+        public int Weight { get; set; } = 5;
+        public EffectType Type { get; set; } = EffectType.Negative;
+
+        public void Execute(Player player)
+        {
+            if (!Warhead.IsDetonated || !Warhead.IsInProgress)
+                Warhead.Start();
+        }
     }
 }

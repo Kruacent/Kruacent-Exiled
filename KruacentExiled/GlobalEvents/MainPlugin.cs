@@ -19,7 +19,6 @@ namespace KruacentExiled.GlobalEvents
         public override string Prefix => "KE.GEFE";
         public static MainPlugin Instance { get; private set; }
 
-        private static Harmony Harmony;
 
 
 
@@ -38,9 +37,7 @@ namespace KruacentExiled.GlobalEvents
 
 
             //Kannassie.LoadVoiceLine();
-            Log.Debug("patching");
-            Harmony = new Harmony(Name);
-            //Harmony.PatchAll();
+
         }
 
         private void OnWaitingPlayer()
@@ -64,8 +61,6 @@ namespace KruacentExiled.GlobalEvents
             Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingPlayer;
 
             Instance = null;
-            Harmony?.UnpatchAll();
-            Harmony = null;
         }
     }
 

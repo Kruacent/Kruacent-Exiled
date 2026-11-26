@@ -28,7 +28,6 @@ namespace KE.Misc.Features._914Upgrades
                 return false;
             }
             Room room = GetRoom(ev.KnobSetting,player);
-
             if (room != null)
             {
                 //idk why but need a delay
@@ -41,8 +40,8 @@ namespace KE.Misc.Features._914Upgrades
                 
             }
 
-
-            return true;
+            //false to not skip the role change
+            return false;
         }
 
 
@@ -50,9 +49,12 @@ namespace KE.Misc.Features._914Upgrades
         public Room GetRoom(Scp914KnobSetting setting,Player player)
         {
             Room room = null;
+            bool luckcheckEntrance = LuckCheck(ChanceTpEntrance, player);
+            KELog.Debug("luckcheck entrance : " + luckcheckEntrance);
 
-            KELog.Debug("tp entrance");
-            if (setting == Scp914KnobSetting.Fine && LuckCheck(ChanceTpEntrance,player))
+            bool luckcheckLcz = LuckCheck(25, player);
+            KELog.Debug("luckcheck lcz : " + luckcheckLcz);
+            if (setting == Scp914KnobSetting.Fine && luckcheckEntrance)
             {
                 try
                 {
@@ -66,7 +68,7 @@ namespace KE.Misc.Features._914Upgrades
 
 
             }
-            if(setting == Scp914KnobSetting.Coarse && LuckCheck(25, player))
+            if(setting == Scp914KnobSetting.Coarse && luckcheckLcz)
             {
                 try
                 {

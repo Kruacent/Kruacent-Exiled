@@ -25,7 +25,7 @@ namespace KruacentExiled.GlobalEvents.GE
             "Attention aux bombardements!"
         };
         ///<inheritdoc/>
-        public override int WeightedChance => 4;
+        public override int DefaultWeightedChance => 4;
         /// <summary>
         /// The cooldown between 2 spawn of grenades
         /// </summary>

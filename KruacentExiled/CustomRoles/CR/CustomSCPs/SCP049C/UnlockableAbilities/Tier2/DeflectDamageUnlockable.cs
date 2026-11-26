@@ -12,40 +12,12 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs.SCP049C.UnlockableAbilities.T
 
         public override string GetName(ReferenceHub hub)
         {
-            return "Deflect Damages";
+            return "Parry";
         }
         public override string GetDescription(ReferenceHub hub)
         {
-            return "1 chance sur 8 d'annuler un dégât (.5s par hp sauvé de cooldown)";
+            return "You can now deflect damage for 0.5s (60s cooldown)";
         }
-
-
-        private static HashSet<ReferenceHub> _players = new HashSet<ReferenceHub>();
-
-        public override void Grant(ReferenceHub hub)
-        {
-            _players.Add(hub);
-        }
-
-        public override void Remove(ReferenceHub hub)
-        {
-            _players.Remove(hub);
-        }
-        internal static void OnHurting(HurtingEventArgs ev)
-        {
-            
-            ReferenceHub hub = ev.Player.ReferenceHub;
-            if (ev.IsAllowed && _players.Contains(hub))
-            {
-                Log.Info("hurted");
-                ev.IsAllowed = false;
-
-
-            }
-        }
-
-
-
     }
 
 

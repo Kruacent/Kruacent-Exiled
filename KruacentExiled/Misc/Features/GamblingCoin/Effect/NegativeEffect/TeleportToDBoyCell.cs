@@ -4,20 +4,23 @@ using Exiled.API.Features.Doors;
 using KruacentExiled.Misc.Features.GamblingCoin.Interfaces;
 using EffectType = KruacentExiled.Misc.Features.GamblingCoin.Types.EffectType;
 
-internal class TeleportToDBoyCell : ICoinEffect
+namespace KruacentExiled.Misc.Features.GamblingCoin.Effect.NegativeEffect
 {
-    public string Name { get; set; } = "TeleportToDBoyCell";
-    public string Message { get; set; } = "You got teleported to Class D cells !";
-    public int Weight { get; set; } = 5;
-    public EffectType Type { get; set; } = EffectType.Negative;
-
-    public void Execute(Player player)
+    internal class TeleportToDBoyCell : ICoinEffect
     {
-        player.Teleport(Door.Get(DoorType.PrisonDoor));
+        public string Name { get; set; } = "TeleportToDBoyCell";
+        public string Message { get; set; } = "You got teleported to Class D cells !";
+        public int Weight { get; set; } = 5;
+        public EffectType Type { get; set; } = EffectType.Negative;
 
-        if (Warhead.IsDetonated)
+        public void Execute(Player player)
         {
-            player.Kill(DamageType.Decontamination, "You were teleported into a radioactive zone.");
+            player.Teleport(Door.Get(DoorType.PrisonDoor));
+
+            if (Warhead.IsDetonated)
+            {
+                player.Kill(DamageType.Decontamination, "You were teleported into a radioactive zone.");
+            }
         }
     }
 }

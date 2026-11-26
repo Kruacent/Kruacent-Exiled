@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Map;
 using KruacentExiled.CustomItems.API.Core.Models;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomItems.Items.ItemEffects;
 using KruacentExiled.CustomItems.Items.PickupModels;
+using System.Collections.Generic;
 
 namespace KruacentExiled.CustomItems.Items
 {
@@ -35,35 +36,42 @@ namespace KruacentExiled.CustomItems.Items
         public override float Weight { get; set; } = 0.65f;
         public override float FuseTime => 3f;
         public override bool ExplodeOnCollision => false;
+        public override ItemRank Rank { get; } = ItemRank.Epic;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.cyan;
         public CustomItemEffect Effect { get; set; }
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 3,
-            DynamicSpawnPoints = new List<DynamicSpawnPoint>
+            RoomSpawnPoints = new List<RoomSpawnPoint>
             {
-                new DynamicSpawnPoint()
+                new RoomSpawnPoint()
                 {
-                    Chance = 50,
-                    Location = SpawnLocationType.InsideHczArmory,
+                    Room = RoomType.HczArmory,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 50
                 },
-                new DynamicSpawnPoint()
-                {
-                    Chance =2,
-                    Location = SpawnLocationType.Inside914,
-                },
-                new DynamicSpawnPoint()
-                {
-                    Chance=50,
-                    Location = SpawnLocationType.Inside049Armory,
-                },
-                new DynamicSpawnPoint()
-                {
-                    Chance=50,
-                    Location = SpawnLocationType.InsideLczArmory,
-                }
-            },
 
+                new RoomSpawnPoint()
+                {
+                    Room = RoomType.Lcz914,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 2
+                },
+
+                new RoomSpawnPoint()
+                {
+                    Room = RoomType.Hcz049,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 50
+                },
+
+                new RoomSpawnPoint()
+                {
+                    Room = RoomType.LczArmory,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 50
+                },
+            },
         };
 
         public PickupModel PickupModel { get; }

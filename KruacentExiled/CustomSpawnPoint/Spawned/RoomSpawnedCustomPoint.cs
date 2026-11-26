@@ -275,6 +275,7 @@ namespace KruacentExiled.CustomSpawnPoint.Spawned
             {
                 point.Destroy();
             }
+            _dict.Clear();
         }
 
         public static int NumberInRoom(Room room)

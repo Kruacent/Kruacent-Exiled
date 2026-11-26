@@ -28,26 +28,35 @@ namespace KE.Misc.Features._914Upgrades
         {
             Player player = ev.Player;
             if (player.Role != InputRole) return false;
+            KELog.Debug($"upgrading {player.Role.Type}");
             if (!OutputRoles.TryGetValue(ev.KnobSetting, out var newRole)) return false;
+            KELog.Debug($"to {newRole.role}");
             if (_upgradingPlayer.Contains(player)) return false;
+            KELog.Debug($"not already upgriading");
             if (!LuckCheck(newRole.chance, ev.Player)) return false;
             
             KELog.Debug($"upgrading {player.Role.Type}->{newRole.role}");
-
-
+                       
             Set(player, newRole.role);
-
             _upgradingPlayer.Add(player);
             return true;
         }
 
+        
+
         private void Set(Player player, RoleTypeId newRole)
         {
-
+            float percent = player.Health / player.MaxHealth;
             SetRole(player, newRole);
             Timing.CallDelayed(.5f, () =>
             {
                 _upgradingPlayer.Remove(player);
+            });
+
+            Timing.CallDelayed(3f, () =>
+            {
+                KELog.Debug("max health " + player.MaxHealth);
+                player.Health = percent * player.MaxHealth;
             });
         }
 

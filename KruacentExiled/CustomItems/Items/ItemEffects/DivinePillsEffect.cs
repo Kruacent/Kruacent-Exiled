@@ -6,6 +6,7 @@ using Exiled.Events.EventArgs.Interfaces;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.Features;
+using KE.Utils.API.Features;
 using KruacentExiled.Audio;
 using KruacentExiled.CustomItems.API.Extensions;
 using KruacentExiled.CustomItems.API.Features;
@@ -56,33 +57,42 @@ namespace KruacentExiled.CustomItems.Items.ItemEffects
                 return;
             }
 
-            bool itemActivation = RandomNumberGenerator.RollChance(75, player, false);
+            bool killPlayer = RandomNumberGenerator.RollChance(25, player, false);
             bool spawnToPlayer = RandomNumberGenerator.RollChance(33, player, true);
-            UsedDivinePillsEffectArgs ev = new UsedDivinePillsEffectArgs(player, itemActivation);
-            if (itemActivation)
+            UsedDivinePillsEffectArgs ev = new UsedDivinePillsEffectArgs(player, killPlayer);
+            if (killPlayer)
             {
                 AudioHandler.Instance.PlayToAll(SoundType.Noise, NoiseDeath, player.Position, 40);
                 player.Kill("unlucky bro");
+                return;
             }
-            else
+
+            RoleTypeId newRole;
+            switch (player.Role.Side)
             {
-                Player respawning = Player.List.GetRandomValue(x => x.Role == RoleTypeId.Spectator);
-                switch (player.Role.Side)
-                {
-                    case Side.ChaosInsurgency:
-                        respawning.Role.Set(RoleTypeId.ChaosRifleman);
-                        break;
-                    case Side.Mtf:
-                        respawning.Role.Set(RoleTypeId.NtfPrivate);
-                        break;
-                }
+                case Side.ChaosInsurgency:
+                    newRole = RoleTypeId.ChaosRifleman;
+                    break;
+                case Side.Mtf:
+                    newRole = RoleTypeId.NtfPrivate;
+                    break;
+                default: return;
+            }
 
-                if (spawnToPlayer)
-                {
-                    Log.Debug("tp");
-                    Timing.CallDelayed(1, () => respawning.Teleport(player));
+            Player respawning = Player.Enumerable.GetRandomValue(x => x.Role == RoleTypeId.Spectator);
+            respawning.Role.Set(newRole);
 
-                }
+            if (spawnToPlayer)
+            {
+                KELog.Debug("tp");
+
+                Timing.CallDelayed(1, () => {
+                    if(respawning.IsAlive && player.IsAlive)
+                    {
+                        respawning.Teleport(player);
+                    }
+                });
+                
             }
             OnUsedDivinePillsEffect(ev);
         }

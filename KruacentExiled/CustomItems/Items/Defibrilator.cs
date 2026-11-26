@@ -1,13 +1,11 @@
 using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
-using Exiled.CustomRoles.Commands;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.Features;
 using KE.Utils.API.Displays.Feeds;
-using KE.Utils.Extensions;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomItems.Events.CustomItem.EventArgs;
@@ -15,9 +13,7 @@ using MEC;
 using PlayerRoles;
 using PlayerRoles.Ragdolls;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using YamlDotNet.Core.Tokens;
 
 namespace KruacentExiled.CustomItems.Items
 {
@@ -51,7 +47,7 @@ namespace KruacentExiled.CustomItems.Items
                     [TranslationFailed] = "<color=red>Failed!</color>",
                     [TranslationExpired] = "<color=red>Body expired.</color>",
                     [TranslationTooFar] = "<color=yellow>Aim at a body.</color>",
-                    [TranslationRevived] = "<color=cyan>Revived by %MedicName%\n<b>you got brian damage</b></color>",
+                    [TranslationRevived] = "<color=blue>Revived by %MedicName%\n<b>you got brian damage</b></color>",
                     [TranslationSucceed] = "<color=green>Successfully ressucitate %PatientName%!</color>",
                     [TranslationInProgress] = "<color=yellow>In progress</color>",
                 },
@@ -72,22 +68,44 @@ namespace KruacentExiled.CustomItems.Items
         public override string Name { get; set; } = "Defibrillator";
         public override float Weight { get; set; } = 1.0f;
         public UnityEngine.Color Color { get; set; } = UnityEngine.Color.magenta;
+        public override ItemRank Rank { get; } = ItemRank.Epic;
 
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 4,
-            DynamicSpawnPoints = new List<DynamicSpawnPoint>
-        {
-            new DynamicSpawnPoint() { Chance = 50, Location = SpawnLocationType.Inside079Secondary },
-            new DynamicSpawnPoint() { Chance = 10, Location = SpawnLocationType.Inside096 },
-            new DynamicSpawnPoint() { Chance = 10, Location = SpawnLocationType.Inside330 },
-            new DynamicSpawnPoint() { Chance = 10, Location = SpawnLocationType.Inside939Cryo },
-        },
+            RoomSpawnPoints = new List<RoomSpawnPoint>
+            {
+                 new RoomSpawnPoint()
+                {
+                    Room = RoomType.Hcz079,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 50
+                },
+                 new RoomSpawnPoint()
+                {
+                    Room = RoomType.Hcz096,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 10
+                },
+                 new RoomSpawnPoint()
+                {
+                    Room = RoomType.Lcz330,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 10
+                },
+                 new RoomSpawnPoint()
+                {
+                    Room = RoomType.Hcz939,
+                    Offset = new UnityEngine.Vector3(1f, 0f, 1f),
+                    Chance = 10
+                },
+            },
+
             LockerSpawnPoints = new List<LockerSpawnPoint>
-        {
-             new LockerSpawnPoint(){ Chance= 50, Type = LockerType.Medkit, },
-             new LockerSpawnPoint(){ Chance= 20, Type = LockerType.Misc, },
-        }
+            {
+                 new LockerSpawnPoint(){ Chance= 50, Type = LockerType.Medkit, },
+                 new LockerSpawnPoint(){ Chance= 20, Type = LockerType.Misc, },
+            }
         };
 
         private struct DeathData
@@ -203,8 +221,8 @@ namespace KruacentExiled.CustomItems.Items
             yield return Timing.WaitForSeconds(0.2f);
             shockLight.Destroy();
 
-            patient.Role.Set(previousRole, SpawnReason.Revived, RoleSpawnFlags.All);
             OnRevivedByDefibrilator(new RevivedByDefibrilatorArgs(patient, medic));
+            patient.Role.Set(previousRole, SpawnReason.Revived, RoleSpawnFlags.None);
 
             yield return Timing.WaitForSeconds(0.4f);
 
@@ -212,8 +230,6 @@ namespace KruacentExiled.CustomItems.Items
 
             if (patient.IsAlive)
             {
-                patient.Position = ragdoll.transform.position + Vector3.up * 0.5f;
-
                 patient.Health = patient.MaxHealth * .2f;
                 patient.AddAhp(50);
                 patient.EnableEffect(EffectType.Flashed, 2f);

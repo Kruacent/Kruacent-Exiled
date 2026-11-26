@@ -13,9 +13,5 @@ namespace KruacentExiled.CustomItems
     {
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = false;
-        public Dictionary<RoomType, List<Vector3>> LocalpositionInRooms { get; set; } = new Dictionary<RoomType, List<Vector3>>()
-        {
-            { RoomType.Lcz914,new List<Vector3>() {new Vector3(0,0.70f,-7.14f) } }
-        };
     }
 }

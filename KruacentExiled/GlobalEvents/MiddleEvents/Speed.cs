@@ -2,15 +2,15 @@
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp173;
-using InventorySystem.Items.Usables;
 using GlobalEventFramework.API.Features;
 using GlobalEventFramework.API.Interfaces;
+using KruacentExiled.GlobalEvents.GE;
 using MEC;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace KruacentExiled.GlobalEvents.MiddleEvents
 {
@@ -21,7 +21,7 @@ namespace KruacentExiled.GlobalEvents.MiddleEvents
         ///<inheritdoc/>
         public override string Description { get; set; } = "Gas! gas! gas!";
         ///<inheritdoc/>
-        public override int WeightedChance { get; set; } = 1;
+        public override int DefaultWeightedChance { get; } = 1;
         public override string[] IncompatibleEvents => new string[] { "Speed" };
         /// <summary>
         /// intensity of the movement boost effect
@@ -39,32 +39,24 @@ namespace KruacentExiled.GlobalEvents.MiddleEvents
         public void SubscribeEvent()
         {
             Exiled.Events.Handlers.Player.ChangingRole += ReactivateEffectSpawn;
-            Exiled.Events.Handlers.Scp173.Blinking += SpeedyNut;
+            Exiled.Events.Handlers.Scp173.Blinking += Speed.SpeedyNut;
         }
         ///<inheritdoc/>
         public void UnsubscribeEvent()
         {
             Exiled.Events.Handlers.Player.ChangingRole -= ReactivateEffectSpawn;
-            Exiled.Events.Handlers.Scp173.Blinking -= SpeedyNut;
+            Exiled.Events.Handlers.Scp173.Blinking -= Speed.SpeedyNut;
         }
 
-        protected override void Disable(KEEvents ev)
+        protected override void Disable()
         {
             OnDisable();
-            base.Disable(ev);
+            base.Disable();
         }
 
         public void OnDisable()
         {
             Player.List.ToList().ForEach(p => p.DisableEffect<MovementBoost>());
-        }
-
-        /// <summary>
-        /// Decrease the blink cooldown of SCP-173
-        /// </summary>
-        private void SpeedyNut(BlinkingEventArgs ev)
-        {
-            ev.BlinkCooldown = ev.BlinkCooldown / 4;
         }
 
         /// <summary>

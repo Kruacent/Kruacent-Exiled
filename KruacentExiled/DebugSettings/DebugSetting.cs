@@ -21,6 +21,12 @@ namespace KruacentExiled.DebugSettings
             settings.Add(this);
         }
 
+
+        public static void DestroyAll()
+        {
+            settings.Clear();
+        }
+
         public IReadOnlyCollection<SettingBase> Settings { get; private set; }
 
 

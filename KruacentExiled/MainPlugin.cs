@@ -15,6 +15,7 @@ using LabApi.Events.Arguments.ServerEvents;
 using MEC;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace KruacentExiled
@@ -24,7 +25,7 @@ namespace KruacentExiled
 
         private KEPlugin[] plugins;
         public override string Author => "Patrique & OmerGS";
-        public override Version Version { get; } = new Version(2, 1, 2);
+        public override Version Version { get; } = new Version(2, 2, 2);
 
         public static MainPlugin Instance { get; private set; }
 
@@ -46,6 +47,7 @@ namespace KruacentExiled
                 new CustomItems.MainPlugin(),
                 new Misc.MainPlugin(),
                 new Map.MainPlugin(),
+                new ServerTools.MainPlugin(),
             };
 
             for (int i = 0; i < plugins.Length; i++)
@@ -73,8 +75,8 @@ namespace KruacentExiled
                 }
 
             }
-            //harmony = new Harmony("KEMainPlugin");
-            //harmony.PatchAll();
+            harmony = new Harmony("KEMainPlugin");
+            harmony.PatchAll();
 
             AudioHandler = new AudioHandler(Config.Debug);
             AudioHandler.SubscribeEvents();
@@ -99,7 +101,7 @@ namespace KruacentExiled
         public override void OnDisabled()
         {
 
-            //harmony.UnpatchAll("KEMainPlugin");
+            harmony.UnpatchAll("KEMainPlugin");
 
             for (int i = 0; i < plugins.Length; i++)
             {
@@ -113,6 +115,8 @@ namespace KruacentExiled
             LabApi.Events.Handlers.ServerEvents.RoundEnded -= OnRoundEnded;
             LabApi.Events.Handlers.ServerEvents.RoundRestarted -= OnRoundRestarted;
             AudioHandler.UnsubscribeEvents();
+
+            DebugSetting.DestroyAll();
 
             Instance = null;
             AudioHandler = null;
@@ -191,10 +195,12 @@ namespace KruacentExiled
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = false;
 
+        [Description("show when player enter or leaves the scp team")]
+        public bool VerboseSCPTeam { get; set; } = true;
         public CustomRoles.Config CustomRoleConfig { get; set; } = new CustomRoles.Config();
-        public CustomItems.Config CustomItemConfig { get; set; } = new CustomItems.Config();
         public Map.Config MapConfig { get; set; } = new Map.Config();
         public Misc.Config MiscConfig { get; set; } = new Misc.Config();
+        public ServerTools.Config ServerToolsConfig { get; set; } = new ServerTools.Config();
         public GlobalEvents.Config GEFEConfig { get; set; } = new GlobalEvents.Config();
     }
 

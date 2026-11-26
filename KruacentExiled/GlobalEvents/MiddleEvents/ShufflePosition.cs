@@ -18,11 +18,11 @@ namespace KruacentExiled.GlobalEvents.MiddleEvents
         ///<inheritdoc/>
         public override string Description { get; set; } = "Aller on change de place";
         ///<inheritdoc/>
-        public override int WeightedChance { get; set; } = 1;
+        public override int DefaultWeightedChance { get; } = 1;
 
         public void Start()
         {
-            List<Player> players = Player.Enumerable.ToList();
+            List<Player> players = Player.Enumerable.Where(p => p.IsAlive).ToList();
             Vector3[] positions = new Vector3[players.Count];
 
             for(int i = 0; i < players.Count; i++)

@@ -12,6 +12,7 @@ using Exiled.Events.EventArgs.Scp106;
 using Exiled.Events.EventArgs.Scp939;
 using Exiled.Events.Features;
 using KE.Utils.API.Displays.Feeds;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomItems.Events.CustomItem.EventArgs;
@@ -78,8 +79,9 @@ namespace KruacentExiled.CustomItems.Items
         public override ItemType ItemType => ItemType.Flashlight;
         public override string Name { get; set; } = "MScan";
         public override float Weight { get; set; } = 1.5f;
+        public override ItemRank Rank { get; } = ItemRank.Good;
         public Color Color { get; set; } = UnityEngine.Color.cyan;
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
             Limit = 2,
             RoomSpawnPoints = new List<RoomSpawnPoint>
@@ -92,7 +94,7 @@ namespace KruacentExiled.CustomItems.Items
                 new RoomSpawnPoint()
                 {
                     Chance = 25,
-                    Room = RoomType.HczIncineratorWayside,
+                    Room = RoomType.Hcz127,
                 },
                 new RoomSpawnPoint()
                 {

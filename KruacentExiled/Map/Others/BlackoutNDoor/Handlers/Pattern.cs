@@ -61,6 +61,16 @@ namespace KruacentExiled.Map.Others.BlackoutNDoor.Handlers
 
         public Pattern(List<MapEvent> pattern)
         {
+            if(pattern == null)
+            {
+                throw new Exceptions.NullMapEventsException();
+            }
+
+            if(pattern.Count == 0)
+            {
+                throw new Exceptions.NoMapEventException();
+            }
+
             _pattern = new List<MapEvent>();
             for (int i = 0; i < pattern.Count; i++)
             {

@@ -3,12 +3,16 @@ using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
+using Exiled.CustomRoles.Commands;
 using Exiled.Events.EventArgs.Player;
 using KE.Utils.Extensions;
+using KruacentExiled.CustomItems.API.Enum;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
+using KruacentExiled.CustomRoles.CR.MTF.Medic;
 using KruacentExiled.Extensions;
 using PlayerRoles;
+using ProjectMER.Features.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -18,6 +22,11 @@ namespace KruacentExiled.CustomItems.Items
 {
     public class TrueDivinePills : KECustomItem, ILumosItem, IRevivingCustomItem
     {
+        private const string PlayerWillSpawnToYou = "PlayerWillSpawnToYou";
+        private const string PlayerWontSpawnToYou = "PlayerWontSpawnToYou";
+        private const string NoOneToRevive = "NoOneToRevive";
+        private const string SummonedPlayer = "SummonedPlayer";
+
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
         {
             return new Dictionary<string, Dictionary<string, string>>()
@@ -26,16 +35,22 @@ namespace KruacentExiled.CustomItems.Items
                 {
                     [TranslationKeyName] = "True Divine Pills",
                     [TranslationKeyDesc] = "Guaranteed to respawn everybody, drop to change the mode",
+                    [PlayerWillSpawnToYou] = "Players will spawn to you",
+                    [PlayerWontSpawnToYou] = "Players won't spawn to you",
+                    [NoOneToRevive] = "No one to respawn",
+                    [SummonedPlayer] = $"You summoned %NumberOfPlayer% player",
                 },
                 ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "True Divine Pills",
                     [TranslationKeyDesc] = "Fait réappaître tout le monde, lâcher pour changer le mode",
+                    [PlayerWillSpawnToYou] = "Les joueurs vont apparaître sur toi",
+                    [PlayerWontSpawnToYou] = "Les joueurs ne vont pas apparaître sur toi",
+                    [NoOneToRevive] = "Pas de joueur à faire réapparaître",
+                    [SummonedPlayer] = $"Tu as fait réapparaître %NumberOfPlayer%",
                 },
             };
         }
-
-        public bool KeepClass => false;
 
         public override ItemType ItemType => ItemType.SCP500;
 
@@ -46,11 +61,12 @@ namespace KruacentExiled.CustomItems.Items
 
         /// <inheritdoc/>
         public override float Weight { get; set; } = 0.65f;
+        public override ItemRank Rank { get; } = ItemRank.Exotic;
         public Color Color { get; set; } = Color.yellow;
-        private bool tp = false;
+        private Dictionary<ushort, bool> TpOnPlayer = new Dictionary<ushort, bool>();
 
         /// <inheritdoc/>
-        public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
+        public override SpawnProperties SpawnProperties { get; set; } = new KESpawnProperties()
         {
 
         };
@@ -80,11 +96,13 @@ namespace KruacentExiled.CustomItems.Items
             }
             Player player = ev.Player;
 
-            tp = !tp;
-            if (tp)
-                KECustomItem.ItemEffectHint(player, "Players will spawn to you");
+            TpOnPlayer.TryGetValue(ev.Item.Serial, out bool spawnToPlayer);
+            TpOnPlayer[ev.Item.Serial] = !spawnToPlayer;
+
+            if (!spawnToPlayer)
+                KECustomItem.ItemEffectHint(player, GetTranslation(player, PlayerWillSpawnToYou));
             else
-                KECustomItem.ItemEffectHint(player, "Players won't spawn to you");
+                KECustomItem.ItemEffectHint(player, GetTranslation(player, PlayerWontSpawnToYou));
             ev.IsAllowed = false;
         }
 
@@ -96,29 +114,34 @@ namespace KruacentExiled.CustomItems.Items
                 return;
             Player player = ev.Player;
 
-
-            List<Player> spectators = Player.Enumerable.Where(p => p.IsDead).ToList();
-
-
+            List<Player> spectators = Player.Enumerable.Where(p => p.IsDead && !p.IsOverwatchEnabled).ToList();
 
             if (spectators.Count == 0)
             {
-                KECustomItem.ItemEffectHint(player, "No one to respawn");
+                KECustomItem.ItemEffectHint(player, GetTranslation(player, NoOneToRevive));
                 ev.IsAllowed = false;
                 return;
             }
 
+            ev.Item.Destroy();
+            int i = 0;
 
             foreach (Player spectator in spectators)
             {
                 bool revived = Revive(player, spectator);
-                if (revived && tp)
+                if (revived)
                 {
-                    spectator.Teleport(player);
+                    if(TpOnPlayer.TryGetValue(ev.Item.Serial, out bool tp) && tp)
+                    {
+                        spectator.Teleport(player);
+                    }
+
+                    i++;
                 }
-
-
             }
+
+            string msgNumberOfPlayer = GetTranslation(player, SummonedPlayer);
+            KECustomItem.ItemEffectHint(player, msgNumberOfPlayer.Replace("%NumberOfPlayer%", i.ToString()));
 
         }
 

@@ -23,11 +23,16 @@ namespace KruacentExiled.Map.Others.BlackoutNDoor
         public override string CassieTranslated => MainPlugin.Translations.DoorstuckTranslation;
         public override float Duration => 15;
 
+        private readonly IReadOnlyCollection<DoorType> BlacklistedDoor = new List<DoorType>()
+        {
+            DoorType.Scp079First,DoorType.Scp079Second,DoorType.Scp914Door
+        };
+
         public override void Start(ZoneType zone)
         {
             bool open = UnityEngine.Random.value > .5f;
             doors = HashSetPool<Door>.Shared.Rent();
-            foreach (Door door in Door.List.Where(d => d != null&& d.Zone == zone && !d.IsElevator && d.Type != DoorType.Scp079First && d.Type != DoorType.Scp079Second))
+            foreach (Door door in Door.List.Where(d => d != null&& d.Zone == zone && !d.IsElevator && !BlacklistedDoor.Contains(d.Type)))
             {
                 if (door.DoorLockType == DoorLockType.None)
                 {

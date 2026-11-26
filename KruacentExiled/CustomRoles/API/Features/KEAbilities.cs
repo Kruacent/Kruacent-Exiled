@@ -12,6 +12,7 @@ using KruacentExiled.CustomRoles.API.HintPositions;
 using KruacentExiled.CustomRoles.API.Interfaces;
 using KruacentExiled.CustomRoles.API.Interfaces.Ability;
 using KruacentExiled.CustomRoles.Settings;
+using LabApi.Events.Arguments.PlayerEvents;
 using MEC;
 using System;
 using System.Collections.Generic;
@@ -76,9 +77,36 @@ namespace KruacentExiled.CustomRoles.API.Features
             TranslationHub.Add(AbilityTranslationId, "en", "AbilityReady", "READY");
             TranslationHub.Add(AbilityTranslationId, "fr", "AbilityReady", "PRÊT");
 
+            LabApi.Events.Handlers.PlayerEvents.Left += OnLeft;
+            LabApi.Events.Handlers.ServerEvents.RoundRestarted += OnRoundEnded;
+
+
 
             activated = true;
         }
+
+        private static void OnRoundEnded()
+        {
+            PlayersAbility.Clear();
+            PlayersHints.Clear();
+            AddonHints.Clear();
+        }
+
+        private static void OnLeft(PlayerLeftEventArgs ev)
+        {
+            Player player = ev.Player;
+
+            PlayersAbility.Remove(player);
+            if (PlayersHints.TryGetValue(player, out var hints))
+            {
+                foreach (AbstractHint hint in hints)
+                {
+                    AddonHints.Remove(hint);
+                }
+                PlayersHints.Remove(player);
+            }
+        }
+
 
         public virtual void Init()
         {
@@ -144,6 +172,10 @@ namespace KruacentExiled.CustomRoles.API.Features
 
         private void InternalUnsubcribeEvent()
         {
+            //yes an event can be unsub multiple time it's fine
+            LabApi.Events.Handlers.PlayerEvents.Left -= OnLeft;
+            LabApi.Events.Handlers.ServerEvents.RoundRestarted -= OnRoundEnded;
+
             UnsubscribeEvents();
         }
 
@@ -249,6 +281,7 @@ namespace KruacentExiled.CustomRoles.API.Features
                 PlayersAbility[player].Remove(this);
                 Players.Remove(player);
                 UnselectAbility(player);
+                LastUsed.Remove(player);
                 AbilityRemoved(player);
             }
         }
@@ -452,7 +485,6 @@ namespace KruacentExiled.CustomRoles.API.Features
             {
                 Registered.Add(this);
                 Init();
-                Log.Debug("registered " + Name);
                 return true;
             }
 
@@ -488,17 +520,15 @@ namespace KruacentExiled.CustomRoles.API.Features
             Destroy();
             if (Registered.Remove(this))
             {
-                Log.Debug("unregistered " + this);
                 return true;
             }
-            Log.Warn(this + " was not registered");
             return false;
         }
 
         public static IEnumerable<KEAbilities> Unregister()
         {
             List<KEAbilities> list = new List<KEAbilities>();
-            foreach (KEAbilities item in Registered)
+            foreach (KEAbilities item in Registered.ToList())
             {
                 item.TryUnregister();
                 list.Add(item);
@@ -567,10 +597,15 @@ namespace KruacentExiled.CustomRoles.API.Features
             }
             else
             {
-                DateTime dateTime = LastUsed[player] + TimeSpan.FromSeconds(Cooldown);
-                sb.Append("[");
-                sb.Append(Math.Round((dateTime - DateTime.Now).TotalSeconds, 0));
-                sb.Append("s]");
+                if (LastUsed.TryGetValue(player,out DateTime lastAbilityUsed ))
+                {
+                    DateTime dateTime = lastAbilityUsed + TimeSpan.FromSeconds(Cooldown);
+                    sb.Append("[");
+                    sb.Append(Math.Round((dateTime - DateTime.Now).TotalSeconds, 0));
+                    sb.Append("s]");
+                }
+
+                
             }
         }
 

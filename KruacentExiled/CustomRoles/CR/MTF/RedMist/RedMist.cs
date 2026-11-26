@@ -36,7 +36,7 @@ namespace KruacentExiled.CustomRoles.CR.MTF.RedMist
             };
         }
         public override int MaxHealth { get; set; } = 200;
-        public override RoleTypeId Role { get; set; } = RoleTypeId.ClassD;
+        public override RoleTypeId Role { get; set; } = RoleTypeId.NtfSergeant;
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public Color32 Color => new Color32(255, 192, 203, 0);

@@ -1,6 +1,8 @@
-﻿using KE.Utils.API;
+﻿using Exiled.API.Features;
+using KE.Utils.API;
 using KE.Utils.API.Features;
 using KE.Utils.API.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace KruacentExiled.Misc.Features
@@ -19,9 +21,19 @@ namespace KruacentExiled.Misc.Features
         {
             foreach(T loaded in _allLoadedFeatures)
             {
-                KELog.Debug("subscribing "+ loaded.GetType().Name);
-                if(loaded is IUsingEvents iue)
-                    iue.SubscribeEvents();
+                try
+                {
+                    if (loaded is IUsingEvents iue)
+                    {
+                        iue.SubscribeEvents();
+                    }
+                        
+                }
+                catch(Exception e)
+                {
+                    Log.Error(e);
+                }
+                
             }
         }
 
@@ -29,9 +41,18 @@ namespace KruacentExiled.Misc.Features
         {
             foreach (T loaded in _allLoadedFeatures)
             {
-                KELog.Debug("Unsubscribing " + loaded.GetType().Name);
-                if (loaded is IUsingEvents iue)
-                    iue.UnsubscribeEvents();
+                try
+                {
+                    if (loaded is IUsingEvents iue)
+                    {
+                        iue.UnsubscribeEvents();
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e);
+                }
             }
         }
     }
