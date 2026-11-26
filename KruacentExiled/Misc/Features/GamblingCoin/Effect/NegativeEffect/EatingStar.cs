@@ -72,6 +72,7 @@ public class EatingStar : IDurationEffect
         private static Dictionary<Player, PlayerEatingStarData> _data = new Dictionary<Player, PlayerEatingStarData>();
         public static IReadOnlyCollection<PlayerEatingStarData> Data => _data.Values;
         public static int Count => _data.Count;
+        private Player _player;
         public static bool IsRunning(Player player)
         {
             return _data.ContainsKey(player);
@@ -147,17 +148,14 @@ public class EatingStar : IDurationEffect
         {
             foreach(AudioClipPlayback audioClipPlayback in clips)
             {
-                KELog.Debug("stop clip : " + audioClipPlayback.Clip);
-
                 audioClipPlayback.Loop = false;
-                KELog.Debug("loop : " + audioClipPlayback.Loop);
             }
 
             light?.Destroy();
             light = null;
-
             clips.Clear();
-
+            _data.Remove(_player);
+            _player = null;
             emptyDatas.Enqueue(this);
         }
     }
